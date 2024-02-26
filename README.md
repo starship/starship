@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Follow @StarshipPrompt on Twitter"
   /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Stand With Ukraine"
+  /></a>
 </p>
 
 <p align="center">
@@ -147,8 +152,6 @@
   /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
@@ -229,6 +232,7 @@ Alternatively, install Starship using any of the following package managers:
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
+| openSUSE           | [OSS]                   | `zypper in starship`                                          |
 | Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
@@ -455,6 +459,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [homebrew]: https://formulae.brew.sh/formula/starship
 [macports]: https://ports.macports.org/port/starship
 [nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
+[OSS]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship

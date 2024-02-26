@@ -1,6 +1,6 @@
 # Erweiterte Konfiguration
 
-Auch wenn Starship eine vielseitige Shell ist, reichen manche Konfigurationen in der `starship.toml` nicht aus, um erweiterte Einstellungen vorzunehmen. Diese Seite beschreibt einige fortgeschrittene Konfigurationen für Starship.
+Auch wenn Starship eine vielseitige Shell ist, reichen manche Konfigurationen in der `starship.toml` nicht aus, um manche Sachen zu erreichen. Diese Seite beschreibt einige fortgeschrittene Konfigurationen für Starship.
 
 ::: warning
 
@@ -10,7 +10,7 @@ Die hier beschriebenen Konfigurationen werden sich mit kommenden Updates von Sta
 
 ## TransientPrompt in PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Es ist möglich, die zuvor geprintete Prompt mit einem benutzerdefinierten String zu ersetzen. Das ist in Fällen nützlich, in denen nicht immer die ganze Information der Prompt gebraucht wird. Führe `Enable-TransientPrompt` in deiner Shell-Session aus, um dieses Verhalten zu aktivieren. Füge das Statement in dein `$PROFILE` ein, um diese Funktion dauerhaft zu aktivieren. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
 By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
 
@@ -26,7 +26,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Das ist in Fällen nützlich, in denen nicht immer die ganze Information der Prompt gebraucht wird. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -56,7 +56,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Es ist möglich, die zuvor geprintete Prompt mit einem benutzerdefinierten String zu ersetzen. Das ist in Fällen nützlich, in denen nicht immer die ganze Information der Prompt gebraucht wird. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
@@ -78,6 +78,26 @@ function starship_transient_rprompt_func
 end
 starship init fish | source
 enable_transience
+```
+
+## TransientPrompt and TransientRightPrompt in Bash
+
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+
+Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
+
+- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+
+```bash
+bleopt prompt_ps1_final="$(starship module character)"
+```
+
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. For example, to display the time at which the last command was started here, you would do
+
+```bash
+bleopt prompt_rps1_final="$(starship module time)"
 ```
 
 ## Custom pre-prompt and pre-execution Commands in Cmd
@@ -129,7 +149,7 @@ eval $(starship init bash)
 set +o functrace
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## Benutzerdefinierte Pre-Prompt- und Pre-Execution-Befehle in PowerShell
 
 PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Starship bietet daher die begrenzte Möglichkeit, eigene Funktionen in das prompt rendering Verfahren einzufügen:
 
@@ -205,7 +225,9 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
 
 ### Beispiel
 

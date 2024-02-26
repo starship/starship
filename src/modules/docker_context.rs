@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    if ctx == "default" {
+    if ctx == "default" || ctx.starts_with("unix://") {
         return None;
     }
 
@@ -287,6 +287,24 @@ mod tests {
             "via {} ",
             Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
         ));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_host_env_with_unix_path() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_HOST", "unix:///run/user/1001/podman/podman.sock")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
 

@@ -27,7 +27,7 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: &str) -> Option<Pro
         .filter_map(|file| {
             let config = utils::read_file(file.as_ref()?).ok()?;
             let clouds = YamlLoader::load_from_str(config.as_str()).ok()?;
-            clouds.get(0)?["clouds"][osp_cloud]["auth"]["project_name"]
+            clouds.first()?["clouds"][osp_cloud]["auth"]["project_name"]
                 .as_str()
                 .map(ToOwned::to_owned)
         })

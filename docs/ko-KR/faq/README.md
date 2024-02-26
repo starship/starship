@@ -1,14 +1,14 @@
-# Frequently Asked Questions
+# 자주 묻는 질문
 
-## What is the configuration used in the demo GIF?
+## 데모 GIF에는 어떤 구성을 사용했나요?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+- **터미널 에뮬레이터**: [iTerm2](https://iterm2.com/)
+  - **테마**: Minimal
+  - **배색**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **폰트**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **셸**: [Fish Shell](https://fishshell.com/)
+  - **구성**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **프롬프트**: [Starship](https://starship.rs/)
 
 ## How do I get command completion as shown in the demo GIF?
 
@@ -40,7 +40,7 @@ PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 
 The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+`starship 프롬프트`에서 지원하는 모든 플래그 값을 보려면 아래 명령어를 사용하세요:
 
 ```sh
 starship prompt --help
@@ -48,19 +48,19 @@ starship prompt --help
 
 The prompt will use as much context as is provided, but no flags are "required".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## 오래된 버전의 glibc가 있는 Linux 배포판에서 Starship을 어떻게 실행하나요?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+미리 빌드된 바이너리를 실행할 때 (예를 들어 CentOS 6 혹은 7에서) "_version 'GLIBC_2.18' not found (required by starship)_" 같은 오류가 보인다면, `glibc` 대신 `musl`로 컴파일된 바이너리 파일을 사용하세요.
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## 왜 `Executing command "..." timed out.` 경고가 뜨나요?
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
-## I see symbols I don't understand or expect, what do they mean?
+## 이해할 수 없거나 예상치 못한 기호가 보이는데 무슨 뜻인가요?
 
 If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
@@ -105,18 +105,26 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Starship을 어떻게 삭제하나요?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship은 처음 설치하는 것만큼이나 쉽게 제거할 수 있습니다.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. 셸 설정 파일 (예시: `~/.bashrc`) 에서 Starship 초기화에 사용되는 모든 줄을 제거하세요.
+1. Starship 바이너리 파일을 제거하세요.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Starship을 패키지 매니저로 설치하였다면 해당 패키지 매니저의 제거 지침 문서를 참조해 주세요.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Starship을 설치 스크립트로 설치하였다면 바이너리 파일 제거를 위해 아래 명령어를 실행하세요:
 
 ```sh
-# Locate and delete the starship binary
+# starship 바이너리 파일을 찾고 제거합니다.
 sh -c 'rm "$(command -v 'starship')"'
 ```
+
+## How do I install Starship without `sudo`?
+
+The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation diretory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+
+For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+
+When using a package manager, see the documentation for your package manager about installing with or without `sudo`.

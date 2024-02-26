@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!
+tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
 actionText: Начало работы →
 actionLink: ./guide/
 features:
@@ -18,7 +18,7 @@ features:
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, и PowerShell.
 ---
 
 <div class="center">
@@ -28,34 +28,34 @@ description: Starship - минимальная, быстрая и бесконе
   </video>
 </div>
 
-### Обязательные требования
+### Обязательные условия
 
 - Установленный и включенный шрифт [Nerd Font](https://www.nerdfonts.com/) в вашем терминале.
 
 ### Быстрая установка
 
-1. Установите двоичный файл **starship**:
+1. Установите бинарный файл **starship**:
 
 
-   #### Установить последнюю версию
+   #### Установка последней версии
 
-   Через Bash:
+   Через Shell:
 
    ```sh
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
+   Чтобы обновить Starship, повторно запустите приведенный выше скрипт. Он заменит текущую версию, не затрагивая конфигурацию Starship.
 
 
-   #### Установить через менеджер пакетов
+   #### Установка через пакетный менеджер
 
-   С [Homebrew](https://brew.sh/):
+   С помощью [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   С помощью [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
@@ -149,7 +149,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   This will change in the future. Поддерживается только Nushell v0.78+.
 
    :::
 

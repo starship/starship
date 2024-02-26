@@ -63,3 +63,9 @@
 Цей шаблон створений під враженням від [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Скріншот шаблона Tokyo Night](/presets/img/tokyo-night.png "Натисніть, щоб переглянути шаблон Токіо Night")](./tokyo-night)
+
+## [Gruvbox Rainbow](./gruvbox-rainbow.md)
+
+Цей шаблон створено під впливом [Pastel Powerline](./pastel-powerline.md) та [Tokyo Night](./tokyo-night.md).
+
+[![Скріншот шаблона Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Натисніть, щоб переглянути шаблон Gruvbox Rainbow")](./gruvbox-rainbow)

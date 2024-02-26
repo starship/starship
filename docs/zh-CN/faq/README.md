@@ -120,3 +120,11 @@ Starship 的卸载过程与安装过程一样简单。
 # 找到并且删除 Starship 二进制文件
 sh -c 'rm "$(command -v 'starship')"'
 ```
+
+## 我如何在没有 `sudo` 的情况下安装 Starship？
+
+Shell 安装脚本(`https://starship.rs/install`) 只尝试使用 `sudo`当安装目录不可被当前用户写入 默认安装目录是环境变量 `$BIN_DIR` 的值或者 `/usr/loca/bin` 如果 if `$BIN_DIR` 未设置 如果你使用一个用户可写的安装目录替代, 你应该可以不使用 `sudo` 安装 Starship 例如, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` 使用 `-b` 选项设置安装目录到 `~/.local/bin`
+
+对于非交互 Starship 安装, 请添加 `-y` 以跳过确认 查看安装脚本源码以获取所有支持的选项
+
+当使用包管理器时, 查询包管理器关于有无`sudo`安装的文档

@@ -166,6 +166,7 @@ impl<'a> ModuleRenderer<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
+    GitBare,
     Hg,
     Pijul,
 }
@@ -227,6 +228,16 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .current_dir(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::GitBare => {
+            let path = tempfile::tempdir()?;
+            gix::ThreadSafeRepository::init(
+                &path,
+                gix::create::Kind::Bare,
+                gix::create::Options::default(),
+            )
+            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
             Ok(path)
         }
         FixtureProvider::Hg => {

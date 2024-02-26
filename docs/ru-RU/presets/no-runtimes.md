@@ -1,10 +1,10 @@
-[Return to Presets](./README.md#no-runtime-versions)
+[Вернуться к пресетам](./README.md#no-runtime-versions)
 
-# No Runtime Versions Preset
+# Пресет No Runtime Versions
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Этот пресет скрывает версии сред выполнения языков программирования. Если вы работаете с контейнерами или виртуализированными средами, то этот пресет для вас!
 
-![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png)
+![Скриншот пресета Hide Runtime Versions](/presets/img/no-runtime-versions.png)
 
 ### Конфигурация
 
@@ -12,6 +12,6 @@ This preset hides the version of language runtimes. If you work in containers or
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml)
+[Нажмите, чтобы загрузить TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml

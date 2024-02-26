@@ -188,7 +188,7 @@ fn main() {
                 (_, _, true) => Target::Continuation,
                 (_, _, _) => Target::Main,
             };
-            print::prompt(properties, target)
+            print::prompt(properties, target);
         }
         Commands::Module {
             name,
@@ -211,7 +211,7 @@ fn main() {
             let context = Context::default();
             if let Some(name) = name {
                 if let Some(value) = value {
-                    configure::update_configuration(&context, &name, &value)
+                    configure::update_configuration(&context, &name, &value);
                 }
             } else if let Err(reason) = configure::edit_configuration(&context, None) {
                 eprintln!("Could not edit configuration: {reason}");
@@ -222,7 +222,7 @@ fn main() {
             configure::print_configuration(&Context::default(), default, &name);
         }
         Commands::Toggle { name, value } => {
-            configure::toggle_configuration(&Context::default(), &name, &value)
+            configure::toggle_configuration(&Context::default(), &name, &value);
         }
         Commands::BugReport => bug_report::create(),
         Commands::Time => {

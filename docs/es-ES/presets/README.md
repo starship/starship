@@ -60,6 +60,12 @@ Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbele
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Este preset está inspirado en [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Captura del preset de Tokyo Night](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [Gruvbox Rainbow](./gruvbox-rainbow.md)
+
+Este preajuste está muy inspirado en [Pastel Powerline](./pastel-powerline.md) y [Tokyo Night](./tokyo-night.md).
+
+[![Captura de pantalla de el preajuste Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Clic para ver el preajuste Gruvbox Rainbow")](./gruvbox-rainbow)

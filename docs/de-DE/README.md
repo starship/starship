@@ -45,7 +45,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Um Starship selbst zu aktualisieren, führe das Skript oben erneut aus. Die vorhandene Version wird ersetzt, ohne das deine Konfiguration von Starship verloren geht.
+   Führe das Skript oben erneut aus, um Starship selbst zu aktualisieren. Die vorhandene Version wird ersetzt, ohne dass deine Starship-Konfiguration verloren geht.
 
 
    #### Installation mithilfe eines Paket-Managers
@@ -66,7 +66,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Bash
 
-   Trage folgendes am Ende der `~/.bashrc` ein:
+   Füge dies ans Ende von `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -99,7 +99,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Powershell
 
-   Trage das folgende am Ende von `Microsoft.PowerShell_profile.ps1` ein. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Der Pfat lautet normalerweise `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` unter Windows und `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
+   Füge das Folgende ans Ende von `Microsoft.PowerShell_profile.ps1` an. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -153,7 +153,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Füge folgendes zum Ende deiner Nushell env Datei hinzu (finde sie, indem du `$nu.env-path` in Nushell ausführst):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

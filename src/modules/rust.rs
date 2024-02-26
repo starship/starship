@@ -914,32 +914,32 @@ version = "12"
             };
         }
 
-        static STABLE: &str = r#"rustc 1.40.0 (73528e339 2019-12-16)
+        static STABLE: &str = r"rustc 1.40.0 (73528e339 2019-12-16)
 binary: rustc
 commit-hash: 73528e339aae0f17a15ffa49a8ac608f50c6cf14
 commit-date: 2019-12-16
 host: x86_64-unknown-linux-gnu
 release: 1.40.0
 LLVM version: 9.0
-"#;
+";
 
-        static BETA: &str = r#"rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)
+        static BETA: &str = r"rustc 1.41.0-beta.1 (eb3f7c2d3 2019-12-17)
 binary: rustc
 commit-hash: eb3f7c2d3aec576f47eba854cfbd3c1187b8a2a0
 commit-date: 2019-12-17
 host: x86_64-unknown-linux-gnu
 release: 1.41.0-beta.1
 LLVM version: 9.0
-"#;
+";
 
-        static NIGHTLY: &str = r#"rustc 1.42.0-nightly (da3629b05 2019-12-29)
+        static NIGHTLY: &str = r"rustc 1.42.0-nightly (da3629b05 2019-12-29)
 binary: rustc
 commit-hash: da3629b05f8f1b425a738bfe9fe9aedd47c5417a
 commit-date: 2019-12-29
 host: x86_64-unknown-linux-gnu
 release: 1.42.0-nightly
 LLVM version: 9.0
-"#;
+";
 
         test!(
             (STABLE, None) => Some(("v1.40.0", "x86_64-unknown-linux-gnu")),

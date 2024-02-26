@@ -21,7 +21,7 @@ starship_preexec() {
     local PREV_LAST_ARG=$1
 
     # Avoid restarting the timer for commands in the same pipeline
-    if [ "$STARSHIP_PREEXEC_READY" = "true" ]; then
+    if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
@@ -33,7 +33,10 @@ starship_preexec() {
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
-    if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
+    if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
+        STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
+    fi
+    if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
 
@@ -62,23 +65,34 @@ starship_precmd() {
     # command pipeline, which may rely on it.
     _starship_set_return "$STARSHIP_CMD_STATUS"
 
-    eval "$_PRESERVED_PROMPT_COMMAND"
+    if [[ -n "${_PRESERVED_PROMPT_COMMAND-}" ]]; then
+        eval "$_PRESERVED_PROMPT_COMMAND"
+    fi
 
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
-    if [[ $STARSHIP_START_TIME ]]; then
+    if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         unset STARSHIP_START_TIME
-    else
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+    fi
+    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
+    if [[ ${BLE_ATTACHED-} ]]; then
+        local nlns=${PS1//[!$'\n']}
+        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
+# If the user appears to be using https://github.com/akinomyoga/ble.sh,
+# then hook our functions into their framework.
+if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
+    blehook PREEXEC!='starship_preexec "$_"'
+    blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-if [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
@@ -99,7 +113,7 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "$PROMPT_COMMAND" ]]; then
+    if [[ -z "${PROMPT_COMMAND-}" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.

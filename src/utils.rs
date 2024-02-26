@@ -71,7 +71,7 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
     };
 
     match file.write_all(text.as_bytes()) {
-        Ok(_) => {
+        Ok(()) => {
             log::trace!("File {file_name:?} written successfully");
         }
         Err(err) => {
@@ -257,6 +257,12 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "fossil diff --numstat" => Some(CommandOutput{
+            stdout: String::from("\
+         3          2 README.md
+         3          2 TOTAL over 1 changed files"),
+            stderr: String::default(),
+        }),
         "fossil update topic-branch" => Some(CommandOutput{
             stdout: String::default(),
             stderr: String::default(),
@@ -335,6 +341,11 @@ WebAssembly: unavailable
             stdout: String::from("default\n"),
             stderr: String::default(),
         }),
+        "typst --version" => Some(CommandOutput {
+            stdout: String::from("typst 0.10 (360cc9b9)"),
+            stderr: String::default(),
+        }),
+
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),

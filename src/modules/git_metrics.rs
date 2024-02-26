@@ -1,5 +1,4 @@
 use regex::Regex;
-use std::ffi::OsStr;
 
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig,
@@ -21,23 +20,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.workdir.as_ref()?;
-
-    let mut args = vec![
-        OsStr::new("--git-dir"),
-        repo.path.as_os_str(),
-        OsStr::new("--work-tree"),
-        repo_root.as_os_str(),
-        OsStr::new("--no-optional-locks"),
-        OsStr::new("diff"),
-        OsStr::new("--shortstat"),
-    ];
-
+    let mut git_args = vec!["diff", "--shortstat"];
     if config.ignore_submodules {
-        args.push(OsStr::new("--ignore-submodules"));
+        git_args.push("--ignore-submodules");
     }
 
-    let diff = context.exec_cmd("git", &args)?.stdout;
+    let diff = repo.exec_git(context, &git_args)?.stdout;
 
     let stats = GitDiff::parse(&diff);
 

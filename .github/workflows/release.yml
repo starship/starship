@@ -20,12 +20,11 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - uses: google-github-actions/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
-          draft: true
 
   # Build sources for every OS
   github_build:
@@ -89,7 +88,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@master
@@ -141,7 +140,7 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -149,7 +148,7 @@ jobs:
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: starship-${{ matrix.target }}.msi
           path: target/wix/starship-${{ matrix.target }}.msi
@@ -176,9 +175,10 @@ jobs:
     env:
       KEYCHAIN_FILENAME: app-signing.keychain-db
       KEYCHAIN_ENTRY: AC_PASSWORD
+      STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Required to include the recently merged Crowdin PR
           ref: master
@@ -214,6 +214,11 @@ jobs:
           # Add Apple Developer ID credentials to keychain
           xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
+      - name: Setup | Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Notarize | Build docs
         run: |
           cd docs
@@ -221,7 +226,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -233,7 +238,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -242,10 +247,11 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
+          overwrite: true
 
       - name: Cleanup Secrets
         if: ${{ always() }}
@@ -260,7 +266,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -284,7 +290,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -298,7 +304,7 @@ jobs:
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.2
+      - uses: mislav/bump-homebrew-formula-action@v3.1
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
@@ -329,9 +335,9 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
@@ -345,11 +351,11 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   publish_docs:
     name: Trigger docs deployment
@@ -357,7 +363,7 @@ jobs:
     needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
         env:
