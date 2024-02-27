@@ -74,3 +74,9 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+
+## [Crimson Snow](./crimson-snow.md)
+
+This preset is heavily inspired by Assassin's Creed.
+
+[![Screenshot of Crimson Snow preset](/presets/img/crimson-snow.png "Click to view Crimson Snow preset")](./crimson-snow)
