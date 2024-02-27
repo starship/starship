@@ -40,6 +40,9 @@ symbol = " "
 [golang]
 symbol = " "
 
+[hare]
+symbol = "󱩡 "
+
 [guix_shell]
 symbol = " "
 

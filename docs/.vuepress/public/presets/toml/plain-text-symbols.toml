@@ -82,6 +82,9 @@ symbol = "gradle "
 [guix_shell]
 symbol = "guix "
 
+[hare]
+symbol = "ha "
+
 [hg_branch]
 symbol = "hg "
 
