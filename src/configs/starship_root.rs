@@ -102,6 +102,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "conda",
     "meson",
     "spack",
+    "loadavg",
     "memory_usage",
     "aws",
     "gcloud",
