@@ -38,6 +38,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "singularity",
     "kubernetes",
     "directory",
+    "p4",
     "vcsh",
     "fossil_branch",
     "fossil_metrics",

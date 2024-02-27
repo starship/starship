@@ -1214,6 +1214,19 @@
         }
       ]
     },
+    "p4": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol $user@$client#$changelist]($style) ",
+        "style": "bold blue",
+        "symbol": "p4"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/P4Config"
+        }
+      ]
+    },
     "package": {
       "default": {
         "disabled": false,
@@ -4697,6 +4710,28 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "P4Config": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "p4",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "format": {
+          "default": "[$symbol $user@$client#$changelist]($style) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
           "type": "boolean"
         }
       },
