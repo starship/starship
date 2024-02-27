@@ -69,3 +69,9 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 이 프리셋은 [Pastel Powerline](./pastel-powerline.md) 및 [Tokyo Night](./tokyo-night.md)에서 강하게 영감을 받았습니다.
 
 [![Gruvbox Rainbow 프리셋 스크린샷](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+
+## [Jetpack](./jetpack.md)
+
+This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+
+[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
