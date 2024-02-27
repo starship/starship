@@ -74,3 +74,9 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+
+## [Parrot OS](./parrot-os.md)
+
+This preset is inspired by the zsh look that comes with the [ParrotOS](https://www.parrotsec.org) operating system.
+
+[![Screenshot of ParrotOS preset](/presets/img/parrot-os.png "Click to view ParrotOS preset")](./parrot-os)
