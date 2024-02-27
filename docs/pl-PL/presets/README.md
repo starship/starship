@@ -69,3 +69,9 @@ Ten zestaw ustawień jest inspirowany [tokyo-night-vscode-theme](https://github.
 Zestaw mocno inspirowany przez [Pastel Powerline](./pastel-powerline.md) i [Tokyo Night](./tokyo-night.md).
 
 [![Zrzut ekranu ustawień Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Kliknij, aby wyświetlić ustawienia Gruvbox Rainbow")](./gruvbox-rainbow)
+
+## [Jetpack](./jetpack.md)
+
+This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+
+[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
