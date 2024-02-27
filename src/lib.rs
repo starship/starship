@@ -2,6 +2,7 @@
 
 #[macro_use]
 extern crate shadow_rs;
+extern crate core;
 
 shadow!(shadow);
 

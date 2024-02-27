@@ -73,6 +73,7 @@ pub mod red;
 pub mod rlang;
 pub mod ruby;
 pub mod rust;
+pub mod salesforce;
 pub mod scala;
 pub mod shell;
 pub mod shlvl;
@@ -250,6 +251,8 @@ pub struct FullConfig<'a> {
     ruby: ruby::RubyConfig<'a>,
     #[serde(borrow)]
     rust: rust::RustConfig<'a>,
+    #[serde(borrow)]
+    salesforce: salesforce::SalesforceConfig<'a>,
     #[serde(borrow)]
     scala: scala::ScalaConfig<'a>,
     #[serde(borrow)]

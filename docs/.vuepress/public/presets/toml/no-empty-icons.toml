@@ -102,6 +102,9 @@ format = '(via [$symbol($version )]($style))'
 [rust]
 format = '(via [$symbol($version )]($style))'
 
+[salesforce]
+format = '(via [$symbol($org_name) ]($style))'
+
 [scala]
 format = '(via [$symbol($version )]($style))'
 
