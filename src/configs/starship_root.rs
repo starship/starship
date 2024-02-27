@@ -58,6 +58,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "cobol",
     "daml",
     "dart",
+    "dbt",
     "deno",
     "dotnet",
     "elixir",
