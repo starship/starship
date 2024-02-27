@@ -179,6 +179,14 @@ Thread model: posix
 InstalledDir: /usr/bin"),
             stderr: String::default(),
         }),
+        "g++ --version" => Some(CommandOutput {
+            stdout: String::from("\
+g++ (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
+            stderr: String::default(),
+        }),
         "gcc --version" => Some(CommandOutput {
             stdout: String::from("\
 cc (Debian 10.2.1-6) 10.2.1 20210110

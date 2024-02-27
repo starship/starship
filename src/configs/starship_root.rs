@@ -56,6 +56,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "c",
     "cmake",
     "cobol",
+    "cpp",
     "daml",
     "dart",
     "deno",

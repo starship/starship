@@ -13,6 +13,9 @@ format = '(via [$symbol($version )]($style))'
 [cobol]
 format = '(via [$symbol($version )]($style))'
 
+[cpp]
+format = '(via [$symbol($version(-$name) )]($style))'
+
 [crystal]
 format = '(via [$symbol($version )]($style))'
 

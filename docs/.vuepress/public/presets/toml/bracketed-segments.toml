@@ -19,6 +19,9 @@ format = '\[[$symbol($version)]($style)\]'
 [conda]
 format = '\[[$symbol$environment]($style)\]'
 
+[cpp]
+format = '\[[$symbol($version(-$name))]($style)\]'
+
 [crystal]
 format = '\[[$symbol($version)]($style)\]'
 
