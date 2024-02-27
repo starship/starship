@@ -1,0 +1,190 @@
+format = """
+[](color_purple)\
+$os\
+$username\
+[](bg:color_rustyred fg:color_purple)\
+$directory\
+[](fg:color_rustyred bg:color_apricot)\
+$git_branch\
+$git_status\
+[](fg:color_apricot bg:color_skyblue)\
+$c\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+[](fg:color_skyblue bg:color_teal)\
+$docker_context\
+[](fg:color_teal bg:color_steelblue)\
+$time\
+[ ](fg:color_steelblue)\
+$line_break$character
+"""
+
+palette = 'pastel_powerline'
+
+[palettes.pastel_powerline]
+color_rustyred = '#DA627D'
+color_purple = '#9A348E'
+color_apricot = '#FCA17D'
+color_skyblue = '#86BBD8'
+color_teal = '#06969A'
+color_steelblue = '#33658A'
+color_green = '#98971a'
+color_red = '#cc241d'
+color_pink = '#b16286'
+color_yellow = '#d79921'
+#color_blue = '#458588'
+color_aqua = '#689d6a'
+#color_orange = '#d65d0e'
+
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+[username]
+show_always = true
+style_user = "bg:color_purple"
+style_root = "bg:color_purple"
+format = '[$user ]($style)'
+disabled = false
+
+[os]
+style = "bg:color_purple"
+disabled = false
+
+[directory]
+style = "bg:color_rustyred"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+"Developer" = "󰲋 "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = " 󰈙 "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important 󰈙 " = " 󰈙 "
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[c]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[docker_context]
+symbol = " "
+style = "bg:color_teal"
+format = '[ $symbol $context ]($style)'
+
+[elixir]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:color_apricot"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:color_apricot"
+format = '[$all_status$ahead_behind ]($style)'
+
+[golang]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[gradle]
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[java]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+symbol = "󰆥 "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[scala]
+symbol = " "
+style = "bg:color_skyblue"
+format = '[ $symbol ($version) ]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:color_steelblue"
+format = '[ ♥ $time ]($style)'
+
+[character]
+disabled = false
+success_symbol = '[](bold fg:color_aqua)'
+error_symbol = '[](bold fg:color_red)'
+vimcmd_symbol = '[](bold fg:color_green)'
+vimcmd_replace_one_symbol = '[](bold fg:color_pink)'
+vimcmd_replace_symbol = '[](bold fg:color_pink)'
+vimcmd_visual_symbol = '[](bold fg:color_yellow)'
