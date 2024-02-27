@@ -64,6 +64,9 @@ format = 'via [$symbol]($style)'
 [meson]
 format = 'via [$symbol]($style)'
 
+[nextflow]
+format = 'via [$symbol]($style)'
+
 [nim]
 format = 'via [$symbol]($style)'
 

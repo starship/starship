@@ -305,6 +305,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$nextflow\
 $nim\
 $nodejs\
 $ocaml\
@@ -2882,6 +2883,33 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Nextflow
+
+The `nextflow` module shows the currently installed version of [nextflow](https://www.nextflow.io/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `nextflow.config` file
+- The current directory contains a file with the `.nf` extension
+
+To avoid timeouts add:
+
+```toml
+# ~/.config/starship.toml
+
+command_timeout = 5000
+```
+
+### Options
+
+| Option              | Default                              | Description                                                |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `detect_extensions` | `["nf"]`                             | Which extensions should trigger this module.               |
+| `detect_files`      | `["nextflow.config"]`                | Which filenames should trigger this module.                |
+| `disabled`          | `false`                              | Disables the `nextflow` module.                            |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                  |
+| `style`             | `"green bold"`                       | The style for the module.                                  |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of Nextflow. |
+| `version_format`    | `"v${raw}"`                          | The version format.                                        |
 
 ## Nim
 

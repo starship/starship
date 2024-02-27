@@ -106,6 +106,9 @@ symbol = "memory "
 [meson]
 symbol = "meson "
 
+[nextflow]
+symbol = "nextflow "
+
 [nim]
 symbol = "nim "
 

@@ -73,6 +73,9 @@ symbol = "󰍛 "
 [meson]
 symbol = "󰔷 "
 
+[nextflow]
+symbol = "∝ "
+
 [nim]
 symbol = "󰆥 "
 

@@ -17,6 +17,7 @@ $haskell\
 $java\
 $julia\
 $nodejs\
+$nextflow\
 $nim\
 $rust\
 $scala\
@@ -119,6 +120,11 @@ format = '[ $symbol ($version) ]($style)'
 
 [nodejs]
 symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[nextflow]
+symbol = "∝ "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 

@@ -61,6 +61,7 @@ pub const ALL_MODULES: &[&str] = &[
     "lua",
     "memory_usage",
     "meson",
+    "nextflow",
     "nim",
     "nix_shell",
     "nodejs",
