@@ -33,12 +33,20 @@ fn pct(total: ByteSize, free: ByteSize) -> f64 {
 }
 
 // Print usage string used/total
-fn format_usage_total(total: ByteSize, free: ByteSize) -> String {
-    format!(
-        "{}/{}",
-        display_bs(saturating_sub_bytes(total, free)),
-        display_bs(total)
-    )
+fn format_usage_total(total: ByteSize, free: ByteSize, single_unit: bool) -> String {
+    let mut used = display_bs(saturating_sub_bytes(total, free));
+    let total = display_bs(total);
+
+    if single_unit {
+        let used_unit = used.trim_start_matches(char::is_numeric);
+        let total_unit = total.trim_start_matches(char::is_numeric);
+
+        if used_unit == total_unit {
+            used = used.strip_suffix(used_unit).unwrap().into();
+        }
+    }
+
+    format!("{}/{}", used, total)
 }
 
 /// Creates a module with system memory usage information
@@ -94,11 +102,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "ram" => Some(Ok(format_usage_total(memory.total, memory.free))),
+                "ram" => Some(Ok(format_usage_total(
+                    memory.total,
+                    memory.free,
+                    config.single_unit_fractions,
+                ))),
                 "ram_pct" => Some(Ok(format!("{used_pct:.0}%"))),
                 "swap" => Some(Ok(format_usage_total(
                     swap.as_ref()?.total,
                     swap.as_ref()?.free,
+                    config.single_unit_fractions,
                 ))),
                 "swap_pct" => Some(Ok(format!(
                     "{:.0}%",
@@ -129,19 +142,44 @@ mod test {
     #[test]
     fn test_format_usage_total() {
         assert_eq!(
-            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(1024 * 1024 * 1024)),
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024),
+                false
+            ),
             "0B/1GiB"
         );
         assert_eq!(
             format_usage_total(
                 ByteSize(1024 * 1024 * 1024),
-                ByteSize(1024 * 1024 * 1024 / 2)
+                ByteSize(1024 * 1024 * 1024),
+                true,
+            ),
+            "0B/1GiB"
+        );
+        assert_eq!(
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024 / 2),
+                false,
             ),
             "512MiB/1GiB"
         );
         assert_eq!(
-            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(0)),
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024 / 2),
+                true,
+            ),
+            "512MiB/1GiB"
+        );
+        assert_eq!(
+            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(0), false),
             "1GiB/1GiB"
+        );
+        assert_eq!(
+            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(0), true),
+            "1/1GiB"
         );
     }
 
