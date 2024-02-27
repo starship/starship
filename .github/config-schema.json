@@ -329,6 +329,19 @@
         }
       ]
     },
+    "devbox_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "Purple bold",
+        "symbol": "</> "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DevboxShellConfig"
+        }
+      ]
+    },
     "directory": {
       "default": {
         "before_repo_root_style": null,
@@ -2645,6 +2658,28 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DevboxShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "</> ",
+          "type": "string"
+        },
+        "style": {
+          "default": "Purple bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

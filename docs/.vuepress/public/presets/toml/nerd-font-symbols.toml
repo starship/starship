@@ -19,6 +19,9 @@ symbol = " "
 [directory]
 read_only = " 󰌾"
 
+[devbox_shell]
+symbol = " "
+
 [docker_context]
 symbol = " "
 

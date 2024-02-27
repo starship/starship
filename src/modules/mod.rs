@@ -15,6 +15,7 @@ pub mod custom;
 mod daml;
 mod dart;
 mod deno;
+mod devbox_shell;
 mod directory;
 mod direnv;
 mod docker_context;
@@ -122,6 +123,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
+            "devbox_shell" => devbox_shell::module(context),
             "directory" => directory::module(context),
             "direnv" => direnv::module(context),
             "docker_context" => docker_context::module(context),
@@ -280,6 +282,7 @@ pub fn description(module: &str) -> &'static str {
         }
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
+        "devbox_shell" => "The devbox-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
         "opa" => "The currently installed version of Open Platform Agent",

@@ -31,6 +31,9 @@ format = '\[[$symbol($version)]($style)\]'
 [deno]
 format = '\[[$symbol($version)]($style)\]'
 
+[devbox_shell]
+format = '\[[$symbol($version)]($style)\]'
+
 [docker_context]
 format = '\[[$symbol$context]($style)\]'
 
