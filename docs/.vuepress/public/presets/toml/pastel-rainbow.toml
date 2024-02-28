@@ -41,9 +41,7 @@ color_green = '#98971a'
 color_red = '#cc241d'
 color_pink = '#b16286'
 color_yellow = '#d79921'
-#color_blue = '#458588'
 color_aqua = '#689d6a'
-#color_orange = '#d65d0e'
 
 
 # Disable the blank line at the start of the prompt
