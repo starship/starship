@@ -123,6 +123,10 @@ $null = New-Module starship {
             "--jobs=$($jobs)"
         )
 
+        if ($Host.UI.RawUI.CursorPosition.Y -eq 0 -or $script:firstRender) {
+            $arguments += "--disable-add-newline"
+        }
+
         # We start from the premise that the command executed correctly, which covers also the fresh console.
         $lastExitCodeForPrompt = 0
         if ($lastCmd = Get-History -Count 1) {
@@ -185,6 +189,7 @@ $null = New-Module starship {
             }
         }
 
+        $script:FirstRender = $false
     }
 
     # Disable virtualenv prompt, it breaks starship
@@ -192,6 +197,7 @@ $null = New-Module starship {
 
     $script:TransientPrompt = $false
     $script:DoesUseLists = (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
+    $script:FirstRender = $true
 
     if ($PSVersionTable.PSVersion.Major -gt 5) {
         $ENV:STARSHIP_SHELL = "pwsh"

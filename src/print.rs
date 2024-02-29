@@ -116,8 +116,8 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
-    if config.add_newline && context.target != Target::Continuation {
-        // continuation prompts normally do not include newlines, but they can
+    if config.add_newline && context.target != Target::Continuation && !&context.disable_add_newline
+    {
         writeln!(buf).unwrap();
     }
     write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
@@ -627,6 +627,25 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn add_newline_prompt() {
+        let context = default_context().set_config(toml::toml! {
+                add_newline = true
+                format="~\n>"
+        });
+        assert_eq!("\n~\n>", &get_prompt(context));
+    }
+
+    #[test]
+    fn add_newline_prompt_with_disable_add_newline() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = true
+                format="~\n>"
+        });
+        context.disable_add_newline = true;
+        assert_eq!("~\n>", &get_prompt(context)); // there is no newline before ~ since it is the top of the terminal
     }
 
     #[test]
