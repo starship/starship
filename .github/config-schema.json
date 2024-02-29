@@ -1717,6 +1717,7 @@
     },
     "username": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "[$user]($style) in ",
         "show_always": false,
@@ -5878,6 +5879,13 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "format": {
           "default": "[$user]($style) in ",
           "type": "string"

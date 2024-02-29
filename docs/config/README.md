@@ -4357,6 +4357,7 @@ The module will be shown if any of the following conditions are met:
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4368,13 +4369,14 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Options
 
-| Option        | Default                 | Description                                 |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
-| `format`      | `'[$user]($style) in '` | The format for the module.                  |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| Option            | Default                 | Description                                               |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | The style used for non-root users.                        |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | The format for the module.                                |
+| `show_always`     | `false`                 | Always shows the `username` module.                       |
+| `disabled`        | `false`                 | Disables the `username` module.                           |
 
 ### Variables
 
@@ -4385,6 +4387,8 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Example
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4394,6 +4398,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant
