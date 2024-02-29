@@ -37,6 +37,9 @@ symbol = " "
 [git_branch]
 symbol = " "
 
+[godot]
+symbol = " "
+
 [golang]
 symbol = " "
 
