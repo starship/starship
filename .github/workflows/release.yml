@@ -50,6 +50,10 @@ jobs:
           - target: aarch64-unknown-linux-musl
             os: ubuntu-latest
             name: starship-aarch64-unknown-linux-musl.tar.gz
+            
+          - target: s390x-unknown-linux-gnu
+            os: ubuntu-latest
+            name: starship-s390x-unknown-linux-gnu.tar.gz
 
           - target: arm-unknown-linux-musleabihf
             os: ubuntu-latest
