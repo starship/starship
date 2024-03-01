@@ -9,6 +9,7 @@ $git_branch\
 $git_status\
 [](fg:#FCA17D bg:#86BBD8)\
 $c\
+$clojure\
 $elixir\
 $elm\
 $golang\
@@ -66,6 +67,11 @@ truncation_symbol = "…/"
 
 [c]
 symbol = " "
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[clojure]
+symbol = "λ̮̮̑̑ "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 

@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "bun",
     "c",
     "character",
+    "clojure",
     "cmake",
     "cmd_duration",
     "cobol",

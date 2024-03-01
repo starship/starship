@@ -5,6 +5,9 @@ discharging_symbol = "⇣ "
 unknown_symbol = "❓ "
 empty_symbol = "❗ "
 
+[clojure]
+symbol = "λ̮̮̑̑ "
+
 [erlang]
 symbol = "ⓔ "
 

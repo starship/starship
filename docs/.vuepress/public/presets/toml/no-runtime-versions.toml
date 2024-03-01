@@ -4,6 +4,9 @@ format = "via [$symbol]($style)"
 [buf]
 format = "via [$symbol]($style)"
 
+[clojure]
+format = 'via [$symbol]($style)'
+
 [cmake]
 format = "via [$symbol]($style)"
 

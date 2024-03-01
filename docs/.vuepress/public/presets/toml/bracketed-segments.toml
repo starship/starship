@@ -7,6 +7,9 @@ format = '\[[$symbol($version)]($style)\]'
 [c]
 format = '\[[$symbol($version(-$name))]($style)\]'
 
+[clojure]
+format = '\[[$symbol($version)]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
