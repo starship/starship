@@ -85,6 +85,9 @@ format = '\[[$symbol$branch]($style)\]'
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
+[jj_change]
+format = '\[[$change_id]($style)\]'
+
 [julia]
 format = '\[[$symbol($version)]($style)\]'
 

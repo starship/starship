@@ -22,6 +22,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$jj_change\
 $pijul_channel\
 $docker_context\
 $package\
@@ -262,6 +263,9 @@ format = " hs [$symbol($version )]($style)"
 [java]
 symbol = "∪ "
 format = " java [${symbol}(${version} )]($style)"
+
+[jj_change]
+format = " jj [$change_id]($style)"
 
 [julia]
 symbol = "◎ "

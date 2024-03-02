@@ -168,6 +168,7 @@ pub enum FixtureProvider {
     Git,
     GitBare,
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -250,6 +251,11 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .arg(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::Jujutsu => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".jj"))?;
             Ok(path)
         }
         FixtureProvider::Pijul => {

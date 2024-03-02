@@ -47,6 +47,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "git_metrics",
     "git_status",
     "hg_branch",
+    "jj_change",
     "pijul_channel",
     "docker_context",
     "package",

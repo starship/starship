@@ -52,6 +52,10 @@ pub struct Context<'a> {
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
 
+    /// Private field containing the JJ root, if one was found. Useful to skip computing JJ modules
+    /// when unnecessary because a previous one already checked.
+    jj_repo: OnceCell<Option<Box<str>>>,
+
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
@@ -168,6 +172,7 @@ impl<'a> Context<'a> {
             logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
+            jj_repo: OnceCell::new(),
             shell,
             target,
             width,
@@ -361,6 +366,19 @@ impl<'a> Context<'a> {
                     kind: repository.kind(),
                 })
             })
+    }
+
+    pub fn get_jj_repo(&self) -> Option<&str> {
+        self.jj_repo
+            .get_or_init(|| {
+                let out = self.exec_cmd("jj", &["root", "--ignore-working-copy"])?;
+                let root = out.stdout.lines().next()?;
+                match root.is_empty() {
+                    true => None,
+                    false => Some(Box::from(root)),
+                }
+            })
+            .as_deref()
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {

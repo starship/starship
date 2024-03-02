@@ -287,6 +287,14 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc."),
             stderr: String::default(),
         }),
+        "jj root --ignore-working-copy" => Some(CommandOutput {
+            stdout: String::from("/tmp/false-jj-root\n"),
+            stderr: String::default()
+        }),
+        "jj --repository /tmp/false-jj-root log --color never --revisions @ --no-graph --template change_id.shortest(3) --ignore-working-copy" => Some(CommandOutput {
+            stdout: String::from("zyx\n"),
+            stderr: String::default()
+        }),
         "julia --version" => Some(CommandOutput {
             stdout: String::from("julia version 1.4.0\n"),
             stderr: String::default(),
