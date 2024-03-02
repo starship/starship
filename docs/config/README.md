@@ -341,6 +341,7 @@ $direnv\
 $env_var\
 $crystal\
 $custom\
+$ssh_agent\
 $sudo\
 $cmd_duration\
 $line_break\
@@ -4060,6 +4061,54 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 [spack]
 format = '[$symbol$environment](dimmed blue) '
+```
+
+## SSH Agent
+
+The `ssh_agent` module shows if one or more private key identities are added to the [OpenSSH authentication](https://en.wikipedia.org/wiki/Ssh-agent) agent.
+
+### Options
+
+| Option         | Default                   | Description                                   |
+| -------------- | ------------------------- | --------------------------------------------- |
+| `symbol`       | `'🔑 '`                   | The symbol used when one key is added.        |
+| `symbol_multi` | `'🔑➕ '`                 | The symbol used when multiple keys are added. |
+| `symbol_none`  | `'❌ '`                   | The symbol used when no keys are added.       |
+| `style`        | `'bold green'`            | The style when keys are added.                |
+| `style_none`   | `'bold red'`              | The style when no keys are added.             |
+| `format`       | `'[ssh $symbol]($style)'` | The format for the module.                    |
+| `disabled`     | `false`                   | Disables the `ssh_agent` module.              |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ssh_agent]
+style = 'bold blue'
+symbol = '🗝 '
+symbol_multi = '🗝🗝 '
+disabled = false
+```
+
+```toml
+# Nerd font symbols
+# $HOME\.starship\config.toml
+
+[ssh_agent]
+symbol = ' '
+symbol_multi = ' '
+symbol_none = ' '
+disabled = false
 ```
 
 ## Status
