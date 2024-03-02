@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#pastel-powerline)
+[Return to Presets](./README.md#tokyo-night)
 
 # Tokyo Night Preset
 
