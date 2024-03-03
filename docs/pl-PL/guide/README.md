@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!**
 
 - **Szybkość:** jest szybki - _naprawdę_ szybki! 🚀
 - **Konfigurowalny:** dostosowuj swój wiersz poleceń w każdym aspekcie.
