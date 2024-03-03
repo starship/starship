@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
 
 - **Rápido:** É rápido – _muito muito_ rápido! 🚀
 - **Personalizável:** Configure todos os detalhes do seu prompt.
