@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!**
 
 - **Cepat:** Starship itu cepat – _sangat sangat_ cepat! 🚀
 - **Customizable:** configure every aspect of your prompt.
