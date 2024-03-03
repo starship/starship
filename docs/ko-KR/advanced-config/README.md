@@ -223,7 +223,7 @@ Invoke-Expression (&starship init powershell)
 
 일부 셸은 입력과 같은 줄에 렌더링되는 오른쪽 프롬프트를 지원합니다. Starship에서는 `right_format` 옵션을 사용하여 오른쪽 프롬프트의 내용을 설정할 수 있습니다. `format`에서 사용할 수 있는 모든 모듈은 `right_format`에서도 지원됩니다. `$all` 변수는 `format` 또는 `right_format`에서 명시적으로 사용하지 않는 모듈만 포함합니다.
 
-알림: 오른쪽 프롬프트는 입력 위치에 따라 한 줄로 표시됩니다. 여러 줄 프롬프트에서 입력 선 위의 모듈을 오른쪽 정렬하려면, [`fill` 모듈](/config/#fill)을 참고하세요.
+알림: 오른쪽 프롬프트는 입력 위치에 따라 한 줄로 표시됩니다. 여러 줄 프롬프트에서 입력 선 위의 모듈을 오른쪽 정렬하려면, [`fill` 모듈](../config/#fill)을 참고하세요.
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 

@@ -1,4 +1,4 @@
-[Retourner aux préréglages](./README.md#jetpack)
+[Retourner aux préréglages](./#jetpack)
 
 # Jetpack Preset
 
@@ -21,4 +21,4 @@ starship preset jetpack -o ~/.config/starship.toml
 
 [Cliquez pour télécharger le TOML](/presets/toml/jetpack.toml)
 
-<<< @/.vuepress/public/presets/toml/jetpack.toml
+<<< @/public/presets/toml/jetpack.toml

@@ -17,7 +17,7 @@ add_newline = true
 
 # 将提示符中的 '❯' 替换为 '➜'
 [character] # 此组件名称为 'character'
-success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'  
+success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'
 
 # 禁用 'package' 组件，将其隐藏
 [package]
@@ -158,7 +158,7 @@ line2
 
 #### 样式字符串
 
-Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](/advanced-config/)。
+Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](../advanced-config/)。
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -200,12 +200,12 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | 选项                | 默认值                           | 描述                                                                                                                                                                               |
 | ----------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                                                                                                                                        |
-| `right_format`    | `''`                          | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `right_format`    | `''`                          | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
 | `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                                                                                                                                       |
 | `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                                                                                                                                      |
 | `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                               |
 | `palette`         | `''`                          | Sets which color palette from `palettes` to use.                                                                                                                                 |
-| `palettes`        | `{}`                          | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `palettes`        | `{}`                          | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                        | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
 
 ::: tip

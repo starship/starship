@@ -1,4 +1,4 @@
-[Retornar para Predefinições](./README.md#plain-text-symbols)
+[Retornar para Predefinições](./#plain-text-symbols)
 
 ## Personalização de símbolos de texto simples
 
@@ -14,4 +14,4 @@ starship preset plain-text-symbols -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/plain-text-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+<<< @/public/presets/toml/plain-text-symbols.toml

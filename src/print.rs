@@ -649,7 +649,7 @@ mod test {
         preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
 
         let actual = utils::read_file(&path)?;
-        let expected = include_str!("../docs/.vuepress/public/presets/toml/nerd-font-symbols.toml");
+        let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
         assert_eq!(actual, expected);
 
         dir.close()

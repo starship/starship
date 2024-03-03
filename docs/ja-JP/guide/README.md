@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">ウェブサイト</a>
+  <a href="https://starship.rs/ja-JP">ウェブサイト</a>
   ·
   <a href="#🚀-installation">インストール</a>
   ·
-  <a href="https://starship.rs/config/">設定</a>
+  <a href="https://starship.rs/ja-JP/config/">設定</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **簡単:** 迅速なインストールが可能であり、数分で使用開始可能です。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/ja-JP/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

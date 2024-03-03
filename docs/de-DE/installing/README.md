@@ -5,7 +5,7 @@ Um Starship zu installieren, musst du zwei Dinge tun:
 1. Lade die **starship** Datei auf den Computer herunter
 1. Weise deine Shell an die Starship Datei als Eingabeaufforderung zu nutzen, indem du eines der Initialisierungs-Skripte benutzt
 
-Die Anleitung auf [der Hauptseite](/guide/#🚀-installation) wird für die meisten Benutzer ausreichend sein. Für einige speziellere Plattformen wird jedoch eine speziellere Anleitung benötigt.
+Die Anleitung auf [der Hauptseite](../guide/#🚀-installation) wird für die meisten Benutzer ausreichend sein. Für einige speziellere Plattformen wird jedoch eine speziellere Anleitung benötigt.
 
 Es gibt sehr viele Plattformen, sodass diese nicht alle in die Hauptanleitung passen, aus diesem Grund sind hier ein paar Installationsanweisungen für ein paar Plattformen von der Community. Ist deine Platform nicht dabei? Dann füge bitte deine hinzu, sobald du herausgefunden hast wie man starship mit dieser benutzt!
 

@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#jetpack)
+[プリセット一覧に戻る](./#jetpack)
 
 # Jetpack Preset
 
@@ -21,4 +21,4 @@ starship preset jetpack -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/jetpack.toml)
 
-<<< @/.vuepress/public/presets/toml/jetpack.toml
+<<< @/public/presets/toml/jetpack.toml

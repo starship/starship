@@ -1,12 +1,10 @@
 {
   "scripts": {
-    "dev": "vuepress dev",
-    "build": "vuepress build"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "devDependencies": {
-    "vuepress": "^1.9.10",
-    "vuepress-plugin-code-copy": "^1.0.6",
-    "vuepress-plugin-sitemap": "^2.3.1",
-    "vuepress-theme-default-prefers-color-scheme": "^2.0.0"
+    "vitepress": "^1.0.0-rc.44"
   }
 }

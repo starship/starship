@@ -106,7 +106,7 @@ format = '''
 
 \$'''
 
-# com string básica multilinha 
+# com string básica multilinha
 format = """
 
 \\$"""
@@ -158,7 +158,7 @@ Por exemplo:
 
 #### Estilo dos textos
 
-A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](/advanced-config/).
+A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](../advanced-config/).
 
 - `"fg:green bg:blue"` define o texto para verde e o fundo azul
 - `"bg:blue fg:bright-green"` define o texto para verde brilhante e o fundo azul
@@ -200,12 +200,12 @@ Esta é a lista de opções de configuração em todo o prompt.
 | Opções            | Padrão                         | Descrição                                                                                                                                                                                               |
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                                                                                                                                                          |
-| `right_format`    | `''`                           | Veja [Ativa o prompt direito](/advanced-config/#enable-right-prompt)                                                                                                                                    |
+| `right_format`    | `''`                           | Veja [Ativa o prompt direito](../advanced-config/#enable-right-prompt)                                                                                                                                    |
 | `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                                                 |
 | `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                                                  |
 | `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                                           |
 | `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                                                 |
-| `palettes`        | `{}`                           | Coleção de paletas de cores que atribuem [cores](/advanced-config/#style-strings) aos nomes definidos pelo usuário. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
+| `palettes`        | `{}`                           | Coleção de paletas de cores que atribuem [cores](../advanced-config/#style-strings) aos nomes definidos pelo usuário. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
 | `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                          |
 
 ::: tip

@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
-actionText: Pierwsze kroki →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
+  actions:
+    - theme: brand
+      text: Pierwsze kroki →
+      link: ./guide/
 features:
-  - 
+  -
     title: Kompatybilność przede wszystkim
     details: Działa na większości powszechnych powłokach, na większości najpopularniejszych systemach. Używaj go wszędzie!
-  - 
+  -
     title: Napędzany językiem Rust
     details: Zapewnia najlepszą w swojej klasie prędkość i bezpieczeństwo języka Rust, w celu zapewnienia jak najszybszej i niezawodnej odpowiedzi.
-  - 
+  -
     title: Konfigurowalny
     details: Każdy mały detal jest konfigurowalny do Twoich preferencji, aby wiersz poleceń był tak minimalny lub tak bogaty w funkcje, jak tylko zechcesz.
 footer: Licencja ISC | Copyright © 2019-obecnie Kontrybutorzy Starship

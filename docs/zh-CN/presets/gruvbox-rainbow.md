@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#gruvbox-rainbow)
+[返回全部预设](./#gruvbox-rainbow)
 
 # Gruvbox Rainbow Preset
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

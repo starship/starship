@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#nerd-font-symbols)
+[프리셋으로 돌아가기](./#nerd-font-symbols)
 
 # Nerd Font 기호 프리셋
 
@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

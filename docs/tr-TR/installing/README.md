@@ -5,7 +5,7 @@ Starship'i kurmak için, 2 şeye ihtiyacınız var:
 1. **Starship** binary dosyalarını bilgisayarınıza alın
 1. Kabuğunuza Starship binary scriptini kullanmasını söyleyin
 
-Çoğu kullanıcı için, [ana sayfadaki](/guide/#🚀-installation) talimatlar gayet iyi çalışacaktır. Fakat, bazı özel platformlar için, farklı talimatlara ihtiyaç vardır.
+Çoğu kullanıcı için, [ana sayfadaki](../guide/#🚀-installation) talimatlar gayet iyi çalışacaktır. Fakat, bazı özel platformlar için, farklı talimatlara ihtiyaç vardır.
 
 Birçok platform var ki ana sisteme uymuyorlar. README.md belgesi ile diğer platformlar için bazı kurulum talimatları. Seninki burada değil mi? Anlarsan lütfen buraya ekle!
 

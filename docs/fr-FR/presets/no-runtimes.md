@@ -1,4 +1,4 @@
-[Retourner aux préréglages](./README.md#no-runtime-versions)
+[Retourner aux préréglages](./#no-runtime-versions)
 
 # Préréglage Pas de version des environnements
 
@@ -14,4 +14,4 @@ starship preset no-runtime-versions -o ~/.config/starship.toml
 
 [Cliquez pour télécharger le TOML](/presets/toml/no-runtime-versions.toml)
 
-<<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
+<<< @/public/presets/toml/no-runtime-versions.toml
