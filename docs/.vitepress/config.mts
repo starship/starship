@@ -385,7 +385,8 @@ export default defineConfig({
     },
     cleanUrls: true,
     markdown: {
-        theme: "github-dark"
+        theme: "github-dark",
+        ignoreInvalid: true,
     },
     ignoreDeadLinks: [
         /\/toml\/.*/,
