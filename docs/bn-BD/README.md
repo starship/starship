@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: আপনার টার্মিনাল এর জন্য একটি সহজ, প্রচণ্ড দ্রুত এবং অশেষভাবে কাস্টমাইজ করার  মতো সুবিধাসম্পন্ন একটি প্রম্প্ট!
   actions:
     - 
       theme: brand
