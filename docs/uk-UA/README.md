@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
   actions:
     - 
       theme: brand
