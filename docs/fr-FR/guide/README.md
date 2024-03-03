@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !**
 
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
 - **Personnalisable:** configurez chaque élément de votre invite.
