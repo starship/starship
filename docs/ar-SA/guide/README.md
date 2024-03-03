@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/ar-SA">الموقع</a>
+  <a href="https://starship.rs">الموقع</a>
   ·
   <a href="#🚀-installation">التثبيت</a>
   ·
-  <a href="https://starship.rs/ar-SA/config/">الإعدادات</a>
+  <a href="https://starship.rs/config/">الإعدادات</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**التخصيص البسيط و السريع و الغير محدود لي ال"shell"!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Fast:** إنها _في غاية_ السرعة! 🚀
 - ** Customizable:** قم بتهيئة ال"prompt" من كل النواحي.
@@ -171,7 +171,7 @@
 - **Easy:** سريع التثبيت – استخدمها في دقائق معدودة.
 
 <p align="center">
-<a href="https://starship.rs/ar-SA/config/"><strong>تصفّح مستندات Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>تصفّح مستندات Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
