@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: 轻量、迅速、客制化的高颜值终端！
   actions:
     - 
       theme: brand
