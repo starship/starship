@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Minimal, blendende rask og uendelig tilpasningsdyktig ledetekst for alle skall! **
 
 - **Fast:** Det er kjapt - _virkelig_ kjapt! 🚀
 - **Tilpassbart:** konfigurer hvert aspekt av din ledetekst.
