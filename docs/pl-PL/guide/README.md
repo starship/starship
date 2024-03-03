@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/pl-PL">Strona internetowa</a>
+  <a href="https://starship.rs">Strona internetowa</a>
   ·
   <a href="#🚀-installation">Instalacja</a>
   ·
-  <a href="https://starship.rs/pl-PL/config/">Konfiguracja</a>
+  <a href="https://starship.rs/config/">Konfiguracja</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Szybkość:** jest szybki - _naprawdę_ szybki! 🚀
 - **Konfigurowalny:** dostosowuj swój wiersz poleceń w każdym aspekcie.
@@ -171,7 +171,7 @@
 - **Łatwy w obsłudze:** szybka instalacja - zacznij korzystać w kilka minut.
 
 <p align="center">
-<a href="https://starship.rs/pl-pl/config/"><strong>Przeglądaj dokumentację Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Przeglądaj dokumentację Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
