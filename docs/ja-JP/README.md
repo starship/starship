@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
   actions:
     - 
       theme: brand
