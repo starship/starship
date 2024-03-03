@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/zh-TW">網站</a>
+  <a href="https://starship.rs">網站</a>
   ·
   <a href="#🚀-installation">安裝</a>
   ·
-  <a href="https://starship.rs/zh-TW/config/">設定</a>
+  <a href="https://starship.rs/config/">設定</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**適合任何 shell 的最小、極速、無限客製化的提示字元！**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **效率：**很快 – _非常非常_快！ 🚀
 - **客製化：**全方面設定你的提示字元。
@@ -171,7 +171,7 @@
 - **易用：**安裝快速 – 幾分鐘內即可開始使用。
 
 <p align="center">
-<a href="https://starship.rs/zh-TW/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
