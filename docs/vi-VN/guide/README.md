@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/vi-VN">Website</a>
+  <a href="https://starship.rs">Website</a>
   ·
   <a href="#🚀-installation">Cài đặt</a>
   ·
-  <a href="https://starship.rs/vi-VN/config/">Cấu hình</a>
+  <a href="https://starship.rs/config/">Cấu hình</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
 - **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
@@ -171,7 +171,7 @@
 - **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
 
 <p align="center">
-<a href="https://starship.rs/vi-VN/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
