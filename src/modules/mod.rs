@@ -65,6 +65,7 @@ mod pijul_channel;
 mod pulumi;
 mod purescript;
 mod python;
+mod quarto;
 mod raku;
 mod red;
 mod rlang;
@@ -172,6 +173,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "quarto" => quarto::module(context),
             "raku" => raku::module(context),
             "rlang" => rlang::module(context),
             "red" => red::module(context),
@@ -292,6 +294,7 @@ pub fn description(module: &str) -> &'static str {
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "quarto" => "The current installed version of quarto",
         "raku" => "The currently installed version of Raku",
         "red" => "The currently installed version of Red",
         "rlang" => "The currently installed version of R",

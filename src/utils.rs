@@ -393,6 +393,10 @@ WebAssembly: unavailable
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
+        "quarto --version" => Some(CommandOutput {
+            stdout: String::from("1.4.549\n"),
+            stderr: String::default(),
+        }),
         "R --version" => Some(CommandOutput {
             stdout: String::default(),
             stderr: String::from(

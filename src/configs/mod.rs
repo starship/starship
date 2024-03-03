@@ -68,6 +68,7 @@ pub mod pijul_channel;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod quarto;
 pub mod raku;
 pub mod red;
 pub mod rlang;
@@ -240,6 +241,8 @@ pub struct FullConfig<'a> {
     purescript: purescript::PureScriptConfig<'a>,
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    quarto: quarto::QuartoConfig<'a>,
     #[serde(borrow)]
     raku: raku::RakuConfig<'a>,
     #[serde(borrow)]

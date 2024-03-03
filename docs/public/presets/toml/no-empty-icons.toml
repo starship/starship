@@ -87,6 +87,9 @@ format = '(via [$symbol($version )]($style))'
 [python]
 format = '(via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style))'
 
+[quarto]
+format = '(via [$symbol($version )]($style))'
+
 [raku]
 format = '(via [$symbol($version-$vm_version )]($style))'
 

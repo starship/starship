@@ -182,6 +182,9 @@ symbol = "purs "
 [python]
 symbol = "py "
 
+[quarto]
+symbol = "quarto "
+
 [raku]
 symbol = "raku "
 

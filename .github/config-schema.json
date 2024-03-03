@@ -1365,6 +1365,27 @@
         }
       ]
     },
+    "quarto": {
+      "default": {
+        "detect_extensions": [
+          "qmd"
+        ],
+        "detect_files": [
+          "_quarto.yml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold #75AADB",
+        "symbol": "⨁ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/QuartoConfig"
+        }
+      ]
+    },
     "raku": {
       "default": {
         "detect_extensions": [
@@ -5044,6 +5065,57 @@
           }
         }
       ]
+    },
+    "QuartoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⨁ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #75AADB",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "qmd"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "_quarto.yml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "RakuConfig": {
       "type": "object",
