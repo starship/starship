@@ -339,10 +339,8 @@ impl<'a> Context<'a> {
                 );
 
                 let branch = get_current_branch(&repository);
-                let remote = get_remote_repository_info(
-                    &repository,
-                    branch.as_ref().map(|name| name.as_ref()),
-                );
+                let remote =
+                    get_remote_repository_info(&repository, branch.as_ref().map(AsRef::as_ref));
                 let path = repository.path().to_path_buf();
 
                 let fs_monitor_value_is_true = repository

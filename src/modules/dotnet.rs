@@ -270,7 +270,7 @@ fn get_local_dotnet_files(context: &Context) -> Result<Vec<DotNetFile>, std::io:
 fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
     let file_name_lower = map_str_to_lower(path.file_name());
 
-    match file_name_lower.as_ref().map(std::convert::AsRef::as_ref) {
+    match file_name_lower.as_ref().map(AsRef::as_ref) {
         Some(GLOBAL_JSON_FILE) => return Some(FileType::GlobalJson),
         Some(PROJECT_JSON_FILE) => return Some(FileType::ProjectJson),
         _ => (),
@@ -278,7 +278,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
 
     let extension_lower = map_str_to_lower(path.extension());
 
-    match extension_lower.as_ref().map(std::convert::AsRef::as_ref) {
+    match extension_lower.as_ref().map(AsRef::as_ref) {
         Some("sln") => return Some(FileType::SolutionFile),
         Some("csproj" | "fsproj" | "xproj") => return Some(FileType::ProjectFile),
         Some("props" | "targets") => return Some(FileType::MsBuildFile),
