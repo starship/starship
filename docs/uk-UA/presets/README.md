@@ -72,6 +72,6 @@
 
 ## [Jetpack](./jetpack.md)
 
-Цей псевдомінімалістичний шаблон створений під враженням від [geometry](https://github.com/geometry-zsh/geometry) та командного рядка [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
+Цей псевдомінімалістичний шаблон створений під враженням від [geometry](https://github.com/geometry-zsh/geometry) та [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-[![Скріншот шаблона Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Скріншот шаблона Jetpack](/presets/img/jetpack.png "Натисніть для перегляду шаблона  Jetpack")](./jetpack)
