@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
 - **效率：**很快 – _非常非常_快！ 🚀
 - **客製化：**全方面設定你的提示字元。
