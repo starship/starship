@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: 아무 셸에나 적용할 수 있는 간결하고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
   actions:
     - 
       theme: brand
