@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
 
 - **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
 - **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
