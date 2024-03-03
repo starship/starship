@@ -3,7 +3,7 @@ layout: home
 hero:
   image: /logo.svg
   text:
-  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  tagline: التخصيص البسيط و السريع و الغير محدود لي ال"shell"!
   actions:
     - 
       theme: brand
