@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/id-ID">Situs Web</a>
+  <a href="https://starship.rs">Situs Web</a>
   ·
   <a href="#🚀-installation">Pemasangan</a>
   ·
-  <a href="https://starship.rs/id-ID/config/">Konfigurasi</a>
+  <a href="https://starship.rs/config/">Konfigurasi</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Cepat:** Starship itu cepat – _sangat sangat_ cepat! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -171,7 +171,7 @@
 - **Mudah:** pemasangan singkat – mulai menggunakannya dalam hitungan menit.
 
 <p align="center">
-<a href="https://starship.rs/id-ID/config/"><strong>Jelajahi dokumentasi Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Jelajahi dokumentasi Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
