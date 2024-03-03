@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/ja-JP">ウェブサイト</a>
+  <a href="https://starship.rs">ウェブサイト</a>
   ·
   <a href="#🚀-installation">インストール</a>
   ·
-  <a href="https://starship.rs/ja-JP/config/">設定</a>
+  <a href="https://starship.rs/config/">設定</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **高速:** _本当に_ 高速です！ 🚀
 - **カスタマイズ可能:** プロンプトのあらゆる側面を構成します。
@@ -171,7 +171,7 @@
 - **簡単:** 迅速なインストールが可能であり、数分で使用開始可能です。
 
 <p align="center">
-<a href="https://starship.rs/ja-JP/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
