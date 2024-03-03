@@ -158,7 +158,7 @@ Sebagai contoh:
 
 #### Penataan String
 
-Sebagian besar modul starship memungkinkan kamu untuk mengkonfigurasi gaya tampilannya. Hal ini dilakukan dengan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [panduan konfigurasi lanjutan](../advanced-config/).
+Sebagian besar modul starship memungkinkan kamu untuk mengkonfigurasi gaya tampilannya. Hal ini dilakukan dengan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan pada string dan kegunaannya. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +197,16 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                         | Deskripsi                                                                                                                                                                        |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                                                                                                                              |
+| Opsi              | Bawaan                         | Deskripsi                                                                                                                                                                          |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                                                                                                                                |
 | `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                                                                                                                     |
-| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik).                                                                                                           |
-| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                                                                                                                     |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                                                                                                                       |
+| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik).                                                                                                             |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                                                                                                                       |
+| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 ::: tip
 
