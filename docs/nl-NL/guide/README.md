@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/nl-NL">Website</a>
+  <a href="https://starship.rs">Website</a>
   ·
   <a href="#🚀-installation">Installatie</a>
   ·
-  <a href="https://starship.rs/nl-NL/config/">Configuratie</a>
+  <a href="https://starship.rs/config/">Configuratie</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**De minimalistische, razend snelle en oneindig aanpasbare prompt voor elke shell!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Snel:** het is snel -_ echt heel_ snel! 🚀
 - **Aanpasbaar:** configureer elk onderdeel van je prompt.
@@ -171,7 +171,7 @@
 - **Makkelijk:** snel te installeren – gebruik het binnen enkele minuten.
 
 <p align="center">
-<a href="https://starship.rs/nl-NL/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
