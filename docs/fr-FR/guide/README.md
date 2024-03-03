@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/fr-FR">Site web</a>
+  <a href="https://starship.rs">Site web</a>
   ·
   <a href="#🚀-installation">Installation</a>
   ·
-  <a href="https://starship.rs/fr-FR/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Rapide** : il est rapide - _vraiment vraiment_ rapide ! 🚀
 - **Personnalisable:** configurez chaque élément de votre invite.
@@ -171,7 +171,7 @@
 - **Facile:** rapide à installer – commencez à l'utiliser en quelques minutes.
 
 <p align="center">
-<a href="https://starship.rs/fr-FR/config/"><strong>Consultez la documentation de Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Consultez la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
