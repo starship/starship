@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/no-NO">Nettside</a>
+  <a href="https://starship.rs">Nettside</a>
   ·
   <a href="#🚀-installation">Installasjon</a>
   ·
-  <a href="https://starship.rs/no-NO/config/">Konfigurasjon</a>
+  <a href="https://starship.rs/config/">Konfigurasjon</a>
 </p>
 
 <p align="center">
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Minimal, blendende rask og uendelig tilpasningsdyktig ledetekst for alle skall! **
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Fast:** Det er kjapt - _virkelig_ kjapt! 🚀
 - **Tilpassbart:** konfigurer hvert aspekt av din ledetekst.
@@ -171,7 +171,7 @@
 - **Lett:** raskt å installere - start å bruke det på minutter.
 
 <p align="center">
-<a href="https://starship.rs/no-NO/config/"><strong>Utforsk Starship dokumentasjon&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Utforsk Starship dokumentasjon&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
