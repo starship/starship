@@ -161,7 +161,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Der minimalistische, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
 - **Schnell:** sie ist schnell – _sehr, sehr_ schnell! 🚀
 - **Konfigurierbar:** konfiguriere jedes Detail der Prompt.
