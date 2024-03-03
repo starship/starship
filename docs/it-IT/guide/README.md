@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Il prompt minimalista, super veloce e infinitamente personalizzabile per qualsiasi shell!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
 - **Velocità:** è veloce – _davvero_ veloce! 🚀
 - **Personalizzabile:** configura ogni aspetto del tuo prompt.
@@ -171,7 +171,7 @@
 - **Facile:** veloce da installare - inizia ad usarlo in pochi minuti.
 
 <p align="center">
-<a href="https://starship.rs/it-IT/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
