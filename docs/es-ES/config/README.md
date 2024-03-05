@@ -158,7 +158,7 @@ Por ejemplo:
 
 #### Cadenas de Estilo
 
-La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consultar la [guía de configuración avanzada](../advanced-config/).
 
 - `'fg:green bg:blue'` define el texto con color verde y el color de fondo azul
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +197,16 @@ Esta es la lista de opciones de configuración del prompt.
 
 ### Opciones
 
-| Opción            | Predeterminado                     | Descripción                                                                                                                                                                                                            |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                                                       |
-| `right_format`    | `''`                               | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                                                     |
-| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).                                                                                                                                              |
-| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).                                                                                                                                          |
-| `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                                                         |
-| `paleta`          | `''`                               | Establece la paleta de color de `paletas` a utilizar.                                                                                                                                                                  |
-| `paletas`         | `{}`                               | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
-| `follow_symlinks` | `true`                             | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                         |
+| Opción            | Predeterminado                     | Descripción                                                                                                                                                                                                                             |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                                                                        |
+| `right_format`    | `''`                               | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                                                                      |
+| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).                                                                                                                                                               |
+| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).                                                                                                                                                           |
+| `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                                                                          |
+| `paleta`          | `''`                               | Establece la paleta de color de `paletas` a utilizar.                                                                                                                                                                                   |
+| `paletas`         | `{}`                               | Colección de paletas de colores que asignan [colores](../advanced-config/#style-strings) a nombres definidos por el usuario. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
+| `follow_symlinks` | `true`                             | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                                          |
 
 ::: tip
 
