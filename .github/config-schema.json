@@ -1720,6 +1720,7 @@
         "disabled": false,
         "format": "[$user]($style) in ",
         "show_always": false,
+        "ssh_only": false,
         "style_root": "red bold",
         "style_user": "yellow bold"
       },
@@ -5878,6 +5879,10 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
+        "ssh_only": {
+          "default": false,
+          "type": "boolean"
+        },
         "format": {
           "default": "[$user]($style) in ",
           "type": "string"

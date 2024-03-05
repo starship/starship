@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 )]
 #[serde(default)]
 pub struct UsernameConfig<'a> {
+    pub ssh_only: bool,
     pub format: &'a str,
     pub style_root: &'a str,
     pub style_user: &'a str,
@@ -18,6 +19,7 @@ pub struct UsernameConfig<'a> {
 impl<'a> Default for UsernameConfig<'a> {
     fn default() -> Self {
         UsernameConfig {
+            ssh_only: false,
             format: "[$user]($style) in ",
             style_root: "red bold",
             style_user: "yellow bold",
