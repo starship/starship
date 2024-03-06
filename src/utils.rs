@@ -611,7 +611,7 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
-    // Fast returns for zero cases
+    // Fast returns for zero cases to render something
     match (raw_millis, show_millis) {
         (0, true) => return "0ms".into(),
         (0..=999, false) => return "0s".into(),
@@ -634,7 +634,7 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
 
     let components = [(days, "d"), (hours, "h"), (minutes, "m"), (seconds, "s")];
 
-    // Concat components to result, stop at seconds number as that is where it becomes param dependant
+    // Concat components ito result starting from the first non-zero one
     let result = components.iter().fold(
         String::with_capacity(result_capacity),
         |acc, (component, suffix)| match component {
