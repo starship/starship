@@ -2099,9 +2099,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "open"
-version = "5.1.0"
+version = "5.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f2588edf622de56e7a1fed57bf203344f63c03f3d43472ba0434a92373c8f27"
+checksum = "449f0ff855d85ddbf1edd5b646d65249ead3f5e422aaa86b7d2d0b049b103e32"
 dependencies = [
  "is-wsl",
  "libc",
