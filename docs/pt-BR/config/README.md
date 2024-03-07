@@ -1888,7 +1888,7 @@ As variáveis a seguir podem ser usadas no `format`:
 
 | Variável       | Descrição                                                                                                  |
 | -------------- | ---------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Atalhos para `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                   |
+| `all_status`   | Atalhos para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                               |
 | `ahead_behind` | Exibe `diverged`, `ahead`, `behind` or `up_to_date` conforme o formato da string do status do repositório. |
 | `conflicted`   | Exibe `conflicted` quando este braço tenha conflitos no merge.                                             |
 | `untracked`    | Exibe `untracked` quando há arquivos não rastreados no diretório atual.                                    |
