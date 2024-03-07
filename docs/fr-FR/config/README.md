@@ -1888,7 +1888,7 @@ Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 
 | Variable       | Description                                                                                                           |
 | -------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                        |
+| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                            |
 | `ahead_behind` | Affiche la chaine de formatage `diverged`, `ahead`, `behind` ou `up_to_date` en se basant sur l’état actuel du dépôt. |
 | `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                                            |
 | `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.                              |
