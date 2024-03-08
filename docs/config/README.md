@@ -3508,7 +3508,7 @@ current [Python virtual environment](https://docs.python.org/tutorial/venv.html)
 If `pyenv_version_name` is set to `true`, it will display the pyenv version
 name. Otherwise, it will display the version number from `python --version`.
 
-By default the module will be shown if any of the following conditions are met:
+By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
@@ -3588,17 +3588,6 @@ python_binary = 'python3'
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Display the version of python from inside a local venv.
-#
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
 ## R
