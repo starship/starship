@@ -219,7 +219,7 @@ Install the latest version for your system:
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Als alternatief kan je Starship installeren met een van de volgende pakketbeheerders:
 
 | Distributie        | Repository                                                                                      | Instructies                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
