@@ -1,3 +1,5 @@
+use gix::hashtable::hash_map;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
@@ -34,11 +36,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
         || is_ssh_session(context) // [3]
-        || has_detected_env_var; // [4]
+        || ( !config.detect_env_vars.is_empty() && has_detected_env_var ); // [4]
 
     if !show_username || !has_detected_env_var {
-        // [A]
-        return None;
+        return None; // [A]
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -303,6 +304,24 @@ mod tests {
             })
             .collect();
         let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_always_false() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                show_always = false
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual.as_deref());
     }
