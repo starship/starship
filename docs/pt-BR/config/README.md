@@ -3356,7 +3356,7 @@ O módulo `python` exibe a versão atual instalada do [Python](https://www.pytho
 
 Se o `pyenv_version_name` estiver definido como `true`, será exibido o nome da versão do pyenv. Caso contrario, ele exibirá o número da versão do `python --version`.
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo `.python-version`
 - O diretório atual tenha um arquivo `Pipfile`
@@ -3426,17 +3426,6 @@ python_binary = 'python3'
 [python]
 # Não acione para arquivos com a extensão py
 detect_extensions = []
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Exibe a versão do python de dentro de um venv local.
-#
-# Note que isso só funcionará quando o venv estiver dentro do projeto e só
-# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
 ## R
