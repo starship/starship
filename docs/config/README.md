@@ -634,7 +634,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `'bold red'`                         | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `bun` module.                                                |
 
-You can override the `detect_files` property of [the nodejs module](#Node.js) in your config so as to only show the bun runtime:
+You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
 
 ```
 [nodejs]
