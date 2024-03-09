@@ -3440,17 +3440,6 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Muestra la versión de python dentro de un entorno virtual local.
-#
-# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
-# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
-
 ## R
 
 El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.org/). El módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
