@@ -3356,7 +3356,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
-By default the module will be shown if any of the following conditions are met:
+By default, the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `.python-version` 文件
 - 当前目录包含 `Pipfile` 文件
@@ -3426,17 +3426,6 @@ python_binary = 'python3'
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Display the version of python from inside a local venv.
-#
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
 ## R
