@@ -5,6 +5,6 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-rc.44"
+    "vitepress": "^1.0.0-rc.45"
   }
 }
