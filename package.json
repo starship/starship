@@ -1,0 +1,8 @@
+{
+  "name": "starship",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sabinonweb/starship",
+  "author": "Sabin <sabinonweb7@gmail.com>",
+  "license": "MIT"
+}

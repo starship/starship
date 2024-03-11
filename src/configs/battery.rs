@@ -32,6 +32,12 @@ impl<'a> Default for BatteryConfig<'a> {
             disabled: false,
         }
     }
+
+    fn is_battery_on_power(&self) -> bool {
+        if self.display.charging_symbol.is_some() {
+            true
+        }
+    }
 }
 
 #[derive(Clone, Deserialize, Serialize)]
