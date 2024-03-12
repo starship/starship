@@ -1,3 +1,5 @@
+use gix::hashtable::hash_map;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
@@ -115,6 +117,8 @@ fn is_ssh_session(context: &Context) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use gix::config::key;
+
     use crate::test::ModuleRenderer;
 
     // TODO: Add tests for if root user (UID == 0)
