@@ -1,5 +1,3 @@
-use gix::hashtable::hash_map;
-
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
