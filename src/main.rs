@@ -52,6 +52,8 @@ enum Commands {
         shell: String,
         #[clap(long)]
         print_full_init: bool,
+        #[clap(long)]
+        enable_detect_keywords: bool,
     },
     ///  Prints a specific prompt module
     Module {
@@ -169,11 +171,12 @@ fn main() {
         Commands::Init {
             shell,
             print_full_init,
+            enable_detect_keywords,
         } => {
             if print_full_init {
-                init::init_main(&shell).expect("can't init_main");
+                init::init_main(&shell, enable_detect_keywords).expect("can't init_main");
             } else {
-                init::init_stub(&shell).expect("can't init_stub");
+                init::init_stub(&shell, enable_detect_keywords).expect("can't init_stub");
             }
         }
         Commands::Prompt {

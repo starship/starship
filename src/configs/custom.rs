@@ -25,6 +25,8 @@ pub struct CustomConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     #[serde(alias = "directories")]
     pub detect_folders: Vec<&'a str>,
+    #[serde(alias = "keywords")]
+    pub detect_keywords: Vec<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,6 +49,7 @@ impl<'a> Default for CustomConfig<'a> {
             detect_files: Vec::default(),
             detect_extensions: Vec::default(),
             detect_folders: Vec::default(),
+            detect_keywords: Vec::default(),
             os: None,
             use_stdin: None,
             ignore_timeout: false,

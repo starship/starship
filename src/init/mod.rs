@@ -94,13 +94,21 @@ impl StarshipPath {
 /* This prints the setup stub, the short piece of code which sets up the main
 init code. The stub produces the main init script, then evaluates it with
 `source` and process substitution */
-pub fn init_stub(shell_name: &str) -> io::Result<()> {
+pub fn init_stub(shell_name: &str, enable_detect_keywords: bool) -> io::Result<()> {
     log::debug!("Shell name: {}", shell_name);
 
     let shell_basename = Path::new(shell_name)
         .file_stem()
         .and_then(OsStr::to_str)
         .unwrap_or(shell_name);
+
+    // Assert that enable_detect_keywords is only used with zsh
+    if enable_detect_keywords && shell_basename != "zsh" {
+        eprintln!(
+            "The `enable_detect_keywords` option is only supported by zsh\n\
+             Ignoring option for {shell_basename}"
+        );
+    }
 
     let starship = StarshipPath::init()?;
 
@@ -153,7 +161,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             "#,
             starship.sprint_posix()?
         ),
-        "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?),
+        "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?, enable_detect_keywords),
         "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
             r#"source ({} init fish --print-full-init | psub)"#,
@@ -172,12 +180,20 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
+        "nu" => print_script(
+            NU_INIT,
+            &StarshipPath::init()?.sprint()?,
+            enable_detect_keywords,
+        ),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
-        "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
+        "cmd" => print_script(
+            CMDEXE_INIT,
+            &StarshipPath::init()?.sprint_cmdexe()?,
+            enable_detect_keywords,
+        ),
         _ => {
             eprintln!(
                 "{shell_basename} is not yet supported by starship.\n\
@@ -204,18 +220,46 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
 
 /* This function (called when `--print-full-init` is passed to `starship init`)
 prints out the main initialization script */
-pub fn init_main(shell_name: &str) -> io::Result<()> {
+pub fn init_main(shell_name: &str, enable_detect_keywords: bool) -> io::Result<()> {
     let starship_path = StarshipPath::init()?;
 
     match shell_name {
-        "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
-        "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
-        "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
-        "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
-        "ion" => print_script(ION_INIT, &starship_path.sprint()?),
-        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
-        "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
-        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "bash" => print_script(
+            BASH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
+        "zsh" => print_script(
+            ZSH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
+        "fish" => print_script(
+            FISH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
+        "powershell" => print_script(
+            PWSH_INIT,
+            &starship_path.sprint_pwsh()?,
+            enable_detect_keywords,
+        ),
+        "ion" => print_script(ION_INIT, &starship_path.sprint()?, enable_detect_keywords),
+        "elvish" => print_script(
+            ELVISH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
+        "tcsh" => print_script(
+            TCSH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
+        "xonsh" => print_script(
+            XONSH_INIT,
+            &starship_path.sprint_posix()?,
+            enable_detect_keywords,
+        ),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -227,8 +271,12 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     Ok(())
 }
 
-fn print_script(script: &str, path: &str) {
+fn print_script(script: &str, path: &str, enable_detect_keywords: bool) {
     let script = script.replace("::STARSHIP::", path);
+    let script = script.replace(
+        "::ENABLE_DETECT_KEYWORDS::",
+        &(enable_detect_keywords as usize).to_string(),
+    );
     print!("{script}");
 }
 
