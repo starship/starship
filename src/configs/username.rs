@@ -14,6 +14,7 @@ pub struct UsernameConfig<'a> {
     pub style_user: &'a str,
     pub show_always: bool,
     pub disabled: bool,
+    pub aliases: Option<Vec<(&'a str, &'a str)>>,
 }
 
 impl<'a> Default for UsernameConfig<'a> {
@@ -25,6 +26,7 @@ impl<'a> Default for UsernameConfig<'a> {
             style_user: "yellow bold",
             show_always: false,
             disabled: false,
+            aliases: None,
         }
     }
 }
