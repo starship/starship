@@ -1,3 +1,5 @@
+use toml::Value;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
@@ -39,6 +41,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !show_username || !has_detected_env_var {
         return None; // [A]
     }
+
+    match config.aliases.get(&username) {
+        Some(Value::String(alias)) => {
+            username = alias.clone();
+            println!("Alias {}", alias);
+        }
+        _ => println!("Nothing"),
+    }
+    // if config.aliases.contains_key(&username) {
+    //     let alias_value = config.aliases.get(&username);
+
+    //     if alias_value.
+    //     username = config.aliases.get(&username);
+    // }
+    // if let Some(aliases) = config.aliases {
+    //     for alias in aliases {
+    //         if username == alias.0 {
+    //             username = String::from(alias.1);
+    //             break;
+    //         }
+    //     }
+    // }
+    println!("Aliases {:?}", config.aliases);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -320,6 +345,26 @@ mod tests {
             })
             .collect();
         let expected = None;
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn test_alias() {
+        println!("Testing ALPER");
+
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                aliases = { "astronaut" = "skywalker" }
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("skywalker in ");
 
         assert_eq!(expected, actual.as_deref());
     }
