@@ -1888,7 +1888,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 | Змінна         | Опис                                                                                                |
 | -------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`             |
+| `all_status`   | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
 | `ahead_behind` | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
 | `conflicted`   | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
 | `untracked`    | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
