@@ -339,20 +339,27 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Since Nu does [not support `eval`](https://www.nushell.sh/book/how_nushell_code_gets_run.html#eval-function) the initialization script is saved in `env.nu`:
 
-```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+```nushell
+'
+let starship_path = $nu.default-config-dir | path join scripts starship.nu
+if $nu.is-interactive {
+  starship init nu | save $starship_path --force
+}' | save $nu.env-path --append
+'
+if $nu.is-interactive {
+  use starship.nu
+}' | save $nu.config-path --append
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+If you prefer to keep your dotfiles clean you can save it to a different directory then update `$env.NU_LIB_DIRS`:
 
-```sh
-use ~/.cache/starship/init.nu
+```nushell
+'
+$env.NU_LIB_DIRS ++= ($starship_path | path dirname | to nuon)
+' | save $nu.env-path --append
 ```
-
-Note: Only Nushell v0.78+ is supported
 
 </details>
 

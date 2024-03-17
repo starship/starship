@@ -137,24 +137,26 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   Since Nu does [not support `eval`](https://www.nushell.sh/book/how_nushell_code_gets_run.html#eval-function) you must save the initialization script:
+   Since Nu does [not support `eval`](https://www.nushell.sh/book/how_nushell_code_gets_run.html#eval-function) the initialization script is saved in `env.nu`:
 
    ```nushell
+   '
    let starship_path = $nu.default-config-dir | path join scripts starship.nu
-   starship init nu | save $starship_path --force
-   "\nuse starship.nu" | save $nu.config-path --append
+   if $nu.is-interactive {
+     starship init nu | save $starship_path --force
+   }' | save $nu.env-path --append
+   '
+   if $nu.is-interactive {
+     use starship.nu
+   }' | save $nu.config-path --append
    ```
 
-   If you prefer to keep your dotfiles clean you can save it to another directory then update `$env.NU_LIB_DIRS`:
+   If you prefer to keep your dotfiles clean you can save it to a different directory then update `$env.NU_LIB_DIRS`:
 
    ```nushell
-   "\n$env.NU_LIB_DIRS ++= ($starship_path | path dirname | to nuon)" | save $nu.env-path --append
-   ```
-
-   You can update the generated script at any time by re-running:
-
-   ```nushell
-   starship init nu | save $starship_path --force
+   '
+   $env.NU_LIB_DIRS ++= ($starship_path | path dirname | to nuon)
+   ' | save $nu.env-path --append
    ```
 
    #### Xonsh
