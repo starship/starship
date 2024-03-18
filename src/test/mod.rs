@@ -70,7 +70,9 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.current_dir = path.into();
-        self.context.logical_dir = self.context.current_dir.clone();
+        self.context
+            .logical_dir
+            .clone_from(&self.context.current_dir);
         self
     }
 
