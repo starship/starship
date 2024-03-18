@@ -2196,35 +2196,23 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción            | Predeterminado                         | Descripción                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                                                                                                                                                                                                                                                                             |
-| `ssh_symbol`      | `'🌐 '`                                 | Una cadena de formato que representa el símbolo cuando se conecta a la sesión SSH.                                                                                                                                                                                                                                                                                                                                 |
-| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` deshabilitará cualquier truncamiento.                                                                                                                                                                                                                                                  |
-| `detect_env_vars` | `[]`                                   | Qué variable(s) de entorno deben activar este módulo.                                                                                                                                                                                                                                                                                                                                                              |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                                                                                                                                                                                                                                                                             |
-| `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
-| `disabled`        | `false`                                | Deshabilita el módulo `hostname<0>.</td>
-</tr>
-</tbody>
-</table>
+| Opción            | Predeterminado                         | Descripción                                                                                                                                                       |
+| ----------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                            |
+| `ssh_symbol`      | `'🌐 '`                                 | Una cadena de formato que representa el símbolo cuando se conecta a la sesión SSH.                                                                                |
+| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` deshabilitará cualquier truncamiento. |
+| `detect_env_vars` | `[]`                                   | Qué variable(s) de entorno deben activar este módulo.                                                                                                             |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                            |
+| `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                             |
+| `disabled`        | `false`                                | Deshabilita el módulo `hostname`.                                                                                                                                 |
 
-<h3 spaces-before="0">Variables</h3>
+### Variables
 
-<table spaces-before="0">
-<thead>
-<tr>
-  <th>Variable</th>
-  <th>Ejemplo</th>
-  <th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>nombre del host</td>
-  <td><code>computadora` | El nombre de host de la computadora |
-| style\*         |                                        | Refleja el valor de la opción `style`                                                                                                                                                                                                                                                                                                                                                                              |
-| ssh_symbol        | `'🌏 '`                                 | El símbolo a representar cuando está conectado a la sesión SSH                                                                                                                                                                                                                                                                                                                                                     |
+| Variable        | Ejemplo       | Descripción                                                    |
+| --------------- | ------------- | -------------------------------------------------------------- |
+| nombre del host | `computadora` | El nombre de host de la computadora                            |
+| style\*       |               | Refleja el valor de la opción `style`                          |
+| ssh_symbol      | `'🌏 '`        | El símbolo a representar cuando está conectado a la sesión SSH |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
