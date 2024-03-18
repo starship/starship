@@ -184,6 +184,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
+                .truncate(false)
                 .open(path.path().join(checkout_db))?
                 .sync_all()?;
             Ok(path)
