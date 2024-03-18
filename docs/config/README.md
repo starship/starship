@@ -3172,7 +3172,9 @@ If you would like an operating system to be added, feel free to open a [feature 
 ```toml
 # This is the default symbols table.
 [os.symbols]
+AIX = "➿ "
 Alpaquita = "🔔 "
+AlmaLinux = "💠 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
@@ -3189,6 +3191,7 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "
@@ -3207,11 +3210,14 @@ Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
 RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
 Redox = "🧪 "
 Solus = "⛵ "
 SUSE = "🦎 "
 Ubuntu = "🎯 "
+Ultramarine = "🔷 "
 Unknown = "❓ "
+Void = "  "
 Windows = "🪟 "
 ```
 
