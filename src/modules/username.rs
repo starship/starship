@@ -42,28 +42,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None; // [A]
     }
 
-    match config.aliases.get(&username) {
-        Some(Value::String(alias)) => {
-            username = alias.clone();
-            println!("Alias {}", alias);
-        }
-        _ => println!("Nothing"),
+    if let Some(Value::String(alias)) = config.aliases.get(&username) {
+        username = alias.clone();
     }
-    // if config.aliases.contains_key(&username) {
-    //     let alias_value = config.aliases.get(&username);
-
-    //     if alias_value.
-    //     username = config.aliases.get(&username);
-    // }
-    // if let Some(aliases) = config.aliases {
-    //     for alias in aliases {
-    //         if username == alias.0 {
-    //             username = String::from(alias.1);
-    //             break;
-    //         }
-    //     }
-    // }
-    println!("Aliases {:?}", config.aliases);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
