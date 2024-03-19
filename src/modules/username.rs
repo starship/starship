@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     if let Some(Value::String(alias)) = config.aliases.get(&username) {
-        username = alias.clone();
+        username = alias.to_string();
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
