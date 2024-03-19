@@ -257,7 +257,6 @@ detect_target() {
   printf '%s' "${target}"
 }
 
-
 confirm() {
   if [ -z "${FORCE-}" ]; then
     printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
@@ -270,11 +269,18 @@ confirm() {
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
+      set +e
+      read -p "Enter the location where you want to install this to: " path
+      rc=$?
+      set -e
+      if [ $rc -ne 0 ]; then
+        error "Error reading from prompt (please re-run with the '--yes' option)"
+        exit 1
     fi
   fi
 }
+
+
 
 check_bin_dir() {
   bin_dir="${1%/}"
