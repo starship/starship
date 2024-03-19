@@ -368,4 +368,22 @@ mod tests {
 
         assert_eq!(expected, actual.as_deref());
     }
+
+    #[test]
+    fn test_alias_emoji() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "kaas")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                aliases = { "a" = "b", "kaas" = "🧀" }
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("🧀 in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
 }
