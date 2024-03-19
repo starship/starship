@@ -95,7 +95,7 @@ fn get_state_description<'a>(
             current: None,
             total: None,
         }),
-        InProgress::Rebase => Some(describe_rebase(repo, config.rebase)),
+        InProgress::Rebase => Some(gigit_rebase(repo, config.rebase)),
         InProgress::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
     }
 }

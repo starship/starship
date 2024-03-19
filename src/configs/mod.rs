@@ -28,6 +28,7 @@ pub mod env_var;
 pub mod erlang;
 pub mod fennel;
 pub mod fill;
+pub mod flutter;
 pub mod fossil_branch;
 pub mod fossil_metrics;
 pub mod gcloud;
@@ -161,6 +162,8 @@ pub struct FullConfig<'a> {
     fennel: fennel::FennelConfig<'a>,
     #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    flutter: flutter::FlutterConfig<'a>,
     #[serde(borrow)]
     fossil_branch: fossil_branch::FossilBranchConfig<'a>,
     #[serde(borrow)]
