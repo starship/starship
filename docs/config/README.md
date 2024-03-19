@@ -4383,7 +4383,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 ## Username
 
-The `username` module shows active user's username.
+The `username` module shows the active user's username.
 The module will be shown if any of the following conditions are met:
 
 - The current user is root/admin
