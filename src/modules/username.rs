@@ -351,8 +351,6 @@ mod tests {
 
     #[test]
     fn test_alias() {
-        println!("Testing ALPER");
-
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .config(toml::toml! {
