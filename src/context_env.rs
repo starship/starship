@@ -6,7 +6,7 @@ use std::ffi::OsString;
 
 #[derive(Default)]
 pub struct Env<'a> {
-    /// A HashMap of environment variable mocks
+    /// A `HashMap` of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
 
