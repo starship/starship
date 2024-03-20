@@ -132,6 +132,8 @@ fn format_exit_code<'a>(
         false => None,
     };
 
+    let os_abort_name = status_os_abort_name(exit_code_int);
+
     StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -164,6 +166,7 @@ fn format_exit_code<'a>(
                 "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
                 "signal_name" => Ok(signal_name).transpose(),
+                "os_abort_name" => Ok(os_abort_name).transpose(),
                 "pipestatus" => {
                     let pipestatus = pipestatus.unwrap_or_else(|| {
                         // We might enter this case if pipestatus hasn't
@@ -245,6 +248,51 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
         20 => Some("TSTP"),   // 128 + 20
         21 => Some("TTIN"),   // 128 + 21
         22 => Some("TTOU"),   // 128 + 22
+        _ => None,
+    }
+}
+
+#[cfg(not(windows))]
+fn status_os_abort_name(exit_code: ExitCode) -> Option<&'static str> {
+    status_to_signal(exit_code).and_then(status_signal_name)
+}
+
+#[cfg(windows)]
+fn status_os_abort_name(exit_code: ExitCode) -> Option<&'static str> {
+    use windows::Win32::Foundation::*;
+
+    match NTSTATUS(exit_code) {
+        STATUS_ACCESS_VIOLATION => Some("ACCESS_VIOLATION"),
+        STATUS_IN_PAGE_ERROR => Some("IN_PAGE_ERROR"),
+        STATUS_INVALID_HANDLE => Some("INVALID_HANDLE"),
+        STATUS_INVALID_PARAMETER => Some("INVALID_PARAMETER"),
+        STATUS_NO_MEMORY => Some("NO_MEMORY"),
+        STATUS_ILLEGAL_INSTRUCTION => Some("ILLEGAL_INSTRUCTION"),
+        STATUS_NONCONTINUABLE_EXCEPTION => Some("NONCONTINUABLE_EXCEPTION"),
+        STATUS_INVALID_DISPOSITION => Some("INVALID_DISPOSITION"),
+        STATUS_ARRAY_BOUNDS_EXCEEDED => Some("ARRAY_BOUNDS_EXCEEDED"),
+        STATUS_FLOAT_DENORMAL_OPERAND => Some("FLOAT_DENORMAL_OPERAND"),
+        STATUS_FLOAT_DIVIDE_BY_ZERO => Some("FLOAT_DIVIDE_BY_ZERO"),
+        STATUS_FLOAT_INEXACT_RESULT => Some("FLOAT_INEXACT_RESULT"),
+        STATUS_FLOAT_INVALID_OPERATION => Some("FLOAT_INVALID_OPERATION"),
+        STATUS_FLOAT_OVERFLOW => Some("FLOAT_OVERFLOW"),
+        STATUS_FLOAT_STACK_CHECK => Some("FLOAT_STACK_CHECK"),
+        STATUS_FLOAT_UNDERFLOW => Some("FLOAT_UNDERFLOW"),
+        STATUS_INTEGER_DIVIDE_BY_ZERO => Some("INTEGER_DIVIDE_BY_ZERO"),
+        STATUS_INTEGER_OVERFLOW => Some("INTEGER_OVERFLOW"),
+        STATUS_PRIVILEGED_INSTRUCTION => Some("PRIVILEGED_INSTRUCTION"),
+        STATUS_STACK_OVERFLOW => Some("STACK_OVERFLOW"),
+        STATUS_DLL_NOT_FOUND => Some("DLL_NOT_FOUND"),
+        STATUS_ORDINAL_NOT_FOUND => Some("ORDINAL_NOT_FOUND"),
+        STATUS_ENTRYPOINT_NOT_FOUND => Some("ENTRYPOINT_NOT_FOUND"),
+        STATUS_CONTROL_C_EXIT => Some("CONTROL_C_EXIT"),
+        STATUS_DLL_INIT_FAILED => Some("DLL_INIT_FAILED"),
+        STATUS_FLOAT_MULTIPLE_FAULTS => Some("FLOAT_MULTIPLE_FAULTS"),
+        STATUS_FLOAT_MULTIPLE_TRAPS => Some("FLOAT_MULTIPLE_TRAPS"),
+        STATUS_REG_NAT_CONSUMPTION => Some("REG_NAT_CONSUMPTION"),
+        STATUS_HEAP_CORRUPTION => Some("HEAP_CORRUPTION"),
+        STATUS_STACK_BUFFER_OVERRUN => Some("STACK_BUFFER_OVERRUN"),
+        STATUS_ASSERTION_FAILURE => Some("ASSERTION_FAILURE"),
         _ => None,
     }
 }
@@ -394,6 +442,44 @@ mod tests {
                     format = "[${symbol}${hex_status}]($style) "
                 })
                 .status(*exit_value)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[cfg(not(windows))]
+    const OS_ABORT_NAME_EXIT_VALUES: [(i64, &str); 4] = [
+        (1, ""),
+        (143, " (TERM)"),
+        (-1073741510, ""),
+        (-1073741515, ""),
+    ];
+
+    #[cfg(windows)]
+    const OS_ABORT_NAME_EXIT_VALUES: [(i64, &str); 4] = [
+        (1, ""),
+        (143, ""),
+        (-1073741510, " (CONTROL_C_EXIT)"),
+        (-1073741515, " (DLL_NOT_FOUND)"),
+    ];
+
+    #[test]
+    fn failure_os_abort_name() {
+        for &(status, expected_text) in OS_ABORT_NAME_EXIT_VALUES.iter() {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red
+                    .bold()
+                    .paint(format!("✖{}{}", status, expected_text))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "✖"
+                    disabled = false
+                    format = "[${symbol}${status}( \\(${os_abort_name}\\))]($style) "
+                })
+                .status(status)
                 .collect();
             assert_eq!(expected, actual);
         }
