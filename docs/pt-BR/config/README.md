@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -3428,6 +3429,38 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
+## Quarto
+
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                                   |
+| `style`             | `'bold #75AADB'`                     | O estilo do módulo.                                                                 |
+| `detect_extensions` | `['.qmd']`                           | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['_quarto.yml']`                    | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                                       |
+
+### Variáveis
+
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `1.4.549` | The version of `quarto`           |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
 ## R
 
 O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-project.org/). O módulo será mostrado se qualquer uma das seguintes condições for atendida:
@@ -3573,11 +3606,12 @@ O Starship pega a versão atual do Ruby rodando `ruby -v`.
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                         |
-| --------- | -------- | --------------------------------- |
-| version   | `v2.5.1` | A versão do `ruby`                |
-| symbol    |          | Espelha o valor da opção `symbol` |
-| style\* |          | Espelha o valor da opção `style`  |
+| Variável  | Exemplo  | Descrição                                   |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | A versão do `ruby`                          |
+| symbol    |          | Espelha o valor da opção `symbol`           |
+| style\* |          | Espelha o valor da opção `style`            |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -4172,6 +4206,7 @@ O módulo `username` mostra o nome de usuário do usuário ativo. O módulo ser�
 - O usuário atual não é o mesmo que está logado
 - O usuário atual esta conectado em uma sessão SSH
 - A variável `show_always` esta definida como true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4181,13 +4216,14 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 
 ### Opções
 
-| Opções        | Padrão                  | Descrição                                     |
-| ------------- | ----------------------- | --------------------------------------------- |
-| `style_root`  | `'bold red'`            | O estilo usado quando o usuário é root/admin. |
-| `style_user`  | `'bold yellow'`         | O estilo usado para usuários não root.        |
-| `format`      | `'[$user]($style) in '` | O formato do módulo.                          |
-| `show_always` | `false`                 | Sempre exibe o módulo `username`.             |
-| `disabled`    | `false`                 | Desabilita o módulo `username`.               |
+| Opções            | Padrão                  | Descrição                                                 |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | O estilo usado quando o usuário é root/admin.             |
+| `style_user`      | `'bold yellow'`         | O estilo usado para usuários não root.                    |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | O formato do módulo.                                      |
+| `show_always`     | `false`                 | Sempre exibe o módulo `username`.                         |
+| `disabled`        | `false`                 | Desabilita o módulo `username`.                           |
 
 ### Variáveis
 
@@ -4198,6 +4234,8 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 
 ### Exemplo
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4207,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant
