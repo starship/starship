@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -3428,6 +3429,38 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
+## Quarto
+
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                          |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`       |
+| `符号`                | `'⨁ '`                               | A format string representing the symbol of Quarto |
+| `style`             | `'bold #75AADB'`                     | 此组件的样式。                                           |
+| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.      |
+| `detect_files`      | `['_quarto.yml']`                    | 哪些文件应触发此组件                                        |
+| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                      |
+| `disabled`          | `false`                              | Disables the `quarto` module.                     |
+
+### 变量
+
+| 字段        | 示例        | 描述                      |
+| --------- | --------- | ----------------------- |
+| version   | `1.4.549` | The version of `quarto` |
+| 符号        |           | `symbol`对应值             |
+| style\* |           | `style`对应值              |
+
+*: 此变量只能作为样式字符串的一部分使用
+
 ## R
 
 The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
@@ -3573,11 +3606,12 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### 变量
 
-| 字段        | 示例       | 描述                    |
-| --------- | -------- | --------------------- |
-| version   | `v2.5.1` | The version of `ruby` |
-| 符号        |          | `symbol`对应值           |
-| style\* |          | `style`对应值            |
+| 字段        | 示例       | 描述                                          |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`                       |
+| 符号        |          | `symbol`对应值                                 |
+| style\* |          | `style`对应值                                  |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -4172,6 +4206,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 当前用户与登录用户不相同
 - 用户正通过 SSH 会话连接访问
 - 字段 `show_always` 被设置为 true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4181,13 +4216,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 配置项
 
-| 选项            | 默认值                     | 描述                                          |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非 root 用户使用的样式。                             |
-| `format`      | `'[$user]($style) in '` | 组件格式化模板。                                    |
-| `show_always` | `false`                 | 总是显示 `username` 组件。                         |
-| `disabled`    | `false`                 | 禁用 `username` 组件。                           |
+| 选项                | 默认值                     | 描述                                                        |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | 非 root 用户使用的样式。                                           |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
+| `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
+| `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
 
 ### 变量
 
@@ -4198,6 +4234,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 示例
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4207,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant
