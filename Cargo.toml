@@ -15,7 +15,7 @@ include = [
   "build.rs",
   "LICENSE",
   "/README.md",
-  "docs/.vuepress/public/presets/toml/",
+  "docs/public/presets/toml/",
   ".github/config-schema.json",
 ]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]

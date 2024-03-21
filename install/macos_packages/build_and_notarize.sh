@@ -65,7 +65,7 @@ starship_docs_dir="$2"
 arch="$3"
 pkgname="${4:-}"
 
-if [[ ! -d "$starship_docs_dir/.vuepress/dist" ]]; then
+if [[ ! -d "$starship_docs_dir/.vitepress/dist" ]]; then
   error "Documentation does not appear to have been built!"
 fi
 
@@ -87,7 +87,7 @@ unzip starship.zip
 
 # Create the component package
 echo ">>>> Building Component Package"
-bash "$script_dir/build_component_package.sh" "starship" "$starship_docs_dir/.vuepress/dist"
+bash "$script_dir/build_component_package.sh" "starship" "$starship_docs_dir/.vitepress/dist"
 
 # Create the distribution package
 echo ">>>> Building Distribution Package"
