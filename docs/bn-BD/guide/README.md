@@ -431,10 +431,6 @@ eval "$(starship init zsh)"
 
 [একজন স্পনসর হয়ে](https://github.com/sponsors/starship) এই প্রোজেক্টটিকে আর্থিক ভাবে সহায়তা করুন । আপনার নাম অথবা লোগো নিম্নে দেখা যাবে আপনার ওয়েবসাইট এর লিঙ্ক সহ ।
 
-**সমর্থক স্তর**
-
-- [Appwrite](https://appwrite.io/)
-
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
