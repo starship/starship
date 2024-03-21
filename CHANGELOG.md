@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.18.0](https://github.com/starship/starship/compare/v1.17.1...v1.18.0) (2024-03-21)
+
+
+### Features
+
+* $gemset variable for Ruby module ([#5429](https://github.com/starship/starship/issues/5429)) ([938ea3c](https://github.com/starship/starship/commit/938ea3c40145af68d8e28b2ef0275531f1123202))
+* **bash:** Support right prompt and transience ([#4902](https://github.com/starship/starship/issues/4902)) ([5ead13d](https://github.com/starship/starship/commit/5ead13d6aa6303c85c562f1b940048cc539667cd))
+* **bash:** use PS0 for preexec hook ([#5735](https://github.com/starship/starship/issues/5735)) ([ae711c0](https://github.com/starship/starship/commit/ae711c0f332f4f24c843e59d6d5783e398e21b38))
+* **direnv:** use JSON status with direnv &gt;= 2.33.0 ([#5692](https://github.com/starship/starship/issues/5692)) ([482c7b7](https://github.com/starship/starship/commit/482c7b719fc304fcad5f3572c4551f8ff4179522))
+* **docs:** move to vitepress ([#5785](https://github.com/starship/starship/issues/5785)) ([7485c90](https://github.com/starship/starship/commit/7485c90c9f7259c026a84dd0335f56860005315d))
+* **install:** Add version option to install script ([f66bfd9](https://github.com/starship/starship/commit/f66bfd9435f215867681a699428bd882d8c63ce7))
+* **install:** Add version option to install script ([#5728](https://github.com/starship/starship/issues/5728)) ([f66bfd9](https://github.com/starship/starship/commit/f66bfd9435f215867681a699428bd882d8c63ce7))
+* **os:** add new os symbols ([#5849](https://github.com/starship/starship/issues/5849)) ([df65b21](https://github.com/starship/starship/commit/df65b2155f92c03d07cabbcee6c92104a878c963))
+* **quarto:** Add Quarto module ([#5820](https://github.com/starship/starship/issues/5820)) ([0e49f04](https://github.com/starship/starship/commit/0e49f04a6b249090cf3703c5dac041a51e6bf530))
+* **release:** add winget arm64 push & repo sync ([#5033](https://github.com/starship/starship/issues/5033)) ([aef1a3f](https://github.com/starship/starship/commit/aef1a3f275e7ec9095c4718ecf6a268abfe7794a))
+* **username:** add detect_env_vars as option ([#5833](https://github.com/starship/starship/issues/5833)) ([b8a812b](https://github.com/starship/starship/commit/b8a812b93207da992ff8ae9f8b955bfa1252072b))
+
+
+### Bug Fixes
+
+* **bash:** Handle Unbound Variables Errors in Bash ([#4972](https://github.com/starship/starship/issues/4972)) ([7093d5c](https://github.com/starship/starship/commit/7093d5cd84967edba93c9ed412b07519664f6356))
+* **bash:** improve integration with bash-preexec ([#5734](https://github.com/starship/starship/issues/5734)) ([2aa711c](https://github.com/starship/starship/commit/2aa711ccc7096437e21149b18d1384534bfbcc57))
+* **character:** also handle vi edit mode in pwsh ([#5775](https://github.com/starship/starship/issues/5775)) ([0891ec2](https://github.com/starship/starship/commit/0891ec27a40421cd742a853885731aed63f412aa))
+* **direnv:** update to work with direnv v2.33 ([#5657](https://github.com/starship/starship/issues/5657)) ([cec111a](https://github.com/starship/starship/commit/cec111affdaf0a52f72c398f8307cf7e19c7dd8d))
+* **git_branch:** fall back to "HEAD" when there is no current branch ([#5768](https://github.com/starship/starship/issues/5768)) ([6a96e84](https://github.com/starship/starship/commit/6a96e84a15e3ea598356e4fcad23ac4b2690dd1e))
+* **nu:** continuation prompt not being displayed correctly ([#5851](https://github.com/starship/starship/issues/5851)) ([d308e91](https://github.com/starship/starship/commit/d308e918ee014f4ca9976683e79e819afd8160f7))
+* **status:** fix pipestatus width calculation ([#5036](https://github.com/starship/starship/issues/5036)) ([ab84043](https://github.com/starship/starship/commit/ab840439e326a80c53466c7b767d29be0112b9d2)), closes [#3162](https://github.com/starship/starship/issues/3162)
+* **zsh:** improve starship binary path escaping ([#5574](https://github.com/starship/starship/issues/5574)) ([2bb57cf](https://github.com/starship/starship/commit/2bb57cf0cd6d53194d26f4be96dff5fa14942622))
+
 ## [1.17.1](https://github.com/starship/starship/compare/v1.17.0...v1.17.1) (2024-01-02)
 
 
