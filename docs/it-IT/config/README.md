@@ -618,13 +618,24 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: This variable can only be used as a part of a style string
 
-### Esempio
+### Examples
+
+#### Customize the format
 
 ```toml
 # ~/.config/starship.toml
 
 [bun]
 format = 'via [🍔 $version](bold green) '
+```
+
+#### Replace Node.js
+
+You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
+
+```
+[nodejs]
+detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -3033,7 +3044,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 ```toml
 # This is the default symbols table.
 [os.symbols]
+AIX = "➿ "
 Alpaquita = "🔔 "
+AlmaLinux = "💠 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
@@ -3050,6 +3063,7 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "
@@ -3068,11 +3082,14 @@ Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
 RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
 Redox = "🧪 "
 Solus = "⛵ "
 SUSE = "🦎 "
 Ubuntu = "🎯 "
+Ultramarine = "🔷 "
 Unknown = "❓ "
+Void = "  "
 Windows = "🪟 "
 ```
 
