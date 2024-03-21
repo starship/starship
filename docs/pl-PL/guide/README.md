@@ -431,10 +431,6 @@ Zapoznaj się z wcześniejszymi projektami, które zainspirowały nas do stworze
 
 Wspomóż ten projekt [stając się sponsorem](https://github.com/sponsors/starship). Twoja nazwa bądź logo pojawi się tutaj wraz z linkiem do Twojej witryny.
 
-**Poziom Supporter**
-
-- [Appwrite](https://appwrite.io/)
-
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
