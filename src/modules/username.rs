@@ -1,5 +1,3 @@
-use toml::Value;
-
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
@@ -42,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None; // [A]
     }
 
-    if let Some(Value::String(alias)) = config.aliases.get(&username) {
+    if let Some(&alias) = config.aliases.get(&username) {
         username = alias.to_string();
     }
 
