@@ -431,10 +431,6 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 [スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-**スポンサーティア**
-
-- [Appwrite](https://appwrite.io/)
-
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
