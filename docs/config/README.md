@@ -645,13 +645,24 @@ By default the module will be shown if any of the following conditions are met:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### Examples
+
+#### Customize the format
 
 ```toml
 # ~/.config/starship.toml
 
 [bun]
 format = 'via [🍔 $version](bold green) '
+```
+
+#### Replace Node.js
+
+You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
+
+```
+[nodejs]
+detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
