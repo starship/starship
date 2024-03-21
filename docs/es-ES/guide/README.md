@@ -431,10 +431,6 @@ Por favor, revisa estas obras anteriores que ayudaron a inspirar la creación de
 
 Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
 
-**Patrocinadores**
-
-- [Appwrite](https://appwrite.io/)
-
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
