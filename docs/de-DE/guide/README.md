@@ -431,10 +431,6 @@ Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspirie
 
 Unterstütze dieses Projekt, indem du [ein Sponsor wirst](https://github.com/sponsors/starship). Dein Name und Logo wird hier mit einem Link zu deiner Website erscheinen.
 
-**Unterstützer**
-
-- [Appwrite](https://appwrite.io/)
-
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen-Symbol">
