@@ -2,20 +2,21 @@
 layout: home
 hero:
   image: /logo.svg
-  text: null
+  text:
   tagline: L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !
   actions:
-    - theme: brand
+    - 
+      theme: brand
       text: Commencez →
       link: ./guide/
 features:
-  -
+  - 
     title: Compatibilité avant tout
     details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
-  -
+  - 
     title: Propulsé par Rust
     details: Profitez de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes la plus rapide et fiable possible.
-  -
+  - 
     title: Personnalisable
     details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre invite de commandes aussi légère ou complète que le vous souhaitez.
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
@@ -24,12 +25,10 @@ metaTitle: "Starship : Invite Multi-Shell"
 description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, et PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Pré-requis
 
@@ -58,6 +57,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    ```sh
    brew install starship
    ```
+
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -157,6 +157,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    :::
 
    Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

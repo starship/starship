@@ -2,20 +2,21 @@
 layout: home
 hero:
   image: /logo.svg
-  text: null
-  tagline: 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
+  text:
+  tagline: 아무 셸에나 적용할 수 있는 간결하고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
   actions:
-    - theme: brand
+    - 
+      theme: brand
       text: 시작하기 →
       link: ./guide/
 features:
-  -
+  - 
     title: 호환성 우선
     details: 거의 모든 운영 체제의 거의 모든 셸에서 동작합니다. 모든 곳에서 사용해 보세요!
-  -
+  - 
     title: Rust 기반
     details: Rust의 최고 수준의 속도와 안정성으로 프롬프트를 가능한 한 빠르고 안정적으로 만들어 보세요.
-  -
+  - 
     title: 커스텀 가능
     details: 모든 사소한 디테일들을 마음대로 커스텀할 수 있어, 프롬프트를 원하는 만큼 간단하게 만들거나 기능이 풍부하게 만들 수 있습니다.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
@@ -24,12 +25,10 @@ metaTitle: "Starship: 크로스-셸 프롬프트"
 description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다! 필요한 정보를 깔끔하고 간략하게 표시합니다. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, 및 PowerShell에 빠르게 설치할 수 있습니다.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 준비 사항
 
@@ -58,6 +57,7 @@ description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 �
    ```sh
    brew install starship
    ```
+
    [Winget](https://github.com/microsoft/winget-cli)으로 설치:
 
    ```powershell
@@ -157,6 +157,7 @@ description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 �
    :::
 
    다음 내용을 Nushell env 파일 (찾으려면 Nushell에서 `$nu.env-path` 실행) 마지막 부분에 추가하세요:
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

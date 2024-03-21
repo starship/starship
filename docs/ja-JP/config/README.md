@@ -158,7 +158,7 @@ line2
 
 #### スタイルの設定
 
-Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 完全な構文の詳細については、詳細は [高度な設定](../advanced-config/)を参照してください 。
+Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +197,16 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 ### オプション
 
-| オプション             | デフォルト                          | 説明                                                                                                                                                                               |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                                                                                                                                                  |
-| `right_format`    | `''`                           | [右プロンプトの有効化](../advanced-config/#enable-right-prompt)を参照してください。                                                                                                                    |
-| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                                                                                                                                         |
-| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。                                                                                                                                |
-| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                                                                                                                                                             |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| オプション             | デフォルト                          | 説明                                                                                                                                                                                 |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                                                                                                                                                    |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                                                                                                                                           |
+| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。                                                                                                                                  |
+| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                                                                                                                                                               |
+| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 ::: tip
 
@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -1888,7 +1889,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 
 | 変数             | 説明                                                                                                            |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -3428,16 +3429,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Display the version of python from inside a local venv.
-#
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto      |
+| `style`             | `'bold #75AADB'`                     | モジュールのスタイルです。                                          |
+| `detect_extensions` | `['.qmd']`                           | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['_quarto.yml']`                    | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                              | Disables the `quarto` module.                          |
+
+### 変数
+
+| 変数        | 設定例       | 説明                      |
+| --------- | --------- | ----------------------- |
+| version   | `1.4.549` | The version of `quarto` |
+| symbol    |           | オプション `symbol` の値をミラーする |
+| style\* |           | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 ## R
 
@@ -3584,11 +3606,12 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### 変数
 
-| 変数        | 設定例      | 説明                      |
-| --------- | -------- | ----------------------- |
-| version   | `v2.5.1` | The version of `ruby`   |
-| symbol    |          | オプション `symbol` の値をミラーする |
-| style\* |          | オプション `style` の値をミラーする  |
+| 変数        | 設定例      | 説明                                          |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`                       |
+| symbol    |          | オプション `symbol` の値をミラーする                     |
+| style\* |          | オプション `style` の値をミラーする                      |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4183,6 +4206,7 @@ The `typst` module shows the current installed version of Typst used in a projec
 - カレントユーザーが、ログインしているユーザーとは異なる
 - ユーザーがSSHセッションとして接続されている
 - `show_always`変数がtrueに設定されている
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4192,13 +4216,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### オプション
 
-| オプション         | デフォルト                   | 説明                                          |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。                      |
-| `format`      | `'[$user]($style) in '` | module のフォーマットです。                           |
-| `show_always` | `false`                 | `username` モジュールを常に表示します。                   |
-| `disabled`    | `false`                 | `username` モジュールを無効にします。                    |
+| オプション             | デフォルト                   | 説明                                                        |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。                                    |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | module のフォーマットです。                                         |
+| `show_always`     | `false`                 | `username` モジュールを常に表示します。                                 |
+| `disabled`        | `false`                 | `username` モジュールを無効にします。                                  |
 
 ### 変数
 
@@ -4209,6 +4234,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 設定例
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4218,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

@@ -35,16 +35,16 @@
   <a href="https://stand-with-ukraine.pp.ua"
     ><img
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
-      alt="Stand With Ukraine"
+      alt="Steun Oekraïne"
  /></a>
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/nl-NL">Website</a>
+  <a href="https://starship.rs">Website</a>
   ·
   <a href="#🚀-installation">Installatie</a>
   ·
-  <a href="https://starship.rs/nl-NL/config/">Configuratie</a>
+  <a href="https://starship.rs/config/">Configuratie</a>
 </p>
 
 <p align="center">
@@ -124,7 +124,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
-      alt="Українська"
+      alt="Oekraïens"
  /></a>
   &nbsp;
   <a
@@ -171,7 +171,7 @@
 - **Makkelijk:** snel te installeren – gebruik het binnen enkele minuten.
 
 <p align="center">
-<a href="https://starship.rs/nl-NL/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -180,7 +180,7 @@
 
 ### Benodigdheden
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Een [Nerd Font](https://www.nerdfonts.com/) is geïnstalleerd en ingeschakeld in je terminal (probeer bijvoorbeeld het [Firacode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Stap 1. Installeer Starship
 
@@ -202,11 +202,11 @@ Installeer Starship met één van de volgende pakketbeheerders:
 
 Installeer Starship met één van de volgende pakketbeheerders:
 
-| Distribution | Repository                                               | Instructies                       |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| Distributie        | Repository                                               | Instructies                       |
+| ------------------ | -------------------------------------------------------- | --------------------------------- |
+| **_Eender welke_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD            | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD             | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -219,13 +219,13 @@ Install the latest version for your system:
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Als alternatief kan je Starship installeren met een van de volgende pakketbeheerders:
 
-| Distribution       | Repository                                                                                      | Instructies                                                                    |
+| Distributie        | Repository                                                                                      | Instructies                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| **_Eender welke_** | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _Eender welke_     | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _Eender welke_     | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -246,7 +246,7 @@ Install the latest version for your system:
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Als alternatief kan je Starship installeren met een van de volgende pakketbeheerders:
 
 | Repository                                               | Instructies                             |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -260,7 +260,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Installeer de nieuwste versie voor uw systeem met de MSI-installers van de [releases sectie](https://github.com/starship/starship/releases/latest).
 
 Installeer Starship met één van de volgende pakketbeheerders:
 
@@ -430,10 +430,6 @@ Please check out these previous works that helped inspire the creation of starsh
 ## ❤️ Sponsors
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
-
-**Supporter Tier**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

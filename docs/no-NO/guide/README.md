@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/no-NO">Nettside</a>
+  <a href="https://starship.rs">Nettside</a>
   ·
   <a href="#🚀-installation">Installasjon</a>
   ·
-  <a href="https://starship.rs/no-NO/config/">Konfigurasjon</a>
+  <a href="https://starship.rs/config/">Konfigurasjon</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **Lett:** raskt å installere - start å bruke det på minutter.
 
 <p align="center">
-<a href="https://starship.rs/no-NO/config/"><strong>Utforsk Starship dokumentasjon&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Utforsk Starship dokumentasjon&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ Please check out these previous works that helped inspire the creation of starsh
 ## ❤️ Sponsors
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
-
-**Supporter Tier**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

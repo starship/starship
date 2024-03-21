@@ -106,7 +106,7 @@ format = '''
 
 \$'''
 
-# com string básica multilinha
+# com string básica multilinha 
 format = """
 
 \\$"""
@@ -158,7 +158,7 @@ Por exemplo:
 
 #### Estilo dos textos
 
-A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](../advanced-config/).
+A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `"fg:green bg:blue"` define o texto para verde e o fundo azul
 - `"bg:blue fg:bright-green"` define o texto para verde brilhante e o fundo azul
@@ -197,16 +197,16 @@ Esta é a lista de opções de configuração em todo o prompt.
 
 ### Opções
 
-| Opções            | Padrão                         | Descrição                                                                                                                                                                                               |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                                                                                                                                                          |
-| `right_format`    | `''`                           | Veja [Ativa o prompt direito](../advanced-config/#enable-right-prompt)                                                                                                                                    |
-| `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                                                 |
-| `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                                                  |
-| `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                                           |
-| `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                                                 |
-| `palettes`        | `{}`                           | Coleção de paletas de cores que atribuem [cores](../advanced-config/#style-strings) aos nomes definidos pelo usuário. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                          |
+| Opções            | Padrão                         | Descrição                                                                                                                                                                                       |
+| ----------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                                                                                                                                                  |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                              |
+| `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                                         |
+| `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                                          |
+| `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                                   |
+| `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                                         |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                  |
 
 ::: tip
 
@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -1888,7 +1889,7 @@ As variáveis a seguir podem ser usadas no `format`:
 
 | Variável       | Descrição                                                                                                  |
 | -------------- | ---------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Atalhos para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                               |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                    |
 | `ahead_behind` | Exibe `diverged`, `ahead`, `behind` or `up_to_date` conforme o formato da string do status do repositório. |
 | `conflicted`   | Exibe `conflicted` quando este braço tenha conflitos no merge.                                             |
 | `untracked`    | Exibe `untracked` quando há arquivos não rastreados no diretório atual.                                    |
@@ -3356,7 +3357,7 @@ O módulo `python` exibe a versão atual instalada do [Python](https://www.pytho
 
 Se o `pyenv_version_name` estiver definido como `true`, será exibido o nome da versão do pyenv. Caso contrario, ele exibirá o número da versão do `python --version`.
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo `.python-version`
 - O diretório atual tenha um arquivo `Pipfile`
@@ -3428,16 +3429,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Exibe a versão do python de dentro de um venv local.
-#
-# Note que isso só funcionará quando o venv estiver dentro do projeto e só
-# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                                   |
+| `style`             | `'bold #75AADB'`                     | O estilo do módulo.                                                                 |
+| `detect_extensions` | `['.qmd']`                           | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['_quarto.yml']`                    | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                                       |
+
+### Variáveis
+
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `1.4.549` | The version of `quarto`           |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
 
 ## R
 
@@ -3584,11 +3606,12 @@ O Starship pega a versão atual do Ruby rodando `ruby -v`.
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                         |
-| --------- | -------- | --------------------------------- |
-| version   | `v2.5.1` | A versão do `ruby`                |
-| symbol    |          | Espelha o valor da opção `symbol` |
-| style\* |          | Espelha o valor da opção `style`  |
+| Variável  | Exemplo  | Descrição                                   |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | A versão do `ruby`                          |
+| symbol    |          | Espelha o valor da opção `symbol`           |
+| style\* |          | Espelha o valor da opção `style`            |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -4183,6 +4206,7 @@ O módulo `username` mostra o nome de usuário do usuário ativo. O módulo ser�
 - O usuário atual não é o mesmo que está logado
 - O usuário atual esta conectado em uma sessão SSH
 - A variável `show_always` esta definida como true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4192,13 +4216,14 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 
 ### Opções
 
-| Opções        | Padrão                  | Descrição                                     |
-| ------------- | ----------------------- | --------------------------------------------- |
-| `style_root`  | `'bold red'`            | O estilo usado quando o usuário é root/admin. |
-| `style_user`  | `'bold yellow'`         | O estilo usado para usuários não root.        |
-| `format`      | `'[$user]($style) in '` | O formato do módulo.                          |
-| `show_always` | `false`                 | Sempre exibe o módulo `username`.             |
-| `disabled`    | `false`                 | Desabilita o módulo `username`.               |
+| Opções            | Padrão                  | Descrição                                                 |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | O estilo usado quando o usuário é root/admin.             |
+| `style_user`      | `'bold yellow'`         | O estilo usado para usuários não root.                    |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | O formato do módulo.                                      |
+| `show_always`     | `false`                 | Sempre exibe o módulo `username`.                         |
+| `disabled`        | `false`                 | Desabilita o módulo `username`.                           |
 
 ### Variáveis
 
@@ -4209,6 +4234,8 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 
 ### Exemplo
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4218,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

@@ -2,20 +2,21 @@
 layout: home
 hero:
   image: /logo.svg
-  text: null
+  text:
   tagline: O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!
   actions:
-    - theme: brand
+    - 
+      theme: brand
       text: Primeiros passos →
       link: ./guide/
 features:
-  -
+  - 
     title: Compatibilidade primeiro
     details: Funciona nos principais shells nos principais sistemas operacionais. Use em qualquer lugar!
-  -
+  - 
     title: Poder do Rust
     details: Tenha o melhor da velocidade e segurança do Rust, para tornar seu prompt o mais rápido e confiável possível.
-  -
+  - 
     title: Personalizável
     details: Cada pequeno detalhe é personalizável ao seu gosto, para tornar esse prompt o mínimo possível ou rico em recursos, como você preferir.
 footer: Licenciado pelo ISC | Todos os direitos reservados © 2019-Presente | Contribuidores Starship
@@ -24,12 +25,10 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: O Starship é o prompt minimalista, extremamente rápido e extremamente personalizável para qualquer shell! Mostra as informações que você precisa, mantendo-se elegante e minimalista. Instalação rápida disponível para Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd e PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Pré-requisitos
 
@@ -58,6 +57,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    ```sh
    brew install starship
    ```
+
    Com o [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -157,6 +157,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    :::
 
    Adicione o seguinte ao final do seu arquivo env do Nushell (enconte-o rodando  `$nu.env-path` no Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/pt-BR">Site</a>
+  <a href="https://starship.rs">Site</a>
   ·
   <a href="#🚀-installation">Instalação</a>
   ·
-  <a href="https://starship.rs/pt-BR/config/">Configuração</a>
+  <a href="https://starship.rs/config/">Configuração</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **Fácil:**Instalação rápida – comece a usar em minutos.
 
 <p align="center">
-<a href="https://starship.rs/pt-BR/config/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ Por favor, confira esses trabalhos anteriores que ajudaram a inspirar a criaçã
 ## ❤️ Patrocinadores
 
 Apoie este projeto [tornando-se um patrocinador](https://github.com/sponsors/starship). O seu nome ou logotipo aparecerá aqui com um link para o seu site.
-
-**Rank de Apoiadores**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

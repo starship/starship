@@ -2,20 +2,21 @@
 layout: home
 hero:
   image: /logo.svg
-  text: null
+  text:
   tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
   actions:
-    - theme: brand
+    - 
+      theme: brand
       text: Pierwsze kroki →
       link: ./guide/
 features:
-  -
+  - 
     title: Kompatybilność przede wszystkim
     details: Działa na większości powszechnych powłokach, na większości najpopularniejszych systemach. Używaj go wszędzie!
-  -
+  - 
     title: Napędzany językiem Rust
     details: Zapewnia najlepszą w swojej klasie prędkość i bezpieczeństwo języka Rust, w celu zapewnienia jak najszybszej i niezawodnej odpowiedzi.
-  -
+  - 
     title: Konfigurowalny
     details: Każdy mały detal jest konfigurowalny do Twoich preferencji, aby wiersz poleceń był tak minimalny lub tak bogaty w funkcje, jak tylko zechcesz.
 footer: Licencja ISC | Copyright © 2019-obecnie Kontrybutorzy Starship
@@ -24,12 +25,10 @@ metaTitle: "Starship: Wiersz poleceń dla dowolnej powłoki"
 description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz poleceń dla każdej powłoki! Pokazuje informacje których potrzebujesz, pozostając elegancki i minimalny. Szybka instalacja dostępna dla powłok Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd i PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Wymagania wstępne
 
@@ -58,6 +57,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    ```sh
    brew install starship
    ```
+
    Za pomocą [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -157,6 +157,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    :::
 
    Dodaj następujący kod na koniec twojego pliku env Nushell (możesz go znaleść za pomocą `$nu.env-path` w Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

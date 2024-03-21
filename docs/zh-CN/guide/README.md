@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/zh-CN">网站</a>
+  <a href="https://starship.rs">网站</a>
   ·
   <a href="#🚀-installation">安装</a>
   ·
-  <a href="https://starship.rs/zh-CN/config/">配置</a>
+  <a href="https://starship.rs/config/">配置</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
-<a href="https://starship.rs/zh-CN/config/"><strong>探索 Starship 文档</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文档</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ eval "$(starship init zsh)"
 ## ❤️ 赞助商
 
 通过 [成为赞助商 ](https://github.com/sponsors/starship)来支持这个项目。 您的名字或 LOGO 将在此处显示，并链接到您的网站。
-
-**支持者级别**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

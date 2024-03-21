@@ -2,20 +2,21 @@
 layout: home
 hero:
   image: /logo.svg
-  text: null
+  text:
   tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
   actions:
-    - theme: brand
+    - 
+      theme: brand
       text: Kullanmaya Başlayın →
       link: ./guide/
 features:
-  -
+  - 
     title: Önce Uyumluluk
     details: En yaygın işletim sistemlerindeki en yaygın shell'ler üzerinde çalışır. Use it everywhere!
-  -
+  - 
     title: Rust-Powered
     details: Prompt'u mümkün olduğunca hızlı ve güvenilir hale getirmek için sınıfının en iyisi Rust hızını ve güvenliğini sağlar.
-  -
+  - 
     title: Özelleştirilebilir
     details: Her küçük ayrıntı beğeninize göre özelleştirilebilir, böylece bu prompt'u istediğiniz kadar minimal veya zengin özelliklere sahip hale getirirsiniz.
 footer: ISC Lisanslı | Telif Hakkı © 2019-günümüz Starship Contributors
@@ -24,12 +25,10 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship, her prompt için minimal, son derece hızlı ve son derece özelleştirilebilir bir shelldir! Şık ve minimal kalırken ihtiyacınız olan bilgileri gösterir. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd ve PowerShell için hızlı kurulum mevcuttur.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Ön koşullar
 
@@ -58,6 +57,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    ```sh
    brew install starship
    ```
+
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -157,6 +157,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    :::
 
    Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-path` komutunu çalıştırarak bulabilirsiniz):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

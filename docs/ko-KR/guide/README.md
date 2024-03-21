@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/ko-KR">웹사이트</a>
+  <a href="https://starship.rs">웹사이트</a>
   ·
   <a href="#🚀-installation">설치</a>
   ·
-  <a href="https://starship.rs/ko-KR/config/">설정</a>
+  <a href="https://starship.rs/config/">설정</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **쉬움:** 빠른 설치 - 몇 분만 투자하면 바로 사용할 수 있습니다.
 
 <p align="center">
-<a href="https://starship.rs/ko-KR/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 ## ❤️ 스폰서
 
 이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
-
-**후원자 티어**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

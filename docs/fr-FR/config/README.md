@@ -158,7 +158,7 @@ Par exemple :
 
 #### Chaînes de style
 
-La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. Cela se fait avec une entrée (généralement appelée `style`) qui est une chaîne de caractères spécifiant la configuration. Voici quelques exemples de chaînes de style avec ce qu'elles font. Pour plus de détails sur la syntaxe complète, consultez le [guide de configuration avancé](../advanced-config/).
+La plupart des modules de Starship vous permettent de configurer leurs styles d'affichage. Cela se fait avec une entrée (généralement appelée `style`) qui est une chaîne de caractères spécifiant la configuration. Voici quelques exemples de chaînes de style avec ce qu'elles font. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +197,16 @@ Voici la liste des options de configuration globales de l'invite de commandes.
 
 ### Options
 
-| Option            | Défaut                         | Description                                                                                                                                                                      |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                                                                                                                                 |
-| `right_format`    | `''`                           | Voir [Activer le prompt à droite](../advanced-config/#enable-right-prompt)                                                                                                         |
-| `scan_timeout`    | `30`                           | Délai maximal pour le scan des fichiers par starship (en millisecondes).                                                                                                         |
-| `command_timeout` | `500`                          | Délai maximal pour les commandes exécutées par starship (en millisecondes).                                                                                                      |
-| `add_newline`     | `true`                         | Insère une ligne vide entre les invites du shell.                                                                                                                                |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| Option            | Défaut                         | Description                                                                                                                                                                        |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                                                                                                                                   |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Délai maximal pour le scan des fichiers par starship (en millisecondes).                                                                                                           |
+| `command_timeout` | `500`                          | Délai maximal pour les commandes exécutées par starship (en millisecondes).                                                                                                        |
+| `add_newline`     | `true`                         | Insère une ligne vide entre les invites du shell.                                                                                                                                  |
+| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 ::: tip
 
@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -1888,7 +1889,7 @@ Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 
 | Variable       | Description                                                                                                           |
 | -------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                        |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                               |
 | `ahead_behind` | Affiche la chaine de formatage `diverged`, `ahead`, `behind` ou `up_to_date` en se basant sur l’état actuel du dépôt. |
 | `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                                            |
 | `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.                              |
@@ -3428,17 +3429,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Affiche la version de python depuis l'intérieur d'un venv local.
-#
-# Notez que cela ne fonctionnera que lorsque le venv est à l'intérieur du projet,
-# et uniquement lorsque vous vous situez dans le répertoire contenant le dossier du venv
-# mais peut-être que c'est suffisant?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'⨁ '`                               | A format string representing the symbol of Quarto                                          |
+| `style`                              | `'bold #75AADB'`                     | Le style pour le module.                                                                   |
+| `detect_extensionsdetect_extensions` | `['.qmd']`                           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['_quarto.yml']`                    | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`                           | `false`                              | Disables the `quarto` module.                                                              |
+
+### Variables
+
+| Variable  | Exemple   | Description                            |
+| --------- | --------- | -------------------------------------- |
+| version   | `1.4.549` | The version of `quarto`                |
+| symbole   |           | Reflète la valeur de l'option `symbol` |
+| style\* |           | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ## R
 
@@ -3585,11 +3606,12 @@ Starship obtient la version actuelle de Ruby en exécutant `ruby -v`.
 
 ### Variables
 
-| Variable  | Exemple  | Description                            |
-| --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | La version de `ruby`                   |
-| symbole   |          | Reflète la valeur de l'option `symbol` |
-| style\* |          | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple  | Description                                 |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | La version de `ruby`                        |
+| symbole   |          | Reflète la valeur de l'option `symbol`      |
+| style\* |          | Reflète la valeur de l'option `style`       |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -4184,6 +4206,7 @@ Le module `username` affiche le nom de l’utilisateur actif. Le module sera aff
 - L'utilisateur courant est différent de celui connecté
 - L'utilisateur est actuellement connecté en tant que session SSH
 - La variable `show_always` est définie à true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4193,13 +4216,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Défaut                  | Description                                          |
-| ------------- | ----------------------- | ---------------------------------------------------- |
-| `style_root`  | `'bold red'`            | Le style utilisé quand l'utilisateur est root/admin. |
-| `style_user`  | `'bold yellow'`         | Le style utilisé pour les utilisateurs non-root.     |
-| `format`      | `'[$user]($style) in '` | Format du module.                                    |
-| `show_always` | `false`                 | Toujours afficher le module `username`.              |
-| `disabled`    | `false`                 | Désactive le module `username`.                      |
+| Option            | Défaut                  | Description                                               |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | Le style utilisé quand l'utilisateur est root/admin.      |
+| `style_user`      | `'bold yellow'`         | Le style utilisé pour les utilisateurs non-root.          |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | Format du module.                                         |
+| `show_always`     | `false`                 | Toujours afficher le module `username`.                   |
+| `disabled`        | `false`                 | Désactive le module `username`.                           |
 
 ### Variables
 
@@ -4210,6 +4234,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Exemple
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4219,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

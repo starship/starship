@@ -200,12 +200,12 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | Параметр          | Стандартно                     | Опис                                                                                                                                                                                                                |
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [link](#default-prompt-format) | Налаштовує формат командного рядка.                                                                                                                                                                                 |
-| `right_format`    | `''`                           | Див [Увімкнути командний рядок праворуч](../advanced-config/#enable-right-prompt)                                                                                                                                     |
+| `right_format`    | `''`                           | Дивіться [Увімкнути вивід праворуч](../advanced-config/#enable-right-prompt)                                                                                                                                        |
 | `scan_timeout`    | `30`                           | Тайм-аут для сканування файлів (у мілісекундах).                                                                                                                                                                    |
 | `command_timeout` | `500`                          | Тайм-аут для команд, виконаних starship (у мілісекундах).                                                                                                                                                           |
 | `add_newline`     | `true`                         | Вставити порожній рядок між командними рядками в оболонці.                                                                                                                                                          |
 | `palette`         | `''`                           | Встановлює кольорову палітру використовуючи `palettes`.                                                                                                                                                             |
-| `palettes`        | `{}`                           | Колекція кольорових палітр, для призначення [кольорів](../advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
+| `palettes`        | `{}`                           | Колекція колірних палітр, для призначення [кольорів](../advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
 | `follow_symlinks` | `true`                         | Перевіряти символічні посилання чи вони посилаються на теки; використовується в таких модулях як git.                                                                                                               |
 
 ::: tip
@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -1888,7 +1889,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 | Змінна         | Опис                                                                                                |
 | -------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`   | Скорочення для `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                      |
+| `all_status`   | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
 | `ahead_behind` | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
 | `conflicted`   | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
 | `untracked`    | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
@@ -3428,16 +3429,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Показувати версію python з venv.
-#
-# Зауважте, що це працюватиме лише тоді, коли venv знаходиться всередині проєкту, і він працюватиме
-# лише в теці, яка містить теку venv, якщо це нормально?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### Параметри
+
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                 |
+| `style`             | `'bold #75AADB'`                     | Стиль модуля.                                                     |
+| `detect_extensions` | `['.qmd']`                           | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['_quarto.yml']`                    | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                     |
+
+### Змінні
+
+| Змінна    | Приклад   | Опис                                     |
+| --------- | --------- | ---------------------------------------- |
+| version   | `1.4.549` | The version of `quarto`                  |
+| symbol    |           | Віддзеркалює значення параметра `symbol` |
+| style\* |           | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ## R
 
@@ -3584,11 +3606,12 @@ Starship отримує поточну версію Ruby командою `ruby 
 
 ### Змінні
 
-| Змінна    | Приклад  | Опис                                     |
-| --------- | -------- | ---------------------------------------- |
-| version   | `v2.5.1` | Версія `ruby`                            |
-| symbol    |          | Віддзеркалює значення параметра `symbol` |
-| style\* |          | Віддзеркалює значення параметра `style`  |
+| Змінна    | Приклад  | Опис                                        |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | Версія `ruby`                               |
+| symbol    |          | Віддзеркалює значення параметра `symbol`    |
+| style\* |          | Віддзеркалює значення параметра `style`     |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -4183,6 +4206,7 @@ time_range = '10:00:00-14:00:00'
 - Поточний користувач не є таким же, як той, який увійшов до системи
 - Користувач зараз підключений через SSH
 - Змінна `show_always` встановлена в true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4192,13 +4216,14 @@ time_range = '10:00:00-14:00:00'
 
 ### Параметри
 
-| Параметр      | Стандартно              | Опис                                                       |
-| ------------- | ----------------------- | ---------------------------------------------------------- |
-| `style_root`  | `'bold red'`            | Стиль, який використовується коли користувач є root/admin. |
-| `style_user`  | `'bold yellow'`         | Стиль для звичайних користувачів.                          |
-| `format`      | `'[$user]($style) in '` | Формат модуля.                                             |
-| `show_always` | `false`                 | Завжди показувати модуль `username`.                       |
-| `disabled`    | `false`                 | Вимикає модуль `username`.                                 |
+| Параметр          | Стандартно              | Опис                                                       |
+| ----------------- | ----------------------- | ---------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | Стиль, який використовується коли користувач є root/admin. |
+| `style_user`      | `'bold yellow'`         | Стиль для звичайних користувачів.                          |
+| `detect_env_vars` | `[]`                    | Які змінні середовища повинні запускати цей модуль.        |
+| `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
+| `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
+| `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
 
 ### Змінні
 
@@ -4209,6 +4234,8 @@ time_range = '10:00:00-14:00:00'
 
 ### Приклад
 
+#### Завжди показувати hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4218,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Приховувати hostname для віддалених сеансів tmux
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

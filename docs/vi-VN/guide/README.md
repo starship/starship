@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs/vi-VN">Website</a>
+  <a href="https://starship.rs">Website</a>
   ·
   <a href="#🚀-installation">Cài đặt</a>
   ·
-  <a href="https://starship.rs/vi-VN/config/">Cấu hình</a>
+  <a href="https://starship.rs/config/">Cấu hình</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
 
 <p align="center">
-<a href="https://starship.rs/vi-VN/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ Xin hãy xem qua những công việc này trước đây, những thứ đã gi
 ## Tài trợ
 
 Hỗ trợ project này bằng việc [trở thành nhà tài trợ](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
-
-**Nhà tài trợ ủng hộ**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

@@ -17,7 +17,7 @@ add_newline = true
 
 # 将提示符中的 '❯' 替换为 '➜'
 [character] # 此组件名称为 'character'
-success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'
+success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'  
 
 # 禁用 'package' 组件，将其隐藏
 [package]
@@ -158,7 +158,7 @@ line2
 
 #### 样式字符串
 
-Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](../advanced-config/)。
+Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +197,16 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 ### 配置项
 
-| 选项                | 默认值                           | 描述                                                                                                                                                                               |
-| ----------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                                                                                                                                        |
+| 选项                | 默认值                           | 描述                                                                                                                                                                                 |
+| ----------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                                                                                                                                          |
 | `right_format`    | `''`                          | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                                                                                                                                       |
-| `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                                                                                                                                      |
-| `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                               |
-| `palette`         | `''`                          | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                                                                                                                                         |
+| `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                                                                                                                                        |
+| `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                                 |
+| `palette`         | `''`                          | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                          | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                        | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+| `follow_symlinks` | `true`                        | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 ::: tip
 
@@ -300,6 +300,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -1888,7 +1889,7 @@ The following variables can be used in `format`:
 
 | 字段             | 描述                                                                                                            |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -3356,7 +3357,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
-By default the module will be shown if any of the following conditions are met:
+By default, the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `.python-version` 文件
 - 当前目录包含 `Pipfile` 文件
@@ -3428,16 +3429,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Display the version of python from inside a local venv.
-#
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                          |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`       |
+| `符号`                | `'⨁ '`                               | A format string representing the symbol of Quarto |
+| `style`             | `'bold #75AADB'`                     | 此组件的样式。                                           |
+| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.      |
+| `detect_files`      | `['_quarto.yml']`                    | 哪些文件应触发此组件                                        |
+| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                      |
+| `disabled`          | `false`                              | Disables the `quarto` module.                     |
+
+### 变量
+
+| 字段        | 示例        | 描述                      |
+| --------- | --------- | ----------------------- |
+| version   | `1.4.549` | The version of `quarto` |
+| 符号        |           | `symbol`对应值             |
+| style\* |           | `style`对应值              |
+
+*: 此变量只能作为样式字符串的一部分使用
 
 ## R
 
@@ -3584,11 +3606,12 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### 变量
 
-| 字段        | 示例       | 描述                    |
-| --------- | -------- | --------------------- |
-| version   | `v2.5.1` | The version of `ruby` |
-| 符号        |          | `symbol`对应值           |
-| style\* |          | `style`对应值            |
+| 字段        | 示例       | 描述                                          |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`                       |
+| 符号        |          | `symbol`对应值                                 |
+| style\* |          | `style`对应值                                  |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -4183,6 +4206,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 当前用户与登录用户不相同
 - 用户正通过 SSH 会话连接访问
 - 字段 `show_always` 被设置为 true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4192,13 +4216,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 配置项
 
-| 选项            | 默认值                     | 描述                                          |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非 root 用户使用的样式。                             |
-| `format`      | `'[$user]($style) in '` | 组件格式化模板。                                    |
-| `show_always` | `false`                 | 总是显示 `username` 组件。                         |
-| `disabled`    | `false`                 | 禁用 `username` 组件。                           |
+| 选项                | 默认值                     | 描述                                                        |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | 非 root 用户使用的样式。                                           |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
+| `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
+| `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
 
 ### 变量
 
@@ -4209,6 +4234,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 示例
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4218,6 +4245,17 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

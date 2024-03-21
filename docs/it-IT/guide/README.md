@@ -171,7 +171,7 @@
 - **Facile:** veloce da installare - inizia ad usarlo in pochi minuti.
 
 <p align="center">
-<a href="https://starship.rs/it-IT/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -430,10 +430,6 @@ Ti invito di controllare questi lavori precedenti che hanno contribuito a ispira
 ## ❤️ Sponsors
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
-
-**Supporter Tier**
-
-- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
