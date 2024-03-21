@@ -351,7 +351,7 @@ format = '$all$directory$character'
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+Das `aws` Modul zeigt die aktuelle AWS Region und Profil sowie den Ablauf-Timer an, wenn temporäre Zugangsdaten verwendet werden. Die Ausgabe des Moduls verwendet die `AWS_REGION`, `AWS_DEFAULT_REGION` und `AWS_PROFILE` Umgebungsvariablen sowie die `~/. ws/config` und `~/.aws/credentials` Dateien, falls nötig.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
