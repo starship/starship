@@ -4402,14 +4402,15 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Options
 
-| Option        | Default                 | Description                                  |
-| ------------- | ----------------------- | -------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin.  |
-| `style_user`  | `'bold yellow'`         | The style used for non-root users.           |
-| `format`      | `'[$user]($style) in '` | The format for the module.                   |
-| `show_always` | `false`                 | Always shows the `username` module.          |
-| `disabled`    | `false`                 | Disables the `username` module.              |
-| `aliases`     | `{}`                    | Translate system usernames to something else |
+| Option            | Default                 | Description                                               |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | The style used for non-root users.                        |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | The format for the module.                                |
+| `show_always`     | `false`                 | Always shows the `username` module.                       |
+| `disabled`        | `false`                 | Disables the `username` module.                           |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### Variables
 
