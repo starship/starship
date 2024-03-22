@@ -108,7 +108,7 @@ enable_transience
 
 ## TransientPrompt and TransientRightPrompt in Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace
 the previous-printed prompt with custom strings. This is useful in cases where all
 the prompt information is not always needed. To enable this, put this in `~/.bashrc`
 `bleopt prompt_ps1_transient=<value>`:
@@ -298,7 +298,7 @@ the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### Example
 
