@@ -23,7 +23,7 @@ impl<'a> Default for OdinConfig<'a> {
         OdinConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "${raw}",
-            symbol: "🐦‍⬛ ",
+            symbol: "Ø ",
             style: "bold bright-blue",
             disabled: false,
             detect_extensions: vec!["odin"],

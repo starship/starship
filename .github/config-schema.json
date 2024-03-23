@@ -1137,7 +1137,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold bright-blue",
-        "symbol": "🐦‍⬛ ",
+        "symbol": "Ø ",
         "version_format": "${raw}"
       },
       "allOf": [
@@ -4623,7 +4623,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐦‍⬛ ",
+          "default": "Ø ",
           "type": "string"
         },
         "style": {

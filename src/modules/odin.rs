@@ -79,7 +79,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.odin"))?.sync_all()?;
         let actual = ModuleRenderer::new("odin").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::LightBlue.bold().paint("🐦‍⬛ dev-2024-03 ")));
+        let expected = Some(format!("via {}", Color::LightBlue.bold().paint("Ø dev-2024-03 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
