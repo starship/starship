@@ -72,7 +72,7 @@ Vous pouvez activer les journaux de débogage en utilisant la variable d’envir
 env STARSHIP_LOG=trace starship module rust
 ```
 
-Si starship est lent, vous pouvez essayer d’utiliser la commande `timings` pour voir si un module ou une commande particulière est à blâmer.
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
