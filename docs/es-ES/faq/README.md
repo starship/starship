@@ -72,7 +72,7 @@ Puede habilitar los registros de depuración usando la variable de entorno `STAR
 env STARSHIP_LOG=trace starship module rust
 ```
 
-Si starship está siendo lento, puedes intentar usar el comando `timings` para ver si hay un módulo en particular o un comando a culpar.
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
