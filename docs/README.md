@@ -142,21 +142,15 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```nushell
    '
    let starship_path = $nu.default-config-dir | path join scripts starship.nu
-   if $nu.is-interactive {
-     starship init nu | save $starship_path --force
-   }' | save $nu.env-path --append
-   '
-   if $nu.is-interactive {
-     use starship.nu
-   }' | save $nu.config-path --append
+   starship init nu | save $starship_path --force
+   ' | save $nu.env-path --append
+   "\nuse starship.nu" | save $nu.config-path --append
    ```
 
    If you prefer to keep your dotfiles clean you can save it to a different directory then update `$env.NU_LIB_DIRS`:
 
    ```nushell
-   '
-   $env.NU_LIB_DIRS ++= ($starship_path | path dirname | to nuon)
-   ' | save $nu.env-path --append
+   "\n$env.NU_LIB_DIRS ++= ($starship_path | path dirname | to nuon)" | save $nu.env-path --append
    ```
 
    #### Xonsh
