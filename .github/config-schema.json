@@ -342,6 +342,7 @@
         "repo_root_style": null,
         "style": "cyan bold",
         "substitutions": {},
+        "truncate_repo_length": 1,
         "truncate_to_repo": true,
         "truncation_length": 3,
         "truncation_symbol": "",
@@ -2688,6 +2689,11 @@
         "truncate_to_repo": {
           "default": true,
           "type": "boolean"
+        },
+        "truncate_repo_length": {
+          "default": 1,
+          "type": "integer",
+          "format": "int64"
         },
         "substitutions": {
           "default": {},
