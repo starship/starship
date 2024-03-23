@@ -1127,6 +1127,25 @@
         }
       ]
     },
+    "odin": {
+      "default": {
+        "detect_extensions": [
+          "odin"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold bright-blue",
+        "symbol": "🐦‍⬛ ",
+        "version_format": "${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OdinConfig"
+        }
+      ]
+    },
     "opa": {
       "default": {
         "detect_extensions": [
@@ -4584,6 +4603,55 @@
             "_opam",
             "esy.lock"
           ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OdinConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐦‍⬛ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "odin"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
           "type": "array",
           "items": {
             "type": "string"
