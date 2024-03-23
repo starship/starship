@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let odin_version = context.exec_cmd("odin", &["version"])?.stdout;
-                    let cut_version = odin_version.split("version ").nth(1)?;
+                    let cut_version = odin_version.split(' ').last()?.split(':').next()?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         cut_version.trim(),
@@ -79,7 +79,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.odin"))?.sync_all()?;
         let actual = ModuleRenderer::new("odin").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::LightBlue.bold().paint("🐦‍⬛ dev-2024-03:fc587c507 ")));
+        let expected = Some(format!("via {}", Color::LightBlue.bold().paint("🐦‍⬛ dev-2024-03 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
