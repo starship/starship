@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.18.1](https://github.com/starship/starship/compare/v1.18.0...v1.18.1) (2024-03-24)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate os_info to 3.8.2 ([#5870](https://github.com/starship/starship/issues/5870)) ([d421f63](https://github.com/starship/starship/commit/d421f63785f901caf222941cbfae7cb8c0feec74))
+* replace all remaining paths referring to vuepress ([#5859](https://github.com/starship/starship/issues/5859)) ([d5861f9](https://github.com/starship/starship/commit/d5861f9f974147d307c319865890cbb3e50dbe5a))
+
 ## [1.18.0](https://github.com/starship/starship/compare/v1.17.1...v1.18.0) (2024-03-21)
 
 
