@@ -2,7 +2,6 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::odin::OdinConfig;
 use crate::formatter::StringFormatter;
-use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Odin version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -33,13 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let odin_version = context.exec_cmd("odin", &["version"])?.stdout;
-                    let cut_version = odin_version.split(' ').last()?.split(':').next()?;
-                    VersionFormatter::format_module_version(
-                        module.get_name(),
-                        cut_version.trim(),
-                        config.version_format,
-                    )
-                    .map(Ok)
+                    let trimmed_version = odin_version.split(' ').last()?.to_string();
+
+                    if config.show_commit {
+                        return Some(Ok(trimmed_version))
+                    }
+
+                    let no_commit = trimmed_version.split(':').next()?.to_string();
+                    Some(Ok(no_commit))
                 }
                 _ => None,
             })

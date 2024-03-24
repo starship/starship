@@ -1136,9 +1136,9 @@
         "detect_folders": [],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
+        "show_commit": false,
         "style": "bold bright-blue",
-        "symbol": "Ø ",
-        "version_format": "${raw}"
+        "symbol": "Ø "
       },
       "allOf": [
         {
@@ -4618,9 +4618,9 @@
           "default": "via [$symbol($version )]($style)",
           "type": "string"
         },
-        "version_format": {
-          "default": "${raw}",
-          "type": "string"
+        "show_commit": {
+          "default": false,
+          "type": "boolean"
         },
         "symbol": {
           "default": "Ø ",

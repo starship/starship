@@ -3079,16 +3079,16 @@ The 'odin' module sows the currently installed version of [Odin](https://odin-la
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'${raw}'`                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig.                     |
-| `style`             | `'bold bright-blue'`                 | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `odin` module.                                               |
-| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| Option              | Default                              | Description                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                            |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `'bold bright-blue'`                 | The style for the module.                             |
+| `disabled`          | `false`                              | Disables the `odin` module.                           |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 
 ### Variables
 
@@ -3107,6 +3107,7 @@ The 'odin' module sows the currently installed version of [Odin](https://odin-la
 
 [odin]
 format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent

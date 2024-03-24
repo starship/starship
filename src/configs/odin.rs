@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct OdinConfig<'a> {
     pub format: &'a str,
-    pub version_format: &'a str,
+    pub show_commit: bool,
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
@@ -22,7 +22,7 @@ impl<'a> Default for OdinConfig<'a> {
     fn default() -> Self {
         OdinConfig {
             format: "via [$symbol($version )]($style)",
-            version_format: "${raw}",
+            show_commit: false,
             symbol: "Ø ",
             style: "bold bright-blue",
             disabled: false,
