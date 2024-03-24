@@ -26,7 +26,7 @@ jobs:
       - name: Install | Taplo
         run: cargo install --debug --locked --version 0.9.0 taplo-cli
       - name: Presets | Validate with schema
-        run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/.vuepress/public/presets/toml/*.toml
+        run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/public/presets/toml/*.toml
 
   # If this is not a Crowdin PR, block changes to translated documentation
   block-crowdin:
