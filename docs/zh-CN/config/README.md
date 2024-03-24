@@ -601,7 +601,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | -------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                     |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`  |
-| `symbol`            | `'🍞 '`                               | 用于表示Bun的格式化字符串                               |
+| `symbol`            | `'🥟 '`                               | 用于表示Bun的格式化字符串                               |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module. |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | 哪些文件应触发此组件                                   |
 | `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                 |
