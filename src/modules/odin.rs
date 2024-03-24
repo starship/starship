@@ -32,13 +32,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let odin_version = context.exec_cmd("odin", &["version"])?.stdout;
-                    let trimmed_version = odin_version.split(' ').last()?.to_string();
+                    let trimmed_version = odin_version.split(' ').last()?.trim().to_string();
 
                     if config.show_commit {
                         return Some(Ok(trimmed_version))
                     }
 
-                    let no_commit = trimmed_version.split(':').next()?.to_string();
+                    let no_commit = trimmed_version.split(':').next()?.trim().to_string();
                     Some(Ok(no_commit))
                 }
                 _ => None,
