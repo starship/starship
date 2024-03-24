@@ -82,7 +82,7 @@ enable_transience
 
 ## TransientPrompt e TransientRightPrompt em Bash
 
-O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) permite substituir o prompt anteriormente impresso por strings personalizadas. Isso é útil em casos onde nem sempre todas as informações do prompt são necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. Isso é útil em casos onde nem sempre todas as informações do prompt são necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
 O \<value\> aqui é uma lista separada por dois pontos de `always`, `same-dir` e `trim`. Quando `prompt_ps1_final` está vazio e esta opção tem um valor não-vazio, o prompt especificado pelo `PS1` é apagado ao sair da linha de comando atual. Se o valor contém um campo `trim`, apenas a última linha de multilinha `PS1` é preservada e as outras linhas são apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido no valor e o diretório de trabalho atual difere do diretório final da linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
 
@@ -227,7 +227,7 @@ Nota: O prompt direito é uma única linha após o local de entrada. To right al
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### Exemplo
 
