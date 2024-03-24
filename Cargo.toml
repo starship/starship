@@ -66,7 +66,7 @@ pest = "2.7.8"
 pest_derive = "2.7.8"
 quick-xml = "0.31.0"
 rand = "0.8.5"
-rayon = "1.9.0"
+rayon = "1.10.0"
 regex = { version = "1.10.4", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.0"
 semver = "1.0.22"
