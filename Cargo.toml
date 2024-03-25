@@ -74,6 +74,7 @@ shadow-rs = { version = "1.7.1", default-features = false, features = ["build"] 
 starship-battery = { version = "0.11.0", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.6"
+tempfile = "3.27.0"
 terminal_size = "0.4.4"
 toml = { version = "1.1.2", features = ["preserve_order"] }
 toml_edit = "0.25.11"
@@ -119,7 +120,6 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.14.0"
-tempfile = "3.27.0"
 
 [profile.release]
 codegen-units = 1
