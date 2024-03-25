@@ -73,6 +73,9 @@ symbol = "gcp "
 [git_branch]
 symbol = "git "
 
+[gleam]
+symbol = "gleam "
+
 [golang]
 symbol = "go "
 

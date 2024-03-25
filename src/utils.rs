@@ -267,6 +267,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "gleam --version" => Some(CommandOutput {
+            stdout: String::from("gleam 1.0.0\n"),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
