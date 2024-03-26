@@ -35,6 +35,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map(|s| {
                     s.lines()
                         .find_map(|l| {
+                            if let Some(name_val) = l.strip_prefix("name=\"") {
+                                return name_val.strip_suffix('"').map(|n| n.to_string());
+                            }
+
                             l.starts_with("image=\"").then(|| {
                                 let r = l.split_at(7).1;
                                 let name = r.rfind('/').map(|n| r.split_at(n + 1).1);
@@ -127,7 +131,10 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    fn containerenv(name: Option<&str>) -> std::io::Result<(Option<String>, Option<String>)> {
+    fn containerenv(
+        image: Option<&str>,
+        name: Option<&str>,
+    ) -> std::io::Result<(Option<String>, Option<String>)> {
         let renderer = ModuleRenderer::new("container")
             // For a custom config
             .config(toml::toml! {
@@ -147,10 +154,10 @@ mod tests {
 
         fs::create_dir_all(containerenv.parent().unwrap())?;
 
-        let contents = match name {
-            Some(name) => format!("image=\"{name}\"\n"),
-            None => String::new(),
-        };
+        let contents = name.map(|n| format!("name=\"{n}\"\n")).unwrap_or_default()
+            + &image
+                .map(|i| format!("image=\"{i}\"\n"))
+                .unwrap_or_default();
         utils::write_file(&containerenv, contents)?;
 
         // The output of the module
@@ -164,7 +171,7 @@ mod tests {
             Color::Red
                 .bold()
                 .dimmed()
-                .paint(format!("⬢ [{}]", name.unwrap_or("podman")))
+                .paint(format!("⬢ [{}]", name.unwrap_or(image.unwrap_or("podman"))))
         ));
 
         Ok((actual, expected))
@@ -173,7 +180,7 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_containerenv() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(None)?;
+        let (actual, expected) = containerenv(None, None)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -184,7 +191,18 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_containerenv_fedora() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(Some("fedora-toolbox:35"))?;
+        let (actual, expected) = containerenv(Some("fedora-toolbox:35"), None)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_fedora_with_name() -> std::io::Result<()> {
+        let (actual, expected) = containerenv(Some("fedora-toolbox:35"), Some("my-fedora"))?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -271,7 +289,7 @@ mod tests {
     #[test]
     #[cfg(not(target_os = "linux"))]
     fn test_containerenv() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(None)?;
+        let (actual, expected) = containerenv(None, None)?;
 
         // Assert that the actual and expected values are not the same
         assert_ne!(actual, expected);
