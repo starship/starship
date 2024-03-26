@@ -35,10 +35,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map(|s| {
                     s.lines()
                         .find_map(|l| {
-                            l.starts_with("image=\"").then(|| {
-                                let r = l.split_at(7).1;
-                                let name = r.rfind('/').map(|n| r.split_at(n + 1).1);
-                                String::from(name.unwrap_or(r).trim_end_matches('"'))
+                            l.starts_with("name=\"").then(|| {
+                                let name = l.split_at(6).1.trim_end_matches('"');
+                                String::from(name)
                             })
                         })
                         .unwrap_or_else(|| "podman".into())
@@ -148,7 +147,11 @@ mod tests {
         fs::create_dir_all(containerenv.parent().unwrap())?;
 
         let contents = match name {
-            Some(name) => format!("image=\"{name}\"\n"),
+            Some(name) => format!(
+                "engine=\"podman-4.9.3\"\n\
+                name=\"{name}\"\n\
+                image=\"registry.fedoraproject.org/fedora-toolbox:39\""
+            ),
             None => String::new(),
         };
         utils::write_file(&containerenv, contents)?;
