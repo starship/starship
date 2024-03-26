@@ -1892,6 +1892,10 @@
       "additionalProperties": {
         "type": "string"
       }
+    },
+    "opt_in_modules": {
+      "default": false,
+      "type": "boolean"
     }
   },
   "additionalProperties": false,
