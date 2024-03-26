@@ -649,7 +649,7 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
 }
 
 pub fn home_dir() -> Option<PathBuf> {
-    dirs_next::home_dir()
+    dirs::home_dir()
 }
 
 const HEXTABLE: &[char] = &[

@@ -1,4 +1,4 @@
-use yaml_rust::YamlLoader;
+use yaml_rust2::YamlLoader;
 
 use std::borrow::Cow;
 use std::env;

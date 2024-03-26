@@ -64,7 +64,7 @@ fn get_snapshot(context: &Context) -> Option<String> {
         return None;
     }
     let file_contents = context.read_file_from_pwd("stack.yaml")?;
-    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["resolver"]
         .as_str()
         .or_else(|| yaml.first()?["snapshot"].as_str())
