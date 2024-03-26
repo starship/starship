@@ -171,16 +171,6 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
 
-      # For windows installer test
-      # On stable rust & main repo pushes only
-      - name: Install cargo-wix [Windows]
-        continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.4 cargo-wix
-        env:
-          # cargo-wix does not require static crt
-          RUSTFLAGS: ""
-
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
@@ -201,7 +191,24 @@ jobs:
       - name: Build | Installer [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs
+        run: |
+          foreach ($target in @("aarch64-pc-windows-msvc", "i686-pc-windows-msvc", "x86_64-pc-windows-msvc")) {
+            # Setup dummy release artifacts
+            New-Item -ItemType Directory -Path ./target/$target/release
+            New-Item -ItemType File -Path ./target/$target/release/starship.exe
+
+            $ENV:STARSHIP_TARGET = $target
+
+            # Build MSI installer
+            ./install/windows/build_msi.ps1
+
+            # Error if MSI installer is not created
+            if (-not (Test-Path ./target/$target/release/starship-$target.msi)) {
+              throw "MSI installer for $target not created"
+            }
+          }
+        env:
+          STARSHIP_VERSION: v1.2.3
 
       - name: Build | Chocolatey Package [Windows]
         continue-on-error: true
@@ -215,7 +222,7 @@ jobs:
             }
           }
           # Build package
-          pwsh ./install/windows/choco/update.ps1
+          ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: v1.2.3
 
