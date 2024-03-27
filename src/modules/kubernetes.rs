@@ -107,6 +107,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
+    let have_env_vars = context.detect_env_vars(&config.detect_env_vars);
+
     // If we have some config for doing the directory scan then we use it but if we don't then we
     // assume we should treat it like the module is enabled to preserve backward compatibility.
     let have_scan_config = [
@@ -127,7 +129,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         })
     });
 
-    if !is_kube_project.unwrap_or(true) {
+    if !is_kube_project.unwrap_or(true) && !have_env_vars {
         return None;
     }
 
@@ -320,7 +322,7 @@ users: []
     }
 
     #[test]
-    fn test_none_when_no_detected_files_or_folders() -> io::Result<()> {
+    fn test_none_when_no_detected_files_folders_or_env_vars() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let filename = dir.path().join("config");
@@ -352,6 +354,7 @@ users: []
                 detect_files = ["k8s.ext"]
                 detect_extensions = ["k8s"]
                 detect_folders = ["k8s_folder"]
+                detect_env_vars = ["k8s_env_var"]
             })
             .collect();
 
@@ -361,7 +364,7 @@ users: []
     }
 
     #[test]
-    fn test_with_detected_files_and_folder() -> io::Result<()> {
+    fn test_with_detected_files_folder_and_env_vars() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let filename = dir.path().join("config");
@@ -429,6 +432,19 @@ users: []
             })
             .collect();
 
+        let empty_dir = tempfile::tempdir()?;
+
+        let actual_env_var = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .env("TEST_K8S_ENV", "foo")
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_env_vars = ["TEST_K8S_ENV"]
+            })
+            .collect();
+
         let expected = Some(format!(
             "{} in ",
             Color::Cyan.bold().paint("☸ test_context")
@@ -437,6 +453,7 @@ users: []
         assert_eq!(expected, actual_file);
         assert_eq!(expected, actual_ext);
         assert_eq!(expected, actual_dir);
+        assert_eq!(expected, actual_env_var);
 
         dir.close()
     }
