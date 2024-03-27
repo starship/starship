@@ -55,7 +55,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         context.get_repo().ok()
     } else {
         None
-
     };
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.workdir.as_ref())
@@ -1133,7 +1132,6 @@ mod tests {
         tmp_dir.close()
     }
 
-    /*
     #[test]
     #[ignore]
     fn directory_in_git_repo_truncate_repo_length() -> io::Result<()> {
@@ -1147,21 +1145,23 @@ mod tests {
             .config(toml::toml! {
                 [directory]
                 truncate_to_repo = true
+                // should display <dir to the left>/<truncated path>
                 truncate_repo_length = 2
+                // make truncation_length bigger for not cutting the path
+                truncation_length = 6
             })
             .path(dir)
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("above-repo/rocket-controls/src/meters/fuel-gauge"))
+            Color::Cyan.bold().paint(convert_path_sep(
+                "above-repo/rocket-controls/src/meters/fuel-gauge"
+            ))
         ));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
-    */
 
     #[test]
     #[ignore]
