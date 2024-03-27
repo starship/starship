@@ -158,6 +158,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn width(mut self, width: usize) -> Self {
+        self.context.width = width;
+        self
+    }
+
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
         let ret = crate::print::get_module(self.name, self.context);
