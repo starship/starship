@@ -39,6 +39,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "kubernetes",
     "directory",
     "vcsh",
+    "flutter",
     "fossil_branch",
     "fossil_metrics",
     "git_branch",
