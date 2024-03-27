@@ -107,9 +107,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    // We check that detect_env_vars is not empty here first since calling any on an amptry
-    // iternator returns false, since we want to preserve backwards compatibiliTy we default to
-    // being enabled.
     let have_env_vars = context.detect_env_vars(&config.detect_env_vars);
 
     // If we have some config for doing the directory scan then we use it but if we don't then we
