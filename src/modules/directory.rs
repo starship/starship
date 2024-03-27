@@ -55,6 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         context.get_repo().ok()
     } else {
         None
+
     };
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.workdir.as_ref())
@@ -64,6 +65,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
+    // If truncate_repo_length > 1, expand path to the left of the git repo
+    // Expand only when truncate_to_repo is true
     let dir_string = if config.truncate_to_repo && config.truncate_repo_length > 1 {
         if let Some(dir_string) = dir_string {
             repo.and_then(|r| r.workdir.as_ref()).and_then(|r| {
@@ -1129,6 +1132,36 @@ mod tests {
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
+
+    /*
+    #[test]
+    #[ignore]
+    fn directory_in_git_repo_truncate_repo_length() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        let dir = repo_dir.join("src/meters/fuel-gauge");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncate_to_repo = true
+                truncate_repo_length = 2
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep("above-repo/rocket-controls/src/meters/fuel-gauge"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+    */
 
     #[test]
     #[ignore]
