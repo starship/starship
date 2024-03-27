@@ -72,7 +72,7 @@ Starship 会执行数个不同的命令来获取应该显示的信息，例如�
 env STARSHIP_LOG=trace starship module rust
 ```
 
-若 Starship 运行缓慢，您可以使用 `timings` 命令查看运行缓慢的组件或命令。
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings

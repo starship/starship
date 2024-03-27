@@ -82,7 +82,7 @@ enable_transience
 
 ## TransientPrompt та TransientRightPrompt в Bash
 
-[Ble.sh](https://github.com/akinomyoga/ble.sh) дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
 
 \<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. Якщо `prompt_ps1_final` порожній і цей параметр має не пусте значення, командний рядок, вказаний у `PS1` буде стертий при виході з поточного командного рядка. Якщо значення містить поле `trim`, тільки останній рядок багаторядкового `PS1` буде збережений, а інші вилучені. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у значені та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
 
@@ -227,7 +227,7 @@ Invoke-Expression (&starship init powershell)
 
 `right_format` наразі підтримується для таких оболонок: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Примітка: фреймворк [Ble.sh](https://github.com/akinomyoga/ble.sh) має бути встановлений для того, щоб використовувати розташування командного рядка в bash праворуч.
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### Приклад
 

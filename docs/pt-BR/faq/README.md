@@ -72,7 +72,7 @@ Você pode ativar os logs de debug usando a variavel de ambiente `STARSHIP_LOG`.
 env STARSHIP_LOG=trace starship module rust
 ```
 
-Se o starship começa a ficar lento você pode tentar usar o comando `timings` para ver se tem um modulo ou comando para culpar.
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings

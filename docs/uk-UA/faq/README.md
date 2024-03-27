@@ -72,7 +72,7 @@ Starship виконує різні команди, щоб отримати ін�
 env STARSHIP_LOG=trace starship module rust
 ```
 
-Якщо Starship працює повільно, ви можете спробувати використати команду `timings`, щоб побачити, чи є певний модуль або команда, які можна в цьому звинуватити.
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings

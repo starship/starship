@@ -14,7 +14,7 @@
   ],
   "excludes": [
     "CHANGELOG.md",
-    "docs/.vuepress/dist/**",
+    "docs/.vitepress/dist/**",
     "**/node_modules",
     "**/*-lock.json",
     ".github/*",

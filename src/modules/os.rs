@@ -327,8 +327,8 @@ mod tests {
         // - crate::modules::os::tests
         // - docs/config/README.md/#Configuration/#OS/#Options
         // - docs/config/README.md/#Configuration/#OS/#Example
-        // - docs/.vuepress/public/presets/toml/plain-text-symbols.toml
-        // - dosc/.vuepress/public/presets/toml/nerd-font-symbols.toml
+        // - docs/public/presets/toml/plain-text-symbols.toml
+        // - dosc/public/presets/toml/nerd-font-symbols.toml
         // - .github/config-schema.json
         let _ = |t: Type| match t {
             Type::AIX => "➿ ",
