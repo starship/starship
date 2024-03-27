@@ -711,7 +711,7 @@
         "format": "via [$symbol($version )]($style)",
         "recursive": false,
         "style": "bold bright-cyan",
-        "symbol": "🅶 ",
+        "symbol": " ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -3609,7 +3609,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🅶 ",
+          "default": " ",
           "type": "string"
         },
         "style": {
