@@ -1,5 +1,6 @@
 use std::string::ToString;
 
+use super::utils::is_root_user::is_root_user;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::status::StatusConfig;
@@ -46,6 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Exit code is zero while success_symbol and pipestatus are all zero or disabled/missing
     if exit_code == "0"
         && config.success_symbol.is_empty()
+        && config.success_symbol_rootuser.is_empty()
         && (match pipestatus_status {
             PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
             _ => true,
@@ -141,6 +143,7 @@ fn format_exit_code<'a>(
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => match exit_code_int {
+                    0 if is_root_user() => Some(config.success_symbol_rootuser),
                     0 => Some(config.success_symbol),
                     126 if config.map_symbol => Some(config.not_executable_symbol),
                     127 if config.map_symbol => Some(config.not_found_symbol),
