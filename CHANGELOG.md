@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.2](https://github.com/starship/starship/compare/v1.18.1...v1.18.2) (2024-03-27)
+
+
+### Reverts
+
+* "build(deps): update rust crate gix to 0.61.1" ([#5878](https://github.com/starship/starship/issues/5878)) ([eb80dba](https://github.com/starship/starship/commit/eb80dbab99e38b5018aa3fb70b06ae9e4d793b24))
+
 ## [1.18.1](https://github.com/starship/starship/compare/v1.18.0...v1.18.1) (2024-03-24)
 
 
