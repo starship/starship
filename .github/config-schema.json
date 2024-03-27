@@ -1339,6 +1339,9 @@
     },
     "python": {
       "default": {
+        "detect_env_vars": [
+          "VIRTUAL_ENV"
+        ],
         "detect_extensions": [
           "py"
         ],
@@ -5058,6 +5061,15 @@
         },
         "detect_folders": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [
+            "VIRTUAL_ENV"
+          ],
           "type": "array",
           "items": {
             "type": "string"
