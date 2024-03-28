@@ -18,6 +18,7 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
+use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -115,12 +116,16 @@ pub fn get_prompt(context: Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
+    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
+    // color sequences for this specific shell
+    let shell_wrapped_output =
+        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    write!(buf, "{}", shell_wrapped_output).unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
