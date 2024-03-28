@@ -66,7 +66,7 @@ fn get_daml_sdk_version(context: &Context) -> Option<String> {
 
 fn read_sdk_version_from_daml_yaml(context: &Context) -> Option<String> {
     let file_contents = context.read_file_from_pwd(DAML_YAML)?;
-    let daml_yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let daml_yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let sdk_version = daml_yaml.first()?[DAML_SDK_VERSION].as_str()?;
     Some(sdk_version.to_string())
 }

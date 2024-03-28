@@ -26,7 +26,7 @@ pub fn get_log_dir() -> PathBuf {
         .unwrap_or_else(|| {
             utils::home_dir()
                 .map(|home| home.join(".cache"))
-                .or_else(dirs_next::cache_dir)
+                .or_else(dirs::cache_dir)
                 .unwrap_or_else(std::env::temp_dir)
                 .join("starship")
         })

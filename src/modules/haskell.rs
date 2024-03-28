@@ -64,7 +64,7 @@ fn get_snapshot(context: &Context) -> Option<String> {
         return None;
     }
     let file_contents = context.read_file_from_pwd("stack.yaml")?;
-    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["resolver"]
         .as_str()
         .or_else(|| yaml.first()?["snapshot"].as_str())
@@ -105,7 +105,7 @@ mod tests {
     fn folder_stack() -> io::Result<()> {
         let cases = vec![
             ("resolver: lts-18.12\n", "lts-18.12"),
-            ("snapshot:\tnightly-2011-11-11", "nightly-2011-11-11"),
+            ("snapshot: nightly-2011-11-11", "nightly-2011-11-11"),
             ("snapshot: ghc-8.10.7", "ghc-8.10.7"),
             (
                 "snapshot: https://github.com/whatever/xxx.yaml\n",
