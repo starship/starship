@@ -33,6 +33,7 @@ mod git_commit;
 mod git_metrics;
 mod git_state;
 mod git_status;
+mod gleam;
 mod golang;
 mod gradle;
 mod guix_shell;
@@ -141,6 +142,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_metrics" => git_metrics::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
+            "gleam" => gleam::module(context),
             "golang" => golang::module(context),
             "gradle" => gradle::module(context),
             "guix_shell" => guix_shell::module(context),
@@ -260,6 +262,7 @@ pub fn description(module: &str) -> &'static str {
         "git_metrics" => "The currently added/deleted lines in your repo",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
+        "gleam" => "The currently installed version of Gleam",
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",
         "guix_shell" => "The guix-shell environment",
