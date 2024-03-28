@@ -15,7 +15,7 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Crates.io 版本"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
@@ -189,9 +189,9 @@
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+透過下列的套件管理器安裝 Starship：
 
-| Repository                                                                        | Instructions           |
+| 儲存庫                                                                               | 說明                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -200,32 +200,32 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+透過下列的套件管理器安裝 Starship：
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| 發行版本       | 儲存庫                                                      | 說明                                |
+| ---------- | -------------------------------------------------------- | --------------------------------- |
+| **_任一版本_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD    | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD     | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+為你的系統安裝最新版本：
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+或者，透過下列的套件管理器安裝 Starship：
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| 發行版本               | 儲存庫                                                                                             | 說明                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| **_任一版本_**         | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _任一版本_             | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _任一版本_             | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -240,15 +240,15 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+為你的系統安裝最新版本：
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+或者，透過下列的套件管理器安裝 Starship：
 
-| Repository                                               | Instructions                            |
+| 儲存庫                                                      | 說明                                      |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -260,11 +260,11 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+透過[發布區](https://github.com/starship/starship/releases/latest)中的 MSI 安裝程式為你的系統安裝最新版本：
 
-Install Starship using any of the following package managers:
+透過下列的套件管理器安裝 Starship：
 
-| Repository                                                                                   | Instructions                            |
+| 儲存庫                                                                                          | 說明                                      |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -338,14 +338,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+新增下列內容至你的 Nushell env 檔案中的最下方（在 Nushell 執行  `$nu.env-path` 找到它）。
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+新增下列的內容至你的 Nushell 設定檔最下方（執行 `$nu.config-path` 找到它）：
 
 ```sh
 use ~/.cache/starship/init.nu
@@ -358,7 +358,7 @@ Note: Only Nushell v0.78+ is supported
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+新增下列的內容至你的 PowerShell 設定檔最下方（執行  `$PROFILE` 找到它）：
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -421,11 +421,11 @@ eval "$(starship init zsh)"
 
 請看之前這些幫助我們創造 Starship 的前任作品。 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 一個給太空人用的 ZSH 提示符號。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – 使用 JavaScript 寫出的跨終端機 robbyrussell 主題。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - 一個跨 shell、可客製化、像 powerline 的圖案提示符號。
 
 ## ❤️ 贊助我們
 
