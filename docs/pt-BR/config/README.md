@@ -601,7 +601,7 @@ O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) r
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
+| `symbol`            | `'🍞 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |

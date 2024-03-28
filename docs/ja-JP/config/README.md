@@ -601,7 +601,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🥟 '`                               | A format string representing the symbol of Bun.        |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.        |
 | `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
