@@ -327,7 +327,7 @@ active boot switches: -d:release\n",
             stderr: String::default(),
         }),
         "odin version" => Some(CommandOutput {
-            stdout: String::from("odin version dev-2024-03:fc587c507"),
+            stdout: String::from("odin version dev-2024-03:fc587c507\n"),
             stderr: String::default(),
         }),
         "opa version" => Some(CommandOutput {

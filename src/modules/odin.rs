@@ -60,6 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -79,6 +80,28 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.odin"))?.sync_all()?;
         let actual = ModuleRenderer::new("odin").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::LightBlue.bold().paint("Ø dev-2024-03 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_odin_file_without_commit() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.odin"))?.sync_all()?;
+        let actual = ModuleRenderer::new("odin")
+            .cmd(
+                "odin version",
+                Some(CommandOutput {
+                    stdout: String::from("odin version dev-2024-03\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
         let expected = Some(format!(
             "via {}",
             Color::LightBlue.bold().paint("Ø dev-2024-03 ")
