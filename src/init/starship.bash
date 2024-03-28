@@ -125,6 +125,12 @@ else
     # add multiple instances of the starship function and keep other user functions if any.
     if [[ -z "${PROMPT_COMMAND-}" ]]; then
         PROMPT_COMMAND="starship_precmd"
+    # If we are running in vscode with shell integration
+    elif [[ "$PROMPT_COMMAND" == "__vsc_prompt_cmd_original" ]]; then
+        # if starship_precmd is not in vscode prompt command list, add it
+        if [[ ! ${__vsc_original_prompt_command[@]} =~ $(printf "\<starship_precmd\>") ]]; then
+            __vsc_original_prompt_command+=("starship_precmd")
+        fi
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
