@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# 常見問題（FAQ）
 
 ## 主頁示例圖中的效果是使用哪些配置達成的？
 
@@ -64,9 +64,9 @@ Starship executes different commands to get information to display in the prompt
 
 如果你看見了一些不認得的符號，你可以使用 `starship explain` 來列出當下顯示出的 modules 的解釋。
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship 運作時做出預期之外的事情，我該怎麼除錯？
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+你可以使用  `STARSHIP_LOG` 環境變數開啟除錯記錄 (debug logs)。 These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
@@ -117,7 +117,7 @@ echo -e "\xee\x82\xa0"
 如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
-# Locate and delete the starship binary
+# 定位並且刪除 starship 執行檔
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
