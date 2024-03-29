@@ -135,7 +135,7 @@ fn get_julia_project_version(context: &Context, config: &PackageConfig) -> Optio
 
 fn get_helm_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("Chart.yaml")?;
-    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["version"].as_str()?;
 
     format_version(version, config.version_format)
@@ -286,7 +286,7 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
 fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("shard.yml")?;
 
-    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let data = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = data.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -295,7 +295,7 @@ fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String
 fn get_daml_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("daml.yaml")?;
 
-    let daml_yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let daml_yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = daml_yaml.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -304,7 +304,7 @@ fn get_daml_project_version(context: &Context, config: &PackageConfig) -> Option
 fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pubspec.yaml")?;
 
-    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let data = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = data.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
