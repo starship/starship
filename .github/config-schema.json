@@ -1022,6 +1022,19 @@
         }
       ]
     },
+    "nats": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol$name]($style)",
+        "style": "bold purple",
+        "symbol": ""
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NatsConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -4362,6 +4375,28 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NatsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol$name]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       },
