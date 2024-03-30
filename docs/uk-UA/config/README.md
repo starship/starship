@@ -3448,12 +3448,12 @@ detect_extensions = []
 
 ## Quarto
 
-The `quarto` module shows the current installed version of Quarto used in a project.
+Модуль `quarto` показує поточну встановлену версію Quarto, що використовується в проєкті.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `_quarto.yml` file
-- The current directory contains any `*.qmd` file
+- Поточна тека містить файл `_quarto.yml`
+- Поточна тека містить файл `.qmd`
 
 ### Параметри
 
@@ -3461,18 +3461,18 @@ The `quarto` module shows the current installed version of Quarto used in a proj
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                 |
+| `symbol`            | `'⨁ '`                               | Формат рядка, що представляє символ Quarto                        |
 | `style`             | `'bold #75AADB'`                     | Стиль модуля.                                                     |
 | `detect_extensions` | `['.qmd']`                           | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['_quarto.yml']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
-| `disabled`          | `false`                              | Disables the `quarto` module.                                     |
+| `disabled`          | `false`                              | Вимикає модуль `quarto`.                                          |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `1.4.549` | The version of `quarto`                  |
+| version   | `1.4.549` | Версія `quarto`                          |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -3623,12 +3623,12 @@ Starship отримує поточну версію Ruby командою `ruby 
 
 ### Змінні
 
-| Змінна    | Приклад  | Опис                                        |
-| --------- | -------- | ------------------------------------------- |
-| version   | `v2.5.1` | Версія `ruby`                               |
-| symbol    |          | Віддзеркалює значення параметра `symbol`    |
-| style\* |          | Віддзеркалює значення параметра `style`     |
-| gemset    | `test`   | Optional, gets the current RVM gemset name. |
+| Змінна    | Приклад  | Опис                                     |
+| --------- | -------- | ---------------------------------------- |
+| version   | `v2.5.1` | Версія `ruby`                            |
+| symbol    |          | Віддзеркалює значення параметра `symbol` |
+| style\* |          | Віддзеркалює значення параметра `style`  |
+| gemset    | `test`   | Опціонально, отримує назву RVM gemset.   |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -4223,7 +4223,7 @@ time_range = '10:00:00-14:00:00'
 - Поточний користувач не є таким же, як той, який увійшов до системи
 - Користувач зараз підключений через SSH
 - Змінна `show_always` встановлена в true
-- The array `detect_env_vars` contains at least the name of one environment variable, that is set
+- Масив `detect_env_vars` містить принаймні одну змінну середовища, яку було встановлено
 
 ::: tip
 
