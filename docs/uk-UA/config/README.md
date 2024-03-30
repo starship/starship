@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом
 format = """
 $username\
 $hostname\
@@ -620,7 +620,7 @@ symbol = '🦬 '
 
 ### Приклади
 
-#### Customize the format
+#### Налаштуйте формат
 
 ```toml
 # ~/.config/starship.toml
@@ -629,9 +629,9 @@ symbol = '🦬 '
 format = 'via [🍔 $version](bold green) '
 ```
 
-#### Replace Node.js
+#### Замінити Node.js
 
-You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
+Ви можете перевизначити параметр `detect_files` властивості [модуля nodejs](#nodejs) у вашій конфігурації, щоб показати середу виконання bun:
 
 ```
 [nodejs]
