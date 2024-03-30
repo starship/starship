@@ -25,6 +25,7 @@ mod env_var;
 mod erlang;
 mod fennel;
 mod fill;
+mod flutter;
 mod fossil_branch;
 mod fossil_metrics;
 mod gcloud;

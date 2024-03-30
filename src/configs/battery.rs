@@ -34,7 +34,7 @@ impl<'a> Default for BatteryConfig<'a> {
     }
 
     fn is_battery_on_power(&self) -> bool {
-        if self.display.charging_symbol.is_some() {
+        if self.display.iter().(|config| config.charging_symbol.is_some()) {
             true
         }
     }

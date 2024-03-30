@@ -35,6 +35,7 @@ pub const ALL_MODULES: &[&str] = &[
     "erlang",
     "fennel",
     "fill",
+    "flutter",
     "fossil_branch",
     "fossil_metrics",
     "gcloud",
