@@ -116,7 +116,7 @@ else
             trap 'starship_preexec "$_"' DEBUG
         elif [[ "$STARSHIP_DEBUG_TRAP" != 'starship_preexec "$_"' && "$STARSHIP_DEBUG_TRAP" != 'starship_preexec_all "$_"' ]]; then
             starship_preexec_all() {
-                local PREV_LAST_ARG=$1 ; $STARSHIP_DEBUG_TRAP; starship_preexec; : "$PREV_LAST_ARG";
+                local PREV_LAST_ARG=$1 ; eval -- "$STARSHIP_DEBUG_TRAP"; starship_preexec; : "$PREV_LAST_ARG";
             }
             trap 'starship_preexec_all "$_"' DEBUG
         fi
