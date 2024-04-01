@@ -110,7 +110,8 @@ else
         # We want to avoid destroying an existing DEBUG hook. If we detect one, create
         # a new function that runs both the existing function AND our function, then
         # re-trap DEBUG to use this new function. This prevents a trap clobber.
-        STARSHIP_DEBUG_TRAP="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
+        eval "STARSHIP_DEBUG_TRAP=($(trap -p DEBUG))"
+        STARSHIP_DEBUG_TRAP=("${STARSHIP_DEBUG_TRAP[2]}")
         if [[ -z "$STARSHIP_DEBUG_TRAP" ]]; then
             trap 'starship_preexec "$_"' DEBUG
         elif [[ "$STARSHIP_DEBUG_TRAP" != 'starship_preexec "$_"' && "$STARSHIP_DEBUG_TRAP" != 'starship_preexec_all "$_"' ]]; then
