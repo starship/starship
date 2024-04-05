@@ -28,7 +28,7 @@ struct PSAzureContext {
     tenant: PSAzureTenant,
     // #[serde(default, skip_serializing_if = "Option::is_none")]
     // subscription: Option<PSAzureSubscription>,
-    #[serde(default, deserialize_with="parse_subscription", flatten)]
+    #[serde(default, deserialize_with="parse_subscription")]
     subscription: PSAzureSubscription,
     environment: PSAzureEnvironment,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -148,13 +148,13 @@ fn get_azure_profile_info(context: &Context) -> Option<PSAzureSubscription> {
 
     let azurerm_contexts = load_azure_profile(&config_path)?;
     let azurerm_context_key = &azurerm_contexts.default_context_key;
-    let azurerm_context  = azurerm_contexts.contexts.get(azurerm_context_key).unwrap();
+    let azurerm_context  = azurerm_contexts.contexts.get(azurerm_context_key).unwrap().clone();
        
     // let context = 
     //     azurerm_contexts
     //     .contexts
     //     .get(azurerm_context_key).unwrap_or_default();
-    Some(azurerm_context.to_owned().subscription)
+    Some(azurerm_context.subscription)
 }
 
 fn load_azure_profile(config_path: &PathBuf) -> Option<AzureRMContext> {
