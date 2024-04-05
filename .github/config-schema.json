@@ -1784,6 +1784,7 @@
     },
     "username": {
       "default": {
+        "aliases": {},
         "detect_env_vars": [],
         "disabled": false,
         "format": "[$user]($style) in ",
@@ -6129,6 +6130,13 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
