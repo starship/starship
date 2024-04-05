@@ -36,6 +36,7 @@ pub mod git_commit;
 pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
+pub mod gleam;
 pub mod go;
 pub mod gradle;
 pub mod guix_shell;
@@ -178,6 +179,8 @@ pub struct FullConfig<'a> {
     git_state: git_state::GitStateConfig<'a>,
     #[serde(borrow)]
     git_status: git_status::GitStatusConfig<'a>,
+    #[serde(borrow)]
+    gleam: gleam::GleamConfig<'a>,
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
