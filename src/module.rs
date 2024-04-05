@@ -66,6 +66,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nix_shell",
     "nodejs",
     "ocaml",
+    "odin",
     "opa",
     "openstack",
     "os",

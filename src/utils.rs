@@ -330,6 +330,10 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
+        "odin version" => Some(CommandOutput {
+            stdout: String::from("odin version dev-2024-03:fc587c507\n"),
+            stderr: String::default(),
+        }),
         "opa version" => Some(CommandOutput {
             stdout: String::from("Version: 0.44.0
 Build Commit: e8d488f

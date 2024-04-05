@@ -59,6 +59,7 @@ pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod odin;
 pub mod opa;
 pub mod openstack;
 pub mod os;
@@ -224,6 +225,8 @@ pub struct FullConfig<'a> {
     nodejs: nodejs::NodejsConfig<'a>,
     #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
+    #[serde(borrow)]
+    odin: odin::OdinConfig<'a>,
     #[serde(borrow)]
     opa: opa::OpaConfig<'a>,
     #[serde(borrow)]
