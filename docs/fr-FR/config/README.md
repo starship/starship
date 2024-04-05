@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -1966,6 +1967,44 @@ Utiliser un exécutable Starship Windows pour les chemins Windows dans WSL
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'⭐ '`                               | Une chaîne de caractères représentant le symbole de Go.                                    |
+| `detect_extensionsdetect_extensions` | `['gleam']`                          | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['gleam.toml']`                     | Les fichiers qui activent ce module.                                                       |
+| `style`                              | `'bold #FFAFF3'`                     | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                              | Disables the `gleam` module.                                                               |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v1.0.0` | The version of `gleam`                 |
+| symbole   |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 Le module `golang` affiche la version de [Go](https://golang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
@@ -2941,6 +2980,43 @@ Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. 
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Options
+
+| Option                               | Défaut                               | Description                                            |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                      |
+| `show_commit`                        | `false`                              | Shows the commit as part of the version.               |
+| `symbole`                            | `'Ø '`                               | Le symbole utilisé avant d'afficher la version de Zig. |
+| `style`                              | `'bold bright-blue'`                 | Le style pour le module.                               |
+| `disabled`                           | `false`                              | Disables the `odin` module.                            |
+| `detect_extensionsdetect_extensions` | `['odin']`                           | Les extensions qui déclenchent ce module.              |
+| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                   |
+| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                   |
+
+### Variables
+
+| Variable  | Exemple       | Description                            |
+| --------- | ------------- | -------------------------------------- |
+| version   | `dev-2024-03` | The version of `odin`                  |
+| symbole   |               | Reflète la valeur de l'option `symbol` |
+| style\* |               | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -4241,6 +4317,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | Format du module.                                         |
 | `show_always`     | `false`                 | Toujours afficher le module `username`.                   |
 | `disabled`        | `false`                 | Désactive le module `username`.                           |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### Variables
 
@@ -4262,6 +4339,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Hide the hostname in remote tmux sessions
