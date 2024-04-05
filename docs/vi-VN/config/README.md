@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -1966,6 +1967,44 @@ Use Windows Starship executable on Windows paths in WSL
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⭐ '`                               | Một format string đại diện cho biểu tượng của Go.                         |
+| `detect_extensions` | `['gleam']`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `['gleam.toml']`                     | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `'bold #FFAFF3'`                     | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                              |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v1.0.0` | The version of `gleam`           |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
@@ -2941,6 +2980,43 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                 |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `'bold bright-blue'`                 | Kiểu cho module.                                      |
+| `disabled`          | `false`                              | Disables the `odin` module.                           |
+| `detect_extensions` | `['odin']`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+
+### Các biến
+
+| Biến      | Ví dụ         | Mô tả                            |
+| --------- | ------------- | -------------------------------- |
+| version   | `dev-2024-03` | The version of `odin`            |
+| symbol    |               | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |               | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -4241,6 +4317,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | Định dạng cho module.                                     |
 | `show_always`     | `false`                 | Always shows the `username` module.                       |
 | `disabled`        | `false`                 | Disables the `username` module.                           |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### Các biến
 
@@ -4262,6 +4339,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Hide the hostname in remote tmux sessions
