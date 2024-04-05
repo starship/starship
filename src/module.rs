@@ -11,6 +11,7 @@ use std::time::Duration;
 pub const ALL_MODULES: &[&str] = &[
     "aws",
     "azure",
+    "azurerm",
     #[cfg(feature = "battery")]
     "battery",
     "buf",

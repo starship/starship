@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod azure;
+mod azurerm;
 mod buf;
 mod bun;
 mod c;
@@ -109,6 +110,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
             "azure" => azure::module(context),
+            "azurerm" => azurerm::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "buf" => buf::module(context),
