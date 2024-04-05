@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -1966,6 +1967,44 @@ behind = '⇣${count}'
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### Параметри
+
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'⭐ '`                               | Формат рядка, що представляє символ Go.                           |
+| `detect_extensions` | `['gleam']`                          | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['gleam.toml']`                     | Які імена файлів мають запускати цей модуль.                      |
+| `style`             | `'bold #FFAFF3'`                     | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                      |
+
+### Змінні
+
+| Змінна    | Приклад  | Опис                                     |
+| --------- | -------- | ---------------------------------------- |
+| version   | `v1.0.0` | The version of `gleam`                   |
+| symbol    |          | Віддзеркалює значення параметра `symbol` |
+| style\* |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 Модуль `golang` показує поточну встановлену версію [Go](https://golang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
@@ -2941,6 +2980,43 @@ format = 'via [🤖 $version](bold green) '
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Параметри
+
+| Параметр            | Стандартно                           | Опис                                         |
+| ------------------- | ------------------------------------ | -------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                               |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.     |
+| `symbol`            | `'Ø '`                               | Символ, який знаходиться перед версією Zig.  |
+| `style`             | `'bold bright-blue'`                 | Стиль модуля.                                |
+| `disabled`          | `false`                              | Disables the `odin` module.                  |
+| `detect_extensions` | `['odin']`                           | Які розширення повинні запускати цей модуль. |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль. |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.     |
+
+### Змінні
+
+| Змінна    | Приклад       | Опис                                     |
+| --------- | ------------- | ---------------------------------------- |
+| version   | `dev-2024-03` | The version of `odin`                    |
+| symbol    |               | Віддзеркалює значення параметра `symbol` |
+| style\* |               | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -4241,6 +4317,7 @@ time_range = '10:00:00-14:00:00'
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
 | `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
 | `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
+| `aliases`         | `{}`                    | Translate system usernames to something else               |
 
 ### Змінні
 
@@ -4262,6 +4339,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Приховувати hostname для віддалених сеансів tmux
