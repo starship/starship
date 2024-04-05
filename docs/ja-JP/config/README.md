@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# Get editor completions based on the config schema
+# エディターの補完を設定スキーマに合わせて取得
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# シェルのプロンプトの間に空行を挿入する
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# 記号"❯"を記号"➜"に置き換える
+[character] # 設定対象のモジュール名は 'character'
+success_symbol = '[➜](bold green)' # セグメント 'success_symbol' を '➜' 配色 'bold green' (太字の緑色) に設定
 
-# Disable the package module, hiding it from the prompt completely
+# package モジュールを無効化してプロンプトから完全に非表示にする
 [package]
 disabled = true
 ```
@@ -219,26 +219,26 @@ If you have symlinks to networked filesystems, consider setting `follow_symlinks
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# カスタムフォーマットを利用
 format = '''
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) '''
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# starship が現在のディレクトリのファイルをチェックするのを10ミリ秒待ちます
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# プロンプトの前の空行を無効化
 add_newline = false
 
-# Set 'foo' as custom color palette
+# カスタム配色として 'foo' を指定
 palette = 'foo'
 
-# Define custom colors
+# カスタム配色を定義
 [palettes.foo]
-# Overwrite existing color
+# 既存の色を上書き
 blue = '21'
-# Define new color
+# 新しい色を定義
 mustard = '#af8700'
 ```
 
@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# これは以下に等価
 format = """
 $username\
 $hostname\
