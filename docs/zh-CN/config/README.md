@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -1966,6 +1967,44 @@ Use Windows Starship executable on Windows paths in WSL
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                             |
+| ------------------- | ------------------------------------ | ---------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                       |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`    |
+| `符号`                | `'⭐ '`                               | A format string representing the symbol of Go. |
+| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.   |
+| `detect_files`      | `['gleam.toml']`                     | 哪些文件应触发此组件                                     |
+| `style`             | `'bold #FFAFF3'`                     | 此组件的样式。                                        |
+| `disabled`          | `false`                              | Disables the `gleam` module.                   |
+
+### 变量
+
+| 字段        | 示例       | 描述                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.0.0` | The version of `gleam` |
+| 符号        |          | `symbol`对应值            |
+| style\* |          | `style`对应值             |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
@@ -2941,6 +2980,43 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                              |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
+| `符号`                | `'Ø '`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `'bold bright-blue'`                 | 此组件的样式。                                               |
+| `disabled`          | `false`                              | Disables the `odin` module.                           |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | 哪些文件应触发此组件                                            |
+| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                          |
+
+### 变量
+
+| 字段        | 示例            | 描述                    |
+| --------- | ------------- | --------------------- |
+| version   | `dev-2024-03` | The version of `odin` |
+| 符号        |               | `symbol`对应值           |
+| style\* |               | `style`对应值            |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -4241,6 +4317,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
 | `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
 | `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### 变量
 
@@ -4262,6 +4339,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Hide the hostname in remote tmux sessions
