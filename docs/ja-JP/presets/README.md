@@ -12,15 +12,15 @@
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+このプリセットは一部のモジュールで使われるシンボルを変更して、Nerd Font シンボルをどこにも使わないようにします。
 
 ::: tip
 
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+このプリセットは [Starship の将来のリリース](https://github.com/starship/starship/pull/3544) でデフォルトのプリセットになります。
 
 :::
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[No Nerd Font プリセットを表示するにはクリックしてください。](./no-nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
@@ -42,7 +42,7 @@ This preset will become the default preset [in a future release of starship](htt
 
 ## [No Empty Icons](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+ツールセットが見つからない場合、このプリセットはアイコンを表示しません。
 
 [![Empty Icons プリセットのスクリーンショット](/presets/img/no-empty-icons.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-empty-icons.md)
 
@@ -62,16 +62,16 @@ This preset does not show icons if the toolset is not found.
 
 このプリセットは[tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme)を参考にしています。
 
-[![Tokyo Night プリセットのスクリーンショット](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Tokyo Night プリセットのスクリーンショット](/presets/img/tokyo-night.png "Tokyo Night プリセットを表示するにはクリックしてください")](./tokyo-night)
 
 ## [Gruvbox Rainbow](./gruvbox-rainbow.md)
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+このプリセットは [Pastel Powerline](./pastel-powerline.md) と [Tokyo Night](./tokyo-night.md) に強くインスパイアされています。
 
-[![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Gruvbox Rainbow プリセットのスクリーンショット](/presets/img/gruvbox-rainbow.png "Gruvbox Rainbow プリセットを表示するにはクリックしてください")](./gruvbox-rainbow)
 
 ## [Jetpack](./jetpack.md)
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+[geometry](https://github.com/geometry-zsh/geometry) と [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) のプロンプトにインスパイアされた擬似ミニマリストプリセットです。
 
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Jetpack プリセットのスクリーンショット](/presets/img/jetpack.png "Jetpack プリセットを表示するにはクリックしてください")](./jetpack)
