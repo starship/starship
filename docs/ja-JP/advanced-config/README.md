@@ -10,7 +10,7 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 ## PowerShell の TransientPrompt
 
-過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
+直前に出力されたプロンプトを置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
 
 デフォルトでは、入力した文字列の左側を `>` で置換します。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
@@ -56,11 +56,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Fish の TransientPrompt と TransientRightPrompt
 
-過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+直前に出力されたプロンプトを指定の内容で置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `enable_transience` を現在のシェルセッションで実行してください。 設定を永続化するにはこのコマンドを `~/.config/fish/config.fish` に記述してください。 また、 `disable_transience` を実行することでいつでも無効化できます。
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+※Fishの場合は、コマンドラインが空ではなく構文的に正しい場合にのみ、transient プロンプトが出力されます。
 
-- By default, the left side of input gets replaced with a bold-green `❯`. カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
+- デフォルトでは入力した文字列の左側が太字・緑色の  `❯` に置き換えられます。 カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```fish
 function starship_transient_prompt_func
@@ -80,11 +80,11 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## Bash の TransientPrompt と TransientRightPrompt
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+バージョン 0.4 以降の [ble.sh](https://github.com/akinomyoga/ble.sh) の枠組みを用いると、直前に表示されたプロンプトを指定の文字列に置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `~/.bashrc` に `bleopt prompt_ps1_transient=<value>` を記述してください。
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+\<value\> は `always`、 `same-dir` 、 `trim` からなるコロン区切りのリストです。 設定 prompt_ps1_transient が空でなくかつ設定 `prompt_ps1_final` が空の場合、 `PS1` に基づくプロンプトは現在のコマンドラインを去るときに消去されます。 設定 prompt_ps1_transient が `trim` を含む場合、複数行 `PS1` の最後の行だけを残して他の行は消去されます。 それ以外の場合は、あたかも `PS1=` が指定されたかのようにコマンドラインが再描画されます。 設定 prompt_ps1_transient が `same-dir` を含む時に現在のワーキングディレクトリが前のコマンドラインの最終的なワーキングディレクトリと異なる場合、設定 `prompt_ps1_transient` は無視されます。
 
 Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
 
@@ -137,7 +137,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- コマンドの直前に関数を実行するために、[`DEBUG` トラップの仕組み](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)を使うことができます。 However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship は DEBUGトラップの値を保護できますが、 starship の起動後にトラップが上書きされると、いくつかの機能は壊れてしまうでしょう。
+- コマンドの直前に関数を実行するために、[`DEBUG` トラップの仕組み](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)を使うことができます。 ただし、Starship を初期化する_前_に DEBUG シグナルをトラップ**しなければいけません**! Starship は DEBUGトラップの値を保護できますが、 starship の起動後にトラップが上書きされると、いくつかの機能は壊れてしまうでしょう。
 
 ```bash
 function blastoff(){
@@ -149,11 +149,11 @@ eval $(starship init bash)
 set +o functrace
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## PowerShell のカスタム事前プロンプトおよび事前実行コマンド
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
+PowerShell は、他のほとんどのシェルと違い、正式な preexec/precmd の枠組みを持ちません。 そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
 
-Create a function named `Invoke-Starship-PreCommand`
+`Invoke-Starship-PreCommand` という名前の関数を作成してください。
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -161,7 +161,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## ウィンドウのタイトルの変更
+## ウィンドウタイトルの変更
 
 いくつかのシェルプロンプトはあなたのためにウィンドウのタイトルを自動的に変更します(例えば、カレントディレクトリを反映するために)。 特に Fish はデフォルトで変更を行います。 Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
