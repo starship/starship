@@ -98,24 +98,24 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-改行を使用する場合、複数行宣言を使えます。 例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
+改行を指定したい場合、複数行宣言が使えます。 例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
 
 ```toml
-# with literal string
+# リテラル文字列を用いる
 format = '''
 
 \$'''
 
-# with multiline basic string
+# 複数行基本文字列を用いる
 format = """
 
 \\$"""
 
-# with basic string
+# 基本文字列を用いる
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+複数行基本文字列では、改行をエスケープすることで、実際の値に影響を与えずにソースコードを整形できます。
 
 ```toml
 format = """
@@ -158,11 +158,11 @@ line2
 
 #### スタイルの設定
 
-Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+Starshipのほとんどのモジュールでは、表示スタイルを設定できます。 これは、設定を指定する文字列であるエントリ（`style`）で行われます。 スタイル文字列の例とその機能を次に示します。 完全な構文については、[高度な設定](../advanced-config/)を参照してください 。
 
-- `'fg:green bg:blue'` sets green text on a blue background
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"fg:green bg:blue"` は、青色の背景上の緑色のテキストを設定します
+- `"bg:blue fg:bright-green"` は、青色の背景上の明るい緑色のテキストを設定します
+- `'bold fg:27'` は [ANSI 色 27](https://i.stack.imgur.com/KTSQa.png) の太字テキストを設定します。
 - `'underline bg:#bf5700'` sets underlined text on a burnt orange background
 - `'bold italic fg:purple'` sets bold italic purple text
 - `''` explicitly disables all styling
@@ -344,7 +344,7 @@ $character"""
 デフォルトのフォーマットを拡張したいだけなら、`$all`を使用できます。 フォーマットに明示的に追加したモジュールは重複しません。 例:
 
 ```toml
-# Move the directory to the second line
+# ディレクトリを2行目に移動
 format = '$all$directory$character'
 ```
 
