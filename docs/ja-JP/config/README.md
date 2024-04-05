@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### ロギング
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます：
+Starship は警告やエラーログを既定で `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log` というファイルに出力します。ただし、${STARSHIP_SESSION_KEY} は端末のそれぞれのインスタンスに対応して決まります。 ディレクトリ名は環境変数 `STARSHIP_CACHE` を使って変更できます：
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -78,27 +78,27 @@ TOML記法では、[文字列](https://toml.io/en/v1.0.0#string)は`'`、`"`、`
 
 これらのStarship記法の記号は文字列のフォーマットにおいて特別な用途があり、文字として表示するためにはエスケープしなければなりません: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| 記号    | 種類         | 備考                             |
+| ----- | ---------- | ------------------------------ |
+| `'`   | リテラル文字列    | 少ないエスケープ                       |
+| `"`   | 文字列        | より多くのエスケープ                     |
+| `'''` | 複数行リテラル文字列 | 少ないエスケープ                       |
+| `"""` | 複数行文字列     | より多くのエスケープ。宣言内の改行はエスケープで無視できます |
 
 例：
 
 ```toml
-# literal string
+# リテラル文字列
 format = '☺\☻ '
 
-# regular string
+# 通常文字列
 format = "☺\\☻ "
 
-# escaping Starship symbols
+# Starship の特殊記号をエスケープ
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+改行を使用する場合、複数行宣言を使えます。 例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
 
 ```toml
 # with literal string
