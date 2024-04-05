@@ -32,12 +32,12 @@ starship_preexec() {
 # Will be run before the prompt is drawn
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
     fi
     if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt 0 ]]; then
-        STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
+        STARSHIP_PIPE_STATUS=("${BP_PIPESTATUS[@]}")
     fi
 
     # Due to a bug in certain Bash versions, any external process launched
