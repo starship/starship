@@ -2483,7 +2483,7 @@ kotlin_binary = 'kotlinc'
 
 Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
-Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2505,6 +2505,7 @@ kotlin_binary = 'kotlinc'
 | `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль.              |
 | `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль.              |
 | `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                      |
+| `detect_env_vars`   | `[]`                                                 | Які змінні середовища повинні запускати цей модуль        |
 | `contexts`          | `[]`                                                 | Кастомізовані стилі та символи для конкретних контекстів. |
 | `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                              |
 
