@@ -2483,7 +2483,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2505,6 +2505,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                   |
 | `detect_files`      | `[]`                                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                            |
 | `detect_folders`    | `[]`                                                 | Những thư mục nào nên kích hoạt các mô đun này.                       |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
