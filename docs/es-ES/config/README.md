@@ -2483,7 +2483,7 @@ Muestra el nombre actual del [contexto de Kubernetes](https://kubernetes.io/docs
 
 Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2505,6 +2505,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Qué extensiones deberían activar este módulo.                               |
 | `detect_files`      | `[]`                                                 | Qué nombres de archivo deberían activar este módulo.                        |
 | `detect_folders`    | `[]`                                                 | Qué carpetas deberían activar estos módulos.                                |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module                    |
 | `contextos`         | `[]`                                                 | Customized styles and symbols for specific contexts.                        |
 | `disabled`          | `true`                                               | Desactiva el módulo `kubernetes`.                                           |
 
