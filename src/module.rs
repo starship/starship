@@ -1,7 +1,5 @@
-use crate::context::Shell;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
-use crate::utils::wrap_colorseq_for_shell;
 use nu_ansi_term::{AnsiString, AnsiStrings};
 use std::fmt;
 use std::time::Duration;
@@ -164,22 +162,16 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString> {
-        self.ansi_strings_for_shell(Shell::Unknown, None)
+        self.ansi_strings_for_width(None)
     }
 
-    pub fn ansi_strings_for_shell(&self, shell: Shell, width: Option<usize>) -> Vec<AnsiString> {
+    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
             ansi_strings.extend(ansi_line(&mut iter, width));
         }
-
-        match shell {
-            Shell::Bash => ansi_strings_modified(ansi_strings, shell),
-            Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
-            Shell::Tcsh => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        }
+        ansi_strings
     }
 }
 
@@ -188,16 +180,6 @@ impl<'a> fmt::Display for Module<'a> {
         let ansi_strings = self.ansi_strings();
         write!(f, "{}", AnsiStrings(&ansi_strings))
     }
-}
-
-fn ansi_strings_modified(ansi_strings: Vec<AnsiString>, shell: Shell) -> Vec<AnsiString> {
-    ansi_strings
-        .into_iter()
-        .map(|ansi| {
-            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), shell);
-            AnsiString::from(wrapped)
-        })
-        .collect::<Vec<AnsiString>>()
 }
 
 fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>

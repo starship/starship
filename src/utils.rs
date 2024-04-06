@@ -510,12 +510,13 @@ pub fn wrap_seq_for_shell(
     escape_begin: char,
     escape_end: char,
 ) -> String {
-    const BASH_BEG: &str = "\u{5c}\u{5b}"; // \[
-    const BASH_END: &str = "\u{5c}\u{5d}"; // \]
-    const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const ZSH_END: &str = "\u{25}\u{7d}"; // %}
-    const TCSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const TCSH_END: &str = "\u{25}\u{7d}"; // %}
+    let (beg, end) = match shell {
+        // \[ and \]
+        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        // %{ and %}
+        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
+        _ => return ansi,
+    };
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
     // in an escape or not with a single boolean variable
@@ -525,20 +526,10 @@ pub fn wrap_seq_for_shell(
         .map(|x| {
             if x == escape_begin && !escaped {
                 escaped = true;
-                match shell {
-                    Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
-                    Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
-                    Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
-                    _ => x.to_string(),
-                }
+                format!("{beg}{escape_begin}")
             } else if x == escape_end && escaped {
                 escaped = false;
-                match shell {
-                    Shell::Bash => format!("{escape_end}{BASH_END}"),
-                    Shell::Zsh => format!("{escape_end}{ZSH_END}"),
-                    Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
-                    _ => x.to_string(),
-                }
+                format!("{escape_end}{end}")
             } else {
                 x.to_string()
             }
