@@ -2483,7 +2483,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2495,18 +2495,19 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 
 :::
 
-| オプション               | デフォルト                                                | 説明                                                   |
-| ------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。                      |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                                    |
-| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                                        |
-| `context_aliases`*  | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。                             |
-| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                    |
-| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか                              |
-| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか                            |
-| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか                            |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts. |
-| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。                            |
+| オプション               | デフォルト                                                | 説明                                                       |
+| ------------------- | ---------------------------------------------------- | -------------------------------------------------------- |
+| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。                          |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                                        |
+| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                                            |
+| `context_aliases`*  | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。                                 |
+| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                        |
+| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか                                  |
+| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか                                |
+| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module |
+| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.     |
+| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。                                |
 
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
