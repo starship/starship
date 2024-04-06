@@ -952,6 +952,7 @@
       "default": {
         "context_aliases": {},
         "contexts": [],
+        "detect_env_vars": [],
         "detect_extensions": [],
         "detect_files": [],
         "detect_folders": [],
@@ -4250,6 +4251,13 @@
           }
         },
         "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
           "default": [],
           "type": "array",
           "items": {

@@ -2601,8 +2601,9 @@ This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
 When the module is enabled it will always be active, unless any of
-`detect_extensions`, `detect_files` or `detect_folders` have been set in which
-case the module will only be active in directories that match those conditions.
+`detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have
+been set in which case the module will only be active in directories that match
+those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2625,6 +2626,7 @@ and `user_alias` options instead.
 | `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
+| `detect_env_vars`   | `[]`                                               | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                               | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
 
