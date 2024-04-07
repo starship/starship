@@ -8,63 +8,31 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::azurerm::AzureRMConfig;
 use crate::formatter::StringFormatter;
 
-
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 struct AzureRMContext {
     default_context_key: String,
-    // #[serde(default, skip)]
-    // environment_table: any,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     contexts: HashMap<String, PSAzureContext>,
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    extended_properties: HashMap<String, String>,
 }
+
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureContext {
     account: PSAzureAccount,
     tenant: PSAzureTenant,
-    // #[serde(default, skip_serializing_if = "Option::is_none")]
-    // subscription: Option<PSAzureSubscription>,
     #[serde(default, deserialize_with="parse_subscription")]
     subscription: PSAzureSubscription,
     environment: PSAzureEnvironment,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    version_profile: Option<String>,
-    // #[serde(default, skip)]
-    // token_cache: String,
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    extended_properties: HashMap<String, String>,
-}
-
-#[derive(Serialize, Deserialize, Clone, Default)]
-#[serde(rename_all = "PascalCase", default)]
-struct PSAzureSubscription {
-  name: String,
-  id: String,
-  state: String,
-  #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-  extended_properties: HashMap<String, String>,
-}
-
-fn parse_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error> where D: Deserializer<'de> {
-    Deserialize::deserialize(d)
-        .map(|x: Option<_>| {
-            x.unwrap_or_default()
-        })
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureAccount {
   id: String,
-  #[serde(rename(deserialize = "Type"))]
-  account_type: String,
-  credential: Option<String>,
-  #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-  extended_properties: HashMap<String, String>,
+  // #[serde(rename = "Type")]
+  // account_type: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -72,23 +40,26 @@ struct PSAzureAccount {
 struct PSAzureTenant {
   id: String,
   directory: Option<String>,
-  is_home: bool,
-  #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-  extended_properties: HashMap<String, String>,
 }
 
+#[derive(Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "PascalCase", default)]
+struct PSAzureSubscription {
+  name: String,
+  id: String, 
+}
 
+fn parse_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error> where D: Deserializer<'de> {
+  Deserialize::deserialize(d)
+      .map(|x: Option<_>| {
+          x.unwrap_or_default()
+      })
+}
 
 #[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all = "PascalCase")]
+#[serde(rename_all = "PascalCase",)]
 struct PSAzureEnvironment {
   name: String,
-  #[serde(rename(deserialize = "Type"))]
-  environment_type: String,
-  on_premise: bool,
-  #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-  extended_properties: HashMap<String, String>,
-  // ad_tenant: String
 }
 
 
@@ -100,14 +71,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let subscription: Option<PSAzureSubscription> = get_azure_profile_info(context);
-
-    if subscription.is_none() {
-        log::info!("Could not find Subscriptions in azureProfile.json");
+    let azurerm_context: Option<PSAzureContext> = get_azurerm_context_info(context);
+    
+    if azurerm_context.is_none() {
+        log::info!("Could not find Context in AzureRmContext.json");
         return None;
     }
-
-    let subscription = subscription.unwrap();
+    let azurerm_context = azurerm_context.unwrap();
+    let subscription = azurerm_context.subscription;
+    let account = azurerm_context.account;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -125,7 +97,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .get(&subscription.name)
                     .copied()
                     .unwrap_or(&subscription.name))),
-                // "username" => Some(Ok(&subscription.user.name)),
+                "username" => Some(Ok(&account.id)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -142,33 +114,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_azure_profile_info(context: &Context) -> Option<PSAzureSubscription> {
+fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
     let mut config_path = get_config_file_location(context)?;
     config_path.push("AzureRmContext.json");
 
-    let azurerm_contexts = load_azure_profile(&config_path)?;
-    let azurerm_context_key = &azurerm_contexts.default_context_key;
-    let azurerm_context  = azurerm_contexts.contexts.get(azurerm_context_key).unwrap().clone();
-       
-    // let context = 
-    //     azurerm_contexts
-    //     .contexts
-    //     .get(azurerm_context_key).unwrap_or_default();
-    Some(azurerm_context.subscription)
+    let azurerm_contexts = load_azurerm_context(&config_path)?;
+    let azurerm_context_key = azurerm_contexts.default_context_key;
+    let azurerm_context = azurerm_contexts.contexts.get(&azurerm_context_key)?.to_owned();
+  
+    Some(azurerm_context)
 }
 
-fn load_azure_profile(config_path: &PathBuf) -> Option<AzureRMContext> {
-    let json_data = fs::read_to_string(config_path).ok()?;
-    let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
-    if let Ok(azurerm_contexts) = serde_json::from_str::<AzureRMContext>(sanitized_json_data) {
-        // let azurerm_context_key = azure_profile.default_context_key;
-        // let azurerm_context = azure_profile.contexts.get(&azurerm_context_key);
-        // Some(azurerm_context)
-        Some(azurerm_contexts)
-    } else {
-        log::info!("Failed to parse azure profile.");
-        None
-    }
+fn load_azurerm_context(config_path: &PathBuf) -> Option<AzureRMContext> {
+  let json_data = fs::read_to_string(config_path).ok()?;
+  let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
+  if let Ok(azurerm_contexts) = serde_json::from_str::<AzureRMContext>(sanitized_json_data) {
+      Some(azurerm_contexts)
+  } else {
+      log::info!("Failed to parse AzureRM Context.");
+      None
+  }
 }
 
 fn get_config_file_location(context: &Context) -> Option<PathBuf> {
