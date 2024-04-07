@@ -25,13 +25,9 @@ $battery\
 [](fg:#756AB6)\
 $line_break$character"""
 
-
-#	\n$character"""
-
 [os]
 disabled = false
 style = "bg:#FEC7B4 fg:#0D1282"
-
 
 [os.symbols]
 Alpaquita = " "
@@ -77,7 +73,6 @@ Ubuntu = " "
 Unknown = " "
 Void = " "
 Windows = "󰍲 "
-
 
 [username]
 show_always = true
@@ -176,7 +171,6 @@ style = "fg:#FFF455 bg:#756AB6"
 [[battery.display]]
 threshold = 100
 style = "fg:#C2F8CB bg:#756AB6"
-
 
 [line_break]
 disabled = false
