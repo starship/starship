@@ -22,7 +22,7 @@ impl<'a> Default for AzureRMConfig<'a> {
             format: "on [$symbol($subscription)]($style) ",
             symbol: "󰠅 ",
             style: "blue bold",
-            disabled: false ,
+            disabled: false,
             subscription_aliases: HashMap::new(),
         }
     }

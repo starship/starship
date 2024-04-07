@@ -1,7 +1,7 @@
-use serde::{Deserialize, Serialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize};
+use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
-use std::collections::HashMap;
 
 use super::{Context, Module, ModuleConfig};
 
@@ -20,30 +20,29 @@ struct AzureRMContext {
 #[serde(rename_all = "PascalCase")]
 struct PSAzureContext {
     account: PSAzureAccount,
-    #[serde(default, deserialize_with="parse_azurerm_subscription")]
+    #[serde(default, deserialize_with = "parse_azurerm_subscription")]
     subscription: PSAzureSubscription,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureAccount {
-  id: String,
+    id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
 #[serde(rename_all = "PascalCase", default)]
 struct PSAzureSubscription {
-  name: String,
-  id: String, 
+    name: String,
+    id: String,
 }
 
-fn parse_azurerm_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error> where D: Deserializer<'de> {
-  Deserialize::deserialize(d)
-      .map(|x: Option<_>| {
-          x.unwrap_or_default()
-      })
+fn parse_azurerm_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    Deserialize::deserialize(d).map(|x: Option<_>| x.unwrap_or_default())
 }
-
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("azurerm");
@@ -54,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let azurerm_context: Option<PSAzureContext> = get_azurerm_context_info(context);
-    
+
     if azurerm_context.is_none() {
         log::info!("Could not find Context in AzureRmContext.json");
         return None;
@@ -102,20 +101,23 @@ fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
 
     let azurerm_contexts = load_azurerm_context(&config_path)?;
     let azurerm_context_key = azurerm_contexts.default_context_key;
-    let azurerm_context = azurerm_contexts.contexts.get(&azurerm_context_key)?.to_owned();
-  
+    let azurerm_context = azurerm_contexts
+        .contexts
+        .get(&azurerm_context_key)?
+        .to_owned();
+
     Some(azurerm_context)
 }
 
 fn load_azurerm_context(config_path: &PathBuf) -> Option<AzureRMContext> {
-  let json_data = fs::read_to_string(config_path).ok()?;
-  let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
-  if let Ok(azurerm_contexts) = serde_json::from_str::<AzureRMContext>(sanitized_json_data) {
-      Some(azurerm_contexts)
-  } else {
-      log::info!("Failed to parse AzureRM Context.");
-      None
-  }
+    let json_data = fs::read_to_string(config_path).ok()?;
+    let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
+    if let Ok(azurerm_contexts) = serde_json::from_str::<AzureRMContext>(sanitized_json_data) {
+        Some(azurerm_contexts)
+    } else {
+        log::info!("Failed to parse AzureRM Context.");
+        None
+    }
 }
 
 fn get_config_file_location(context: &Context) -> Option<PathBuf> {
