@@ -16,30 +16,18 @@ struct AzureRMContext {
     contexts: HashMap<String, PSAzureContext>,
 }
 
-
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureContext {
     account: PSAzureAccount,
-    tenant: PSAzureTenant,
-    #[serde(default, deserialize_with="parse_subscription")]
+    #[serde(default, deserialize_with="parse_azurerm_subscription")]
     subscription: PSAzureSubscription,
-    environment: PSAzureEnvironment,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureAccount {
   id: String,
-  // #[serde(rename = "Type")]
-  // account_type: String,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all = "PascalCase")]
-struct PSAzureTenant {
-  id: String,
-  directory: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
@@ -49,17 +37,11 @@ struct PSAzureSubscription {
   id: String, 
 }
 
-fn parse_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error> where D: Deserializer<'de> {
+fn parse_azurerm_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error> where D: Deserializer<'de> {
   Deserialize::deserialize(d)
       .map(|x: Option<_>| {
           x.unwrap_or_default()
       })
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all = "PascalCase",)]
-struct PSAzureEnvironment {
-  name: String,
 }
 
 
