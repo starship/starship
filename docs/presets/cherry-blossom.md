@@ -8,7 +8,7 @@ This a minimalist prompt inspired by [Pastel Powerline](./pastel-powerline.md).
 
 ### Prerequisite
 
-- [Meslo ](https://github.com/ryanoasis/nerd-fonts) is recommended.
+- [Meslo](https://github.com/ryanoasis/nerd-fonts) is recommended.
 
 ### Configuration
 
