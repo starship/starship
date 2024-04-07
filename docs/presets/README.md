@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+
+## [Cherry Blossom](./cherry-blossom.md)
+This preset is inspired by [Pastel Powerline](./pastel-powerline.md).
+
+[![Screenshot of Cherry Blossom](/docs/public/presets/img/jetpack.png "Click to view Jetpack preset")](./cherry-blossom)
