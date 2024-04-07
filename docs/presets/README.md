@@ -83,5 +83,4 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ## [Cherry Blossom](./cherry-blossom.md)
 This preset is inspired by [Pastel Powerline](./pastel-powerline.md).
-
 [![Screenshot of Cherry Blossom](/presets/img/cherry-blossom.png "Click to view Cherry Blossom preset")](./cherry-blossom)
