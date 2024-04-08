@@ -1708,17 +1708,17 @@ very-long-project-name = 'vlpn'
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                             |
-| -------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
-| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                           |
-| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | module のフォーマットです。 現在のブランチ名を参照するには、`'$branch'` を使用します。          |
-| `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                                      |
-| `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                                  |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                       |
-| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。                   |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state. |
-| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 Useful for 'master' or 'main'.                    |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                      |
+| オプション                | デフォルト                                             | 説明                                                    |
+| -------------------- | ------------------------------------------------- | ----------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                  |
+| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | module のフォーマットです。 現在のブランチ名を参照するには、`'$branch'` を使用します。 |
+| `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                             |
+| `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                         |
+| `truncation_length`  | `2^63 - 1`                                        | gitブランチ名を `N` 書記素までで切り捨てます。                           |
+| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `only_attached`      | `false`                                           | デタッチ `HEAD` 状態にない時はブランチ名のみ表示します。                      |
+| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 'master' や 'main' に対して有用です。              |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                             |
 
 ### 変数
 
@@ -1750,24 +1750,24 @@ ignore_branches = ['master', 'main']
 
 ### オプション
 
-| オプション                | デフォルト                          | 説明                                                                                   |
-| -------------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
-| `commit_hash_length` | `7`                            | 表示される git コミットハッシュの長さ。                                                               |
-| `format`             | `'[\($hash$tag\)]($style) '` | module のフォーマットです。                                                                    |
-| `style`              | `'bold green'`                 | モジュールのスタイルです。                                                                        |
-| `only_detached`      | `true`                         | detached `HEAD` 状態のときのみ git コミットハッシュを表示する                                            |
-| `tag_disabled`       | `true`                         | `git_commit` モジュールのタグ情報の表示を無効にする。                                                    |
-| `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷 '`                        | 表示される情報の前に追加されるタグシンボル                                                                |
-| `disabled`           | `false`                        | `git_commit` モジュールを無効にします。                                                           |
+| オプション                | デフォルト                          | 説明                                        |
+| -------------------- | ------------------------------ | ----------------------------------------- |
+| `commit_hash_length` | `7`                            | 表示される git コミットハッシュの長さ。                    |
+| `format`             | `'[\($hash$tag\)]($style) '` | module のフォーマットです。                         |
+| `style`              | `'bold green'`                 | モジュールのスタイルです。                             |
+| `only_detached`      | `true`                         | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
+| `tag_disabled`       | `true`                         | `git_commit` モジュールのタグ情報の表示を無効にする。         |
+| `tag_max_candidates` | `0`                            | タグ表示で考慮するコミットの数。 既定では完全一致のみ許可します。         |
+| `tag_symbol`         | `' 🏷 '`                        | 表示される情報の前に追加されるタグシンボル                     |
+| `disabled`           | `false`                        | `git_commit` モジュールを無効にします。                |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                                           |
-| --------- | --------- | -------------------------------------------- |
-| hash      | `b703eb3` | 現在の git コミットハッシュ                             |
-| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
-| style\* |           | オプション `style` の値をミラーする                       |
+| 変数        | 設定例       | 説明                     |
+| --------- | --------- | ---------------------- |
+| hash      | `b703eb3` | 現在の git コミットハッシュ       |
+| tag       | `v1.0.0`  | タグ情報の表示が有効の場合のタグ名。     |
+| style\* |           | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
