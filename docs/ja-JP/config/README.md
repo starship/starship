@@ -1116,7 +1116,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` によってパスに含まれる固定文字列に対する任意の置換を定義できます。固定文字列の例として、長いネットワークプレフィックスや (Java の) 開発ディレクトリが考えられます。 ※これは fish 形式の PWD を無効化します。
 
 ```toml
 [directory.substitutions]
@@ -1124,7 +1124,7 @@ format = 'via [🦕 $version](green bold) '
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` は標準の短縮設定と組み合わさって、一見して意外な結果をもたらすかもしれません。非ゼロの値の場合、通常省略されるディレクトリ名がその文字数だけ表示されます。 例えばパス `/built/this/city/on/rock/and/roll` は通常 `rock/and/roll` と表示されますが、 `fish_style_pwd_dir_length = 1` の時は `/b/t/c/o/rock/and/roll` と表示されます。つまり、通常削除されるパスコンポーネントが代わりに一文字で表示されます。 `fish_style_pwd_dir_length = 2`の場合、 `/bu/th/ci/on/rock/and/roll` になります。
 
 </details>
 
@@ -1164,34 +1164,34 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+`direnv` モジュールは、もし存在すれば、現在の rc ファイルの状態を示します。 状態として rc ファイルへのパス、ロードされているかどうか、および `direnv` によって許可されているかどうかを含みます。
 
 ### オプション
 
-| オプション               | デフォルト                                  | 説明                                                    |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | module のフォーマットです。                                     |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | モジュールのスタイルです。                                         |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | どの拡張子がこのモジュールをアクティブにするか                               |
-| `detect_files`      | `['.envrc']`                           | どのファイル名がこのモジュールをアクティブにするか                             |
-| `detect_folders`    | `[]`                                   | どのフォルダーがこのモジュールをアクティブにするか                             |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| オプション               | デフォルト                                  | 説明                                         |
+| ------------------- | -------------------------------------- | ------------------------------------------ |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | module のフォーマットです。                          |
+| `symbol`            | `'direnv '`                            | Direnv コンテキストの前に表示される記号です。                 |
+| `style`             | `'bold orange'`                        | モジュールのスタイルです。                              |
+| `disabled`          | `true`                                 | `Direnv`モジュールを無効にします。                      |
+| `detect_extensions` | `[]`                                   | どの拡張子がこのモジュールをアクティブにするか                    |
+| `detect_files`      | `['.envrc']`                           | どのファイル名がこのモジュールをアクティブにするか                  |
+| `detect_folders`    | `[]`                                   | どのフォルダーがこのモジュールをアクティブにするか                  |
+| `allowed_msg`       | `'allowed'`                            | Rcファイルが許可されているとき (allowed) に表示されるメッセージです。  |
+| `not_allowed_msg`   | `'not allowed'`                        | Rcファイルが不許可のとき (not_allowed) に表示されるメッセージです。 |
+| `denied_msg`        | `'denied'`                             | Rcファイルが拒否されているとき (denied) に表示されるメッセージです。   |
+| `loaded_msg`        | `'loaded'`                             | Rcファイルがロードされているときに表示されるメッセージです。            |
+| `unloaded_msg`      | `'not loaded'`                         | Rcファイルがロードされていないときに表示されるメッセージです。           |
 
 ### 変数
 
-| 変数        | 設定例                 | 説明                                      |
-| --------- | ------------------- | --------------------------------------- |
-| loaded    | `loaded`            | Whether the current rc file is loaded.  |
-| allowed   | `denied`            | Whether the current rc file is allowed. |
-| rc_path   | `/home/test/.envrc` | The current rc file path.               |
-| symbol    |                     | オプション `symbol` の値をミラーする.                |
-| style\* | `red bold`          | オプション `style` の値をミラーする.                 |
+| 変数        | 設定例                 | 説明                      |
+| --------- | ------------------- | ----------------------- |
+| loaded    | `loaded`            | 現在のrcファイルがロードされているかどうか。 |
+| allowed   | `denied`            | 現在のrcファイルが許可されているかどうか。  |
+| rc_path   | `/home/test/.envrc` | 現在の rc ファイルパス。          |
+| symbol    |                     | オプション `symbol` の値のミラー。  |
+| style\* | `red bold`          | オプション `style` の値のミラー。   |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1387,7 +1387,7 @@ format = 'via [ $version](cyan bold) '
 
 ::: tip
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+The order in which env_var モジュールが表示される順序は、`${env_var.foo}` (ドットが含まれるので `${...}` を使う必要があります) をトップレベルの `format` に入れることで個別に設定できます。 既定では、 `env_var` モジュールは、単にすべての env_var モジュールを定義順で表示します。
 
 :::
 
@@ -1408,14 +1408,14 @@ default = 'unknown user'
 
 ### オプション
 
-| オプション      | デフォルト                          | 説明                                                                           |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                                                        |
-| `variable` |                                | 表示される環境変数です。                                                                 |
-| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。                                        |
-| `format`   | `"with [$env_value]($style) "` | module のフォーマットです。                                                            |
-| `説明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                        | `env_var`モジュールを無効にします。                                                       |
+| オプション      | デフォルト                          | 説明                                     |
+| ---------- | ------------------------------ | -------------------------------------- |
+| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                  |
+| `variable` |                                | 表示される環境変数です。                           |
+| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。  |
+| `format`   | `"with [$env_value]($style) "` | module のフォーマットです。                      |
+| `説明`       | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
+| `disabled` | `false`                        | `env_var`モジュールを無効にします。                 |
 
 ### 変数
 
@@ -1490,28 +1490,28 @@ format = 'via [e $version](bold red) '
 
 ## Fennel
 
-The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`fennel`モジュールは、現在インストールされている[Fennel](https://fennel-lang.org)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with the `.fnl` extension
+- カレントディレクトリに拡張子 `.fnl` のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                       |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                        |
-| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。   |
-| `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel. |
-| `style`             | `'bold green'`                       | モジュールのスタイルです。                                            |
-| `detect_extensions` | `['fnl']`                            | どの拡張子がこのモジュールをアクティブにするか                                  |
-| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
-| `disabled`          | `false`                              | Disables the `fennel` module.                            |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🧅 '`                               | Fennel のバージョンの前に表示される記号です。                             |
+| `style`             | `'bold green'`                       | モジュールのスタイルです。                                          |
+| `detect_extensions` | `['fnl']`                            | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                              | `fennel`モジュールを無効にします。                                  |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                      |
 | --------- | -------- | ----------------------- |
-| version   | `v1.2.1` | The version of `fennel` |
+| version   | `v1.2.1` | `fennel`のバージョン          |
 | symbol    |          | オプション `symbol` の値をミラーする |
 | style\* |          | オプション `style` の値をミラーする  |
 
@@ -1557,26 +1557,26 @@ AA -------------------------------------------- BB -----------------------------
 
 ## Fossil Branch
 
-The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+`fossil_branch`モジュールは、現在のディレクトリにあるチェックアウトのアクティブなブランチ名を表示します。
 
 ### オプション
 
-| オプション               | デフォルト                            | 説明                                                                                 |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol$branch]($style) '` | module のフォーマットです。 Use `'$branch'` to refer to the current branch name.             |
-| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory. |
-| `style`             | `'bold purple'`                  | モジュールのスタイルです。                                                                      |
-| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                    |
-| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。 You can use `''` for no symbol.                        |
-| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                               |
+| オプション               | デフォルト                            | 説明                                                    |
+| ------------------- | -------------------------------- | ----------------------------------------------------- |
+| `format`            | `'on [$symbol$branch]($style) '` | module のフォーマットです。 現在のブランチ名を参照するには、`'$branch'` を使用します。 |
+| `symbol`            | `' '`                           | 現在のディレクトリのチェックアウトのブランチ名の前に使用されるシンボルです。                |
+| `style`             | `'bold purple'`                  | モジュールのスタイルです。                                         |
+| `truncation_length` | `2^63 - 1`                       | Fossil のブランチ名を `N` 書記素までで切り捨てます。                      |
+| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `disabled`          | `true`                           | `fossil_branch` モジュールを無効にします。                         |
 
 ### 変数
 
-| 変数        | 設定例     | 説明                       |
-| --------- | ------- | ------------------------ |
-| branch    | `trunk` | The active Fossil branch |
-| symbol    |         | オプション `symbol` の値をミラーする  |
-| style\* |         | オプション `style` の値をミラーする   |
+| 変数        | 設定例     | 説明                      |
+| --------- | ------- | ----------------------- |
+| branch    | `trunk` | アクティブな Fossil ブランチ      |
+| symbol    |         | オプション `symbol` の値をミラーする |
+| style\* |         | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1593,26 +1593,26 @@ truncation_symbol = ''
 
 ## Fossil Metrics
 
-The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+`fossil_branch` モジュールは、現在のディレクトリのチェックアウトにおける追加・削除された行数を表示します。 少なくとも Fossil バージョン 2.14 (2021-01-20) が必要です。
 
 ### オプション
 
-| オプション                | デフォルト                                                        | 説明                                    |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                     |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module. |
+| オプション                | デフォルト                                                        | 説明                             |
+| -------------------- | ------------------------------------------------------------ | ------------------------------ |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。              |
+| `added_style`        | `'bold green'`                                               | 追加行数のスタイルです。                   |
+| `deleted_style`      | `'bold red'`                                                 | 削除行数のスタイルです。                   |
+| `only_nonzero_diffs` | `true`                                                       | 変更された項目についてのみステータスを表示します。      |
+| `disabled`           | `true`                                                       | `fossil_metrics` モジュールを無効にします。 |
 
 ### 変数
 
-| 変数                | 設定例 | 説明                                          |
-| ----------------- | --- | ------------------------------------------- |
-| added             | `1` | The current number of added lines           |
-| deleted           | `2` | The current number of deleted lines         |
-| added_style\*   |     | Mirrors the value of option `added_style`   |
-| deleted_style\* |     | Mirrors the value of option `deleted_style` |
+| 変数                | 設定例 | 説明                              |
+| ----------------- | --- | ------------------------------- |
+| added             | `1` | 現在の追加行数です。                      |
+| deleted           | `2` | 現在の削除行数です。                      |
+| added_style\*   |     | オプション `added_style` の値を反映します。   |
+| deleted_style\* |     | オプション `deleted_style` の値を反映します。 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1630,19 +1630,19 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 `gcloud` モジュールは、 [`gcloud`](https://cloud.google.com/sdk/gcloud) CLIの現在の設定が表示されます。 これは `~/.config/gcloud/active_config` ファイルと `~/.config/gcloud/configurations/config_{CONFIG NAME}` ファイルと `CLOUDSDK_CONFIG` 環境変数に基づきます。
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
+`detect_env_vars` が設定されていない限り、モジュールが有効になっているときは常に活性化します。<0>detect_env_vars</0> が設定されている場合、何れかの環境変数が設定されているときにのみ活性化します。
 
 ### オプション
 
-| オプション             | デフォルト                                                      | 説明                                                       |
-| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。                                        |
-| `symbol`          | `'☁️  '`                                                   | 現在のGCPプロファイルを表示する前に表示される記号です。                            |
-| `region_aliases`  | `{}`                                                       | GCP名に加えて表示するリージョンのエイリアスです。                               |
-| `project_aliases` | `{}`                                                       | GCP名に加えて表示するプロジェクトのエイリアスです。                              |
-| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module |
-| `style`           | `'bold blue'`                                              | モジュールのスタイルです。                                            |
-| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。                                    |
+| オプション             | デフォルト                                                      | 説明                            |
+| ----------------- | ---------------------------------------------------------- | ----------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。             |
+| `symbol`          | `'☁️  '`                                                   | 現在のGCPプロファイルを表示する前に表示される記号です。 |
+| `region_aliases`  | `{}`                                                       | GCP名に加えて表示するリージョンのエイリアスです。    |
+| `project_aliases` | `{}`                                                       | GCP名に加えて表示するプロジェクトのエイリアスです。   |
+| `detect_env_vars` | `[]`                                                       | このモジュールを活性化する環境変数です。          |
+| `style`           | `'bold blue'`                                              | モジュールのスタイルです。                 |
+| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。         |
 
 ### 変数
 
@@ -1708,17 +1708,17 @@ very-long-project-name = 'vlpn'
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                                     |
-| -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------- |
-| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                                   |
-| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | module のフォーマットです。 Use `'$branch'` to refer to the current branch name. |
-| `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                                              |
-| `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                                          |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                               |
-| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `''` for no symbol.            |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.         |
-| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 Useful for 'master' or 'main'.                            |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                              |
+| オプション                | デフォルト                                             | 説明                                                             |
+| -------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                           |
+| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | module のフォーマットです。 現在のブランチ名を参照するには、`'$branch'` を使用します。          |
+| `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                                      |
+| `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                                  |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                       |
+| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。                   |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state. |
+| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 Useful for 'master' or 'main'.                    |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                      |
 
 ### 変数
 
@@ -1833,23 +1833,23 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ### オプション
 
-| オプション                | デフォルト                                                        | 説明                                    |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                     |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| オプション                | デフォルト                                                        | 説明                                 |
+| -------------------- | ------------------------------------------------------------ | ---------------------------------- |
+| `added_style`        | `'bold green'`                                               | 追加行数のスタイルです。                       |
+| `deleted_style`      | `'bold red'`                                                 | 削除行数のスタイルです。                       |
+| `only_nonzero_diffs` | `true`                                                       | 変更された項目についてのみステータスを表示します。          |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                  |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module. |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules       |
 
 ### 変数
 
-| 変数                | 設定例 | 説明                                          |
-| ----------------- | --- | ------------------------------------------- |
-| added             | `1` | The current number of added lines           |
-| deleted           | `2` | The current number of deleted lines         |
-| added_style\*   |     | Mirrors the value of option `added_style`   |
-| deleted_style\* |     | Mirrors the value of option `deleted_style` |
+| 変数                | 設定例 | 説明                              |
+| ----------------- | --- | ------------------------------- |
+| added             | `1` | 現在の追加行数です。                      |
+| deleted           | `2` | 現在の削除行数です。                      |
+| added_style\*   |     | オプション `added_style` の値を反映します。   |
+| deleted_style\* |     | オプション `deleted_style` の値を反映します。 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2495,19 +2495,19 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 
 :::
 
-| オプション               | デフォルト                                                | 説明                                                       |
-| ------------------- | ---------------------------------------------------- | -------------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。                          |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                                        |
-| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                                            |
-| `context_aliases`*  | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。                                 |
-| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                        |
-| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか                                  |
-| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか                                |
-| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
-| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.     |
-| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。                                |
+| オプション               | デフォルト                                                | 説明                                                   |
+| ------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。                      |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                                    |
+| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                                        |
+| `context_aliases`*  | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。                             |
+| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                    |
+| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか                              |
+| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか                            |
+| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか                            |
+| `detect_env_vars`   | `[]`                                                 | このモジュールを活性化する環境変数です。                                 |
+| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts. |
+| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。                            |
 
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
@@ -2740,14 +2740,14 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### オプション
 
-| オプション               | デフォルト                              | 説明                                                                                        |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                                |
-| `truncation_symbol` | `'…'`                              | The symbol used to indicate a project name was truncated. You can use `''` for no symbol. |
-| `format`            | `'via [$symbol$project]($style) '` | module のフォーマットです。                                                                         |
-| `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                                       |
-| `style`             | `'blue bold'`                      | モジュールのスタイルです。                                                                             |
-| `disabled`          | `false`                            | Disables the `meson` module.                                                              |
+| オプション               | デフォルト                              | 説明                                                                         |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------------------- |
+| `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                 |
+| `truncation_symbol` | `'…'`                              | The symbol used to indicate a project name was truncated. `''` で記号なしにできます。 |
+| `format`            | `'via [$symbol$project]($style) '` | module のフォーマットです。                                                          |
+| `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                        |
+| `style`             | `'blue bold'`                      | モジュールのスタイルです。                                                              |
+| `disabled`          | `false`                            | Disables the `meson` module.                                               |
 
 ### 変数
 
@@ -3834,7 +3834,7 @@ The `shell` module shows an indicator for currently used shell.
 | 変数        | デフォルト | 説明                                                         |
 | --------- | ----- | ---------------------------------------------------------- |
 | indicator |       | Mirrors the value of `indicator` for currently used shell. |
-| style\* |       | オプション `style` の値をミラーする.                                    |
+| style\* |       | オプション `style` の値のミラー。                                      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
