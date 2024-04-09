@@ -1899,30 +1899,30 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 
 ` format` 内では以下の変数が利用できます。
 
-| 変数             | 説明                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット                          |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
-| style\*      | オプション `style` の値をミラーする                                                                                        |
+| 変数             | 説明                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------ |
+| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット |
+| `ahead_behind` | 現在のリポジトリに応じてフォーマット文字列 `diverged`, `ahead`, `behind`, `up_to_date` の何れかを表示します。        |
+| `conflicted`   | このブランチにマージコンフリクトがある場合、 `conflicted` を表示します。                                          |
+| `untracked`    | 作業ディレクトリに追跡されていないファイルがある場合、 `untracked` を表示します。                                      |
+| `stashed`      | Stash がローカルリポジトリに存在する場合、 `stashed` を表示します。                                           |
+| `modified`     | 作業ディレクトリのファイルに変更がある場合に、 `modified` を表示します。                                           |
+| `staged`       | インデックスに新しく追加されたファイルがあるときに、 `staged` を表示します。                                          |
+| `renamed`      | インデックスに名前が変更されたファイルがあるときに、 `renamed` を表示します。                                         |
+| `deleted`      | インデックスに削除されたファイルがあるときに、 `deleted` を表示します。                                            |
+| `typechanged`  | インデックスにファイルタイプの変更があるときに、 `typechange` を表示します。                                        |
+| style\*      | オプション `style` の値をミラーする                                                               |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
-The following variables can be used in `diverged`:
+` diverged` 内では以下の変数が利用できます。
 
-| 変数             | 説明                                             |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| 変数             | 説明                        |
+| -------------- | ------------------------- |
+| `ahead_count`  | 追跡対象のブランチよりこちらが進んでいるコミット数 |
+| `behind_count` | 追跡対象のブランチよりこちらが遅れているコミット数 |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+`conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` および `deleted` の中で以下の変数が使えます:
 
 | 変数      | 説明            |
 | ------- | ------------- |
@@ -1947,7 +1947,7 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
-Show ahead/behind count of the branch being tracked
+以下は、追跡対象のブランチと比べて進んでいる・遅れているコミット数を表示します。
 
 ```toml
 # ~/.config/starship.toml
@@ -1958,7 +1958,7 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+以下は WSL で Windows のパスにある Windows 用の Starship 実行ファイルを使用します。
 
 ```toml
 # ~/.config/starship.toml
@@ -1969,10 +1969,10 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Gleam
 
-The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`gleam` モジュールは、現在インストールされている[Gleam](https://gleam.run/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `gleam.toml` file
-- The current directory contains a file with the `.gleam` extension
+- 現在のディレクトリに`gleam.toml`ファイルが含まれている
+- 現在のディレクトリに拡張子が `.gleam` のファイルが含まれている
 
 ### オプション
 
@@ -1980,17 +1980,17 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.         |
+| `symbol`            | `'⭐ '`                               | Go のシンボルを表すフォーマット文字列                                   |
 | `detect_extensions` | `['gleam']`                          | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['gleam.toml']`                     | どのファイル名がこのモジュールをアクティブにするか                              |
 | `style`             | `'bold #FFAFF3'`                     | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `gleam` module.                           |
+| `disabled`          | `false`                              | `gleam` モジュールを無効にします                                   |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                      |
 | --------- | -------- | ----------------------- |
-| version   | `v1.0.0` | The version of `gleam`  |
+| version   | `v1.0.0` | `gleam` のバージョン          |
 | symbol    |          | オプション `symbol` の値をミラーする |
 | style\* |          | オプション `style` の値をミラーする  |
 
@@ -2021,26 +2021,26 @@ format = 'via [⭐ $version](bold red) '
 
 ### オプション
 
-| オプション               | デフォルト                                                                                     | 説明                                                                                                         |
-| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                                                                          |
-| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                                     |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
-| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                                                                    |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                                                                                  |
-| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                                                                                  |
-| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                                                                              |
-| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                                                                      |
+| オプション               | デフォルト                                                                                     | 説明                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                                  |
+| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。             |
+| `symbol`            | `'🐹 '`                                                                                    | Go のシンボルを表すフォーマット文字列                                               |
+| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                            |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                                          |
+| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                                          |
+| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                                      |
+| `not_capable_style` | `'bold red'`                                                                              | go.mod ファイル中の go ディレクティブがインストールされている Go のバージョンと一致しないときのモジュールのスタイル。 |
+| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                              |
 
 ### 変数
 
-| 変数          | 設定例       | 説明                                                                                                                                          |
-| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| version     | `v1.12.1` | The version of `go`                                                                                                                         |
-| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
-| symbol      |           | オプション `symbol` の値をミラーする                                                                                                                     |
-| style\*   |           | オプション `style` の値をミラーする                                                                                                                      |
+| 変数          | 設定例       | 説明                                                                                |
+| ----------- | --------- | --------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | `go` のバージョン                                                                       |
+| mod_version | `1.16`    | `go.mod` の go ディレクティブに設定されている `go` のバージョン要件 バージョン要件が `go` バージョンと一致しない場合にのみ表示されます。 |
+| symbol      |           | オプション `symbol` の値をミラーする                                                           |
+| style\*   |           | オプション `style` の値をミラーする                                                            |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2053,7 +2053,7 @@ format = 'via [⭐ $version](bold red) '
 format = 'via [🏎💨 $version](bold cyan) '
 ```
 
-### Using `mod_version`
+### `mod_version` を使用する
 
 ```toml
 # ~/.config/starship.toml
@@ -2064,16 +2064,16 @@ format = 'via [$symbol($version )($mod_version )]($style)'
 
 ## Guix-shell
 
-The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+`guix_shell`モジュールは、 [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) 環境を表示します。 このモジュールは、 guix-shell 環境内にあるときに表示されます。
 
 ### オプション
 
-| オプション      | デフォルト                      | 説明                                                     |
-| ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `'via [$symbol]($style) '` | module のフォーマットです。                                      |
-| `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `'yellow bold'`            | モジュールのスタイルです。                                          |
-| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+| オプション      | デフォルト                      | 説明                            |
+| ---------- | -------------------------- | ----------------------------- |
+| `format`   | `'via [$symbol]($style) '` | module のフォーマットです。             |
+| `symbol`   | `'🐃 '`                     | Guix-shell のシンボルを表すフォーマット文字列。 |
+| `style`    | `'yellow bold'`            | モジュールのスタイルです。                 |
+| `disabled` | `false`                    | `guix_shell` モジュールを無効にします。    |
 
 ### 変数
 
@@ -3176,7 +3176,7 @@ Windows = "🪟 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| 種類        | `Arch`       | The current operating system type                                  |
+| type      | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
@@ -4472,9 +4472,9 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.  |
+| `symbol`            | `'↯ '`                               | Zig のバージョンの前に表示されるシンボルです。                              |
 | `style`             | `'bold yellow'`                      | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `zig` module.                             |
+| `disabled`          | `false`                              | `zig` モジュールを無効にします。                                    |
 | `detect_extensions` | `['zig']`                            | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
@@ -4483,7 +4483,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 | 変数        | 設定例      | 説明                      |
 | --------- | -------- | ----------------------- |
-| version   | `v0.6.0` | The version of `zig`    |
+| version   | `v0.6.0` | `zig` のバージョン            |
 | symbol    |          | オプション `symbol` の値をミラーする |
 | style\* |          | オプション `style` の値をミラーする  |
 
@@ -4498,21 +4498,21 @@ By default the `zig` module shows the currently installed version of [Zig](https
 symbol = '⚡️ '
 ```
 
-## Custom commands
+## カスタムコマンド
 
-The `custom` modules show the output of some arbitrary commands.
+`custom` モジュールは、任意のコマンドの出力を表示します。
 
-These modules will be shown if any of the following conditions are met:
+以下のいずれかの条件が満たされる場合に、モジュールが表示されます:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
-- The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
+- 現在のディレクトリに `detect_files` に挙げた名前のファイルが存在する。
+- 現在のディレクトリに `detect_folders` に挙げた名前のサブディレクトリが存在する。
+- 現在のディレクトリに `detect_extensions` に挙げた拡張子に一致するファイルが存在する。
+- `when` コマンドが 0 を返す。
+- `os` フィールドが指定されている場合、現在のオペレーティング システム (std::env::consts::OS) がそれに一致する。
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+`.` を使用して複数のカスタムモジュールを定義できます。
 
 :::
 
@@ -4540,8 +4540,8 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 | オプション               | デフォルト                           | 説明                                                                                                                                                                                                                                                                                            |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                                                                                                                                                          |
+| `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 文字列の場合、コマンドが終了ステータス `0` を返したときにモジュールが表示されます。                                                                                                                                                                               |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                                                                                                                                       |
 | `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                                                                                                                                                                        |
@@ -4551,18 +4551,18 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`             | `'bold green'`                  | モジュールのスタイルです。                                                                                                                                                                                                                                                                                 |
 | `format`            | `'[$symbol($output )]($style)'` | module のフォーマットです。                                                                                                                                                                                                                                                                             |
-| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
-| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
+| `disabled`          | `false`                         | `custom` モジュールを無効にします。                                                                                                                                                                                                                                                                        |
+| `os`                |                                 | モジュールが表示されるオペレーティングシステムの名前 (unix, linux, macos, windows, ...)。 [利用可能な値](https://doc.rust-lang.org/std/env/consts/constant.OS.html) を参照してください。                                                                                                                                                 |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
 ### 変数
 
-| 変数        | 説明                                     |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | オプション `symbol` の値をミラーする                |
-| style\* | オプション `style` の値をミラーする                 |
+| 変数        | 説明                        |
+| --------- | ------------------------- |
+| output    | `shell` におけるシェルコマンドの出力結果。 |
+| symbol    | オプション `symbol` の値をミラーする   |
+| style\* | オプション `style` の値をミラーする    |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4601,19 +4601,19 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # コマンドの出力を表示する
+detect_files = ['foo'] # フィルター。ワイルドカードは非対応
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # *.pst ファイルを選択
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # *.pst ファイルを選択
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
