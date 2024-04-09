@@ -1408,14 +1408,14 @@ default = 'unknown user'
 
 ### オプション
 
-| オプション      | デフォルト                          | 説明                                     |
-| ---------- | ------------------------------ | -------------------------------------- |
-| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                  |
-| `variable` |                                | 表示される環境変数です。                           |
-| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。  |
-| `format`   | `"with [$env_value]($style) "` | module のフォーマットです。                      |
-| `説明`       | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
-| `disabled` | `false`                        | `env_var`モジュールを無効にします。                 |
+| オプション         | デフォルト                          | 説明                                     |
+| ------------- | ------------------------------ | -------------------------------------- |
+| `symbol`      | `""`                           | 環境変数を表示する前に使用される記号です。                  |
+| `variable`    |                                | 表示される環境変数です。                           |
+| `default`     |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。  |
+| `format`      | `"with [$env_value]($style) "` | module のフォーマットです。                      |
+| `description` | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
+| `disabled`    | `false`                        | `env_var`モジュールを無効にします。                 |
 
 ### 変数
 
@@ -1823,7 +1823,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 ## Git Metrics
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+`git_metrics` モジュールは、現在の git リポジトリにおける追加・削除された行数を表示します。
 
 ::: tip
 
@@ -1833,14 +1833,14 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ### オプション
 
-| オプション                | デフォルト                                                        | 説明                                 |
-| -------------------- | ------------------------------------------------------------ | ---------------------------------- |
-| `added_style`        | `'bold green'`                                               | 追加行数のスタイルです。                       |
-| `deleted_style`      | `'bold red'`                                                 | 削除行数のスタイルです。                       |
-| `only_nonzero_diffs` | `true`                                                       | 変更された項目についてのみステータスを表示します。          |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                  |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module. |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules       |
+| オプション                | デフォルト                                                        | 説明                          |
+| -------------------- | ------------------------------------------------------------ | --------------------------- |
+| `added_style`        | `'bold green'`                                               | 追加行数のスタイルです。                |
+| `deleted_style`      | `'bold red'`                                                 | 削除行数のスタイルです。                |
+| `only_nonzero_diffs` | `true`                                                       | 変更された項目についてのみステータスを表示します。   |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。           |
+| `disabled`           | `true`                                                       | `git_metrics` モジュールを無効にします。 |
+| `ignore_submodules`  | `false`                                                      | Git サブモジュールの変更を無視します。       |
 
 ### 変数
 
@@ -1889,7 +1889,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`            | `'+'`                                           | `staged`のフォーマット                                                        |
 | `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                       |
 | `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                       |
-| `typechanged`       | `""`                                            | The format of `typechange`                                             |
+| `typechanged`       | `""`                                            | `typechange` のフォーマット                                                   |
 | `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                          |
 | `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                      |
 | `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                              |
@@ -1901,7 +1901,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 
 | 変数             | 説明                                                                                                            |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット                          |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
