@@ -518,7 +518,7 @@ The `azurerm` module shows the current Azure Subscription for the AzureRM and Az
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
 | `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
-| `disabled`             | `true`                                   | Disables the `azurerm` module.                                                          |
+| `disabled`             | `true`                                   | Disables the `azurerm` module.                                                        |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Examples
