@@ -507,6 +507,55 @@ style = "blue bold"
 very-long-subscription-name = 'vlsn'
 ```
 
+## AzureRM
+
+The `azurerm` module shows the current Azure Subscription for the AzureRM and Az PowerShell module(s). This is based on showing the name of the default subscription or the username, as defined in the `~/.azurerm/AzureRm_Context.json` file.
+
+### Options
+
+| Variable               | Default                                  | Description                                                                           |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azurerm` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
+
+### Examples
+
+#### Display Subscription Name
+
+```toml
+# ~/.config/starship.toml
+
+[azurerm]
+disabled = false
+format = 'on [$symbol($subscription)]($style) '
+symbol = '󰠅 '
+style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azurerm]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "󰠅 "
+style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azurerm.subscription_aliases]
+very-long-subscription-name = 'vlsn'
+```
+
 ## Battery
 
 The `battery` module shows how charged the device's battery is and its current charging status.
