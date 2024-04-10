@@ -229,6 +229,7 @@ pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
+        "azurerm" => "The current Azure subscription for the Azure PowerShell modules",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
         "bun" => "The currently installed version of the Bun",
