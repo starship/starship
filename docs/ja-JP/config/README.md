@@ -2989,16 +2989,16 @@ The 'odin' module shows the currently installed version of [Odin](https://odin-l
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                     |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | モジュールのスタイルです。                                         |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | どの拡張子がこのモジュールをアクティブにするか                               |
-| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                             |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                             |
+| オプション               | デフォルト                                | 説明                                       |
+| ------------------- | ------------------------------------ | ---------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                        |
+| `show_commit`       | `false`                              | Shows the commit as part of the version. |
+| `symbol`            | `'Ø '`                               | Zig のバージョンの前に表示されるシンボルです。                |
+| `style`             | `'bold bright-blue'`                 | モジュールのスタイルです。                            |
+| `disabled`          | `false`                              | Disables the `odin` module.              |
+| `detect_extensions` | `['odin']`                           | どの拡張子がこのモジュールをアクティブにするか                  |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                |
 
 ### 変数
 
