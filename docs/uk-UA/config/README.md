@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є квівалентом
 format = """
 $username\
 $hostname\
@@ -1969,10 +1969,10 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Gleam
 
-The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `gleam` показує поточну встановлену версію [Gleam](https://gleam.run/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `gleam.toml` file
-- The current directory contains a file with the `.gleam` extension
+- Поточна тека містить файл `gleam.toml`
+- Поточна тека містить файли з розширенням `.gleam`
 
 ### Параметри
 
@@ -1984,13 +1984,13 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | `detect_extensions` | `['gleam']`                          | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['gleam.toml']`                     | Які імена файлів мають запускати цей модуль.                      |
 | `style`             | `'bold #FFAFF3'`                     | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `gleam` module.                                      |
+| `disabled`          | `false`                              | Вимикає модуль `gleam`.                                           |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v1.0.0` | The version of `gleam`                   |
+| version   | `v1.0.0` | Версія `gleam`                           |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -2483,7 +2483,7 @@ kotlin_binary = 'kotlinc'
 
 Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
+Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_env_vars`, `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам.
 
 :::
 
@@ -2985,17 +2985,17 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+Модуль `odin` показує поточну встановлену версію [Odin](https://odin-lang.org/). Стандартно модуль буде показаний, якщо поточна тека містить файли `.odin`.
 
 ### Параметри
 
 | Параметр            | Стандартно                           | Опис                                         |
 | ------------------- | ------------------------------------ | -------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                               |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.     |
+| `show_commit`       | `false`                              | Показує коміт як частину версії.             |
 | `symbol`            | `'Ø '`                               | Символ, який знаходиться перед версією Zig.  |
 | `style`             | `'bold bright-blue'`                 | Стиль модуля.                                |
-| `disabled`          | `false`                              | Disables the `odin` module.                  |
+| `disabled`          | `false`                              | Вимикає модуль `odin`.                       |
 | `detect_extensions` | `['odin']`                           | Які розширення повинні запускати цей модуль. |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль. |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.     |
@@ -3004,7 +3004,7 @@ The 'odin' module shows the currently installed version of [Odin](https://odin-l
 
 | Змінна    | Приклад       | Опис                                     |
 | --------- | ------------- | ---------------------------------------- |
-| version   | `dev-2024-03` | The version of `odin`                    |
+| version   | `dev-2024-03` | Версія `odin`                            |
 | symbol    |               | Віддзеркалює значення параметра `symbol` |
 | style\* |               | Віддзеркалює значення параметра `style`  |
 
@@ -4318,7 +4318,7 @@ time_range = '10:00:00-14:00:00'
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
 | `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
 | `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
-| `aliases`         | `{}`                    | Translate system usernames to something else               |
+| `aliases`         | `{}`                    | Переводить системні імена користувачів у щось інше         |
 
 ### Змінні
 
