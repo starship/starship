@@ -43,7 +43,6 @@ color_pink = '#b16286'
 color_yellow = '#d79921'
 color_aqua = '#689d6a'
 
-
 # Disable the blank line at the start of the prompt
 # add_newline = false
 
