@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#gruvbox-rainbow)
+[Return to Presets](./README.md#pastel-rainbow)
 
 # Pastel Rainbow Preset
 
@@ -18,4 +18,4 @@ starship preset pastel-rainbow -o ~/.config/starship.toml
 
 [Click to download TOML](/presets/toml/pastel-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/.vuepress/public/presets/toml/pastel-rainbow.toml
