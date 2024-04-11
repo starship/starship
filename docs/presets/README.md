@@ -81,7 +81,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
-
 ## [Pastel Rainbow](./pastel-rainbow.md)
 
 This preset is the same as [Gruvbox Rainbow](./gruvbox-rainbow.md) but with the colors of [Pastel Powerline](./pastel-powerline.md).
