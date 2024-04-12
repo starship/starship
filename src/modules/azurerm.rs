@@ -19,15 +19,8 @@ struct AzureRMContext {
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
 struct PSAzureContext {
-    account: PSAzureAccount,
     #[serde(default, deserialize_with = "parse_azurerm_subscription")]
     subscription: PSAzureSubscription,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all = "PascalCase")]
-struct PSAzureAccount {
-    id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
@@ -35,6 +28,15 @@ struct PSAzureAccount {
 struct PSAzureSubscription {
     name: String,
     id: String,
+    extended_properties: PSAzureSubscriptionProperties
+}
+
+#[derive(Serialize, Deserialize, Clone, Default)]
+#[serde(rename_all = "PascalCase", default)]
+struct PSAzureSubscriptionProperties {
+    environment: String,
+    account: String,
+    home_tenant: String
 }
 
 fn parse_azurerm_subscription<'de, D>(d: D) -> Result<PSAzureSubscription, D::Error>
@@ -60,7 +62,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
     let azurerm_context = azurerm_context.unwrap();
     let subscription = azurerm_context.subscription;
-    let account = azurerm_context.account;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -78,7 +79,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .get(&subscription.name)
                     .copied()
                     .unwrap_or(&subscription.name))),
-                "username" => Some(Ok(&account.id)),
+                "username" => Some(Ok(&subscription.extended_properties.account)),
                 _ => None,
             })
             .parse(None, Some(context))
