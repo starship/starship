@@ -1064,9 +1064,9 @@ dependencies = [
 
 [[package]]
 name = "gix"
-version = "0.61.0"
+version = "0.62.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4e0e59a44bf00de058ee98d6ecf3c9ed8f8842c1da642258ae4120d41ded8f7"
+checksum = "5631c64fb4cd48eee767bf98a3cbc5c9318ef3bb71074d4c099a2371510282b6"
 dependencies = [
  "gix-actor",
  "gix-commitgraph",
@@ -1151,9 +1151,9 @@ dependencies = [
 
 [[package]]
 name = "gix-config"
-version = "0.36.0"
+version = "0.36.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62129c75e4b6229fe15fb9838cdc00c655e87105b651e4edd7c183fc5288b5d1"
+checksum = "7580e05996e893347ad04e1eaceb92e1c0e6a3ffe517171af99bf6b6df0ca6e5"
 dependencies = [
  "bstr",
  "gix-config-value",
@@ -1197,9 +1197,9 @@ dependencies = [
 
 [[package]]
 name = "gix-diff"
-version = "0.42.0"
+version = "0.43.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78e605593c2ef74980a534ade0909c7dc57cca72baa30cbb67d2dda621f99ac4"
+checksum = "a5fbc24115b957346cd23fb0f47d830eb799c46c89cdcf2f5acc9bf2938c2d01"
 dependencies = [
  "bstr",
  "gix-hash",
@@ -1248,9 +1248,9 @@ dependencies = [
 
 [[package]]
 name = "gix-fs"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "634b8a743b0aae03c1a74ee0ea24e8c5136895efac64ce52b3ea106e1c6f0613"
+checksum = "e2184c40e7910529677831c8b481acf788ffd92427ed21fad65b6aa637e631b8"
 dependencies = [
  "gix-features",
  "gix-utils",
@@ -1291,9 +1291,9 @@ dependencies = [
 
 [[package]]
 name = "gix-index"
-version = "0.31.1"
+version = "0.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "549621f13d9ccf325a7de45506a3266af0d08f915181c5687abb5e8669bfd2e6"
+checksum = "3383122cf18655ef4c097c0b935bba5eb56983947959aaf3b0ceb1949d4dd371"
 dependencies = [
  "bitflags 2.4.1",
  "bstr",
@@ -1359,9 +1359,9 @@ dependencies = [
 
 [[package]]
 name = "gix-odb"
-version = "0.59.0"
+version = "0.60.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81b55378c719693380f66d9dd21ce46721eed2981d8789fc698ec1ada6fa176e"
+checksum = "e8bbb43d2fefdc4701ffdf9224844d05b136ae1b9a73c2f90710c8dd27a93503"
 dependencies = [
  "arc-swap",
  "gix-date",
@@ -1379,9 +1379,9 @@ dependencies = [
 
 [[package]]
 name = "gix-pack"
-version = "0.49.0"
+version = "0.50.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6391aeaa030ad64aba346a9f5c69bb1c4e5c6fb4411705b03b40b49d8614ec30"
+checksum = "b58bad27c7677fa6b587aab3a1aca0b6c97373bd371a0a4290677c838c9bcaf1"
 dependencies = [
  "clru",
  "gix-chunk",
@@ -1516,16 +1516,17 @@ dependencies = [
 
 [[package]]
 name = "gix-trace"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b838b2db8f62c9447d483a4c28d251b67fee32741a82cb4d35e9eb4e9fdc5ab"
+checksum = "f924267408915fddcd558e3f37295cc7d6a3e50f8bd8b606cee0808c3915157e"
 
 [[package]]
 name = "gix-traverse"
-version = "0.38.0"
+version = "0.39.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95aef84bc777025403a09788b1e4815c06a19332e9e5d87a955e1ed7da9bf0cf"
+checksum = "f4029ec209b0cc480d209da3837a42c63801dd8548f09c1f4502c60accb62aeb"
 dependencies = [
+ "bitflags 2.4.1",
  "gix-commitgraph",
  "gix-date",
  "gix-hash",
@@ -1538,9 +1539,9 @@ dependencies = [
 
 [[package]]
 name = "gix-url"
-version = "0.27.2"
+version = "0.27.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f0b24f3ecc79a5a53539de9c2e99425d0ef23feacdcf3faac983aa9a2f26849"
+checksum = "0db829ebdca6180fbe32be7aed393591df6db4a72dbbc0b8369162390954d1cf"
 dependencies = [
  "bstr",
  "gix-features",
@@ -1552,9 +1553,9 @@ dependencies = [
 
 [[package]]
 name = "gix-utils"
-version = "0.1.11"
+version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0066432d4c277f9877f091279a597ea5331f68ca410efc874f0bdfb1cd348f92"
+checksum = "35192df7fd0fa112263bad8021e2df7167df4cc2a6e6d15892e1e55621d3d4dc"
 dependencies = [
  "fastrand",
  "unicode-normalization",
