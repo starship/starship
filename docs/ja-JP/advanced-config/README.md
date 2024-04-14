@@ -84,20 +84,20 @@ enable_transience
 
 バージョン 0.4 以降の [ble.sh](https://github.com/akinomyoga/ble.sh) の枠組みを用いると、直前に表示されたプロンプトを指定の文字列に置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `~/.bashrc` に `bleopt prompt_ps1_transient=<value>` を記述してください。
 
-\<value\> は `always`、 `same-dir` 、 `trim` からなるコロン区切りのリストです。 設定 prompt_ps1_transient が空でなくかつ設定 `prompt_ps1_final` が空の場合、 `PS1` に基づくプロンプトは現在のコマンドラインを去るときに消去されます。 設定 prompt_ps1_transient が `trim` を含む場合、複数行 `PS1` の最後の行だけを残して他の行は消去されます。 それ以外の場合は、あたかも `PS1=` が指定されたかのようにコマンドラインが再描画されます。 設定 prompt_ps1_transient が `same-dir` を含む時に現在のワーキングディレクトリが前のコマンドラインの最終的なワーキングディレクトリと異なる場合、設定 `prompt_ps1_transient` は無視されます。
+\<value\> は `always`、 `same-dir` 、 `trim` からなるコロン区切りのリストです。 When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. それ以外の場合は、あたかも `PS1=` が指定されたかのようにコマンドラインが再描画されます。 When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
 
-左側や右側に transient プロンプトとして出力する文字列を変更するには、以下の変更を `~/.bashrc` に適用してください。
+Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
 - 入力文字列の左側を何に置き換えるか変更するには、 ble.sh 設定 `prompt_ps1_final` を設定します。 例えば Starship の `character` モジュールをここに表示するには、次のようにします。
 
 ```bash
-bleopt prompt_ps1_final="$(starship module character)"
+bleopt prompt_ps1_final='$(starship module character)'
 ```
 
 - 入力文字列の右側を何に置き換えるか変更するには、 ble.sh 設定 `prompt_rps1_final` を設定します。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
 
 ```bash
-bleopt prompt_rps1_final="$(starship module time)"
+bleopt prompt_rps1_final='$(starship module time)'
 ```
 
 ## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
@@ -266,7 +266,7 @@ Starship では、 `contination_prompt` オプションを使用して継続プ�
 ```toml
 # ~/.config/starship.toml
 
-# 2つの塗りつぶし右三角を表示する継続プロンプト
+# A continuation prompt that displays two filled-in arrows
 continuation_prompt = '▶▶ '
 ```
 
@@ -301,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 すべてのスタイル文字列がすべての端末で正しく表示できるわけではありません。 特に、端末の変な動作として以下のようなものが知られています。
 
-- 多くの端末はデフォルトで `bink` のサポートを無効にしています。
+- Many terminals disable support for `blink` by default.
 - `hidden` は [iTerm ではサポートされていません](https://gitlab.com/gnachman/iterm2/-/issues/4564)。
-- `strikethrough` は、macOS 既定の Terminal.app ではサポートされていません。
+- `strikethrough` is not supported by the default macOS Terminal.app.
