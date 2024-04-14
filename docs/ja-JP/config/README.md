@@ -1387,7 +1387,7 @@ format = 'via [ $version](cyan bold) '
 
 ::: tip
 
-The order in which env_var モジュールが表示される順序は、`${env_var.foo}` (ドットが含まれるので `${...}` を使う必要があります) をトップレベルの `format` に入れることで個別に設定できます。 既定では、 `env_var` モジュールは、単にすべての env_var モジュールを定義順で表示します。
+env_var モジュールが表示される順序は、`${env_var.foo}` (ドットが含まれるので `${...}` を使う必要があります) をトップレベルの `format` に入れることで個別に設定できます。 既定では、 `env_var` モジュールは、単にすべての env_var モジュールを定義順で表示します。
 
 :::
 
@@ -4518,21 +4518,21 @@ symbol = '⚡️ '
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+カスタムモジュールが表示される順序は、`${custom.foo}` (ドットが含まれるので `${...}` を使う必要があります) をトップレベルの `format` に入れることで個別に設定できます。 既定では、 `custom` モジュールは、単にすべての custom モジュールを定義順で表示します。
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[イシュー #1252](https://github.com/starship/starship/discussions/1252) にはカスタムモジュールの例が含まれています。 紹介されていない興味深い用例をお持ちでしたら、そちらで気軽に共有してください!
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning コマンド出力はエスケープされずにプロンプトに出力されます
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+コマンドが生成するいかなる出力もそのままプロンプト内に表示されます。 つまり、出力にシェルによって解釈される特殊なシーケンスが含まれている場合、それらが表示時に展開されます。 特殊なシーケンスは各シェル固有のものです。例えば `\h` などの Bash で使われるシーケンスを出力するコマンドモジュールを作成することができますが、そのようなモジュールは Fish や Zsh などのシェルでは動きません。
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+フォーマット文字列には、シェル固有のプロンプトシーケンスを含めることもできます。例えば [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -4542,7 +4542,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                                                                                                                                                          |
 | `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 文字列の場合、コマンドが終了ステータス `0` を返したときにモジュールが表示されます。                                                                                                                                                                               |
-| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
+| `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 This option alone is not sufficient display condition in absence of other options.                                                                                                                                                              |
 | `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                                                                                                                                       |
 | `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                                                                                                                                                                        |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
