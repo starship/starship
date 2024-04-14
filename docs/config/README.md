@@ -4062,7 +4062,7 @@ threshold = 3
 
 Using `repeat` and `repeat_offset` along with `character` module, one can get
 prompt like `❯❯❯` where last character is colored appropriately for return
-status code and preceeding characters are provided by `shlvl`.
+status code and preceding characters are provided by `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
