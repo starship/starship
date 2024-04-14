@@ -114,15 +114,15 @@ the prompt information is not always needed. To enable this, put this in `~/.bas
 `bleopt prompt_ps1_transient=<value>`:
 
 The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`.
-When `prompt_ps1_final` is empty and this option has a non-empty value,
+When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>,
 the prompt specified by `PS1` is erased on leaving the current command line.
-If the value contains a field `trim`, only the last line of multiline `PS1` is
+If \<value\> contains a field `trim`, only the last line of multiline `PS1` is
 preserved and the other lines are erased. Otherwise, the command line will be
-redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the
-value and the current working directory is different from the final directory of
+redrawn as if `PS1=` is specified. When a field `same-dir` is contained in
+\<value\> and the current working directory is different from the final directory of
 the previous command line, this option `prompt_ps1_transient` is ignored.
 
-Make the following changes to your `~/.bashrc` to customize what gets displayed on
+Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on
 the left and on the right:
 
 - To customize what the left side of input gets replaced with, configure the
@@ -130,7 +130,7 @@ the left and on the right:
   module here, you would do
 
 ```bash
-bleopt prompt_ps1_final="$(starship module character)"
+bleopt prompt_ps1_final='$(starship module character)'
 ```
 
 - To customize what the right side of input gets replaced with, configure the
@@ -138,7 +138,7 @@ bleopt prompt_ps1_final="$(starship module character)"
   the time at which the last command was started here, you would do
 
 ```bash
-bleopt prompt_rps1_final="$(starship module time)"
+bleopt prompt_rps1_final='$(starship module time)'
 ```
 
 ## Custom pre-prompt and pre-execution Commands in Cmd
@@ -337,7 +337,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# A continuation prompt that displays two filled-in arrows
 continuation_prompt = '▶▶ '
 ```
 
@@ -375,6 +375,6 @@ If multiple colors are specified for foreground/background, the last one in the 
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
-- Many terminals disable support for `blink` by default
+- Many terminals disable support for `blink` by default.
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- `strikethrough` is not supported by the default macOS Terminal.app.
