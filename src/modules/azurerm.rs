@@ -95,16 +95,18 @@ fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
     config_path.push("AzureRmContext.json");
 
     let azurerm_contexts = load_azurerm_context(&config_path)?;
-    let azurerm_context_key = azurerm_contexts.default_context_key;
+    if azurerm_contexts.contexts.is_empty() {
+        return None;
+    }
+
     let azurerm_context = azurerm_contexts
         .contexts
-        .get(&azurerm_context_key)?
-        .to_owned();
+        .get(&azurerm_contexts.default_context_key)?;
 
     if azurerm_context.subscription.is_none() {
         None
     } else {
-        Some(azurerm_context)
+        Some(azurerm_context.to_owned())
     }
 }
 
@@ -134,7 +136,6 @@ fn get_config_file_location(context: &Context) -> Option<PathBuf> {
 mod tests {
     use crate::modules::azurerm::load_azurerm_context;
     use crate::test::ModuleRenderer;
-    use ini::Ini;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
@@ -725,6 +726,28 @@ mod tests {
             .collect();
         let expected = None;
         assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn azurerm_context_is_empty() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let bom = vec![239, 187, 191];
+        let mut bom_str = String::from_utf8(bom).unwrap();
+
+        let json_str = r#"{
+            "DefaultContextKey": "",
+            "EnvironmentTable": {},
+            "Contexts": {},
+            "ExtendedProperties": {}
+        }"#;
+
+        bom_str.push_str(json_str);
+
+        let dir_path_no_bom = save_string_to_file(&dir, bom_str, String::from("bom.json"))?;
+        let sanitized_json = load_azurerm_context(&dir_path_no_bom).unwrap();
+        assert!(sanitized_json.contexts.is_empty());
         dir.close()
     }
 }
