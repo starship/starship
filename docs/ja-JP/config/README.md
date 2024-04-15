@@ -4261,12 +4261,12 @@ time_range = '10:00:00-14:00:00'
 
 ## Typst
 
-The `typst` module shows the current installed version of Typst used in a project.
+`typst` モジュールは、現在インストールされてプロジェクトで使われている Typst のバージョンを表示します。
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`template.typ`ファイルが含まれている
-- The current directory contains any `*.typ` file
+- カレントディレクトリに拡張子が `.typ` のファイルが含まれている
 
 ### オプション
 
@@ -4283,12 +4283,12 @@ The `typst` module shows the current installed version of Typst used in a projec
 
 ### 変数
 
-| 変数            | 設定例       | 説明                                              |
-| ------------- | --------- | ----------------------------------------------- |
-| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                       |
-| symbol        |           | オプション `symbol` の値をミラーする                         |
-| style\*     |           | オプション `style` の値をミラーする                          |
+| 変数            | 設定例       | 説明                                    |
+| ------------- | --------- | ------------------------------------- |
+| version       | `v0.9.0`  | `typst`のバージョン。typst_version のエイリアスです。 |
+| typst_version | `default` | 現在の Typst バージョン                       |
+| symbol        |           | オプション `symbol` の値をミラーします              |
+| style\*     |           | オプション `style` の値をミラーします               |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4296,15 +4296,15 @@ The `typst` module shows the current installed version of Typst used in a projec
 
 `username`モジュールはアクティブなユーザーのユーザー名を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current user is root/admin
+- 現在のユーザーが root/admin である
 - カレントユーザーが、ログインしているユーザーとは異なる
 - ユーザーがSSHセッションとして接続されている
 - `show_always`変数がtrueに設定されている
-- The array `detect_env_vars` contains at least the name of one environment variable, that is set
+- 配列 `detect_env_var` に、少なくとも1つの現在シェルで設定されている環境変数の名前が含まれている
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+SSH接続は、環境変数 `SSH_CONNECTION`、 `SSH_CLIENT`、および `SSH_TTY` をチェックすることで検出されます。 お使いの SSH ホストがこれらの変数を設定しない場合、回避策として例えばこれらの変数にダミー値を設定してください。
 
 :::
 
@@ -4566,32 +4566,32 @@ symbol = '⚡️ '
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
-#### Custom command shell
+#### カスタムコマンドを実行するシェル
 
-`shell` accepts a non-empty list of strings, where:
+`shell` には、以下のように空でない文字列のリストを指定します:
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- 最初の文字列は、コマンドを実行するために使用するシェルへのパスです。
+- その他の文字列は引数としてシェルに渡されます。
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+未設定の場合は、最初に STARSHIP_SHELL に対して、そして Linux では 'sh' に、Windowsでは 'cmd / C' に対してフォールバックが試みられます。
 
-The `command` will be passed in on stdin.
+`command` は stdin に渡されます。
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+`shell` が指定されていないか要素の数が1つでかつ Starship が PowerShell が使われると判定した場合、次の引数が自動的に付加されます: `-NoProfile -Command -`。 `shell` が指定されていないか要素の数が1つでかつ Starship が Cmd が使われると判定した場合、引数 `/C` が自動的に付加され、`stdin` が `false` に設定されます。 `shell` が指定されていないか要素の数が1つでかつ Starship が Nushell が使われると判定した場合、引数 `-c` が自動的に付加され、`stdin` が `false` に設定されます。 この動作は、シェルに明示的に引数を渡すことで回避できます。例:
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning 設定したカスタムシェルが正常終了することを再度ご確認ください
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+カスタムコマンドを設定するときは、(`shell` オプションを通して指定される) Starship が使用する既定のシェルがコマンドを正しく実行し正しく終了することを確認してください。
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+たとえば、PowerShell では一行コマンドを実行するために `-Command` パラメータを指定する必要があります。 このパラメータを省略すると、呼び出されたシェルが初期化のために再帰的に Starship を呼び出し、その Starship が再びカスタムコマンドを実行することによって、無限ループになる可能性があります。
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+PowerShell の `-NoProfile` に似たパラメータは、他のシェルでも推奨されます。これは、Starship の呼び出しごとにカスタムプロファイルの追加ロード時間が発生することを避けるためです。
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+現在、シェルと適切なパラメータの自動検出は実装されていますが、すべてのシェルがカバーされているとは限りません。 このような状況にお気づきの場合は、[イシューを開いて](https://github.com/starship/starship/issues/new/choose)シェルの詳細と Starship の設定をご報告ください。
 
 :::
 
