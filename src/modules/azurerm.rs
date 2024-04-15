@@ -29,7 +29,7 @@ struct PSAzureContext {
 struct PSAzureSubscription {
     name: String,
     id: String,
-    extended_properties: PSAzureSubscriptionProperties
+    extended_properties: PSAzureSubscriptionProperties,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -37,7 +37,7 @@ struct PSAzureSubscription {
 struct PSAzureSubscriptionProperties {
     environment: String,
     account: String,
-    home_tenant: String
+    home_tenant: String,
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
     let azurerm_context = azurerm_context.unwrap();
     let subscription = azurerm_context.subscription.unwrap();
-        
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -102,11 +102,10 @@ fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
         .to_owned();
 
     if azurerm_context.subscription.is_none() {
-      return None;
+        return None;
     }
 
     return Some(azurerm_context);
-    
 }
 
 fn load_azurerm_context(config_path: &PathBuf) -> Option<AzureRMContext> {
@@ -149,7 +148,7 @@ mod tests {
             azurerm_context_contents.to_string(),
             String::from("AzureRmContext.json"),
         )?;
-        
+
         Ok(())
     }
 
@@ -261,7 +260,6 @@ mod tests {
         dir.close()
     }
 
-
     #[test]
     fn subscription_name_missing_from_profile() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -308,7 +306,6 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-
 
     #[test]
     fn user_name_set_correctly() -> io::Result<()> {
@@ -359,7 +356,7 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-    
+
     #[test]
     fn user_name_missing_from_profile() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -405,7 +402,6 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-
 
     #[test]
     fn user_name_empty() -> io::Result<()> {
@@ -458,7 +454,6 @@ mod tests {
         dir.close()
     }
 
-
     #[test]
     fn subscription_name_and_username_found() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -508,7 +503,6 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-
 
     #[test]
     fn subscription_name_with_alias() -> io::Result<()> {
@@ -560,26 +554,26 @@ mod tests {
             "ExtendedProperties": {}
         }"#;
 
-            generate_test_config(&dir, azurerm_context_contents)?;
-            let dir_path = &dir.path().to_string_lossy();
-            let actual = ModuleRenderer::new("azurerm")
-                .config(toml::toml! {
-                    [azurerm]
-                    format = "on [$symbol($subscription:$username)]($style)"
-                    disabled = false
-                    [azurerm.subscription_aliases]
-                    VeryLongSubscriptionName = "vlsn"
-                    AnotherLongSubscriptionName = "alsn"
-                    TheLastLongSubscriptionName = "tllsn"
-                })
-                .env("AZURE_CONFIG_DIR", dir_path.as_ref())
-                .collect();
-            let expected = Some(format!(
-                "on {}",
-                Color::Blue.bold().paint("󰠅 vlsn:user@domain.com")
-            ));
-            assert_eq!(actual, expected);
-            dir.close()
+        generate_test_config(&dir, azurerm_context_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azurerm")
+            .config(toml::toml! {
+                [azurerm]
+                format = "on [$symbol($subscription:$username)]($style)"
+                disabled = false
+                [azurerm.subscription_aliases]
+                VeryLongSubscriptionName = "vlsn"
+                AnotherLongSubscriptionName = "alsn"
+                TheLastLongSubscriptionName = "tllsn"
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 vlsn:user@domain.com")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
     }
 
     #[test]
@@ -635,19 +629,19 @@ mod tests {
             "ExtendedProperties": {}
         }"#;
 
-            generate_test_config(&dir, azurerm_context_contents)?;
-            let dir_path = &dir.path().to_string_lossy();
-            let actual = ModuleRenderer::new("azurerm")
-                .config(toml::toml! {
-                    [azurerm]
-                    format = "on [$symbol($subscription)]($style)"
-                    disabled = false
-                })
-                .env("AZURE_CONFIG_DIR", dir_path.as_ref())
-                .collect();
-            let expected = None;
-            assert_eq!(actual, expected);
-            dir.close()
+        generate_test_config(&dir, azurerm_context_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azurerm")
+            .config(toml::toml! {
+                [azurerm]
+                format = "on [$symbol($subscription)]($style)"
+                disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = None;
+        assert_eq!(actual, expected);
+        dir.close()
     }
 
     #[test]
@@ -703,21 +697,21 @@ mod tests {
             "ExtendedProperties": {}
         }"#;
 
-            generate_test_config(&dir, azurerm_context_contents)?;
-            let dir_path = &dir.path().to_string_lossy();
-            let actual = ModuleRenderer::new("azurerm")
-                .config(toml::toml! {
-                    [azurerm]
-                    disabled = false
-                })
-                .env("AZURE_CONFIG_DIR", dir_path.as_ref())
-                .collect();
-            let expected = Some(format!(
-                "on {} ",
-                Color::Blue.bold().paint("󰠅 Subscription 1")
-            ));
-            assert_eq!(actual, expected);
-            dir.close()
+        generate_test_config(&dir, azurerm_context_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azurerm")
+            .config(toml::toml! {
+                [azurerm]
+                disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("󰠅 Subscription 1")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
     }
 
     #[test]
@@ -733,5 +727,4 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-
 }
