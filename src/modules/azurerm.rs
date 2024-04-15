@@ -103,11 +103,9 @@ fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
 
     if azurerm_context.subscription.is_none() {
         None
-    }
-    else {
+    } else {
         Some(azurerm_context)
     }
-
 }
 
 fn load_azurerm_context(config_path: &PathBuf) -> Option<AzureRMContext> {
