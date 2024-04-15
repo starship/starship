@@ -301,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 并非每种类型的字符串都会被每个终端正确显示。 特别地，以下是已知的几种情况：
 
-- Many terminals disable support for `blink` by default.
+- 许多终端默认禁用对 `blink` 的支持.
 - [iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564) 不支持 `hidden`
-- `strikethrough` is not supported by the default macOS Terminal.app.
+- macOS 的默认终端不支持 `strikethrough`.
