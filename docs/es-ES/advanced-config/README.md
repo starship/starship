@@ -301,6 +301,6 @@ Si se especifican varios colores para el primer plano/fondo, el último en la ca
 
 No todas las cadenas de estilo se mostrarán correctamente en cada terminal. En particular, existen las siguientes rarezas conocidas:
 
-- Many terminals disable support for `blink` by default.
+- Muchos terminales deshabilitan el soporte para `parpadear` por defecto.
 - `hiden` no es [compatible con iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app.
+- `strikethrough` no está soportado por macOS Terminal.app por defecto.
