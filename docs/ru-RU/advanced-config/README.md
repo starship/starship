@@ -301,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 Не все строки стиля будут корректно отображаться в терминале. В частности, существуют следующие известные ошибки:
 
-- Many terminals disable support for `blink` by default.
+- Во многих терминалах по умолчанию отключена поддержка `blink`.
 - `hidden` [не поддерживается в iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app.
+- `strikethrough` по умолчанию не поддерживается в macOS Terminal.app.
