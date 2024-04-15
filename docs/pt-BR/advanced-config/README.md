@@ -301,6 +301,6 @@ Se várias cores forem especificadas para primeiro plano/plano de fundo, a últi
 
 Nem todas os estilos de string serão exibidos corretamente em todos terminais. Em particular, existem os seguintes erros conhecidos:
 
-- Many terminals disable support for `blink` by default.
+- Muitos terminais desabilitam por padrão o suporte ao `blink`.
 - `hidden` não é [ suportado no iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app.
+- `strikethrough` não é suportado por padrão no aplicativo de terminal do macOS.
