@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
@@ -102,10 +102,12 @@ fn get_azurerm_context_info(context: &Context) -> Option<PSAzureContext> {
         .to_owned();
 
     if azurerm_context.subscription.is_none() {
-        return None;
+        None
+    }
+    else {
+        Some(azurerm_context)
     }
 
-    return Some(azurerm_context);
 }
 
 fn load_azurerm_context(config_path: &PathBuf) -> Option<AzureRMContext> {
