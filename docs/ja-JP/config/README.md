@@ -2252,7 +2252,7 @@ format = 'via [⎈ $version](bold white) '
 | `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                   |
 | `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                             |
 | `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                          |
+| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                                 |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                  |
 | `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                      |
 | `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                                            |
@@ -2269,7 +2269,7 @@ format = 'via [⎈ $version](bold white) '
 
 ### 設定例
 
-#### Always show the hostname
+#### ホスト名を常に表示する
 
 ```toml
 # ~/.config/starship.toml
@@ -2281,7 +2281,7 @@ trim_at = '.companyname.com'
 disabled = false
 ```
 
-#### Hide the hostname in remote tmux sessions
+#### リモートのtmuxセッションでホスト名を非表示にする
 
 ```toml
 # ~/.config/starship.toml
