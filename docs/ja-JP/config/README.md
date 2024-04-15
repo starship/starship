@@ -3974,25 +3974,25 @@ format = "via [S $version](blue bold)"
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+`spack` モジュールは、`$SPACK_ENV` が設定されているときに、現在の [Spack](https://spack.readthedocs.io/en/latest/) 環境を表示します。
 
 ### オプション
 
-| オプション               | デフォルト                                  | 説明                                                                                                                             |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0`は切り捨てがないことを意味します。  [`directory`](#directory)もご覧ください。 |
-| `symbol`            | `'🅢  '`                                | 環境名の直前に使用されるシンボルです。                                                                                                            |
-| `style`             | `'bold blue'`                          | モジュールのスタイルです。                                                                                                                  |
-| `format`            | `'via [$symbol$environment]($style) '` | module のフォーマットです。                                                                                                              |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                   |
+| オプション               | デフォルト                                  | 説明                                                                              |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | 環境パスを切り捨てて表示するディレクトリの数。 `0`は切り捨てがないことを意味します。  [`directory`](#directory)もご覧ください。 |
+| `symbol`            | `'🅢  '`                                | 環境名の直前に使用されるシンボルです。                                                             |
+| `style`             | `'bold blue'`                          | モジュールのスタイルです。                                                                   |
+| `format`            | `'via [$symbol$environment]($style) '` | module のフォーマットです。                                                               |
+| `disabled`          | `false`                                | `spack` モジュールを無効にします。                                                           |
 
 ### 変数
 
-| 変数          | 設定例          | 説明                            |
-| ----------- | ------------ | ----------------------------- |
-| environment | `astronauts` | The current spack environment |
-| symbol      |              | オプション `symbol` の値をミラーする       |
-| style\*   |              | オプション `style` の値をミラーする        |
+| 変数          | 設定例          | 説明                      |
+| ----------- | ------------ | ----------------------- |
+| environment | `astronauts` | 現在の spack 環境            |
+| symbol      |              | オプション `symbol` の値をミラーする |
+| style\*   |              | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4007,7 +4007,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+`status` モジュールは、直前のコマンドの終了ステータスを表示します。 $success_symbol が空 (既定) の場合、モジュールは終了ステータスが `0` でない場合にのみ表示されます。 終了ステータスは符号付き32ビット整数にキャストされます。
 
 ::: tip
 
@@ -4017,38 +4017,38 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### オプション
 
-| オプション                       | デフォルト                                                                              | 説明                                                                    |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | The format of the module                                              |
-| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | モジュールのスタイルです。                                                         |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
+| オプション                       | デフォルト                                                                              | 説明                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                      | モジュールのフォーマットです。                                     |
+| `symbol`                    | `'❌'`                                                                              | プログラムエラー時に表示される記号です。                                |
+| `success_symbol`            | `''`                                                                               | プログラム成功時に表示される記号です。                                 |
+| `not_executable_symbol`     | `'🚫'`                                                                              | ファイルが実行可能ファイルでないときに表示されるシンボルです。                     |
+| `not_found_symbol`          | `'🔍'`                                                                              | コマンドが見つからないときに表示されるシンボルです。                          |
+| `sigint_symbol`             | `'🧱'`                                                                              | SIGINT (Ctrl + c) に際して表示されるシンボルです。                  |
+| `signal_symbol`             | `'⚡'`                                                                              | 任意のシグナルに対して表示されるシンボルです。                             |
+| `style`                     | `'bold red'`                                                                       | モジュールのスタイルです。                                       |
+| `recognize_signal_code`     | `true`                                                                             | 終了ステータスからシグナルへのマッピングを有効にします。                        |
+| `map_symbol`                | `false`                                                                            | 終了ステータスからシンボルへのマッピングを有効にします。                        |
+| `pipestatus`                | `false`                                                                            | パイプステータス表示を有効にします。                                  |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | パイプラインの各要素を分割するのに使う記号を指定します。フォーマット文字列がサポートされます。     |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | コマンドがパイプラインである場合のモジュールのフォーマットです。                    |
+| `pipestatus_segment_format` |                                                                                    | 指定されている場合、パイプステータスの要素を書式設定する際に `format` の代わりに使われます。 |
+| `disabled`                  | `true`                                                                             | `status`モジュールを無効にします。                               |
 
 ### 変数
 
-| 変数             | 設定例     | 説明                                                                                         |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`   | The exit code of the last command                                                          |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
-| int            | `127`   | The exit code of the last command                                                          |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |         | オプション `symbol` の値をミラーする                                                                    |
-| style\*      |         | オプション `style` の値をミラーする                                                                     |
+| 変数             | 設定例     | 説明                                                      |
+| -------------- | ------- | ------------------------------------------------------- |
+| status         | `127`   | 直前のコマンドの終了ステータス                                         |
+| hex_status     | `0x7F`  | 直前のコマンドの終了ステータスを16進数で表記したもの                             |
+| int            | `127`   | 直前のコマンドの終了ステータス                                         |
+| common_meaning | `ERROR` | シグナルでない場合、終了ステータスの意味                                    |
+| signal_number  | `9`     | シグナルで終了した場合、終了ステータスに対応するシグナル番号                          |
+| signal_name    | `KILL`  | シグナルで終了した場合、終了ステータスに対応するシグナル名                           |
+| maybe_int      | `7`     | 対応する意味が見つからない場合にのみ、終了コード番号を含みます。                        |
+| pipestatus     |         | パイプラインプログラムの終了ステータスの表示です。pipestatus_format の中でのみ使用できます。 |
+| symbol         |         | オプション `symbol` の値をミラーする                                 |
+| style\*      |         | オプション `style` の値をミラーする                                  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4068,7 +4068,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+`sudo` モジュールは、sudo 資格情報が現在キャッシュされているかどうかを表示します。 モジュールは資格情報がキャッシュされている場合にのみ表示されます。
 
 ::: tip
 
@@ -4078,13 +4078,13 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ### オプション
 
-| オプション           | デフォルト                    | 説明                                                      |
-| --------------- | ------------------------ | ------------------------------------------------------- |
-| `format`        | `'[as $symbol]($style)'` | The format of the module                                |
-| `symbol`        | `'🧙 '`                   | The symbol displayed when credentials are cached        |
-| `style`         | `'bold blue'`            | モジュールのスタイルです。                                           |
-| `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                   | Disables the `sudo` module.                             |
+| オプション           | デフォルト                    | 説明                                      |
+| --------------- | ------------------------ | --------------------------------------- |
+| `format`        | `'[as $symbol]($style)'` | モジュールのフォーマットです。                         |
+| `symbol`        | `'🧙 '`                   | 資格情報がキャッシュされたときに表示されるシンボルです。            |
+| `style`         | `'bold blue'`            | モジュールのスタイルです。                           |
+| `allow_windows` | `false`                  | Windows にはデフォルトで sudo がないため、既定で無効になります。 |
+| `disabled`      | `true`                   | `sudo` モジュールを無効にします。                    |
 
 ### 変数
 
@@ -4107,7 +4107,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# Windows では
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -4128,18 +4128,18 @@ disabled = false
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift       |
+| `symbol`            | `'🐦 '`                               | Swift のシンボルを表すフォーマット文字列                                |
 | `detect_extensions` | `['swift']`                          | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['Package.swift']`                  | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `'bold 202'`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `swift` module.                           |
+| `disabled`          | `false`                              | `swift` モジュールを無効にします。                                  |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                      |
 | --------- | -------- | ----------------------- |
-| version   | `v5.2.4` | The version of `swift`  |
+| version   | `v5.2.4` | `swift` のバージョン          |
 | symbol    |          | オプション `symbol` の値をミラーする |
 | style\* |          | オプション `style` の値をミラーする  |
 
@@ -4225,17 +4225,17 @@ format = '[🏎💨 $workspace]($style) '
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | モジュールのフォーマット文字列。                                                                                      |
-| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
-| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
-| `style`           | `'bold yellow'`         | モジュールのスタイルです。                                                                                         |
-| `utc_time_offset` | `'local'`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
-| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| オプション             | デフォルト                   | 説明                                                                                                |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | モジュールのフォーマット文字列。                                                                                  |
+| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                               |
+| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。 |
+| `style`           | `'bold yellow'`         | モジュールのスタイルです。                                                                                     |
+| `utc_time_offset` | `'local'`               | 使用するUTCオフセットを設定します。 -24 から 24 までの間で設定可能です。 フロートが30/45分のタイムゾーンオフセットに対応できるようにします。                   |
+| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                               |
+| `time_range`      | `'-'`                   | モジュールを表示する時間帯を設定します。 時刻は24時間形式で指定する必要があります。                                                       |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
+`use_12hr` が `true` の場合、`format` のデフォルトは `'%r'` です。 それ以外の場合、デフォルトは`'%T'`です。 `time_format` を手動で設定すると、設定 `use_12hr` が上書きされます。
 
 ### 変数
 
