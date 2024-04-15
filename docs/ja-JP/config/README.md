@@ -4241,7 +4241,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| time      | `13:08:10` | The current time.      |
+| time      | `13:08:10` | 現在時刻                   |
 | style\* |            | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
