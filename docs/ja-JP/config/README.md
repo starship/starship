@@ -2096,14 +2096,14 @@ format = 'via [🐂](yellow bold) '
 
 ## Gradle
 
-The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+`gradle` モジュールは、プロジェクトディレクトリで現在使用されている [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) のバージョンを表示します。
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
-- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+- カレントディレクトリに `gradle/wrapper/gradle-wrapper.properties` ディレクトリが含まれている。
+- カレントディレクトリに  `.gradle` または `.gradle.kts` で終わるファイルが含まれている。
 
-The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+`gradle` モジュールは、設定ファイルからしか Gradle Wrapper バージョンを読み取れません。セキュリティー上の理由で、 Starship がラッパーを実行することはありません。
 
 ### オプション
 
@@ -2111,19 +2111,19 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.     |
+| `symbol`            | `'🅶 '`                               | Gradle のシンボルを表すフォーマット文字列                               |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `['gradle']`                         | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `'bold bright-cyan'`                 | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `gradle` module.                          |
-| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.  |
+| `disabled`          | `false`                              | `gradle` モジュールを無効にします。                                 |
+| `recursive`         | `false`                              | `gradle` ディレクトリの再帰的な検索を有効にします。                         |
 
 ### 変数
 
 | 変数      | 設定例      | 説明                      |
 | ------- | -------- | ----------------------- |
-| version | `v7.5.1` | The version of `gradle` |
+| version | `v7.5.1` | `gradle`のバージョン          |
 | symbol  |          | オプション `symbol` の値をミラーする |
 | style*  |          | オプション `style` の値をミラーする  |
 
