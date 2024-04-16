@@ -2483,7 +2483,7 @@ kotlin_binary = 'kotlinc'
 
 このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
+モジュールが有効化されているとき、`detect_env_vars`, `detect_extensions`, `detect_files`, `detect_folders` の何れかのオプションが設定されていない限りモジュールは常に表示されます。これらのオプションが設定されている場合は、対応する条件が満たされるディレクトリ内にいるときまたは環境変数が存在するときに、モジュールが表示されます。
 
 :::
 
@@ -2509,9 +2509,9 @@ When the module is enabled it will always be active, unless any of `detect_env_v
 | `contexts`          | `[]`                                                 | 特定のコンテキストのカスタマイズされたスタイルとシンボルです。 |
 | `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。       |
 
-*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+*: このオプションは非推奨になりました。代わりに `contexts` を対応するオプション `context_alias` と `user_alias` と一緒に追加してください。
 
-To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
+特定の環境におけるモジュールのスタイルを変更するには、以下の設定をリスト `contexts` に含めます。
 
 | 変数                | 説明                                                                                       |
 | ----------------- | ---------------------------------------------------------------------------------------- |
