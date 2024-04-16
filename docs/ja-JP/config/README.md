@@ -2259,11 +2259,11 @@ format = 'via [⎈ $version](bold white) '
 
 ### 変数
 
-| 変数         | 設定例        | 説明                                                    |
-| ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | コンピュータのホスト名です。                                        |
-| style\*  |            | オプション `style` の値をミラーします。                              |
-| ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
+| 変数         | 設定例        | 説明                       |
+| ---------- | ---------- | ------------------------ |
+| hostname   | `computer` | コンピュータのホスト名です。           |
+| style\*  |            | オプション `style` の値をミラーします。 |
+| ssh_symbol | `'🌏 '`     | SSHセッションに接続していることを表すシンボル |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2296,7 +2296,7 @@ disabled = false
 
 `Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
+- 現在のディレクトリに `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, `.sdkmanrc` の何れかのファイルが含まれている
 - カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`または`.cljc`のファイルが含まれている
 
 ### オプション
@@ -2308,7 +2308,7 @@ disabled = false
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                                                                                                  | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java        |
+| `symbol`            | `'☕ '`                                                                                                                | Java の記号を表すフォーマット文字列です。                                |
 | `style`             | `'red dimmed'`                                                                                                        | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                                                                                                               | `java`モジュールを無効にします。                                    |
 
@@ -2316,7 +2316,7 @@ disabled = false
 
 | 変数        | 設定例   | 説明                      |
 | --------- | ----- | ----------------------- |
-| version   | `v14` | The version of `java`   |
+| version   | `v14` | `java` のバージョン           |
 | symbol    |       | オプション `symbol` の値をミラーする |
 | style\* |       | オプション `style` の値をミラーする  |
 
@@ -2471,7 +2471,7 @@ symbol = '🅺 '
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Kotlinコンパイラバイナリを使ってバージョンを確認する
 kotlin_binary = 'kotlinc'
 ```
 
