@@ -2247,15 +2247,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### オプション
 
-| オプション             | デフォルト                                  | 説明                                                                                     |
-| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------- |
-| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                       |
-| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                   |
-| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。ん。 |
-| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                     |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                      |
-| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                          |
-| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                                |
+| オプション             | デフォルト                                  | 説明                                                                                   |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
+| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                     |
+| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                 |
+| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。 |
+| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                   |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                    |
+| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                        |
+| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                              |
 
 ### 変数
 
@@ -2333,39 +2333,39 @@ symbol = '🌟 '
 
 ## ジョブ
 
-`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 設定変数 `number_threshold` が存在すればその値以上、さもなければ2つ以上のジョブがある場合に、実行中のジョブの数を表示します。 1つ以上のジョブがある、設定変数 `symbol_threshold` が存在すればその数以上、さもなければ1つ以上のジョブがある場合に、シンボルを表示します。 ジョブがない時も含めて_常_にシンボルとジョブ数を表示するには、両方に 0 を設定します。
 
-The default functionality is:
+デフォルトの機能は次のとおりです。
 
-- 0 jobs -> Nothing is shown.
-- 1 job -> `symbol` is shown.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 0個のジョブ -> 何も表示しません。
+- 1個のジョブ -> `symbol` を表示します。
+- 2個以上のジョブ-> `symbol` + `number` を表示します。
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+このモジュールは tcsh と nu ではサポートされません。
 
 :::
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+オプション `threshold` は非推奨になりましたが、`threshold` が指定されている場合には、モジュールは走っているジョブの数を表示します。 `threshold` が 0 に設定されている場合は、ジョブが走っていない場合にもモジュールが表示されます。
 
 :::
 
 ### オプション
 
-| オプション              | デフォルト                         | 説明                                                                       |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | 超過した場合、ジョブの数を表示します。                                                      |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `'[$symbol$number]($style) '` | module のフォーマットです。                                                        |
-| `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `'bold blue'`                 | モジュールのスタイルです。                                                            |
-| `disabled`         | `false`                       | `jobs`モジュールを無効にします。                                                      |
+| オプション              | デフォルト                         | 説明                                                     |
+| ------------------ | ----------------------------- | ------------------------------------------------------ |
+| `threshold`*       | `1`                           | 超過した場合、ジョブの数を表示します。                                    |
+| `symbol_threshold` | `1`                           | ジョブの数が少なくとも `symbol_threshold` ある場合に  `symbol` を表示します。 |
+| `number_threshold` | `2`                           | ジョブの数が少なくとも `number_threshold` ある場合に、ジョブ数を表示します。       |
+| `format`           | `'[$symbol$number]($style) '` | module のフォーマットです。                                      |
+| `symbol`           | `'✦'`                         | `symbol` 変数を表すために使用される文字列。                             |
+| `style`            | `'bold blue'`                 | モジュールのスタイルです。                                          |
+| `disabled`         | `false`                       | `jobs`モジュールを無効にします。                                    |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: このオプションは非推奨です。代わりに `number_threshold` と `symbol_threshold` オプションを指定してください。
 
 ### 変数
 
@@ -2477,7 +2477,7 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. 環境変数`$KUBECONFIG`が設定されている場合、このモジュールはそれを利用し、`~/.kube/config`を利用しません。
+現在の[Kubernetes コンテキスト](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context)名を表示します。 kubeconfigファイルに設定されている場合は、名前空間、ユーザー、クラスターも表示します。 名前空間は kubeconfig ファイルの中で設定する必要があります。次のようにして行います: `kubectl config set-context starship-context --namespace astronaut`。 同様に、ユーザーとクラスターは `kubectl config set-context starship-context --user starship-user` と `kubectl config set-context starship-context ---cluster starship-cluster` で設定できます。 環境変数 `$KUBECONFIG` が設定されている場合、このモジュールはそれを利用し、 `~/.kube/config` を利用しません。
 
 ::: tip
 
@@ -2491,23 +2491,23 @@ When the module is enabled it will always be active, unless any of `detect_env_v
 
 ::: warning
 
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
+`context_aliases` と `user_aliases` オプションは非推奨になりました。 代わりに `contexts` と対応するオプション `context_alias` と `user_alias` をお使いください。
 
 :::
 
-| オプション               | デフォルト                                                | 説明                                                   |
-| ------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。                      |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                                    |
-| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                                        |
-| `context_aliases`*  | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。                             |
-| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                    |
-| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか                              |
-| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか                            |
-| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか                            |
-| `detect_env_vars`   | `[]`                                                 | このモジュールを活性化する環境変数です。                                 |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts. |
-| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。                            |
+| オプション               | デフォルト                                                | 説明                              |
+| ------------------- | ---------------------------------------------------- | ------------------------------- |
+| `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。 |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | モジュールのフォーマットです。                 |
+| `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                   |
+| `context_aliases`*  | `{}`                                                 | 表示するコンテキストエイリアスを定義するテーブル。       |
+| `user_aliases`*     | `{}`                                                 | 表示するユーザーエイリアスを定義するテーブル。         |
+| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか         |
+| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか       |
+| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか       |
+| `detect_env_vars`   | `[]`                                                 | このモジュールを活性化する環境変数です。            |
+| `contexts`          | `[]`                                                 | 特定のコンテキストのカスタマイズされたスタイルとシンボルです。 |
+| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。       |
 
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
@@ -2526,14 +2526,14 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 
 ### 変数
 
-| 変数        | 設定例                  | 説明                                     |
-| --------- | -------------------- | -------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name    |
-| namespace | `starship-namespace` | 設定されている場合、現在の Kubernetes の namespace 名 |
-| user      | `starship-user`      | If set, the current kubernetes user    |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster |
-| symbol    |                      | オプション `symbol` の値をミラーする                |
-| style\* |                      | オプション `style` の値をミラーする                 |
+| 変数        | 設定例                  | 説明                               |
+| --------- | -------------------- | -------------------------------- |
+| context   | `starship-context`   | 現在の Kubernetes のコンテキスト名          |
+| namespace | `starship-namespace` | 設定されている場合、現在の Kubernetes の名前空間名  |
+| user      | `starship-user`      | 設定されている場合、現在の Kubernetes のユーザー名  |
+| cluster   | `starship-cluster`   | 設定されている場合、現在の Kubernetes のクラスター名 |
+| symbol    |                      | オプション `symbol` の値をミラーする          |
+| style\* |                      | オプション `style` の値をミラーする           |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2550,7 +2550,7 @@ contexts = [
 ]
 ```
 
-Only show the module in directories that contain a `k8s` file.
+以下は `k8s` ファイルを含むディレクトリの中でのみモジュールを表示します。
 
 ```toml
 # ~/.config/starship.toml
