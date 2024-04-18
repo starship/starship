@@ -3888,7 +3888,7 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
+Використовуючи `repeat` та `repeat_offset` разом з модулем `character`, ви можете отримати рядок виду `❯❯❯`, де останній символ має колір відповідно до статусу виконання останньої команди, а символи, що йому передують зазначаються у `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
