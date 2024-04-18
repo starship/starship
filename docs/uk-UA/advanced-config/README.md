@@ -84,9 +84,9 @@ enable_transience
 
 [Ble.sh](https://github.com/akinomyoga/ble.sh) v0.4 або вище дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
 
-\<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+\<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. Якщо `prompt_ps1_final` порожній і параметр `prompt_ps1_transient` має не пусте значення \<value\>, командний рядок, вказаний у `PS1` буде стертий при виході з поточного командного рядка. Якщо \<value\> містить поле `trim`, тільки останній рядок багаторядкового `PS1` буде збережений, а інші вилучені. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у \<value\> та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
 
-Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
+Зробіть наступні зміни у `~/.blerc` (або у `~/.config/blesh/init.sh`), щоб налаштувати, що показується ліворуч і праворуч:
 
 - Для налаштування того, чим замінюється ліва частина вводу, налаштуйте параметр `prompt_ps1_final`. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
@@ -266,7 +266,7 @@ right_format = """$all"""
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled-in arrows
+# Подовжений ввід позначається двома стрілками
 continuation_prompt = '▶▶ '
 ```
 
