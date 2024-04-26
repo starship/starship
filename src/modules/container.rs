@@ -1,4 +1,5 @@
 use super::{Context, Module};
+use std::fs;
 
 #[cfg(not(target_os = "linux"))]
 pub fn module<'a>(_context: &'a Context) -> Option<Module<'a>> {
@@ -20,10 +21,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             // OpenVZ
             return Some("OpenVZ".into());
         }
-
         if context_path(context, "/run/host/container-manager").exists() {
-            // OCI
-            return Some("OCI".into());
+            match fs::read_to_string("/run/host/container-manager"){
+                Ok(content) => {
+                    if content.contains("systemd-nspawn"){
+                        return Some("nspawn".into())
+                    } else{
+                        return Some("OCI".into())
+                    }
+                },
+                Err(_) => return None,
+            }
         }
 
         let container_env_path = context_path(context, "/run/.containerenv");
