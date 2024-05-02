@@ -15,8 +15,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let ctx_str = context
         .exec_cmd("nats", &["context", "info", "--json"])?
         .stdout;
-    let nats_context: json::Value = json::from_str(&ctx_str).ok()?;
-    let name = nats_context.get("name")?.as_str()?;
+    let nats_context: json::Value = json::from_str(&ctx_str).or_else(
+        |e| {
+            log::warn!("Error parsing nats context JSON: {}\n", e);
+            return Err(e);
+        }
+    ).ok()?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -29,7 +33,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "name" => Some(Ok(name)),
+                "name" => {
+                    Some(Ok(nats_context.get("name")?.as_str()?))
+                }
                 _ => None,
             })
             .parse(None, Some(context))
