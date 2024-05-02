@@ -18,7 +18,7 @@ impl<'a> Default for NatsConfig<'a> {
     fn default() -> Self {
         NatsConfig {
             format: "[$symbol$name]($style)",
-            symbol: "",
+            symbol: "✉️ ",
             style: "bold purple",
             disabled: true,
         }
