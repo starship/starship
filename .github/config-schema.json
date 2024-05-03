@@ -1027,7 +1027,7 @@
         "disabled": true,
         "format": "[$symbol$name]($style)",
         "style": "bold purple",
-        "symbol": ""
+        "symbol": "✉️ "
       },
       "allOf": [
         {
@@ -4388,7 +4388,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "",
+          "default": "✉️ ",
           "type": "string"
         },
         "style": {
