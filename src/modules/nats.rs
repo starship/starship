@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let nats_context: json::Value = json::from_str(&ctx_str)
         .map_err(|e| {
             log::warn!("Error parsing nats context JSON: {}\n", e);
-            return e;
+            drop(e);
         })
         .ok()?;
 
@@ -56,7 +56,6 @@ mod tests {
     use std::io;
 
     use crate::test::ModuleRenderer;
-    use crate::utils::create_command;
 
     #[test]
     fn show_context() -> io::Result<()> {
