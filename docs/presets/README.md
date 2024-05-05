@@ -81,6 +81,8 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
-## [Catpuccin](./catppuccin.md)
+## [Catppuccin](./catppuccin.md)
 
 This is a rewrite of the [gruvbox rainbow](./gruvbox-rainbow.md) preset with different separators and the [catppucin](https://github.com/catppuccin/catppuccin) color theme.
+
+[![Screenshot of Catppuccin preset](/presets/img/catppuccin.png "Click to view Catppucin preset")](./catppuccin)
