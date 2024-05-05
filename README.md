@@ -265,7 +265,7 @@ Install the latest version for your system with the MSI-installers from the [rel
 Install Starship using any of the following package managers:
 
 | Repository      | Instructions                                            |
-| --------------- | --------------------------------------------------------|
+| --------------- | ------------------------------------------------------- |
 | **[crates.io]** | `cargo install starship --locked`                       |
 | [Chocolatey]    | `choco install starship`                                |
 | [conda-forge]   | `conda install -c conda-forge starship`                 |
