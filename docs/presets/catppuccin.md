@@ -4,6 +4,7 @@
 
 This is a rewrite of the [gruvbox rainbow](./gruvbox-rainbow.md) preset with different separators and the [catppucin](https://github.com/catppuccin/catppuccin) color theme.
 
+![Screenshot of Catppuccin preset](/presets/img/catppuccin.png)
 
 
 ### Prerequisites
