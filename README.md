@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 | [Chocolatey]    | `choco install starship`                |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Scoop]         | `scoop install starship`                |
-| [winget]        | `winget install --id Starship.Starship -- source winget` |
+| [winget]        | `winget install --id Starship.Starship --source winget` |
 
 </details>
 
