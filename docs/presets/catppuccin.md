@@ -18,4 +18,4 @@ starship preset catppuccin -o ~/.config/starship.toml
 
 [Click to download TOML](/presets/toml/catppuccin.toml)
 
-<<< @/public/presets/toml/catpuccin.toml
+<<< @/public/presets/toml/catppuccin.toml
