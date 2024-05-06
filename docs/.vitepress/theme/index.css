@@ -21,6 +21,10 @@
   transform: none;
 }
 
+.VPHero .image img.uwu {
+  max-height: 290px;
+}
+
 .VPHero .container .actions {
   justify-content: center !important;
 }
