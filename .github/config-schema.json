@@ -1025,7 +1025,7 @@
     "nats": {
       "default": {
         "disabled": true,
-        "format": "[$symbol$name]($style)",
+        "format": "[$symbol($name )]($style)",
         "style": "bold purple",
         "symbol": "✉️ "
       },
@@ -4384,7 +4384,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "[$symbol$name]($style)",
+          "default": "[$symbol($name )]($style)",
           "type": "string"
         },
         "symbol": {
