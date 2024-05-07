@@ -60,17 +60,12 @@ mod tests {
     #[test]
     fn show_context() -> io::Result<()> {
         let actual = ModuleRenderer::new("nats")
-            .config(
-                toml::from_str(&format!(
-                    "
+            .config(toml::toml! {
                 [nats]
-                format = \"[$symbol$name](bold purple)\"
-                symbol = \"\"
+                format = "[$symbol$name](bold purple)"
+                symbol = ""
                 disabled = false
-                "
-                ))
-                .unwrap(),
-            )
+            })
             .collect();
         let expected = Some(format!("{}", Color::Purple.bold().paint("localhost")));
         assert_eq!(expected, actual);
@@ -80,19 +75,14 @@ mod tests {
     #[test]
     fn test_with_symbol() -> io::Result<()> {
         let actual = ModuleRenderer::new("nats")
-            .config(
-                toml::from_str(&format!(
-                    "
+            .config(toml::toml! {
                 [nats]
-                format = \"[$symbol$name](bold red)\"
-                symbol = \"N \"
+                format = "[$symbol$name](bold red)"
+                symbol = "✉️ "
                 disabled = false
-                "
-                ))
-                .unwrap(),
-            )
+            })
             .collect();
-        let expected = Some(format!("{}", Color::Red.bold().paint("N localhost")));
+        let expected = Some(format!("{}", Color::Red.bold().paint("✉️ localhost")));
         assert_eq!(expected, actual);
         Ok(())
     }

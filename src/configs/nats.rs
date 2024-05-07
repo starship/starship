@@ -17,7 +17,7 @@ pub struct NatsConfig<'a> {
 impl<'a> Default for NatsConfig<'a> {
     fn default() -> Self {
         NatsConfig {
-            format: "[$symbol$name]($style)",
+            format: "[$symbol($name )]($style)",
             symbol: "✉️ ",
             style: "bold purple",
             disabled: true,
