@@ -25,6 +25,20 @@ metaTitle: "Starship: یەکێ لە Promptـە شێڵ نەناسەکان"
 description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.'
 ---
 
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
 <video class="demo-video" muted autoplay loop playsinline>
   <source src="/demo.webm" type="video/webm">
   <source src="/demo.mp4" type="video/mp4">
