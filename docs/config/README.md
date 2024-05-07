@@ -2904,7 +2904,7 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 
 | Option     | Default                    | Description                                                  |
 | ---------- | -------------------------- | ------------------------------------------------------------ |
-| `symbol`   | `'✉️ '`                       | The symbol used before the NATS context (defaults to empty). |
+| `symbol`   | `'✉️ '`                     | The symbol used before the NATS context (defaults to empty). |
 | `style`    | `'bold purple'`            | The style for the module.                                    |
 | `format`   | `'[$symbol$name]($style)'` | The format for the module.                                   |
 | `disabled` | `false`                    | Disables the `nats` module.                                  |
