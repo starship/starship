@@ -25,6 +25,20 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки! Показує потрібну інформацію залишаючись блискучим та мінімальним. Швидке встановлення доступне для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd і PowerShell.
 ---
 
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
 <video class="demo-video" muted autoplay loop playsinline>
   <source src="/demo.webm" type="video/webm">
   <source src="/demo.mp4" type="video/mp4">
