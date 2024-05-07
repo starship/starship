@@ -2574,9 +2574,9 @@ dependencies = [
 
 [[package]]
 name = "semver"
-version = "1.0.22"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "92d43fe69e652f3df9bdc2b85b2854a0825b86e4fb76bc44d945137d053639ca"
+checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "semver-parser"
@@ -2811,7 +2811,7 @@ dependencies = [
  "regex",
  "rust-ini",
  "schemars",
- "semver 1.0.22",
+ "semver 1.0.23",
  "serde",
  "serde_json",
  "sha1",
