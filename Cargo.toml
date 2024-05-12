@@ -69,9 +69,9 @@ rand = "0.8.5"
 rayon = "1.10.0"
 regex = { version = "1.10.4", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.0"
-semver = "1.0.22"
-serde = { version = "1.0.199", features = ["derive"] }
-serde_json = "1.0.116"
+semver = "1.0.23"
+serde = { version = "1.0.201", features = ["derive"] }
+serde_json = "1.0.117"
 sha1 = "0.10.6"
 shadow-rs = { version = "0.27.1", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -96,7 +96,7 @@ home = "0.5.9"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "0.8.17"
+version = "0.8.19"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
@@ -124,7 +124,7 @@ dunce = "1.0.4"
 winres = "0.1.12"
 
 [dev-dependencies]
-mockall = "0.12"
+mockall = "0.12.1"
 tempfile = "3.10.1"
 
 [profile.release]
