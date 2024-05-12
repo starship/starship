@@ -18,7 +18,7 @@
     "rebaseWhen": "conflicted",
     "lockFileMaintenance": {
         "enabled": true,
-        "extends":["schedule:weekly"],
+        "extends": ["schedule:weekly"],
         "groupName": "lockfile maintenance",
         "automerge": true
     },
