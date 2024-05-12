@@ -341,6 +341,7 @@ $openstack\
 $azure\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -2921,6 +2922,42 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | -------- | --------- | ------------------------------------ |
 | branch   | `master`  | The active mercurial branch          |
 | topic    | `feature` | The active mercurial topic           |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+format = 'on [🌱 $branch](bold purple)'
+truncation_length = 4
+truncation_symbol = ''
+```
+
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### Options
+
+| Option             | Default                          | Description                                      |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | The style for the module.                        |
+| `format`           | `'on [$symbol$health]($style) '` | The format for the module.                       |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| health   | `healthy` | The health of _mise_                 |
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 

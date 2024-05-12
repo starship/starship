@@ -112,6 +112,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "azure",
     "direnv",
     "env_var",
+    "mise",
     "crystal",
     "custom",
     "sudo",
