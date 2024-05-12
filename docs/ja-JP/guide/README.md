@@ -431,6 +431,8 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 [スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
