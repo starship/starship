@@ -45,7 +45,7 @@ Unter Funtoo Linux kann starship von [core-kit](https://github.com/funtoo/core-k
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### Das Binary holen
 
