@@ -122,7 +122,33 @@ jobs:
         run: >
           cargo wix -v --no-build --nocapture -I install/windows/main.wxs
           --target ${{ matrix.target }}
-          --output target/wix/starship-${{ matrix.target }}.msi
+          --output target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Upload [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-${{ matrix.name }}
+          path: |
+            target/${{ matrix.target }}/release/starship.exe
+            target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Sign [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        uses: signpath/github-action-submit-signing-request@v0.3
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'starship'
+          signing-policy-slug: 'test-signing'
+          github-artifact-name: 'unsigned-${{ matrix.name }}'
+          wait-for-completion: false
+          # TODO use release-signing certificate:
+          # signing-policy-slug: 'release-signing'
+          # wait-for-completion: true
+          # output-artifact-directory: 'target/${{ matrix.target }}/release'
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -150,7 +176,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship-${{ matrix.target }}.msi
+          path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
