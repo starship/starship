@@ -5,7 +5,7 @@ Starship をインストールするには、以下の2つのことを行う必�
 1. ** starship ** のバイナリをコンピューター上に取得する
 1. Init スクリプトを修正することで、Starship バイナリをプロンプトとして使用するようシェルに指示する
 
-For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. しかし、より特殊なプラットフォームでは、別の操作が必要になることがあります。
+ほとんどの場合、[メインページ](../guide/#🚀-installation)の指示に従えば問題なく動作します。 しかし、より特殊なプラットフォームでは、別の操作が必要になることがあります。
 
 プラットフォームは無数に存在するため、メインの README.md ファイルには書ききれません。そこで、このページでは、コミュニティにより提供された他のプラットフォーム向けのインストール方法について紹介します。 あなたが使用しているプラットフォームが見当たりませんか？ その場合は是非、見つけた方法をここに追加してください。
 
@@ -45,7 +45,7 @@ Funtoo Linuxでは、Portageの[core-kit](https://github.com/funtoo/core-kit/tre
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### バイナリの取得
 

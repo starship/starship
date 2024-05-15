@@ -45,7 +45,7 @@ Na Funtoo Linux, starship może być zainstalowany przez Portage z [core-kit](ht
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### Getting the Binary
 

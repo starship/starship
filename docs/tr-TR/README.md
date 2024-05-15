@@ -25,6 +25,20 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship, her prompt için minimal, son derece hızlı ve son derece özelleştirilebilir bir shelldir! Şık ve minimal kalırken ihtiyacınız olan bilgileri gösterir. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd ve PowerShell için hızlı kurulum mevcuttur.
 ---
 
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
 <video class="demo-video" muted autoplay loop playsinline>
   <source src="/demo.webm" type="video/webm">
   <source src="/demo.mp4" type="video/mp4">

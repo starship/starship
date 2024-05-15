@@ -1,17 +1,17 @@
 [プリセット一覧に戻る](./#jetpack)
 
-# Jetpack Preset
+# Jetpack プリセット
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+[geometry](https://github.com/geometry-zsh/geometry) と [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) のプロンプトにインスパイアされた擬似ミニマリストプリセットです。
 
-> Jetpack uses the terminal's color theme.
+> Jetpack はターミナルのカラーテーマを使用します。
 
-![Screenshot of Jetpack preset](/presets/img/jetpack.png)
+![Jetpack プリセットのスクリーンショット](/presets/img/jetpack.png)
 
-### Prerequisite
+### 前提条件
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
-- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
+- [`右プロンプト`](https://starship.rs/advanced-config/#enable-right-prompt) に対応したシェルが必要です。
+- [Jetbrain Mono](https://www.jetbrains.com/lp/mono/) が推奨されます。
 
 ### 設定
 

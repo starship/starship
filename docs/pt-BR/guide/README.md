@@ -431,6 +431,8 @@ Por favor, confira esses trabalhos anteriores que ajudaram a inspirar a criaçã
 
 Apoie este projeto [tornando-se um patrocinador](https://github.com/sponsors/starship). O seu nome ou logotipo aparecerá aqui com um link para o seu site.
 
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ícone de foguete do Starship">

@@ -158,14 +158,14 @@ line2
 
 #### 样式字符串
 
-Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](../advanced-config/)。
 
-- `'fg:green bg:blue'` sets green text on a blue background
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `'underline bg:#bf5700'` sets underlined text on a burnt orange background
-- `'bold italic fg:purple'` sets bold italic purple text
-- `''` explicitly disables all styling
+- `'fg:green bg:blue'` 在蓝色背景上显示绿色文本
+- `'bg:blue fg:bright-green'` 在蓝色背景上显示亮绿色文本
+- `'bold fg:27'` 用 [ANSI颜色](https://i.stack.imgur.com/KTSQa.png) 27 设置粗体文本
+- `'underline bg:#bf5700'` 在深橙色背景上显示带下划线文本
+- `'bold italic fg:purple'` 设置粗体、斜体、紫色文本
+- `''` 显式禁用所有样式
 
 请注意，最终的显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要获得意大利体文本（一般设计为斜体），您的终端必须支持意大利体显示。
 
@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -324,6 +325,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -601,7 +603,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | -------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                     |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`  |
-| `symbol`            | `'🍞 '`                               | 用于表示Bun的格式化字符串                               |
+| `symbol`            | `'🥟 '`                               | 用于表示Bun的格式化字符串                               |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module. |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | 哪些文件应触发此组件                                   |
 | `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                 |
@@ -1966,6 +1968,44 @@ Use Windows Starship executable on Windows paths in WSL
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                             |
+| ------------------- | ------------------------------------ | ---------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                       |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`    |
+| `符号`                | `'⭐ '`                               | A format string representing the symbol of Go. |
+| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.   |
+| `detect_files`      | `['gleam.toml']`                     | 哪些文件应触发此组件                                     |
+| `style`             | `'bold #FFAFF3'`                     | 此组件的样式。                                        |
+| `disabled`          | `false`                              | Disables the `gleam` module.                   |
+
+### 变量
+
+| 字段        | 示例       | 描述                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.0.0` | The version of `gleam` |
+| 符号        |          | `symbol`对应值            |
+| style\* |          | `style`对应值             |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
@@ -2444,7 +2484,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2466,6 +2506,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | 哪些文件应触发此组件                                                            |
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
@@ -2768,6 +2809,35 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### 配置项
+
+| 选项         | 默认值                        | 描述                                                           |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `符号`       | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | 此组件的样式。                                                      |
+| `format`   | `'[$symbol$name]($style)'` | 组件格式化模板。                                                     |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### 变量
+
+| 字段        | 示例          | 描述                           |
+| --------- | ----------- | ---------------------------- |
+| name      | `localhost` | The name of the NATS context |
+| 符号        |             | `symbol`对应值                  |
+| style\* |             | `style`对应值                   |
+
+### 示例
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
@@ -2941,6 +3011,43 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                              |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
+| `符号`                | `'Ø '`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `'bold bright-blue'`                 | 此组件的样式。                                               |
+| `disabled`          | `false`                              | Disables the `odin` module.                           |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | 哪些文件应触发此组件                                            |
+| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                          |
+
+### 变量
+
+| 字段        | 示例            | 描述                    |
+| --------- | ------------- | --------------------- |
+| version   | `dev-2024-03` | The version of `odin` |
+| 符号        |               | `symbol`对应值           |
+| style\* |               | `style`对应值            |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -3811,7 +3918,7 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
@@ -4241,6 +4348,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
 | `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
 | `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### 变量
 
@@ -4262,6 +4370,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Hide the hostname in remote tmux sessions

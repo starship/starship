@@ -431,6 +431,8 @@ eval "$(starship init zsh)"
 
 Поддержите этот проект, [став спонсором](https://github.com/sponsors/starship). Ваше имя или логотип будут отображаться здесь со ссылкой на ваш сайт.
 
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Иконка ракеты Starship">
