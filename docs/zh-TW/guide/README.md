@@ -431,6 +431,8 @@ eval "$(starship init zsh)"
 
 你可以[成爲一個贊助者](https://github.com/sponsors/starship)來支持這個專案！ 你的名字和頭像會在這裏顯示，並且會帶有一個前往你網站的鏈接。
 
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">

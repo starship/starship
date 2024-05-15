@@ -281,6 +281,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -324,6 +325,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -601,7 +603,7 @@ O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) r
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
+| `symbol`            | `'🥟 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
@@ -1966,6 +1968,44 @@ Use o executável do Windows Starship em caminhos do Windows em WSL
 windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/starship.exe'
 ```
 
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⭐ '`                               | O formato da string que representa o simbolo do Go.                                 |
+| `detect_extensions` | `['gleam']`                          | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['gleam.toml']`                     | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `style`             | `'bold #FFAFF3'`                     | O estilo do módulo.                                                                 |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                                        |
+
+### Variáveis
+
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.0.0` | The version of `gleam`            |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
 ## Go
 
 O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
@@ -2444,7 +2484,7 @@ Exibe o nome atual do [Kubernetes context](https://kubernetes.io/docs/concepts/c
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2466,6 +2506,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Quais extensões devem ativar este módulo.                     |
 | `detect_files`      | `[]`                                                 | Quais nomes de arquivos devem ativar este módulo.             |
 | `detect_folders`    | `[]`                                                 | Quais pastas devem ativar este módulo.                        |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module      |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.          |
 | `disabled`          | `true`                                               | Desabilita o módulo `kubernetes`.                             |
 
@@ -2768,6 +2809,35 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### Opções
+
+| Opções     | Padrão                     | Descrição                                                    |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | O estilo do módulo.                                          |
+| `format`   | `'[$symbol$name]($style)'` | O formato do módulo.                                         |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### Variáveis
+
+| Variável  | Exemplo     | Descrição                         |
+| --------- | ----------- | --------------------------------- |
+| name      | `localhost` | The name of the NATS context      |
+| symbol    |             | Espelha o valor da opção `symbol` |
+| style\* |             | Espelha o valor da opção `style`  |
+
+### Exemplo
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
+```
+
 ## Nim
 
 O módulo `nim` exibe a versão atual instalada do [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
@@ -2941,6 +3011,43 @@ O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/)
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                              |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.          |
+| `symbol`            | `'Ø '`                               | O símbolo usado antes de exibir a versão do Zig.  |
+| `style`             | `'bold bright-blue'`                 | O estilo do módulo.                               |
+| `disabled`          | `false`                              | Disables the `odin` module.                       |
+| `detect_extensions` | `['odin']`                           | Quais extensões devem ativar este módulo.         |
+| `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo. |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.            |
+
+### Variáveis
+
+| Variável  | Exemplo       | Descrição                         |
+| --------- | ------------- | --------------------------------- |
+| version   | `dev-2024-03` | The version of `odin`             |
+| symbol    |               | Espelha o valor da opção `symbol` |
+| style\* |               | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
 ```
 
 ## Open Policy Agent
@@ -3811,7 +3918,7 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
@@ -4241,6 +4348,7 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 | `format`          | `'[$user]($style) in '` | O formato do módulo.                                      |
 | `show_always`     | `false`                 | Sempre exibe o módulo `username`.                         |
 | `disabled`        | `false`                 | Desabilita o módulo `username`.                           |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### Variáveis
 
@@ -4262,6 +4370,7 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
 ```
 
 #### Hide the hostname in remote tmux sessions

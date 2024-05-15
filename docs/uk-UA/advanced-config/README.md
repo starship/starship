@@ -82,22 +82,22 @@ enable_transience
 
 ## TransientPrompt та TransientRightPrompt в Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
+[Ble.sh](https://github.com/akinomyoga/ble.sh) v0.4 або вище дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
 
-\<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. Якщо `prompt_ps1_final` порожній і цей параметр має не пусте значення, командний рядок, вказаний у `PS1` буде стертий при виході з поточного командного рядка. Якщо значення містить поле `trim`, тільки останній рядок багаторядкового `PS1` буде збережений, а інші вилучені. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у значені та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
+\<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. Якщо `prompt_ps1_final` порожній і параметр `prompt_ps1_transient` має не пусте значення \<value\>, командний рядок, вказаний у `PS1` буде стертий при виході з поточного командного рядка. Якщо \<value\> містить поле `trim`, тільки останній рядок багаторядкового `PS1` буде збережений, а інші вилучені. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у \<value\> та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
 
-Зробіть наступні зміни у `~/.bashrc`, щоб налаштувати, що показується ліворуч і праворуч:
+Зробіть наступні зміни у `~/.blerc` (або у `~/.config/blesh/init.sh`), щоб налаштувати, що показується ліворуч і праворуч:
 
 - Для налаштування того, чим замінюється ліва частина вводу, налаштуйте параметр `prompt_ps1_final`. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```bash
-bleopt prompt_ps1_final="$(starship module character)"
+bleopt prompt_ps1_final='$(starship module character)'
 ```
 
 - Для налаштування того, чим замінюється права частина вводу, налаштуйте параметр `prompt_rps1_final`. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```bash
-bleopt prompt_rps1_final="$(starship module time)"
+bleopt prompt_rps1_final='$(starship module time)'
 ```
 
 ## Власні команди pre-prompt та pre-execution в Cmd
@@ -227,7 +227,7 @@ Invoke-Expression (&starship init powershell)
 
 `right_format` наразі підтримується для таких оболонок: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
+Примітка: фреймворк [Ble.sh](https://github.com/akinomyoga/ble.sh) v0.4 або вище має бути встановлений для того, щоб використовувати розташування командного рядка в bash праворуч.
 
 ### Приклад
 
@@ -301,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 Не кожен рядок стилю буде правильно показуватись у кожному терміналі. Зокрема, існують такі відомі примхи:
 
-- Багато терміналів стандартно вмикають підтримку `blink`
+- Багато терміналів стандартно вмикають підтримку `blink`.
 - `hidden` [не підтримується в iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` не підтримується стандартно в macOS Terminal.app
+- `strikethrough` не підтримується стандартно в macOS Terminal.app.
