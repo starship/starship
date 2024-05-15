@@ -184,6 +184,7 @@ mod tests {
 
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
+    use nu_ansi_term::Color;
     use std::io;
     use std::path::Path;
     #[test]
@@ -227,7 +228,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -239,13 +240,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc(dir.path(), false, "0", true),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv not loaded/allowed")
+        ));
 
-        assert_eq!(
-            Some("direnv not loaded/allowed ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -255,7 +257,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -267,13 +269,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc_json(dir.path(), 1, 0),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv not loaded/allowed")
+        ));
 
-        assert_eq!(
-            Some("direnv not loaded/allowed ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -283,7 +286,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -295,13 +298,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc(dir.path(), true, "0", true),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/allowed")
+        ));
 
-        assert_eq!(
-            Some("direnv loaded/allowed ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -311,7 +315,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -323,13 +327,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/allowed")
+        ));
 
-        assert_eq!(
-            Some("direnv loaded/allowed ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -339,7 +344,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -351,13 +356,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc(dir.path(), true, "2", true),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/denied")
+        ));
 
-        assert_eq!(
-            Some("direnv loaded/denied ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -367,7 +373,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -379,13 +385,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc_json(dir.path(), 0, 1),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/not allowed")
+        ));
 
-        assert_eq!(
-            Some("direnv loaded/not allowed ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     #[test]
@@ -395,7 +402,7 @@ mod tests {
 
         std::fs::File::create(rc_path)?.sync_all()?;
 
-        let renderer = ModuleRenderer::new("direnv")
+        let actual = ModuleRenderer::new("direnv")
             .config(toml::toml! {
                 [direnv]
                 disabled = false
@@ -407,13 +414,14 @@ mod tests {
                     stdout: status_cmd_output_with_rc_json(dir.path(), 0, 2),
                     stderr: String::default(),
                 }),
-            );
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/denied")
+        ));
 
-        assert_eq!(
-            Some("direnv loaded/denied ".to_string()),
-            renderer.collect()
-        );
-
+        assert_eq!(expected, actual);
         dir.close()
     }
     fn status_cmd_output_without_rc() -> String {
