@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# これは以下に等価
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -325,6 +325,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -2808,6 +2809,35 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### オプション
+
+| オプション      | デフォルト                      | 説明                                                           |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | モジュールのスタイルです。                                                |
+| `format`   | `'[$symbol$name]($style)'` | module のフォーマットです。                                            |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### 変数
+
+| 変数        | 設定例         | 説明                           |
+| --------- | ----------- | ---------------------------- |
+| name      | `localhost` | The name of the NATS context |
+| symbol    |             | オプション `symbol` の値をミラーする      |
+| style\* |             | オプション `style` の値をミラーする       |
+
+### 設定例
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
+```
+
 ## Nim
 
 `nim`モジュールは、現在インストールされている[Nim](https://nim-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -4184,12 +4214,12 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 変数
 
-| 変数        | 設定例        | 説明                      |
-| --------- | ---------- | ----------------------- |
-| version   | `v0.12.24` | `terraform` のバージョン      |
-| workspace | `default`  | 現在のTerraformワークスペース     |
-| symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーする  |
+| 変数        | 設定例        | 説明                       |
+| --------- | ---------- | ------------------------ |
+| version   | `v0.12.24` | `terraform` のバージョン       |
+| workspace | `default`  | 現在のTerraformワークスペース      |
+| symbol    |            | オプション `symbol` の値をミラーします |
+| style\* |            | オプション `style` の値をミラーする   |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4239,10 +4269,10 @@ format = '[🏎💨 $workspace]($style) '
 
 ### 変数
 
-| 変数        | 設定例        | 説明                     |
-| --------- | ---------- | ---------------------- |
-| time      | `13:08:10` | 現在時刻                   |
-| style\* |            | オプション `style` の値をミラーする |
+| 変数        | 設定例        | 説明                      |
+| --------- | ---------- | ----------------------- |
+| time      | `13:08:10` | 現在時刻                    |
+| style\* |            | オプション `style` の値をミラーします |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4287,8 +4317,8 @@ time_range = '10:00:00-14:00:00'
 | ------------- | --------- | ------------------------------------- |
 | version       | `v0.9.0`  | `typst`のバージョン。typst_version のエイリアスです。 |
 | typst_version | `default` | 現在の Typst バージョン                       |
-| symbol        |           | オプション `symbol` の値をミラーします              |
-| style\*     |           | オプション `style` の値をミラーします               |
+| symbol        |           | オプション `symbol` の値をミラーする               |
+| style\*     |           | オプション `style` の値をミラーする                |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
