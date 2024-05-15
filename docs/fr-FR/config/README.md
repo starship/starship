@@ -325,6 +325,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -2806,6 +2807,35 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
+```
+
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### Options
+
+| Option     | Défaut                     | Description                                                  |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbole`  | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | Le style pour le module.                                     |
+| `format`   | `'[$symbol$name]($style)'` | Format du module.                                            |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### Variables
+
+| Variable  | Exemple     | Description                            |
+| --------- | ----------- | -------------------------------------- |
+| name      | `localhost` | The name of the NATS context           |
+| symbole   |             | Reflète la valeur de l'option `symbol` |
+| style\* |             | Reflète la valeur de l'option `style`  |
+
+### Exemple
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
 ```
 
 ## Nim
