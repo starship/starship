@@ -315,6 +315,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
             stderr: String::default(),
         }),
+        "nats context info --json" => Some(CommandOutput{
+            stdout: String::from("{\"name\":\"localhost\",\"url\":\"nats://localhost:4222\"}"),
+            stderr: String::default(),
+        }),
         "nim --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
