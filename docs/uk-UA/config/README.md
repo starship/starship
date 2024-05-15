@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є квівалентом
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -325,6 +325,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -2806,6 +2807,35 @@ style = 'bold dimmed green'
 format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
+```
+
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### Параметри
+
+| Параметр   | Стандартно                 | Опис                                                         |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | Стиль модуля.                                                |
+| `format`   | `'[$symbol$name]($style)'` | Формат модуля.                                               |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### Змінні
+
+| Змінна    | Приклад     | Опис                                     |
+| --------- | ----------- | ---------------------------------------- |
+| name      | `localhost` | The name of the NATS context             |
+| symbol    |             | Віддзеркалює значення параметра `symbol` |
+| style\* |             | Віддзеркалює значення параметра `style`  |
+
+### Приклад
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
 ```
 
 ## Nim
