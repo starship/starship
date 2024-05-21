@@ -294,7 +294,7 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
 
 fn get_version_from_cli(context: &Context) -> Option<String> {
     let version_output = context.exec_cmd("dotnet", &["--version"])?;
-    Some(version_output.stdout.trim())
+    Some(version_output.stdout.trim().to_string())
 }
 
 fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
