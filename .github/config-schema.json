@@ -842,6 +842,7 @@
     },
     "hostname": {
       "default": {
+        "aliases": {},
         "detect_env_vars": [],
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
