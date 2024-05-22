@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     if let Some(&alias) = config.aliases.get(host) {
-         host = alias;
+        host = alias;
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -271,7 +271,8 @@ mod tests {
             [hostname]
             ssh_only = false
             aliases = {{ "{}" = "homeworld" }}
-            "#, hostname
+            "#,
+            hostname
         );
         let actual = ModuleRenderer::new("hostname")
             .config(toml::from_str(&toml_config_string).unwrap())
