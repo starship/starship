@@ -2355,7 +2355,7 @@ The `hostname` module shows the system hostname.
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                            |
 | `style`           | `'bold dimmed green'`                  | The style for the module.                                                                                                             |
 | `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
-| `aliases`         | `{}`                                   | Translate system usernames to something else.                                                                                         |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
 
 ### Variables
 
@@ -2393,6 +2393,7 @@ disabled = false
 ```
 
 #### Replace the hostname with a nickname
+
 ```toml
 # ~/.config/starship.toml
 [hostname]

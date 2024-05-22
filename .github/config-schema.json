@@ -4003,6 +4003,13 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
