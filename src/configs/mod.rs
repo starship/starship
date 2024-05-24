@@ -55,6 +55,7 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod nats;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
@@ -217,6 +218,8 @@ pub struct FullConfig<'a> {
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
+    nats: nats::NatsConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]

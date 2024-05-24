@@ -287,6 +287,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
             stderr: String::default(),
         }),
+        "scala-cli version --scala" => Some(CommandOutput {
+            stdout: String::from("3.4.1"),
+            stderr: String::default(),
+        }),
         "scalac -version" => Some(CommandOutput {
             stdout: String::from("Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc."),
             stderr: String::default(),
@@ -309,6 +313,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "luajit -v" => Some(CommandOutput{
             stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
+            stderr: String::default(),
+        }),
+        "nats context info --json" => Some(CommandOutput{
+            stdout: String::from("{\"name\":\"localhost\",\"url\":\"nats://localhost:4222\"}"),
             stderr: String::default(),
         }),
         "nim --version" => Some(CommandOutput {

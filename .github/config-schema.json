@@ -1044,6 +1044,19 @@
         }
       ]
     },
+    "nats": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol($name )]($style)",
+        "style": "bold purple",
+        "symbol": "✉️ "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NatsConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -2082,14 +2095,12 @@
           "type": "string"
         },
         "charging_symbol": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "discharging_symbol": {
-          "default": null,
           "type": [
             "string",
             "null"
@@ -2760,14 +2771,12 @@
           "type": "string"
         },
         "repo_root_style": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "before_repo_root_style": {
-          "default": null,
           "type": [
             "string",
             "null"
@@ -4282,35 +4291,30 @@
           "type": "string"
         },
         "user_pattern": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "symbol": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "style": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "context_alias": {
-          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "user_alias": {
-          "default": null,
           "type": [
             "string",
             "null"
@@ -4462,6 +4466,28 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NatsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol($name )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "✉️ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       },

@@ -12,6 +12,15 @@
 .VPHero .image-container {
   transform: none;
   height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .VPHero .image-container {
+    max-width: 320px;
+    width: auto;
+  }
 }
 
 .VPHero .image img {
@@ -19,6 +28,11 @@
   max-width: none;
   position: static;
   transform: none;
+}
+
+.VPHero .image img.uwu {
+  max-height: 290px;
+  max-width: 80vw;
 }
 
 .VPHero .container .actions {

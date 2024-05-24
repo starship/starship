@@ -98,8 +98,7 @@ jobs:
 
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
-        # aarch64 is only supported in wix 4.0 development builds
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
@@ -119,11 +118,37 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         run: >
           cargo wix -v --no-build --nocapture -I install/windows/main.wxs
           --target ${{ matrix.target }}
-          --output target/wix/starship-${{ matrix.target }}.msi
+          --output target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Upload [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-${{ matrix.name }}
+          path: |
+            target/${{ matrix.target }}/release/starship.exe
+            target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Sign [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        uses: signpath/github-action-submit-signing-request@v0.3
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'starship'
+          signing-policy-slug: 'test-signing'
+          github-artifact-name: 'unsigned-${{ matrix.name }}'
+          wait-for-completion: false
+          # TODO use release-signing certificate:
+          # signing-policy-slug: 'release-signing'
+          # wait-for-completion: true
+          # output-artifact-directory: 'target/${{ matrix.target }}/release'
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -147,11 +172,11 @@ jobs:
 
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship-${{ matrix.target }}.msi
+          path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
@@ -320,9 +345,9 @@ jobs:
     needs: [release_please, github_build, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
-      URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc.msi
-      URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc.msi
-      URL_ARM: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc.zip
+      URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc
+      URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc
+      URL_ARM: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc
     steps:
       # Publishing will fail if the repo is too far behind the upstream
       - run: gh repo sync matchai/winget-pkgs
@@ -331,7 +356,11 @@ jobs:
       - run: |
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 $env:URL_ARM -t ${{ secrets.GH_PAT }}
+          ./wingetcreate.exe update Starship.Starship -s -v $version `
+            -u ${{ env.URL_64 }}.msi  ${{ env.URL_64 }}.zip `
+               ${{ env.URL_32 }}.msi  ${{ env.URL_32 }}.zip `
+               ${{ env.URL_ARM }}.msi ${{ env.URL_ARM }}.zip `
+            -t ${{ secrets.GH_PAT }}
 
   choco_update:
     name: Update Chocolatey Package

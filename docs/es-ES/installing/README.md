@@ -45,7 +45,7 @@ En Funtoo Linux, Starship puede instalarse desde [core-kit](https://github.com/f
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### Obtener el binario
 

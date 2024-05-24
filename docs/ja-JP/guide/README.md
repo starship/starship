@@ -35,7 +35,7 @@
   <a href="https://stand-with-ukraine.pp.ua"
     ><img
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
-      alt="Stand With Ukraine"
+      alt="ウクライナと共に歩む"
  /></a>
 </p>
 
@@ -161,7 +161,7 @@
   align="right"
  />
 
-**シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！**
+**最小限の、非常に高速で、無限にカスタマイズ可能なシェル用のプロンプトです！**
 
 - **高速:** _本当に_ 高速です！ 🚀
 - **カスタマイズ可能:** プロンプトのあらゆる側面を構成します。
@@ -430,6 +430,8 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 ## ❤️ スポンサー
 
 [スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
+
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

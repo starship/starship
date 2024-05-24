@@ -37,6 +37,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "shlvl",
     "singularity",
     "kubernetes",
+    "nats",
     "directory",
     "vcsh",
     "fossil_branch",

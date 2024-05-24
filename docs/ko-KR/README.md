@@ -25,6 +25,20 @@ metaTitle: "Starship: 크로스-셸 프롬프트"
 description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다! 필요한 정보를 깔끔하고 간략하게 표시합니다. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, 및 PowerShell에 빠르게 설치할 수 있습니다.
 ---
 
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
 <video class="demo-video" muted autoplay loop playsinline>
   <source src="/demo.webm" type="video/webm">
   <source src="/demo.mp4" type="video/mp4">

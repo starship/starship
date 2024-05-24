@@ -58,7 +58,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## どうして`Executing command "..." timed out.`という警告が出てくるのでしょうか?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](../config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship は、プロンプトに表示する情報 (例えば、プログラムのバージョンや現在の git ステータス) を取得するために、異なるコマンドを実行します。 これらのコマンドの実行中に Starship の応答がなくなるのを防ぐためにタイムリミットが設定されています。コマンド実行にタイムリミットよりも長い時間がかかった時、コマンド実行がキャンセルされ上記の警告が表示されます。これは意図的な動作です。 タイムリミットは [`command_timeout`key](../config/#prompt) を用いて変更可能ですので、お望みであればタイムリミットを長くできます。 更に以下のデバッグ手順によって、どのコマンドの実行に時間がかかっているかや、それを高速化できるかについて確認できます。 最終手段として、環境変数 `STARSHIP_LOG` に `error` を設定することでこれらの警告を非表示にできます。
 
 ## よくわからない記号を見つけました。これはどういった意味ですか？
 
@@ -66,21 +66,21 @@ Starship executes different commands to get information to display in the prompt
 
 ## Starshipがなにか想定外の挙動をしているとき、どのようにデバッグすればよいですか？
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+環境変数 `STARSHIP_LOG` を使用してデバッグログを有効にできます。 特定のモジュールをデバグしようとしているとき、デバッグログが過度に冗長になることがありますが、その場合は `module` コマンドが役立ちます。例えば、`rust` モジュールをデバグしようとしているとき、以下のコマンドを用いてこのモジュールからのログと出力を取得できます。
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
+Starship が遅い場合は、 `timings` コマンドを使って特定のモジュールまたはコマンドが悪さをしているか確認できます。
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+トレースログおよび、実行に 1 ミリ秒以上かかったか何か出力をした全てのモジュールの個別解析を出力します。
 
-Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
+バグを見つけた場合は、 `bug-report` コマンドを用いて GitHub の問題を作成できます。
 
 ```sh
 starship bug-report
@@ -121,10 +121,10 @@ Starship をインストールスクリプトを使用してインストール�
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
-## How do I install Starship without `sudo`?
+## `sudo` を使わずに Starship をインストールするにはどうすればいいですか?
 
-The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation diretory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+インストールシェルスクリプト (`https://starship.rs/install.sh`) はインストール先のディレクトリが現在のユーザによって書き込みできない時に限り `sudo` の使用を試みます。 既定のインストールディレクトリは、 `$BIN_DIR` 環境変数の値、または`$BIN_DIR` が設定されていない場合は `/usr/local/bin` です。 インストールディレクトリを現在のユーザが書き込みできるディレクトリに設定すれば、 `sudo` なしで Starship をインストールできます。 例えば `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` は、インストールスクリプトにコマンドラインオプション `-b` を指定してインストールディレクトリを `~/.local/bin` に設定します。
 
-For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+Starship の非対話形式でのインストールでは、確認をスキップするために `-y` オプションを追加することを忘れないでください。 対応しているオプションの一覧についてはインストールスクリプトのソースをご確認ください。
 
-When using a package manager, see the documentation for your package manager about installing with or without `sudo`.
+パッケージマネージャーを使う時は、 `sudo` を使ったまたは使わないインストールに関して、パッケージマネージャーのドキュメントを参照してください。
