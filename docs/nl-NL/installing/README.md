@@ -5,7 +5,7 @@ Om Starship te installeren moet je twee dingen doen:
 1. Sla het **Starship** programma op je computer op
 1. Stel je shell in om het Starship programma te gebruiken bij de invoer door de opstartscripts aan te passen
 
-Voor de meeste gebruikers werken de instructies op de [hoofdpagina](../guide/#🚀-installation) prima, maar voor sommige specifiekere platformen zijn er andere instructies.
+Voor de meeste gebruikers werken de instructies op de [hoofdpagina](../guide/#🚀-installation) prima, maar voor specifieke platformen zijn er andere instructies.
 
 Er bestaan dermate veel platformen dat ze niet meer in het hoofdbestand voor de README, dus zijn andere instructies door de gemeenschap hier samengebracht. Staat jouw platform er niet tussen? Voeg het hier toe als je het werkend krijgt!
 
@@ -57,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Declaratief voor een enkele gebruiker, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Activeer de `programs.starship` module in het `home.nix` bestand en voeg je instellingen in
 
 ```nix
 {
@@ -78,15 +78,15 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+en dan
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Declaratief voor het hele systeem, met NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Voeg `pkgs.starship` toe aan `environment.systemPackages` in `configuration.nix` gevolgd door het aanroepen van
 
 ```sh
 sudo nixos-rebuild switch
