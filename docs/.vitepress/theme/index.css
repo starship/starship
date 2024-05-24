@@ -16,6 +16,13 @@
   justify-content: center;
 }
 
+@media (max-width: 640px) {
+  .VPHero .image-container {
+    max-width: 320px;
+    width: auto;
+  }
+}
+
 .VPHero .image img {
   max-height: 130px;
   max-width: none;
