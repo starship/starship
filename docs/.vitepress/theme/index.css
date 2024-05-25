@@ -24,6 +24,7 @@
 }
 
 .VPHero .image img {
+  width: 100%;
   max-height: 130px;
   max-width: none;
   position: static;
