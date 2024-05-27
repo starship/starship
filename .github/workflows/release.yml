@@ -137,7 +137,7 @@ jobs:
       - name: Sign | Sign [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: signpath/github-action-submit-signing-request@v0.3
+        uses: signpath/github-action-submit-signing-request@v0.4
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
