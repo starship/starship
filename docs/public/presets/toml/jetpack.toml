@@ -201,61 +201,65 @@ renamed = "[◎◦](italic bright-blue)"
 deleted = "[✕](italic red)"
 
 [deno]
-format = " deno [∫ $version](blue italic)"
-version_format = "${major}.${minor}"
+format = " [deno](italic) [∫ $version](green bold)"
+version_format = "${raw}"
 
 [lua]
-format = " lua [${symbol}${version}]($style)"
-symbol = "⨀ "
-style = "italic bright-yellow"
+format = " [lua](italic) [${symbol}${version}]($style)"
+version_format = "${raw}"
+symbol = "⨀ "                                           # ⏾◕
+style = "bold bright-yellow"
 
 [nodejs]
-format = " node [◫ ($version)](italic bright-green)"
+format = " [node](italic) [◫ ($version)](bold bright-green)"
+version_format = "${raw}"
 detect_files = ["package-lock.json", "yarn.lock"]
-version_format = "${major}.${minor}"
+detect_folders = ["node_modules"]
+detect_extensions = []
 
 [python]
-format = " py [${symbol}${version}]($style)"
-symbol = "[⌉](italic bright-blue)⌊ "
-version_format = "${major}.${minor}"
-style = "italic bright-yellow"
+format = " [py](italic) [${symbol}${version}]($style)"
+symbol = "[⌉](bold bright-blue)⌊ "
+version_format = "${raw}"
+style = "bold bright-yellow"
 
 [ruby]
-format = " rb [${symbol}${version}]($style)"
+format = " [rb](italic) [${symbol}${version}]($style)"
 symbol = "◆ "
-version_format = "${major}.${minor}"
-style = "italic red"
+version_format = "${raw}"
+style = "bold red"
 
 [rust]
-format = " rs [$symbol$version]($style)"
+format = " [rs](italic) [$symbol$version]($style)"
 symbol = "⊃ "
-version_format = "${major}.${minor}"
-style = "italic red"
+version_format = "${raw}"
+style = "bold red"
 
 [package]
-format = " pkg [$symbol$version]($style)"
-version_format = "${major}.${minor}"
-symbol = "◫ "
-style = "bright-yellow italic"
+format = " [pkg](italic dimmed) [$symbol$version]($style)"
+version_format = "${raw}"
+symbol = "◨ "
+style = "dimmed yellow italic bold"
 
 [swift]
-format = " sw [${symbol}${version}]($style)"
+format = " [sw](italic) [${symbol}${version}]($style)"
 symbol = "◁ "
-style = "italic bright-red"
-version_format = "${major}.${minor}"
+style = "bold bright-red"
+version_format = "${raw}"
 
 [aws]
-format = " aws [$symbol $profile $region]($style)"
-style = "italic blue"
+disabled = true
+format = " [aws](italic) [$symbol $profile $region]($style)"
+style = "bold blue"
 symbol = "▲ "
 
 [buf]
 symbol = "■ "
-format = " buf [$symbol $version $buf_version]($style)"
+format = " [buf](italic) [$symbol $version $buf_version]($style)"
 
 [c]
-symbol = "∁ "
-format = " c [$symbol($version(-$name))]($style)"
+symbol = "ℂ "
+format = " [$symbol($version(-$name))]($style)"
 
 [conda]
 symbol = "◯ "
@@ -302,8 +306,12 @@ symbol = "▴▲▴ "
 format = " nim [$symbol($version )]($style)"
 
 [nix_shell]
-symbol = "⊛ "
-format = " nix [$symbol$state $name]($style)"
+style = 'bold italic dimmed blue'
+symbol = '✶'
+format = '[$symbol nix⎪$state⎪]($style) [$name](italic dimmed white)'
+impure_msg = '[⌽](bold dimmed red)'
+pure_msg = '[⌾](bold dimmed green)'
+unknown_msg = '[◌](bold dimmed ellow)'
 
 [spack]
 symbol = "◇ "
