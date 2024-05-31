@@ -92,7 +92,7 @@ $time"""
 symbol = ' '
 
 [character]
-format = "$symbol "                               # ◌ ○ ● ◎ ◉ ⚇ ◈ ■ ▲
+format = "$symbol "
 success_symbol = "[◎](bold italic bright-yellow)"
 error_symbol = "[○](blink italic purple)"
 vicmd_symbol = "[■](italic dimmed green)"
@@ -101,14 +101,14 @@ vimcmd_replace_one_symbol = "◌"
 vimcmd_replace_symbol = "□"
 vimcmd_visual_symbol = "▼"
 
-[env_var.VIMSHELL] # vim subshell
+[env_var.VIMSHELL]
 format = "[$env_value]($style)"
 style = 'green italic'
 
 [sudo]
 format = "[$symbol]($style)"
 style = "bold italic bright-purple"
-symbol = "⋈┈"                       # ◇
+symbol = "⋈┈"
 disabled = false
 
 [username]
@@ -121,7 +121,7 @@ show_always = false
 [directory]
 home_symbol = "⌂"
 truncation_length = 2
-truncation_symbol = "□ "                                                                                                                                           # ■□▫
+truncation_symbol = "□ "
 read_only = " ◈"
 use_os_path_sep = true
 style = "italic blue"
@@ -156,7 +156,7 @@ time_range = "00:00:00-17:00:00"
 format = "[ $percentage $symbol]($style)"
 full_symbol = "█"
 charging_symbol = "[↑](blink italic bold green)"
-discharging_symbol = "↓"                         # ↓ ▿
+discharging_symbol = "↓"
 unknown_symbol = "░"
 empty_symbol = "▃"
 
@@ -176,13 +176,13 @@ style = "italic dimmed yellow"
 format = " [$branch(:$remote_branch)]($style)"
 symbol = "[△](bold italic bright-blue)"
 style = "italic bright-blue"
-truncation_symbol = "⋯"                        # ⋯ ┄ ⊸
+truncation_symbol = "⋯"
 truncation_length = 11
 ignore_branches = ["main", "master"]
 only_attached = true
 
 [git_metrics]
-format = '([▴$added]($added_style))([▿$deleted]($deleted_style))' # ⊟⊖-▿ ⊠⊕+▴
+format = '([▴$added]($added_style))([▿$deleted]($deleted_style))'
 added_style = 'italic dimmed green'
 deleted_style = 'italic dimmed red'
 ignore_submodules = true
@@ -209,7 +209,7 @@ version_format = "${raw}"
 [lua]
 format = " [lua](italic) [${symbol}${version}]($style)"
 version_format = "${raw}"
-symbol = "⨀ "                                           # ⏾◕
+symbol = "⨀ "
 style = "bold bright-yellow"
 
 [nodejs]
