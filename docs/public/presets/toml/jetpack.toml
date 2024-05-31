@@ -133,9 +133,9 @@ format = "[◄ $duration ](italic white)"
 show_milliseconds = true
 
 [jobs]
-format = "[ $symbol$number]($style)"
+format = "[$symbol$number]($style) "
 style = "white"
-symbol = "[▶ ](blue italic)"
+symbol = "[▶](blue italic)"
 
 [localip]
 ssh_only = true
