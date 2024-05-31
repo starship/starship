@@ -105,15 +105,16 @@ style = 'green italic'
 
 [sudo]
 format = "[$symbol]($style)"
-style = "italic bright-purple"
-symbol = "◇┈"
+style = "bold italic bright-purple"
+symbol = "⋈┈"                       # ◇
 disabled = false
 
 [username]
-style_user = "yellow bold"
+style_user = "bright-yellow bold italic"
 style_root = "purple bold italic"
-format = "[$user]($style) ▻ "
+format = "[⭘ $user]($style) "
 disabled = false
+show_always = false
 
 [directory]
 home_symbol = "⌂"
