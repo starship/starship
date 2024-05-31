@@ -128,8 +128,9 @@ repo_root_style = 'bold blue'
 repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [△](bold bright-blue)'
 
 [cmd_duration]
-min_time = 500
-format = "[$duration ](italic bright-yellow)"
+min_time = 800
+format = "[◄ $duration ](italic white)"
+show_milliseconds = true
 
 [jobs]
 format = "[ $symbol$number]($style)"
