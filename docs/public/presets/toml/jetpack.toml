@@ -1,14 +1,18 @@
-format = """
-$cmd_duration\
+add_newline = true
+scan_timeout = 500
+command_timeout = 1000
+continuation_prompt = "[▸▹ ](dimmed white)"
+
+format = """($nix_shell$container$fill$git_metrics\n)$cmd_duration\
 $hostname\
 $localip\
 $shlvl\
 $shell\
 $env_var\
-$username\
+$jobs\
 $sudo\
-$character\
-"""
+$username\
+$character"""
 
 right_format = """
 $singularity\
@@ -19,7 +23,6 @@ $fossil_branch\
 $git_branch\
 $git_commit\
 $git_state\
-$git_metrics\
 $git_status\
 $hg_branch\
 $pijul_channel\
@@ -68,7 +71,6 @@ $vlang\
 $vagrant\
 $zig\
 $buf\
-$nix_shell\
 $conda\
 $meson\
 $spack\
@@ -79,15 +81,13 @@ $openstack\
 $azure\
 $crystal\
 $custom\
-$jobs\
 $status\
 $os\
-$container\
 $battery\
-$time\
-"""
+$time"""
 
-add_newline = true
+[fill]
+symbol = ' '
 
 [character]
 format = "$symbol "
