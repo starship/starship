@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
@@ -2811,22 +2811,22 @@ truncation_symbol = ''
 
 ## NATS
 
-The `nats` module shows the name of the current [NATS](https://nats.io) context.
+Модуль `nats` показує назву поточного контексту[NATS](https://nats.io).
 
 ### Параметри
 
-| Параметр   | Стандартно                 | Опис                                                         |
-| ---------- | -------------------------- | ------------------------------------------------------------ |
-| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
-| `style`    | `'bold purple'`            | Стиль модуля.                                                |
-| `format`   | `'[$symbol$name]($style)'` | Формат модуля.                                               |
-| `disabled` | `false`                    | Disables the `nats` module.                                  |
+| Параметр   | Стандартно                 | Опис                                                                 |
+| ---------- | -------------------------- | -------------------------------------------------------------------- |
+| `symbol`   | `'✉️ '`                    | Символ, що використовується перед контекстом NATS (типово порожнім). |
+| `style`    | `'bold purple'`            | Стиль модуля.                                                        |
+| `format`   | `'[$symbol$name]($style)'` | Формат модуля.                                                       |
+| `disabled` | `false`                    | Вимикає модуль `nats`.                                               |
 
 ### Змінні
 
 | Змінна    | Приклад     | Опис                                     |
 | --------- | ----------- | ---------------------------------------- |
-| name      | `localhost` | The name of the NATS context             |
+| name      | `localhost` | Назва контексту NATS                     |
 | symbol    |             | Віддзеркалює значення параметра `symbol` |
 | style\* |             | Віддзеркалює значення параметра `style`  |
 
