@@ -152,20 +152,27 @@ time_range = "00:00:00-17:00:00"
 
 [battery]
 format = "[ $percentage $symbol]($style)"
-full_symbol = "[█](italic green)"
-charging_symbol = "[↑](italic green)"
-discharging_symbol = "[↓](italic)"
-unknown_symbol = "[░](italic)"
-empty_symbol = "[▃](italic red)"
+full_symbol = "█"
+charging_symbol = "[↑](blink italic bold green)"
+discharging_symbol = "↓"                         # ↓ ▿
+unknown_symbol = "░"
+empty_symbol = "▃"
 
 [[battery.display]]
-threshold = 40
-style = "dimmed yellow"
+threshold = 20
+style = "blink italic bold red"
+
+[[battery.display]]
+threshold = 60
+style = "italic dimmed bright-purple"
 
 [[battery.display]]
 threshold = 70
-style = "dimmed white"
+style = "italic dimmed yellow"
 
+# [[battery.display]]
+# threshold = 100
+# style = "dimmed green"
 [git_branch]
 format = "[ $symbol $branch(:$remote_branch)]($style)"
 symbol = "[◬](bold bright-blue)"
