@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | Một format string đại diện cho biểu tượng của Go.                         |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
 | `detect_extensions` | `['gleam']`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['gleam.toml']`                     | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `style`             | `'bold #FFAFF3'`                     | Kiểu cho module.                                                          |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `'⌘ '`                                                                                          | Một format string đại diện cho biểu tượng của Helm.                       |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
@@ -4304,7 +4304,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                           |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                          |
 | `style`             | `'bold #0093A7'`                     | Kiểu cho module.                                                          |
 | `detect_extensions` | `['.typ']`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['template.typ']`                   | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
