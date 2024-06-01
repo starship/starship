@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.                                              |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                           |
 | `detect_extensions` | `['gleam']`                          | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['gleam.toml']`                     | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `style`             | `'bold #FFAFF3'`                     | Lo stile per il modulo.                                                                     |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                                  |
-| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                                            |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                            |
 | `style`             | `'bold fg:202'`                                                                                 | Lo stile per il modulo.                                                                     |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                                 |
 
@@ -4304,7 +4304,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                             |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                            |
 | `style`             | `'bold #0093A7'`                     | Lo stile per il modulo.                                                                     |
 | `detect_extensions` | `['.typ']`                           | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['template.typ']`                   | Quali nomi di file dovrebbero attivare questo modulo.                                       |
