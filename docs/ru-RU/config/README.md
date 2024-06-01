@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                            |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.                            |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
 | `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
 | `style`             | `'bold #FFAFF3'`                     | Стиль модуля.                                                             |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
-| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                          |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | Стиль модуля.                                                             |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
@@ -4304,7 +4304,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                            |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                           |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                          |
 | `style`             | `'bold #0093A7'`                     | Стиль модуля.                                                             |
 | `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
 | `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
