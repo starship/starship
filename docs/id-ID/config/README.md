@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.                                      |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                   |
 | `detect_extensions` | `['gleam']`                          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['gleam.toml']`                     | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `style`             | `'bold #FFAFF3'`                     | Gaya penataan untuk modul.                                                          |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                                    |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                    |
 | `style`             | `'bold fg:202'`                                                                                 | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                         |
 
@@ -4304,7 +4304,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                     |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                    |
 | `style`             | `'bold #0093A7'`                     | Gaya penataan untuk modul.                                                          |
 | `detect_extensions` | `['.typ']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['template.typ']`                   | filenames mana yang sebaiknya memicu modul ini.                                     |
