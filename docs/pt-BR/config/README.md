@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | O formato da string que representa o simbolo do Go.                                 |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                   |
 | `detect_extensions` | `['gleam']`                          | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['gleam.toml']`                     | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `style`             | `'bold #FFAFF3'`                     | O estilo do módulo.                                                                 |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Quais pastas devem ativar este módulo.                                              |
-| `symbol`            | `'⌘ '`                                                                                          | O formato de string que representa o simbolo do Helm.                               |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                    |
 | `style`             | `'bold fg:202'`                                                                                 | O estilo do módulo.                                                                 |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                         |
 
@@ -4304,7 +4304,7 @@ Por padrão, o módulo será exibido se qualquer das seguintes condições for a
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                     |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                    |
 | `style`             | `'bold #0093A7'`                     | O estilo do módulo.                                                                 |
 | `detect_extensions` | `['.typ']`                           | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['template.typ']`                   | Quais nomes de arquivos devem ativar este módulo.                                   |
