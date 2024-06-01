@@ -25,7 +25,7 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## TransientPrompt and TransientRightPrompt in Cmd
+## TransientPrompt ve TransientRightPrompt Cmd'de
 
 Clink allows you to replace the previous-printed prompt with custom strings. Bu tüm bilgi istemi bilgilerinin her zaman gerekli olmadığı durumlarda kullanışlıdır. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
