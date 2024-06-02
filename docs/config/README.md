@@ -4235,7 +4235,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `not_found_symbol`          | `'🔍'`                                                                        | The symbol displayed when the command can't be found                  |
 | `sigint_symbol`             | `'🧱'`                                                                        | The symbol displayed on SIGINT (Ctrl + c)                             |
 | `signal_symbol`             | `'⚡'`                                                                        | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                  | The style for the module.                                             |
+| `style`                     | `'bold red'`                                                                  | The style for the module                                             |
+| `success_style`             | `'bold green'`                                                                | The style of the success symbol
 | `recognize_signal_code`     | `true`                                                                        | Enable signal mapping from exit code                                  |
 | `map_symbol`                | `false`                                                                       | Enable symbols mapping from exit code                                 |
 | `pipestatus`                | `false`                                                                       | Enable pipestatus reporting                                           |
@@ -4267,7 +4268,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [status]
-style = 'bg:blue'
+style = 'fg:red'
+success_style = 'fg:green'
 symbol = '🔴 '
 success_symbol = '🟢 SUCCESS'
 format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
