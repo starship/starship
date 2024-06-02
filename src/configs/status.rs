@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
+#[derive(Debug)]
 pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -16,6 +17,7 @@ pub struct StatusConfig<'a> {
     pub sigint_symbol: &'a str,
     pub signal_symbol: &'a str,
     pub style: &'a str,
+    pub success_style: &'a str,
     pub map_symbol: bool,
     pub recognize_signal_code: bool,
     pub pipestatus: bool,
@@ -37,6 +39,7 @@ impl<'a> Default for StatusConfig<'a> {
             sigint_symbol: "🧱",
             signal_symbol: "⚡",
             style: "bold red",
+            success_style: "bold green",
             map_symbol: false,
             recognize_signal_code: true,
             pipestatus: false,

@@ -157,10 +157,13 @@ fn format_exit_code<'a>(
                 },
                 _ => None,
             })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+            .map_style(|variable|{log::warn!("Var: {}", variable); match variable {
+                "style" => match exit_code_int {
+                    0 => Some(Ok(config.success_style)),
+                    _ => Some(Ok(config.style))
+                },
                 _ => None,
-            })
+            }})
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
                 "hex_status" => Some(Ok(hex_status.as_ref())),
@@ -315,6 +318,7 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 success_symbol = "✔️"
+                success_style = "bold red"  
                 disabled = false
             })
             .status(0)
@@ -326,6 +330,7 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 success_symbol = "✔️"
+                success_style = "bold red"  
                 disabled = false
             })
             .collect();
