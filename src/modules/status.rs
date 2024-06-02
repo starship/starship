@@ -805,6 +805,7 @@ mod tests {
                 [status]
                 format = "\\($status\\)"
                 style = "fg:white bg:red bold"
+                success_style = "fg:white bg:red bold"
                 pipestatus = true
                 pipestatus_separator = "[|](fg:white bg:green italic)"
                 pipestatus_format = "[\\[]($style)$pipestatus[\\] => <$status>]($style)"
