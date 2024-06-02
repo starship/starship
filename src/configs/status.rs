@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-#[derive(Debug)]
 pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
