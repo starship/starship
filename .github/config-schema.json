@@ -367,7 +367,7 @@
         "format": "[$symbol$loaded/$allowed]($style) ",
         "loaded_msg": "loaded",
         "not_allowed_msg": "not allowed",
-        "style": "bold orange",
+        "style": "bold bright-yellow",
         "symbol": "direnv ",
         "unloaded_msg": "not loaded"
       },
@@ -2821,7 +2821,7 @@
           "type": "string"
         },
         "style": {
-          "default": "bold orange",
+          "default": "bold bright-yellow",
           "type": "string"
         },
         "disabled": {
