@@ -339,7 +339,7 @@ mod tests {
     }
 
     #[test]
-    fn succes_error_int() {
+    fn success_error_int() {
         let expected = Some(format!("{}", Color::Red.bold().paint("✔️")));
 
         // Status code 0
