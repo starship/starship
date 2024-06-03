@@ -162,9 +162,15 @@ fn format_exit_code<'a>(
                 _ => None,
             })
             .map(|variable| match variable {
-                "status" => Some(Ok(exit_code)),
+                "status" | "int" => Some(Ok(exit_code)),
+                "error_int" => {
+                    if exit_code_int != 0 {
+                        Some(Ok(exit_code))
+                    } else {
+                        None
+                    }
+                }
                 "hex_status" => Some(Ok(hex_status.as_ref())),
-                "int" => Some(Ok(exit_code)),
                 "maybe_int" => Ok(maybe_exit_code_number).transpose(),
                 "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
@@ -330,6 +336,47 @@ mod tests {
             })
             .collect();
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn succes_error_int() {
+        let expected = Some(format!("{}", Color::Red.bold().paint("✔️")));
+
+        // Status code 0
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                success_symbol = "✔️"
+                disabled = false
+                format="[$symbol$error_int]($style)"
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn failure_status_error_int() {
+        let exit_values = [1, 2, 130];
+
+        for status in &exit_values {
+            let expected = Some(format!(
+                "{}",
+                Color::Red.bold().paint(format!("❌{status}"))
+            ));
+
+            // Status code 0
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "❌"
+                    disabled = false
+                    format="[$symbol$error_int]($style)"
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
     }
 
     #[test]

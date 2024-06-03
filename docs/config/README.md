@@ -4251,6 +4251,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | status         | `127`   | The exit code of the last command                                                          |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
 | int            | `127`   | The exit code of the last command                                                          |
+| error_int      | `127`   | The exit code of the last command if it is non zero                                        |
 | common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
 | signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
