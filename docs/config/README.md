@@ -4495,7 +4495,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
 | `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+| `disabled`          | `false`                              | Disables the `typst` module.                                              |
 
 ### Variables
 
