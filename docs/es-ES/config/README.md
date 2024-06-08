@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
 | `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | Una cadena de formato que representa el símbolo de Go.                                  |
+| `symbol`            | `'⭐ '`                               | Una cadena de formato que representa el símbolo de Gleam.                                  |
 | `detect_extensions` | `['gleam']`                          | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['gleam.toml']`                     | Qué nombres de archivo deberían activar este módulo.                                    |
 | `style`             | `'bold #FFAFF3'`                     | El estilo del módulo.                                                                   |

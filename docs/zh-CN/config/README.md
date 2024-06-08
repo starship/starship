@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ---------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                       |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`    |
-| `符号`                | `'⭐ '`                               | A format string representing the symbol of Go. |
+| `符号`                | `'⭐ '`                               | A format string representing the symbol of Gleam. |
 | `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.   |
 | `detect_files`      | `['gleam.toml']`                     | 哪些文件应触发此组件                                     |
 | `style`             | `'bold #FFAFF3'`                     | 此组件的样式。                                        |
