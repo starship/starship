@@ -4309,7 +4309,7 @@ time_range = '10:00:00-14:00:00'
 | `detect_extensions` | `['.typ']`                           | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['template.typ']`                   | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `disabled`          | `false`                              | `daml`モジュールを無効にします。                                    |
+| `disabled`          | `false`                              | Disables the `typst` module.                           |
 
 ### 変数
 
