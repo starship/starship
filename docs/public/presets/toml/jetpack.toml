@@ -93,11 +93,6 @@ symbol = ' '
 format = "$symbol "
 success_symbol = "[◎](bold italic bright-yellow)"
 error_symbol = "[○](blink italic purple)"
-# vicmd_symbol = "[■](italic dimmed green)"
-# not supported in zsh
-# vimcmd_replace_one_symbol = "◌"
-# vimcmd_replace_symbol = "□"
-# vimcmd_visual_symbol = "▼"
 
 [env_var.VIMSHELL]
 format = "[$env_value]($style)"
