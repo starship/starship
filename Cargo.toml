@@ -67,7 +67,7 @@ pest_derive = "2.7.9"
 quick-xml = "0.31.0"
 rand = "0.8.5"
 rayon = "1.10.0"
-regex = { version = "1.10.4", default-features = false, features = ["perf", "std", "unicode-perl"] }
+regex = { version = "1.10.5", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.0"
 semver = "1.0.23"
 serde = { version = "1.0.203", features = ["derive"] }
