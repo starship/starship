@@ -4309,7 +4309,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['.typ']`                           | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['template.typ']`                   | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
-| `disabled`          | `false`                              | Disables the `daml` module.                                                                 |
+| `disabled`          | `false`                              | Disables the `typst` module.                                                                |
 
 ### Variables
 
