@@ -1,8 +1,6 @@
 # version: 1.0.0
 
 add_newline = true
-scan_timeout = 500
-command_timeout = 1000
 continuation_prompt = "[▸▹ ](dimmed white)"
 
 format = """($nix_shell$container$fill$git_metrics\n)$cmd_duration\
