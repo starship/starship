@@ -40,7 +40,7 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">İnternet sitesi</a>
   ·
   <a href="#🚀-installation">Kurulum</a>
   ·
