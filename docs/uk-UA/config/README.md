@@ -4309,7 +4309,7 @@ time_range = '10:00:00-14:00:00'
 | `detect_extensions` | `['.typ']`                           | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['template.typ']`                   | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
-| `disabled`          | `false`                              | Вимикає модуль `daml`.                                            |
+| `disabled`          | `false`                              | Disables the `typst` module.                                      |
 
 ### Змінні
 
