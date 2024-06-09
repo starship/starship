@@ -4309,7 +4309,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.     |
 | `detect_files`      | `['template.typ']`                   | 哪些文件应触发此组件                                       |
 | `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                     |
-| `disabled`          | `false`                              | Disables the `daml` module.                      |
+| `disabled`          | `false`                              | Disables the `typst` module.                     |
 
 ### 变量
 
