@@ -107,7 +107,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let have_env_vars = context.detect_env_vars(&config.detect_env_vars);
+    let have_env_config = !config.detect_env_vars.is_empty();
+    let have_env_vars = have_env_config.then(|| context.detect_env_vars(&config.detect_env_vars));
 
     // If we have some config for doing the directory scan then we use it but if we don't then we
     // assume we should treat it like the module is enabled to preserve backward compatibility.
@@ -129,7 +130,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         })
     });
 
-    if !is_kube_project.unwrap_or(true) && !have_env_vars {
+    if !is_kube_project.or(have_env_vars).unwrap_or(true) {
         return None;
     }
 
@@ -445,6 +446,16 @@ users: []
             })
             .collect();
 
+        let actual_none = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+            })
+            .collect();
+
         let expected = Some(format!(
             "{} in ",
             Color::Cyan.bold().paint("☸ test_context")
@@ -454,6 +465,7 @@ users: []
         assert_eq!(expected, actual_ext);
         assert_eq!(expected, actual_dir);
         assert_eq!(expected, actual_env_var);
+        assert_eq!(None, actual_none);
 
         dir.close()
     }
