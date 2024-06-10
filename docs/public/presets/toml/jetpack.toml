@@ -128,9 +128,7 @@ repo_root_style = 'bold blue'
 repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [△](bold bright-blue)'
 
 [cmd_duration]
-min_time = 800
 format = "[◄ $duration ](italic white)"
-show_milliseconds = true
 
 [jobs]
 format = "[$symbol$number]($style) "
@@ -148,7 +146,6 @@ format = "[ $time]($style)"
 time_format = "%R"
 utc_time_offset = "local"
 style = "italic dimmed white"
-time_range = "00:00:00-17:00:00"
 
 [battery]
 format = "[ $percentage $symbol]($style)"
