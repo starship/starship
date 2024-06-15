@@ -30,7 +30,6 @@ pub struct GitStatusConfig<'a> {
     pub index_deleted: &'a str,
     pub index_modified: &'a str,
     pub index_typechanged: &'a str,
-    pub untracked_as_worktree_added: bool,
     pub ignore_submodules: bool,
     pub disabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,7 +61,6 @@ impl<'a> Default for GitStatusConfig<'a> {
             index_deleted: "",
             index_modified: "",
             index_typechanged: "",
-            untracked_as_worktree_added: false,
             ignore_submodules: false,
             disabled: false,
             windows_starship: None,

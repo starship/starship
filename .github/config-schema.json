@@ -663,7 +663,6 @@
         "style": "red bold",
         "typechanged": "",
         "untracked": "?",
-        "untracked_as_worktree_added": false,
         "up_to_date": "",
         "worktree_added": "",
         "worktree_deleted": "",
@@ -3608,10 +3607,6 @@
         "index_typechanged": {
           "default": "",
           "type": "string"
-        },
-        "untracked_as_worktree_added": {
-          "default": false,
-          "type": "boolean"
         },
         "ignore_submodules": {
           "default": false,
