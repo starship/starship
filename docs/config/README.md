@@ -1966,34 +1966,33 @@ You can disable the module or use the `windows_starship` option to use a Windows
 
 ### Options
 
-| Option                        | Default                                       | Description                                                                                                 |
-| ----------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`                      | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`                  | `'='`                                         | This branch has merge conflicts.                                                                            |
-| `ahead`                       | `'⇡'`                                         | The format of `ahead`                                                                                       |
-| `behind`                      | `'⇣'`                                         | The format of `behind`                                                                                      |
-| `diverged`                    | `'⇕'`                                         | The format of `diverged`                                                                                    |
-| `up_to_date`                  | `''`                                          | The format of `up_to_date`                                                                                  |
-| `untracked`                   | `'?'`                                         | The format of `untracked`                                                                                   |
-| `stashed`                     | `'$'`                                         | The format of `stashed`                                                                                     |
-| `modified`                    | `'!'`                                         | The format of `modified`                                                                                    |
-| `staged`                      | `'+'`                                         | The format of `staged`                                                                                      |
-| `renamed`                     | `'»'`                                         | The format of `renamed`                                                                                     |
-| `deleted`                     | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`                 | `""`                                          | The format of `typechanged`                                                                                 |
-| `style`                       | `'bold red'`                                  | The style for the module.                                                                                   |
-| `ignore_submodules`           | `false`                                       | Ignore changes to submodules.                                                                               |
-| `worktree_added`              | `""`                                          | The format of `worktree_added`                                                                              |
-| `worktree_deleted`            | `""`                                          | The format of `worktree_deleted`                                                                            |
-| `worktree_modified`           | `""`                                          | The format of `worktree_modified`                                                                           |
-| `worktree_typechanged`        | `""`                                          | The format of `worktree_typechanged`                                                                        |
-| `index_added`                 | `""`                                          | The format of `index_added`                                                                                 |
-| `index_deleted`               | `""`                                          | The format of `index_deleted`                                                                               |
-| `index_modified`              | `""`                                          | The format of `index_modified`                                                                              |
-| `index_typechanged`           | `""`                                          | The format of `index_typechanged`                                                                           |
-| `untracked_as_worktree_added` | `false`                                       | Add `untracked` files to `worktree_added` count                                                             |
-| `disabled`                    | `false`                                       | Disables the `git_status` module.                                                                           |
-| `windows_starship`            |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Option                 | Default                                       | Description                                                                                                 |
+| ---------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                         | This branch has merge conflicts.                                                                            |
+| `ahead`                | `'⇡'`                                         | The format of `ahead`                                                                                       |
+| `behind`               | `'⇣'`                                         | The format of `behind`                                                                                      |
+| `diverged`             | `'⇕'`                                         | The format of `diverged`                                                                                    |
+| `up_to_date`           | `''`                                          | The format of `up_to_date`                                                                                  |
+| `untracked`            | `'?'`                                         | The format of `untracked`                                                                                   |
+| `stashed`              | `'$'`                                         | The format of `stashed`                                                                                     |
+| `modified`             | `'!'`                                         | The format of `modified`                                                                                    |
+| `staged`               | `'+'`                                         | The format of `staged`                                                                                      |
+| `renamed`              | `'»'`                                         | The format of `renamed`                                                                                     |
+| `deleted`              | `'✘'`                                         | The format of `deleted`                                                                                     |
+| `typechanged`          | `""`                                          | The format of `typechanged`                                                                                 |
+| `style`                | `'bold red'`                                  | The style for the module.                                                                                   |
+| `ignore_submodules`    | `false`                                       | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                          | The format of `worktree_added`                                                                              |
+| `worktree_deleted`     | `""`                                          | The format of `worktree_deleted`                                                                            |
+| `worktree_modified`    | `""`                                          | The format of `worktree_modified`                                                                           |
+| `worktree_typechanged` | `""`                                          | The format of `worktree_typechanged`                                                                        |
+| `index_added`          | `""`                                          | The format of `index_added`                                                                                 |
+| `index_deleted`        | `""`                                          | The format of `index_deleted`                                                                               |
+| `index_modified`       | `""`                                          | The format of `index_modified`                                                                              |
+| `index_typechanged`    | `""`                                          | The format of `index_typechanged`                                                                           |
+| `disabled`             | `false`                                       | Disables the `git_status` module.                                                                           |
+| `windows_starship`     |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
 

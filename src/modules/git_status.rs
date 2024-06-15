@@ -107,27 +107,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "typechanged" => info.get_typechanged().and_then(|count| {
                         format_count(config.typechanged, "git_status.typechanged", context, count)
                     }),
-                    "worktree_added" => {
-                        if config.untracked_as_worktree_added {
-                            info.get_worktree_added_and_untracked().and_then(|count| {
-                                format_count(
-                                    config.worktree_added,
-                                    "git_status.worktree_added",
-                                    context,
-                                    count,
-                                )
-                            })
-                        } else {
-                            info.get_worktree_added().and_then(|count| {
-                                format_count(
-                                    config.worktree_added,
-                                    "git_status.worktree_added",
-                                    context,
-                                    count,
-                                )
-                            })
-                        }
-                    }
+                    "worktree_added" => info.get_worktree_added().and_then(|count| {
+                        format_count(
+                            config.worktree_added,
+                            "git_status.worktree_added",
+                            context,
+                            count,
+                        )
+                    }),
                     "worktree_deleted" => info.get_worktree_deleted().and_then(|count| {
                         format_count(
                             config.worktree_deleted,
@@ -285,11 +272,6 @@ impl<'a> GitStatusInfo<'a> {
         self.get_repo_status().map(|data| data.worktree_added)
     }
 
-    pub fn get_worktree_added_and_untracked(&self) -> Option<usize> {
-        self.get_repo_status()
-            .map(|data| data.worktree_added_and_untracked)
-    }
-
     pub fn get_worktree_deleted(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.worktree_deleted)
     }
@@ -338,7 +320,7 @@ fn get_repo_status(
     }
 
     // ... and add flags that omit information the user doesn't want
-    let has_untracked = !config.untracked.is_empty() || config.untracked_as_worktree_added;
+    let has_untracked = !config.untracked.is_empty();
     if !has_untracked {
         args.push("--untracked-files=no");
     }
@@ -400,7 +382,6 @@ struct RepoStatus {
     typechanged: usize,
     untracked: usize,
     worktree_added: usize,
-    worktree_added_and_untracked: usize,
     worktree_deleted: usize,
     worktree_modified: usize,
     worktree_typechanged: usize,
@@ -483,7 +464,6 @@ impl RepoStatus {
 
         if Self::is_worktree_added(short_status) {
             self.worktree_added += 1;
-            self.worktree_added_and_untracked += 1;
         }
 
         if Self::is_worktree_deleted(short_status) {
@@ -523,10 +503,7 @@ impl RepoStatus {
                 self.parse_normal_status(&s[2..4])
             }
             Some('u') => self.conflicted += 1,
-            Some('?') => {
-                self.untracked += 1;
-                self.worktree_added_and_untracked += 1;
-            }
+            Some('?') => self.untracked += 1,
             Some('!') => (),
             Some(_) => log::error!("Unknown line type in git status output"),
             None => log::error!("Missing line type in git status output"),
@@ -1196,48 +1173,6 @@ mod tests {
     }
 
     #[test]
-    fn shows_worktree_added_and_untracked_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
-
-        create_added_and_untracked(repo_dir.path())?;
-
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_added"
-                untracked_as_worktree_added = false
-                worktree_added = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("1"));
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
-    fn shows_worktree_added_and_untracked_with_count_combined() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
-
-        create_added_and_untracked(repo_dir.path())?;
-
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$worktree_added"
-                untracked_as_worktree_added = true
-                worktree_added = "$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("2"));
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
     fn shows_staged_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1698,14 +1633,6 @@ mod tests {
             .args(["add", "-A", "-N"])
             .current_dir(repo_dir)
             .output()?;
-
-        Ok(())
-    }
-
-    fn create_added_and_untracked(repo_dir: &Path) -> io::Result<()> {
-        create_added(repo_dir)?;
-
-        File::create(repo_dir.join(".gitignore"))?.sync_all()?;
 
         Ok(())
     }
