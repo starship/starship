@@ -274,9 +274,9 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 </details>
 
-### 2. Adım Kabuğunuzu Starship kullanması için hazırlayın
+### 2. Adım Shellinizi Starshipi kurmaya hazır hale getirin
 
-Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
+Shelli starship ile çalışması için ayarla. Aşağıdaki listeden Shellinizi seçin:
 
 <details>
 <summary>Bash</summary>
