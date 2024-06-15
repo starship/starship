@@ -427,43 +427,40 @@ impl RepoStatus {
     fn parse_normal_status(&mut self, short_status: &str) {
         if Self::is_worktree_added(short_status) {
             self.worktree_added += 1;
-            self.modified += 1; // is_wt_modified || is_wt_added
         }
 
         if Self::is_worktree_deleted(short_status) {
             self.worktree_deleted += 1;
-            self.deleted += 1; // is_wt_deleted || is_index_deleted
         }
 
         if Self::is_worktree_modified(short_status) {
             self.worktree_modified += 1;
-            self.modified += 1; // is_wt_modified || is_wt_added
         }
 
         if Self::is_worktree_typechanged(short_status) {
             self.worktree_typechanged += 1;
-            self.typechanged += 1;
         }
 
         if Self::is_index_added(short_status) {
             self.index_added += 1;
-            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
 
         if Self::is_index_deleted(short_status) {
             self.index_deleted += 1;
-            self.deleted += 1; // is_wt_deleted || is_index_deleted
         }
 
         if Self::is_index_modified(short_status) {
             self.index_modified += 1;
-            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
 
         if Self::is_index_typechanged(short_status) {
             self.index_typechanged += 1;
-            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
+
+        self.deleted += self.worktree_deleted + self.index_deleted;
+        self.modified += self.worktree_modified + self.worktree_added;
+        self.staged += self.index_modified + self.index_added + self.index_typechanged;
+        self.typechanged += self.worktree_typechanged;
     }
 
     fn add(&mut self, s: &str) {
