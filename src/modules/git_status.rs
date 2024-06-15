@@ -392,27 +392,6 @@ struct RepoStatus {
 }
 
 impl RepoStatus {
-    fn is_deleted(short_status: &str) -> bool {
-        // is_wt_deleted || is_index_deleted
-        Self::is_worktree_deleted(short_status) || Self::is_index_deleted(short_status)
-    }
-
-    fn is_modified(short_status: &str) -> bool {
-        // is_wt_modified || is_wt_added
-        Self::is_worktree_modified(short_status) || Self::is_worktree_added(short_status)
-    }
-
-    fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added || is_index_typechanged
-        Self::is_index_modified(short_status)
-            || Self::is_index_added(short_status)
-            || Self::is_index_typechanged(short_status)
-    }
-
-    fn is_typechanged(short_status: &str) -> bool {
-        Self::is_worktree_typechanged(short_status)
-    }
-
     fn is_index_typechanged(short_status: &str) -> bool {
         short_status.starts_with('T')
     }
@@ -446,52 +425,44 @@ impl RepoStatus {
     }
 
     fn parse_normal_status(&mut self, short_status: &str) {
-        if Self::is_deleted(short_status) {
-            self.deleted += 1;
-        }
-
-        if Self::is_modified(short_status) {
-            self.modified += 1;
-        }
-
-        if Self::is_staged(short_status) {
-            self.staged += 1;
-        }
-
-        if Self::is_typechanged(short_status) {
-            self.typechanged += 1;
-        }
-
         if Self::is_worktree_added(short_status) {
             self.worktree_added += 1;
+            self.modified += 1; // is_wt_modified || is_wt_added
         }
 
         if Self::is_worktree_deleted(short_status) {
             self.worktree_deleted += 1;
+            self.deleted += 1; // is_wt_deleted || is_index_deleted
         }
 
         if Self::is_worktree_modified(short_status) {
             self.worktree_modified += 1;
+            self.modified += 1; // is_wt_modified || is_wt_added
         }
 
         if Self::is_worktree_typechanged(short_status) {
             self.worktree_typechanged += 1;
+            self.typechanged += 1;
         }
 
         if Self::is_index_added(short_status) {
             self.index_added += 1;
+            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
 
         if Self::is_index_deleted(short_status) {
             self.index_deleted += 1;
+            self.deleted += 1; // is_wt_deleted || is_index_deleted
         }
 
         if Self::is_index_modified(short_status) {
             self.index_modified += 1;
+            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
 
         if Self::is_index_typechanged(short_status) {
             self.index_typechanged += 1;
+            self.staged += 1; // is_index_modified || is_index_added || is_index_typechanged
         }
     }
 
