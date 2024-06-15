@@ -457,10 +457,10 @@ impl RepoStatus {
             self.index_typechanged += 1;
         }
 
-        self.deleted += self.worktree_deleted + self.index_deleted;
-        self.modified += self.worktree_modified + self.worktree_added;
-        self.staged += self.index_modified + self.index_added + self.index_typechanged;
-        self.typechanged += self.worktree_typechanged;
+        self.deleted = self.worktree_deleted + self.index_deleted;
+        self.modified = self.worktree_modified + self.worktree_added;
+        self.staged = self.index_modified + self.index_added + self.index_typechanged;
+        self.typechanged = self.worktree_typechanged;
     }
 
     fn add(&mut self, s: &str) {
