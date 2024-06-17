@@ -89,6 +89,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let (config_name, config_path) = get_current_config(context)?;
+
+    if config_name == "NONE" {
+        return None;
+    }
     let gcloud_context = GcloudContext::new(&config_name, &config_path);
     let account: Lazy<Option<Account<'_>>, _> = Lazy::new(|| gcloud_context.get_account());
 
