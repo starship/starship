@@ -467,6 +467,16 @@ project = very-long-project-name
     }
 
     #[test]
+    fn no_active_config() {
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_ACTIVE_CONFIG_NAME", "NONE")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn active_config_manually_overridden() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
