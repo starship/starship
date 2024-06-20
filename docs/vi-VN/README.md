@@ -46,7 +46,7 @@ onMounted(() => {
 
 ### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Đã cài đặt một [Nerd Font](https://www.nerdfonts.com/) và được kích hoạt trong terminal của bạn.
 
 ### Cài đặt nhanh chóng
 
@@ -72,7 +72,7 @@ onMounted(() => {
    brew install starship
    ```
 
-   With [Winget](https://github.com/microsoft/winget-cli):
+   Với [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
@@ -138,7 +138,7 @@ onMounted(() => {
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Chỉ hỗ trợ elvish từ phiên bản 0.18 trở lên.
 
    :::
 
@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   This will change in the future. Chỉ hỗ trợ nushell từ phiên bản 0.78 trở lên.
 
    :::
 
