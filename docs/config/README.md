@@ -739,16 +739,18 @@ are only supported in fish due to [upstream issues with mode detection in zsh](h
 
 ### Options
 
-| Option                      | Default              | Description                                                                             |
-| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                    | `'$symbol '`         | The format string used before the text input.                                           |
-| `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.         |
-| `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.            |
-| `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.        |
-| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
-| `disabled`                  | `false`              | Disables the `character` module.                                                        |
+| Option                      | Default              | Description                                                                                 |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `format`                    | `'$symbol '`         | The format string used before the text input.                                               |
+| `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.             |
+| `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.                |
+| `root_success_symbol`       | `'[❯](bold blue)'`   | The format string used before the text input if the previous command succeeded (root user). |
+| `root_error_symbol`         | `'[❯](bold purple)`  | The format string used before the text input if the previous command failed (root user).    |
+| `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.            |
+| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode.     |
+| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.           |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.            |
+| `disabled`                  | `false`              | Disables the `character` module.                                                            |
 
 ### Variables
 
@@ -766,6 +768,8 @@ are only supported in fish due to [upstream issues with mode detection in zsh](h
 [character]
 success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
+root_success_symbol = '[➜](bold blue) '
+root_error_symbol = '[✗](bold purple) '
 ```
 
 #### Without custom error shape
@@ -776,6 +780,8 @@ error_symbol = '[✗](bold red) '
 [character]
 success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
+root_success_symbol = '[➜](bold blue) '
+root_error_symbol = '[➜](bold purple) '
 ```
 
 #### With custom vim shape
