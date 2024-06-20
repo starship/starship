@@ -5,7 +5,7 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::Duration;
 
-use process_control::{ChildExt, Control, Output};
+use process_control::{ChildExt, Control, ExitStatus, Output};
 
 use super::{Context, Module, ModuleConfig};
 
@@ -59,7 +59,15 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let (output, status) = exec_command(config.command, context, &config)?;
+    status.code()?;
+    let status_code = status.code().unwrap();
+    let format = config
+        .formats
+        .get(&status_code.to_string())
+        .unwrap_or(&config.format);
+
+    let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -71,7 +79,6 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
-                    let output = exec_command(config.command, context, &config)?;
                     let trimmed = output.trim();
 
                     if trimmed.is_empty() {
@@ -80,6 +87,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                         Some(Ok(trimmed.to_string()))
                     }
                 }
+                "status" => Some(Ok(status_code.to_string())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -110,13 +118,13 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         return config;
     } else if let Some(modules) = context.config.get_custom_modules() {
         log::debug!(
-                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                DebugCustomModules(modules),
-        );
+            "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+            DebugCustomModules(modules),
+    );
     } else {
         log::debug!(
-            "top level format contains custom module {module_name:?}, but no configuration was provided.",
-        );
+        "top level format contains custom module {module_name:?}, but no configuration was provided.",
+    );
     };
     None
 }
@@ -135,6 +143,18 @@ fn get_shell<'a, 'b>(
         ("cmd".into(), &[] as &[&str])
     } else {
         ("sh".into(), &[] as &[&str])
+    }
+}
+
+fn get_cmd_wrapper(shell: &str, cmd: &str, _use_stdin: bool) -> String {
+    match shell {
+        "powershell" | "pwsh" => {
+            format!("{}; exit $LASTEXITCODE", cmd)
+        }
+        "bash" | "sh" => {
+            format!("{}; exit $?", cmd)
+        }
+        _ => cmd.to_string(),
     }
 }
 
@@ -178,8 +198,10 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
     let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
 
+    let cmd_wrapper = get_cmd_wrapper(&shell, cmd, use_stdin);
+
     if !use_stdin {
-        command.arg(cmd);
+        command.arg(cmd_wrapper.clone());
     }
 
     let mut child = match command.spawn() {
@@ -194,7 +216,11 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     };
 
     if use_stdin {
-        child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
+        child
+            .stdin
+            .as_mut()?
+            .write_all(cmd_wrapper.as_bytes())
+            .ok()?;
     }
 
     let mut output = child.controlled_with_output();
@@ -241,24 +267,18 @@ fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
 }
 
 /// Execute the given command, returning its output on success
-fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<String> {
+fn exec_command(
+    cmd: &str,
+    context: &Context,
+    config: &CustomConfig,
+) -> Option<(String, ExitStatus)> {
     log::trace!("Running '{cmd}'");
 
     if let Some(output) = shell_command(cmd, config, context) {
-        if !output.status.success() {
-            log::trace!("Non-zero exit code '{:?}'", output.status.code());
-            log::trace!(
-                "stdout: {}",
-                std::str::from_utf8(&output.stdout).unwrap_or("<invalid utf8>")
-            );
-            log::trace!(
-                "stderr: {}",
-                std::str::from_utf8(&output.stderr).unwrap_or("<invalid utf8>")
-            );
-            return None;
-        }
-
-        Some(String::from_utf8_lossy(&output.stdout).into())
+        Some((
+            String::from_utf8_lossy(&output.stdout).into(),
+            output.status,
+        ))
     } else {
         None
     }
