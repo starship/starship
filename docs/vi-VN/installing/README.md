@@ -13,7 +13,7 @@ Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp nh�
 
 ### Yêu cầu
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Đi tới [trang cài đặt Chocolatey](https://chocolatey.org/install) và làm theo hướng dẫn để cài đặt Chocolatey.
 
 ### Cài đặt
 
