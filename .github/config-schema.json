@@ -1332,6 +1332,7 @@
         "format": "via [$symbol($version )]($style)",
         "style": "147 bold",
         "symbol": "🐘 ",
+        "use_symfony_cli": false,
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -5057,6 +5058,10 @@
           "items": {
             "type": "string"
           }
+        },
+        "use_symfony_cli": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
