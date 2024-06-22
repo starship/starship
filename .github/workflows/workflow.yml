@@ -224,6 +224,7 @@ jobs:
       - name: Sign | Upload Executable [Windows]
         uses: actions/upload-artifact@v4
         continue-on-error: true
+        id: unsigned-artifacts
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
           name: unsigned-artifacts-dbg
@@ -239,7 +240,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
           project-slug: 'starship'
-          github-artifact-name: 'unsigned-artifacts-dbg'
+          github-artifact-id: '${{ steps.unsigned-artifacts.outputs.artifact-id }}'
           signing-policy-slug: 'test-signing'
           wait-for-completion: true
           output-artifact-directory: target/debug
