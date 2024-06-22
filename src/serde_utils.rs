@@ -103,9 +103,9 @@ impl ValueDeserializer<'_> {
 }
 
 impl<'de> IntoDeserializer<'de> for ValueDeserializer<'de> {
-    type Deserializer = ValueDeserializer<'de>;
+    type Deserializer = Self;
 
-    fn into_deserializer(self) -> ValueDeserializer<'de> {
+    fn into_deserializer(self) -> Self {
         self
     }
 }
