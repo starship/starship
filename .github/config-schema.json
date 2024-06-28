@@ -1377,7 +1377,9 @@
           "purs"
         ],
         "detect_files": [
-          "spago.dhall"
+          "spago.dhall",
+          "spago.yaml",
+          "spago.lock"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -5164,7 +5166,9 @@
         },
         "detect_files": {
           "default": [
-            "spago.dhall"
+            "spago.dhall",
+            "spago.yaml",
+            "spago.lock"
           ],
           "type": "array",
           "items": {
