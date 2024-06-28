@@ -1,6 +1,6 @@
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
-use nu_ansi_term::{AnsiString, AnsiStrings};
+use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use std::fmt;
 use std::time::Duration;
 
@@ -190,16 +190,21 @@ where
     let mut used = 0usize;
     let mut current: Vec<AnsiString> = Vec::new();
     let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
+    let mut prev_style: Option<AnsiStyle> = None;
 
     for segment in segments {
         match segment {
             Segment::Fill(fs) => {
                 chunks.push((current, fs));
                 current = Vec::new();
+                prev_style = None;
             }
             _ => {
                 used += segment.width_graphemes();
-                current.push(segment.ansi_string());
+                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+
+                prev_style = Some(*current_segment_string.style_ref());
+                current.push(current_segment_string);
             }
         }
 
@@ -217,8 +222,9 @@ where
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
-                strs.into_iter()
-                    .chain(std::iter::once(fill.ansi_string(fill_size)))
+                let fill_string =
+                    fill.ansi_string(fill_size, strs.last().map(|segment| segment.style_ref()));
+                strs.into_iter().chain(std::iter::once(fill_string))
             })
             .chain(current)
             .collect::<Vec<AnsiString>>()

@@ -1,4 +1,3 @@
-use nu_ansi_term::Style;
 use pest::error::Error as PestError;
 use rayon::prelude::*;
 use std::borrow::Cow;
@@ -6,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
 
-use crate::config::parse_style_string;
+use crate::config::{parse_style_string, Style};
 use crate::context::{Context, Shell};
 use crate::segment::Segment;
 
@@ -487,7 +486,7 @@ mod tests {
         let style = Some(Color::Red.bold());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(style, None).unwrap();
+        let result = formatter.parse(style.map(|s| s.into()), None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", style);
     }
@@ -562,7 +561,9 @@ mod tests {
         let inner_style = Some(Color::Blue.normal());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(outer_style, None).unwrap();
+        let result = formatter
+            .parse(outer_style.map(|s| s.into()), None)
+            .unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
@@ -618,9 +619,9 @@ mod tests {
 
         let mut segments: Vec<Segment> = Vec::new();
         segments.extend(Segment::from_text(None, "styless"));
-        segments.extend(Segment::from_text(styled_style, "styled"));
+        segments.extend(Segment::from_text(styled_style.map(|s| s.into()), "styled"));
         segments.extend(Segment::from_text(
-            styled_no_modifier_style,
+            styled_no_modifier_style.map(|s| s.into()),
             "styled_no_modifier",
         ));
 
