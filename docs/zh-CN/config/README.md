@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `spago.dhall` 文件
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - The current directory contains a file with the `.purs` extension
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                                     |
-| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                  |
-| `符号`                | `'<=> '`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `['purs']`                           | Which extensions should trigger this module.                 |
-| `detect_files`      | `['spago.dhall']`                    | 哪些文件应触发此组件                                                   |
-| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                                 |
-| `style`             | `'bold white'`                       | 此组件的样式。                                                      |
-| `disabled`          | `false`                              | Disables the `purescript` module.                            |
+| 选项                  | 默认值                                           | 描述                                                           |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`          | 组件格式化模板。                                                     |
+| `version_format`    | `'v${raw}'`                                   | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                  |
+| `符号`                | `'<=> '`                                | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                 |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | 哪些文件应触发此组件                                                   |
+| `detect_folders`    | `[]`                                          | 那些文件夹应该触发此组件                                                 |
+| `style`             | `'bold white'`                                | 此组件的样式。                                                      |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                            |
 
 ### 变量
 
