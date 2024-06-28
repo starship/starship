@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - Direktori ini memiliki berkas `spago.dhall`
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opsi
 
-| Opsi                | Bawaan                               | Deskripsi                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
-| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.                        |
-| `detect_extensions` | `['purs']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `['spago.dhall']`                    | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `'bold white'`                       | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                   |
+| Opsi                | Bawaan                                        | Deskripsi                                                                           |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'`          | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                                   | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                | The symbol used before displaying the version of PureScript.                        |
+| `detect_extensions` | `['purs']`                                    | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                          | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `'bold white'`                                | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                                                   |
 
 ### Variabel
 
