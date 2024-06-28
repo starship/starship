@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 `purescript`モジュールは、現在インストールされている[PureScript](https://www.purescript.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - カレントディレクトリに拡張子が`.purs`のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                            |
-| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。       |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `['purs']`                           | どの拡張子がこのモジュールをアクティブにするか                                      |
-| `detect_files`      | `['spago.dhall']`                    | どのファイル名がこのモジュールをアクティブにするか                                    |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                    |
-| `style`             | `'bold white'`                       | モジュールのスタイルです。                                                |
-| `disabled`          | `false`                              | Disables the `purescript` module.                            |
+| オプション               | デフォルト                                         | 説明                                                           |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`          | module のフォーマットです。                                            |
+| `version_format`    | `'v${raw}'`                                   | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。       |
+| `symbol`            | `'<=> '`                                | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `['purs']`                                    | どの拡張子がこのモジュールをアクティブにするか                                      |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | どのファイル名がこのモジュールをアクティブにするか                                    |
+| `detect_folders`    | `[]`                                          | どのフォルダーがこのモジュールをアクティブにするか                                    |
+| `style`             | `'bold white'`                                | モジュールのスタイルです。                                                |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                            |
 
 ### 変数
 
