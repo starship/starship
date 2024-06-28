@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 El módulo `purescript` muestra la versión instalada de [PureScript](https://www.purescript.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `spago.dhall`
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - El directorio actual contiene un archivo con la extensión `.purs`
 
 ### Opciones
 
-| Opción              | Predeterminado                       | Descripción                                                                             |
-| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
-| `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | El símbolo usado antes de mostrar la versión de PureScript.                             |
-| `detect_extensions` | `['purs']`                           | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `['spago.dhall']`                    | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `'bold white'`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Desactiva el módulo `purescript`.                                                       |
+| Opción              | Predeterminado                                | Descripción                                                                             |
+| ------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | El formato del módulo.                                                                  |
+| `version_format`    | `'v${raw}'`                                   | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                | El símbolo usado antes de mostrar la versión de PureScript.                             |
+| `detect_extensions` | `['purs']`                                    | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                          | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `'bold white'`                                | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                       | Desactiva el módulo `purescript`.                                                       |
 
 ### Variables
 
