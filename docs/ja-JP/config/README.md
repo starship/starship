@@ -3441,8 +3441,8 @@ format = '[$symbol$stack]($style) '
 `purescript`モジュールは、現在インストールされている[PureScript](https://www.purescript.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
-- The current directory contains a `spago.yaml` file
-- The current directory contains a `spago.lock` file
+- 現在のディレクトリに`spago.yaml`ファイルが含まれている
+- 現在のディレクトリに`spago.lock`ファイルが含まれている
 - カレントディレクトリに拡張子が`.purs`のファイルが含まれている
 
 ### オプション
