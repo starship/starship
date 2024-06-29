@@ -3441,8 +3441,8 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `spago.dhall`
-- The current directory contains a `spago.yaml` file
-- The current directory contains a `spago.lock` file
+- Текущий каталог содержит файл `spago.yaml`
+- Текущий каталог содержит файл `spago.lock`
 - The current directory contains a file with the `.purs` extension
 
 ### Опции
