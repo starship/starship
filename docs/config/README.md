@@ -44,6 +44,25 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
+### Loading additional configuration from the environment
+
+In addition to the configuration file, starship also allows you to set configuration values by using environment variables. The variables should be formatted like this: `STARSHIP_CONFIG__SECTION_NAME__KEY=value`. The configuration keys in the environment need to start with `STARSHIP_CONFIG__` and table keys need to be separated with `__`.
+
+In most POSIX-like shells, you can set the `disabled` key of the `status` module to `false` with the following:
+
+```sh
+export STARSHIP_CONFIG__STATUS__DISABLED=false
+```
+
+Equivalently in PowerShell (Windows) would be adding this line:
+
+```powershell
+$ENV:STARSHIP_CONFIG__STATUS__DISABLED = "false"
+```
+
+Other shells may use a different syntax to set environment variables.
+At this time, only simple values like such as numbers, floats, booleans and strings can be set with environment variables. This method cannot be used to set complex values like tables or arrays. If the environment values cannot be directly parsed as TOML values, they are treated as strings. This means that `true` is parsed as a boolean when it's not quoted, but is parsed as a string when it is quoted. In contrast, when a value matches neither a number, float, nor boolean like `starship` is found, it is treated as a string.
+
 ### Logging
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal.

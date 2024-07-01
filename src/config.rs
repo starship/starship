@@ -124,11 +124,18 @@ pub struct StarshipConfig {
 impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize(config_file_path: &Option<OsString>) -> Self {
-        Self::config_from_file(config_file_path)
+        #[cfg_attr(test, allow(unused_mut))]
+        let mut out = Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
             })
-            .unwrap_or_default()
+            .unwrap_or_default();
+
+        // Avoid tainting config in tests
+        #[cfg(not(test))]
+        out.load_from_env();
+
+        out
     }
 
     /// Create a config from a starship configuration file
@@ -171,6 +178,68 @@ impl StarshipConfig {
                 None
             }
         }
+    }
+
+    /// Load additional config values from the environment
+    /// Variables are prefixed with `STARSHIP_` and delimited with `__`
+    /// e.g. `STARSHIP_CONFIG__JAVA__DISABLED`
+    pub fn load_from_env(&mut self) {
+        for (key, value) in std::env::vars() {
+            if let Some(name) = key.strip_prefix("STARSHIP_CONFIG__") {
+                log::debug!("Loading config from environment: {name}={value}");
+
+                if let Err(e) = self.load_key_from_env(name, &value) {
+                    log::error!("Unable to load config {name}={value} from environment: {e}");
+                }
+            }
+        }
+        log::debug!("Config with env: {:?}", &self.config);
+    }
+
+    /// Load a config value from a `__` delimited uppercase key name (environment variable)
+    pub fn load_key_from_env(&mut self, name: &str, value: &str) -> Result<(), String> {
+        let config = match self.config.as_mut() {
+            Some(c) => c,
+            None => {
+                self.config = Some(toml::value::Table::new());
+                self.config.as_mut().unwrap()
+            }
+        };
+
+        let mut keys = name.split("__").map(str::to_ascii_lowercase);
+
+        let first_key = match keys.next() {
+            Some(key) if !key.is_empty() => key,
+            _ => return Err("Empty table keys are not supported.".to_owned()),
+        };
+
+        let mut current_item = config
+            .entry(first_key)
+            .or_insert(toml::Value::Table(toml::value::Table::new()));
+
+        for key in keys {
+            if key.is_empty() {
+                return Err("Empty table keys are not supported.".to_owned());
+            }
+
+            let table = match current_item.as_table_mut() {
+                Some(t) => t,
+                None => return Err(format!("{key} is not a table.")),
+            };
+
+            if !table.contains_key(&key) {
+                table.insert(key.clone(), toml::Value::Table(toml::value::Table::new()));
+            }
+
+            current_item = table.get_mut(&key).unwrap();
+        }
+
+        let new_value = parse_toml_value(value);
+
+        log::trace!("Setting config value: {:?}", &new_value);
+
+        *current_item = new_value;
+        Ok(())
     }
 
     /// Get the subset of the table for a module by its name
@@ -506,6 +575,24 @@ fn parse_color_string(
         log::debug!("Could not parse color in string: {}", color_string);
     }
     predefined_color
+}
+
+/// Parses a string as a simple TOML value (String, Integer, etc.)
+/// TODO: support complex values like arrays/tables?
+fn parse_toml_value(value: &str) -> Value {
+    use toml_edit::Value as EValue;
+    if let Ok(t) = value.parse::<EValue>() {
+        // Support for parsing quoted values, to allow parsing "true" as a string
+        match t {
+            EValue::String(s) => return Value::String(s.into_value()),
+            EValue::Integer(s) => return Value::Integer(s.into_value()),
+            EValue::Float(s) => return Value::Float(s.into_value()),
+            EValue::Boolean(s) => return Value::Boolean(s.into_value()),
+            _ => (),
+        }
+    };
+
+    Value::String(value.to_owned())
 }
 
 fn get_palette<'a>(
@@ -992,6 +1079,71 @@ mod tests {
             multi_style.to_ansi_style(None),
             AnsiStyle::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
+    }
+
+    fn test_config() -> StarshipConfig {
+        StarshipConfig {
+            config: Some(toml::toml! {
+                [status]
+                disabled = false
+            }),
+        }
+    }
+
+    #[test]
+    fn test_env_config_wrong_type() {
+        let mut cfg = test_config();
+
+        assert!(cfg
+            .load_key_from_env("status__disabled__not_a_table", "true")
+            .is_err());
+
+        assert!(cfg.config.unwrap()["status"]["disabled"].is_bool(),);
+    }
+
+    #[test]
+    fn test_env_config_simple() {
+        let mut cfg = test_config();
+
+        assert!(!cfg.config.as_ref().unwrap()["status"]["disabled"]
+            .as_bool()
+            .unwrap());
+
+        cfg.load_key_from_env("status__disabled", "true").unwrap();
+
+        assert!(cfg.config.unwrap()["status"]["disabled"].as_bool().unwrap());
+    }
+
+    #[test]
+    fn test_value_config_parse() {
+        assert!(parse_toml_value("true").as_bool().unwrap());
+        assert_eq!(parse_toml_value("0").as_integer().unwrap(), 0);
+        assert!(parse_toml_value("0.0").is_float());
+        assert_eq!(parse_toml_value("a string").as_str().unwrap(), "a string");
+        assert_eq!(parse_toml_value("\"true\"").as_str().unwrap(), "true");
+    }
+
+    #[test]
+    fn test_update_config_empty() {
+        let mut cfg = test_config();
+
+        assert!(cfg.load_key_from_env("", "true").is_err());
+        assert!(cfg.load_key_from_env("______", "true").is_err());
+        assert!(cfg.load_key_from_env("a__a__a____a__a", "true").is_err());
+        assert!(cfg.load_key_from_env("a__a__a__a__a__", "true").is_err());
+        assert!(cfg.load_key_from_env("__a__a__a__a__a", "true").is_err());
+    }
+
+    #[test]
+    fn test_update_config_deep() {
+        let mut cfg = test_config();
+
+        cfg.load_key_from_env("a__b__c__d__e__f__g__h", "true")
+            .unwrap();
+
+        assert!(cfg.config.unwrap()["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
+            .as_bool()
+            .unwrap())
     }
 
     #[test]
