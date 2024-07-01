@@ -3,12 +3,16 @@
 format = """
 [](color_orange)\
 $os\
+$hostname\
 $username\
 [](bg:color_yellow fg:color_orange)\
 $directory\
 [](fg:color_yellow bg:color_aqua)\
 $git_branch\
+$git_commit\
+$git_state\
 $git_status\
+$git_metrics\
 [](fg:color_aqua bg:color_blue)\
 $c\
 $rust\
@@ -23,7 +27,7 @@ $python\
 $docker_context\
 $conda\
 [](fg:color_bg3 bg:color_bg1)\
-$time\
+$cmd_duration\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
@@ -73,6 +77,11 @@ style_user = "bg:color_orange fg:color_fg0"
 style_root = "bg:color_orange fg:color_fg0"
 format = '[ $user ]($style)'
 
+[hostname]
+ssh_only = true
+ssh_symbol = '󰌘 '
+format = '[ \[${ssh_symbol}${hostname}\] as](bg:color_orange fg:color_fg0)'
+
 [directory]
 style = "fg:color_fg0 bg:color_yellow"
 format = "[ $path ]($style)"
@@ -93,7 +102,28 @@ format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
 
 [git_status]
 style = "bg:color_aqua"
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+untracked = '?${count}'
+staged = '+${count}'
+renamed = '»${count}'
+deleted = '✘${count}'
+modified = '!${count}'
 format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_commit]
+format = '[[\($hash$tag\)](fg:color_fg0 bg:color_aqua)]($style)'
+tag_symbol = '🔖 '
+
+[git_state]
+format = '[[\($state( $progress_current/$progress_total)\)](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_metrics]
+disabled = false
+added_style = 'fg:bold blue bg:color_aqua'
+deleted_style = 'fg:bold red bg:color_aqua'
+format = '([ ([+$added]($added_style))/([-$deleted]($deleted_style))](fg:color_fg0 bg:color_aqua))'
 
 [nodejs]
 symbol = ""
@@ -154,6 +184,11 @@ disabled = false
 time_format = "%R"
 style = "bg:color_bg1"
 format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+
+[cmd_duration]
+disabled = false
+min_time = 2_000
+format = '[[  $duration ](fg:color_fg0 bg:color_bg1)]($style)'
 
 [line_break]
 disabled = false
