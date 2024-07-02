@@ -79,6 +79,9 @@
       alt="Français"
   /></a>
   &nbsp;
+  <a href="https://github.com/Rieuxx/starship/blob/master/docs/tr-TR/guide/README.md" ><img height="20"
+src=https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/1200px-Flag_of_Turkey.svg.png alt="Türkçe" /></a>
+  &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
     ><img
