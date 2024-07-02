@@ -287,7 +287,7 @@ Stil-Zeichenketten sind eine Liste von Wörtern, getrennt durch Leerzeichen. Die
 - `<color>`
 - `keins`
 
-wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe, das kann sich in Zukunft aber ändern. `inverted` tauscht Hinter- und Vordergrundfarben. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
+wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe, das kann sich in Zukunft aber ändern. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` tauscht Hinter- und Vordergrundfarben. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
 `none` überschreibt alle anderen Tokens in einem String wenn es nicht ein Teil einer `bg:` Zeichenkette ist, so dass z.B. über die Zeichenkette `fg:red none fg:blue` kein Styling mehr anzeigt wird. `bg:none` setzt den Hintergrund auf die Standardfarbe, so `fg:red bg:none` entspricht `rot` oder `fg:red` und `bg:green fg:red bg:none` entspricht auch `fg:red` oder `rot`. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
 

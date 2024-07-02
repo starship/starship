@@ -22,7 +22,7 @@ features:
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Hỗ trợ cài đặt nhanh cho Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, và PowerShell.
 ---
 
 <script setup>
@@ -46,7 +46,7 @@ onMounted(() => {
 
 ### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Đã cài đặt một [Nerd Font](https://www.nerdfonts.com/) và được kích hoạt trong terminal của bạn.
 
 ### Cài đặt nhanh chóng
 
@@ -72,7 +72,7 @@ onMounted(() => {
    brew install starship
    ```
 
-   With [Winget](https://github.com/microsoft/winget-cli):
+   Với [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
@@ -138,7 +138,7 @@ onMounted(() => {
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Chỉ hỗ trợ elvish từ phiên bản 0.18 trở lên.
 
    :::
 
@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   Điều này có thể thay đổi trong tương lai. Chỉ hỗ trợ nushell từ phiên bản 0.78 trở lên.
 
    :::
 
@@ -197,7 +197,7 @@ onMounted(() => {
 
    #### Cmd
 
-   Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Thêm đoạn mã sau vào tệp tin `starship.lua` và đặt tệp tin này vào địa chỉ Clink scripts:
 
    ```lua
    -- starship.lua

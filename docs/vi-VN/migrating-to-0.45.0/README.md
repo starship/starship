@@ -1,12 +1,12 @@
 # Tích hợp sang v0.45.0
 
-Starship v0.45.0 là một bản phát hành chứa nhiều thay đổi trong việc chuẩn bị cho bản thay đổi lớn v1.0.0. Chúng tôi tạo một vài thay đổi xung quanh cách cấu hình được thực hiện trên dáu nhắc lệnh, cho phép tùy biến theo góc độ tốt hơn.
+Starship v0.45.0 là một bản phát hành chứa nhiều thay đổi trong việc chuẩn bị cho bản thay đổi lớn v1.0.0. Chúng tôi tạo một vài thay đổi xung quanh cách cấu hình được thực hiện trên dấu nhắc lệnh, cho phép tùy biến theo góc độ tốt hơn.
 
 Hướng dẫn này nhằm hướng dẫn bạn vượt qua những sự thay đổi.
 
-## `prompt_order` được thay thế boiwr một root-level `format`
+## `prompt_order` được thay thế bởi một root-level `format`
 
-Từ trước đế v0.45.0, `prompt_order` sẽ chấp nhận một mảng các tên mô đun theo thứ tự mà chúng nên được render bởi Starship.
+Trước phiên bản v0.45.0, `prompt_order` sẽ chấp nhận một mảng các tên mô đun theo thứ tự mà chúng nên được kết xuất bởi Starship.
 
 Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó.
 
@@ -52,7 +52,7 @@ format = """\
   """
 ```
 
-## Mô đun `prefix` và`suffix` thay bằng `format`
+## Mô đun `prefix` và `suffix` thay bằng `format`
 
 Từ trước tới v0.45.0, một vài mô đun sẽ chấp nhận `prefix` và/hoặc `suffix` theo thứ tự để stylize các mà các mô đun được render.
 

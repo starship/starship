@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
 | `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'⭐ '`                               | Une chaîne de caractères représentant le symbole de Go.                                    |
+| `symbole`                            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                          |
 | `detect_extensionsdetect_extensions` | `['gleam']`                          | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `['gleam.toml']`                     | Les fichiers qui activent ce module.                                                       |
 | `style`                              | `'bold #FFAFF3'`                     | Le style pour le module.                                                                   |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensionsdetect_extensions` | `['hx', 'hxml']`                                                                                | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `['.haxelib', 'haxe_libraries']`                                                                | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'⌘ '`                                                                                          | Une chaîne de format représentant le symbole de Helm.                                      |
+| `symbole`                            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                           |
 | `style`                              | `'bold fg:202'`                                                                                 | Le style pour le module.                                                                   |
 | `disabled`                           | `false`                                                                                         | Disables the `haxe` module.                                                                |
 
@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 Le module `purescript` affiche la version de [PureScript](https://www.purescript.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `spago.dhall`
+- Le dossier courant contient un fichier `spago.yaml`
+- Le dossier courant contient un fichier `spago.lock`
 - Le dossier courant contient un fichier avec l’extension `.purs`
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'<=> '`                       | Le symbole utilisé avant d'afficher la version de PureScript.                              |
-| `detect_extensionsdetect_extensions` | `['purs']`                           | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['spago.dhall']`                    | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold white'`                       | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `purescript`.                                                          |
+| Option                               | Défaut                                        | Description                                                                                |
+| ------------------------------------ | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'`          | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'<=> '`                                | Le symbole utilisé avant d'afficher la version de PureScript.                              |
+| `detect_extensionsdetect_extensions` | `['purs']`                                    | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                          | Les dossiers qui activent ce module.                                                       |
+| `style`                              | `'bold white'`                                | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                                       | Désactive le module `purescript`.                                                          |
 
 ### Variables
 
@@ -4304,12 +4306,12 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
 | `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'t '`                               | A format string representing the symbol of Daml                                            |
+| `symbole`                            | `'t '`                               | A format string representing the symbol of Typst                                           |
 | `style`                              | `'bold #0093A7'`                     | Le style pour le module.                                                                   |
 | `detect_extensionsdetect_extensions` | `['.typ']`                           | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `['template.typ']`                   | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Disables the `daml` module.                                                                |
+| `disabled`                           | `false`                              | Disables the `typst` module.                                                               |
 
 ### Variables
 

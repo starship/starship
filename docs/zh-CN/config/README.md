@@ -1977,15 +1977,15 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                             |
-| ------------------- | ------------------------------------ | ---------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                       |
-| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`    |
-| `符号`                | `'⭐ '`                               | A format string representing the symbol of Go. |
-| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.   |
-| `detect_files`      | `['gleam.toml']`                     | 哪些文件应触发此组件                                     |
-| `style`             | `'bold #FFAFF3'`                     | 此组件的样式。                                        |
-| `disabled`          | `false`                              | Disables the `gleam` module.                   |
+| 选项                  | 默认值                                  | 描述                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                          |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`       |
+| `符号`                | `'⭐ '`                               | A format string representing the symbol of Gleam. |
+| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.      |
+| `detect_files`      | `['gleam.toml']`                     | 哪些文件应触发此组件                                        |
+| `style`             | `'bold #FFAFF3'`                     | 此组件的样式。                                           |
+| `disabled`          | `false`                              | Disables the `gleam` module.                      |
 
 ### 变量
 
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.     |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | 哪些文件应触发此组件                                       |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.       |
-| `符号`                | `'⌘ '`                                                                                          | A format string representing the symbol of Helm. |
+| `符号`                | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe. |
 | `style`             | `'bold fg:202'`                                                                                 | 此组件的样式。                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                      |
 
@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `spago.dhall` 文件
+- 当前目录包含一个 `spago.yaml` 文件
+- 当前目录包含一个 `spago.lock` 文件
 - The current directory contains a file with the `.purs` extension
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                                     |
-| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                  |
-| `符号`                | `'<=> '`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `['purs']`                           | Which extensions should trigger this module.                 |
-| `detect_files`      | `['spago.dhall']`                    | 哪些文件应触发此组件                                                   |
-| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                                 |
-| `style`             | `'bold white'`                       | 此组件的样式。                                                      |
-| `disabled`          | `false`                              | Disables the `purescript` module.                            |
+| 选项                  | 默认值                                           | 描述                                                           |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`          | 组件格式化模板。                                                     |
+| `version_format`    | `'v${raw}'`                                   | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                  |
+| `符号`                | `'<=> '`                                | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                 |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | 哪些文件应触发此组件                                                   |
+| `detect_folders`    | `[]`                                          | 那些文件夹应该触发此组件                                                 |
+| `style`             | `'bold white'`                                | 此组件的样式。                                                      |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                            |
 
 ### 变量
 
@@ -4300,16 +4302,16 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                              |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                        |
-| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`     |
-| `符号`                | `'t '`                               | A format string representing the symbol of Daml |
-| `style`             | `'bold #0093A7'`                     | 此组件的样式。                                         |
-| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.    |
-| `detect_files`      | `['template.typ']`                   | 哪些文件应触发此组件                                      |
-| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                    |
-| `disabled`          | `false`                              | Disables the `daml` module.                     |
+| 选项                  | 默认值                                  | 描述                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                         |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`      |
+| `符号`                | `'t '`                               | A format string representing the symbol of Typst |
+| `style`             | `'bold #0093A7'`                     | 此组件的样式。                                          |
+| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.     |
+| `detect_files`      | `['template.typ']`                   | 哪些文件应触发此组件                                       |
+| `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                     |
+| `disabled`          | `false`                              | Disables the `typst` module.                     |
 
 ### 变量
 

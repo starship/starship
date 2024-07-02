@@ -12,6 +12,6 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-empty-icons.toml)
+[Nhấn vào đây để tải tệp tin TOML](/presets/toml/no-empty-icons.toml)
 
 <<< @/public/presets/toml/no-empty-icons.toml
