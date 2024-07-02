@@ -294,7 +294,7 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
 
 fn get_version_from_cli(context: &Context) -> Option<String> {
     let version_output = context.exec_cmd("dotnet", &["--version"])?;
-    Some(format!("v{}", version_output.stdout.trim()))
+    Some(version_output.stdout.trim().to_string())
 }
 
 fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
@@ -356,6 +356,7 @@ mod tests {
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
+    use utils::{write_file, CommandOutput};
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
@@ -551,6 +552,36 @@ mod tests {
             )),
         );
         workspace.close()
+    }
+
+    #[test]
+    fn version_from_dotnet_cli() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        write_file(dir.path().join("main.cs"), "")?;
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Blue.bold().paint(".NET v8.0.301 ")
+        ));
+        let actual = ModuleRenderer::new("dotnet")
+            .path(dir.path())
+            .cmd(
+                "dotnet --version",
+                Some(CommandOutput {
+                    stdout: "8.0.301\n".to_string(),
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [dotnet]
+                heuristic = false
+                detect_extensions = ["cs"]
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     fn create_workspace(is_repo: bool) -> io::Result<TempDir> {
