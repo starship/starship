@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.20.0](https://github.com/starship/starship/compare/v1.19.0...v1.20.0) (2024-07-02)
+
+
+### Features
+
+* **color:** add prev_fg and prev_bg as color specifiers based on the previous foreground/background colors respectively ([#6017](https://github.com/starship/starship/issues/6017)) ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **color:** add prevfg,prevbg as color specifiers based on the previous foreground/background colors respectively ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **gcloud:** Disabled gcloud module when active config hasn't been set ([#6039](https://github.com/starship/starship/issues/6039)) ([4d36d46](https://github.com/starship/starship/commit/4d36d463b91a245a62c357de308cad3cdec48edf))
+* **purescript:** add support for spago-next configuration files ([#6036](https://github.com/starship/starship/issues/6036)) ([e028186](https://github.com/starship/starship/commit/e0281868c9d7801fc25f64f86ab8312d2a5a1794))
+
+
+### Bug Fixes
+
+* **direnv:** replace nonexistent "orange" color with "bright-yellow" ([#5969](https://github.com/starship/starship/issues/5969)) ([478d5cc](https://github.com/starship/starship/commit/478d5cccb6f7f4622dd681756cf004ba92c98607))
+* improve non-msvc windows support by bumping stable dependencies ([#5989](https://github.com/starship/starship/issues/5989)) ([50a6b84](https://github.com/starship/starship/commit/50a6b846045899c88d95b063a6b939a6dcb72a5c))
+* **k8s:** don't trigger if scan config is set but env vars are not ([#5979](https://github.com/starship/starship/issues/5979)) ([8c75822](https://github.com/starship/starship/commit/8c75822d4380e020ebd289a4ef06cd4d31ee5196))
+
 ## [1.19.0](https://github.com/starship/starship/compare/v1.18.2...v1.19.0) (2024-05-15)
 
 
