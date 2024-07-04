@@ -173,6 +173,7 @@
       "$ref": "#/$defs/CharacterConfig",
       "default": {
         "format": "$symbol ",
+        "success_exit_codes": [],
         "success_symbol": "[❯](bold green)",
         "error_symbol": "[❯](bold red)",
         "vimcmd_symbol": "[❮](bold green)",
@@ -2101,6 +2102,14 @@
         "error_symbol": {
           "type": "string",
           "default": "[❯](bold red)"
+        },
+        "success_exit_codes": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
         },
         "vimcmd_symbol": {
           "type": "string",
