@@ -25,9 +25,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
 
     let props = &context.properties;
-    let exit_code = props.status_code.as_deref().unwrap_or("0");
+    let exit_code = props
+        .status_code
+        .as_deref()
+        .unwrap_or("0")
+        .parse::<i32>()
+        .unwrap_or(0);
     let keymap = props.keymap.as_str();
-    let exit_success = exit_code == "0";
+    let exit_success = exit_code == 0 || config.success_exit_codes.contains(&exit_code);
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -106,6 +111,35 @@ mod test {
         for status in &exit_values {
             let actual = ModuleRenderer::new("character").status(*status).collect();
             assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
+    fn success_exit_codes_handling() {
+        let module_config = toml::toml! {
+            [character]
+            success_exit_codes = [146, 42]
+        };
+        let expected_success = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_fail = Some(format!("{} ", Color::Red.bold().paint("❯")));
+
+        let exit_values_success = [0, 42, 146];
+        let exit_values_fail = [-5000, 1, 145, 147];
+
+        for status in &exit_values_success {
+            let actual = ModuleRenderer::new("character")
+                .config(module_config.clone())
+                .status(*status)
+                .collect();
+            assert_eq!(expected_success, actual);
+        }
+
+        for status in &exit_values_fail {
+            let actual = ModuleRenderer::new("character")
+                .config(module_config.clone())
+                .status(*status)
+                .collect();
+            assert_eq!(expected_fail, actual);
         }
     }
 
