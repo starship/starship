@@ -147,6 +147,15 @@ on darwin_arm64
     }
 
     #[test]
+    fn test_parse_opentofu_version_prerelease() {
+        let input = "OpenTofu v1.8.0-alpha1";
+        assert_eq!(
+            parse_terraform_version(input),
+            Some("1.8.0-alpha1".to_string())
+        )
+    }
+
+    #[test]
     fn test_parse_terraform_version_development() {
         let input = "Terraform v0.12.14-dev (cca89f74)";
         assert_eq!(
