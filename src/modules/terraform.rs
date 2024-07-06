@@ -6,7 +6,6 @@ use crate::formatter::VersionFormatter;
 use crate::utils;
 
 use once_cell::sync::Lazy;
-use semver::Version;
 use std::io;
 use std::ops::Deref;
 use std::path::PathBuf;
@@ -93,13 +92,16 @@ fn parse_terraform_version(version: &str) -> Option<String> {
     // `terraform version` or `tofu version` output looks like this
     //   Terraform v0.12.14/OpenTofu v1.7.2
     // with potential extra output if it detects you are not running the latest version
-    // try to find the version by finding the first semver-ish word, just like the c module
+    // finds the version by grabbing the first line of output, splitting by spaces, and
+    // then skipping the first word
 
     let version = version
         .lines()
         .next()?
         .split_whitespace()
-        .find(|word| Version::parse(&word[1..]).is_ok())?;
+        .skip(1)
+        .collect::<Vec<&str>>()
+        .join(" ");
 
     // skip the `v` at the beginning of the string
     Some(version[1..].to_string())
@@ -117,6 +119,22 @@ mod tests {
     fn test_parse_terraform_version_release() {
         let input = "Terraform v0.12.14";
         assert_eq!(parse_terraform_version(input), Some("0.12.14".to_string()));
+    }
+
+    #[test]
+    fn test_parse_opentofu_version_release() {
+        let input = "OpenTofu v1.7.2";
+        assert_eq!(parse_terraform_version(input), Some("1.7.2".to_string()));
+    }
+
+    #[test]
+    fn test_parse_opentofu_version_multiline() {
+        let input = "OpenTofu v1.7.2
+on darwin_arm64
++ provider registry.opentofu.org/hashicorp/helm v2.14.0
++ provider registry.opentofu.org/hashicorp/kubernetes v2.31.0
+";
+        assert_eq!(parse_terraform_version(input), Some("1.7.2".to_string()));
     }
 
     #[test]
