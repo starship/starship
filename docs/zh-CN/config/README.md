@@ -564,7 +564,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
 | `version_format`    | `'v${raw}'`                                     | 版本格式                                                  |
-| `符号`                | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
+| `symbol`            | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | 哪些文件应触发此组件                                            |
 | `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
@@ -4139,7 +4139,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# 在 Windows 上
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -4160,7 +4160,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | ------------------- | ------------------------------------ | ------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                         |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`      |
-| `符号`                | `'🐦 '`                               | A format string representing the symbol of Swift |
+| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift |
 | `detect_extensions` | `['swift']`                          | Which extensions should trigger this module.     |
 | `detect_files`      | `['Package.swift']`                  | 哪些文件应触发此组件                                       |
 | `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                     |
@@ -4172,7 +4172,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | 字段        | 示例       | 描述                     |
 | --------- | -------- | ---------------------- |
 | version   | `v5.2.4` | The version of `swift` |
-| 符号        |          | `symbol`对应值            |
+| symbol    |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4207,7 +4207,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                     |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`           |
-| `符号`                | `'💠'`                                | A format string shown before the terraform workspace. |
+| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace. |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Which extensions should trigger this module.          |
 | `detect_files`      | `[]`                                 | 哪些文件应触发此组件                                            |
 | `detect_folders`    | `['.terraform']`                     | 那些文件夹应该触发此组件                                          |
@@ -4220,7 +4220,7 @@ By default the module will be shown if any of the following conditions are met:
 | --------- | ---------- | ------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`      |
 | workspace | `default`  | The current Terraform workspace |
-| 符号        |            | `symbol`对应值                     |
+| symbol    |            | `symbol`对应值                     |
 | style\* |            | `style`对应值                      |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4245,7 +4245,7 @@ format = '[🏎💨 $version$workspace]($style) '
 format = '[🏎💨 $workspace]($style) '
 ```
 
-## Time
+## 时间
 
 `time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
@@ -4271,10 +4271,10 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### 变量
 
-| 字段        | 示例         | 描述                |
-| --------- | ---------- | ----------------- |
-| time      | `13:08:10` | The current time. |
-| style\* |            | `style`对应值        |
+| 字段        | 示例         | 描述         |
+| --------- | ---------- | ---------- |
+| time      | `13:08:10` | 当前时间       |
+| style\* |            | `style`对应值 |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -4306,7 +4306,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                         |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`      |
-| `符号`                | `'t '`                               | A format string representing the symbol of Typst |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst |
 | `style`             | `'bold #0093A7'`                     | 此组件的样式。                                          |
 | `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.     |
 | `detect_files`      | `['template.typ']`                   | 哪些文件应触发此组件                                       |
@@ -4319,12 +4319,12 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------- | --------- | ----------------------------------------------- |
 | version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
 | typst_version | `default` | The current Typst version                       |
-| 符号            |           | `symbol`对应值                                     |
+| symbol        |           | `symbol`对应值                                     |
 | style\*     |           | `style`对应值                                      |
 
 *: 此变量只能作为样式字符串的一部分使用
 
-## Username
+## 用户名
 
 `username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件时显示：
 
@@ -4398,7 +4398,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | ------------------- | ------------------------------------ | --------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                            |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`         |
-| `符号`                | `'⍱ '`                               | A format string representing the symbol of Vagrant. |
+| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant. |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
 | `detect_files`      | `['Vagrantfile']`                    | 哪些文件应触发此组件                                          |
 | `detect_folders`    | `[]`                                 | 那些文件夹应该触发此组件                                        |
@@ -4410,7 +4410,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | 字段        | 示例               | 描述                       |
 | --------- | ---------------- | ------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant` |
-| 符号        |                  | `symbol`对应值              |
+| symbol    |                  | `symbol`对应值              |
 | style\* |                  | `style`对应值               |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4437,7 +4437,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | 组件格式化模板。                                     |
 | `version_format`    | `'v${raw}'`                                  | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`  |
-| `符号`                | `'V '`                                       | A format string representing the symbol of V |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V |
 | `detect_extensions` | `['v']`                                      | Which extensions should trigger this module. |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | 哪些文件应触发此组件                                   |
 | `detect_folders`    | `[]`                                         | 那些文件夹应该触发此组件                                 |
@@ -4449,7 +4449,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | 字段        | 示例     | 描述                 |
 | --------- | ------ | ------------------ |
 | version   | `v0.2` | The version of `v` |
-| 符号        |        | `symbol`对应值        |
+| symbol    |        | `symbol`对应值        |
 | style\* |        | `style`对应值         |
 
 ### 示例
@@ -4468,7 +4468,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | 选项         | 默认值                              | 描述                                                     |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `符号`       | `''`                             | The symbol used before displaying the repository name. |
+| `symbol`   | `''`                             | The symbol used before displaying the repository name. |
 | `style`    | `'bold yellow'`                  | 此组件的样式。                                                |
 | `format`   | `'vcsh [$symbol$repo]($style) '` | 组件格式化模板。                                               |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
@@ -4478,7 +4478,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | 字段        | 示例                                          | 描述                         |
 | --------- | ------------------------------------------- | -------------------------- |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name |
-| 符号        |                                             | `symbol`对应值                |
+| symbol    |                                             | `symbol`对应值                |
 | style\* | `black bold dimmed`                         | `style`对应值                 |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4504,7 +4504,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                              |
 | `version_format`    | `'v${raw}'`                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`           |
-| `符号`                | `'↯ '`                               | The symbol used before displaying the version of Zig. |
+| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig. |
 | `style`             | `'bold yellow'`                      | 此组件的样式。                                               |
 | `disabled`          | `false`                              | Disables the `zig` module.                            |
 | `detect_extensions` | `['zig']`                            | Which extensions should trigger this module.          |
@@ -4516,7 +4516,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
 | version   | `v0.6.0` | The version of `zig` |
-| 符号        |          | `symbol`对应值          |
+| symbol    |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4580,7 +4580,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
-| `符号`                | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
+| `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`             | `'bold green'`                  | 此组件的样式。                                                                                                                                                                                                                                                                                       |
 | `format`            | `'[$symbol($output )]($style)'` | 组件格式化模板。                                                                                                                                                                                                                                                                                      |
 | `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
@@ -4593,7 +4593,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | 字段        | 描述             |
 | --------- | -------------- |
 | output    | `shell` 中命令的输出 |
-| 符号        | `symbol`对应值    |
+| symbol    | `symbol`对应值    |
 | style\* | `style`对应值     |
 
 *: 此变量只能作为样式字符串的一部分使用
