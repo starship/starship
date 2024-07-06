@@ -2,10 +2,13 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::terraform::TerraformConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 use crate::utils;
 
-use crate::formatter::VersionFormatter;
+use once_cell::sync::Lazy;
+use semver::Version;
 use std::io;
+use std::ops::Deref;
 use std::path::PathBuf;
 
 /// Creates a module with the current Terraform version and workspace
@@ -25,6 +28,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        let terraform_version = Lazy::new(|| context.exec_cmds_return_first(config.commands));
+
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
@@ -36,12 +41,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let terraform_version = parse_terraform_version(
-                        context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                    let parsed_version = parse_terraform_version(
+                        terraform_version.deref().as_ref()?.stdout.as_str(),
                     )?;
+
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &terraform_version,
+                        &parsed_version,
                         config.version_format,
                     )
                 }
@@ -84,17 +90,19 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
 }
 
 fn parse_terraform_version(version: &str) -> Option<String> {
-    // `terraform version` output looks like this
-    // Terraform v0.12.14
-    // With potential extra output if it detects you are not running the latest version
+    // `terraform version` or `tofu version` output looks like this
+    //   Terraform v0.12.14/OpenTofu v1.7.2
+    // with potential extra output if it detects you are not running the latest version
+    // try to find the version by finding the first semver-ish word, just like the c module
+
     let version = version
         .lines()
         .next()?
-        .trim_start_matches("Terraform ")
-        .trim()
-        .trim_start_matches('v');
+        .split_whitespace()
+        .find(|word| Version::parse(&word[1..]).is_ok())?;
 
-    Some(version.to_string())
+    // skip the `v` at the beginning of the string
+    Some(version[1..].to_string())
 }
 
 #[cfg(test)]
