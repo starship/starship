@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | 字段                     | 默认值                                      | 描述                                                                                    |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `符号`                   | `'󰠅 '`                                   | 格式中使用的符号                                                                              |
+| `symbol`               | `'󰠅 '`                                   | 格式中使用的符号                                                                              |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | 禁用 `azure` 组件。                                                                        |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -485,7 +485,7 @@ style = "blue bold"
 very-long-subscription-name = 'vlsn'
 ```
 
-## Battery
+## 电池
 
 `battery` 组件显示电池充电情况和当前充电状态。 这个组件只会在当前电量低于 10% 时显示。
 
@@ -650,7 +650,7 @@ The `c` module shows some information about your C compiler. By default the modu
 | ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                      |
 | `version_format`    | `'v${raw}'`                                                                   | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`            |
-| `符号`                | `'C '`                                                                        | The symbol used before displaying the compiler details |
+| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details |
 | `detect_extensions` | `['c', 'h']`                                                                  | Which extensions should trigger this module.           |
 | `detect_files`      | `[]`                                                                          | 哪些文件应触发此组件                                             |
 | `detect_folders`    | `[]`                                                                          | 那些文件夹应该触发此组件                                           |
@@ -664,7 +664,7 @@ The `c` module shows some information about your C compiler. By default the modu
 | ------- | ------ | --------------------------- |
 | name    | clang  | The name of the compiler    |
 | version | 13.0.0 | The version of the compiler |
-| 符号      |        | `symbol`对应值                 |
+| symbol  |        | `symbol`对应值                 |
 | style   |        | `style`对应值                  |
 
 NB that `version` is not in the default format.
@@ -686,7 +686,7 @@ If a C compiler is not supported by this module, you can request it by [raising 
 format = 'via [$name $version]($style)'
 ```
 
-## Character
+## 字符
 
 `character` 组件用于在您输入终端的文本旁显示一个字符（通常是一个箭头）。
 
@@ -778,7 +778,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | 字段        | 示例        | 描述                   |
 | --------- | --------- | -------------------- |
 | version   | `v3.17.3` | The version of cmake |
-| 符号        |           | `symbol`对应值          |
+| symbol    |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4079,7 +4079,7 @@ The `status` module displays the exit code of the previous command. If $success_
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
 | pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| 符号             |         | `symbol`对应值                                                                                |
+| symbol         |         | `symbol`对应值                                                                                |
 | style\*      |         | `style`对应值                                                                                 |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -4113,7 +4113,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 | 选项              | 默认值                      | 描述                                                      |
 | --------------- | ------------------------ | ------------------------------------------------------- |
 | `format`        | `'[as $symbol]($style)'` | The format of the module                                |
-| `符号`            | `'🧙 '`                   | The symbol displayed when credentials are cached        |
+| `symbol`        | `'🧙 '`                   | The symbol displayed when credentials are cached        |
 | `style`         | `'bold blue'`            | 此组件的样式。                                                 |
 | `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
 | `disabled`      | `true`                   | Disables the `sudo` module.                             |
@@ -4122,7 +4122,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 | 字段        | 示例 | 描述          |
 | --------- | -- | ----------- |
-| 符号        |    | `symbol`对应值 |
+| symbol    |    | `symbol`对应值 |
 | style\* |    | `style`对应值  |
 
 *: 此变量只能作为样式字符串的一部分使用
