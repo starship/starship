@@ -47,7 +47,7 @@ clap = { version = "4.5.8", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.7"
 dirs = "5.0.1"
 dunce = "1.0.4"
-gethostname = "0.4.3"
+gethostname = "0.5.0"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 gix = { version = "0.63.0", default-features = false, features = ["max-performance-safe", "revision"] }
 gix-features = { version = "0.38.2", optional = true }
