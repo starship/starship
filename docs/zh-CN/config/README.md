@@ -200,7 +200,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | 选项                | 默认值                           | 描述                                                                                                                                                                                 |
 | ----------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                                                                                                                                          |
-| `right_format`    | `''`                          | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `right_format`    | `''`                          | 参见[启用右侧提示](../advanced-config/#enable-right-prompt)                                                                                                                                |
 | `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                                                                                                                                         |
 | `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                                                                                                                                        |
 | `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                                 |
@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# 相当于
 format = """
 $username\
 $hostname\
@@ -371,7 +371,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | 选项                  | 默认值                                                                   | 描述                                                                                                          |
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | 组件格式化模板。                                                                                                    |
-| `符号`                | `'☁️ '`                                                               | 这个字段的内容会显示在当前 AWS 配置信息之前。                                                                                   |
+| `symbol`            | `'☁️ '`                                                               | 这个字段的内容会显示在当前 AWS 配置信息之前。                                                                                   |
 | `region_aliases`    | `{}`                                                                  | 地区缩写列表，用来显示在 AWS 主机名之后。                                                                                     |
 | `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                       | 此组件的样式。                                                                                                     |
@@ -386,7 +386,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
 | duration  | `2h27m20s`       | The temporary credentials validity duration |
-| 符号        |                  | `symbol`对应值                                 |
+| symbol    |                  | `symbol`对应值                                 |
 | style\* |                  | `style`对应值                                  |
 
 *: 此变量只能作为样式字符串的一部分使用
