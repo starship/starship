@@ -32,14 +32,29 @@ jobs:
   block-crowdin:
     name: Block Translated Changes
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'i18n_master' }}
     steps:
-      - name: Prevent File Change
-        uses: xalvarez/prevent-file-change-action@v1.6.0
-        if: ${{ github.event.pull_request.head.ref != 'i18n_master' }}
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
+          fetch-depth: 0
+      - name: Prevent File Change
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            const pattern = /^docs\/[a-z][a-z][a-z]?-[A-Z][A-Z]?\/.*$/;
+            const base = context.payload.pull_request.base.sha;
+            const head = context.payload.pull_request.head.sha;
+
+            const result = execSync(`git diff --name-only ${base} ${head}`).toString().split('\n');
+
+            for (const file of result) {
+              if (pattern.test(file)) {
+                core.setFailed(`To avoid conflicts, changes to the translated documentation are only allowed via Crowdin at https://translate.starship.rs.`);
+                break;
+              }
+            }
 
   # Vitepress build
   vitepress:
