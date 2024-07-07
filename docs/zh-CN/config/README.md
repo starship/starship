@@ -3410,7 +3410,7 @@ By default the module will be shown if any of the following conditions are met:
 | --------- | ---------- | --------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`     |
 | stack     | `dev`      | The current Pulumi stack    |
-| username  | `alice`    | The current Pulumi username |
+| 用户名       | `alice`    | The current Pulumi username |
 | 符号        |            | `symbol`对应值                 |
 | style\* |            | `style`对应值                  |
 
