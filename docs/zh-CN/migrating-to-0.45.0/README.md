@@ -76,7 +76,7 @@ format = "took [$duration]($style) "
 
 ### Affected Modules
 
-#### Character
+#### 字符
 
 | Removed Property        | Replacement      |
 | ----------------------- | ---------------- |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### 时间
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |
