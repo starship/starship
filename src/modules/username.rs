@@ -120,6 +120,7 @@ fn is_ssh_session(context: &Context) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+
     // TODO: Add tests for if root user (UID == 0)
     // Requires mocking
 
