@@ -70,7 +70,9 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.current_dir = path.into();
-        self.context.logical_dir = self.context.current_dir.clone();
+        self.context
+            .logical_dir
+            .clone_from(&self.context.current_dir);
         self
     }
 
@@ -132,6 +134,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn width(mut self, width: usize) -> Self {
+        self.context.width = width;
+        self
+    }
+
     #[cfg(feature = "battery")]
     pub fn battery_info_provider(
         mut self,
@@ -162,6 +169,12 @@ impl<'a> ModuleRenderer<'a> {
     }
 }
 
+impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
+    fn from(renderer: ModuleRenderer<'a>) -> Self {
+        renderer.context
+    }
+}
+
 #[derive(Clone, Copy)]
 pub enum FixtureProvider {
     Fossil,
@@ -184,6 +197,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
+                .truncate(false)
                 .open(path.path().join(checkout_db))?
                 .sync_all()?;
             Ok(path)

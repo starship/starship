@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#pastel-powerline)
+[プリセット一覧に戻る](./#pastel-powerline)
 
 # Pastel Powerlineプリセット
 
@@ -18,4 +18,4 @@ starship preset pastel-powerline -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/pastel-powerline.toml)
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

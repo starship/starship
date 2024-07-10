@@ -40,6 +40,9 @@ format = '(via [$symbol($version )]($style))'
 [fennel]
 format = '(via [$symbol($version )]($style))'
 
+[gleam]
+format = '(via [$symbol($version )]($style))'
+
 [golang]
 format = '(via [$symbol($version )]($style))'
 
@@ -86,6 +89,9 @@ format = '(via [$symbol($version )]($style))'
 
 [python]
 format = '(via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style))'
+
+[quarto]
+format = '(via [$symbol($version )]($style))'
 
 [raku]
 format = '(via [$symbol($version-$vm_version )]($style))'

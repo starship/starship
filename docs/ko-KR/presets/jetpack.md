@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#jetpack)
+[프리셋으로 돌아가기](./#jetpack)
 
 # Jetpack Preset
 
@@ -21,4 +21,4 @@ starship preset jetpack -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/jetpack.toml)
 
-<<< @/.vuepress/public/presets/toml/jetpack.toml
+<<< @/public/presets/toml/jetpack.toml

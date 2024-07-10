@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#jetpack)
+[Повернутися до Шаблонів](./#jetpack)
 
 # Jetpack
 
@@ -21,4 +21,4 @@ starship preset jetpack -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/jetpack.toml)
 
-<<< @/.vuepress/public/presets/toml/jetpack.toml
+<<< @/public/presets/toml/jetpack.toml

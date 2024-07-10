@@ -1,3 +1,5 @@
+use regex::Regex;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
@@ -45,6 +47,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     config.version_format,
                 )
                 .map(Ok),
+                "gemset" => {
+                    format_rvm_gemset(&context.exec_cmd("rvm", &["current"])?.stdout).map(Ok)
+                }
                 _ => None,
             })
             .parse(None, Some(context))
@@ -81,10 +86,21 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
     }
 }
 
+fn format_rvm_gemset(current: &str) -> Option<String> {
+    let gemset_re = Regex::new(r"@(\S+)").unwrap();
+    if let Some(gemset) = gemset_re.captures(current) {
+        let gemset_name = gemset.get(1)?.as_str();
+        return Some(gemset_name.to_string());
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -159,6 +175,58 @@ mod tests {
 
         // rbenv variable is only detected; its value is not used
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn rvm_gemset_active() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.rb"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .cmd(
+                "rvm current",
+                Some(CommandOutput {
+                    stdout: String::from("ruby-2.5.1@test\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .config(toml::toml! {
+                [ruby]
+                format = "via [$symbol($version)@($gemset )]($style)"
+                version_format = "${raw}"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 2.5.1@test ")));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn rvm_gemset_not_active() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.rb"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .cmd(
+                "rvm current",
+                Some(CommandOutput {
+                    // with no gemset, `rvm current` outputs an empty string
+                    stdout: String::default(),
+                    stderr: String::default(),
+                }),
+            )
+            .config(toml::toml! {
+                [ruby]
+                format = "via [$symbol($version)(@$gemset) ]($style)"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+
         assert_eq!(expected, actual);
         dir.close()
     }

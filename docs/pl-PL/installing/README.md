@@ -5,7 +5,7 @@ Aby zainstalować starship, musisz zrobić dwie rzeczy:
 1. Pobrać plik wykonywalny **starship** na swój komputer
 1. Skonfigurować swoją powłokę żeby używała pliku wykonywalnego starship jako wiersza poleceń poprzez modyfikację skryptów inicjalizacyjnych
 
-Dla większości użytkowników instrukcje na [stronie głównej](/guide/#🚀-installation) są wystarczające. Jednakże, dla niektórych wyspecjalizowanych platform, potrzebne będą inne.
+For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. Jednakże, dla niektórych wyspecjalizowanych platform, potrzebne będą inne.
 
 Istnieje tak wiele platform, że nie zmieściły się one w głównym pliku README.md, więc poniżej znajdują się instrukcje instalacji dla innych platform od społeczności. Nie ma tutaj Twojej? Jeśli się o tym dowiesz, dodaj je tutaj!
 
@@ -45,7 +45,7 @@ Na Funtoo Linux, starship może być zainstalowany przez Portage z [core-kit](ht
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### Getting the Binary
 

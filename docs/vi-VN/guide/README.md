@@ -431,9 +431,7 @@ Xin hãy xem qua những công việc này trước đây, những thứ đã gi
 
 Hỗ trợ project này bằng việc [trở thành nhà tài trợ](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
 
-**Nhà tài trợ ủng hộ**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

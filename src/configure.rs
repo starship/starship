@@ -10,7 +10,7 @@ use crate::context::Context;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
-use toml_edit::Document;
+use toml_edit::DocumentMut;
 
 #[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
@@ -29,7 +29,11 @@ pub fn update_configuration(context: &Context, name: &str, value: &str) {
     }
 }
 
-fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> Result<(), String> {
+fn handle_update_configuration(
+    doc: &mut DocumentMut,
+    name: &str,
+    value: &str,
+) -> Result<(), String> {
     let mut keys = name.split('.');
 
     let first_key = keys.next().unwrap_or_default();
@@ -190,7 +194,7 @@ pub fn toggle_configuration(context: &Context, name: &str, key: &str) {
     }
 }
 
-fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Result<(), String> {
+fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> Result<(), String> {
     if name.is_empty() || key.is_empty() {
         return Err("Empty table keys are not supported".to_owned());
     }
@@ -225,17 +229,17 @@ pub fn get_configuration(context: &Context) -> toml::Table {
     starship_config.config.unwrap_or_default()
 }
 
-pub fn get_configuration_edit(context: &Context) -> Document {
+pub fn get_configuration_edit(context: &Context) -> DocumentMut {
     let config_file_path = context.get_config_path_os();
     let toml_content = StarshipConfig::read_config_content_as_str(&config_file_path);
 
     toml_content
         .unwrap_or_default()
-        .parse::<Document>()
+        .parse::<DocumentMut>()
         .expect("Failed to load starship config")
 }
 
-pub fn write_configuration(context: &Context, doc: &Document) {
+pub fn write_configuration(context: &Context, doc: &DocumentMut) {
     let config_path = context.get_config_path_os().unwrap_or_else(|| {
         eprintln!("config path required to write configuration");
         process::exit(1);
@@ -430,7 +434,7 @@ mod tests {
         assert_eq!(toml::Value::Table(expected_config), actual_config);
     }
 
-    fn create_doc() -> Document {
+    fn create_doc() -> DocumentMut {
         let config = concat!(
             " # comment\n",
             "  [status] # comment\n",
@@ -439,7 +443,7 @@ mod tests {
             "\n"
         );
 
-        config.parse::<Document>().unwrap()
+        config.parse::<DocumentMut>().unwrap()
     }
 
     #[test]

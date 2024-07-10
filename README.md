@@ -433,9 +433,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
 
-**Supporter Tier**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io], certificate by [SignPath Foundation]
 
 <p align="center">
     <br>
@@ -462,6 +460,8 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [OSS]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
+[SignPath Foundation]: https://signpath.org
+[SignPath.io]: https://signpath.io
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
 [void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
 [winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

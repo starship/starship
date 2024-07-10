@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#pure)
+[Повернутися до Шаблонів](./#pure)
 
 # Pure Prompt
 
@@ -14,4 +14,4 @@ starship preset pure-preset -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/pure-preset.toml)
 
-<<< @/.vuepress/public/presets/toml/pure-preset.toml
+<<< @/public/presets/toml/pure-preset.toml

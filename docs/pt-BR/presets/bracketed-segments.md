@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./README.md#bracketed-segments)
+[Retornar para Personalizações](./#bracketed-segments)
 
 # Predefinições entre colchetes
 
@@ -14,4 +14,4 @@ starship preset bracketed-segments -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/bracketed-segments.toml)
 
-<<< @/.vuepress/public/presets/toml/bracketed-segments.toml
+<<< @/public/presets/toml/bracketed-segments.toml

@@ -69,3 +69,9 @@ Este preset está inspirado en [tokyo-night-vscode-theme](https://github.com/enk
 Este preajuste está muy inspirado en [Pastel Powerline](./pastel-powerline.md) y [Tokyo Night](./tokyo-night.md).
 
 [![Captura de pantalla de el preajuste Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Clic para ver el preajuste Gruvbox Rainbow")](./gruvbox-rainbow)
+
+## [Jetpack](./jetpack.md)
+
+Este es un preajuste pseudominimalista inspirado en las indicaciones [geometría](https://github.com/geometry-zsh/geometry) y [nave espacial](https://github.com/spaceship-prompt/spaceship-prompt).
+
+[![Captura de pantalla del preajuste Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)

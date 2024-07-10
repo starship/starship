@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./README.md#pure)
+[Retornar para Personalizações](./#pure)
 
 # Personalização do prompt do terminal com Pure
 
@@ -14,4 +14,4 @@ starship preset pure-preset -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/pure-preset.toml)
 
-<<< @/.vuepress/public/presets/toml/pure-preset.toml
+<<< @/public/presets/toml/pure-preset.toml

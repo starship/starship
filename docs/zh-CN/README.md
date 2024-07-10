@@ -1,32 +1,48 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 轻量、迅速、可无限定制的高颜值终端！
-actionText: 快速上手 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: 轻量、迅速、客制化的高颜值终端！
+  actions:
+    - 
+      theme: brand
+      text: 快速上手 →
+      link: ./guide/
 features:
   - 
     title: 兼容性优先
-    details: Starship 可以在各种常见的操作系统和常见的 shell 上运行。 尝试着在各种地方使用它吧！
+    details: Starship 可以在常见的操作系统和 shell 上运行。 尝试着在各种地方使用它吧！
   - 
-    title: 使用 Rust 编写
-    details: 具有 Rust 独树一帜的速度与安全性，使你的提示符尽可能的快速可靠。
+    title: 基于 Rust
+    details: Rust 特有的的速度与安全性，让你的提示尽可能的快速可靠。
   - 
-    title: 可自定义
-    details: 每个小细节都可以按您喜欢的自定义，不论是最小化以求速度，还是最大化以获得最完善的功能。
-footer: ISC 许可 | 版权所有 © 2019 - 目前 Starship 贡献者
+    title: 客制化
+    details: 每个小细节都可以按您喜欢的客制化，不论是最小化以求速度，还是更大以获得最完善的功能。
+footer: ISC 许可 | 版权所有 © 2019至今 - Starship 贡献者
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：可用于各种 Shell 的提示符"
-description: Starship是一款轻量级、反应迅速、可自定义的高颜值终端！ 只显示所需要的信息，将优雅和轻量化合二为一。 可以为Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh、Cmd和PowerShell执行快速安装。
+description: Starship是一款轻量、迅速、可客制化的高颜值终端！ 只显示所需要的信息，将优雅和轻量化合二为一。 可以为Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh、Cmd和PowerShell执行快速安装。
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 前置要求
 
@@ -55,6 +71,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    ```sh
    brew install starship
    ```
+
    使用 [ Winget](https://github.com/microsoft/winget-cli)：
 
    ```powershell
@@ -154,6 +171,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    :::
 
    在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
@@ -162,7 +180,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    然后在您的 Nushell 配置文件的最后（使用 `$nu.config-path` 来获取它的路径），添加以下内容：
 
    ```sh
-   使用 ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
 
 

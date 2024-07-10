@@ -1,4 +1,4 @@
-[Вернуться к пресетам](./README.md#gruvbox-rainbow)
+[Вернуться к пресетам](./#gruvbox-rainbow)
 
 # Пресет Gruvbox Rainbow
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [Нажмите, чтобы загрузить TOML](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

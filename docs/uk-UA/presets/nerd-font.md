@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#nerd-font-symbols)
+[Повернутися до Шаблонів](./#nerd-font-symbols)
 
 # Nerd Font Symbols
 
@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#gruvbox-rainbow)
+[Повернутися до Шаблонів](./#gruvbox-rainbow)
 
 # Шаблон Gruvbox Rainbow
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

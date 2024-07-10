@@ -1,6 +1,6 @@
 # Konfiguration
 
-Um mit der Konfiguration von Starship zu beginnen, muss eine leere Datei in diesem Pfad erstellt werden: `~/.config/starship.toml`.
+Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -9,24 +9,25 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Die gesamte Konfiguration von Starship erfolgt in dieser [TOML](https://github.com/toml-lang/toml)-Datei:
 
 ```toml
-# Get editor completions based on the config schema
+
+# Editor Vervollständigungen basierend auf dem Konfigurations-Schema erhalten
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Fügt eine Leerzeile zwischen den Eingabeaufforderungen ein
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Ersetzt das '❯' Zeichen in der Prompt mit '➜'
+[character] # Der name des Moduls das wir ändern ist 'character'
+success_symbol = '[➜](bold green)' # Der 'success_symbol' Teil wird auf '➜' mit der farbe 'bold green' gesetzt
 
-# Disable the package module, hiding it from the prompt completely
+# Deaktiviert das "package" Modul, damit es in der Eingabeaufforderung nicht mehr zu sehen ist
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Ort der Konfigurationsdatei
 
-Die voreingestellte Konfigurations-Datei kann mit der `STARSHIP_CONFIG` Umgebungsvariable verändert werden. Hier z. Bsp. für die BASH shell, hinzuzufügen zur ~/. bashrc:
+Du kannst die voreingestellte Konfigurations-Datei mit der `STARSHIP_CONFIG` Umgebungsvariable verändern:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
@@ -38,7 +39,7 @@ export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Oder für Cmd (Windows) diese Zeile (wieder zur  `starship.lua`):
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -46,7 +47,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Protokollierung
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
+Standardmäßig protokolliert Starship Warnungen und Fehler in einer Datei names `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, wobei der session key zu der Instanz deines Terminals korrespondiert. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -58,7 +59,7 @@ export STARSHIP_CACHE=~/.starship/cache
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Oder für Cmd (Windows) diese Zeile (wieder zur  `starship.lua`):
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -74,9 +75,9 @@ Die meisten Module haben einen Präfix der standardmäßigen terminal-Farbe (z.B
 
 ### Strings
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+In der TOML Syntax werden [Zeichenketten](https://toml.io/en/v1.0.0#string) mit `'`, `"`, `'''`, oder `"""` eingesetzt.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+Die folgende Starship Syntax Symbole haben eine spezielle Rolle in einem String, und müssen demnach als Spezialzeichen markiert werden, um als normales Zeichen angezeigt zu werden:  `$ [ ] ( )`.
 
 | Symbol | Type                      | Notes                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
@@ -158,7 +159,7 @@ Hier sind ein paar Beispiele:
 
 #### Style-Strings
 
-Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen der mit Beschreibungen, was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
+Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen der mit Beschreibungen, was sie bewirken. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -197,16 +198,16 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 
 ### Optionen
 
-| Option            | Standartwert                   | Beschreibung                                                                                                                                                                     |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Das Aussehen des Prompts festlegen.                                                                                                                                              |
-| `right_format`    | `''`                           | Sieh [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                |
-| `scan_timeout`    | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden).                                                                                                                          |
-| `command_timeout` | `500`                          | Maximale Zeit für von Starship ausgeführte Kommandos.                                                                                                                            |
-| `add_newline`     | `true`                         | Fügt leere Zeilen zwischen Shell Prompts ein.                                                                                                                                    |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+| Option            | Standartwert                   | Beschreibung                                                                                                                                                                       |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Das Aussehen des Prompts festlegen.                                                                                                                                                |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden).                                                                                                                            |
+| `command_timeout` | `500`                          | Maximale Zeit für von Starship ausgeführte Kommandos.                                                                                                                              |
+| `add_newline`     | `true`                         | Fügt leere Zeilen zwischen Shell Prompts ein.                                                                                                                                      |
+| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 ::: tip
 
@@ -281,6 +282,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -300,6 +302,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -323,6 +326,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -349,7 +353,7 @@ format = '$all$directory$character'
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+Das `aws` Modul zeigt die aktuelle AWS Region und Profil sowie den Ablauf-Timer an, wenn temporäre Zugangsdaten verwendet werden. Die Ausgabe des Moduls verwendet die `AWS_REGION`, `AWS_DEFAULT_REGION` und `AWS_PROFILE` Umgebungsvariablen sowie die `~/. ws/config` und `~/.aws/credentials` Dateien, falls nötig.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
@@ -543,7 +547,7 @@ style = 'bold red'
 [[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦'
+discharging_symbol = '💦 '
 
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
@@ -600,7 +604,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Das Format für das Modul.                                                 |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                           |
+| `symbol`            | `'🥟 '`                               | A format string representing the symbol of Bun.                           |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
@@ -617,13 +621,24 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: This variable can only be used as a part of a style string
 
-### Beispiel
+### Beispiele
+
+#### Customize the format
 
 ```toml
 # ~/.config/starship.toml
 
 [bun]
 format = 'via [🍔 $version](bold green) '
+```
+
+#### Replace Node.js
+
+You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
+
+```
+[nodejs]
+detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -1165,6 +1180,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.           |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module.             |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
 | `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
 | `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
@@ -1887,7 +1903,7 @@ The following variables can be used in `format`:
 
 | Variable       | Beschreibung                                                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -1951,6 +1967,44 @@ Use Windows Starship executable on Windows paths in WSL
 
 [git_status]
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `gleam.toml` file
+- The current directory contains a file with the `.gleam` extension
+
+### Optionen
+
+| Option              | Standartwert                         | Beschreibung                                                              |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Das Format für das Modul.                                                 |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
+| `style`             | `'bold #FFAFF3'`                     | Stil für dieses Modul.                                                    |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                              |
+
+### Variables
+
+| Variable  | Beispiel | Beschreibung                          |
+| --------- | -------- | ------------------------------------- |
+| version   | `v1.0.0` | The version of `gleam`                |
+| symbol    |          | Spiegelt den Wert der Option `symbol` |
+| style\* |          | Spiegelt den Wert der Option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
 ```
 
 ## Go
@@ -2431,7 +2485,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 :::
 
@@ -2453,6 +2507,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Deaktiviert das `kubernetes`-Modul.                                   |
 
@@ -2755,6 +2810,35 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### Optionen
+
+| Option     | Standartwert               | Beschreibung                                                 |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | Stil für dieses Modul.                                       |
+| `format`   | `'[$symbol$name]($style)'` | Das Format für das Modul.                                    |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### Variables
+
+| Variable  | Beispiel    | Beschreibung                          |
+| --------- | ----------- | ------------------------------------- |
+| name      | `localhost` | The name of the NATS context          |
+| symbol    |             | Spiegelt den Wert der Option `symbol` |
+| style\* |             | Spiegelt den Wert der Option `style`  |
+
+### Beispiel
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
@@ -2930,6 +3014,43 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 format = 'via [🐪 $version]($style) '
 ```
 
+## Odin
+
+The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Optionen
+
+| Option              | Standartwert                         | Beschreibung                                          |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Das Format für das Modul.                             |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `'bold bright-blue'`                 | Stil für dieses Modul.                                |
+| `disabled`          | `false`                              | Disables the `odin` module.                           |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+
+### Variables
+
+| Variable  | Beispiel      | Beschreibung                          |
+| --------- | ------------- | ------------------------------------- |
+| version   | `dev-2024-03` | The version of `odin`                 |
+| symbol    |               | Spiegelt den Wert der Option `symbol` |
+| style\* |               | Spiegelt den Wert der Option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
+```
+
 ## Open Policy Agent
 
 The `opa` module shows the currently installed version of the OPA tool. By default the module will be shown if the current directory contains a `.rego` file.
@@ -3031,7 +3152,9 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 ```toml
 # This is the default symbols table.
 [os.symbols]
+AIX = "➿ "
 Alpaquita = "🔔 "
+AlmaLinux = "💠 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
@@ -3048,6 +3171,7 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "
@@ -3066,11 +3190,14 @@ Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
 RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
 Redox = "🧪 "
 Solus = "⛵ "
 SUSE = "🦎 "
 Ubuntu = "🎯 "
+Ultramarine = "🔷 "
 Unknown = "❓ "
+Void = "  "
 Windows = "🪟 "
 ```
 
@@ -3355,7 +3482,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-By default the module will be shown if any of the following conditions are met:
+By default, the module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
 - Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
@@ -3427,16 +3554,37 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
-```toml
-# ~/.config/starship.toml
+## Quarto
 
-[python]
-# Display the version of python from inside a local venv.
-#
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
-python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
-```
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `_quarto.yml` file
+- The current directory contains any `*.qmd` file
+
+### Optionen
+
+| Option              | Standartwert                         | Beschreibung                                                              |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Das Format für das Modul.                                                 |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                         |
+| `style`             | `'bold #75AADB'`                     | Stil für dieses Modul.                                                    |
+| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['_quarto.yml']`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                             |
+
+### Variables
+
+| Variable  | Beispiel  | Beschreibung                          |
+| --------- | --------- | ------------------------------------- |
+| version   | `1.4.549` | The version of `quarto`               |
+| symbol    |           | Spiegelt den Wert der Option `symbol` |
+| style\* |           | Spiegelt den Wert der Option `style`  |
+
+*: This variable can only be used as a part of a style string
 
 ## R
 
@@ -3583,11 +3731,12 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable  | Beispiel | Beschreibung                          |
-| --------- | -------- | ------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                 |
-| symbol    |          | Spiegelt den Wert der Option `symbol` |
-| style\* |          | Spiegelt den Wert der Option `style`  |
+| Variable  | Beispiel | Beschreibung                                |
+| --------- | -------- | ------------------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`                       |
+| symbol    |          | Spiegelt den Wert der Option `symbol`       |
+| style\* |          | Spiegelt den Wert der Option `style`        |
+| gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: This variable can only be used as a part of a style string
 
@@ -3770,7 +3919,7 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
@@ -4182,6 +4331,7 @@ Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezei
 - Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
 - Der Benutzer ist aktuell via SSH verbunden
 - Die Variable `show_always` ist auf true gesetzt
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
 ::: tip
 
@@ -4191,13 +4341,15 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Optionen
 
-| Option        | Standartwert            | Beschreibung                                   |
-| ------------- | ----------------------- | ---------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin.    |
-| `style_user`  | `'bold yellow'`         | Stil wenn der Benutzer nicht unter root läuft. |
-| `format`      | `'[$user]($style) in '` | Das Format für das Modul.                      |
-| `show_always` | `false`                 | Immer das `username` Modul anzeigen.           |
-| `disabled`    | `false`                 | Deavktiviert das `username` Modul.             |
+| Option            | Standartwert            | Beschreibung                                              |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | Stil wenn der Benutzer nicht unter root läuft.            |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | Das Format für das Modul.                                 |
+| `show_always`     | `false`                 | Immer das `username` Modul anzeigen.                      |
+| `disabled`        | `false`                 | Deavktiviert das `username` Modul.                        |
+| `aliases`         | `{}`                    | Translate system usernames to something else              |
 
 ### Variables
 
@@ -4208,6 +4360,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Beispiel
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4217,6 +4371,18 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
+aliases = { "corpuser034g" = "matchai" }
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
 ```
 
 ## Vagrant

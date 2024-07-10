@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./README.md#nerd-font-symbols)
+[Retornar para Personalizações](./#nerd-font-symbols)
 
 # Símbolos Nerd Font
 
@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

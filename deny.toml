@@ -1,20 +1,17 @@
 [advisories]
-vulnerability = "deny"
-unmaintained = "warn"
-yanked = "warn"
-notice = "warn"
+version = 2
 
 # A list of advisory IDs to ignore. Note that ignored advisories will still
 # output a note when they are encountered.
 ignore = [
 
 
-  # "RUSTSEC-0000-0000",
+  # { id = "RUSTSEC-0000-0000",  reason = "" },
 ]
 
 [licenses]
-# The lint level for crates which do not have a detectable license
-unlicensed = "deny"
+version = 2
+
 # List of explicitly allowed licenses
 allow = [
   "Apache-2.0 WITH LLVM-exception",
@@ -27,6 +24,7 @@ allow = [
   "MIT",
   "MPL-2.0",
   "Unicode-DFS-2016",
+  "Unicode-3.0",
   "Unlicense",
   "WTFPL",
   "Zlib",

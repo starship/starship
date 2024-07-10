@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#bracketed-segments)
+[プリセット一覧に戻る](./#bracketed-segments)
 
 # Bracketed Segmentsプリセット
 
@@ -14,4 +14,4 @@ starship preset bracketed-segments -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/bracketed-segments.toml)
 
-<<< @/.vuepress/public/presets/toml/bracketed-segments.toml
+<<< @/public/presets/toml/bracketed-segments.toml

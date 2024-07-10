@@ -431,9 +431,7 @@ Voyez ces travaux précédents qui ont contribué à inspirer la création de St
 
 Soutenez ce projet en [devenant un collaborateur](https://github.com/sponsors/starship). Votre nom ou logo apparaîtra ici avec un lien vers votre site Web.
 
-**Palier Collaborateur**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

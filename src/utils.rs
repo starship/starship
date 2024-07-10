@@ -136,7 +136,7 @@ pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
 ) -> String {
     std::iter::once(cmd.as_ref())
-        .chain(args.iter().map(std::convert::AsRef::as_ref))
+        .chain(args.iter().map(AsRef::as_ref))
         .map(|i| i.to_string_lossy().into_owned())
         .collect::<Vec<String>>()
         .join(" ")
@@ -267,6 +267,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "gleam --version" => Some(CommandOutput {
+            stdout: String::from("gleam 1.0.0\n"),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
@@ -281,6 +285,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
             stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
+            stderr: String::default(),
+        }),
+        "scala-cli version --scala" => Some(CommandOutput {
+            stdout: String::from("3.4.1"),
             stderr: String::default(),
         }),
         "scalac -version" => Some(CommandOutput {
@@ -307,6 +315,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
             stderr: String::default(),
         }),
+        "nats context info --json" => Some(CommandOutput{
+            stdout: String::from("{\"name\":\"localhost\",\"url\":\"nats://localhost:4222\"}"),
+            stderr: String::default(),
+        }),
         "nim --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -324,6 +336,10 @@ active boot switches: -d:release\n",
         }),
         "ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.10.0\n"),
+            stderr: String::default(),
+        }),
+        "odin version" => Some(CommandOutput {
+            stdout: String::from("odin version dev-2024-03:fc587c507\n"),
             stderr: String::default(),
         }),
         "opa version" => Some(CommandOutput {
@@ -391,6 +407,10 @@ WebAssembly: unavailable
         }),
         "python3 --version" => Some(CommandOutput {
             stdout: String::from("Python 3.8.0\n"),
+            stderr: String::default(),
+        }),
+        "quarto --version" => Some(CommandOutput {
+            stdout: String::from("1.4.549\n"),
             stderr: String::default(),
         }),
         "R --version" => Some(CommandOutput {
@@ -498,12 +518,13 @@ pub fn wrap_seq_for_shell(
     escape_begin: char,
     escape_end: char,
 ) -> String {
-    const BASH_BEG: &str = "\u{5c}\u{5b}"; // \[
-    const BASH_END: &str = "\u{5c}\u{5d}"; // \]
-    const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const ZSH_END: &str = "\u{25}\u{7d}"; // %}
-    const TCSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const TCSH_END: &str = "\u{25}\u{7d}"; // %}
+    let (beg, end) = match shell {
+        // \[ and \]
+        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        // %{ and %}
+        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
+        _ => return ansi,
+    };
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
     // in an escape or not with a single boolean variable
@@ -513,20 +534,10 @@ pub fn wrap_seq_for_shell(
         .map(|x| {
             if x == escape_begin && !escaped {
                 escaped = true;
-                match shell {
-                    Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
-                    Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
-                    Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
-                    _ => x.to_string(),
-                }
+                format!("{beg}{escape_begin}")
             } else if x == escape_end && escaped {
                 escaped = false;
-                match shell {
-                    Shell::Bash => format!("{escape_end}{BASH_END}"),
-                    Shell::Zsh => format!("{escape_end}{ZSH_END}"),
-                    Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
-                    _ => x.to_string(),
-                }
+                format!("{escape_end}{end}")
             } else {
                 x.to_string()
             }
@@ -645,7 +656,7 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
 }
 
 pub fn home_dir() -> Option<PathBuf> {
-    dirs_next::home_dir()
+    dirs::home_dir()
 }
 
 const HEXTABLE: &[char] = &[

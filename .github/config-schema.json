@@ -94,7 +94,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": "🍞 ",
+        "symbol": "🥟 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -374,7 +374,7 @@
         "format": "[$symbol$loaded/$allowed]($style) ",
         "loaded_msg": "loaded",
         "not_allowed_msg": "not allowed",
-        "style": "bold orange",
+        "style": "bold bright-yellow",
         "symbol": "direnv ",
         "unloaded_msg": "not loaded"
       },
@@ -674,6 +674,27 @@
         }
       ]
     },
+    "gleam": {
+      "default": {
+        "detect_extensions": [
+          "gleam"
+        ],
+        "detect_files": [
+          "gleam.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold #FFAFF3",
+        "symbol": "⭐ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GleamConfig"
+        }
+      ]
+    },
     "golang": {
       "default": {
         "detect_extensions": [
@@ -938,6 +959,7 @@
       "default": {
         "context_aliases": {},
         "contexts": [],
+        "detect_env_vars": [],
         "detect_extensions": [],
         "detect_files": [],
         "detect_folders": [],
@@ -1026,6 +1048,19 @@
       "allOf": [
         {
           "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
+    "nats": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol($name )]($style)",
+        "style": "bold purple",
+        "symbol": "✉️ "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NatsConfig"
         }
       ]
     },
@@ -1134,6 +1169,25 @@
         }
       ]
     },
+    "odin": {
+      "default": {
+        "detect_extensions": [
+          "odin"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "show_commit": false,
+        "style": "bold bright-blue",
+        "symbol": "Ø "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OdinConfig"
+        }
+      ]
+    },
     "opa": {
       "default": {
         "detect_extensions": [
@@ -1172,6 +1226,8 @@
         "format": "[$symbol]($style)",
         "style": "bold white",
         "symbols": {
+          "AIX": "➿ ",
+          "AlmaLinux": "💠 ",
           "Alpaquita": "🔔 ",
           "Alpine": "🏔️ ",
           "Amazon": "🙂 ",
@@ -1189,6 +1245,7 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Kali": "🐉 ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
           "Macos": "🍎 ",
@@ -1206,10 +1263,13 @@
           "RedHatEnterprise": "🎩 ",
           "Redhat": "🎩 ",
           "Redox": "🧪 ",
+          "RockyLinux": "💠 ",
           "SUSE": "🦎 ",
           "Solus": "⛵ ",
           "Ubuntu": "🎯 ",
+          "Ultramarine": "🔷 ",
           "Unknown": "❓ ",
+          "Void": "  ",
           "Windows": "🪟 ",
           "openEuler": "🦉 ",
           "openSUSE": "🦎 "
@@ -1323,7 +1383,9 @@
           "purs"
         ],
         "detect_files": [
-          "spago.dhall"
+          "spago.dhall",
+          "spago.yaml",
+          "spago.lock"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -1369,6 +1431,27 @@
       "allOf": [
         {
           "$ref": "#/definitions/PythonConfig"
+        }
+      ]
+    },
+    "quarto": {
+      "default": {
+        "detect_extensions": [
+          "qmd"
+        ],
+        "detect_files": [
+          "_quarto.yml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold #75AADB",
+        "symbol": "⨁ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/QuartoConfig"
         }
       ]
     },
@@ -1724,6 +1807,8 @@
     },
     "username": {
       "default": {
+        "aliases": {},
+        "detect_env_vars": [],
         "disabled": false,
         "format": "[$user]($style) in ",
         "show_always": false,
@@ -2098,7 +2183,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🍞 ",
+          "default": "🥟 ",
           "type": "string"
         },
         "style": {
@@ -2824,7 +2909,7 @@
           "type": "string"
         },
         "style": {
-          "default": "bold orange",
+          "default": "bold bright-yellow",
           "type": "string"
         },
         "disabled": {
@@ -3588,6 +3673,57 @@
       },
       "additionalProperties": false
     },
+    "GleamConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⭐ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #FFAFF3",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "gleam"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "gleam.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "GoConfig": {
       "type": "object",
       "properties": {
@@ -4218,6 +4354,13 @@
             "type": "string"
           }
         },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "contexts": {
           "default": [],
           "type": "array",
@@ -4416,6 +4559,28 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NatsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol($name )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "✉️ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       },
@@ -4646,6 +4811,55 @@
       },
       "additionalProperties": false
     },
+    "OdinConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "show_commit": {
+          "default": false,
+          "type": "boolean"
+        },
+        "symbol": {
+          "default": "Ø ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "odin"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "OpaConfig": {
       "type": "object",
       "properties": {
@@ -4730,6 +4944,8 @@
         },
         "symbols": {
           "default": {
+            "AIX": "➿ ",
+            "AlmaLinux": "💠 ",
             "Alpaquita": "🔔 ",
             "Alpine": "🏔️ ",
             "Amazon": "🙂 ",
@@ -4747,6 +4963,7 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Kali": "🐉 ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
             "Macos": "🍎 ",
@@ -4764,10 +4981,13 @@
             "RedHatEnterprise": "🎩 ",
             "Redhat": "🎩 ",
             "Redox": "🧪 ",
+            "RockyLinux": "💠 ",
             "SUSE": "🦎 ",
             "Solus": "⛵ ",
             "Ubuntu": "🎯 ",
+            "Ultramarine": "🔷 ",
             "Unknown": "❓ ",
+            "Void": "  ",
             "Windows": "🪟 ",
             "openEuler": "🦉 ",
             "openSUSE": "🦎 "
@@ -5020,7 +5240,9 @@
         },
         "detect_files": {
           "default": [
-            "spago.dhall"
+            "spago.dhall",
+            "spago.yaml",
+            "spago.lock"
           ],
           "type": "array",
           "items": {
@@ -5126,6 +5348,57 @@
           }
         }
       ]
+    },
+    "QuartoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⨁ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #75AADB",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "qmd"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "_quarto.yml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "RakuConfig": {
       "type": "object",
@@ -5960,6 +6233,13 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "format": {
           "default": "[$user]($style) in ",
           "type": "string"
@@ -5979,6 +6259,13 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
