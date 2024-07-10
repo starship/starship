@@ -110,7 +110,7 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
             let build_file_contents = context.read_file_from_pwd("build.gradle")?;
-            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let re = Regex::new(r#"(?m)^version( |\s*=\s*)['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
             let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
 
@@ -910,6 +910,25 @@ license = "MIT"
     id 'test.plugin' version '0.2.0'
 }
 version '0.1.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_gradle_version_setter_notation_single_quote() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version = '0.1.0'
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
