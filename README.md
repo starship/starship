@@ -166,7 +166,7 @@
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
+- **Intelligent:** displays relevant information at a glance.
 - **Feature rich:** support for all your favorite tools.
 - **Easy:** quick to install – start using it in minutes.
 
