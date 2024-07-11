@@ -208,7 +208,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `palettes`        | `{}`                          | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                        | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
-::: tip
+::: tip 提示
 
 如果你有链接至网络文件系统的符号链接, 建议设置 `follow_symlinks` 为 `false`
 
@@ -622,7 +622,7 @@ symbol = '🦬 '
 
 ### 示例
 
-#### Customize the format
+#### 自定义格式
 
 ```toml
 # ~/.config/starship.toml
@@ -660,12 +660,12 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### 变量
 
-| 字段      | 示例     | 描述                          |
-| ------- | ------ | --------------------------- |
-| name    | clang  | The name of the compiler    |
-| version | 13.0.0 | The version of the compiler |
-| symbol  |        | `symbol`对应值                 |
-| style   |        | `style`对应值                  |
+| 字段      | 示例     | 描述          |
+| ------- | ------ | ----------- |
+| name    | clang  | 编译器的名称      |
+| version | 13.0.0 | 编译器的版本      |
+| symbol  |        | `symbol`对应值 |
+| style   |        | `style`对应值  |
 
 NB that `version` is not in the default format.
 
@@ -697,7 +697,7 @@ format = 'via [$name $version]($style)'
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: warning 警告
 
 `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -755,10 +755,10 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+`cmake` 组件显示当前安装的 [CMake](https://cmake.org/) 版本。 默认情况下，此组件将在满足以下任意条件时启用：
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- 当前目录包含 `CMakeLists.txt` 文件
+- 当前目录包含 `CMakeCache.txt` 文件
 
 ### 配置项
 
@@ -775,11 +775,11 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### 变量
 
-| 字段        | 示例        | 描述                   |
-| --------- | --------- | -------------------- |
-| version   | `v3.17.3` | The version of cmake |
-| symbol    |           | `symbol`对应值          |
-| style\* |           | `style`对应值           |
+| 字段        | 示例        | 描述          |
+| --------- | --------- | ----------- |
+| version   | `v3.17.3` | cmake 版本    |
+| symbol    |           | `symbol`对应值 |
+| style\* |           | `style`对应值  |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -805,11 +805,11 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### 变量
 
-| 字段        | 示例         | 描述                     |
-| --------- | ---------- | ---------------------- |
-| version   | `v3.1.2.0` | The version of `cobol` |
-| symbol    |            | `symbol`对应值            |
-| style\* |            | `style`对应值             |
+| 字段        | 示例         | 描述          |
+| --------- | ---------- | ----------- |
+| version   | `v3.1.2.0` | `cobol` 版本  |
+| symbol    |            | `symbol`对应值 |
+| style\* |            | `style`对应值  |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -861,7 +861,7 @@ format = 'underwent [$duration](bold yellow)'
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
+::: tip 提示
 
 此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。
 
@@ -934,7 +934,7 @@ format = '[$symbol \[$name\]]($style) '
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). 默认情况下，此组件将在满足以下任意条件时显示：
 
 - 当前目录包含一个 `shard.yml` 文件
-- The current directory contains a `.cr` file
+- 当前目录包含一个 `.cr` 文件
 
 ### 配置项
 
@@ -1048,30 +1048,30 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). 默认情况下，此组件将在满足以下任意条件时显示：
+`deno` 组件显示当前安装的 [Deno](https://deno.land/) 版本。 默认情况下，此组件将在满足以下任意条件时显示：
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- 当前目录包含 `deno.json`、`deno.jsonc`、`mod.ts`、`mod.js`、`deps.ts` 或 `deps.js` 文件
 
 ### 配置项
 
-| 选项                  | 默认值                                                                     | 描述                                              |
-| ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | 组件格式化模板。                                        |
-| `version_format`    | `'v${raw}'`                                                             | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`     |
-| `symbol`            | `'🦕 '`                                                                  | A format string representing the symbol of Deno |
-| `detect_extensions` | `[]`                                                                    | 触发此组件的扩展名                                       |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                       |
-| `detect_folders`    | `[]`                                                                    | 触发此组件的文件夹                                       |
-| `style`             | `'green bold'`                                                          | 此组件的样式。                                         |
-| `disabled`          | `false`                                                                 | Disables the `deno` module.                     |
+| 选项                  | 默认值                                                                     | 描述                                          |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                    | 组件格式化模板。                                    |
+| `version_format`    | `'v${raw}'`                                                             | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch` |
+| `symbol`            | `'🦕 '`                                                                  | 用于表示 Deno 的格式化字符串                           |
+| `detect_extensions` | `[]`                                                                    | 触发此组件的扩展名                                   |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                   |
+| `detect_folders`    | `[]`                                                                    | 触发此组件的文件夹                                   |
+| `style`             | `'green bold'`                                                          | 此组件的样式。                                     |
+| `disabled`          | `false`                                                                 | 禁用 `deno` 组件                                |
 
 ### 变量
 
-| 字段        | 示例       | 描述                    |
-| --------- | -------- | --------------------- |
-| version   | `v1.8.3` | The version of `deno` |
-| symbol    |          | `symbol`对应值           |
-| style\* |          | `style`对应值            |
+| 字段        | 示例       | 描述          |
+| --------- | -------- | ----------- |
+| version   | `v1.8.3` | `deno` 版本   |
+| symbol    |          | `symbol`对应值 |
+| style\* |          | `style`对应值  |
 
 ### 示例
 
@@ -1131,10 +1131,10 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 
 ### 变量
 
-| 字段        | 示例                    | 描述                         |
-| --------- | --------------------- | -------------------------- |
-| path      | `'D:/Projects'`       | The current directory path |
-| style\* | `'black bold dimmed'` | `style`对应值                 |
+| 字段        | 示例                    | 描述         |
+| --------- | --------------------- | ---------- |
+| path      | `'D:/Projects'`       | 当前目录的路径    |
+| style\* | `'black bold dimmed'` | `style`对应值 |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -1386,13 +1386,13 @@ The `env_var` module displays the current value of a selected environment variab
 - 设置的 `variable` 是一个已存在的环境变量
 - 未定义 `variable`，但定义了 `default`
 
-::: tip
+::: tip 提示
 
 The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
 
 :::
 
-::: tip
+::: tip 提示
 
 Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
@@ -1826,7 +1826,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -1868,7 +1868,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 `git_status`组件通过相应的符号显示您当前目录中 git 仓库的状态。
 
-::: tip
+::: tip 提示
 
 The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
@@ -2012,13 +2012,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
-- 当前目录包含一个 `go.work` 文件
+- 当前目录包含 `go.work` 文件
 - 当前目录包含 `glide.yaml` 文件
 - 当前目录包含 `Gopkg.yml` 文件
 - 当前目录包含 `Gopkg.lock` 文件
-- The current directory contains a `.go-version` file
+- 当前目录包含 `.go-version` 文件
 - 当前目录包含 `Godeps` 目录
-- 当前目录包含一个使用 `.go` 扩展名的文件
+- 当前目录包含使用 `.go` 扩展名的文件
 
 ### 配置项
 
@@ -2295,7 +2295,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). 默认情况下，此组件将在满足以下任意条件时显示：
+`java` 组件显示当前安装的 [Java](https://www.oracle.com/java/) 版本。 默认情况下，此组件将在满足以下任意条件时显示：
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
@@ -2342,13 +2342,13 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+::: warning 警告
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: warning
+::: warning 警告
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
@@ -2480,7 +2480,7 @@ kotlin_binary = 'kotlinc'
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -2490,7 +2490,7 @@ When the module is enabled it will always be active, unless any of `detect_env_v
 
 ### 配置项
 
-::: warning
+::: warning 警告
 
 The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
@@ -2692,7 +2692,7 @@ format = 'via [🌕 $version](bold blue) '
 
 默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -3125,13 +3125,13 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: warning
+::: warning 警告
 
 The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
 :::
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -3382,7 +3382,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
-::: tip
+::: tip 提示
 
 By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
@@ -3511,7 +3511,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
 | `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                        |
 
-::: tip
+::: tip 提示
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -3835,7 +3835,7 @@ symbol = '🌟 '
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -4041,7 +4041,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -4102,7 +4102,7 @@ disabled = false
 
 The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -4190,7 +4190,7 @@ format = 'via [🏎  $version](red bold)'
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
+::: tip 提示
 
 By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
@@ -4249,7 +4249,7 @@ format = '[🏎💨 $workspace]($style) '
 
 `time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
-::: tip
+::: tip 提示
 
 此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
@@ -4334,7 +4334,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 字段 `show_always` 被设置为 true
 - The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
-::: tip
+::: tip 提示
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -4542,19 +4542,19 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
-::: tip
+::: tip 提示
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: tip 提示
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: tip 提示
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
