@@ -280,6 +280,7 @@ $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
+$jujutsu\
 $hg_branch\
 $pijul_channel\
 $docker_context\
@@ -2497,6 +2498,56 @@ symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
+
+## Jujutsu
+
+The `jujutsu` module shows the current branch, change id, and description message of the commit.
+
+Information is gathered by running the following command:
+
+```shell
+jj log -r@ -n1 --ignore-working-copy --no-graph --color always -T $TEMPLATE
+```
+
+Default template is defined as follows:
+
+```
+separate(" ",
+  change_id.shortest(6),
+  branches.map(|x| if(
+    x.name().substr(0, 20).starts_with(x.name()),
+    x.name().substr(0, 20),
+    x.name().substr(0, 19) ++ "…")
+  ).join(" "),
+  if(
+    description.first_line().substr(0, 24).starts_with(description.first_line()),
+    description.first_line().substr(0, 24),
+    description.first_line().substr(0, 23) ++ "…"
+  ),
+  if(conflict, "conflict"),
+  if(divergent, "divergent"),
+  if(hidden, "hidden"),
+)
+```
+
+
+### Options
+
+| Option              | Default                  | Description                                                               |
+| ------------------- | ------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'$symbol $commit_info ` | The format for the module.                                                |
+| `detect_folders`    | `['.jj']`                | Which folders should trigger this modules.                                |
+| `symbol`            | `'jj '`                  | A format string representing the symbol of Jujutsu.                       |
+| `template`          | See the template above   | Jujutsu template collects the `commit_info` value.                        |
+| `disabled`          | `false`                  | Disables the `jujutsu` module.                                            |
+
+## Variables
+
+| Variable     | Example                        | Description                                      |
+| ------------ | ------------------------------ | ------------------------------------------------ |
+| symbol       |                                | Mirrors the value of option `symbol`             |
+| commit_info  | `main szuflg "initial commit"` | The output of the template                       |
+
 
 ## Julia
 
