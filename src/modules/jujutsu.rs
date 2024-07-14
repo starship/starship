@@ -41,3 +41,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use std::fs::create_dir;
+    use std::io;
+
+    #[test]
+    fn folder_without_jj_repo() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("jujutsu").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_jj_repo() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir(dir.path().join(".jj"))?;
+        let actual = ModuleRenderer::new("jujutsu").path(dir.path()).collect();
+        let expected = Some("jj main \"initial commit\" ");
+        assert_eq!(expected, actual.as_deref());
+        dir.close()
+    }
+}
