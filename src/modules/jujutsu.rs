@@ -23,7 +23,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "commit_info" => {
-                    let output = &context.exec_cmd("jj", &["log", "-r@", "-n1", "--ignore-working-copy", "--no-graph", "--color","always", "-T", config.template])?.stdout;
+                    let output = &context
+                        .exec_cmd(
+                            "jj",
+                            &[
+                                "log",
+                                "-r@",
+                                "-n1",
+                                "--ignore-working-copy",
+                                "--no-graph",
+                                "--color",
+                                "always",
+                                "-T",
+                                config.template,
+                            ],
+                        )?
+                        .stdout;
                     Some(Ok(output.to_owned()))
                 }
                 _ => None,
