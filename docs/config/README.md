@@ -2530,24 +2530,22 @@ separate(" ",
 )
 ```
 
-
 ### Options
 
-| Option              | Default                  | Description                                                               |
-| ------------------- | ------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'$symbol $commit_info ` | The format for the module.                                                |
-| `detect_folders`    | `['.jj']`                | Which folders should trigger this modules.                                |
-| `symbol`            | `'jj '`                  | A format string representing the symbol of Jujutsu.                       |
-| `template`          | See the template above   | Jujutsu template collects the `commit_info` value.                        |
-| `disabled`          | `false`                  | Disables the `jujutsu` module.                                            |
+| Option           | Default                 | Description                                         |
+| ---------------- | ----------------------- | --------------------------------------------------- |
+| `format`         | `'$symbol $commit_info` | The format for the module.                          |
+| `detect_folders` | `['.jj']`               | Which folders should trigger this modules.          |
+| `symbol`         | `'jj '`                 | A format string representing the symbol of Jujutsu. |
+| `template`       | See the template above  | Jujutsu template collects the `commit_info` value.  |
+| `disabled`       | `false`                 | Disables the `jujutsu` module.                      |
 
 ## Variables
 
-| Variable     | Example                        | Description                                      |
-| ------------ | ------------------------------ | ------------------------------------------------ |
-| symbol       |                                | Mirrors the value of option `symbol`             |
-| commit_info  | `main szuflg "initial commit"` | The output of the template                       |
-
+| Variable    | Example                        | Description                          |
+| ----------- | ------------------------------ | ------------------------------------ |
+| symbol      |                                | Mirrors the value of option `symbol` |
+| commit_info | `main szuflg "initial commit"` | The output of the template           |
 
 ## Julia
 
