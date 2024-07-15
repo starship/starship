@@ -279,6 +279,7 @@ pub fn description(module: &str) -> &'static str {
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
+        "jujutsu" => "The currently installed version of Jujutsu",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
