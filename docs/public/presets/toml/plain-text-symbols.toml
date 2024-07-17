@@ -232,3 +232,6 @@ symbol = "terraform "
 
 [zig]
 symbol = "zig "
+
+[hostname]
+ssh_symbol = ""
