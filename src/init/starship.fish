@@ -11,6 +11,7 @@ function fish_prompt
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
     set STARSHIP_JOBS (count (jobs -p))
     if test "$TRANSIENT" = "1"
+        set -g TRANSIENT 0
         # Clear from cursor to end of screen as `commandline -f repaint` does not do this
         # See https://github.com/fish-shell/fish-shell/issues/8418
         printf \e\[0J
@@ -19,7 +20,6 @@ function fish_prompt
         else
             printf "\e[1;32m❯\e[0m "
         end
-        set -g TRANSIENT 0
     else
         ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
@@ -38,12 +38,12 @@ function fish_right_prompt
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
     set STARSHIP_JOBS (count (jobs -p))
     if test "$RIGHT_TRANSIENT" = "1"
+        set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
             starship_transient_rprompt_func
         else
             printf ""
         end
-        set -g RIGHT_TRANSIENT 0
     else
         ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
