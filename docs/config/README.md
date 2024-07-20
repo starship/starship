@@ -2948,10 +2948,10 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | ------------------- | ------------------------------------- | ------------------------------------------------------ |
 | `format`            | `'with [$symbol($version )]($style)'` | The format for the module.                             |
 | `show_commit`       | `false`                               | Shows the commit as part of the version.               |
-| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `symbol`            | `'🔥 '`                               | The symbol used before displaying the version of Mojo. |
 | `style`             | `'bold 208'`                          | The style for the module.                              |
 | `disabled`          | `false`                               | Disables the `mojo` module.                            |
-| `detect_extensions` | `['mojo', '🔥']`                       | Which extensions should trigger this module.           |
+| `detect_extensions` | `['mojo', '🔥']`                      | Which extensions should trigger this module.           |
 | `detect_files`      | `[]`                                  | Which filenames should trigger this module.            |
 | `detect_folders`    | `[]`                                  | Which folders should trigger this module.              |
 
