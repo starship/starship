@@ -1173,7 +1173,7 @@ it would have been `nixpkgs/pkgs`.
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
-prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1982,7 +1982,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `staged`            | `'+'`                                         | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                         | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                          | The format of `typechange`                                                                                  |
+| `typechanged`       | `""`                                          | The format of `typechanged`                                                                                 |
 | `style`             | `'bold red'`                                  | The style for the module.                                                                                   |
 | `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
@@ -2003,7 +2003,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
 | style\*        | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
