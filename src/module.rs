@@ -222,8 +222,10 @@ where
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
-                let fill_string =
-                    fill.ansi_string(fill_size, strs.last().map(|segment| segment.style_ref()));
+                let fill_string = fill.ansi_string(
+                    fill_size,
+                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
+                );
                 strs.into_iter().chain(std::iter::once(fill_string))
             })
             .chain(current)

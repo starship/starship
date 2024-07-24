@@ -130,8 +130,8 @@ impl Segment {
 
     pub fn style(&self) -> Option<AnsiStyle> {
         match self {
-            Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None).to_owned()),
-            Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None).to_owned()),
+            Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
+            Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
             Self::LineTerm => None,
         }
     }

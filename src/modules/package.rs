@@ -152,7 +152,7 @@ fn get_mix_version(context: &Context, config: &PackageConfig) -> Option<String> 
 fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pom.xml")?;
     let mut reader = QXReader::from_str(&file_contents);
-    reader.trim_text(true);
+    reader.config_mut().trim_text(true);
 
     let mut buf = vec![];
     let mut in_ver = false;

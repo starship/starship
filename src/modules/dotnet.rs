@@ -99,7 +99,7 @@ fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
 fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     let project_file = utils::read_file(path).ok()?;
     let mut reader = Reader::from_str(&project_file);
-    reader.trim_text(true);
+    reader.config_mut().trim_text(true);
 
     let mut in_tfm = false;
     let mut buf = Vec::new();
