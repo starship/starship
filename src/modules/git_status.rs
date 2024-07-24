@@ -426,13 +426,13 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     log::trace!("Using WSL mode");
 
     // Get Windows path
-    let winpath = match create_command("wslpath")
+    let wslpath = create_command("wslpath")
         .map(|mut c| {
             c.arg("-w").arg(&context.current_dir);
             c
         })
-        .and_then(|mut c| c.output())
-    {
+        .and_then(|mut c| c.output());
+    let winpath = match wslpath {
         Ok(r) => r,
         Err(e) => {
             // Not found might means this might not be WSL after all
@@ -472,7 +472,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
         |e| e + ":STARSHIP_CONFIG/wp",
     );
 
-    let out = match create_command(starship_exe)
+    let exe = create_command(starship_exe)
         .map(|mut c| {
             c.env(
                 "STARSHIP_CONFIG",
@@ -484,8 +484,9 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
             .args(["module", "git_status", "--path", winpath]);
             c
         })
-        .and_then(|mut c| c.output())
-    {
+        .and_then(|mut c| c.output());
+
+    let out = match exe {
         Ok(r) => r,
         Err(e) => {
             log::error!("Failed to run Git Status module on Windows:\n{}", e);

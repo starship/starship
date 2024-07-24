@@ -22,7 +22,7 @@ impl<'a> Default for FossilBranchConfig<'a> {
             format: "on [$symbol$branch]($style) ",
             symbol: " ",
             style: "bold purple",
-            truncation_length: std::i64::MAX,
+            truncation_length: i64::MAX,
             truncation_symbol: "…",
             disabled: true,
         }
