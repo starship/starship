@@ -115,7 +115,7 @@ impl DataValue for JsonValue {
 impl DataValue for Yaml {
     fn get(&self, key: &str) -> Option<&Self> {
         match self {
-            Yaml::Hash(map) => map.get(&Yaml::String(key.to_string())),
+            Self::Hash(map) => map.get(&Self::String(key.to_string())),
             _ => None,
         }
     }
@@ -126,7 +126,7 @@ impl DataValue for Yaml {
 
     fn as_array(&self) -> Option<Vec<&Self>> {
         match self {
-            Yaml::Array(arr) => Some(arr.iter().collect()),
+            Self::Array(arr) => Some(arr.iter().collect()),
             _ => None,
         }
     }
@@ -1567,7 +1567,7 @@ users: []
         let actual = results.first().unwrap();
         match actual {
             Document::Json(..) => {}
-            _ => panic!("Expected Document::Json, got {:?}", actual),
+            _ => panic!("Expected Document::Json, got {actual:?}"),
         }
         Ok(())
     }
@@ -1598,7 +1598,7 @@ users: []
         let actual = results.first().unwrap();
         match actual {
             Document::Yaml(..) => {}
-            _ => panic!("Expected Document::Yaml, got {:?}", actual),
+            _ => panic!("Expected Document::Yaml, got {actual:?}"),
         }
         Ok(())
     }

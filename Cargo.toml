@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.71"
+rust-version = "1.74"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -64,7 +64,7 @@ os_info = "3.8.2"
 path-slash = "0.2.1"
 pest = "2.7.11"
 pest_derive = "2.7.11"
-quick-xml = "0.31.0"
+quick-xml = "0.36.1"
 rand = "0.8.5"
 rayon = "1.10.0"
 regex = { version = "1.10.5", default-features = false, features = ["perf", "std", "unicode-perl"] }
@@ -104,7 +104,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.56.0"
+version = "0.58.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -114,7 +114,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.28.0", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.29.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "0.30.0", default-features = false }
