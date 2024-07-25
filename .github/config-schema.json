@@ -1376,7 +1376,9 @@
           "purs"
         ],
         "detect_files": [
-          "spago.dhall"
+          "spago.dhall",
+          "spago.yaml",
+          "spago.lock"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -2095,12 +2097,14 @@
           "type": "string"
         },
         "charging_symbol": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "discharging_symbol": {
+          "default": null,
           "type": [
             "string",
             "null"
@@ -2771,12 +2775,14 @@
           "type": "string"
         },
         "repo_root_style": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "before_repo_root_style": {
+          "default": null,
           "type": [
             "string",
             "null"
@@ -4291,30 +4297,35 @@
           "type": "string"
         },
         "user_pattern": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "symbol": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "style": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "context_alias": {
+          "default": null,
           "type": [
             "string",
             "null"
           ]
         },
         "user_alias": {
+          "default": null,
           "type": [
             "string",
             "null"
@@ -5147,7 +5158,9 @@
         },
         "detect_files": {
           "default": [
-            "spago.dhall"
+            "spago.dhall",
+            "spago.yaml",
+            "spago.lock"
           ],
           "type": "array",
           "items": {

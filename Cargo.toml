@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.71"
+rust-version = "1.74"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -43,49 +43,49 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.6", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.5"
+clap = { version = "4.5.10", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.5.9"
 dirs = "5.0.1"
 dunce = "1.0.4"
-gethostname = "0.4.3"
+gethostname = "0.5.0"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.63.0", default-features = false, features = ["max-performance-safe", "revision"] }
+gix = { version = "0.64.0", default-features = false, features = ["max-performance-safe", "revision"] }
 gix-features = { version = "0.38.2", optional = true }
 indexmap = { version = "2.2.6", features = ["serde"] }
-log = { version = "0.4.21", features = ["std"] }
+log = { version = "0.4.22", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.11.0", optional = true }
-nu-ansi-term = "0.50.0"
+nu-ansi-term = "0.50.1"
 once_cell = "1.19.0"
-open = "5.1.4"
+open = "5.3.0"
 # update os module config and tests when upgrading os_info
 os_info = "3.8.2"
 path-slash = "0.2.1"
-pest = "2.7.9"
-pest_derive = "2.7.9"
-quick-xml = "0.31.0"
+pest = "2.7.11"
+pest_derive = "2.7.11"
+quick-xml = "0.36.1"
 rand = "0.8.5"
 rayon = "1.10.0"
 regex = { version = "1.10.5", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.0"
 semver = "1.0.23"
-serde = { version = "1.0.203", features = ["derive"] }
-serde_json = "1.0.117"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
 sha1 = "0.10.6"
-shadow-rs = { version = "0.28.0", default-features = false }
+shadow-rs = { version = "0.30.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.8.3", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.3"
 terminal_size = "0.3.0"
-toml = { version = "0.8.14", features = ["preserve_order"] }
-toml_edit = "0.22.14"
+toml = { version = "0.8.15", features = ["preserve_order"] }
+toml_edit = "0.22.16"
 unicode-segmentation = "1.11.0"
 unicode-width = "0.1.13"
 urlencoding = "2.1.3"
-versions = "6.2.0"
+versions = "6.3.0"
 which = "6.0.1"
 yaml-rust2 = "0.8.1"
 
@@ -104,7 +104,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.56.0"
+version = "0.58.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -114,17 +114,17 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.28.0", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.29.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.28.0", default-features = false }
+shadow-rs = { version = "0.30.0", default-features = false }
 dunce = "1.0.4"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
 
 [dev-dependencies]
-mockall = "0.12.1"
+mockall = "0.13.0"
 tempfile = "3.10.1"
 
 [profile.release]

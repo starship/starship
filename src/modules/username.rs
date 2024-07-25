@@ -119,7 +119,6 @@ fn is_ssh_session(context: &Context) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use gix::config::key;
 
     use crate::test::ModuleRenderer;
 

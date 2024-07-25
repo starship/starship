@@ -1,6 +1,8 @@
-use crate::print::{Grapheme, UnicodeWidthGraphemes};
-use nu_ansi_term::{AnsiString, Style};
-use std::fmt;
+use crate::{
+    config::Style,
+    print::{Grapheme, UnicodeWidthGraphemes},
+};
+use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
 /// Type that holds text with an associated style
@@ -15,9 +17,9 @@ pub struct TextSegment {
 
 impl TextSegment {
     // Returns the AnsiString of the segment value
-    fn ansi_string(&self) -> AnsiString {
+    fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString {
         match self.style {
-            Some(style) => style.paint(&self.value),
+            Some(style) => style.to_ansi_style(prev).paint(&self.value),
             None => AnsiString::from(&self.value),
         }
     }
@@ -35,7 +37,7 @@ pub struct FillSegment {
 
 impl FillSegment {
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>) -> AnsiString {
+    pub fn ansi_string(&self, width: Option<usize>, prev: Option<&AnsiStyle>) -> AnsiString {
         let s = match width {
             Some(w) => self
                 .value
@@ -53,7 +55,7 @@ impl FillSegment {
             None => String::from(&self.value),
         };
         match self.style {
-            Some(style) => style.paint(s),
+            Some(style) => style.to_ansi_style(prev).paint(s),
             None => AnsiString::from(s),
         }
     }
@@ -80,9 +82,9 @@ mod fill_seg_tests {
         for (text, expected) in &inputs {
             let f = FillSegment {
                 value: String::from(*text),
-                style: Some(style),
+                style: Some(style.into()),
             };
-            let actual = f.ansi_string(Some(width));
+            let actual = f.ansi_string(Some(width), None);
             assert_eq!(style.paint(*expected), actual);
         }
     }
@@ -126,10 +128,10 @@ impl Segment {
         })
     }
 
-    pub fn style(&self) -> Option<Style> {
+    pub fn style(&self) -> Option<AnsiStyle> {
         match self {
-            Self::Fill(fs) => fs.style,
-            Self::Text(ts) => ts.style,
+            Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
+            Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
             Self::LineTerm => None,
         }
     }
@@ -159,10 +161,10 @@ impl Segment {
     }
 
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self) -> AnsiString {
+    pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString {
         match self {
-            Self::Fill(fs) => fs.ansi_string(None),
-            Self::Text(ts) => ts.ansi_string(),
+            Self::Fill(fs) => fs.ansi_string(None, prev),
+            Self::Text(ts) => ts.ansi_string(prev),
             Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
         }
     }
@@ -178,9 +180,3 @@ impl Segment {
 
 const LINE_TERMINATOR: char = '\n';
 const LINE_TERMINATOR_STRING: &str = "\n";
-
-impl fmt::Display for Segment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.ansi_string())
-    }
-}
