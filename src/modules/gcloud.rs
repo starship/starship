@@ -510,7 +510,11 @@ project = overridden
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
+        #[rustfmt::skip]
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("☁️  overridden")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
