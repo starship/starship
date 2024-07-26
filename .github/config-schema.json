@@ -6444,6 +6444,10 @@
         "ignore_timeout": {
           "default": false,
           "type": "boolean"
+        },
+        "unsafe_no_escape": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

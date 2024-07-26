@@ -4756,11 +4756,12 @@ If you have an interesting example not covered there, feel free to share it ther
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
 Whatever output the command generates is printed unmodified in the prompt. This means if the output
-contains special sequences that are interpreted by your shell they will be expanded when displayed.
-These special sequences are shell specific, e.g. you can write a command module that writes bash sequences,
+contains shell-specific interpretable sequences, they could be interpreted on display.
+Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell.
+Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences,
 e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Format strings can also contain shell specific prompt sequences, e.g.
@@ -4778,6 +4779,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
