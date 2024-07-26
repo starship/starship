@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* **ci:** move to macos-latest image ([#6132](https://github.com/starship/starship/issues/6132)) ([c7a8ea7](https://github.com/starship/starship/commit/c7a8ea757033512b5723a39be71bdb91fdcfbdb1))
+
 ## [1.20.0](https://github.com/starship/starship/compare/v1.19.0...v1.20.0) (2024-07-26)
 
 
