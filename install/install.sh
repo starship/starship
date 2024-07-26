@@ -531,7 +531,7 @@ if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
 fi
 
 if [ "${VERSION}" != "latest" ]; then
-  URL="${BASE_URL}/download/${VERSION}/starship-${TARGET}.${EXT}"
+  URL="${BASE_URL}/download/v${VERSION}/starship-${TARGET}.${EXT}"
 else
   URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
 fi
