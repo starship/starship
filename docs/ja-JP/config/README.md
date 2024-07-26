@@ -4560,9 +4560,9 @@ symbol = '⚡️ '
 
 :::
 
-::: warning コマンド出力はエスケープされずにプロンプトに出力されます
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
-コマンドが生成するいかなる出力もそのままプロンプト内に表示されます。 つまり、出力にシェルによって解釈される特殊なシーケンスが含まれている場合、それらが表示時に展開されます。 特殊なシーケンスは各シェル固有のものです。例えば `\h` などの Bash で使われるシーケンスを出力するコマンドモジュールを作成することができますが、そのようなモジュールは Fish や Zsh などのシェルでは動きません。
+コマンドが生成するいかなる出力もそのままプロンプト内に表示されます。 This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 フォーマット文字列には、シェル固有のプロンプトシーケンスを含めることもできます。例えば [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
@@ -4577,6 +4577,7 @@ symbol = '⚡️ '
 | `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 他のオプションが指定されていない場合、このオプション単体では表示条件として不十分です。                                                            |
 | `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                              |
 | `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                               |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                        |
 | `detect_files`      | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイル名を指定します。                                                                                                                    |
 | `detect_folders`    | `[]`                            | 表示条件として確認する作業ディレクトリ内のディレクトリ名を指定します。                                                                                                                  |
 | `detect_extensions` | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイルの拡張子を指定します。                                                                                                                 |
