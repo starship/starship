@@ -86,15 +86,15 @@ O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) na versão 0.4 ou sup
 
 O \<value\> aqui é uma lista separada por dois pontos de `always`, `same-dir` e `trim`. Quando `prompt_ps1_final` está vazio e a opção `prompt_ps1_transient` tem um \ não vazio <value\>, o prompt especificado por `PS1` é apagado ao sair da linha de comando atual. Se \<value\> contiver um campo `trim`, apenas a última linha da multilinha `PS1`  será preservada e as outras linhas serão apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido em \<value\> e o diretório atual é diferente do diretório final da linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
 
-Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
+Faça as seguintes alterações no seu `~/.blerc` (ou em `~/.config/blesh/init.sh`) para personalizar o que é exibido à esquerda e à direita:
 
-- Para personalizar o que o lado esquerdo do valor de entrada é substituído, configure a opção `prompt_ps1_final` Ble.sh. Por exemplo, para exibir o caractere da `Starship` aqui, você faria
+- Para personalizar o que o lado esquerdo da entrada será substituído, configure a opção `prompt_ps1_final` Ble.sh. Por exemplo, para exibir o módulo `caractere` do Starship aqui, você deve fazer
 
 ```bash
 bleopt prompt_ps1_final='$(starship module character)'
 ```
 
-- Para personalizar o que o lado direito de entrada é substituído, configure a opção `prompt_rps1_final` Ble.sh. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
+- Para personalizar o que o lado direito de entrada será substituído, configure a opção `prompt_rps1_final` Ble.sh. Por exemplo, para exibir o momento em que o último comando foi iniciado, você deve fazer
 
 ```bash
 bleopt prompt_rps1_final='$(starship module time)'
@@ -223,11 +223,11 @@ Invoke-Expression (&starship init powershell)
 
 Alguns shells suportam um prompt direito que é renderizado na mesma linha que a entrada. Starship pode definir o conteúdo do prompt correto usando a opção `right_format`. Qualquer módulo que pode ser usado no `format` também é compatível com `right_format`. A variável `$all` conterá apenas módulos não usado explicitamente em `format` ou `right_format`.
 
-Nota: O prompt direito é uma única linha após o local de entrada. To right align modules above the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
+Nota: O prompt direito é uma única linha após o local de entrada. Para alinhar à direita os módulos acima da linha de entrada em um prompt de várias linhas, consulte o [módulo`fill`](../config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+`right_format` é atualmente suportado para os seguintes shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
+Nota: O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) na versão 0.4 ou superior deve estar instalado para utilizar o prompt direito no bash.
 
 ### Exemplo
 
@@ -266,7 +266,7 @@ Nota: os prompts de continuação estão disponíveis apenas nos seguintes shell
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled-in arrows
+# Um prompt de continuação que exibe duas setas preenchidas
 continuation_prompt = '▶▶ '
 ```
 
@@ -287,7 +287,7 @@ As strings de estilo são uma lista de palavras, separadas por espaços em branc
 - `<color>`
 - `none`
 
-onde `<color>` é um especificador de cor (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, embora isso possa mudar no futuro. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` troca as cores de fundo e primeiro plano. A ordem das palavras na string não importa.
+onde `<color>` é um especificador de cor (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, embora isso possa mudar no futuro. `<color>` também pode ser configurado para `prev_fg` ou `prev_bg`, que avaliam a cor de primeiro plano ou de fundo do item anterior, respectivamente, se disponível, ou `none` caso contrário. `inverted` troca as cores de fundo e primeiro plano. A ordem das palavras na string não importa.
 
 O token `none` substitui todos os outros tokens em uma string se não fizer parte de um especificador `bg:`, de modo que, ex., `fg:red none fg:blue` ainda criará uma string sem estilo. `bg:none` define o plano de fundo para a cor padrão para que `fg:red bg:none` seja equivalente a `red` ou `fg:red` e `bg:green fg:red bg:none` também é equivalente a `fg:red` ou `red`. Pode ser um erro usar `none` em conjunto com outros tokens no futuro.
 
