@@ -1798,6 +1798,20 @@
         }
       ]
     },
+    "unity": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$version ]($style)",
+        "style": "bold blue",
+        "symbol": "🎮 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/UnityConfig"
+        }
+      ]
+    },
     "username": {
       "default": {
         "aliases": {},
@@ -6144,6 +6158,32 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "UnityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol$version ]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🎮 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
