@@ -125,9 +125,10 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
 
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
     let mut buf = String::new();
-    if let Err(_) = std::fs::File::open(venv_path.join("pyvenv.cfg"))
+    if std::fs::File::open(venv_path.join("pyvenv.cfg"))
         .ok()?
         .read_to_string(&mut buf)
+        .is_err()
     {
         return None;
     }
