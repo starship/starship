@@ -10,7 +10,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ### Prerequisite
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
+- 需要一个 支持[`右提示词`](https://starship.rs/advanced-config/#enable-right-prompt)的shell。
 - [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
 
 ### 配置
