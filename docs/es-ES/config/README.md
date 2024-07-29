@@ -4361,7 +4361,7 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 
 ### Ejemplo
 
-#### Mostrar siempre el nombre del host
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4373,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Ocultar el nombre de host en sesiones remotas de tmux
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
