@@ -1117,7 +1117,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | `fish_style_pwd_dir_length` | `0`    | O número de caracteres para usar quando aplicado no path logico do fish shell pwd.                                                                                    |
 | `use_logical_path`          | `true` | Se `true` exibe um caminho lógico originado do shell via `PWD` ou`--logical-path`. Se `false` em vez disso, exibe o caminho do filesystem com os symlinks resolvidos. |
 
-`substitutions` aceita você definir substituições arbitrarias para strings literais que ocorra no path, por exemplo prefixos de rede longos ou diretórios de desenvolvimento (ex:. Java). Note isto irá desabilita o estilo PWD do fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note isto irá desabilita o estilo PWD do fish.
 
 ```toml
 [directory.substitutions]
@@ -1890,7 +1890,7 @@ O módulo Git Status é muito lento nos diretórios do Windows (por exemplo, em 
 | `staged`            | `'+'`                                           | O formato do `staged`                                                                                                                   |
 | `renamed`           | `'»'`                                           | O formato do `renamed`                                                                                                                  |
 | `deleted`           | `'✘'`                                           | O formato do `deleted`                                                                                                                  |
-| `typechanged`       | `""`                                            | The format of `typechange`                                                                                                              |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                                             |
 | `style`             | `'bold red'`                                    | O estilo do módulo.                                                                                                                     |
 | `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos.                                                                                                     |
 | `disabled`          | `false`                                         | Desabilita o módulo `git_status`.                                                                                                       |
@@ -1911,7 +1911,7 @@ As variáveis a seguir podem ser usadas no `format`:
 | `staged`       | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                   |
 | `renamed`      | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                             |
 | `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                              |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                             |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                            |
 | style\*      | Espelha o valor da opção `style`                                                                           |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
