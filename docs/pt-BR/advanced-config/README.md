@@ -1,6 +1,6 @@
 # Configuração avançada
 
-Ainda que Starship seja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo `starship.toml`. Esta página detalha algumas das técnicas de configuração avançadas utilizadas no starship.
+Embora o Starship seja um shell versátil, às vezes é necessário fazer mais do que editar o `starship.toml` para que ele realize certas funções. Esta página detalha algumas das técnicas de configuração avançadas utilizadas no starship.
 
 ::: atenção
 
@@ -82,9 +82,9 @@ enable_transience
 
 ## TransientPrompt e TransientRightPrompt em Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. Isso é útil em casos onde nem sempre todas as informações do prompt são necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) na versão 0.4 ou superior permite substituir o prompt exibido anteriormente por strings personalizadas. Isso é útil em casos onde todas as informações do prompt não são sempre necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-O \<value\> aqui é uma lista separada por dois pontos de `always`, `same-dir` e `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+O \<value\> aqui é uma lista separada por dois pontos de `always`, `same-dir` e `trim`. Quando `prompt_ps1_final` está vazio e a opção `prompt_ps1_transient` tem um \ não vazio <value\>, o prompt especificado por `PS1` é apagado ao sair da linha de comando atual. Se \<value\> contiver um campo `trim`, apenas a última linha da multilinha `PS1`  será preservada e as outras linhas serão apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido em \<value\> e o diretório atual é diferente do diretório final da linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
 
 Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
