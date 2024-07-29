@@ -1,4 +1,5 @@
 use ini::Ini;
+use std::io::Read;
 use std::path::Path;
 
 use super::{Context, Module, ModuleConfig};
@@ -121,8 +122,16 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
         })
     })
 }
+
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
-    Ini::load_from_file(venv_path.join("pyvenv.cfg"))
+    let mut buf = String::new();
+    if let Err(_) = std::fs::File::open(venv_path.join("pyvenv.cfg"))
+        .ok()?
+        .read_to_string(&mut buf)
+    {
+        return None;
+    }
+    Ini::load_from_str(buf.replace("\\", "/").as_str())
         .ok()?
         .general_section()
         .get("prompt")
@@ -418,6 +427,33 @@ prompt = '(foo)'
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_line_break_like_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = foo\nbar
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo/nbar) ")
         ));
 
         assert_eq!(actual, expected);
