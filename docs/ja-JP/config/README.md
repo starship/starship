@@ -1117,7 +1117,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` によってパスに含まれる固定文字列に対する任意の置換を定義できます。固定文字列の例として、長いネットワークプレフィックスや (Java の) 開発ディレクトリが考えられます。 ※これは fish 形式の PWD を無効化します。
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
 
 ```toml
 [directory.substitutions]
@@ -1890,7 +1890,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`            | `'+'`                                           | `staged`のフォーマット                                                        |
 | `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                       |
 | `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                       |
-| `typechanged`       | `""`                                            | `typechange` のフォーマット                                                   |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                            |
 | `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                          |
 | `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                      |
 | `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                              |
@@ -1911,7 +1911,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`       | インデックスに新しく追加されたファイルがあるときに、 `staged` を表示します。                                          |
 | `renamed`      | インデックスに名前が変更されたファイルがあるときに、 `renamed` を表示します。                                         |
 | `deleted`      | インデックスに削除されたファイルがあるときに、 `deleted` を表示します。                                            |
-| `typechanged`  | インデックスにファイルタイプの変更があるときに、 `typechange` を表示します。                                        |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.      |
 | style\*      | オプション `style` の値をミラーする                                                               |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
