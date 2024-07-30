@@ -266,17 +266,21 @@ mod tests {
     #[test]
     fn test_alias() {
         let hostname = get_hostname!();
-        let toml_config_string = format!(
-            r#"
+        let mut toml_config = toml::toml!(
             [hostname]
             ssh_only = false
             trim_at = ""
-            aliases = {{ "{}" = "homeworld" }}
-            "#,
-            hostname
+            aliases = {}
         );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(
+                hostname.clone(),
+                toml::Value::String("homeworld".to_string()),
+            );
         let actual = ModuleRenderer::new("hostname")
-            .config(toml::from_str(&toml_config_string).unwrap())
+            .config(toml_config)
             .collect();
 
         let expected = Some(format!("{} in ", style().paint("homeworld")));
@@ -286,25 +290,28 @@ mod tests {
     #[test]
     fn test_alias_with_trim_at() {
         let hostname = get_hostname!();
-        // Hostname needs to be at least 2 characters long for this test to work
-        if hostname.len() < 2 {
+
+        let mut hostname_iter = hostname.graphemes(true);
+        let remainder = hostname_iter.next().unwrap_or_default();
+        let trim_at = hostname_iter.collect::<String>();
+
+        // Trimmed hostname needs to be non-empty
+        if remainder.is_empty() {
             log::warn!("Skipping test_alias_with_trim_at because hostname is too short");
             return;
         }
-        let trim_at = &hostname[1..=1];
-        let hostname_c = &hostname[..1];
-        let toml_config_string = format!(
-            r#"
+        let mut toml_config = toml::toml!(
             [hostname]
             ssh_only = false
-            trim_at = "{char}"
-            aliases = {{ "{hostname}" = "🌍" }}
-            "#,
-            char = trim_at,
-            hostname = hostname_c,
+            trim_at = trim_at
+            aliases = {}
         );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(remainder.to_string(), toml::Value::String("🌍".to_string()));
         let actual = ModuleRenderer::new("hostname")
-            .config(toml::from_str(&toml_config_string).unwrap())
+            .config(toml_config)
             .collect();
 
         let expected = Some(format!("{} in ", style().paint("🌍")));
