@@ -1,5 +1,4 @@
 use ini::Ini;
-use std::io::Read;
 use std::path::Path;
 
 use super::{Context, Module, ModuleConfig};
@@ -124,19 +123,11 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
 }
 
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
-    let mut buf = String::new();
-    if std::fs::File::open(venv_path.join("pyvenv.cfg"))
-        .ok()?
-        .read_to_string(&mut buf)
-        .is_err()
-    {
-        return None;
-    }
-    Ini::load_from_str(buf.replace("\\", "/").as_str())
+    Ini::load_from_file_noescape(venv_path.join("pyvenv.cfg"))
         .ok()?
         .general_section()
         .get("prompt")
-        .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
+        .map(|prompt| String::from(prompt.replace("\\", "/").trim_matches(&['(', ')'] as &[_])))
 }
 
 #[cfg(test)]
