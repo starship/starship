@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
-                    let version_items = mojo_version_output.split(' ').collect::<Vec<&str>>();
+                    let version_items = mojo_version_output.split_ascii_whitespace().collect::<Vec<&str>>();
 
                     if version_items.len() <= 1 {
                         return None;
