@@ -2,7 +2,7 @@
 
 # Jetpack Preset
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+这是一个伪最简的预设，灵感来自 [geometry](https://github.com/geometry-zsh/geometry) 和   [spaceship](https://github.com/spaceship-prompt/spaceship-prompt)。
 
 > Jetpack uses the terminal's color theme.
 
