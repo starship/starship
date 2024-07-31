@@ -103,25 +103,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
-            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-            let num_segments_after_root = after_repo_root.split('/').count();
+    // the usage of 2 takes in the following is to avoid borrowing issues. They would never overlaps, so the ? are safe
+    let mut maybe_prefix = Some(prefix);
+    let path_vec = repo
+        .and_then(|r| r.workdir.as_ref())
+        .and_then(|repo_root| {
+            if config.repo_root_style.is_some() {
+                if let Some(contracted_path) = contract_repo_path(display_dir, repo_root) {
+                    let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+                    let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+                    let num_segments_after_root = after_repo_root.split('/').count();
 
-            if config.truncation_length == 0
-                || ((num_segments_after_root - 1) as i64) < config.truncation_length
-            {
-                let root = repo_path_vec[0];
-                let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
-            } else {
-                [String::new(), String::new(), prefix + dir_string.as_str()]
+                    if config.truncation_length == 0
+                        || ((num_segments_after_root - 1) as i64) < config.truncation_length
+                    {
+                        let root = repo_path_vec[0];
+                        let before = before_root_dir(&dir_string, &contracted_path);
+                        return Some([
+                            maybe_prefix.take()? + before,
+                            root.to_string(),
+                            after_repo_root,
+                        ]);
+                    }
+                }
             }
-        }
-        _ => [String::new(), String::new(), prefix + dir_string.as_str()],
-    };
+            None
+        })
+        .unwrap_or([
+            String::new(),
+            String::new(),
+            maybe_prefix.take()? + dir_string.as_str(),
+        ]);
 
     let path_vec = if config.use_os_path_sep {
         path_vec.map(|i| convert_path_sep(&i))
