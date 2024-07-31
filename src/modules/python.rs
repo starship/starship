@@ -127,7 +127,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .ok()?
         .general_section()
         .get("prompt")
-        .map(|prompt| String::from(prompt.replace("\\", "/").trim_matches(&['(', ')'] as &[_])))
+        .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
 }
 
 #[cfg(test)]
@@ -445,7 +445,7 @@ prompt = foo\nbar
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (foo/nbar) ")
+            Color::Yellow.bold().paint(r"🐍 v3.8.0 (foo\nbar) ")
         ));
 
         assert_eq!(actual, expected);
