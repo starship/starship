@@ -20,7 +20,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
-    let version_items = mojo_version_output.split_ascii_whitespace().collect::<Vec<&str>>();
+    let version_items = mojo_version_output
+        .split_ascii_whitespace()
+        .collect::<Vec<&str>>();
 
     let (version, hash) = match version_items[..] {
         [_, version] => (version.trim(), None),
@@ -42,15 +44,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    Some(Ok(version.to_string()))
-                }
-                "hash" => {
-                    match hash {
-                        Some(s) => Some(Ok(s.to_string())),
-                        _ => None
-                    }
-                }
+                "version" => Some(Ok(version.to_string())),
+                "hash" => match hash {
+                    Some(s) => Some(Ok(s.to_string())),
+                    _ => None,
+                },
                 _ => None,
             })
             .parse(None, Some(context))
