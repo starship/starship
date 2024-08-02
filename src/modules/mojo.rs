@@ -19,6 +19,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
+    let version_items = mojo_version_output.split_ascii_whitespace().collect::<Vec<&str>>();
+
+    let (version, hash) = match version_items[..] {
+        [_, version] => (version.trim(), None),
+        [_, version, hash, ..] => (version.trim(), Some(hash.trim())),
+        _ => {
+            log::debug!("Unexpected `mojo --version` output: {mojo_version_output}");
+            return None;
+        }
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -31,21 +43,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
-                    let version_items = mojo_version_output.split_ascii_whitespace().collect::<Vec<&str>>();
-
-                    if version_items.len() <= 1 {
-                        return None;
+                    Some(Ok(version.to_string()))
+                }
+                "hash" => {
+                    match hash {
+                        Some(s) => Some(Ok(s.to_string())),
+                        _ => None
                     }
-
-                    if version_items.len() == 2 || !config.show_commit {
-                        return Some(Ok(version_items[1].trim().to_string()));
-                    }
-
-                    let mojo_version = version_items[1].trim();
-                    let mojo_hash = version_items[2].trim();
-
-                    Some(Ok(format!("{} {}", mojo_version, mojo_hash)))
                 }
                 _ => None,
             })
@@ -114,7 +118,7 @@ mod tests {
         let actual = ModuleRenderer::new("mojo")
             .config(toml::toml! {
                 [mojo]
-                show_commit = true
+                format = "with [$symbol($version )($hash )]($style)"
             })
             .path(dir.path())
             .collect()
