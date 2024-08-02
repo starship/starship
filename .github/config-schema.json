@@ -1054,7 +1054,6 @@
         "detect_folders": [],
         "disabled": false,
         "format": "with [$symbol($version )]($style)",
-        "show_commit": false,
         "style": "bold 208",
         "symbol": "🔥 "
       },
@@ -4508,10 +4507,6 @@
         "format": {
           "default": "with [$symbol($version )]($style)",
           "type": "string"
-        },
-        "show_commit": {
-          "default": false,
-          "type": "boolean"
         },
         "symbol": {
           "default": "🔥 ",

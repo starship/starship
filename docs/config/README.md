@@ -2947,7 +2947,6 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | Option              | Default                               | Description                                            |
 | ------------------- | ------------------------------------- | ------------------------------------------------------ |
 | `format`            | `'with [$symbol($version )]($style)'` | The format for the module.                             |
-| `show_commit`       | `false`                               | Shows the commit as part of the version.               |
 | `symbol`            | `'🔥 '`                               | The symbol used before displaying the version of Mojo. |
 | `style`             | `'bold 208'`                          | The style for the module.                              |
 | `disabled`          | `false`                               | Disables the `mojo` module.                            |
@@ -2971,8 +2970,7 @@ The `mojo` module shows the current version of [Mojo programming language](https
 # ~/.config/starship.toml
 
 [mojo]
-format = 'via [mojo ($version )]($style)'
-show_commit = true
+format = 'via [mojo ($version )($hash )]($style)'
 ```
 
 ## NATS
