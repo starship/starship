@@ -860,6 +860,9 @@ pub struct Properties {
     /// The execution duration of the last command, in milliseconds
     #[clap(short = 'd', long)]
     pub cmd_duration: Option<String>,
+    /// The last command
+    #[clap(short = 'c', long)]
+    pub cmd: Option<String>,
     /// The keymap of fish/zsh/cmd
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
@@ -879,6 +882,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            cmd: None,
         }
     }
 }
