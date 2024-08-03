@@ -14,7 +14,7 @@
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip
+::: tip 提示
 
 This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 

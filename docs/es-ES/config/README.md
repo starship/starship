@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
 | `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | Una cadena de formato que representa el símbolo de Go.                                  |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                       |
 | `detect_extensions` | `['gleam']`                          | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['gleam.toml']`                     | Qué nombres de archivo deberían activar este módulo.                                    |
 | `style`             | `'bold #FFAFF3'`                     | El estilo del módulo.                                                                   |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Qué carpetas deberían activar estos módulos.                                            |
-| `symbol`            | `'⌘ '`                                                                                          | Una cadena de formato que representa el símbolo de Helm.                                |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                        |
 | `style`             | `'bold fg:202'`                                                                                 | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                         | Deshabilita el módulo `haxe`.                                                           |
 
@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 El módulo `purescript` muestra la versión instalada de [PureScript](https://www.purescript.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `spago.dhall`
+- El directorio actual contiene un archivo `spago.yaml`
+- El directorio actual contiene un archivo `spago.lock`
 - El directorio actual contiene un archivo con la extensión `.purs`
 
 ### Opciones
 
-| Opción              | Predeterminado                       | Descripción                                                                             |
-| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
-| `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | El símbolo usado antes de mostrar la versión de PureScript.                             |
-| `detect_extensions` | `['purs']`                           | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `['spago.dhall']`                    | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `'bold white'`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Desactiva el módulo `purescript`.                                                       |
+| Opción              | Predeterminado                                | Descripción                                                                             |
+| ------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | El formato del módulo.                                                                  |
+| `version_format`    | `'v${raw}'`                                   | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                | El símbolo usado antes de mostrar la versión de PureScript.                             |
+| `detect_extensions` | `['purs']`                                    | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                          | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `'bold white'`                                | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                       | Desactiva el módulo `purescript`.                                                       |
 
 ### Variables
 
@@ -4304,12 +4306,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
 | `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                         |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                        |
 | `style`             | `'bold #0093A7'`                     | El estilo del módulo.                                                                   |
 | `detect_extensions` | `['.typ']`                           | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['template.typ']`                   | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
-| `disabled`          | `false`                              | Deshabilita el módulo `daml`.                                                           |
+| `disabled`          | `false`                              | Disables the `typst` module.                                                            |
 
 ### Variables
 
@@ -4558,9 +4560,9 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 
 :::
 
-::: warning la salida de comandos se imprime sin escapar al prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
-Cualquiera que sea la salida que genere el comando se imprime sin modificar en el prompt. Esto significa que si la salida contiene secuencias especiales que son interpretadas por el intérprete, se expandirán cuando se muestre. Estas secuencias especiales son específicas del intérprete, por ejemplo, puedes escribir un módulo de comando que escribe secuencias de bash, por ejemplo, `\h`, pero este módulo no funcionará en el intérprete fish o zsh.
+Cualquiera que sea la salida que genere el comando se imprime sin modificar en el prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Las cadenas de formato también pueden contener secuencias específicas del intérprete, por ejemplo, [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
@@ -4575,6 +4577,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 | `require_repo`      | `false`                          | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                                              |
 | `shell`             |                                  | [Ver a continuación](#custom-command-shell)                                                                                                                                                                                                                                                                                      |
 | `description`       | `'<módulo personalizado>'` | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                                                                                                                                                                         |
+| `unsafe_no_escape`  | `false`                          | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                    |
 | `detect_files`      | `[]`                             | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                                                                                                                                                                                                                          |
 | `detect_folders`    | `[]`                             | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                                                                                                                                                                                                               |
 | `detect_extensions` | `[]`                             | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                                                                                                                                                                                                                       |

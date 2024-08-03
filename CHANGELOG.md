@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* **ci:** move to macos-latest image ([#6132](https://github.com/starship/starship/issues/6132)) ([c7a8ea7](https://github.com/starship/starship/commit/c7a8ea757033512b5723a39be71bdb91fdcfbdb1))
+
+## [1.20.0](https://github.com/starship/starship/compare/v1.19.0...v1.20.0) (2024-07-26)
+
+
+### Features
+
+* **color:** add prev_fg and prev_bg as color specifiers based on the previous foreground/background colors respectively ([#6017](https://github.com/starship/starship/issues/6017)) ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **color:** add prevfg,prevbg as color specifiers based on the previous foreground/background colors respectively ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **gcloud:** Disabled gcloud module when active config hasn't been set ([#6039](https://github.com/starship/starship/issues/6039)) ([4d36d46](https://github.com/starship/starship/commit/4d36d463b91a245a62c357de308cad3cdec48edf))
+* **purescript:** add support for spago-next configuration files ([#6036](https://github.com/starship/starship/issues/6036)) ([e028186](https://github.com/starship/starship/commit/e0281868c9d7801fc25f64f86ab8312d2a5a1794))
+
+
+### Bug Fixes
+
+* **direnv:** replace nonexistent "orange" color with "bright-yellow" ([#5969](https://github.com/starship/starship/issues/5969)) ([478d5cc](https://github.com/starship/starship/commit/478d5cccb6f7f4622dd681756cf004ba92c98607))
+* **dotnet:** Remove duplicate v in dotnet version  ([#6060](https://github.com/starship/starship/issues/6060)) ([52a89a5](https://github.com/starship/starship/commit/52a89a515ed44d861ea556a0bb70d6901660a9b5))
+* improve non-msvc windows support by bumping stable dependencies ([#5989](https://github.com/starship/starship/issues/5989)) ([50a6b84](https://github.com/starship/starship/commit/50a6b846045899c88d95b063a6b939a6dcb72a5c))
+* **k8s:** don't trigger if scan config is set but env vars are not ([#5979](https://github.com/starship/starship/issues/5979)) ([8c75822](https://github.com/starship/starship/commit/8c75822d4380e020ebd289a4ef06cd4d31ee5196))
+* **preset:** fix typo in Open Policy Agent module format string ([#6118](https://github.com/starship/starship/issues/6118)) ([eba9748](https://github.com/starship/starship/commit/eba9748eb1bd9e1802d2a770eb0907cdb73292d6))
+
+
+### Performance Improvements
+
+* **k8s:** Improve performance of kubeconfig module ([#6032](https://github.com/starship/starship/issues/6032)) ([fae92b2](https://github.com/starship/starship/commit/fae92b29646f73bf1eb843fde80885c58480e85b))
+
 ## [1.19.0](https://github.com/starship/starship/compare/v1.18.2...v1.19.0) (2024-05-15)
 
 

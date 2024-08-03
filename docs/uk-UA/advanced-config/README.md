@@ -287,7 +287,7 @@ continuation_prompt = '▶▶ '
 - `<color>`
 - `none`
 
-де `<color>` є специфікацією кольору (обговорюється нижче). `fg:<color>` та `<color>` на цей час роблять те саме, хоча це може змінитися в майбутньому. `inverted` замінює кольори тла і тексту. Порядок слів у рядку не має значення.
+де `<color>` є специфікацією кольору (обговорюється нижче). `fg:<color>` та `<color>` на цей час роблять те саме, хоча це може змінитися в майбутньому. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` замінює кольори тла і тексту. Порядок слів у рядку не має значення.
 
 Токен `none` перевизначає всі інші токени у рядку, якщо він не є частиною `bg:`, так `fg:red none fg:blue` все одно створить рядок без стилізування. `bg:none` встановлює типовий колір фону, таким чином, `fg:red bg:none` еквівалентно `red` або `fg:red`, а `bg:green fg:red fg:none` також еквівалентно `fg:red` або `red`. Використання `none` у поєднанні з іншими токенами в майбутньому може стати помилкою.
 

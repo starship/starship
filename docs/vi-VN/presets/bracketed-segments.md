@@ -12,6 +12,6 @@ This preset changes the format of all the built-in modules to show their segment
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+[Nhấn vào đây để tải tệp tin TOML](/presets/toml/bracketed-segments.toml)
 
 <<< @/public/presets/toml/bracketed-segments.toml

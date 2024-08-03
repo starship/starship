@@ -1173,7 +1173,7 @@ it would have been `nixpkgs/pkgs`.
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
-prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1982,7 +1982,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `staged`            | `'+'`                                         | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                         | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                          | The format of `typechange`                                                                                  |
+| `typechanged`       | `""`                                          | The format of `typechanged`                                                                                 |
 | `style`             | `'bold red'`                                  | The style for the module.                                                                                   |
 | `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
@@ -2003,7 +2003,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
 | style\*        | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
@@ -4585,7 +4585,7 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Example
 
-#### Always show the hostname
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4597,17 +4597,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Hide the hostname in remote tmux sessions
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
@@ -4791,11 +4780,12 @@ If you have an interesting example not covered there, feel free to share it ther
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
 Whatever output the command generates is printed unmodified in the prompt. This means if the output
-contains special sequences that are interpreted by your shell they will be expanded when displayed.
-These special sequences are shell specific, e.g. you can write a command module that writes bash sequences,
+contains shell-specific interpretable sequences, they could be interpreted on display.
+Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell.
+Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences,
 e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Format strings can also contain shell specific prompt sequences, e.g.
@@ -4813,6 +4803,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
