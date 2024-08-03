@@ -3,6 +3,9 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::mojo::MojoConfig;
 use crate::formatter::StringFormatter;
 
+use once_cell::sync::Lazy;
+use std::ops::Deref;
+
 /// Creates a module with the current Mojo version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("mojo");
@@ -19,19 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
-    let version_items = mojo_version_output
-        .split_ascii_whitespace()
-        .collect::<Vec<&str>>();
-
-    let (version, hash) = match version_items[..] {
-        [_, version] => (version.trim(), None),
-        [_, version, hash, ..] => (version.trim(), Some(hash.trim())),
-        _ => {
-            log::debug!("Unexpected `mojo --version` output: {mojo_version_output}");
-            return None;
-        }
-    };
+    let version_hash = Lazy::new(|| get_mojo_version(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -44,9 +35,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(version.to_string())),
-                "hash" => match hash {
-                    Some(s) => Some(Ok(s.to_string())),
+                "version" => match version_hash.deref() {
+                    Some((version, _)) => Some(Ok(version)),
+                    _ => None,
+                },
+                "hash" => match version_hash.deref() {
+                    Some((_, Some(hash))) => Some(Ok(hash)),
                     _ => None,
                 },
                 _ => None,
@@ -63,6 +57,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn get_mojo_version(context: &Context) -> Option<(String, Option<String>)> {
+    let mojo_version_output = context.exec_cmd("mojo", &["--version"])?.stdout;
+
+    let version_items = mojo_version_output
+        .split_ascii_whitespace()
+        .collect::<Vec<&str>>();
+
+    let (version, hash) = match version_items[..] {
+        [_, version] => (version.trim().to_string(), None),
+        [_, version, hash, ..] => (version.trim().to_string(), Some(hash.trim().to_string())),
+        _ => {
+            log::debug!("Unexpected `mojo --version` output: {mojo_version_output}");
+            return None;
+        }
+    };
+
+    Some((version, hash))
 }
 
 #[cfg(test)]
