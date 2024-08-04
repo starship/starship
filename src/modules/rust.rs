@@ -392,7 +392,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         caps.name("date").map(|x| {
             let date = x.as_str();
             let date = chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d")
-                .expect(&format!("invalid date format: {date}"))
+                .unwrap_or_else(|_| panic!("invalid date format: {date}"))
                 + chrono::Duration::days(1);
             format!("nightly-{}", date.format("%Y-%m-%d"))
         })
