@@ -175,6 +175,14 @@ elevate_priv() {
   fi
 }
 
+clean_tmp() {
+  archive="$1"
+  ext="$2"
+
+  tmp=${archive%.${ext}} # extract tmp file base name
+  rm -f "${archive}" ${tmp}
+}
+
 install() {
   ext="$1"
 
@@ -189,13 +197,23 @@ install() {
   fi
   info "$msg"
 
-  archive=$(get_tmpfile "$ext")
+  archive=$(get_tmpfile "${ext}")
 
   # download to the temp file
-  download "${archive}" "${URL}"
+  if ! download "${archive}" "${URL}"
+  then
+    clean_tmp "${archive}" "${ext}"
+    exit 1
+  fi
 
   # unpack the temp file to the bin dir, using sudo if required
-  unpack "${archive}" "${BIN_DIR}" "${sudo}"
+  if ! unpack "${archive}" "${BIN_DIR}" "${sudo}"
+  then
+    clean_tmp "${archive}" "${ext}"
+    exit 1
+  fi
+
+  clean_tmp "${archive}" "${ext}"
 }
 
 # Currently supporting:
