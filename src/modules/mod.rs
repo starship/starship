@@ -70,6 +70,7 @@ mod purescript;
 mod python;
 mod quarto;
 mod raku;
+mod random;
 mod red;
 mod rlang;
 mod ruby;
@@ -203,6 +204,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "vagrant" => vagrant::module(context),
             "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
+            random if random.starts_with("random.") => {
+                random::module(random.strip_prefix("random.").unwrap(), context)
+            }
             env if env.starts_with("env_var.") => {
                 env_var::module(env.strip_prefix("env_var."), context)
             }
