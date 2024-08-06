@@ -125,7 +125,7 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.13.0"
-tempfile = "3.11.0"
+tempfile = "3.12.0"
 
 [profile.release]
 codegen-units = 1
