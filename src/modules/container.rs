@@ -66,7 +66,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
         if context_path(context, "/.dockerenv").exists() {
             // docker
-            return Some("Docker".into());
+            return context
+                .get_env("CONTAINER_ID")
+                .or(context.get_env("HOSTNAME"))
+                .or(Some("Docker".into()));
         }
 
         None
@@ -279,6 +282,75 @@ mod tests {
     #[cfg(target_os = "linux")]
     fn test_containerenv_wsl_in_systemd() -> std::io::Result<()> {
         let (actual, expected) = containerenv_systemd(Some("wsl"), None)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[cfg(target_os = "linux")]
+    fn containerenv_docker(
+        env_name_pair: Option<(&str, &str)>,
+        display: &str,
+    ) -> std::io::Result<(Option<String>, Option<String>)> {
+        let env_name_val = env_name_pair.unwrap_or(("", ""));
+        let renderer = ModuleRenderer::new("container")
+            // For a custom config
+            .config(toml::toml! {
+               [container]
+               disabled = false
+            })
+            .env(env_name_val.0, env_name_val.1);
+
+        let root_path = renderer.root_path();
+        let dockerenv_path = root_path.join(".dockerenv");
+        utils::write_file(dockerenv_path, "")?;
+
+        // The output of the module
+        let actual = renderer
+            // Run the module and collect the output
+            .collect();
+
+        // The value that should be rendered by the module.
+        let expected = Some(format!(
+            "{} ",
+            Color::Red.bold().dimmed().paint(format!("⬢ [{}]", display))
+        ));
+
+        Ok((actual, expected))
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_docker_default() -> std::io::Result<()> {
+        let (actual, expected) = containerenv_docker(None, "Docker")?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_docker_containerid() -> std::io::Result<()> {
+        let container_name = "my-container";
+        let (actual, expected) =
+            containerenv_docker(Some(("CONTAINER_ID", container_name)), container_name)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_docker_hostname() -> std::io::Result<()> {
+        let container_name = "my-container";
+        let (actual, expected) =
+            containerenv_docker(Some(("HOSTNAME", container_name)), container_name)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
