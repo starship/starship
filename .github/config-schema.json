@@ -2111,6 +2111,10 @@
           ]
         }
       },
+      "display_on_charging": {
+        "default": true,
+        "type": "boolean"
+      },
       "additionalProperties": false
     },
     "BufConfig": {
