@@ -1117,7 +1117,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` дозволяє визначити довільні заміни літер рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки (в Java). Зауважте, що це відключить стиль fish у PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Зауважте, що це відключить стиль fish у PWD.
 
 ```toml
 [directory.substitutions]
@@ -1890,7 +1890,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`            | `'+'`                                           | Формат `staged`                                                                                                         |
 | `renamed`           | `'»'`                                           | Формат `renamed`                                                                                                        |
 | `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`       | `""`                                            | Формат `typechange`                                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                             |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                                           |
 | `ignore_submodules` | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
 | `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
@@ -1911,7 +1911,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
 | `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
 | `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
-| `typechanged`  | Показує `typechange` коли інформація про файл була змінена у просторі staging.                      |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                     |
 | style\*      | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -4361,7 +4361,7 @@ time_range = '10:00:00-14:00:00'
 
 ### Приклад
 
-#### Завжди показувати hostname
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4373,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Приховувати hostname для віддалених сеансів tmux
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
