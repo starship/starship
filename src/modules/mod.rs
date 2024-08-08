@@ -52,6 +52,7 @@ mod localip;
 mod lua;
 mod memory_usage;
 mod meson;
+mod mojo;
 mod nats;
 mod nim;
 mod nix_shell;
@@ -163,6 +164,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
+            "mojo" => mojo::module(context),
             "nats" => nats::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
@@ -287,6 +289,7 @@ pub fn description(module: &str) -> &'static str {
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
         }
+        "mojo" => "The currently installed version of Mojo",
         "nats" => "The current NATS context",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",

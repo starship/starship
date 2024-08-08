@@ -75,6 +75,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "julia",
     "kotlin",
     "lua",
+    "mojo",
     "nim",
     "nodejs",
     "ocaml",

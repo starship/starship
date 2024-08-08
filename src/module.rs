@@ -60,6 +60,7 @@ pub const ALL_MODULES: &[&str] = &[
     "lua",
     "memory_usage",
     "meson",
+    "mojo",
     "nats",
     "nim",
     "nix_shell",
