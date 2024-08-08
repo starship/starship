@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Muted Moss](./muted-moss.md)
+
+This preset is inspired by Tokyo Night, Gruvbox Rainbow, & a strong desire for something a little more polished that blends nicely into the background.
+
+[![Screenshot of Tokyo Night preset](/presets/img/muted-moss.png "Click to view Muted Moss preset")](./muted-moss)
