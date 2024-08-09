@@ -1434,7 +1434,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/src/sub/path"))
+            Color::Cyan.bold().paint(convert_path_sep("src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1453,6 +1453,7 @@ mod tests {
                 [directory]
                 truncation_length = 5
                 truncation_symbol = "…/"
+                repo_truncation_symbol = "G "
                 truncate_to_repo = true
             })
             .path(dir)
@@ -1461,7 +1462,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep("…/repo/src/sub/path"))
+                .paint(convert_path_sep("G repo/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
