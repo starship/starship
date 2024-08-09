@@ -345,7 +345,7 @@ impl<'a> Context<'a> {
 
                 let fs_monitor_value_is_true = repository
                     .config_snapshot()
-                    .boolean("core.fs_monitor")
+                    .boolean("core.fsmonitor")
                     .unwrap_or(false);
 
                 Ok(Repo {
