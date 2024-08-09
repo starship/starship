@@ -96,6 +96,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 &contracted_home_dir,
                 &dir_string,
             )
+        } else if config.truncate_to_repo && repo.is_some() {
+            String::from(config.repo_truncation_symbol)
         } else {
             String::from(config.truncation_symbol)
         }
