@@ -75,6 +75,7 @@ format = '(via [$symbol($version )(\($switch_indicator$switch_name\) )]($style))
 
 [opa]
 format = '(via [$symbol($version )]($style))'
+
 [package]
 format = '(is [$symbol$version]($style) )'
 
