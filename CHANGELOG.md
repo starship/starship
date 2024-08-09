@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.21.0](https://github.com/starship/starship/compare/v1.20.1...v1.21.0) (2024-08-09)
+
+
+### Features
+
+* **package:** support alternative gradle module version syntax ([#6079](https://github.com/starship/starship/issues/6079)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+
+
+### Bug Fixes
+
+* **bash:** fix variable leak in Bash integration ([#6143](https://github.com/starship/starship/issues/6143)) ([e1189ed](https://github.com/starship/starship/commit/e1189ed7567de580d8f51c8baf870056a6060789))
+* **cmd_duration:** Make render_time format more consistent ([#5825](https://github.com/starship/starship/issues/5825)) ([4abea6b](https://github.com/starship/starship/commit/4abea6b601c53adfa5719a7aac11069dc054cdf8))
+* **docs:** correct username options ([#6084](https://github.com/starship/starship/issues/6084)) ([d96fbc5](https://github.com/starship/starship/commit/d96fbc5bcb9c039f875c4a55cff31edda57d5e6e))
+* **fish:** improve fish transient prompt ([#6107](https://github.com/starship/starship/issues/6107)) ([274dff3](https://github.com/starship/starship/commit/274dff37dbb375821a90d6976a11cf57d9386e4f))
+* **package:** support alternative gradle module version syntax ([#6080](https://github.com/starship/starship/issues/6080)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+
 ## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
 
 
