@@ -2248,15 +2248,16 @@ format = 'via [⎈ $version](bold white) '
 
 ### 配置项
 
-| 选项                | 默认值                                    | 描述                                                                                                     |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                    |
-| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                 |
-| `trim_at`         | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                              |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                               |
-| `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                |
-| `disabled`        | `false`                                | 禁用 `hostname` 组件。                                                                                      |
+| 选项                | 默认值                                    | 描述                                                                                                                         |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                                        |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                     |
+| `trim_at`         | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation.                     |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                  |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                                                   |
+| `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                                    |
+| `disabled`        | `false`                                | 禁用 `hostname` 组件。                                                                                                          |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced. |
 
 ### 变量
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
 | `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
 | `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### 变量
 
