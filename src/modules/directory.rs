@@ -51,7 +51,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+    let repo = if config.truncate_to_repo
+        || config.repo_root_style.is_some()
+        || config.before_repo_root_style.is_some()
+    {
         context.get_repo().ok()
     } else {
         None
@@ -104,7 +107,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) if config.repo_root_style.is_some() => {
+        Some(repo_root) => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
@@ -1803,5 +1806,37 @@ mod tests {
             before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
             "~/user/gitrepo-diff/gitrepo".to_string()
         );
+    }
+
+    #[test]
+    fn before_repo_root_style_without_repo_root_style() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let before_root = tmp_dir.path().join(".config");
+        let repo_dir = before_root.join("nix");
+        let dir = repo_dir.join("darwin-configurations");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .path(dir)
+            .config(toml::toml! {
+                [directory]
+                before_repo_root_style = "dimmed white"
+                truncate_to_repo = false
+                truncation_symbol = "…/"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}{} ",
+            Color::White
+                .dimmed()
+                .paint(format!("{}{}", "…/", convert_path_sep(".config/"))),
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep("nix/darwin-configurations")),
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 }
