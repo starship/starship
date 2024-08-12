@@ -2257,6 +2257,7 @@ format = 'via [⎈ $version](bold white) '
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                                 |
 | `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                                  |
 | `disabled`        | `false`                                | Отключает модуль `hostname`.                                                                                                                   |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.                     |
 
 ### Переменные
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                            |
 | `show_always`     | `false`                 | Всегда показывать модуль `username`.                      |
 | `disabled`        | `false`                 | Отключает модуль `username`.                              |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### Переменные
 
