@@ -2257,6 +2257,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                            |
 | `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                             |
 | `disabled`        | `false`                                | Deshabilita el módulo `hostname`.                                                                                                                                 |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.                                        |
 
 ### Variables
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 | `format`          | `'[$user]($style) in '` | El formato del módulo.                                |
 | `show_always`     | `false`                 | Siempre muestra el módulo `username`.                 |
 | `disabled`        | `false`                 | Deshabilita el módulo `username`.                     |
-| `aliases`         | `{}`                    | Translate system usernames to something else          |
+| `aliases`         | `{}`                    | Translate system usernames to something else.         |
 
 ### Variables
 
