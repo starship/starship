@@ -2248,15 +2248,16 @@ format = 'via [⎈ $version](bold white) '
 
 ### オプション
 
-| オプション             | デフォルト                                  | 説明                                                                                   |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                     |
-| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                 |
-| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。 |
-| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                   |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                    |
-| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                        |
-| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                              |
+| オプション             | デフォルト                                  | 説明                                                                                                                         |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                                           |
+| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                                                       |
+| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。                                       |
+| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                                                         |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                                          |
+| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                                              |
+| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                                                                    |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced. |
 
 ### 変数
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4342,15 +4351,15 @@ SSH接続は、環境変数 `SSH_CONNECTION`、 `SSH_CLIENT`、および `SSH_TT
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                |
-| ----------------- | ----------------------- | --------------------------------- |
-| `style_root`      | `'bold red'`            | ユーザーが root/admin のときに使用されるスタイルです。 |
-| `style_user`      | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。            |
-| `detect_env_vars` | `[]`                    | このモジュールを活性化する環境変数。                |
-| `format`          | `'[$user]($style) in '` | module のフォーマットです。                 |
-| `show_always`     | `false`                 | `username` モジュールを常に表示します。         |
-| `disabled`        | `false`                 | `username` モジュールを無効にします。          |
-| `aliases`         | `{}`                    | システムユーザー名を別のものに置換します。             |
+| オプション             | デフォルト                   | 説明                                            |
+| ----------------- | ----------------------- | --------------------------------------------- |
+| `style_root`      | `'bold red'`            | ユーザーが root/admin のときに使用されるスタイルです。             |
+| `style_user`      | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。                        |
+| `detect_env_vars` | `[]`                    | このモジュールを活性化する環境変数。                            |
+| `format`          | `'[$user]($style) in '` | module のフォーマットです。                             |
+| `show_always`     | `false`                 | `username` モジュールを常に表示します。                     |
+| `disabled`        | `false`                 | `username` モジュールを無効にします。                      |
+| `aliases`         | `{}`                    | Translate system usernames to something else. |
 
 ### 変数
 
