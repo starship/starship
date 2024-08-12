@@ -2248,15 +2248,16 @@ format = 'via [⎈ $version](bold white) '
 
 ### 選項
 
-| 選項                | 預設                                     | 說明                                                                                           |
-| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `ssh_only`        | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                                                 |
-| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                       |
-| `trim_at`         | `'.'`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                    |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                   |
-| `style`           | `'bold dimmed green'`                  | 這個模組的風格。                                                                                     |
-| `disabled`        | `false`                                | 停用 `hostname` 模組。                                                                            |
+| 選項                | 預設                                     | 說明                                                                                                                         |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                                                                               |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                     |
+| `trim_at`         | `'.'`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `'.'` will stop after the first dot. `''` will disable any truncation.                               |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                  |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                 |
+| `style`           | `'bold dimmed green'`                  | 這個模組的風格。                                                                                                                   |
+| `disabled`        | `false`                                | 停用 `hostname` 模組。                                                                                                          |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced. |
 
 ### 變數
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | The format for the module.                                |
 | `show_always`     | `false`                 | 總是顯示 `username` 模組。                                       |
 | `disabled`        | `false`                 | 停用 `username` 模組。                                         |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### 變數
 
