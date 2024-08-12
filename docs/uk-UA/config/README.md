@@ -2257,6 +2257,7 @@ format = 'via [⎈ $version](bold white) '
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                      |
 | `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                       |
 | `disabled`        | `false`                                | Вимикає модуль `hostname`.                                                                                                          |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.          |
 
 ### Змінні
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ time_range = '10:00:00-14:00:00'
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
 | `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
 | `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
-| `aliases`         | `{}`                    | Переводить системні імена користувачів у щось інше         |
+| `aliases`         | `{}`                    | Translate system usernames to something else.              |
 
 ### Змінні
 
