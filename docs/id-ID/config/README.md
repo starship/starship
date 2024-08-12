@@ -2257,6 +2257,7 @@ The `hostname` module shows the system hostname.
 | `fromat`          | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                    |
 | `style`           | `'bold dimmed green'`                  | Gaya penataan untuk modul.                                                                                                            |
 | `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
 
 ### Variabel
 
@@ -2291,6 +2292,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -4350,7 +4359,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `fromat`          | `'[$user]($style) in '` | Format dari modul.                                        |
 | `show_always`     | `false`                 | Always shows the `username` module.                       |
 | `disabled`        | `false`                 | Disables the `username` module.                           |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### Variabel
 
