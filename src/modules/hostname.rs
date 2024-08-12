@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
-    let host = if !config.trim_at.is_empty() {
+    let mut host = if !config.trim_at.is_empty() {
         if let Some(index) = host.find(config.trim_at) {
             host.split_at(index).0
         } else {
@@ -44,6 +44,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         host.as_ref()
     };
+
+    if let Some(&alias) = config.aliases.get(host) {
+        host = alias;
+    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -256,6 +260,61 @@ mod tests {
             .collect();
         let expected = Some(format!("{} in ", style().paint(remainder)));
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_alias() {
+        let hostname = get_hostname!();
+        let mut toml_config = toml::toml!(
+            [hostname]
+            ssh_only = false
+            trim_at = ""
+            aliases = {}
+        );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(
+                hostname.clone(),
+                toml::Value::String("homeworld".to_string()),
+            );
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml_config)
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint("homeworld")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_alias_with_trim_at() {
+        let hostname = get_hostname!();
+
+        let mut hostname_iter = hostname.graphemes(true);
+        let remainder = hostname_iter.next().unwrap_or_default();
+        let trim_at = hostname_iter.collect::<String>();
+
+        // Trimmed hostname needs to be non-empty
+        if remainder.is_empty() {
+            log::warn!("Skipping test_alias_with_trim_at because hostname is too short");
+            return;
+        }
+        let mut toml_config = toml::toml!(
+            [hostname]
+            ssh_only = false
+            trim_at = trim_at
+            aliases = {}
+        );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(remainder.to_string(), toml::Value::String("🌍".to_string()));
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml_config)
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint("🌍")));
         assert_eq!(expected, actual);
     }
 
