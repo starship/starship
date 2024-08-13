@@ -174,7 +174,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
-	"mksh" => print!(
+        "mksh" => print!(
             r#"eval "$({} init mksh --print-full-init)""#,
             starship.sprint_posix()?
         ),
@@ -217,7 +217,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
     match shell_name {
         "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
-	"mksh" => print_script(MKSH_INIT, &starship_path.sprint_posix()?),
+        "mksh" => print_script(MKSH_INIT, &starship_path.sprint_posix()?),
         "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
