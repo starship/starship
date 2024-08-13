@@ -174,6 +174,11 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
+	"mksh" => print!(
+            r#"eval "$({} init mksh --print-full-init)""#,
+            starship.sprint_posix()?
+        ),
+
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
@@ -194,6 +199,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * nu\n\
                  * xonsh\n\
                  * cmd\n\
+		 * mksh\n\
                  \n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {shell_basename}:\n\
@@ -211,6 +217,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
     match shell_name {
         "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
+	"mksh" => print_script(MKSH_INIT, &starship_path.sprint_posix()?),
         "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
@@ -250,7 +257,7 @@ starship binary.
 */
 
 const BASH_INIT: &str = include_str!("starship.bash");
-
+const MKSH_INIT: &str = include_str!("starship.mksh");
 const ZSH_INIT: &str = include_str!("starship.zsh");
 
 const FISH_INIT: &str = include_str!("starship.fish");

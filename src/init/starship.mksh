@@ -1,0 +1,39 @@
+
+# Define a function to capture time in milliseconds
+__starship_get_time() {
+    STARSHIP_CAPTURED_TIME=$(date +%s%3N) # Using date command for compatibility
+}
+
+# Function to calculate command duration and manage prompt variables
+prompt_starship_precmd() {
+    STARSHIP_CMD_STATUS=$? # Save last command status
+
+    # Calculate duration if STARSHIP_START_TIME is set
+    if [ -n "$STARSHIP_START_TIME" ]; then
+        __starship_get_time
+        STARSHIP_DURATION=$((STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME))
+        unset STARSHIP_START_TIME
+    else
+        unset STARSHIP_DURATION STARSHIP_CMD_STATUS
+    fi
+
+    # MKSH does not support jobstates array directly, simplifying jobs count
+    STARSHIP_JOBS_COUNT=$(jobs | wc -l)
+}
+
+# Function to set start time before executing a command
+prompt_starship_preexec() {
+    __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+}
+
+# Setup prompt
+ PS1='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status="$STARSHIP_CMD_STATUS" --cmd-duration="${STARSHIP_DURATION:-}") '
+
+# Export necessary variables
+export STARSHIP_SHELL="mksh"
+
+# Simplified session key generation
+STARSHIP_SESSION_KEY=$(od -vAn -N4 -tu4 < /dev/urandom); export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16};
+
+VIRTUAL_ENV_DISABLE_PROMPT=1
+
