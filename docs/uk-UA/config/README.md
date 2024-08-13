@@ -4359,7 +4359,7 @@ time_range = '10:00:00-14:00:00'
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
 | `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
 | `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
-| `aliases`         | `{}`                    | Translate system usernames to something else.              |
+| `aliases`         | `{}`                    | Переводить системні імена користувачів у щось інше.        |
 
 ### Змінні
 
