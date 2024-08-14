@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         "php",
                         &[
                             "-nr",
-                            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
+                            "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION;",
                         ],
                     )?.stdout;
                     VersionFormatter::format_module_version(module.get_name(), &php_version, config.version_format).map(Ok)
