@@ -2818,6 +2818,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                              | Mô tả                                                  |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | Định dạng cho module.                                  |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Kiểu cho module.                                       |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.    |
+| `detect_files`      | `[]`                                  | Những tên tệp nào sẽ kích hoạt mô-đun này.             |
+| `detect_folders`    | `[]`                                  | Những thư mục nào sẽ kích hoạt mô-đun này.             |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `24.4.0` | The version of `mojo`            |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2943,17 +2978,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                   | Mô tả                                                                                                 |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | Định dạng cho module.                                                                                 |
-| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
-| `detect_files`      | `['package.json', '.node-version']`        | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                            |
-| `detect_folders`    | `['node_modules']`                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
-| `style`             | `'bold green'`                             | Kiểu cho module.                                                                                      |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Tuỳ chọn            | Mặc định                                      | Mô tả                                                                                                 |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Định dạng cho module.                                                                                 |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                            |
+| `detect_folders`    | `['node_modules']`                            | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
+| `style`             | `'bold green'`                                | Kiểu cho module.                                                                                      |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Các biến
 
@@ -3518,6 +3553,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py']`                                                                                                     | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                     |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Tên tệp nào sẽ kích hoạt mô-đun này                                                    |
 | `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                    |
+| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
