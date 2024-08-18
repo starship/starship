@@ -2818,6 +2818,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Opciones
+
+| Opción              | Predeterminado                        | Descripción                                            |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | El formato del módulo.                                 |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | El estilo del módulo.                                  |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Qué extensiones deberían activar este módulo.          |
+| `detect_files`      | `[]`                                  | Qué nombres de archivo deberían activar este módulo.   |
+| `detect_folders`    | `[]`                                  | Qué carpetas deberían activar este módulo.             |
+
+### Variables
+
+| Variable  | Ejemplo  | Descripción                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `24.4.0` | The version of `mojo`                  |
+| symbol    |          | Refleja el valor de la opción `symbol` |
+| style\* |          | Refleja el valor de la opción `style`  |
+
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2943,17 +2978,17 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 
 ### Opciones
 
-| Opción              | Predeterminado                             | Descripción                                                                                                     |
-| ------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | El formato del módulo.                                                                                          |
-| `version_format`    | `'v${raw}'`                                | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                         |
-| `symbol`            | `' '`                                     | Una cadena de formato que representa el símbolo de Node.js.                                                     |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Qué extensiones deberían activar este módulo.                                                                   |
-| `detect_files`      | `['package.json', '.node-version']`        | Qué nombres de archivo deberían activar este módulo.                                                            |
-| `detect_folders`    | `['node_modules']`                         | Qué carpetas deberían activar este módulo.                                                                      |
-| `style`             | `'bold green'`                             | El estilo del módulo.                                                                                           |
-| `disabled`          | `false`                                    | Deshabilita el módulo `nodejs`.                                                                                 |
-| `not_capable_style` | `'bold red'`                               | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de Node.js. |
+| Opción              | Predeterminado                                | Descripción                                                                                                     |
+| ------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | El formato del módulo.                                                                                          |
+| `version_format`    | `'v${raw}'`                                   | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                         |
+| `symbol`            | `' '`                                        | Una cadena de formato que representa el símbolo de Node.js.                                                     |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Qué extensiones deberían activar este módulo.                                                                   |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Qué nombres de archivo deberían activar este módulo.                                                            |
+| `detect_folders`    | `['node_modules']`                            | Qué carpetas deberían activar este módulo.                                                                      |
+| `style`             | `'bold green'`                                | El estilo del módulo.                                                                                           |
+| `disabled`          | `false`                                       | Deshabilita el módulo `nodejs`.                                                                                 |
+| `not_capable_style` | `'bold red'`                                  | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de Node.js. |
 
 ### Variables
 
@@ -3518,6 +3553,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_extensions`  | `['py']`                                                                                                     | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
+| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                                |
 | `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
 
 ::: tip
