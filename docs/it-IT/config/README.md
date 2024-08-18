@@ -2818,6 +2818,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Opzioni
+
+| Opzione             | Default                               | Descrizione                                            |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | The format for the module.                             |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Lo stile per il modulo.                                |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Quali estensioni dovrebbero attivare questo modulo.    |
+| `detect_files`      | `[]`                                  | Quali nomi di file dovrebbero attivare questo modulo.  |
+| `detect_folders`    | `[]`                                  | Quali cartelle dovrebbero attivare questo modulo.      |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `24.4.0` | The version of `mojo`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2943,17 +2978,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Opzioni
 
-| Opzione             | Default                                    | Descrizione                                                                                           |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | The format for the module.                                                                            |
-| `version_format`    | `'v${raw}'`                                | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch`           |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Quali estensioni dovrebbero attivare questo modulo.                                                   |
-| `detect_files`      | `['package.json', '.node-version']`        | Quali nomi di file dovrebbero attivare questo modulo.                                                 |
-| `detect_folders`    | `['node_modules']`                         | Quali cartelle dovrebbero attivare questo modulo.                                                     |
-| `style`             | `'bold green'`                             | Lo stile per il modulo.                                                                               |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opzione             | Default                                       | Descrizione                                                                                           |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                            |
+| `version_format`    | `'v${raw}'`                                   | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch`           |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Quali estensioni dovrebbero attivare questo modulo.                                                   |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Quali nomi di file dovrebbero attivare questo modulo.                                                 |
+| `detect_folders`    | `['node_modules']`                            | Quali cartelle dovrebbero attivare questo modulo.                                                     |
+| `style`             | `'bold green'`                                | Lo stile per il modulo.                                                                               |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -3518,6 +3553,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py']`                                                                                                     | Quali estensioni dovrebbero attivare questo modulo                                          |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Quali nomi di file dovrebbero attivare questo modulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Quali cartelle dovrebbero attivare questo modulo                                            |
+| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                                    |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                               |
 
 ::: tip
