@@ -2818,6 +2818,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Opsi
+
+| Opsi                | Bawaan                                | Deskripsi                                              |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `fromat`            | `'with [$symbol($version )]($style)'` | Format dari modul.                                     |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Gaya penataan untuk modul.                             |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Ekstensi mana yang sebaiknya memicu modul ini.         |
+| `detect_files`      | `[]`                                  | filenames mana yang sebaiknya memicu modul ini.        |
+| `detect_folders`    | `[]`                                  | Folder mana yang sebaiknya memicul modul ini.          |
+
+### Variabel
+
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `24.4.0` | The version of `mojo`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2943,17 +2978,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Opsi
 
-| Opsi                | Bawaan                                     | Deskripsi                                                                                             |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `fromat`            | `'via [$symbol($version )]($style)'`       | Format dari modul.                                                                                    |
-| `version_format`    | `'v${raw}'`                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
-| `detect_files`      | `['package.json', '.node-version']`        | filenames mana yang sebaiknya memicu modul ini.                                                       |
-| `detect_folders`    | `['node_modules']`                         | Folder mana yang sebaiknya memicul modul ini.                                                         |
-| `style`             | `'bold green'`                             | Gaya penataan untuk modul.                                                                            |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opsi                | Bawaan                                        | Deskripsi                                                                                             |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'`          | Format dari modul.                                                                                    |
+| `version_format`    | `'v${raw}'`                                   | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | filenames mana yang sebaiknya memicu modul ini.                                                       |
+| `detect_folders`    | `['node_modules']`                            | Folder mana yang sebaiknya memicul modul ini.                                                         |
+| `style`             | `'bold green'`                                | Gaya penataan untuk modul.                                                                            |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variabel
 
@@ -3518,6 +3553,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py']`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | filenames mana yang sebaiknya memicu modul ini                                         |
 | `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                           |
+| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
