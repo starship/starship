@@ -1045,6 +1045,25 @@
         }
       ]
     },
+    "mojo": {
+      "default": {
+        "detect_extensions": [
+          "mojo",
+          "🔥"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "with [$symbol($version )]($style)",
+        "style": "bold 208",
+        "symbol": "🔥 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MojoConfig"
+        }
+      ]
+    },
     "nats": {
       "default": {
         "disabled": true,
@@ -4489,6 +4508,52 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MojoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "with [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🔥 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 208",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "mojo",
+            "🔥"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
