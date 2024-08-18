@@ -2818,6 +2818,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### 配置项
+
+| 选项                  | 默认值                                   | 描述                                                     |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | 组件格式化模板。                                               |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | 此组件的样式。                                                |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | 触发此组件的扩展名                                              |
+| `detect_files`      | `[]`                                  | 触发此组件的文件名                                              |
+| `detect_folders`    | `[]`                                  | 触发此组件的文件夹                                              |
+
+### 变量
+
+| 字段        | 示例       | 描述                    |
+| --------- | -------- | --------------------- |
+| version   | `24.4.0` | The version of `mojo` |
+| symbol    |          | `symbol`对应值           |
+| style\* |          | `style`对应值            |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2943,17 +2978,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### 配置项
 
-| 选项                  | 默认值                                        | 描述                                                                                                    |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | 组件格式化模板。                                                                                              |
-| `version_format`    | `'v${raw}'`                                | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                                           |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | 触发此组件的扩展名                                                                                             |
-| `detect_files`      | `['package.json', '.node-version']`        | 触发此组件的文件名                                                                                             |
-| `detect_folders`    | `['node_modules']`                         | 触发此组件的文件夹                                                                                             |
-| `style`             | `'bold green'`                             | 此组件的样式。                                                                                               |
-| `disabled`          | `false`                                    | 禁用 `nodejs` 组件。                                                                                       |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| 选项                  | 默认值                                           | 描述                                                                                                    |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | 组件格式化模板。                                                                                              |
+| `version_format`    | `'v${raw}'`                                   | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                                           |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | 触发此组件的扩展名                                                                                             |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | 触发此组件的文件名                                                                                             |
+| `detect_folders`    | `['node_modules']`                            | 触发此组件的文件夹                                                                                             |
+| `style`             | `'bold green'`                                | 此组件的样式。                                                                                               |
+| `disabled`          | `false`                                       | 禁用 `nodejs` 组件。                                                                                       |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### 变量
 
@@ -3518,6 +3553,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py']`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                               |
 | `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                        |
 
 ::: tip 提示
