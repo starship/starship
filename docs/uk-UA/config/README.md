@@ -863,7 +863,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
