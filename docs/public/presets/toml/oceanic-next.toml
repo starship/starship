@@ -1,0 +1,155 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](bg:red fg:red)\
+$os\
+[](bg:black fg:red)\
+[](bg:red fg:black)\
+$username\
+[](bg:yellow fg:red)\
+$directory\
+[](bg:green fg:yellow)\
+$git_branch\
+$git_status\
+[](bg:green)\
+[](bg:cyan fg:green)\
+$java\
+$kotlin\
+$nodejs\
+$python\
+$rust\
+$golang\
+[](bg:blue fg:cyan)\
+$cmd_duration\
+[](bg:magenta fg:blue)\
+[](bg:black fg:magenta)\
+$fill[---](bg:black fg:yellow)
+$character\
+"""
+
+right_format = """
+[](bg:black bold fg:yellow)
+"""
+
+palette = 'oceanic_next'
+
+[palettes.oceanic_next]
+base-00 = '#1B2B34'
+base-01 = '#343D46'
+base-02 = '#4F5B66'
+base-03 = '#65737E'
+base-04 = '#A7ADBA'
+base-05 = '#C0C5CE'
+base-06 = '#CDD3DE'
+base-07 = '#D8DEE9'
+base-08 = '#EC5f67'
+base-09 = '#F99157'
+base-0A = '#FAC863'
+base-0B = '#99C794'
+base-0C = '#5FB3B3'
+base-0D = '#6699CC'
+base-0E = '#C594C5'
+base-0F = '#AB7967'
+black = '#1B2B34'
+red = '#EC5f67'
+green = '#99C794'
+yellow = '#FAC863'
+magenta = '#C594C5'
+blue = '#6699CC'
+cyan = '#5FB3B3'
+white = '#C0C5CE'
+bright-black = '#65737E'
+bright-red = '#E35d64'
+bright-green = '#98C892'
+bright-yellow = '#FbC959'
+bright-blue = '#6498Ce'
+bright-magenta = '#C693C6'
+bright-cyan = '#5aB3B4'
+bright-white = '#C0C5CE'
+
+[os]
+disabled = false
+style = "bg:red bold fg:black"
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "bg:red bold fg:black"
+format = "[ $user ]($style)"
+
+[directory]
+style = "bg:yellow bold fg:black"
+format = "[ $path ]($style)"
+truncation_symbol = "…/"
+truncation_length = 6
+
+[git_branch]
+symbol = ""
+style = "bg:green bold fg:black"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "bg:green bold fg:red"
+format = "[$all_status$ahead_behind]($style)"
+
+[java]
+style = "bg:cyan bold fg:black"
+format = "[ JAVA[-](dimmed $style)($version) ]($style)"
+
+[kotlin]
+style = "bg:cyan bold fg:black"
+format = "[ Kotlin[-](dimmed $style)($version) ]($style)"
+
+[nodejs]
+style = "bg:cyan bold fg:black"
+format = "[ NodeJS[-](dimmed $style)($version) ]($style)"
+
+[python]
+style = "bg:cyan bold fg:black"
+format = "[ Python[-](dimmed $style)($version) ]($style)"
+
+[rust]
+style = "bg:cyan bold fg:black"
+format = "[ Rust[-](dimmed $style)($version) ]($style)"
+
+[golang]
+style = "bg:cyan bold fg:black"
+format = "[ GO[-](dimmed $style)($version) ]($style)"
+
+[package]
+disabled = true
+
+[time]
+disabled = false
+time_format = "%r"
+style = "bg:black fg:white"
+format = "[ $time ]($style)"
+
+[cmd_duration]
+style = "bg:blue bold fg:yellow"
+format = "[ $duration ]($style)"
+
+[fill]
+symbol = " "
+style = "bg:black fg:black"
