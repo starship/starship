@@ -863,7 +863,7 @@ O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/lat
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
