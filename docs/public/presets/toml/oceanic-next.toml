@@ -152,4 +152,3 @@ format = "[ $duration ]($style)"
 
 [fill]
 symbol = " "
-style = "bg:black fg:black"
