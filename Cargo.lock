@@ -2683,9 +2683,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.32.0"
+version = "0.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25d4535372eab969a98536e39dd272bca49fc338b09b25babea715968d15eeae"
+checksum = "8a3978e7641f86a78c2f619f9b13bdffb4e43a1d5119f39eb03d1bc5ac61daaf"
 dependencies = [
  "const_format",
  "is_debug",
