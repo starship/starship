@@ -11,6 +11,7 @@ use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils::create_command;
 use home::rustup_home;
+use regex::Regex;
 
 use once_cell::sync::OnceCell;
 
@@ -384,17 +385,24 @@ fn execute_rustc_version(context: &Context) -> Option<String> {
 }
 
 fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<String> {
-    let version = rustc_version
-        // split into ["rustc", "1.34.0", ...]
-        .split_whitespace()
-        // get down to "1.34.0"
-        .nth(1)?;
+    if rustc_version.contains("nightly") {
+        let re = Regex::new(r"rustc .* \(.* (?P<date>.*)\)").unwrap();
+        let caps = re.captures(rustc_version)?;
 
-    match VersionFormatter::format_version(version, version_format) {
-        Ok(formatted) => Some(formatted),
-        Err(error) => {
-            log::warn!("Error formatting `rust` version:\n{}", error);
-            Some(format!("v{version}"))
+        caps.name("date").map(|x| format!("nightly-{}", x.as_str()))
+    } else {
+        let version = rustc_version
+            // split into ["rustc", "1.34.0", ...]
+            .split_whitespace()
+            // get down to "1.34.0"
+            .nth(1)?;
+
+        match VersionFormatter::format_version(version, version_format) {
+            Ok(formatted) => Some(formatted),
+            Err(error) => {
+                log::warn!("Error formatting `rust` version:\n{}", error);
+                Some(format!("v{version}"))
+            }
         }
     }
 }
@@ -707,7 +715,7 @@ version = "12"
         let rustc_nightly = "rustc 1.34.0-nightly (b139669f3 2019-04-10)";
         assert_eq!(
             format_rustc_version(rustc_nightly, config.version_format),
-            Some("v1.34.0-nightly".to_string())
+            Some("nightly-2019-04-10".to_string())
         );
         assert_eq!(
             format_rustc_version(rustc_beta, config.version_format),
