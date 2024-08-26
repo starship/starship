@@ -103,7 +103,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
-    // the usage of 2 takes in the following is to avoid borrowing issues. They would never overlaps, so the ? are safe
+    // the usage of 2 takes in the following is to avoid borrowing issues. They would never overlaps, so the unwrap is safe
     let mut maybe_prefix = Some(prefix);
     let path_vec = repo
         .and_then(|r| r.workdir.as_ref())
@@ -129,11 +129,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
             None
         })
-        .unwrap_or([
-            String::new(),
-            String::new(),
-            maybe_prefix.take()? + dir_string.as_str(),
-        ]);
+        .unwrap_or_else(|| {
+            [
+                String::new(),
+                String::new(),
+                maybe_prefix
+                    .take()
+                    .expect("the previous take should not have happened")
+                    + dir_string.as_str(),
+            ]
+        });
 
     let path_vec = if config.use_os_path_sep {
         path_vec.map(|i| convert_path_sep(&i))
