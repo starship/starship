@@ -1828,9 +1828,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{}{} ",
-            Color::White
-                .dimmed()
-                .paint(convert_path_sep("…/.config/")),
+            Color::White.dimmed().paint(convert_path_sep("…/.config/")),
             Color::Cyan
                 .bold()
                 .paint(convert_path_sep("nix/darwin-configurations")),
