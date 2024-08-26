@@ -1830,7 +1830,7 @@ mod tests {
             "{}{} ",
             Color::White
                 .dimmed()
-                .paint(format!("{}{}", "…/", convert_path_sep(".config/"))),
+                .paint(convert_path_sep("…/.config/")),
             Color::Cyan
                 .bold()
                 .paint(convert_path_sep("nix/darwin-configurations")),
