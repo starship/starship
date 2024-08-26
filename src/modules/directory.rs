@@ -107,7 +107,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) => {
+        Some(repo_root) if repo_root != &&home_dir => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
