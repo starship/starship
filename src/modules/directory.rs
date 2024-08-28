@@ -1437,7 +1437,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("src/sub/path"))
+            Color::Cyan.bold().paint(convert_path_sep("…/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
