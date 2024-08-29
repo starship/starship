@@ -1,14 +1,18 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use serde::{Deserialize, Serialize};
 
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct ThresholdStyle<'a> {
     pub threshold: i64,
     pub style: &'a str,
 }
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct DiskUsedConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -23,8 +27,8 @@ pub struct DiskUsedConfig<'a> {
     pub threshold_styles: Vec<ThresholdStyle<'a>>,
 }
 
-impl<'a> RootModuleConfig<'a> for DiskUsedConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for DiskUsedConfig<'a> {
+    fn default() -> Self {
         DiskUsedConfig {
             format: "[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) ",
             symbol: "💾 ",

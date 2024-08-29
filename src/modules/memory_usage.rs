@@ -9,7 +9,7 @@ use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
 
 // Display a `ByteSize` in a human readable format.
-fn display_bs(bs: ByteSize) -> String {
+pub(super) fn display_bs(bs: ByteSize) -> String {
     let mut display_bytes = bs.to_string_as(true);
     let mut keep = true;
     // Skip decimals and the space before the byte unit.
