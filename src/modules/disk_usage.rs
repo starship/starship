@@ -3,13 +3,13 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use systemstat::{saturating_sub_bytes, Filesystem, Platform, System};
+use systemstat::{Filesystem, Platform, System};
 
-use super::{Context, Module};
+use super::{memory_usage::pct, Context, Module};
 
-use crate::segment::Segment;
+use crate::formatter::StringFormatter;
 use crate::{config::ModuleConfig, configs::disk_usage::DiskUsedConfig};
-use crate::{formatter::StringFormatter, modules::memory_usage::display_bs};
+use crate::{modules::memory_usage::format_usage_total, segment::Segment};
 
 fn get_disk_name(disk: &Filesystem) -> Option<&str> {
     Path::new(&disk.fs_mounted_on)
@@ -24,15 +24,12 @@ fn format_disk_usage(
     add_separator: bool,
     context: &Context,
 ) -> Result<Vec<Segment>, Box<dyn Error>> {
-    let used_space = saturating_sub_bytes(disk.total, disk.avail);
-    let total_space = disk.total;
-
-    let used_percentage = used_space.as_u64() as f64 / total_space.as_u64() as f64 * 100f64;
+    let used_percentage = pct(disk.total, disk.free);
 
     let formatted_usage = if config.show_percentage {
         format!("{:.2}%", used_percentage)
     } else {
-        format!("{}/{}", display_bs(used_space), display_bs(disk.total))
+        format!("{}", format_usage_total(disk.total, disk.free))
     };
 
     let threshold_config = config
@@ -74,9 +71,7 @@ fn format_disk_usage(
 }
 
 fn should_display_disk(disk: &Filesystem, threshold: i64) -> bool {
-    let used = saturating_sub_bytes(disk.total, disk.avail);
-    let percentage = used.as_u64() as f64 / disk.total.as_u64() as f64;
-    percentage >= (threshold as f64 * 0.01f64)
+    pct(disk.total, disk.free) >= threshold as f64
 }
 
 fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Filesystem]) -> Option<&'a Filesystem> {

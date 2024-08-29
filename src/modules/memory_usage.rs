@@ -9,7 +9,7 @@ use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
 
 // Display a `ByteSize` in a human readable format.
-pub(super) fn display_bs(bs: ByteSize) -> String {
+fn display_bs(bs: ByteSize) -> String {
     let mut display_bytes = bs.to_string_as(true);
     let mut keep = true;
     // Skip decimals and the space before the byte unit.
@@ -28,12 +28,12 @@ pub(super) fn display_bs(bs: ByteSize) -> String {
 }
 
 // Calculate the memory usage from total and free memory
-fn pct(total: ByteSize, free: ByteSize) -> f64 {
+pub(super) fn pct(total: ByteSize, free: ByteSize) -> f64 {
     100.0 * saturating_sub_bytes(total, free).0 as f64 / total.0 as f64
 }
 
 // Print usage string used/total
-fn format_usage_total(total: ByteSize, free: ByteSize) -> String {
+pub(super) fn format_usage_total(total: ByteSize, free: ByteSize) -> String {
     format!(
         "{}/{}",
         display_bs(saturating_sub_bytes(total, free)),

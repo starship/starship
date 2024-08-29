@@ -255,7 +255,7 @@ pub fn description(module: &str) -> &'static str {
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "direnv" => "The currently applied direnv file",
-        "disk_usage" => "Current disk used",
+        "disk_usage" => "Current system disk usage",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "elixir" => "The currently installed versions of Elixir and OTP",
