@@ -20,7 +20,7 @@ pub mod dart;
 pub mod deno;
 pub mod directory;
 pub mod direnv;
-pub mod disk_used;
+pub mod disk_usage;
 pub mod docker_context;
 pub mod dotnet;
 pub mod elixir;

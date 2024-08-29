@@ -8,7 +8,7 @@ use systemstat::{saturating_sub_bytes, Filesystem, Platform, System};
 use super::{Context, Module};
 
 use crate::segment::Segment;
-use crate::{config::ModuleConfig, configs::disk_used::DiskUsedConfig};
+use crate::{config::ModuleConfig, configs::disk_usage::DiskUsedConfig};
 use crate::{formatter::StringFormatter, modules::memory_usage::display_bs};
 
 fn get_disk_name(disk: &Filesystem) -> Option<&str> {
@@ -17,7 +17,7 @@ fn get_disk_name(disk: &Filesystem) -> Option<&str> {
         .and_then(|name| name.to_str())
 }
 
-fn format_disk_used(
+fn format_disk_usage(
     disk: &Filesystem,
     config: &DiskUsedConfig,
     show_disk_name: bool,
@@ -86,7 +86,7 @@ fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Filesystem]) -> Option<&'
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("disk_used");
+    let mut module = context.new_module("disk_usage");
     let config = DiskUsedConfig::try_load(module.config);
 
     if config.disabled {
@@ -110,7 +110,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             Some(disk) => {
                 current_disk = Some(disk);
                 if should_display_disk(disk, threshold) {
-                    match format_disk_used(disk, &config, config.show_current_name, false, context)
+                    match format_disk_usage(disk, &config, config.show_current_name, false, context)
                     {
                         Ok(segments) => {
                             if !segments.is_empty() {
@@ -141,7 +141,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let mut all_segments = Vec::new();
 
         for (i, disk) in display_disks.iter().enumerate() {
-            match format_disk_used(disk, &config, true, display_disks.len() != i + 1, context) {
+            match format_disk_usage(disk, &config, true, display_disks.len() != i + 1, context) {
                 Ok(ref mut segments) => {
                     all_segments.append(segments);
                 }

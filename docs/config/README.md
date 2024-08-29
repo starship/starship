@@ -348,7 +348,7 @@ $sudo\
 $cmd_duration\
 $line_break\
 $jobs\
-$disk_used\
+$disk_usage\
 $battery\
 $time\
 $status\
@@ -1266,7 +1266,7 @@ disabled = false
 
 ## Disk Used
 
-The `disk_used` module shows disk used in current directory or any disk specified.
+The `disk_usage` module shows disk used in current directory or any disk specified.
 
 By default the moduel only shows the current directory's disk used when it is more than 30%.
 
@@ -1285,7 +1285,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`            | `"[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) "` | The format for the module.                                                      |
 | `symbol`            | `"💾 "`                                                                | The symbol used before displaying the disk used usage.                          |
 | `default_style`     | `"white bold"`                                                         | The style for the module.                                                       |
-| `disabled`          | `true`                                                                 | Disables the `disk_used` module.                                                |
+| `disabled`          | `true`                                                                 | Disables the `disk_usage` module.                                                |
 | `separator`         | `|`                                                                    | Used to seprate disk used texts.                                                |
 | `show_percentage`   | `true`                                                                 | Switches between `63.05%` and `147GB/233GB`.                                    |
 | `current_threshold` | `30`                                                                   | Hides the current directory disk used if it is less than this value.            |
@@ -1298,10 +1298,10 @@ To enable it, set `disabled` to `false` in your configuration file.
 The `threshold_styles` are used to change the style of the disk used display based on the percentage of disk used.
 
 ```toml
-[[disk_used.threshold_styles]]
+[[disk_usage.threshold_styles]]
 threshold = 50
 style = "yellow bold"
-[[disk_used.threshold_styles]]
+[[disk_usage.threshold_styles]]
 threshold = 80
 style = "red bold"
 ```
@@ -1324,7 +1324,7 @@ style = "red bold"
 ```toml
 # ~/.config/starship.toml
 
-[disk_used]
+[disk_usage]
 disabled = false
 show_percentage = true
 current_threshold = 0
