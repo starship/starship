@@ -1,7 +1,4 @@
-use std::{
-    error::Error,
-    path::{Path, PathBuf},
-};
+use std::{error::Error, path::Path};
 
 use systemstat::{Filesystem, Platform, System};
 
@@ -29,7 +26,7 @@ fn format_disk_usage(
     let formatted_usage = if config.show_percentage {
         format!("{:.2}%", used_percentage)
     } else {
-        format!("{}", format_usage_total(disk.total, disk.free))
+        format_usage_total(disk.total, disk.free).to_string()
     };
 
     let threshold_config = config
@@ -53,10 +50,7 @@ fn format_disk_usage(
                 _ => None,
             })
             .map(|var| match var {
-                "name" if show_disk_name => match get_disk_name(disk) {
-                    Some(name) => Some(Ok(name)),
-                    _ => None,
-                },
+                "name" if show_disk_name => get_disk_name(disk).map(Ok),
                 "usage" => Some(Ok(formatted_usage.as_str())),
                 "separator" if add_separator => Some(Ok(config.separator)),
                 _ => None,
@@ -74,7 +68,7 @@ fn should_display_disk(disk: &Filesystem, threshold: i64) -> bool {
     pct(disk.total, disk.free) >= threshold as f64
 }
 
-fn get_drive_from_path<'a>(path: &PathBuf, disks: &'a [Filesystem]) -> Option<&'a Filesystem> {
+fn get_drive_from_path<'a>(path: &Path, disks: &'a [Filesystem]) -> Option<&'a Filesystem> {
     disks
         .iter()
         .find(|disk| path.starts_with(&disk.fs_mounted_on))
@@ -165,14 +159,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_variables_to_segments(|var| match var {
-                "current_storage" => match &current_storage {
-                    Some(current_storage) => Some(Ok(current_storage.to_vec())),
-                    None => None,
-                },
-                "other_storage" => match &other_storage {
-                    Some(other_storage) => Some(Ok(other_storage.to_vec())),
-                    None => None,
-                },
+                "current_storage" => current_storage
+                    .as_ref()
+                    .map(|current_storage| Ok(current_storage.to_vec())),
+                "other_storage" => other_storage
+                    .as_ref()
+                    .map(|other_storage| Ok(other_storage.to_vec())),
                 _ => None,
             })
             .parse(None, Some(context))
