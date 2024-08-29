@@ -1279,19 +1279,19 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option              | Default                                                                | Description                                                                     |
-| ------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `prefix`            | ` `                                                                    | A prefix for the module output.                                                 |
-| `format`            | `"[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) "` | The format for the module.                                                      |
-| `symbol`            | `"💾 "`                                                                | The symbol used before displaying the disk used usage.                          |
-| `default_style`     | `"white bold"`                                                         | The style for the module.                                                       |
-| `disabled`          | `true`                                                                 | Disables the `disk_usage` module.                                                |
-| `separator`         | `|`                                                                    | Used to seprate disk used texts.                                                |
-| `show_percentage`   | `true`                                                                 | Switches between `63.05%` and `147GB/233GB`.                                    |
-| `current_threshold` | `30`                                                                   | Hides the current directory disk used if it is less than this value.            |
-| `all_threshold`     | ` `                                                                    | Hides all disk used if it is less than this value.                              |
-| `show_current_name` | `false`                                                                | Toggles between `💾 sda1: 63.05%` and `💾 63.05%`.                              |
-| `threshold_styles`  | [link](#disk-used-style-threshold)                                     | Thresholds and style pairs for disk used                                        |
+| Option              | Default                                                                | Description                                                          |
+| ------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `prefix`            | ``                                                                     | A prefix for the module output.                                      |
+| `format`            | `"[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) "` | The format for the module.                                           |
+| `symbol`            | `"💾 "`                                                                | The symbol used before displaying the disk used usage.               |
+| `default_style`     | `"white bold"`                                                         | The style for the module.                                            |
+| `disabled`          | `true`                                                                 | Disables the `disk_usage` module.                                    |
+| `separator`         | `                                                                      | `                                                                    |
+| `show_percentage`   | `true`                                                                 | Switches between `63.05%` and `147GB/233GB`.                         |
+| `current_threshold` | `30`                                                                   | Hides the current directory disk used if it is less than this value. |
+| `all_threshold`     | ``                                                                     | Hides all disk used if it is less than this value.                   |
+| `show_current_name` | `false`                                                                | Toggles between `💾 sda1: 63.05%` and `💾 63.05%`.                   |
+| `threshold_styles`  | [link](#disk-used-style-threshold)                                     | Thresholds and style pairs for disk used                             |
 
 ### Disk Used Style Threshold
 
@@ -1308,13 +1308,13 @@ style = "red bold"
 
 ### Variables
 
-| Variable          | Example                   | Description                                                                                   |
-| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------- |
-| prefix            | `used`                    | A perfix for the prompt.                                                                      |
-| style\*           | `white bold`              | Mirrors the value of option `default_style`.                                                  |
-| symbol            | `💾 `                     | Mirrors the value of option `symbol`.                                                         |
-| current_storage   | `63.05%`                  | The amount of used space on the current disk.                                                 |
-| other_storage\*\* | `sda2:63.05%|sdb1:63.05%` | The amount of used space on all disks. Only displays the disks that pass the `all_threshold`  |
+| Variable          | Example      | Description                                   |
+| ----------------- | ------------ | --------------------------------------------- |
+| prefix            | `used`       | A perfix for the prompt.                      |
+| style\*           | `white bold` | Mirrors the value of option `default_style`.  |
+| symbol            | `💾`         | Mirrors the value of option `symbol`.         |
+| current_storage   | `63.05%`     | The amount of used space on the current disk. |
+| other_storage\*\* | `sda2:63.05% | sdb1:63.05%`                                  |
 
 \*: This variable can only be used as a part of a style string
 \*\*: Disabled if `all_threshold` is not defined

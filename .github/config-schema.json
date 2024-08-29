@@ -377,6 +377,35 @@
         }
       ]
     },
+    "disk_usage": {
+      "default": {
+        "all_threshold": null,
+        "current_threshold": 30,
+        "default_style": "white bold",
+        "disabled": true,
+        "format": "[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) ",
+        "prefix": "",
+        "separator": "|",
+        "show_current_name": false,
+        "show_percentage": true,
+        "symbol": "💾 ",
+        "threshold_styles": [
+          {
+            "style": "yellow bold",
+            "threshold": 50
+          },
+          {
+            "style": "red bold",
+            "threshold": 80
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DiskUsedConfig"
+        }
+      ]
+    },
     "docker_context": {
       "default": {
         "detect_extensions": [],
@@ -2898,6 +2927,93 @@
         },
         "unloaded_msg": {
           "default": "not loaded",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DiskUsedConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[($prefix )]($style)$symbol$current_storage(\\[$other_storage\\]) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "💾 ",
+          "type": "string"
+        },
+        "prefix": {
+          "default": "",
+          "type": "string"
+        },
+        "separator": {
+          "default": "|",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "show_percentage": {
+          "default": true,
+          "type": "boolean"
+        },
+        "current_threshold": {
+          "default": 30,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int64"
+        },
+        "all_threshold": {
+          "default": null,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int64"
+        },
+        "show_current_name": {
+          "default": false,
+          "type": "boolean"
+        },
+        "default_style": {
+          "default": "white bold",
+          "type": "string"
+        },
+        "threshold_styles": {
+          "default": [
+            {
+              "style": "yellow bold",
+              "threshold": 50
+            },
+            {
+              "style": "red bold",
+              "threshold": 80
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ThresholdStyle"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ThresholdStyle": {
+      "type": "object",
+      "required": [
+        "style",
+        "threshold"
+      ],
+      "properties": {
+        "threshold": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "style": {
           "type": "string"
         }
       },

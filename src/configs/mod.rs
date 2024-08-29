@@ -152,6 +152,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     direnv: direnv::DirenvConfig<'a>,
     #[serde(borrow)]
+    disk_usage: disk_usage::DiskUsedConfig<'a>,
+    #[serde(borrow)]
     docker_context: docker_context::DockerContextConfig<'a>,
     #[serde(borrow)]
     dotnet: dotnet::DotnetConfig<'a>,
