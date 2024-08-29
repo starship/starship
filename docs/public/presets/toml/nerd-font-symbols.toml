@@ -165,3 +165,6 @@ symbol = " "
 
 [zig]
 symbol = " "
+
+[gradle]
+symbol = " "
