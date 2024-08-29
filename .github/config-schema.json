@@ -340,7 +340,7 @@
         "read_only_style": "red",
         "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_style": null,
-        "repo_truncation_symbol": "",
+        "repo_truncation_symbol": null,
         "style": "cyan bold",
         "substitutions": {},
         "truncate_to_repo": true,
@@ -2802,8 +2802,11 @@
           "type": "string"
         },
         "repo_truncation_symbol": {
-          "default": "",
-          "type": "string"
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "truncation_symbol": {
           "default": "",
