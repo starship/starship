@@ -364,11 +364,12 @@ Add the following to the end of your PowerShell configuration (find it by runnin
 ```powershell
 Invoke-Expression (&starship init powershell)
 ```
-
 If you are using PowerShell 7.0+, instead of the version(s) that ship with Windows 10/11, you can use the following instead:
+
 ```powershell
 & 'C:\Program Files\starship\bin\starship.exe' init powershell | Out-String | Invoke-Expression
 ```
+
 To test if Starship is working, save and close your updated profile, and run `. $PROFILE` in PowerShell. If you see your Starship prompt, you're all set! Tip: This works best if you installed Starship with the MSI installer in the default installation location. Otherwise, you may have to update the path to the `starship.exe` file.
 
 </details>

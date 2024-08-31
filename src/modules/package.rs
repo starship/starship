@@ -583,7 +583,7 @@ license = "MIT"
 
     #[test]
     fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
-        // Only create an empty directory. There's no .nibmle file for this case.
+        // Only create an empty directory. There's no .nimble file for this case.
         let project_dir = create_project_dir()?;
 
         let starship_config = toml::toml! {
