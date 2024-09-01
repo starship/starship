@@ -373,7 +373,7 @@ If you are using PowerShell 7.0+, instead of the version(s) that ship with Windo
 
 If you do not already have a PowerShell configuration file, create one in the location you obtained, with the name shown when you ran the `$PROFILE` command. If this is the first time you are attempting to run code not signed by Microsoft, you will need to enable scripts execution. You can do this by running the following command:
 
-`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm`. 
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm`.
 
 or,
 
