@@ -24,9 +24,9 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### Địa chỉ tệp tin cấu hình
 
-Bạn thay đổi địa chỉ tệp tin cấu hình mặc định bằng biến môi trường `STARSHIP_CONFIG`:
+Bạn có thể thay đổi địa chỉ tệp tin cấu hình mặc định bằng biến môi trường `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | Một format string đại diện cho biểu tượng của Go.                         |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
 | `detect_extensions` | `['gleam']`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['gleam.toml']`                     | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `style`             | `'bold #FFAFF3'`                     | Kiểu cho module.                                                          |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `'⌘ '`                                                                                          | Một format string đại diện cho biểu tượng của Helm.                       |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Thư mục hiện tại chứa một tập tin `spago.dhall`
+- Thư mục hiện tại chứa một tập tin `spago.yaml`
+- Thư mục hiện tại chứa một tập tin `spago.lock`
 - The current directory contains a file with the `.purs` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.              |
-| `detect_extensions` | `['purs']`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `['spago.dhall']`                    | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `'bold white'`                       | Kiểu cho module.                                                          |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                         |
+| Tuỳ chọn            | Mặc định                                      | Mô tả                                                                     |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Định dạng cho module.                                                     |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `['purs']`                                    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                          | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `'bold white'`                                | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                                         |
 
 ### Các biến
 
@@ -4304,12 +4306,12 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                           |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                          |
 | `style`             | `'bold #0093A7'`                     | Kiểu cho module.                                                          |
 | `detect_extensions` | `['.typ']`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['template.typ']`                   | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+| `disabled`          | `false`                              | Disables the `typst` module.                                              |
 
 ### Các biến
 
@@ -4558,9 +4560,9 @@ The order in which custom modules are shown can be individually set by including
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
@@ -4575,6 +4577,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `mô tả`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |

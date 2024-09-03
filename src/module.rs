@@ -1,6 +1,6 @@
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
-use nu_ansi_term::{AnsiString, AnsiStrings};
+use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use std::fmt;
 use std::time::Duration;
 
@@ -60,6 +60,7 @@ pub const ALL_MODULES: &[&str] = &[
     "lua",
     "memory_usage",
     "meson",
+    "mojo",
     "nats",
     "nim",
     "nix_shell",
@@ -122,7 +123,7 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Self {
         Module {
             config,
             name: name.to_string(),
@@ -190,16 +191,21 @@ where
     let mut used = 0usize;
     let mut current: Vec<AnsiString> = Vec::new();
     let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
+    let mut prev_style: Option<AnsiStyle> = None;
 
     for segment in segments {
         match segment {
             Segment::Fill(fs) => {
                 chunks.push((current, fs));
                 current = Vec::new();
+                prev_style = None;
             }
             _ => {
                 used += segment.width_graphemes();
-                current.push(segment.ansi_string());
+                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+
+                prev_style = Some(*current_segment_string.style_ref());
+                current.push(current_segment_string);
             }
         }
 
@@ -217,8 +223,11 @@ where
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
-                strs.into_iter()
-                    .chain(std::iter::once(fill.ansi_string(fill_size)))
+                let fill_string = fill.ansi_string(
+                    fill_size,
+                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
+                );
+                strs.into_iter().chain(std::iter::once(fill_string))
             })
             .chain(current)
             .collect::<Vec<AnsiString>>()

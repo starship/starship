@@ -56,11 +56,11 @@ jobs:
             name: starship-arm-unknown-linux-musleabihf.tar.gz
 
           - target: x86_64-apple-darwin
-            os: macOS-11
+            os: macos-latest
             name: starship-x86_64-apple-darwin.tar.gz
 
           - target: aarch64-apple-darwin
-            os: macOS-11
+            os: macos-latest
             name: starship-aarch64-apple-darwin.tar.gz
 
           - target: x86_64-pc-windows-msvc
@@ -127,6 +127,7 @@ jobs:
       - name: Sign | Upload [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
+        id: unsigned-artifacts
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-${{ matrix.name }}
@@ -143,7 +144,7 @@ jobs:
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
           project-slug: 'starship'
           signing-policy-slug: 'test-signing'
-          github-artifact-name: 'unsigned-${{ matrix.name }}'
+          github-artifact-id: '${{ steps.unsigned-artifacts.outputs.artifact-id }}'
           wait-for-completion: false
           # TODO use release-signing certificate:
           # signing-policy-slug: 'release-signing'

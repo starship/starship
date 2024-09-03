@@ -579,10 +579,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
-
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### Options
 
@@ -906,6 +903,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 ::: tip
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
@@ -1173,7 +1171,7 @@ it would have been `nixpkgs/pkgs`.
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
-prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1982,7 +1980,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `staged`            | `'+'`                                         | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                         | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                          | The format of `typechange`                                                                                  |
+| `typechanged`       | `""`                                          | The format of `typechanged`                                                                                 |
 | `style`             | `'bold red'`                                  | The style for the module.                                                                                   |
 | `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
@@ -2003,7 +2001,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
 | style\*        | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
@@ -2355,6 +2353,7 @@ The `hostname` module shows the system hostname.
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                            |
 | `style`           | `'bold dimmed green'`                  | The style for the module.                                                                                                             |
 | `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
 
 ### Variables
 
@@ -2389,6 +2388,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2938,6 +2945,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Options
+
+| Option              | Default                               | Description                                            |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | The format for the module.                             |
+| `symbol`            | `'🔥 '`                               | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | The style for the module.                              |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                      | Which extensions should trigger this module.           |
+| `detect_files`      | `[]`                                  | Which filenames should trigger this module.            |
+| `detect_folders`    | `[]`                                  | Which folders should trigger this module.              |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `24.4.0` | The version of `mojo`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -3066,17 +3108,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                    | Description                                                                                           |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | The format for the module.                                                                            |
-| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Which extensions should trigger this module.                                                          |
-| `detect_files`      | `['package.json', '.node-version']`        | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `['node_modules']`                         | Which folders should trigger this module.                                                             |
-| `style`             | `'bold green'`                             | The style for the module.                                                                             |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Option              | Default                                       | Description                                                                                           |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                            |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `['node_modules']`                            | Which folders should trigger this module.                                                             |
+| `style`             | `'bold green'`                                | The style for the module.                                                                             |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -3593,20 +3635,22 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - The current directory contains a file with the `.purs` extension
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                             | The symbol used before displaying the version of PureScript.              |
-| `detect_extensions` | `['purs']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `['spago.dhall']`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold white'`                       | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                         |
+| Option              | Default                                       | Description                                                               |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                      | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                              |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                          | Which folders should trigger this module.                                 |
+| `style`             | `'bold white'`                                | The style for the module.                                                 |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                                         |
 
 ### Variables
 
@@ -4539,7 +4583,7 @@ these variables, one workaround is to set one of them with a dummy value.
 | `format`          | `'[$user]($style) in '` | The format for the module.                                |
 | `show_always`     | `false`                 | Always shows the `username` module.                       |
 | `disabled`        | `false`                 | Disables the `username` module.                           |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### Variables
 
@@ -4550,7 +4594,7 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Example
 
-#### Always show the hostname
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4562,17 +4606,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Hide the hostname in remote tmux sessions
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
@@ -4756,11 +4789,12 @@ If you have an interesting example not covered there, feel free to share it ther
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
 Whatever output the command generates is printed unmodified in the prompt. This means if the output
-contains special sequences that are interpreted by your shell they will be expanded when displayed.
-These special sequences are shell specific, e.g. you can write a command module that writes bash sequences,
+contains shell-specific interpretable sequences, they could be interpreted on display.
+Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell.
+Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences,
 e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Format strings can also contain shell specific prompt sequences, e.g.
@@ -4778,6 +4812,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |

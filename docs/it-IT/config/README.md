@@ -1981,7 +1981,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Go.                                              |
+| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                           |
 | `detect_extensions` | `['gleam']`                          | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['gleam.toml']`                     | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `style`             | `'bold #FFAFF3'`                     | Lo stile per il modulo.                                                                     |
@@ -2180,7 +2180,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                                  |
-| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                                            |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                            |
 | `style`             | `'bold fg:202'`                                                                                 | Lo stile per il modulo.                                                                     |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                                 |
 
@@ -3441,20 +3441,22 @@ format = '[$symbol$stack]($style) '
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
+- The current directory contains a `spago.yaml` file
+- The current directory contains a `spago.lock` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opzioni
 
-| Opzione             | Default                              | Descrizione                                                                                 |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
-| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.                                |
-| `detect_extensions` | `['purs']`                           | Quali estensioni dovrebbero attivare questo modulo.                                         |
-| `detect_files`      | `['spago.dhall']`                    | Quali nomi di file dovrebbero attivare questo modulo.                                       |
-| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
-| `style`             | `'bold white'`                       | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                           |
+| Opzione             | Default                                       | Descrizione                                                                                 |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                  |
+| `version_format`    | `'v${raw}'`                                   | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                | The symbol used before displaying the version of PureScript.                                |
+| `detect_extensions` | `['purs']`                                    | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `[]`                                          | Quali cartelle dovrebbero attivare questo modulo.                                           |
+| `style`             | `'bold white'`                                | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                                                           |
 
 ### Variables
 
@@ -4304,12 +4306,12 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                             |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                            |
 | `style`             | `'bold #0093A7'`                     | Lo stile per il modulo.                                                                     |
 | `detect_extensions` | `['.typ']`                           | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['template.typ']`                   | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
-| `disabled`          | `false`                              | Disables the `daml` module.                                                                 |
+| `disabled`          | `false`                              | Disables the `typst` module.                                                                |
 
 ### Variables
 
@@ -4558,9 +4560,9 @@ The order in which custom modules are shown can be individually set by including
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
 Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
@@ -4575,6 +4577,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `descrizione`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
