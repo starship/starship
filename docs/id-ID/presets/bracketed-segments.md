@@ -12,6 +12,6 @@ Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk men
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+[Click to download TOML](/presets/toml/bracketed-segments.toml){download}
 
 <<< @/public/presets/toml/bracketed-segments.toml
