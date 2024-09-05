@@ -1,0 +1,169 @@
+format = """
+$os\
+$username\
+[](bg:color_gray fg:color_dark)\
+$directory\
+[](fg:color_gray bg:color_dark)\
+$git_branch\
+$git_status\
+[](fg:color_dark bg:color_blue)\
+$c\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+[](fg:color_blue bg:color_dark_blue)\
+$docker_context\
+[ ](fg:color_dark_blue)\
+"""
+
+# Use color settings
+palette = 'owo'
+
+[palettes.owo]
+color_light = '#c2c2c2'
+color_light_blue = '#87d7ff'
+color_blue = '#87c7ff'
+color_dark_blue = '#394260'
+color_gray = '#3a3a3a'
+color_dark = '#303030'
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+format = '[ $symbol  ]($style)'
+style = "bg:color_dark fg:color_light"
+disabled = false # Disabled by default
+
+# You can adjuest [username] display here
+# Set show_always = true to display it
+[username]
+show_always = false
+style_user = "bg:color_dark fg:color_light"
+style_root = "bg:color_dark fg:color_light"
+format = '[ $user ]($style)'
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+EndeavourOS = ""
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[directory]
+style = "bg:color_gray fg:color_light_blue"
+format = "[ $path ]($style)"
+truncation_length = 4
+truncation_symbol = "…/"
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"~/Documents" = "󰈙 ~/Documents"
+"~/Downloads" = " ~/Downloads"
+"~/Music" = " ~/Music"
+"~/Pictures" = " ~/Pictures"
+"~/Projects" = " ~/Projects"
+# Keep in mind that the order matters. For example:
+# "Important Documents" = " 󰈙 "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important 󰈙 " = " 󰈙 "
+
+[docker_context]
+symbol = ""
+style = "bg:color_dark_blue fg:color_light_blue"
+format = '[ $symbol $context ]($style)'
+
+[c]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[elixir]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:color_dark fg:color_light"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:color_dark fg:color_light"
+format = '[$all_status$ahead_behind ]($style)'
+
+[golang]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[gradle]
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[java]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+symbol = "󰆥"
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
+
+[scala]
+symbol = ""
+style = "bg:color_blue fg:color_dark"
+format = '[ $symbol ($version) ]($style)'
