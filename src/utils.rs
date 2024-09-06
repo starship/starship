@@ -456,6 +456,10 @@ Version: 0.8.16+commit.07a7930e.Linux.g++"),
         "solcjs --version" => Some(CommandOutput {
             stdout: String::from("0.8.15+commit.e14f2714.Emscripten.clang"),
             stderr: String::default() }),
+        "spin --version" => Some(CommandOutput {
+            stdout: String::from("spin 2.7.0 (a111517 2024-07-30)\n"),
+            stderr: String::default(),
+        }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\

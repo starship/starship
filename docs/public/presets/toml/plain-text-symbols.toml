@@ -212,6 +212,9 @@ symbol = "scala "
 [spack]
 symbol = "spack "
 
+[spin]
+symbol = "spin "
+
 [solidity]
 symbol = "solidity "
 
