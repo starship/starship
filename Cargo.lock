@@ -527,9 +527,9 @@ dependencies = [
 
 [[package]]
 name = "core-foundation"
-version = "0.9.4"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91e195e091a93c46f7102ec7818a2aa394e1e1771c3ab4825963fa03e45afb8f"
+checksum = "b55271e5c8c478ad3f38ad24ef34923091e0548492a266d19b3c0b4d82574c63"
 dependencies = [
  "core-foundation-sys",
  "libc",
@@ -2806,9 +2806,9 @@ dependencies = [
 
 [[package]]
 name = "starship-battery"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da7915746794358b8f649d3032c8ce150f55b7a0cd41951f170162e82e6cf43f"
+checksum = "9017a937879cf3db80807fa7c28f09eafd4981c998265233028ee7b75f898ed2"
 dependencies = [
  "cfg-if",
  "core-foundation",
@@ -2819,7 +2819,7 @@ dependencies = [
  "num-traits",
  "plist",
  "uom",
- "winapi",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
