@@ -4263,25 +4263,25 @@ The `spin` module displays the current [Spin](https://github.com/fermyon/spin) v
 
 ### Options
 
-| Option              | Default                                | Description                                                                                                                                    |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module. |
-| `detect_files`      | `['Spin.toml', 'spin.toml']`           | Which filenames should trigger this module. |
-| `detect_folders`    | `['.spin']`                            | Which folders should trigger this module.|
-| `permanent`         | `false`                                | Always display the current Spin version. |
-| `symbol`            | `'💫 '`                                | The symbol used before the Spin version. |
-| `style`             | `'bold bright-purple'`                 | The style for the module. |
-| `format`            | `'[$symbol($version) ]($style)'`       | The format for the module. |
-| `version_format`    | `'Spin ${raw}'`                        | The format for the Spin version. |
-| `disabled`          | `false`                                | Disables the `spin` module. |
+| Option              | Default                          | Description                                  |
+| ------------------- | -------------------------------- | -------------------------------------------- |
+| `detect_extensions` | `[]`                             | Which extensions should trigger this module. |
+| `detect_files`      | `['Spin.toml', 'spin.toml']`     | Which filenames should trigger this module.  |
+| `detect_folders`    | `['.spin']`                      | Which folders should trigger this module.    |
+| `permanent`         | `false`                          | Always display the current Spin version.     |
+| `symbol`            | `'💫 '`                          | The symbol used before the Spin version.     |
+| `style`             | `'bold bright-purple'`           | The style for the module.                    |
+| `format`            | `'[$symbol($version) ]($style)'` | The format for the module.                   |
+| `version_format`    | `'Spin ${raw}'`                  | The format for the Spin version.             |
+| `disabled`          | `false`                          | Disables the `spin` module.                  |
 
 ### Variables
 
-| Variable    | Example      | Description                          |
-| ----------- | ------------ | ------------------------------------ |
-| version     | `2.7.0`      | The current Spin version             |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*     |              | Mirrors the value of option `style`  |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| version  | `2.7.0` | The current Spin version             |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
