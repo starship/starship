@@ -1,0 +1,124 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](fg:#003b46 bg:#004f5e)\
+[](fg:#004f5e bg:#006374)\
+[](fg:#006374 bg:#007a8a)\
+[](fg:#007a8a bg:#0093a3)\
+[](fg:#0093a3 bg:#003b46)\
+[](fg:#003b46 bg:#e6454b)\
+$username\
+[](fg:#e6454b bg:#ff6a4b)\
+$battery\
+[](fg:#ff6a4b bg:#ffcc66)\
+$directory\
+[](fg:#ffcc66 bg:#85b57a)\
+$git_branch\
+$git_status\
+[](fg:#85b57a bg:#4da6a6)\
+$cmd_duration\
+[](fg:#4da6a6 bg:#3a82e6)\
+[](fg:#3a82e6 bg:#8c4de6)\
+[](fg:#8c4de6)\
+$fill\
+[---](fg:#ffcc66)
+$character\
+"""
+
+right_format = """
+[󰇥](bold fg:#ffcc66 )
+"""
+# scheme: "Deep Oceanic Next"
+# author: "spearkkk (https://github.com/spearkkk/deep-oceanic-next)"
+# base00: "003b46" # background
+# base01: "004f5e" # black
+# base02: "006374" # bright black
+# base03: "007a8a" # grey
+# base04: "0093a3" # light grey
+# base05: "dce3e8" # foreground
+# base06: "e6ebf0" # white
+# base07: "f0f5f5" # bright white
+# base08: "e6454b" # red
+# base09: "ff6a4b" # orange
+# base0A: "ffcc66" # yellow
+# base0B: "85b57a" # green
+# base0C: "4da6a6" # cyan/aqua
+# base0D: "3a82e6" # blue
+# base0E: "8c4de6" # magenta/purple
+# base0F: "e673a3" # pink
+# base10: "001114" # darker black
+# base11: "000a0d" # darkest black
+# base12: "ff5a61" # bright red
+# base13: "ffdd80" # bright yellow
+# base14: "99d8a0" # bright green
+# base15: "66cccc" # bright cyan
+# base16: "4da6ff" # bright blue
+# base17: "a366ff" # bright purple
+
+palette = "deep_oceanic_next"
+
+[palettes.deep_oceanic_next]
+black = "#003b46"
+red = "#e6454b"
+green = "#85b57a"
+blue = "#3a82e6"
+yellow = "#ffcc66"
+purple = "#8c4de6"
+cyan = "#4da6a6"
+white = "#dce3e8"
+
+bright-black = "#004f5e"
+bright-red = "#ff9999"
+bright-green = "#c7e6c7"
+bright-blue = "#99ccff"
+bright-yellow = "#ffb380"
+bright-purple = "#d4a1ff"
+bright-cyan = "#99e6e6"
+bright-white = "#e6ebf0"
+
+[os]
+disabled = true
+
+[username]
+show_always = true
+style_user = "bg:#f99157 bold fg:#003b46"
+style_root = "bg:#f99157 bold fg:#003b46"
+format = "[ 󰀄 $user ](bold fg:#003b46 bg:#e6454b)"
+
+# Battery configuration
+[battery]
+format = "[ $symbol$percentage ](bold fg:#003b46 bg:#ff6a4b)"
+
+[[battery.display]]
+threshold = 100
+
+[directory]
+truncation_symbol = "…/"
+truncation_length = 6
+format = "[ $path ](bold fg:#003b46 bg:#ffcc66)"
+
+[git_branch]
+symbol = ""
+format = "[ $symbol $branch ](bold fg:#003b46 bg:#85b57a)"
+
+[git_status]
+format = "[$all_status$ahead_behind ](bold fg:#003b46 bg:#85b57a)"
+
+[package]
+disabled = true
+
+[time]
+disabled = false
+time_format = "%r"
+style = "bg:#003b46 fg:white"
+format = "[ $time ](bold fg:#003b46 bg:#b26cff)"
+
+[cmd_duration]
+format = "[ $duration ](bold fg:#003b46 bg:#4da6a6)"
+
+[fill]
+symbol = " "
+
+[character]
+error_symbol = "[✗](bold red)"
