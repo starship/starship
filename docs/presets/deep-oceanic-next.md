@@ -15,7 +15,7 @@ You can see more information
 ### Configuration
 
 First, please install and enable a [nerd font](https://www.nerdfonts.com/) in your terminal.
-  
+
 Second, copy and then execute bellow shell script in your terminal.
 
 ```sh
