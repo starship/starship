@@ -1,10 +1,10 @@
-[Return to Presets](./#bracketed-segments)
+[Return to Presets](./#deep-oceanic-next)
 
 # Deep Oceanic Next Preset
 
 ![Screenshot of Deep Oceanic Next preset](/presets/img/deep-oceanic-next.png)
 
-### Have you ever been in deep ocean?
+### 🌊 Have you ever been in deep ocean?
 I just have recreated color theme while imagine how deep ocean is awesome.
 Someday I hope getting chance to see real deep ocean.
 
