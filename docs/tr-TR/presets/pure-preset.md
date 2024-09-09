@@ -12,6 +12,6 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pure-preset.toml){download}
+[Click to download TOML](/presets/toml/pure-preset.toml)
 
 <<< @/public/presets/toml/pure-preset.toml
