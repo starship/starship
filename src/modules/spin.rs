@@ -80,6 +80,32 @@ fn parse_spin_version(spin_version_stdout: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    use std::io;
+
+    use crate::test::ModuleRenderer;
+    use nu_ansi_term::Color;
+
+    #[test]
+    fn test_spin_module_rendering() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("spin")
+            .path(dir.path())
+            .config(toml::toml! {
+               [spin]
+               permanent = true
+               disabled = false
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{}",
+            Color::LightPurple.bold().paint("💫 Spin 2.7.0 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
     #[test]
     fn test_parse_spin_version() {
         let input = "spin 2.7.0 (a111517 2024-07-30)";
