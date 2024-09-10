@@ -9,7 +9,6 @@ use crate::{
 };
 
 use crate::utils::get_command_string_output;
-const SPIN_CANARY: &str = "canary";
 const SPIN_CANARY_IDENTIFIER: &str = "pre";
 const SPIN_BINARY: &str = "spin";
 
@@ -73,7 +72,7 @@ fn parse_spin_version(spin_version_stdout: &str) -> Option<String> {
     let input = spin_version_stdout;
     let capture = semver_regex.find(input)?.as_str();
     if input.contains(SPIN_CANARY_IDENTIFIER) {
-        Some(format!("{} ({})", capture, SPIN_CANARY))
+        Some(format!("{} ({})", capture, SPIN_CANARY_IDENTIFIER))
     } else {
         Some(capture.to_string())
     }
@@ -92,7 +91,7 @@ mod tests {
         let input = "spin 2.8.0-pre0 (3e62d2e 2024-09-04)";
         assert_eq!(
             super::parse_spin_version(input),
-            Some(String::from("2.8.0 (canary)"))
+            Some(String::from("2.8.0 (pre)"))
         );
     }
 }
