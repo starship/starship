@@ -55,7 +55,7 @@ indexmap = { version = "2.5.0", features = ["serde"] }
 log = { version = "0.4.22", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.11.1", optional = true }
+notify-rust = { version = "4.11.3", optional = true }
 nu-ansi-term = "0.50.1"
 once_cell = "1.19.0"
 open = "5.3.0"
