@@ -16,6 +16,6 @@
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
+[Натисніть, щоб завантажити TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml
