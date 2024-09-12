@@ -16,6 +16,6 @@
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/pastel-powerline.toml)
+[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml
