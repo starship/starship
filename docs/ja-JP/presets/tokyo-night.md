@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#pastel-powerline)
+[プリセット一覧に戻る](./#pastel-powerline)
 
 # Tokyo Night プリセット
 
@@ -18,4 +18,4 @@ starship preset tokyo-night -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/tokyo-night.toml)
 
-<<< @/.vuepress/public/presets/toml/tokyo-night.toml
+<<< @/public/presets/toml/tokyo-night.toml

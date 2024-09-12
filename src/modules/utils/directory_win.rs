@@ -3,7 +3,7 @@ use std::{mem, os::windows::ffi::OsStrExt, path::Path};
 use windows::{
     core::PCWSTR,
     Win32::{
-        Foundation::{CloseHandle, ERROR_INSUFFICIENT_BUFFER, HANDLE},
+        Foundation::{CloseHandle, BOOL, ERROR_INSUFFICIENT_BUFFER, HANDLE},
         Security::{
             AccessCheck, DuplicateToken, GetFileSecurityW, MapGenericMask, SecurityImpersonation,
             DACL_SECURITY_INFORMATION, GENERIC_MAPPING, GROUP_SECURITY_INFORMATION,
@@ -17,6 +17,17 @@ use windows::{
         UI::Shell::PathIsNetworkPathW,
     },
 };
+
+struct Handle(HANDLE);
+
+impl Drop for Handle {
+    fn drop(&mut self) {
+        if let Err(e) = unsafe { CloseHandle(self.0) } {
+            log::debug!("CloseHandle failed: {e:?}");
+        }
+    }
+}
+
 /// Checks if the current user has write access right to the `folder_path`
 ///
 /// First, the function extracts DACL from the given directory and then calls `AccessCheck` against
@@ -71,27 +82,35 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
         ));
     }
 
-    let mut token = HANDLE::default();
-    let rc = unsafe {
-        OpenProcessToken(
-            GetCurrentProcess(),
-            TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_READ_CONTROL,
-            &mut token,
-        )
+    let token = {
+        let mut token = HANDLE::default();
+
+        let rc = unsafe {
+            OpenProcessToken(
+                GetCurrentProcess(),
+                TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_READ_CONTROL,
+                &mut token,
+            )
+        };
+        if let Err(e) = rc {
+            return Err(format!(
+                "OpenProcessToken failed to retrieve current process' security token: {e:?}"
+            ));
+        }
+
+        Handle(token)
     };
-    if let Err(e) = rc.ok() {
-        return Err(format!(
-            "OpenProcessToken failed to retrieve current process' security token: {e:?}"
-        ));
-    }
 
-    let mut impersonated_token = HANDLE::default();
-    let rc = unsafe { DuplicateToken(token, SecurityImpersonation, &mut impersonated_token) };
+    let impersonated_token = {
+        let mut impersonated_token = HANDLE::default();
+        let rc = unsafe { DuplicateToken(token.0, SecurityImpersonation, &mut impersonated_token) };
 
-    if let Err(e) = rc.ok() {
-        unsafe { CloseHandle(token) };
-        return Err(format!("DuplicateToken failed: {e:?}"));
-    }
+        if let Err(e) = rc {
+            return Err(format!("DuplicateToken failed: {e:?}"));
+        }
+
+        Handle(impersonated_token)
+    };
 
     let mapping = GENERIC_MAPPING {
         GenericRead: FILE_GENERIC_READ.0,
@@ -104,12 +123,12 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
     let mut priv_size = mem::size_of::<PRIVILEGE_SET>() as _;
     let mut granted_access = 0;
     let mut access_rights = FILE_GENERIC_WRITE;
-    let mut result = 0;
+    let mut result = BOOL::default();
     unsafe { MapGenericMask(&mut access_rights.0, &mapping) };
     let rc = unsafe {
         AccessCheck(
             psecurity_descriptor,
-            impersonated_token,
+            impersonated_token.0,
             access_rights.0,
             &mapping,
             Some(&mut privileges),
@@ -118,14 +137,10 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
             &mut result,
         )
     };
-    unsafe {
-        CloseHandle(impersonated_token);
-        CloseHandle(token);
-    }
 
-    if let Err(e) = rc.ok() {
+    if let Err(e) = rc {
         return Err(format!("AccessCheck failed: {e:?}"));
     }
 
-    Ok(result != 0)
+    Ok(result.as_bool())
 }

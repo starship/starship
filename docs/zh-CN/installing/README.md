@@ -5,7 +5,7 @@
 1. 下载 **Starship** 的可执行文件
 1. 修改 shell 的初始化脚本，将 Starship 设置为命令提示符
 
-大部分用户按照[主页](/guide/#🚀-installation)上的步骤安装即可， 但有一些特殊系统上的安装步骤不同。
+对大多数用户而言，按照[主页](../guide/#🚀-installation)上的步骤安装即可。 但有一些特殊系统上的安装步骤不同。
 
 现有平台众多，README 中无法全部展示，所以这里是社区中对其他平台 的一些安装说明。 找不到你的平台？ 如果你知道怎么安装，请添加到这里！
 
@@ -45,7 +45,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### 获取二进制文件
 

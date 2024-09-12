@@ -251,7 +251,7 @@ Changes to documentation can be viewed in a rendered state from the GitHub PR pa
 (go to the CI section at the bottom of the page and look for "deploy preview", then
 click on "details"). If you want to view changes locally as well, follow these steps.
 
-After cloning the project, you can do the following to run the VuePress website on your local machine:
+After cloning the project, you can do the following to run the VitePress website on your local machine:
 
 1. `cd` into the `/docs` directory.
 2. Install the project dependencies:
@@ -266,7 +266,7 @@ After cloning the project, you can do the following to run the VuePress website 
    npm run dev
    ```
 
-Once setup is complete, you can refer to VuePress documentation on the actual implementation here: <https://vuepress.vuejs.org/guide/>.
+Once setup is complete, you can refer to VitePress documentation on the actual implementation here: <https://vitepress.dev/guide/getting-started>.
 
 ## Git/GitHub workflow
 
@@ -292,7 +292,7 @@ everyone remember what they are. Don't worry: most of them are quite simple!
       appropriate--this is a bare minimum).
 - [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
-- [ ] Add an appropriate choice of options to each preset in `docs/.vuepress/public/presets/toml`
+- [ ] Add an appropriate choice of options to each preset in `docs/public/presets/toml`
 - [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
       following:

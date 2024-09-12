@@ -5,7 +5,7 @@ Per installare starship, è necessario fare due cose:
 1. Ottieni il binario **starship** sul tuo computer
 1. Indica alla tua shell di usare il binario starship come prompt modificando i suoi script in init
 
-Per la maggior parte degli utenti, le istruzioni nella [pagina principale](/guide/#🚀-installation) funzioneranno bene. Tuttavia, per alcune piattaforme più specializzate, sono necessarie istruzioni diverse.
+For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. Tuttavia, per alcune piattaforme più specializzate, sono necessarie istruzioni diverse.
 
 Ci sono così tante piattaforme là fuori che non sono tutte inserite nel README.md principale, così ecco alcune istruzioni di installazione per altre piattaforme della community. La tua non c'è? Per favore, aggiungilo qui se capisci che manca!
 
@@ -45,7 +45,7 @@ On Funtoo Linux, starship can be installed from [core-kit](https://github.com/fu
 emerge app-shells/starship
 ```
 
-## [Nix](https://nixos.wiki/wiki/Nix)
+## [Nix](https://wiki.nixos.org/wiki/Nix)
 
 ### Ottenere il Binario
 

@@ -38,9 +38,9 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
-    /// A logical directory path which should represent the same directory as current_dir,
+    /// A logical directory path which should represent the same directory as `current_dir`,
     /// though may appear different.
-    /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
+    /// E.g. when navigating to a `PSDrive` in `PowerShell`, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
 
     /// A struct containing directory contents in a lookup-optimized format.
@@ -61,10 +61,10 @@ pub struct Context<'a> {
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
-    /// A HashMap of environment variable mocks
+    /// A `HashMap` of environment variable mocks
     pub env: Env<'a>,
 
-    /// A HashMap of command mocks
+    /// A `HashMap` of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
@@ -86,7 +86,7 @@ impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it. "logical-path" is used when a shell allows the "current working directory"
     /// to be something other than a file system path (like powershell provider specific paths).
-    pub fn new(arguments: Properties, target: Target) -> Context<'a> {
+    pub fn new(arguments: Properties, target: Target) -> Self {
         let shell = Context::get_shell();
 
         // Retrieve the "current directory".
@@ -126,7 +126,7 @@ impl<'a> Context<'a> {
         path: PathBuf,
         logical_path: PathBuf,
         env: Env<'a>,
-    ) -> Context<'a> {
+    ) -> Self {
         let config = StarshipConfig::initialize(&get_config_path_os(&env));
 
         // If the vector is zero-length, we should pretend that we didn't get a
@@ -184,7 +184,7 @@ impl<'a> Context<'a> {
     }
 
     /// Sets the context config, overwriting the existing config
-    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+    pub fn set_config(mut self, config: toml::Table) -> Self {
         self.root_config = StarshipRootConfig::load(&config);
         self.config = StarshipConfig {
             config: Some(config),
@@ -339,15 +339,13 @@ impl<'a> Context<'a> {
                 );
 
                 let branch = get_current_branch(&repository);
-                let remote = get_remote_repository_info(
-                    &repository,
-                    branch.as_ref().map(|name| name.as_ref()),
-                );
+                let remote =
+                    get_remote_repository_info(&repository, branch.as_ref().map(AsRef::as_ref));
                 let path = repository.path().to_path_buf();
 
                 let fs_monitor_value_is_true = repository
                     .config_snapshot()
-                    .boolean("core.fs_monitor")
+                    .boolean("core.fsmonitor")
                     .unwrap_or(false);
 
                 Ok(Repo {

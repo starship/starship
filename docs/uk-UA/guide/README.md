@@ -431,9 +431,7 @@ eval "$(starship init zsh)"
 
 Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
-**Підтримувачі**
-
-- [Appwrite](https://appwrite.io/)
+- Безкоштовний підпис похідного коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

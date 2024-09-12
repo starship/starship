@@ -1,13 +1,17 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
-actionText: Начало работы →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
+  actions:
+    - 
+      theme: brand
+      text: Начало работы →
+      link: ./guide/
 features:
   - 
-    title: Совместивость в первую очередь
+    title: Совместимость в первую очередь
     details: Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!
   - 
     title: Основана на Rust
@@ -21,12 +25,24 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, и PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Обязательные условия
 
@@ -55,6 +71,7 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    brew install starship
    ```
+
    С помощью [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -154,6 +171,7 @@ description: Starship - минимальная, быстрая и бесконе
    :::
 
    Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

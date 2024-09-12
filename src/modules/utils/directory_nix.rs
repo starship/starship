@@ -10,8 +10,8 @@ use std::path::Path;
 /// It extracts Unix access rights from the directory and checks whether
 /// 1) the current user is the owner of the directory and whether it has the write access
 /// 2) the current user's primary group is the directory group owner whether if it has write access
-/// 2a) (not implemented on macOS) one of the supplementary groups of the current user is the
-/// directory group owner and whether it has write access
+///    2a) (not implemented on macOS) one of the supplementary groups of the current user is the
+///        directory group owner and whether it has write access
 /// 3) 'others' part of the access mask has the write access
 #[allow(clippy::useless_conversion)] // On some platforms it is not u32
 pub fn is_write_allowed(folder_path: &Path) -> Result<bool, String> {

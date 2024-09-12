@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./README.md#no-empty-icons)
+[Retornar para Personalizações](./#no-empty-icons)
 
 # Predefinição Nenhum Ícones Vazios
 
@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

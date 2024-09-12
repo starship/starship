@@ -431,9 +431,7 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 
 이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
-**후원자 티어**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

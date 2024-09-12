@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.17.1"
+version = "1.20.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -15,7 +15,7 @@ include = [
   "build.rs",
   "LICENSE",
   "/README.md",
-  "docs/.vuepress/public/presets/toml/",
+  "docs/public/presets/toml/",
   ".github/config-schema.json",
 ]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.65"
+rust-version = "1.74"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -42,61 +42,61 @@ gix-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
-chrono = { version = "0.4.31", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.4.13", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.4.6"
-dirs-next = "2.0.0"
-dunce = "1.0.4"
-gethostname = "0.4.3"
+chrono = { version = "0.4.38", default-features = false, features = ["clock", "std", "wasmbind"] }
+clap = { version = "4.5.17", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.5.26"
+dirs = "5.0.1"
+dunce = "1.0.5"
+gethostname = "0.5.0"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.57.1", default-features = false, features = ["max-performance-safe", "revision"] }
-gix-features = { version = "0.37.1", optional = true }
-indexmap = { version = "2.1.0", features = ["serde"] }
-log = { version = "0.4.20", features = ["std"] }
+gix = { version = "0.66.0", default-features = false, features = ["max-performance-safe", "revision"] }
+gix-features = { version = "0.38.2", optional = true }
+indexmap = { version = "2.5.0", features = ["serde"] }
+log = { version = "0.4.22", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.10.0", optional = true }
-nu-ansi-term = "0.49.0"
+notify-rust = { version = "4.11.3", optional = true }
+nu-ansi-term = "0.50.1"
 once_cell = "1.19.0"
-open = "5.0.1"
+open = "5.3.0"
 # update os module config and tests when upgrading os_info
-os_info = "3.7.0"
+os_info = "3.8.2"
 path-slash = "0.2.1"
-pest = "2.7.6"
-pest_derive = "2.7.6"
-quick-xml = "0.31.0"
+pest = "2.7.12"
+pest_derive = "2.7.12"
+quick-xml = "0.36.1"
 rand = "0.8.5"
-rayon = "1.8.0"
-regex = { version = "1.10.2", default-features = false, features = ["perf", "std", "unicode-perl"] }
-rust-ini = "0.20.0"
-semver = "1.0.21"
-serde = { version = "1.0.195", features = ["derive"] }
-serde_json = "1.0.111"
+rayon = "1.10.0"
+regex = { version = "1.10.6", default-features = false, features = ["perf", "std", "unicode-perl"] }
+rust-ini = "0.21.1"
+semver = "1.0.23"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
 sha1 = "0.10.6"
-shadow-rs = { version = "0.26.0", default-features = false }
+shadow-rs = { version = "0.34.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-starship-battery = { version = "0.8.2", optional = true }
-strsim = "0.10.1"
+starship-battery = { version = "0.10.0", optional = true }
+strsim = "0.11.1"
 systemstat = "=0.2.3"
 terminal_size = "0.3.0"
-toml = { version = "0.8.8", features = ["preserve_order"] }
-toml_edit = "0.21.0"
-unicode-segmentation = "1.10.1"
-unicode-width = "0.1.11"
+toml = { version = "0.8.19", features = ["preserve_order"] }
+toml_edit = "0.22.20"
+unicode-segmentation = "1.11.0"
+unicode-width = "0.1.13"
 urlencoding = "2.1.3"
-versions = "6.0.0"
-which = "5.0.0"
-yaml-rust = "0.4.5"
+versions = "6.3.2"
+which = "6.0.3"
+yaml-rust2 = "0.8.1"
 
-process_control = { version = "4.0.3", features = ["crossbeam-channel"] }
+process_control = { version = "4.2.2", features = ["crossbeam-channel"] }
 
-guess_host_triple = "0.1.3"
+guess_host_triple = "0.1.4"
 home = "0.5.9"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "0.8.16"
+version = "0.8.21"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
@@ -104,7 +104,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.48.0"
+version = "0.58.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -114,18 +114,18 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.27.1", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.29.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.26.0", default-features = false }
-dunce = "1.0.4"
+shadow-rs = { version = "0.34.0", default-features = false }
+dunce = "1.0.5"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
 
 [dev-dependencies]
-mockall = "0.12"
-tempfile = "3.9.0"
+mockall = "0.13.0"
+tempfile = "3.12.0"
 
 [profile.release]
 codegen-units = 1

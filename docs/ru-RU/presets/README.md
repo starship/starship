@@ -69,3 +69,9 @@
 Этот пресет в значительной степени вдохновлен [Pastel Powerline](./pastel-powerline.md) и [Tokyo Night](./tokyo-night.md).
 
 [![Скриншот пресета Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Нажмите, чтобы просмотреть пресет Gruvbox Rainbow")](./gruvbox-rainbow)
+
+## [Jetpack](./jetpack.md)
+
+Это псевдоминималистичный пресет, вдохновленный приглашениями командной оболочки [geometry](https://github.com/geometry-zsh/geometry) и [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
+
+[![Скриншот пресета Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)

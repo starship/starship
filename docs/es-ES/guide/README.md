@@ -431,9 +431,7 @@ Por favor, revisa estas obras anteriores que ayudaron a inspirar la creación de
 
 Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
 
-**Patrocinadores**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

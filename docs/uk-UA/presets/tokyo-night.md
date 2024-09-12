@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#pastel-powerline)
+[Повернутися до Шаблонів](./#pastel-powerline)
 
 # Tokyo Night
 
@@ -18,4 +18,4 @@ starship preset tokyo-night -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/tokyo-night.toml)
 
-<<< @/.vuepress/public/presets/toml/tokyo-night.toml
+<<< @/public/presets/toml/tokyo-night.toml

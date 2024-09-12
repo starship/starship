@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#gruvbox-rainbow)
+[Powrót do ustawień predefiniowanych](./#gruvbox-rainbow)
 
 # Ustawienia Gruvbox Rainbow
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [Kliknij, aby pobrać TOML](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

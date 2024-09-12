@@ -89,6 +89,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let (config_name, config_path) = get_current_config(context)?;
+
+    if config_name == "NONE" {
+        return None;
+    }
     let gcloud_context = GcloudContext::new(&config_name, &config_path);
     let account: Lazy<Option<Account<'_>>, _> = Lazy::new(|| gcloud_context.get_account());
 
@@ -463,6 +467,16 @@ project = very-long-project-name
     }
 
     #[test]
+    fn no_active_config() {
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_ACTIVE_CONFIG_NAME", "NONE")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn active_config_manually_overridden() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
@@ -496,7 +510,11 @@ project = overridden
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
+        #[rustfmt::skip]
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("☁️  overridden")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()

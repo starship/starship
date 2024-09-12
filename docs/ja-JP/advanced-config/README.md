@@ -10,7 +10,7 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 ## PowerShell の TransientPrompt
 
-過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
+直前に出力されたプロンプトを置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
 
 デフォルトでは、入力した文字列の左側を `>` で置換します。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
@@ -56,11 +56,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Fish の TransientPrompt と TransientRightPrompt
 
-過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+直前に出力されたプロンプトを指定の内容で置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `enable_transience` を現在のシェルセッションで実行してください。 設定を永続化するにはこのコマンドを `~/.config/fish/config.fish` に記述してください。 また、 `disable_transience` を実行することでいつでも無効化できます。
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+※Fishの場合は、コマンドラインが空ではなく構文的に正しい場合にのみ、transient プロンプトが出力されます。
 
-- By default, the left side of input gets replaced with a bold-green `❯`. カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
+- デフォルトでは入力した文字列の左側が太字・緑色の  `❯` に置き換えられます。 カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```fish
 function starship_transient_prompt_func
@@ -80,11 +80,31 @@ starship init fish | source
 enable_transience
 ```
 
+## Bash の TransientPrompt と TransientRightPrompt
+
+バージョン 0.4 以降の [ble.sh](https://github.com/akinomyoga/ble.sh) の枠組みを用いると、直前に表示されたプロンプトを指定の文字列に置き換えることができます。 プロンプトの内容全てが常に必要ではない時に役立ちます。 有効にするには、 `~/.bashrc` に `bleopt prompt_ps1_transient=<value>` を記述してください。
+
+\<value\> は `always`、 `same-dir` 、 `trim` からなるコロン区切りのリストです。 設定 `prompt_ps1_final` が空でかつ設定 `prompt_ps1_transient` が非空の \<value\> を持つ場合、 `PS1` に基づくプロンプトは現在のコマンドラインを去るときに消去されます。 \<value\> が `trim` を含む場合、複数行 `PS1` の最後の行だけを残して他の行は消去されます。 それ以外の場合は、あたかも `PS1=` が指定されたかのようにコマンドラインが再描画されます。 \<value\> が項目 `same-dir` を含む時に現在のワーキングディレクトリが前のコマンドラインの最終的なワーキングディレクトリと異なる場合、設定 `prompt_ps1_transient` は無視されます。
+
+左側や右側に transient プロンプトとして出力する文字列を変更するには、以下の変更を `~/.blerc` (または `~/.config/blesh/init.sh`) に適用してください。
+
+- 入力文字列の左側を何に置き換えるか変更するには、 ble.sh 設定 `prompt_ps1_final` を設定します。 例えば Starship の `character` モジュールをここに表示するには、次のようにします。
+
+```bash
+bleopt prompt_ps1_final='$(starship module character)'
+```
+
+- 入力文字列の右側を何に置き換えるか変更するには、 ble.sh 設定 `prompt_rps1_final` を設定します。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
+
+```bash
+bleopt prompt_rps1_final='$(starship module time)'
+```
+
 ## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
 
-Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 Starshipからこれを利用するのはとても簡単です。 好みに従って `starship.lua` を以下のように変更してください。
 
-- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+- プロンプトが描画される直前に好みの関数を実行するには、 `starship_preprompt_user_func` という名前で新しい関数を定義してください。 この関数は現在のプロンプトを再利用できる文字列で受け取ります。 例として、ロケットをプロンプトの前に表示するには、以下のようにします。
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -94,7 +114,7 @@ end
 load(io.popen('starship init cmd'):read("*a")()
 ```
 
-- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+- コマンドが実行される直前に好みの関数を実行するには、 `starship_precmd_user_func` という名前で新しい関数を定義してください。 この関数は現在のコマンドライン文字列を再利用できる文字列で受け取ります。 例えば、これから実行されるコマンドを出力するには、以下のようにします。
 
 ```lua
 function starship_precmd_user_func(line)
@@ -117,7 +137,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- コマンドの直前に関数を実行するために、[`DEBUG` トラップの仕組み](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)を使うことができます。 However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship は DEBUGトラップの値を保護できますが、 starship の起動後にトラップが上書きされると、いくつかの機能は壊れてしまうでしょう。
+- コマンドの直前に関数を実行するために、[`DEBUG` トラップの仕組み](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)を使うことができます。 ただし、Starship を初期化する_前_に DEBUG シグナルをトラップ**しなければいけません**! Starship は DEBUGトラップの値を保護できますが、 starship の起動後にトラップが上書きされると、いくつかの機能は壊れてしまうでしょう。
 
 ```bash
 function blastoff(){
@@ -129,11 +149,11 @@ eval $(starship init bash)
 set +o functrace
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## PowerShell のカスタム事前プロンプトおよび事前実行コマンド
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
+PowerShell は、他のほとんどのシェルと違い、正式な preexec/precmd の枠組みを持ちません。 そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
 
-Create a function named `Invoke-Starship-PreCommand`
+`Invoke-Starship-PreCommand` という名前の関数を作成してください。
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -141,9 +161,9 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## ウィンドウのタイトルの変更
+## ウィンドウタイトルの変更
 
-いくつかのシェルプロンプトはあなたのためにウィンドウのタイトルを自動的に変更します(例えば、カレントディレクトリを反映するために)。 特に Fish はデフォルトで変更を行います。 Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+いくつかのシェルプロンプトはあなたのためにウィンドウのタイトルを自動的に変更します(例えば、カレントディレクトリを反映するために)。 特に Fish はデフォルトで変更を行います。 Starship はこれに対応しませんが、この機能を `bash`, `zsh`, `cmd`, `powershell` に追加することは簡単です。
 
 まず、ウィンドウのタイトルを変更する関数を定義してください（ bash も zsh も同様に）
 
@@ -178,7 +198,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+Cmd では、 `starship_preprompt_user_func` 関数を使用してウィンドウのタイトルを変更できます。
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -188,7 +208,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+PowerShell でも `Invoke-Starship-PreCommand` という名前の関数を作成することで、同様の出力を設定できます。
 
 ```powershell
 # edit $PROFILE
@@ -203,19 +223,21 @@ Invoke-Expression (&starship init powershell)
 
 シェルによっては、入力と同じ行にレンダリングされる右プロンプトをサポートしています。 Starship では `right_format` オプションを使って右プロンプトの内容を設定できます。 `format`で使用できるモジュールはすべて`right_format`でも使用できます。 変数`$all`には、`format`や`right_format`で明示的に使用されていないモジュールのみが格納されます。
 
-注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
+注意: 右プロンプトは入力の場所に続く単一の行です。 複数行プロンプトで入力行の上にあるモジュールを右寄せしたいときは、 [`fill` module](../config/#fill) を参照してください。
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` は現在、次のシェルでサポートされています: elvish, fish, zsh, xonsh, cmd, nushell, bash
+
+注意: 右プロンプトを Bash で利用するには [ble.sh](https://github.com/akinomyoga/ble.sh) のバージョン 0.4 以降をインストールする必要があります。
 
 ### 設定例
 
 ```toml
 # ~/.config/starship.toml
 
-# A minimal left prompt
+# 最低限の左プロンプト
 format = """$character"""
 
-# move the rest of the prompt to the right
+# 残りのプロンプトの内容を右に寄せる
 right_format = """$all"""
 ```
 
@@ -225,15 +247,15 @@ right_format = """$all"""
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## 継続プロンプト (Continuation Prompt)
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+一部のシェルは、通常のプロンプトの他に継続プロンプトをサポートしています。 このプロンプトは、ユーザーが不完全な文 (単一の左括弧や引用符など) を確定したときに通常のプロンプトの代わりに表示されます。
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
+Starship では、 `contination_prompt` オプションを使用して継続プロンプトを設定できます。 既定の継続プロンプトは `'[・](bright-black) '` です。
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+注意: `contination_prompt` には変数を含まないそのまま文字列を設定する必要があります。
 
-Note: Continuation prompts are only available in the following shells:
+注意: 継続プロンプトは次のシェルでのみ使用できます。
 
 - `bash`
 - `zsh`
@@ -244,7 +266,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# 2つの塗りつぶし右三角を表示する継続プロンプト
 continuation_prompt = '▶▶ '
 ```
 
@@ -265,7 +287,7 @@ continuation_prompt = '▶▶ '
 - `<color>`
 - `none`
 
-ここで、 `<color>` は色を指定します（以下で述べます）。 現在 `fg:<color>` と `<color>` は同様の動作ですが、将来変更される可能性があります。 `inverted` は背景と前景の色を交換します。 文字列中の単語の順序は関係ありません。
+ここで、 `<color>` は色を指定します（以下で述べます）。 現在 `fg:<color>` と `<color>` は同様の動作ですが、将来変更される可能性があります。 `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` は背景と前景の色を交換します。 文字列中の単語の順序は関係ありません。
 
 `none` トークンは、文字列中の`bg:` 指定子の一部でない場合、他のすべてのトークンをオーバーライドします。そのため、たとえば、`fg:red none fg:blue` と指定した場合、スタイルなしの文字列が作られます。 `bg:none` は背景色をデフォルトの色にセットするので、`fg:red bg:none` は `red` や `fg:red` と同じ意味になり、`bg:green fg:red bg:none` も `fg:red` や `red` と同じ意味になります。 将来 `none` を他の単語と一緒に使用することはエラーになるかもしれません。
 
@@ -277,8 +299,8 @@ continuation_prompt = '▶▶ '
 
 複数の色が文字色/背景色に指定された際には、最後の指定が優先して選ばれます。
 
-Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+すべてのスタイル文字列がすべての端末で正しく表示できるわけではありません。 特に、端末の変な動作として以下のようなものが知られています。
 
-- Many terminals disable support for `blink` by default
-- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- 多くの端末はデフォルトで `bink` のサポートを無効にしています。
+- `hidden` は [iTerm ではサポートされていません](https://gitlab.com/gnachman/iterm2/-/issues/4564)。
+- `strikethrough` は、macOS 既定の Terminal.app ではサポートされていません。

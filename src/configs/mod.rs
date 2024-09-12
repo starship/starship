@@ -37,6 +37,7 @@ pub mod git_commit;
 pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
+pub mod gleam;
 pub mod go;
 pub mod gradle;
 pub mod guix_shell;
@@ -55,10 +56,13 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod mojo;
+pub mod nats;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod odin;
 pub mod opa;
 pub mod openstack;
 pub mod os;
@@ -69,6 +73,7 @@ pub mod pijul_channel;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod quarto;
 pub mod raku;
 pub mod red;
 pub mod rlang;
@@ -181,6 +186,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     git_status: git_status::GitStatusConfig<'a>,
     #[serde(borrow)]
+    gleam: gleam::GleamConfig<'a>,
+    #[serde(borrow)]
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
     gradle: gradle::GradleConfig<'a>,
@@ -216,6 +223,10 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
     #[serde(borrow)]
+    mojo: mojo::MojoConfig<'a>,
+    #[serde(borrow)]
+    nats: nats::NatsConfig<'a>,
+    #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
     nix_shell: nix_shell::NixShellConfig<'a>,
@@ -223,6 +234,8 @@ pub struct FullConfig<'a> {
     nodejs: nodejs::NodejsConfig<'a>,
     #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
+    #[serde(borrow)]
+    odin: odin::OdinConfig<'a>,
     #[serde(borrow)]
     opa: opa::OpaConfig<'a>,
     #[serde(borrow)]
@@ -243,6 +256,8 @@ pub struct FullConfig<'a> {
     purescript: purescript::PureScriptConfig<'a>,
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    quarto: quarto::QuartoConfig<'a>,
     #[serde(borrow)]
     raku: raku::RakuConfig<'a>,
     #[serde(borrow)]

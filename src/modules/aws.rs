@@ -684,15 +684,12 @@ credential_process = /opt/bin/awscreds-retriever
 
     #[test]
     fn expiration_date_set() {
-        use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
+        use chrono::{DateTime, SecondsFormat, Utc};
 
         let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
         expiration_env_vars.iter().for_each(|env_var| {
-            let now_plus_half_hour: DateTime<Utc> = DateTime::from_naive_utc_and_offset(
-                NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0)
-                    .unwrap(),
-                Utc,
-            );
+            let now_plus_half_hour: DateTime<Utc> =
+                DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
 
             let actual = ModuleRenderer::new("aws")
                 .env("AWS_PROFILE", "astronauts")
@@ -705,7 +702,7 @@ credential_process = /opt/bin/awscreds-retriever
                 .collect();
 
             let possible_values = [
-                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+                "30m2s", "30m1s", "30m0s", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
             ];
             let possible_values = possible_values.map(|duration| {
                 let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
@@ -727,12 +724,10 @@ credential_process = /opt/bin/awscreds-retriever
         let credentials_path = dir.path().join("credentials");
         let mut file = File::create(&credentials_path)?;
 
-        use chrono::{DateTime, NaiveDateTime, Utc};
+        use chrono::{DateTime, Utc};
 
-        let now_plus_half_hour: DateTime<Utc> = DateTime::from_naive_utc_and_offset(
-            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
-            Utc,
-        );
+        let now_plus_half_hour: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
 
         let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
 
@@ -761,7 +756,7 @@ aws_secret_access_key=dummy
                 // In principle, "30m" should be correct. However, bad luck in scheduling
                 // on shared runners may delay it.
                 let possible_values = [
-                    "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+                    "30m2s", "30m1s", "30m0s", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
                 ];
                 let possible_values = possible_values.map(|duration| {
                     let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
@@ -800,12 +795,10 @@ aws_secret_access_key=dummy
 
     #[test]
     fn expiration_date_set_expired() {
-        use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
+        use chrono::{DateTime, SecondsFormat, Utc};
 
-        let now: DateTime<Utc> = DateTime::from_naive_utc_and_offset(
-            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() - 1800, 0).unwrap(),
-            Utc,
-        );
+        let now: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1800, 0).unwrap();
 
         let symbol = "!!!";
 

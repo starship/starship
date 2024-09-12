@@ -157,6 +157,7 @@ usage() {
     "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
     "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
     "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
+    "-v, --version" "Install a specific version of starship [default: ${VERSION}]" \
     "-h, --help" "Display this help message"
 }
 
@@ -424,6 +425,10 @@ if [ -z "${BASE_URL-}" ]; then
   BASE_URL="https://github.com/starship/starship/releases"
 fi
 
+if [ -z "${VERSION-}" ]; then
+  VERSION="latest"
+fi
+
 # Non-POSIX shells can break once executing code due to semantic differences
 verify_shell_is_posix_or_exit
 
@@ -444,6 +449,10 @@ while [ "$#" -gt 0 ]; do
     ;;
   -B | --base-url)
     BASE_URL="$2"
+    shift 2
+    ;;
+  -v | --version)
+    VERSION="$2"
     shift 2
     ;;
 
@@ -474,6 +483,10 @@ while [ "$#" -gt 0 ]; do
     ;;
   -B=* | --base-url=*)
     BASE_URL="${1#*=}"
+    shift 1
+    ;;
+  -v=* | --version=*)
+    VERSION="${1#*=}"
     shift 1
     ;;
   -V=* | --verbose=*)
@@ -517,13 +530,18 @@ if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
   EXT=zip
 fi
 
-URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
+if [ "${VERSION}" != "latest" ]; then
+  URL="${BASE_URL}/download/${VERSION}/starship-${TARGET}.${EXT}"
+else
+  URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
+fi
+
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
-confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
+confirm "Install Starship ${GREEN}${VERSION}${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"
 
 install "${EXT}"
-completed "Starship installed"
+completed "Starship ${VERSION} installed"
 
 printf '\n'
 info "Please follow the steps for your shell to complete the installation:"

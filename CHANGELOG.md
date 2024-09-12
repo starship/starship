@@ -1,5 +1,112 @@
 # Changelog
 
+## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* **ci:** move to macos-latest image ([#6132](https://github.com/starship/starship/issues/6132)) ([c7a8ea7](https://github.com/starship/starship/commit/c7a8ea757033512b5723a39be71bdb91fdcfbdb1))
+
+## [1.20.0](https://github.com/starship/starship/compare/v1.19.0...v1.20.0) (2024-07-26)
+
+
+### Features
+
+* **color:** add prev_fg and prev_bg as color specifiers based on the previous foreground/background colors respectively ([#6017](https://github.com/starship/starship/issues/6017)) ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **color:** add prevfg,prevbg as color specifiers based on the previous foreground/background colors respectively ([9a3e87f](https://github.com/starship/starship/commit/9a3e87f2cbaa8ca4b8dea41f4f56ff297e94bb1a))
+* **gcloud:** Disabled gcloud module when active config hasn't been set ([#6039](https://github.com/starship/starship/issues/6039)) ([4d36d46](https://github.com/starship/starship/commit/4d36d463b91a245a62c357de308cad3cdec48edf))
+* **purescript:** add support for spago-next configuration files ([#6036](https://github.com/starship/starship/issues/6036)) ([e028186](https://github.com/starship/starship/commit/e0281868c9d7801fc25f64f86ab8312d2a5a1794))
+
+
+### Bug Fixes
+
+* **direnv:** replace nonexistent "orange" color with "bright-yellow" ([#5969](https://github.com/starship/starship/issues/5969)) ([478d5cc](https://github.com/starship/starship/commit/478d5cccb6f7f4622dd681756cf004ba92c98607))
+* **dotnet:** Remove duplicate v in dotnet version  ([#6060](https://github.com/starship/starship/issues/6060)) ([52a89a5](https://github.com/starship/starship/commit/52a89a515ed44d861ea556a0bb70d6901660a9b5))
+* improve non-msvc windows support by bumping stable dependencies ([#5989](https://github.com/starship/starship/issues/5989)) ([50a6b84](https://github.com/starship/starship/commit/50a6b846045899c88d95b063a6b939a6dcb72a5c))
+* **k8s:** don't trigger if scan config is set but env vars are not ([#5979](https://github.com/starship/starship/issues/5979)) ([8c75822](https://github.com/starship/starship/commit/8c75822d4380e020ebd289a4ef06cd4d31ee5196))
+* **preset:** fix typo in Open Policy Agent module format string ([#6118](https://github.com/starship/starship/issues/6118)) ([eba9748](https://github.com/starship/starship/commit/eba9748eb1bd9e1802d2a770eb0907cdb73292d6))
+
+
+### Performance Improvements
+
+* **k8s:** Improve performance of kubeconfig module ([#6032](https://github.com/starship/starship/issues/6032)) ([fae92b2](https://github.com/starship/starship/commit/fae92b29646f73bf1eb843fde80885c58480e85b))
+
+## [1.19.0](https://github.com/starship/starship/compare/v1.18.2...v1.19.0) (2024-05-15)
+
+
+### Features
+
+* **container:** show name if available ([#5195](https://github.com/starship/starship/issues/5195)) ([3e3f18e](https://github.com/starship/starship/commit/3e3f18ef277c9bb3db9f60c964f280c7d981102c))
+* **gleam:** Add Gleam module ([#5886](https://github.com/starship/starship/issues/5886)) ([34a8f7e](https://github.com/starship/starship/commit/34a8f7e62845fd66df3f6f9003cb850f2b0d9bc5))
+* **k8s:** Add detect env vars option ([#4488](https://github.com/starship/starship/issues/4488)) ([e3b5dff](https://github.com/starship/starship/commit/e3b5dff3524608328de6ee3cbb390f8c640b0ce0))
+* **nats:** Add NATS Context ([#5900](https://github.com/starship/starship/issues/5900)) ([5facd85](https://github.com/starship/starship/commit/5facd85da56d28e74878286923f148bc468f71c3))
+* **odin:** Add Odin Lang module ([#5873](https://github.com/starship/starship/issues/5873)) ([335c514](https://github.com/starship/starship/commit/335c514e9ee5fa5bc8a8294b4804ddf198504b97))
+* **username:** add aliases option ([#5855](https://github.com/starship/starship/issues/5855)) ([9c1eadd](https://github.com/starship/starship/commit/9c1eaddae154daed9e1d00faac414586f7920013))
+
+
+### Bug Fixes
+
+* **bash:** fix handling of the preserved DEBUG trap (used in Bash &lt;= 4.3) ([#5908](https://github.com/starship/starship/issues/5908)) ([fe1a8df](https://github.com/starship/starship/commit/fe1a8df6fa5121cc83b288cf054a8ed16631d335))
+* **bash:** use `eval` instead of a procsub for the POSIX mode ([#5020](https://github.com/starship/starship/issues/5020)) ([0f859e8](https://github.com/starship/starship/commit/0f859e8b61c8ada354f4ea4147fb8752dca02c51))
+* **bash:** use eval instead of a procsub for the POSIX mode ([0f859e8](https://github.com/starship/starship/commit/0f859e8b61c8ada354f4ea4147fb8752dca02c51))
+* **bun:** change default icon ([#5880](https://github.com/starship/starship/issues/5880)) ([be4e97c](https://github.com/starship/starship/commit/be4e97c2d9169cbf0bc30e271dd4ba07530dc46f))
+* **scala:** use scala-cli first to avoid timeout ([2221a88](https://github.com/starship/starship/commit/2221a88f5ada124c657a265b878e37be47998766))
+* **xonsh:** remove `| cat` workaround from xonsh init ([#5113](https://github.com/starship/starship/issues/5113)) ([de5b7f0](https://github.com/starship/starship/commit/de5b7f041a8c88ecf912b3be3b32d70f76518348))
+
+
+### Performance Improvements
+
+* **scala:** use scala-cli first to avoid timeout ([#5952](https://github.com/starship/starship/issues/5952)) ([2221a88](https://github.com/starship/starship/commit/2221a88f5ada124c657a265b878e37be47998766))
+
+## [1.18.2](https://github.com/starship/starship/compare/v1.18.1...v1.18.2) (2024-03-29)
+
+
+### Bug Fixes
+
+* replace unmaintained crates `yaml-rust`, `dirs-next` ([#5887](https://github.com/starship/starship/issues/5887)) ([796a411](https://github.com/starship/starship/commit/796a411602c9ca4e5103c54247440f4efe892918))
+
+
+### Reverts
+
+* "build(deps): update rust crate gix to 0.61.1" ([#5878](https://github.com/starship/starship/issues/5878)) ([eb80dba](https://github.com/starship/starship/commit/eb80dbab99e38b5018aa3fb70b06ae9e4d793b24))
+
+## [1.18.1](https://github.com/starship/starship/compare/v1.18.0...v1.18.1) (2024-03-24)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate os_info to 3.8.2 ([#5870](https://github.com/starship/starship/issues/5870)) ([d421f63](https://github.com/starship/starship/commit/d421f63785f901caf222941cbfae7cb8c0feec74))
+* replace all remaining paths referring to vuepress ([#5859](https://github.com/starship/starship/issues/5859)) ([d5861f9](https://github.com/starship/starship/commit/d5861f9f974147d307c319865890cbb3e50dbe5a))
+
+## [1.18.0](https://github.com/starship/starship/compare/v1.17.1...v1.18.0) (2024-03-21)
+
+
+### Features
+
+* $gemset variable for Ruby module ([#5429](https://github.com/starship/starship/issues/5429)) ([938ea3c](https://github.com/starship/starship/commit/938ea3c40145af68d8e28b2ef0275531f1123202))
+* **bash:** Support right prompt and transience ([#4902](https://github.com/starship/starship/issues/4902)) ([5ead13d](https://github.com/starship/starship/commit/5ead13d6aa6303c85c562f1b940048cc539667cd))
+* **bash:** use PS0 for preexec hook ([#5735](https://github.com/starship/starship/issues/5735)) ([ae711c0](https://github.com/starship/starship/commit/ae711c0f332f4f24c843e59d6d5783e398e21b38))
+* **direnv:** use JSON status with direnv &gt;= 2.33.0 ([#5692](https://github.com/starship/starship/issues/5692)) ([482c7b7](https://github.com/starship/starship/commit/482c7b719fc304fcad5f3572c4551f8ff4179522))
+* **docs:** move to vitepress ([#5785](https://github.com/starship/starship/issues/5785)) ([7485c90](https://github.com/starship/starship/commit/7485c90c9f7259c026a84dd0335f56860005315d))
+* **install:** Add version option to install script ([f66bfd9](https://github.com/starship/starship/commit/f66bfd9435f215867681a699428bd882d8c63ce7))
+* **install:** Add version option to install script ([#5728](https://github.com/starship/starship/issues/5728)) ([f66bfd9](https://github.com/starship/starship/commit/f66bfd9435f215867681a699428bd882d8c63ce7))
+* **os:** add new os symbols ([#5849](https://github.com/starship/starship/issues/5849)) ([df65b21](https://github.com/starship/starship/commit/df65b2155f92c03d07cabbcee6c92104a878c963))
+* **quarto:** Add Quarto module ([#5820](https://github.com/starship/starship/issues/5820)) ([0e49f04](https://github.com/starship/starship/commit/0e49f04a6b249090cf3703c5dac041a51e6bf530))
+* **release:** add winget arm64 push & repo sync ([#5033](https://github.com/starship/starship/issues/5033)) ([aef1a3f](https://github.com/starship/starship/commit/aef1a3f275e7ec9095c4718ecf6a268abfe7794a))
+* **username:** add detect_env_vars as option ([#5833](https://github.com/starship/starship/issues/5833)) ([b8a812b](https://github.com/starship/starship/commit/b8a812b93207da992ff8ae9f8b955bfa1252072b))
+
+
+### Bug Fixes
+
+* **bash:** Handle Unbound Variables Errors in Bash ([#4972](https://github.com/starship/starship/issues/4972)) ([7093d5c](https://github.com/starship/starship/commit/7093d5cd84967edba93c9ed412b07519664f6356))
+* **bash:** improve integration with bash-preexec ([#5734](https://github.com/starship/starship/issues/5734)) ([2aa711c](https://github.com/starship/starship/commit/2aa711ccc7096437e21149b18d1384534bfbcc57))
+* **character:** also handle vi edit mode in pwsh ([#5775](https://github.com/starship/starship/issues/5775)) ([0891ec2](https://github.com/starship/starship/commit/0891ec27a40421cd742a853885731aed63f412aa))
+* **direnv:** update to work with direnv v2.33 ([#5657](https://github.com/starship/starship/issues/5657)) ([cec111a](https://github.com/starship/starship/commit/cec111affdaf0a52f72c398f8307cf7e19c7dd8d))
+* **git_branch:** fall back to "HEAD" when there is no current branch ([#5768](https://github.com/starship/starship/issues/5768)) ([6a96e84](https://github.com/starship/starship/commit/6a96e84a15e3ea598356e4fcad23ac4b2690dd1e))
+* **nu:** continuation prompt not being displayed correctly ([#5851](https://github.com/starship/starship/issues/5851)) ([d308e91](https://github.com/starship/starship/commit/d308e918ee014f4ca9976683e79e819afd8160f7))
+* **status:** fix pipestatus width calculation ([#5036](https://github.com/starship/starship/issues/5036)) ([ab84043](https://github.com/starship/starship/commit/ab840439e326a80c53466c7b767d29be0112b9d2)), closes [#3162](https://github.com/starship/starship/issues/3162)
+* **zsh:** improve starship binary path escaping ([#5574](https://github.com/starship/starship/issues/5574)) ([2bb57cf](https://github.com/starship/starship/commit/2bb57cf0cd6d53194d26f4be96dff5fa14942622))
+
 ## [1.17.1](https://github.com/starship/starship/compare/v1.17.0...v1.17.1) (2024-01-02)
 
 

@@ -16,6 +16,12 @@
     "semanticCommitType": "build",
     "rangeStrategy": "bump",
     "rebaseWhen": "conflicted",
+    "lockFileMaintenance": {
+        "enabled": true,
+        "extends": ["schedule:weekly"],
+        "groupName": "lockfile maintenance",
+        "automerge": true
+    },
     "packageRules": [
         // group updates to related packages
         {
@@ -52,14 +58,6 @@
             "groupName": "npm",
             "matchDatasources": ["npm"],
             "extends": ["schedule:weekly"]
-        },
-        // Update (rust) lockfiles weekly
-        {
-            "matchDatasources": ["crate"],
-            "lockFileMaintenance": {
-                "enabled": true,
-                "extends": ["schedule:weekly"]
-            }
         }
     ],
     // custom regex update managers

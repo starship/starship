@@ -10,7 +10,7 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 ## TransientPrompt in PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Il est possible de remplacer le prompt précédent avec une string personnalisée. Ceci est utile lorsque toutes les informations fournies par l'invité de commande ne sont pas nécessaire. Pour activer ceci, exécutez `Enable-TransientPrompt` dans la session shell. Pour que la modification soit permanente, ajoutez cette commande dans votre `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
 By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
 
@@ -26,13 +26,13 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Ceci est utile lorsque toutes les informations fournies par l'invité de commande ne sont pas nécessaire. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
 - `off`: do not replace the prompt (i.e. turn off transience)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Il est nécessaire de faire cela qu'une fois. Modifiez votre `starship.lua` pour customiser ce qui sera présenté à gauche et à droite:
 
 - By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
 
@@ -56,7 +56,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt et TransientRightPrompt dans Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Il est possible de remplacer le prompt précédent avec une string personnalisée. Ceci est utile lorsque toutes les informations fournies par l'invité de commande ne sont pas nécessaire. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
@@ -78,6 +78,26 @@ function starship_transient_rprompt_func
 end
 starship init fish | source
 enable_transience
+```
+
+## TransientPrompt and TransientRightPrompt in Bash
+
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+
+Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
+
+- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+
+```bash
+bleopt prompt_ps1_final='$(starship module character)'
+```
+
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Par exemple, pour afficher l'heure à laquelle la dernière commande a été lancée ici, vous feriez
+
+```bash
+bleopt prompt_rps1_final='$(starship module time)'
 ```
 
 ## Commandes pré-invite et pré-exécution personnalisées dans Cmd
@@ -203,9 +223,11 @@ Invoke-Expression (&starship init powershell)
 
 Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée utilisateur. Starship peut définir le contenu de cet invite à droite en utilisant l’option `right_format`. N’importe quel module qui peut être utilisé dans `format` est aussi géré dans `right_format`. La variable `$all` va seulement contenir les modules qui ne sont explicitement utilisés ni dans `format`, ni dans `right_format`.
 
-Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite les modules au-dessus de la ligne d’entrée d’une invite multiligne, voir le [module `fill`](/config/#fill).
+Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. To right align modules above the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
-`right_format` est actuellement supporté pour les shells suivants : elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### Exemple
 
@@ -244,7 +266,7 @@ Note: les invites de confirmation sont uniquement disponibles pour les shells su
 ```toml
 # ~/.config/starship.toml
 
-# Un invite de continuation qui affiche deux flèches pleines
+# A continuation prompt that displays two filled-in arrows
 continuation_prompt = '▶▶ '
 ```
 
@@ -265,7 +287,7 @@ Les chaines de style sont une liste de mots séparés par des espaces. Les mots 
 - `<color>`
 - `none (aucun)`
 
-où `<color>` spécifie une couleur (voir ci-dessous). `fg:<color>` and `<color>` font la même chose actuellement, mais cela pourrait changer dans le futur. `inverted` inverse les couleurs d’arrière-plan et d’avant-plan. L’ordre des mots dans la chaine n’a pas d’importance.
+où `<color>` spécifie une couleur (voir ci-dessous). `fg:<color>` and `<color>` font la même chose actuellement, mais cela pourrait changer dans le futur. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` inverse les couleurs d’arrière-plan et d’avant-plan. L’ordre des mots dans la chaine n’a pas d’importance.
 
 La valeur `none` écrase toutes les autres dans une chaine si elle ne fait pas partie d’une déclaration `bg:`, donc par exemple `fg:red none fg:blue` va créer une chaine sans style. `bg:none` définit comme arrière-plan la couleur par défaut donc `fg:red bg:none` équivaut à `red` ou `fg:red` et `bg:green fg:red bg:none` équivaut aussi à `fg:red` or `red`. Cela pourrait devenir une erreur d’utiliser `none` avec d’autres mots dans le futur.
 
@@ -279,6 +301,6 @@ Si plusieurs couleurs sont définies pour l’avant-plan/arrière-plan, la derni
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
-- Many terminals disable support for `blink` by default
+- Many terminals disable support for `blink` by default.
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- `strikethrough` is not supported by the default macOS Terminal.app.

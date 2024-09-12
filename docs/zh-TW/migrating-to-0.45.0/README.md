@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# 遷移版本至 v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 包含了破壞性的變更，這個變更是為了大的 v1.0.0. 做準備 我們圍繞著如何在提示上完成設定進行了一些重大的更改，以允許更大程度的客製化。
 
-This guide is intended to walk you through the breaking changes.
+這個指南目的在引導您走過一次這些破壞性的變更
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` 已經被根層級的 `format` 所取代
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+v0.45.0 以前, `prompt_order` 將會依照 Starship 渲染的順序來接受模組名稱的陣列
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+取而代之的是 Starship v0.45.0 會接受 `format` 值，這個值允許在模組本身之外自訂提示
 
-**Example pre-v0.45.0 configuration**
+**pre-v0.45.0 的設定範例**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+** v0.45.0 的設定範例**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## 模組 `prefix` 以及 `suffix` 已經被 `format` 所取代
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+v0.45.0 版之前，有些模組會接受  `prefix` 且/或 `suffix`，以便使得模組呈現的方式更為風格化
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 取而代之的接受了 `format` 的值，允許進一步客製模組的渲染方式 現在可以從表示模組輸出的格式字串中取代變數，而不是基於上下文的變數定義前綴以及後綴
 
-**Example pre-v0.45.0 configuration**
+**pre-v0.45.0 的設定範例**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+** v0.45.0 的設定範例**
 
 ```toml
 [cmd_duration]
@@ -74,18 +74,18 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### 受影響的模組
 
 #### 字元
 
-| Removed Property        | Replacement      |
+| 已移除的屬性                  | 取代屬性             |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+在之前 `use_symbol_for_status` 屬性會被用於設定提示字元在最後一個指令執行的結果為非 0 的狀態代碼時，會顯示 `error_symbol`
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+隨著 v0.45.0 版本的發布，我們現在都只會在非零狀態代碼之後使用 `error_symbol`，統一 `use_symbol_for_status` 以及 `error_symbol` 屬性
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+如果要設定提示字元使用舊的 `use_symbol_for_status = true` 設定，請將以下設定加入您的設定檔案中:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Note:_ ，`character` 元素會自動附加一個空格, 所以與設定值 `format` 字串不同, 我們上面的例子中刻意沒有加入這個設定
 
 #### 指令持續時間
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### 資料夾
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [directory]
@@ -141,12 +141,12 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### 環境變數
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [env_var]
@@ -155,14 +155,14 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Git 提交
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [git_commit]
@@ -171,15 +171,15 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = '[\($hash\)]($style) '
 ```
 
-#### Git Status
+#### Git 狀態
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| 已移除的屬性            | 取代屬性     |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+在之前的版本 `show_sync_count` 屬性是被用於設定提示字元顯示分之在遠端分支之前或之後所 commit 的數量
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+在 v0.45.0 的版本，這個屬性已經被三個分開的屬性所取代，分別是 `ahead`、`behind` 以及 `diverged`
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+為了能夠讓題是字元能夠使用舊的  `show_sync_count = true` 設定，請將以下內容設定至您的設定檔當中
 
 ```toml
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### 主機名稱
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `label`  | `format` |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### 時間
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| 已移除的屬性   | 取代屬性          |
+| -------- | ------------- |
+| `format` | `time_format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### 自訂指令
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| 已移除的屬性   | 取代屬性     |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**預設設定的異動**
 
 ```diff
 [custom.example]

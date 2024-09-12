@@ -92,4 +92,26 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    fn folder_with_spago_yaml_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("spago.yaml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_spago_lock_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("spago.lock"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }

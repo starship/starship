@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#pastel-powerline)
+[返回全部预设](./#pastel-powerline)
 
 # Tokyo Night Preset
 
@@ -8,7 +8,7 @@
 
 ### 前置要求
 
-- 安装一种 [Nerd fonts](https://www.nerdfonts.com/) 并在您的终端启用。
+- 安装一种 [Nerd Font](https://www.nerdfonts.com/) 并在您的终端启用。
 
 ### 配置
 
@@ -18,4 +18,4 @@ starship preset tokyo-night -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/tokyo-night.toml)
 
-<<< @/.vuepress/public/presets/toml/tokyo-night.toml
+<<< @/public/presets/toml/tokyo-night.toml

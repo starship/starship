@@ -1,5 +1,5 @@
 [buf]
-format = '(with [$symbol$version ]($style))'
+format = '(with [$symbol($version )]($style))'
 
 [bun]
 format = '(via [$symbol($version )]($style))'
@@ -40,6 +40,9 @@ format = '(via [$symbol($version )]($style))'
 [fennel]
 format = '(via [$symbol($version )]($style))'
 
+[gleam]
+format = '(via [$symbol($version )]($style))'
+
 [golang]
 format = '(via [$symbol($version )]($style))'
 
@@ -71,7 +74,7 @@ format = '(via [$symbol($version )]($style))'
 format = '(via [$symbol($version )(\($switch_indicator$switch_name\) )]($style))'
 
 [opa]
-format = '(via [$symbo($version ]($style))"'
+format = '(via [$symbol($version )]($style))'
 [package]
 format = '(is [$symbol$version]($style) )'
 
@@ -86,6 +89,9 @@ format = '(via [$symbol($version )]($style))'
 
 [python]
 format = '(via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style))'
+
+[quarto]
+format = '(via [$symbol($version )]($style))'
 
 [raku]
 format = '(via [$symbol($version-$vm_version )]($style))'

@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
-actionText: Початок роботи →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
+  actions:
+    - 
+      theme: brand
+      text: Початок роботи →
+      link: ./guide/
 features:
   - 
     title: Сумісність на першому місці
@@ -21,12 +25,24 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки! Показує потрібну інформацію залишаючись блискучим та мінімальним. Швидке встановлення доступне для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd і PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Вимоги
 
@@ -55,6 +71,7 @@ description: Простий, супер швидкий та безмежно а�
    ```sh
    brew install starship
    ```
+
    [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -154,6 +171,7 @@ description: Простий, супер швидкий та безмежно а�
    :::
 
    Додайте наступне в кінець вашого файлу env (його можна знайти за допомогою змінної `$nu.env-path` в Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu

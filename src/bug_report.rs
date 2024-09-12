@@ -62,6 +62,7 @@ struct Environment {
 }
 
 fn get_pkg_branch_tag() -> &'static str {
+    #[allow(clippy::const_is_empty)]
     if !shadow::TAG.is_empty() {
         return shadow::TAG;
     }
@@ -201,8 +202,7 @@ fn get_terminal_info() -> TerminalInfo {
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
     if shell == "nu" {
-        return dirs_next::config_dir()
-            .map(|config_dir| config_dir.join("nushell").join("config.nu"));
+        return dirs::config_dir().map(|config_dir| config_dir.join("nushell").join("config.nu"));
     }
 
     utils::home_dir().and_then(|home_dir| {

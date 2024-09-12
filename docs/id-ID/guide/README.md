@@ -338,7 +338,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Tambahkan baris berikut di akhir env file Nushell anda (dengan menjalankan `$nu.env-path` di Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -431,9 +431,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
 
-**Supporter Tier**
-
-- [Appwrite](https://appwrite.io/)
+- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
 <p align="center">
     <br>

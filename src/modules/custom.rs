@@ -59,8 +59,22 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let variables_closure = |variable: &str| match variable {
+        "output" => {
+            let output = exec_command(config.command, context, &config)?;
+            let trimmed = output.trim();
+
+            if trimmed.is_empty() {
+                None
+            } else {
+                Some(Ok(trimmed.to_string()))
+            }
+        }
+        _ => None,
+    };
+
+    let parsed = StringFormatter::new(config.format).and_then(|mut formatter| {
+        formatter = formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -68,21 +82,15 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
-            })
-            .map_no_escaping(|variable| match variable {
-                "output" => {
-                    let output = exec_command(config.command, context, &config)?;
-                    let trimmed = output.trim();
+            });
 
-                    if trimmed.is_empty() {
-                        None
-                    } else {
-                        Some(Ok(trimmed.to_string()))
-                    }
-                }
-                _ => None,
-            })
-            .parse(None, Some(context))
+        if config.unsafe_no_escape {
+            formatter = formatter.map_no_escaping(variables_closure)
+        } else {
+            formatter = formatter.map(variables_closure)
+        }
+
+        formatter.parse(None, Some(context))
     });
 
     match parsed {
@@ -244,6 +252,11 @@ fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
 fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<String> {
     log::trace!("Running '{cmd}'");
 
+    #[cfg(test)]
+    if cmd == "__starship_to_be_escaped" {
+        return Some("`to_be_escaped`".to_string());
+    }
+
     if let Some(output) = shell_command(cmd, config, context) {
         if !output.status.success() {
             log::trace!("Non-zero exit code '{:?}'", output.status.code());
@@ -298,6 +311,7 @@ fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool
 mod tests {
     use super::*;
 
+    use crate::context::Shell;
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use nu_ansi_term::Color;
     use std::fs::File;
@@ -760,5 +774,48 @@ mod tests {
         let expected = Some("test".to_string());
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn output_is_escaped() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                format = "$output"
+                command = "__starship_to_be_escaped"
+                when = true
+                ignore_timeout = true
+            })
+            .shell(Shell::Bash)
+            .collect();
+        let expected = Some("\\`to_be_escaped\\`".to_string());
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn unsafe_no_escape() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                format = "$output"
+                command = "__starship_to_be_escaped"
+                when = true
+                ignore_timeout = true
+                unsafe_no_escape = true
+            })
+            .shell(Shell::Bash)
+            .collect();
+        let expected = Some("`to_be_escaped`".to_string());
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 }
