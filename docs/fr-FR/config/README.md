@@ -1756,7 +1756,7 @@ Le module `git_commit` affiche le hash du commit courant et l’étiquette (s’
 | `only_detached`      | `true`                         | Ne montrer le hash du commit qu'en mode `HEAD` détachée.                             |
 | `tag_disabled`       | `true`                         | Désactive l'affichage des informations du tag dans le module `git_commit`.           |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷 '`                        | Symbole préfixant les informations affichées concernant le tag                       |
+| `tag_symbol`         | `' 🏷  '`                       | Symbole préfixant les informations affichées concernant le tag                       |
 | `disabled`           | `false`                        | Désactive le module `git_commit`.                                                    |
 
 ### Variables
