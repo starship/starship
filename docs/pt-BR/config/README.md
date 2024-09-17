@@ -158,7 +158,7 @@ Por exemplo:
 
 #### Estilo dos textos
 
-A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para detalhes da sintaxe completa, consulte o [ guia de configurações avançadas ](../advanced-config/).
 
 - `"fg:green bg:blue"` define o texto para verde e o fundo azul
 - `"bg:blue fg:bright-green"` define o texto para verde brilhante e o fundo azul
