@@ -204,12 +204,12 @@ mod tests {
 
     #[test]
     fn test_hindi_truncation() -> io::Result<()> {
-        test_truncate_length("नमस्ते", 3, "नमस्", "…")
+        test_truncate_length("नमस्ते", 2, "नम", "…")
     }
 
     #[test]
     fn test_hindi_truncation2() -> io::Result<()> {
-        test_truncate_length("नमस्त", 3, "नमस्", "…")
+        test_truncate_length("नमस्त", 2, "नम", "…")
     }
 
     #[test]
