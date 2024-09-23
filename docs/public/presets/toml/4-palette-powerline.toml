@@ -1,0 +1,324 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Usefull starship commands:
+# starship explain, explains the prompt elements
+# starship timings, shows the timings of the prompt elements
+# See https://starship.rs/ for the most recent info
+
+# Disable the blank line at the start of the prompt
+add_newline = true
+
+format = """
+[](fg:color_1)\
+$os\
+$username\
+$hostname\
+[](fg:color_1 bg:color_2)\
+$directory\
+[](fg:color_2 bg:color_3)\
+$git_branch\
+$git_status\
+[](fg:color_3 bg:color_4)\
+$c\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
+$java\
+$julia\
+$kotlin\
+$nodejs\
+$nim\
+$php\
+$python\
+$rust\
+$scala\
+$zig\
+[](fg:color_4 bg:color_5)\
+$conda\
+$nix_shell\
+$docker_context\
+[](fg:color_5 bg:color_6)\
+$time\
+[ ](fg:color_6)\
+$battery\
+$cmd_duration\
+$line_break$character"""
+
+#palette = "tig_rainbow"
+#palette = "tig_blues"
+#palette = "tig_greens"
+palette = "tig_browns"
+
+# Rainbox color palette
+[palettes.tig_rainbow]
+color_1 = "#e57373"
+color_2 = "#f2994a"
+color_3 = "#f2c94c"
+color_4 = "#6fcf97"
+color_5 = "#56ccf2"
+color_6 = "#4a90e2"
+content_1 = "#f5d2d2"
+content_2 = "#fbe5cf"
+content_3 = "#fdf2d5"
+content_4 = "#d8f1e3"
+content_5 = "#d3eefb"
+content_6 = "#d6e4f7"
+
+# Blue color palette
+[palettes.tig_blues]
+color_1 = "#6a94b8"
+color_2 = "#5880a3"
+color_3 = "#476c8e"
+color_4 = "#3d5c7a"
+color_5 = "#2e4b65"
+color_6 = "#243b51"
+content_1 = "#cfdfea"
+content_2 = "#b9d4e3"
+content_3 = "#a3c8db"
+content_4 = "#8fbcd3"
+content_5 = "#7aafcb"
+content_6 = "#669ec2"
+
+# Green color palette
+[palettes.tig_greens]
+color_1 = "#88b583"
+color_2 = "#739d6e"
+color_3 = "#5e8359"
+color_4 = "#4c7048"
+color_5 = "#3a5c37"
+color_6 = "#2e4b2c"
+content_1 = "#d3e6d0"
+content_2 = "#c4dec1"
+content_3 = "#b4d5b1"
+content_4 = "#a3cba0"
+content_5 = "#93c091"
+content_6 = "#84b481"
+
+# Brown color palette
+[palettes.tig_browns]
+color_1 = "#c2835e"
+color_2 = "#9b6a4e"
+color_3 = "#7d563f"
+color_4 = "#6f462e"
+color_5 = "#573623"
+color_6 = "#492e1e"
+content_1 = "#f2c9a5"
+content_2 = "#e3ab8a"
+content_3 = "#d39d7b"
+content_4 = "#c4906c"
+content_5 = "#b97c5c"
+content_6 = "#9b6752"
+
+# 1st Powerline element
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+disabled = true
+style = "fg:content_1 bg:color_1"
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+# You can also replace your username with a neat symbol like   or disable this
+# and use the os module below
+[username]
+show_always = true
+style_user = "bg:color_1 fg:content_1"
+style_root = "bg:#color_1 fg:content_1"
+format = '[ 🚀 $user]($style)'
+
+[hostname]
+disabled = false
+ssh_only = false
+style = "fg:content_1 bg:color_1"
+trim_at = "-"
+format = '[@$hostname]($style)'
+
+# 2nd Powerline element, directory
+
+[directory]
+style = "bg:color_2 fg:content_2"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true # truncates directory to root folder if in github repo
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = " 󰈙 "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important 󰈙 " = " 󰈙 "
+
+# 3rd Powerline element, git branch and git status
+
+[git_branch]
+symbol = ""
+style = "bg:color_3 fg:content_3"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:color_3 fg:content_3"
+format = '[$all_status$ahead_behind ]($style)'
+
+# 4th Powerline element, language
+
+[c]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[elixir]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[golang]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[gradle]
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[java]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+symbol = "󰆥"
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[php]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[[ $symbol( $version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[[ $symbol( $version) ]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:color__4 fg:content_4"
+format = '[[ $symbol( $version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[scala]
+symbol = ""
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+[zig]
+symbol = "↯"
+style = "bg:color_4 fg:content_4"
+format = '[ $symbol ($version) ]($style)'
+
+# 5th Powerline element, context
+
+[conda]
+style = "bg:color_5 fg:content_5"
+format = '[[ $symbol( $environment) ]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:color_5 fg:content_5"
+format = '[ $symbol $context ]($style)'
+
+[nix_shell]
+impure_msg = '📦 devbox'
+style = "bg:color_5 fg:content_5"
+#format = '[ $symbol$state ]($style)'
+format = '[ $state ]($style)'
+
+# 6th Powerline element, time
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:color_6 fg:content_6"
+format = '[  $time ]($style)'
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰁽 "
+empty_symbol = "󰂎 "
+
+[[battery.display]]
+threshold = 30
+style = "content_3"
+
+[[battery.display]]
+threshold = 20
+style = "content_2"
+
+[[battery.display]]
+threshold = 10
+style = "content_1"
+
+# Command duration only shown when longer than 5 seconds
+[cmd_duration]
+min_time = 5000
+format = '[$duration](content_3)'
+
+[character]
+# disabled = false
+success_symbol = '[➜](fg:color_1)'
+error_symbol = '[✘](bold fg:red)'
