@@ -46,9 +46,6 @@ $battery\
 $cmd_duration\
 $line_break$character"""
 
-#palette = "tig_rainbow"
-#palette = "tig_blues"
-#palette = "tig_greens"
 palette = "tig_browns"
 
 # Rainbox color palette
@@ -283,7 +280,6 @@ format = '[ $symbol $context ]($style)'
 [nix_shell]
 impure_msg = '📦 devbox'
 style = "bg:color_5 fg:content_5"
-#format = '[ $symbol$state ]($style)'
 format = '[ $state ]($style)'
 
 # 6th Powerline element, time
