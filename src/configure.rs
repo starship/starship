@@ -8,8 +8,7 @@ use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
 use crate::utils;
-use std::fs::File;
-use std::io::Write;
+use std::path::PathBuf;
 use toml_edit::DocumentMut;
 
 #[cfg(not(windows))]
@@ -240,16 +239,17 @@ pub fn get_configuration_edit(context: &Context) -> DocumentMut {
 }
 
 pub fn write_configuration(context: &Context, doc: &DocumentMut) {
-    let config_path = context.get_config_path_os().unwrap_or_else(|| {
+    let Some(config_path) = context.get_config_path_os() else {
         eprintln!("config path required to write configuration");
         process::exit(1);
-    });
+    };
 
-    let config_str = doc.to_string();
+    let config_path = PathBuf::from(config_path);
 
-    File::create(config_path)
-        .and_then(|mut file| file.write_all(config_str.as_ref()))
-        .expect("Error writing starship config");
+    if let Err(e) = crate::utils::write_file_atomic(config_path, doc.to_string(), true) {
+        eprintln!("Unable to write configuration: {e}");
+        process::exit(1);
+    }
 }
 
 pub fn edit_configuration(
@@ -313,7 +313,10 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 
 #[cfg(test)]
 mod tests {
-    use std::{fs::create_dir, io};
+    use std::{
+        fs::{create_dir, File},
+        io::{self, Write},
+    };
 
     use tempfile::TempDir;
     use toml_edit::Item;

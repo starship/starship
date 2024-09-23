@@ -491,7 +491,7 @@ impl ValueEnum for Preset {
     }
 }
 
-pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool) {
+pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, force: bool, list: bool) {
     if list {
         println!("{}", preset_list());
         return;
@@ -499,11 +499,11 @@ pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool)
     let variant = name.expect("name argument must be specified");
     let content = shadow::get_preset_content(variant.0);
     if let Some(output) = output {
-        if let Err(err) = std::fs::write(output, content) {
-            eprintln!("Error writing preset to file: {err}");
+        if let Err(e) = crate::utils::write_file_atomic(&output, content, force) {
+            eprintln!("Error writing preset to {output:?}: {e}");
             std::process::exit(1);
         }
-    } else if let Err(err) = std::io::stdout().write_all(content) {
+    } else if let Err(err) = std::io::stdout().write_all(content.as_bytes()) {
         eprintln!("Error writing preset to stdout: {err}");
         std::process::exit(1);
     }
@@ -641,22 +641,45 @@ mod test {
 
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
-        preset_command(None, None, true);
+        preset_command(None, None, false, true);
         Preset::value_variants()
             .iter()
-            .for_each(|v| preset_command(Some(v.clone()), None, false));
+            .for_each(|v| preset_command(Some(v.clone()), None, false, false));
     }
 
     #[test]
     fn preset_command_output_to_file() -> std::io::Result<()> {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("preset.toml");
-        preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
+        preset_command(
+            Some(Preset("nerd-font-symbols")),
+            Some(path.clone()),
+            false,
+            false,
+        );
 
         let actual = utils::read_file(&path)?;
         let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
         assert_eq!(actual, expected);
+        dir.close()
+    }
 
+    #[test]
+    fn preset_command_output_existing_file_force() -> io::Result<()> {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("preset.toml");
+        utils::write_file(&path, "existing content")?;
+
+        preset_command(
+            Some(Preset("nerd-font-symbols")),
+            Some(path.clone()),
+            true,
+            false,
+        );
+
+        let actual = utils::read_file(&path).unwrap();
+        let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
+        assert_eq!(actual, expected);
         dir.close()
     }
 
