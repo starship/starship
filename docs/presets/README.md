@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Power10](./power10.md)
+
+This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlevel10k) configuration variant.
+
+[![Screenshot of Power10 preset](/presets/img/power10.png) "Click to view Power10 preset")](./power10.md)
