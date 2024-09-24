@@ -9,7 +9,8 @@ This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlev
 ### Prerequisites
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
-  - Tested / recommended: 'MesloLGS NF Regular' from [Meslo Nerd Font patched for Powerlevel10k](https://github.com/romkatv/powerlevel10k)
+  - Tested / recommended: 'MesloLGS NF Regular'
+    - Font download: [Meslo Nerd Font patched for Powerlevel10k]([https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#manual-font-installation))
 - Optional / recommended: Shell with right-prompt support
   - Only for ssh to show the ipv4 address on the right side of the prompt line
 
