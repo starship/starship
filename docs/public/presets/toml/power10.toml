@@ -170,7 +170,6 @@ disabled = false
 format = '[$ssh_symbol ](fg:sshsymbol bold)[$hostname](fg:hostname bold)[ ]()'
 ssh_only = true
 ssh_symbol = "\ue36e" # \ue36e '' # '⇒' # ' ' # 'ﬁ⇒'
-# trim_at = '.companyname.com'
 disabled = false
 
 [sudo]
@@ -189,7 +188,7 @@ truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = true
 repo_root_format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()" # \u276F ❯ \ueab6 
-repo_root_style	= 'fg:directory bold'
+repo_root_style = 'fg:directory bold'
 use_os_path_sep = true
 disabled = false
 
@@ -208,7 +207,6 @@ pyenv_version_name = true
 format = "[\u3009$symbol $branch(:$remote_branch)]($style)[ ]()" # \u3009 \uf460 ❯
 style = 'fg:orangegit'
 symbol = "\ue702" # \ue702 
-# ignore_branches = ['master', 'main']
 
 [git_commit]
 format = '[\($hash$tag\)]($style)[ ]()'
