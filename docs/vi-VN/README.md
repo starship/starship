@@ -166,18 +166,18 @@ onMounted(() => {
 
    ::: warning
 
-   Điều này có thể thay đổi trong tương lai. Chỉ hỗ trợ nushell từ phiên bản 0.78 trở lên.
+   Điều này có thể thay đổi trong tương lai. Chỉ hỗ trợ Nushell từ phiên bản 0.78 trở lên.
 
    :::
 
-   Thêm đoạn code dưới đây vào cuối file Nushell env của bạn (Bạn có thể tìm đường dẫn tới file Nushell env bằng cách chạy `$nu.env-path` trong Nushell):
+   Thêm đoạn code dưới đây vào cuối file môi trường Nushell (có thể mở nhanh trong Nushell bằng lệnh như `hx $nu.env-path`, nhớ thay `hx` bằng trình soạn thảo ưa thích của bạn):
 
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   Thêm đoạn code sau vào cuối file cấu hình Nushell (bạn có thể tìm đường dẫn tới file cấu hình Nushell bằng cách chạy câu lệnh `$nu.config-path`):
+   Thêm đoạn code sau vào cuối file cấu hình Nushell (có thể mở nhanh trong Nushell bằng lệnh như `hx $nu.config-path`, nhớ thay `hx` bằng trình soạn thảo ưa thích của bạn):
 
    ```sh
    use ~/.cache/starship/init.nu
