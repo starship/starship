@@ -51,6 +51,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(undistract_me(module, &config, context, elapsed))
 }
 
+#[cfg(all(feature = "notify", target_os = "linux"))]
+fn add_transient(notification: &mut notify_rust::Notification) {
+    notification.hint(notify_rust::Hint::Transient(true));
+}
+
+#[cfg(any(not(feature = "notify"), not(target_os = "linux")))]
+fn add_transient(_notification: &mut notify_rust::Notification) {}
+
 #[cfg(not(feature = "notify"))]
 fn undistract_me<'a>(
     module: Module<'a>,
@@ -99,6 +107,10 @@ fn undistract_me<'a>(
             .body(&body)
             .icon("utilities-terminal")
             .timeout(timeout);
+
+        if config.transient {
+            add_transient(&mut notification);
+        }
 
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {}", err);
