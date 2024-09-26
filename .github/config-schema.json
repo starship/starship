@@ -1419,7 +1419,8 @@
           "VIRTUAL_ENV"
         ],
         "detect_extensions": [
-          "py"
+          "py",
+          "ipynb"
         ],
         "detect_files": [
           "requirements.txt",
@@ -1428,7 +1429,8 @@
           "Pipfile",
           "tox.ini",
           "setup.py",
-          "__init__.py"
+          "__init__.py",
+          "pixi.toml"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -5298,7 +5300,8 @@
         },
         "detect_extensions": {
           "default": [
-            "py"
+            "py",
+            "ipynb"
           ],
           "type": "array",
           "items": {
@@ -5313,7 +5316,8 @@
             "Pipfile",
             "tox.ini",
             "setup.py",
-            "__init__.py"
+            "__init__.py",
+            "pixi.toml"
           ],
           "type": "array",
           "items": {

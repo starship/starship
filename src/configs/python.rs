@@ -35,7 +35,7 @@ impl<'a> Default for PythonConfig<'a> {
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,
-            detect_extensions: vec!["py"],
+            detect_extensions: vec!["py", "ipynb"],
             detect_files: vec![
                 "requirements.txt",
                 ".python-version",
@@ -44,6 +44,7 @@ impl<'a> Default for PythonConfig<'a> {
                 "tox.ini",
                 "setup.py",
                 "__init__.py",
+                "pixi.toml",
             ],
             detect_folders: vec![],
             detect_env_vars: vec!["VIRTUAL_ENV"],
