@@ -632,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -3533,25 +3533,26 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 - Le dossier courant contient un fichier `requirements.txt`
 - Le dossier courant contient un fichier `setup.py`
 - Le dossier courant contient un fichier `tox.ini`
+- The current directory contains a `pixi.toml` file
 - Le dossier courant contient un fichier avec l’extension `.py`.
+- The current directory contains a file with the `.ipynb` extension.
 - Un environnement virtuel est actuellement activé
 
 ### Options
 
-| Option                               | Défaut                                                                                                       | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐍 '`                                                                                                       | Une chaîne de caractères représentant le symbole de Python                                 |
-| `style`                              | `'yellow bold'`                                                                                              | Le style pour le module.                                                                   |
-| `pyenv_version_name`                 | `false`                                                                                                      | Utiliser pyenv pour obtenir la version de Python                                           |
-| `pyenv_prefix`                       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                            |
-| `python_binary`                      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version.     |
-| `detect_extensionsdetect_extensions` | `['py']`                                                                                                     | Les extensions qui déclenchent ce module                                                   |
-| `detect_files`                       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Quels fichiers devraient activer ce module                                                 |
-| `detect_folders`                     | `[]`                                                                                                         | Quels dossiers devraient activer ce module                                                 |
-| `detect_env_vars`                    | `["VIRTUAL_ENV"]`                                                                                            | Which environmental variables should trigger this module                                   |
-| `disabled`                           | `false`                                                                                                      | Désactive le module `python`.                                                              |
+| Option                               | Défaut                                                                                                                    | Description                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                                                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'🐍 '`                                                                                                                    | Une chaîne de caractères représentant le symbole de Python                                 |
+| `style`                              | `'yellow bold'`                                                                                                           | Le style pour le module.                                                                   |
+| `pyenv_version_name`                 | `false`                                                                                                                   | Utiliser pyenv pour obtenir la version de Python                                           |
+| `pyenv_prefix`                       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                            |
+| `python_binary`                      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version.     |
+| `detect_extensionsdetect_extensions` | `['py', 'ipynb']`                                                                                                         | Les extensions qui déclenchent ce module                                                   |
+| `detect_files`                       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Quels fichiers devraient activer ce module                                                 |
+| `detect_folders`                     | `[]`                                                                                                                      | Quels dossiers devraient activer ce module                                                 |
+| `disabled`                           | `false`                                                                                                                   | Désactive le module `python`.                                                              |
 
 ::: tip
 
