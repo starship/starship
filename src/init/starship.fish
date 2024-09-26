@@ -64,12 +64,7 @@ function reset-transient --on-event fish_postexec
 end
 
 function transient_execute
-    if commandline --paging-mode
-        commandline -f accept-autosuggestion
-        return
-    end
-    commandline --is-valid
-    if test $status != 2
+    if commandline --is-valid || test -z "$(commandline)" && not commandline --paging-mode
         set -g TRANSIENT 1
         set -g RIGHT_TRANSIENT 1
         commandline -f repaint
