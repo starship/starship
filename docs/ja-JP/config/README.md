@@ -632,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 Bun ランタイムだけが表示されるように、設定中の [nodejs モジュール](#nodejs) の `detect_files` プロパティを上書きできます。
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -3533,25 +3533,26 @@ The `python` module shows the currently installed version of [Python](https://ww
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`setup.py`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
+- The current directory contains a `pixi.toml` file
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている.
+- The current directory contains a file with the `.ipynb` extension.
 - 仮想環境がアクティブである
 
 ### オプション
 
-| オプション                | デフォルト                                                                                                        | 説明                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | module のフォーマットです。                                                                      |
-| `version_format`     | `'v${raw}'`                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
-| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                              | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py']`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
-| `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
-| `detect_env_vars`    | `["VIRTUAL_ENV"]`                                                                                            | このモジュールを活性化する環境変数です。                                                                   |
-| `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                  |
+| オプション                | デフォルト                                                                                                                     | 説明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | module のフォーマットです。                                                                      |
+| `version_format`     | `'v${raw}'`                                                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
+| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
+| `style`              | `'yellow bold'`                                                                                                           | モジュールのスタイルです。                                                                          |
+| `pyenv_version_name` | `false`                                                                                                                   | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | どの拡張子がこのモジュールをアクティブにするか                                                                |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
+| `detect_folders`     | `[]`                                                                                                                      | どのフォルダーがこのモジュールをアクティブにするか                                                              |
+| `disabled`           | `false`                                                                                                                   | `python`モジュールを無効にします。                                                                  |
 
 ::: tip
 
