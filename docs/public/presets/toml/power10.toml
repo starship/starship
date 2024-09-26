@@ -12,7 +12,7 @@
 #         --> "Manual font installation", with currently 4 Font Types
 
 # - If you do not want the filling solid line in top row:
-#   set the fill symbol to ' '
+#   Delete the line containing '$fill\' within format = """ ... """ # or set the fill symbol to ' '
 # - Shell [shell]:
 #   If you want to see the content of the shell module, search for [shell] and change 'disabled = true' to false
 # - '$line_break': everything from the next line on refers to the second line of the prompt
@@ -32,6 +32,7 @@ $username\
 $hostname\
 $sudo\
 $directory\
+$direnv\
 $php\
 $python\
 $git_branch$git_commit$git_state$git_metrics$git_status\
@@ -170,6 +171,7 @@ disabled = false
 format = '[$ssh_symbol ](fg:sshsymbol bold)[$hostname](fg:hostname bold)[ ]()'
 ssh_only = true
 ssh_symbol = "\ue36e" # \ue36e '' # '⇒' # ' ' # 'ﬁ⇒'
+# trim_at = '.companyname.com'
 disabled = false
 
 [sudo]
@@ -179,7 +181,7 @@ symbol = "\uf007! " # \uf007  # \uf21b \uedcc ' ' # ' '
 disabled = false
 
 [directory]
-format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path]($style)" # \u276F ❯ \ueab6 
+format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$repo_root]($repo_root_style)[$path ]($style)" # \u276F ❯ \ueab6 
 style = 'fg:directory bold'
 home_symbol = "\uf015 ~" # \uf015 ' ~'
 read_only = "\uf023 " # \uf023 ' '
@@ -190,6 +192,17 @@ truncate_to_repo = true
 repo_root_format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()" # \u276F ❯ \ueab6 
 repo_root_style = 'fg:directory bold'
 use_os_path_sep = true
+disabled = false
+
+[direnv]
+symbol = 'direnv'
+style = 'fg:greydimmed'
+format = "[\u3009$symbol $loaded/$allowed ]($style)"
+allowed_msg = 'a' # 'ok' # '✓'
+not_allowed_msg = '!a' # 'nok' # '!'
+denied_msg = 'x' # '✘'
+loaded_msg = '+' # "\ueabc" # \ueabc  # '->' # 'yo' # '󰗡' # \udb81\udde1 # '󱥸✓' # '󱥸✓' # 
+unloaded_msg = '-' # "\ueabc!" # \ueabc ! # '->!' # 'no' # '󰅚' # '󱥸!' \udb86\udd78
 disabled = false
 
 [php]
@@ -207,6 +220,7 @@ pyenv_version_name = true
 format = "[\u3009$symbol $branch(:$remote_branch)]($style)[ ]()" # \u3009 \uf460 ❯
 style = 'fg:orangegit'
 symbol = "\ue702" # \ue702 
+# ignore_branches = ['master', 'main']
 
 [git_commit]
 format = '[\($hash$tag\)]($style)[ ]()'
