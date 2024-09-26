@@ -85,4 +85,4 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlevel10k) configuration variant.
 
-[![Screenshot of Power10 preset](/presets/img/power10.png) "Click to view Power10 preset")](./power10.md)
+[![Screenshot of Power10 preset](/presets/img/power10.png "Click to view Power10 preset")](./power10.md)
