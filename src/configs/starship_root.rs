@@ -1,3 +1,4 @@
+use crate::config::Either;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -22,7 +23,20 @@ pub struct StarshipRootConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
-    pub profiles: IndexMap<String, String>,
+    pub profiles: IndexMap<String, Either<String, Profile>>,
+}
+
+/// Profiles are either a string containing the format, or a struct containing the format and right_format
+#[derive(Clone, Serialize, Deserialize, Default, Debug)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+pub struct Profile {
+    pub format: String,
+    pub right_format: String,
 }
 
 pub type Palette = HashMap<String, String>;
@@ -130,15 +144,22 @@ pub const PROMPT_ORDER: &[&str] = &[
     "character",
 ];
 
-// On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
 impl Default for StarshipRootConfig {
     fn default() -> Self {
+        let mut profiles = IndexMap::new();
+        profiles.insert(
+            "transient".to_string(),
+            Either::Second(Profile {
+                format: "$character".to_string(),
+                right_format: String::new(),
+            }),
+        );
         Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
             right_format: String::new(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
-            profiles: Default::default(),
+            profiles,
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,

@@ -12,6 +12,7 @@ use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
 use std::ffi::OsString;
+use std::fmt::Debug;
 use std::io::ErrorKind;
 
 use toml::Value;
@@ -74,6 +75,15 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
 pub enum Either<A, B> {
     First(A),
     Second(B),
+}
+
+impl<A: Debug, B: Debug> Debug for Either<A, B> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Either::First(a) => write!(f, "First({:?})", a),
+            Either::Second(b) => write!(f, "Second({:?})", b),
+        }
+    }
 }
 
 /// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either

@@ -1969,10 +1969,15 @@
       }
     },
     "profiles": {
-      "default": {},
+      "default": {
+        "transient": {
+          "format": "$character",
+          "right_format": ""
+        }
+      },
       "type": "object",
       "additionalProperties": {
-        "type": "string"
+        "$ref": "#/definitions/Either_for_String_and_Profile"
       }
     }
   },
@@ -6550,6 +6555,31 @@
           "type": "string"
         }
       ]
+    },
+    "Either_for_String_and_Profile": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/Profile"
+        }
+      ]
+    },
+    "Profile": {
+      "description": "Profiles are either a string containing the format, or a struct containing the format and right_format",
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "",
+          "type": "string"
+        },
+        "right_format": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
