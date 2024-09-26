@@ -3533,9 +3533,9 @@ format = 'via [$symbol$version](bold white)'
 - Поточна тека містить файл `requirements.txt`
 - Поточна тека містить файл `setup.py`
 - Поточна тека містить файл `tox.ini`
-- The current directory contains a `pixi.toml` file
+- Поточна тека містить файл `pixi.toml`
 - Поточна тека містить файл `.py`.
-- The current directory contains a file with the `.ipynb` extension.
+- Поточна тека містить файли з розширенням `.ipynb`.
 - Віртуальне середовище активовано
 
 ### Параметри
