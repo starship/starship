@@ -3533,7 +3533,7 @@ By default, the module will be shown if any of the following conditions are met:
 - Direktori ini memiliki berkas `requirements.txt`
 - Direktori ini memiliki berkas `setup.py`
 - Direktori ini memiliki berkas `tox.ini`
-- The current directory contains a `pixi.toml` file
+- Direktori ini memiliki berkas `pixi.toml`
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
