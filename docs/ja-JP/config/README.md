@@ -3533,7 +3533,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`setup.py`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
-- The current directory contains a `pixi.toml` file
+- 現在のディレクトリに`pixi.toml`ファイルが含まれている
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている.
 - The current directory contains a file with the `.ipynb` extension.
 - 仮想環境がアクティブである
