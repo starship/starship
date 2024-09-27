@@ -3533,7 +3533,7 @@ Por padrão, o módulo será exibido se qualquer das seguintes condições for a
 - O diretório atual conter um arquivo `requirements.txt`
 - O diretório atual conter um arquivo `setup.py`
 - O diretório atual conter um arquivo `tox.ini`
-- The current directory contains a `pixi.toml` file
+- O diretório atual conter um arquivo `pixi.toml`
 - O diretório atual tenha um arquivo com a extensão `.py`.
 - The current directory contains a file with the `.ipynb` extension.
 - Um ambiente virtual está atualmente ativo
