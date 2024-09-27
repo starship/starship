@@ -3533,7 +3533,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 目前資料夾中有一個 `requirements.txt` 檔案
 - 目前資料夾中有一個 `setup.py` 檔案
 - 目前資料夾中有一個 `tox.ini` 檔案
-- The current directory contains a `pixi.toml` file
+- 目前資料夾中有一個 `pixi.toml` 檔案
 - 目前資料夾中有一個 `.py` 副檔名的檔案.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
