@@ -3533,7 +3533,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 - Le dossier courant contient un fichier `requirements.txt`
 - Le dossier courant contient un fichier `setup.py`
 - Le dossier courant contient un fichier `tox.ini`
-- The current directory contains a `pixi.toml` file
+- Le dossier courant contient un fichier `pixi.toml`
 - Le dossier courant contient un fichier avec l’extension `.py`.
 - The current directory contains a file with the `.ipynb` extension.
 - Un environnement virtuel est actuellement activé
