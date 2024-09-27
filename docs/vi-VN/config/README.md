@@ -3533,7 +3533,7 @@ By default, the module will be shown if any of the following conditions are met:
 - Thư mục hiện tại chứa một tập tin `requirements.txt`
 - Thư mục hiện tại chứa một tập tin `setup.py`
 - Thư mục hiện tại chứa một tập tin `tox.ini`
-- The current directory contains a `pixi.toml` file
+- Thư mục hiện tại chứa một tập tin `pixi.toml`
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
