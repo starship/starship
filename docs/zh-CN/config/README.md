@@ -3533,7 +3533,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 当前目录包含 `requirements.txt` 文件
 - 当前目录包含一个 `setup.py` 文件
 - 当前目录包含一个 `tox.ini` 文件
-- The current directory contains a `pixi.toml` file
+- 当前目录包含 `pixi.toml` 文件
 - 当前目录包含一个使用 `.py` 扩展名的文件.
 - The current directory contains a file with the `.ipynb` extension.
 - 当前处于一个活跃的 python 虚拟环境中
