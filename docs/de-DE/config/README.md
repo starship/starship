@@ -3534,7 +3534,7 @@ By default, the module will be shown if any of the following conditions are met:
 - Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
 - Das aktuelle Verzeichnis enthält eine `setup.py`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- The current directory contains a `pixi.toml` file
+- Das aktuelle Verzeichnis enthält eine `pixi.toml`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung.
 - The current directory contains a file with the `.ipynb` extension.
 - Ein virtualenv ist momentan aktiv
