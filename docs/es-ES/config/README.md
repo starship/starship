@@ -3533,7 +3533,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 - El directorio actual contiene un archivo `requirements.txt`
 - El directorio actual contiene un archivo `setup.py`
 - El directorio actual contiene un archivo `tox.ini`
-- The current directory contains a `pixi.toml` file
+- El directorio actual contiene un archivo `pixi.toml`
 - El directorio actual contiene un archivo con la extensión `.py`.
 - The current directory contains a file with the `.ipynb` extension.
 - Un entorno virtual está activado actualmente
