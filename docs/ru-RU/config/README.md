@@ -3533,7 +3533,7 @@ By default, the module will be shown if any of the following conditions are met:
 - Текущий каталог содержит файл `requirements.txt`
 - Текущий каталог содержит файл `setup.py`
 - Текущий каталог содержит файл `tox.ini`
-- The current directory contains a `pixi.toml` file
+- Текущий каталог содержит файл `pixi.toml`
 - Текущий каталог содержит файл с расширением `.py`.
 - The current directory contains a file with the `.ipynb` extension.
 - Виртуальная среда в данный момент активирована
