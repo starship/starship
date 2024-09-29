@@ -22,6 +22,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
 
         if context_path(context, "/run/host/container-manager").exists() {
+            // systemd-nspawn
+            if read_file("/run/host/container-manager")
+                .map(|c| c.contains("systemd-nspawn"))
+                .unwrap_or_default()
+            {
+                return Some("nspawn".into());
+            }
+
             // OCI
             return Some("OCI".into());
         }
