@@ -1055,7 +1055,7 @@ format = 'via [🔰 $version](bold red) '
 | ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'`                                    | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🦕 '`                                                                  | Dart のシンボルを表すフォーマット文字列                                 |
+| `symbol`            | `'🦕 '`                                                                  | Deno のシンボルを表すフォーマット文字列                                 |
 | `detect_extensions` | `[]`                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
