@@ -20,11 +20,11 @@ this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
 
 By default, the left side of input gets replaced with `>`. To customize this,
 define a new function called `Invoke-Starship-TransientFunction`. For example, to
-display Starship's `character` module here, you would do
+display Starship's `transient` profile with the `character` module:
 
 ```powershell
 function Invoke-Starship-TransientFunction {
-  &starship module character
+  &starship prompt --profile=transient
 }
 
 Invoke-Expression (&starship init powershell)
@@ -48,11 +48,11 @@ to customize what gets displayed on the left and on the right:
 - By default, the left side of input gets replaced with `>`. To customize this,
   define a new function called `starship_transient_prompt_func`. This function
   receives the current prompt as a string that you can utilize. For example, to
-  display Starship's `character` module here, you would do
+  display Starship's default `transient` profile with the `character` module, you would do
 
 ```lua
 function starship_transient_prompt_func(prompt)
-  return io.popen("starship module character"
+  return io.popen("starship prompt --profile=transient"
     .." --keymap="..rl.getvariable('keymap')
   ):read("*a")
 end
@@ -62,11 +62,22 @@ load(io.popen('starship init cmd'):read("*a"))()
 - By default, the right side of input is empty. To customize this, define a new
   function called `starship_transient_rprompt_func`. This function receives the
   current prompt as a string that you can utilize. For example, to display
-  the time at which the last command was started here, you would do
+  the time at which the last command was started here, you could define the following:
+
+```toml
+# ~/.config/starship.toml
+
+[profiles.transient]
+format = "$character"
+right_format = "$time"
+
+[time]
+disabled = false
+```
 
 ```lua
 function starship_transient_rprompt_func(prompt)
-  return io.popen("starship module time"):read("*a")
+  return io.popen("starship prompt --profile=transient --right"):read("*a")
 end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
@@ -84,11 +95,11 @@ and syntactically correct.
 
 - By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
   define a new function called `starship_transient_prompt_func`. For example, to
-  display Starship's `character` module here, you would do
+  display Starship's default `transient` profile with the `character` module, you would do
 
 ```fish
 function starship_transient_prompt_func
-  starship module character
+  starship prompt --profile=transient
 end
 starship init fish | source
 enable_transience
@@ -98,9 +109,20 @@ enable_transience
   function called `starship_transient_rprompt_func`. For example, to display
   the time at which the last command was started here, you would do
 
+```toml
+# ~/.config/starship.toml
+
+[profiles.transient]
+format = "$character"
+right_format = "$time"
+
+[time]
+disabled = false
+```
+
 ```fish
 function starship_transient_rprompt_func
-  starship module time
+  starship prompt --right --profile=transient
 end
 starship init fish | source
 enable_transience

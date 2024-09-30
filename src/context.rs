@@ -58,6 +58,10 @@ pub struct Context<'a> {
     /// Which prompt to print (main, right, ...)
     pub target: Target,
 
+    /// The profile to use for the prompt
+    /// If None, the default profile will be used
+    pub profile: Option<String>,
+
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
@@ -148,6 +152,8 @@ impl<'a> Context<'a> {
             properties.status_code = None;
         }
 
+        let profile = properties.profile.take();
+
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this may convert the path to extended-path syntax.
         let current_dir = Context::expand_tilde(path);
@@ -160,7 +166,6 @@ impl<'a> Context<'a> {
             .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
         let width = properties.terminal_width;
-
         Context {
             config,
             properties,
@@ -170,6 +175,7 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             target,
+            profile,
             width,
             env,
             #[cfg(test)]
@@ -830,12 +836,11 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum Target {
     Main,
     Right,
     Continuation,
-    Profile(String),
 }
 
 /// Properties as passed on from the shell as arguments
@@ -866,6 +871,9 @@ pub struct Properties {
     /// The number of currently running jobs
     #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
+    /// Print the prompt with the specified profile name (instead of the standard left prompt)
+    #[clap(long, env = "STARSHIP_PROFILE")]
+    pub profile: Option<String>,
 }
 
 impl Default for Properties {
@@ -879,6 +887,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            profile: None,
         }
     }
 }

@@ -10,6 +10,7 @@ use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
+use crate::config::Either;
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
 use crate::formatter::{StringFormatter, VariableHolder};
@@ -409,7 +410,6 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 /// and the list of all modules used in a format string
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
     let config = &context.root_config;
-
     if context.target == Target::Continuation {
         let cf = &config.continuation_prompt;
         let formatter = StringFormatter::new(cf);
@@ -425,33 +425,49 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         };
     }
 
-    let (left_format_str, right_format_str): (&str, &str) = match context.target {
-        Target::Main | Target::Right => (&config.format, &config.right_format),
-        Target::Profile(ref name) => {
-            if let Some(lf) = config.profiles.get(name) {
-                (lf, "")
-            } else {
-                log::error!("Profile {name:?} not found");
-                return (StringFormatter::raw(">"), BTreeSet::new());
-            }
-        }
-        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    let profile_name = context.profile.as_deref();
+    let profile = profile_name.and_then(|name| config.profiles.get(name));
+
+    // Reset `profile_name` if the profile is not found
+    let profile_name = if let (Some(profile_name), None) = (profile_name, profile) {
+        log::error!("Unknown profile {profile_name:?}, using default prompt");
+        None
+    } else {
+        profile_name
     };
+
+    let (left_format_str, right_format_str) = profile
+        .as_ref()
+        .map(|p| match p {
+            Either::First(p) => (p.as_str(), ""),
+            Either::Second(p) => (p.format.as_str(), p.right_format.as_str()),
+        })
+        .unwrap_or((config.format.as_str(), config.right_format.as_str()));
 
     let lf = StringFormatter::new(left_format_str);
     let rf = StringFormatter::new(right_format_str);
 
     if let Err(ref e) = lf {
-        let name = if let Target::Profile(ref profile_name) = context.target {
-            format!("profile.{profile_name}")
-        } else {
-            "format".to_string()
+        let name = match (profile, profile_name) {
+            // String-style profile
+            (Some(Either::First(_)), Some(name)) => name.to_string(),
+            // Table-style profile
+            (Some(Either::Second(_)), Some(name)) => {
+                format!("{name}.format")
+            }
+            // No profile
+            (_, _) => "format".to_string(),
         };
         log::error!("Error parsing {name:?}: {e}");
-    };
+    }
 
     if let Err(ref e) = rf {
-        log::error!("Error parsing right_format: {e}");
+        let name = if let Some(profile_name) = profile_name {
+            format!("{profile_name}.right_format")
+        } else {
+            "right_format".to_string()
+        };
+        log::error!("Error parsing {name:?}: {e}");
     }
 
     let modules = [&lf, &rf]
@@ -459,9 +475,8 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         .flatten()
         .flat_map(VariableHolder::get_variables)
         .collect();
-
     let main_formatter = match context.target {
-        Target::Main | Target::Profile(_) => lf,
+        Target::Main => lf,
         Target::Right => rf,
         Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
     };
@@ -520,6 +535,7 @@ fn preset_list() -> String {
 
 #[cfg(test)]
 mod test {
+
     use super::*;
     use crate::test::default_context;
     use crate::utils;
@@ -599,7 +615,7 @@ mod test {
             [character]
             format=">>"
         });
-        context.target = Target::Profile("test".to_string());
+        context.profile = Some("test".to_string());
 
         let expected = String::from("0_0>>");
         let actual = get_prompt(context);
@@ -610,16 +626,123 @@ mod test {
     fn custom_prompt_fallback() {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
+                format = ">fallback>"
                 [profiles]
                 test="0_0$character"
                 [character]
                 format=">>"
         });
-        context.target = Target::Profile("wrong_prompt".to_string());
+        context.profile = Some("wrong_prompt".to_string());
 
-        let expected = String::from(">");
+        let expected = String::from(">fallback>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_prompt_verbose() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline=false
+            [profiles.test]
+            format = "0_0$character"
+            [character]
+            format=">>"
+        });
+        context.profile = Some("test".to_string());
+        context.root_config.add_newline = false;
+
+        let expected = String::from("0_0>>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual, "profile format should be used");
+    }
+
+    #[test]
+    fn custom_prompt_right() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline=false
+            right_format = "rf"
+            [profiles.test]
+            right_format = "0_0$character"
+            [character]
+            format=">>"
+        });
+        context.profile = Some("test".to_string());
+        context.target = Target::Right;
+        context.root_config.add_newline = false;
+
+        let expected = String::from("0_0>>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual, "profile right_format should be used");
+    }
+
+    #[test]
+    fn custom_prompt_right_not_set() {
+        let cfg = toml::toml! {
+            add_newline=false
+            right_format = "rf"
+            [profiles.test]
+            format = "0_0$character"
+            [character]
+            format=">>"
+        };
+
+        let mut context = default_context().set_config(cfg.clone());
+        context.profile = Some("test".to_string());
+        context.target = Target::Right;
+
+        let expected = String::from("");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "right prompt should be empty if not defined in verbose cfg"
+        );
+
+        let mut context = default_context().set_config(cfg);
+        context.profile = Some("test".to_string());
+        context.target = Target::Right;
+        context.root_config.profiles.insert(
+            "test".to_string(),
+            Either::First("0_0$character".to_string()),
+        );
+
+        let expected = String::from("");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "right prompt should be empty if not defined in short cfg"
+        );
+    }
+
+    #[test]
+    fn custom_prompt_verbose_not_defined() {
+        let cfg = toml::toml! {
+            format = ">fallback>"
+            right_format = ">right_fallback>"
+            add_newline=false
+            [profiles.test]
+            format = "0_0$character"
+            [character]
+            format=">>"
+        };
+        let mut context = default_context().set_config(cfg.clone());
+        context.profile = Some("wrong_prompt".to_string());
+
+        let expected = String::from(">fallback>");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "verbose prompt should use main format as fallback if not defined in verbose cfg"
+        );
+
+        let mut context = default_context().set_config(cfg);
+        context.profile = Some("wrong_prompt".to_string());
+        context.target = Target::Right;
+        let expected = String::from(">right_fallback>");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "right prompt should use main right_format as fallback if not defined in verbose cfg"
+        );
     }
 
     #[test]
