@@ -1565,7 +1565,7 @@ AA -------------------------------------------- BB -----------------------------
 | `symbol`            | `' '`                           | 現在のディレクトリのチェックアウトのブランチ名の前に使用されるシンボルです。                |
 | `style`             | `'bold purple'`                  | モジュールのスタイルです。                                         |
 | `truncation_length` | `2^63 - 1`                       | Fossil のブランチ名を `N` 書記素までで切り捨てます。                      |
-| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `truncation_symbol` | `'…'`                            | ブランチ名が切り捨てられていることを示すための記号です。 `''` で記号なしにできます。         |
 | `disabled`          | `true`                           | `fossil_branch` モジュールを無効にします。                         |
 
 ### 変数
@@ -1713,7 +1713,7 @@ very-long-project-name = 'vlpn'
 | `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                             |
 | `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                         |
 | `truncation_length`  | `2^63 - 1`                                        | gitブランチ名を `N` 書記素までで切り捨てます。                           |
-| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `truncation_symbol`  | `'…'`                                             | ブランチ名が切り捨てられていることを示すための記号です。 `''` で記号なしにできます。         |
 | `only_attached`      | `false`                                           | デタッチ `HEAD` 状態にない時はブランチ名のみ表示します。                      |
 | `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 'master' や 'main' に対して有用です。              |
 | `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                             |
@@ -2790,7 +2790,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `style`             | `'bold purple'`                           | モジュールのスタイルです。                                                                                |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | module のフォーマットです。                                                                            |
 | `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
-| `truncation_symbol` | `'…'`                                     | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `truncation_symbol` | `'…'`                                     | ブランチ名が切り捨てられていることを示すための記号です。                                                                 |
 | `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
 ### 変数
@@ -3416,7 +3416,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `style`             | `'bold purple'`                   | モジュールのスタイルです。                                                                        |
 | `format`            | `'on [$symbol$channel]($style) '` | module のフォーマットです。                                                                    |
 | `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
-| `truncation_symbol` | `'…'`                             | ブランチ名切り捨てられていることを示すための記号です。                                                          |
+| `truncation_symbol` | `'…'`                             | ブランチ名が切り捨てられていることを示すための記号です。                                                         |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
