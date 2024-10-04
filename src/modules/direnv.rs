@@ -15,13 +15,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config = DirenvConfig::try_load(module.config);
     let has_detected_env_var = context.detect_env_vars(&config.detect_env_vars);
 
-    let direnv_applies = !config.disabled && has_detected_env_var
-        || context
-            .try_begin_scan()?
-            .set_extensions(&config.detect_extensions)
-            .set_files(&config.detect_files)
-            .set_folders(&config.detect_folders)
-            .is_match();
+    let direnv_applies = !config.disabled
+        && (has_detected_env_var
+            || context
+                .try_begin_scan()?
+                .set_extensions(&config.detect_extensions)
+                .set_files(&config.detect_files)
+                .set_folders(&config.detect_folders)
+                .is_match());
 
     if !direnv_applies {
         return None;
