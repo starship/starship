@@ -57,7 +57,7 @@ log = { version = "0.4.22", features = ["std"] }
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.11.3", optional = true }
 nu-ansi-term = "0.50.1"
-once_cell = "1.20.1"
+once_cell = "1.20.2"
 open = "5.3.0"
 # update os module config and tests when upgrading os_info
 os_info = "3.8.2"
