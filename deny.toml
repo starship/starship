@@ -4,8 +4,6 @@ version = 2
 # A list of advisory IDs to ignore. Note that ignored advisories will still
 # output a note when they are encountered.
 ignore = [
-
-
   # { id = "RUSTSEC-0000-0000",  reason = "" },
 ]
 
