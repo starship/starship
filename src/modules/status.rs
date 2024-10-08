@@ -158,7 +158,12 @@ fn format_exit_code<'a>(
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(if exit_code_int == 0 {
+                    config.success_style
+                } else {
+                    config.failure_style
+                }
+                .unwrap_or(config.style))),
                 _ => None,
             })
             .map(|variable| match variable {
