@@ -12,6 +12,6 @@
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Нажмите, чтобы загрузить TOML](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
 <<< @/public/presets/toml/plain-text-symbols.toml

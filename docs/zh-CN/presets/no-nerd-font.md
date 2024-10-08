@@ -2,11 +2,11 @@
 
 # No Nerd Fonts Preset
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+此预设谨慎的使用了来自emoji和powerline的符号。
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+这意味着即使没有安装Nerd Font，您也应该看到所有的模块符号。
 
-This preset will become the default preset in a future release of starship.
+在未来的starship release中，此预设将成为默认预设。
 
 ### 配置
 
@@ -14,6 +14,6 @@ This preset will become the default preset in a future release of starship.
 starship preset no-nerd-font -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/no-nerd-font.toml)
+[Click to download TOML](/presets/toml/no-nerd-font.toml){download}
 
 <<< @/public/presets/toml/no-nerd-font.toml

@@ -12,6 +12,6 @@ This preset changes the symbols for each module into plain text. Great if you do
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[클릭하여 TOML 다운로드](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
 <<< @/public/presets/toml/plain-text-symbols.toml

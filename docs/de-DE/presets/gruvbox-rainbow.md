@@ -16,6 +16,6 @@ Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerl
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Zum Herunterladen der TOML Datei klicken](/presets/toml/gruvbox-rainbow.toml)
+[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml

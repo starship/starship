@@ -12,6 +12,6 @@ Ikony zestawów narzędzi będą wyświetlane dla zidentyfikowanych plików zest
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/no-empty-icons.toml)
+[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
 
 <<< @/public/presets/toml/no-empty-icons.toml

@@ -19,6 +19,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[클릭하여 TOML 다운로드](/presets/toml/jetpack.toml)
+[Click to download TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml

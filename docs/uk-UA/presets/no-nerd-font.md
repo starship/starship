@@ -14,6 +14,6 @@
 starship preset no-nerd-font -o ~/.config/starship.toml
 ```
 
-[Натисніть, щоб завантажити TOML](/presets/toml/no-nerd-font.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/no-nerd-font.toml){download}
 
 <<< @/public/presets/toml/no-nerd-font.toml

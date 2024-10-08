@@ -8,7 +8,7 @@
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- 在终端中安装并使用 [Nerd Font](https://www.nerdfonts.com/)字体（本示例使用Caskaydia Cove Nerd Font）。
 
 ### 配置
 
@@ -16,6 +16,6 @@
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/pastel-powerline.toml)
+[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml

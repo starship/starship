@@ -19,6 +19,6 @@
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[Нажмите, чтобы загрузить TOML](/presets/toml/jetpack.toml)
+[Click to download TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml

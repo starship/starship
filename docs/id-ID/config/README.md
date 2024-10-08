@@ -553,10 +553,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
-
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### Opsi
 
@@ -635,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -863,7 +860,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ::: tip
 
-Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`.
+Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
@@ -1117,7 +1114,7 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 | `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1759,7 +1756,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `only_detached`      | `true`                         | Only show git commit hash when in detached `HEAD` state                              |
 | `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷 '`                        | Tag symbol prefixing the info shown                                                  |
+| `tag_symbol`         | `' 🏷  '`                       | Tag symbol prefixing the info shown                                                  |
 | `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
 
 ### Variabel
@@ -1890,7 +1887,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                 |
 | `style`             | `'bold red'`                                    | Gaya penataan untuk modul.                                                                                  |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
@@ -1911,7 +1908,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
 | style\*      | Menyalin nilai dari opsi `style`                                                                              |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
@@ -2257,6 +2254,7 @@ The `hostname` module shows the system hostname.
 | `fromat`          | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                    |
 | `style`           | `'bold dimmed green'`                  | Gaya penataan untuk modul.                                                                                                            |
 | `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
 
 ### Variabel
 
@@ -2291,6 +2289,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2809,6 +2815,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Opsi
+
+| Opsi                | Bawaan                                | Deskripsi                                              |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `fromat`            | `'with [$symbol($version )]($style)'` | Format dari modul.                                     |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Gaya penataan untuk modul.                             |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Ekstensi mana yang sebaiknya memicu modul ini.         |
+| `detect_files`      | `[]`                                  | filenames mana yang sebaiknya memicu modul ini.        |
+| `detect_folders`    | `[]`                                  | Folder mana yang sebaiknya memicul modul ini.          |
+
+### Variabel
+
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `24.4.0` | The version of `mojo`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2934,17 +2975,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Opsi
 
-| Opsi                | Bawaan                                     | Deskripsi                                                                                             |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `fromat`            | `'via [$symbol($version )]($style)'`       | Format dari modul.                                                                                    |
-| `version_format`    | `'v${raw}'`                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
-| `detect_files`      | `['package.json', '.node-version']`        | filenames mana yang sebaiknya memicu modul ini.                                                       |
-| `detect_folders`    | `['node_modules']`                         | Folder mana yang sebaiknya memicul modul ini.                                                         |
-| `style`             | `'bold green'`                             | Gaya penataan untuk modul.                                                                            |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opsi                | Bawaan                                        | Deskripsi                                                                                             |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'`          | Format dari modul.                                                                                    |
+| `version_format`    | `'v${raw}'`                                   | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | filenames mana yang sebaiknya memicu modul ini.                                                       |
+| `detect_folders`    | `['node_modules']`                            | Folder mana yang sebaiknya memicul modul ini.                                                         |
+| `style`             | `'bold green'`                                | Gaya penataan untuk modul.                                                                            |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variabel
 
@@ -3492,24 +3533,26 @@ By default, the module will be shown if any of the following conditions are met:
 - Direktori ini memiliki berkas `requirements.txt`
 - Direktori ini memiliki berkas `setup.py`
 - Direktori ini memiliki berkas `tox.ini`
+- Direktori ini memiliki berkas `pixi.toml`
 - The current directory contains a file with the `.py` extension.
+- The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
 
 ### Opsi
 
-| Opsi                 | Bawaan                                                                                                       | Deskripsi                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `fromat`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format dari modul.                                                                     |
-| `version_format`     | `'v${raw}'`                                                                                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`    |
-| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                              | Gaya penataan untuk modul.                                                             |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py']`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | filenames mana yang sebaiknya memicu modul ini                                         |
-| `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                           |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| Opsi                 | Bawaan                                                                                                                    | Deskripsi                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `fromat`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Format dari modul.                                                                     |
+| `version_format`     | `'v${raw}'`                                                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`    |
+| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
+| `style`              | `'yellow bold'`                                                                                                           | Gaya penataan untuk modul.                                                             |
+| `pyenv_version_name` | `false`                                                                                                                   | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Ekstensi mana yang sebaiknya memicu modul ini                                          |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | filenames mana yang sebaiknya memicu modul ini                                         |
+| `detect_folders`     | `[]`                                                                                                                      | Folder mana yang sebaiknya memicul modul ini                                           |
+| `disabled`           | `false`                                                                                                                   | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -4350,7 +4393,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `fromat`          | `'[$user]($style) in '` | Format dari modul.                                        |
 | `show_always`     | `false`                 | Always shows the `username` module.                       |
 | `disabled`        | `false`                 | Disables the `username` module.                           |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### Variabel
 
@@ -4361,7 +4404,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Contoh
 
-#### Always show the hostname
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4416,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Hide the hostname in remote tmux sessions
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant

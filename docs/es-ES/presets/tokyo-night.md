@@ -16,6 +16,6 @@ Este preset está inspirado en [tokyo-night-vscode-theme](https://github.com/enk
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

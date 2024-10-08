@@ -12,6 +12,6 @@ Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://
 starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[Zum Herunterladen der TOML Datei klicken](/presets/toml/pure-preset.toml)
+[Click to download TOML](/presets/toml/pure-preset.toml){download}
 
 <<< @/public/presets/toml/pure-preset.toml

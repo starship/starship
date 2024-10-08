@@ -16,6 +16,6 @@
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/nerd-font-symbols.toml)
+[Click to download TOML](/presets/toml/nerd-font-symbols.toml){download}
 
 <<< @/public/presets/toml/nerd-font-symbols.toml

@@ -553,10 +553,7 @@ discharging_symbol = '💦'
 
 ## Buf
 
-Модуль `buf` показує поточну встановлену версію [Buf](https://buf.build). Типово, модуль показується, якщо всі наступні умови виконуються:
-
-- Встановлено [`buf`](https://github.com/bufbuild/buf) CLI.
-- Поточна тека містить файли налаштувань [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), чи [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
+Модуль `buf` показує поточну встановлену версію [Buf](https://buf.build). Стандартно, модуль показується якщо поточна тека містить [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml) або конфігураційний файл [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
 
 ### Параметри
 
@@ -635,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 Ви можете перевизначити параметр `detect_files` властивості [модуля nodejs](#nodejs) у вашій конфігурації, щоб показати середу виконання bun:
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -863,7 +860,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, запустивши `pixi config set change-ps1 false`.
 
 :::
 
@@ -1117,7 +1114,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` дозволяє визначити довільні заміни літер рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки (в Java). Зауважте, що це відключить стиль fish у PWD.
+`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD.
 
 ```toml
 [directory.substitutions]
@@ -1759,7 +1756,7 @@ ignore_branches = ['master', 'main']
 | `only_detached`      | `true`                         | Показувати хеш коміту тільки коли `HEAD` у відʼєднаному стані                                |
 | `tag_disabled`       | `true`                         | Вимикає показ теґів в модулі `git_commit`.                                                   |
 | `tag_max_candidates` | `0`                            | Впродовж скількох комітів показувати теґ. Стандартно дозволяється тільки безпосередній збіг. |
-| `tag_symbol`         | `' 🏷 '`                        | Символ теґу                                                                                  |
+| `tag_symbol`         | `' 🏷  '`                       | Символ теґу                                                                                  |
 | `disabled`           | `false`                        | Вимикає модуль `git_commit`.                                                                 |
 
 ### Змінні
@@ -1890,7 +1887,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`            | `'+'`                                           | Формат `staged`                                                                                                         |
 | `renamed`           | `'»'`                                           | Формат `renamed`                                                                                                        |
 | `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`       | `""`                                            | Формат `typechange`                                                                                                     |
+| `typechanged`       | `""`                                            | Формат `typechanged`                                                                                                    |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                                           |
 | `ignore_submodules` | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
 | `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
@@ -1911,7 +1908,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
 | `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
 | `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
-| `typechanged`  | Показує `typechange` коли інформація про файл була змінена у просторі staging.                      |
+| `typechanged`  | Показує `typechanged` коли інформація про файл була змінена у просторі staging.                     |
 | style\*      | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -2257,6 +2254,7 @@ format = 'via [⎈ $version](bold white) '
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                      |
 | `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                       |
 | `disabled`        | `false`                                | Вимикає модуль `hostname`.                                                                                                          |
+| `aliases`         | `{}`                                   | Переводить системні імена хостів у щось інше. Якщо задано `trim_at`, то лише перша частина буде перевірена та замінена.             |
 
 ### Змінні
 
@@ -2291,6 +2289,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Замінити імʼя хосту псевдонімом
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2809,6 +2815,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+Модуль `mojo` показує поточну версію встановленої мови програмування [Mojo](https://www.modular.com/mojo)
+
+### Параметри
+
+| Параметр            | Стандартно                            | Опис                                         |
+| ------------------- | ------------------------------------- | -------------------------------------------- |
+| `format`            | `'with [$symbol($version )]($style)'` | Формат модуля.                               |
+| `symbol`            | `'🔥 '`                                | Символ, який знаходиться перед версією Mojo. |
+| `style`             | `'bold 208'`                          | Стиль модуля.                                |
+| `disabled`          | `false`                               | Вимикає модуль `mojo`.                       |
+| `detect_extensions` | `['mojo', '🔥']`                       | Які розширення повинні запускати цей модуль. |
+| `detect_files`      | `[]`                                  | Які імена файлів мають запускати цей модуль. |
+| `detect_folders`    | `[]`                                  | В яких теках цей модуль має запускатись.     |
+
+### Змінні
+
+| Змінна    | Приклад  | Опис                                     |
+| --------- | -------- | ---------------------------------------- |
+| version   | `24.4.0` | Версія `mojo`                            |
+| symbol    |          | Віддзеркалює значення параметра `symbol` |
+| style\* |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 Модуль `nats` показує назву поточного контексту[NATS](https://nats.io).
@@ -2934,17 +2975,17 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### Параметри
 
-| Параметр            | Стандартно                                 | Опис                                                                             |
-| ------------------- | ------------------------------------------ | -------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | Формат модуля.                                                                   |
-| `version_format`    | `'v${raw}'`                                | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                |
-| `symbol`            | `' '`                                     | Формат рядка, що представляє символ Node.js.                                     |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Які розширення повинні запускати цей модуль.                                     |
-| `detect_files`      | `['package.json', '.node-version']`        | Які імена файлів мають запускати цей модуль.                                     |
-| `detect_folders`    | `['node_modules']`                         | В яких теках цей модуль має запускатись.                                         |
-| `style`             | `'bold green'`                             | Стиль модуля.                                                                    |
-| `disabled`          | `false`                                    | Вимикає модуль `nodejs`.                                                         |
-| `not_capable_style` | `'bold red'`                               | Стиль для модуля, коли версія рушія у package.json не відповідає версії Node.js. |
+| Параметр            | Стандартно                                    | Опис                                                                             |
+| ------------------- | --------------------------------------------- | -------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Формат модуля.                                                                   |
+| `version_format`    | `'v${raw}'`                                   | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                |
+| `symbol`            | `' '`                                        | Формат рядка, що представляє символ Node.js.                                     |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Які розширення повинні запускати цей модуль.                                     |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Які імена файлів мають запускати цей модуль.                                     |
+| `detect_folders`    | `['node_modules']`                            | В яких теках цей модуль має запускатись.                                         |
+| `style`             | `'bold green'`                                | Стиль модуля.                                                                    |
+| `disabled`          | `false`                                       | Вимикає модуль `nodejs`.                                                         |
+| `not_capable_style` | `'bold red'`                                  | Стиль для модуля, коли версія рушія у package.json не відповідає версії Node.js. |
 
 ### Змінні
 
@@ -3492,24 +3533,26 @@ format = 'via [$symbol$version](bold white)'
 - Поточна тека містить файл `requirements.txt`
 - Поточна тека містить файл `setup.py`
 - Поточна тека містить файл `tox.ini`
+- Поточна тека містить файл `pixi.toml`
 - Поточна тека містить файл `.py`.
+- Поточна тека містить файли з розширенням `.ipynb`.
 - Віртуальне середовище активовано
 
 ### Параметри
 
-| Параметр             | Стандартно                                                                                                   | Опис                                                                                      |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                            |
-| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                         |
-| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                                |
-| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                             |
-| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                         |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                      |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Налаштовує бінарні файли python, який Starship буде використовувати для отримання версії. |
-| `detect_extensions`  | `['py']`                                                                                                     | Які розширення повинні запускати цей модуль                                               |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                        |
-| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                            |
-| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                  |
+| Параметр             | Стандартно                                                                                                                | Опис                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Формат модуля.                                                                            |
+| `version_format`     | `'v${raw}'`                                                                                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                         |
+| `symbol`             | `'🐍 '`                                                                                                                    | Формат рядка, що представляє символ Python                                                |
+| `style`              | `'yellow bold'`                                                                                                           | Стиль модуля.                                                                             |
+| `pyenv_version_name` | `false`                                                                                                                   | Використовувати pyenv для отримання версії Python                                         |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Префікс перед версією pyenv, показується якщо pyenv використовується                      |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Налаштовує бінарні файли python, який Starship буде використовувати для отримання версії. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Які розширення повинні запускати цей модуль                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Назви файлів, які активують модуль                                                        |
+| `detect_folders`     | `[]`                                                                                                                      | Назви тек, що активують модуль                                                            |
+| `disabled`           | `false`                                                                                                                   | Вимикає модуль `python`.                                                                  |
 
 ::: tip
 
@@ -4350,7 +4393,7 @@ time_range = '10:00:00-14:00:00'
 | `format`          | `'[$user]($style) in '` | Формат модуля.                                             |
 | `show_always`     | `false`                 | Завжди показувати модуль `username`.                       |
 | `disabled`        | `false`                 | Вимикає модуль `username`.                                 |
-| `aliases`         | `{}`                    | Переводить системні імена користувачів у щось інше         |
+| `aliases`         | `{}`                    | Переводить системні імена користувачів у щось інше.        |
 
 ### Змінні
 
@@ -4361,7 +4404,7 @@ time_range = '10:00:00-14:00:00'
 
 ### Приклад
 
-#### Завжди показувати hostname
+#### Завжди показувати username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4416,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Приховувати hostname для віддалених сеансів tmux
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
@@ -4560,9 +4592,9 @@ symbol = '⚡️ '
 
 :::
 
-::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+::: warning Якщо увімкнено `unsafe_no_escape` або до версії starship v1.20 вивід команди буде виведено без екранування.
 
-Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід  містить специфічні для оболонки інтерпретовані послідовності, вони можуть бути інтерпретовані безпосередньо під час виведення на екран. Залежно від оболонки, це може означати, що, наприклад, рядки, у зворотніх лапках, виконуються оболонкою. Такі послідовності зазвичай залежать від оболонки, наприклад, ви можете написати командний модуль, який пише послідовності для bash, наприклад, `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
 
 Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
@@ -4577,7 +4609,7 @@ symbol = '⚡️ '
 | `require_repo`      | `false`                         | Якщо `true`, модуль буде показано лише в шляхах, що містять репозиторій (git). Цей параметр сам по собі не є достатньою умовою для показу модуля за відсутності інших варіантів.                                                                                                                                                 |
 | `shell`             |                                 | [Дивіться нижче](#custom-command-shell)                                                                                                                                                                                                                                                                                          |
 | `description`       | `'<custom module>'`       | Опис модуля, який показується під час запуску `starship explain`.                                                                                                                                                                                                                                                                |
-| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                    |
+| `unsafe_no_escape`  | `false`                         | Якщо встановлено, виведення команд не екранується від символів, які можуть бути інтерпретовані оболонкою.                                                                                                                                                                                                                        |
 | `detect_files`      | `[]`                            | Файли, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                      |
 | `detect_folders`    | `[]`                            | Теки, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                       |
 | `detect_extensions` | `[]`                            | Розширення файлів, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                          |

@@ -12,6 +12,6 @@ Ten zestaw ustawień zmienia symbole w zwykły tekst dla każdego modułu. Świe
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
 <<< @/public/presets/toml/plain-text-symbols.toml

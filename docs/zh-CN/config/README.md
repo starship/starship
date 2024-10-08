@@ -553,10 +553,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
-
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### 配置项
 
@@ -635,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -863,7 +860,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ::: tip 提示
 
-此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。
+此组件没有禁用 conda 自带的提示符修改，您可能需要执行 `conda config --set changeps1 False`。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
@@ -1117,7 +1114,7 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 | `fish_style_pwd_dir_length` | `0`    | 使用 fish shell 当前目录路径逻辑时每个省略目录名使用的字符数。                                                                                                                                  |
 | `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1759,7 +1756,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `only_detached`      | `true`                         | Only show git commit hash when in detached `HEAD` state                              |
 | `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷 '`                        | Tag symbol prefixing the info shown                                                  |
+| `tag_symbol`         | `' 🏷  '`                       | Tag symbol prefixing the info shown                                                  |
 | `disabled`           | `false`                        | 禁用 `git_commit` 组件。                                                                  |
 
 ### 变量
@@ -1890,7 +1887,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`           | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`          | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`          | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`      | `""`                                            | The format of `typechange`                                                                                  |
+| `typechanged`      | `""`                                            | The format of `typechanged`                                                                                 |
 | `style`            | `'bold red'`                                    | 此组件的样式。                                                                                                     |
 | `忽略子组件`            | `false`                                         | 忽略子模块的更改.                                                                                                   |
 | `disabled`         | `false`                                         | 禁用 `git_status` 组件。                                                                                         |
@@ -1911,7 +1908,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
 | style\*      | `style`对应值                                                                                                    |
 
 *: 此变量只能作为样式字符串的一部分使用
@@ -2248,15 +2245,16 @@ format = 'via [⎈ $version](bold white) '
 
 ### 配置项
 
-| 选项                | 默认值                                    | 描述                                                                                                     |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                    |
-| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                 |
-| `trim_at`         | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                              |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                               |
-| `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                |
-| `disabled`        | `false`                                | 禁用 `hostname` 组件。                                                                                      |
+| 选项                | 默认值                                    | 描述                                                                                                                         |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                                        |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                     |
+| `trim_at`         | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation.                     |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                  |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                                                   |
+| `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                                    |
+| `disabled`        | `false`                                | 禁用 `hostname` 组件。                                                                                                          |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced. |
 
 ### 变量
 
@@ -2291,6 +2289,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2809,6 +2815,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### 配置项
+
+| 选项                  | 默认值                                   | 描述                                                     |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | 组件格式化模板。                                               |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | 此组件的样式。                                                |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | 触发此组件的扩展名                                              |
+| `detect_files`      | `[]`                                  | 触发此组件的文件名                                              |
+| `detect_folders`    | `[]`                                  | 触发此组件的文件夹                                              |
+
+### 变量
+
+| 字段        | 示例       | 描述                    |
+| --------- | -------- | --------------------- |
+| version   | `24.4.0` | The version of `mojo` |
+| symbol    |          | `symbol`对应值           |
+| style\* |          | `style`对应值            |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2934,17 +2975,17 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### 配置项
 
-| 选项                  | 默认值                                        | 描述                                                                                                    |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | 组件格式化模板。                                                                                              |
-| `version_format`    | `'v${raw}'`                                | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                                           |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | 触发此组件的扩展名                                                                                             |
-| `detect_files`      | `['package.json', '.node-version']`        | 触发此组件的文件名                                                                                             |
-| `detect_folders`    | `['node_modules']`                         | 触发此组件的文件夹                                                                                             |
-| `style`             | `'bold green'`                             | 此组件的样式。                                                                                               |
-| `disabled`          | `false`                                    | 禁用 `nodejs` 组件。                                                                                       |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| 选项                  | 默认值                                           | 描述                                                                                                    |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | 组件格式化模板。                                                                                              |
+| `version_format`    | `'v${raw}'`                                   | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                                           |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | 触发此组件的扩展名                                                                                             |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | 触发此组件的文件名                                                                                             |
+| `detect_folders`    | `['node_modules']`                            | 触发此组件的文件夹                                                                                             |
+| `style`             | `'bold green'`                                | 此组件的样式。                                                                                               |
+| `disabled`          | `false`                                       | 禁用 `nodejs` 组件。                                                                                       |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### 变量
 
@@ -3492,24 +3533,26 @@ By default, the module will be shown if any of the following conditions are met:
 - 当前目录包含 `requirements.txt` 文件
 - 当前目录包含一个 `setup.py` 文件
 - 当前目录包含一个 `tox.ini` 文件
+- 当前目录包含 `pixi.toml` 文件
 - 当前目录包含一个使用 `.py` 扩展名的文件.
+- The current directory contains a file with the `.ipynb` extension.
 - 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
-| 选项                   | 默认值                                                                                                          | 描述                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | 组件格式化模板。                                                                               |
-| `version_format`     | `'v${raw}'`                                                                                                  | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                            |
-| `symbol`             | `'🐍 '`                                                                                                       | 用于表示Python的格式化字符串。                                                                     |
-| `style`              | `'yellow bold'`                                                                                              | 此组件的样式。                                                                                |
-| `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 获取 Python 版本                                                                  |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py']`                                                                                                     | Which extensions should trigger this module                                            |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                        |
+| 选项                   | 默认值                                                                                                                       | 描述                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | 组件格式化模板。                                                                               |
+| `version_format`     | `'v${raw}'`                                                                                                               | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch`                                            |
+| `symbol`             | `'🐍 '`                                                                                                                    | 用于表示Python的格式化字符串。                                                                     |
+| `style`              | `'yellow bold'`                                                                                                           | 此组件的样式。                                                                                |
+| `pyenv_version_name` | `false`                                                                                                                   | 使用 pyenv 获取 Python 版本                                                                  |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Which extensions should trigger this module                                            |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                                      | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                                   | 禁用 `python` 组件。                                                                        |
 
 ::: tip 提示
 
@@ -4350,7 +4393,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `format`          | `'[$user]($style) in '` | 组件格式化模板。                                                  |
 | `show_always`     | `false`                 | 总是显示 `username` 组件。                                       |
 | `disabled`        | `false`                 | 禁用 `username` 组件。                                         |
-| `aliases`         | `{}`                    | Translate system usernames to something else              |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
 
 ### 变量
 
@@ -4361,7 +4404,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 示例
 
-#### Always show the hostname
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4416,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Hide the hostname in remote tmux sessions
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant

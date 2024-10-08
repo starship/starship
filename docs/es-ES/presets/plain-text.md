@@ -12,6 +12,6 @@ Este preajuste cambia los símbolos a texto sin formato. Bueno si usted no tiene
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
 <<< @/public/presets/toml/plain-text-symbols.toml
