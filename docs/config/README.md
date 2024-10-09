@@ -3877,6 +3877,36 @@ By default the module will be shown if any of the following conditions are met:
 format = 'via [🦪 $version]($style) '
 ```
 
+## Random
+
+The `random` modules randomizes the output every time the prompt is displayed.
+
+### Options
+
+| Option        | Default              | Description                          |
+| ------------- | -------------------- | ------------------------------------ |
+| `symbols`     | `['>', '$', '%']`    | List of style variables to pick from |
+| `styles`      | `['bold', 'italic']` | List of symbols to pick from         |
+| `format`      | `'[$symbol]($style)` | The format for the module            |
+| `disabled`    | `false`              | Disables this `random` module        |
+| `description` | `'<random module>'`  | Description for the module           |
+
+### Variables
+
+| Variable | Description                 |
+| -------- | --------------------------- |
+| style    | Random element of `styles`  |
+| symbol   | Random element of `symbols` |
+
+## Example
+
+```toml
+[random.prompt]
+symbols = ['>', '\\$', '%']
+styles = ['#ffffff', '#ababab', '#3c3c3c']
+format = '[$symbol](fg:$style)'
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/).
