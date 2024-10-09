@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.21.0](https://github.com/starship/starship/compare/v1.20.1...v1.21.0) (2024-10-08)
+
+
+### Features
+
+* **hostname:** add option to replace hostnames with aliases ([#6097](https://github.com/starship/starship/issues/6097)) ([68a8fc9](https://github.com/starship/starship/commit/68a8fc9563a52c4119241375d181ff68bb3d3da3))
+* **mojo:** add module for Mojo language ([#6108](https://github.com/starship/starship/issues/6108)) ([171746a](https://github.com/starship/starship/commit/171746a58408cbc0d48dedc52e21327bd35fccd4))
+* **package:** support alternative gradle module version syntax ([#6079](https://github.com/starship/starship/issues/6079)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+* **python:** Add detect env vars option  ([#4486](https://github.com/starship/starship/issues/4486)) ([8a2d944](https://github.com/starship/starship/commit/8a2d944bc80a0a8358c30e639e8af51c1d45d973))
+* **python:** detect pixi and ipynb files ([#6228](https://github.com/starship/starship/issues/6228)) ([36134d8](https://github.com/starship/starship/commit/36134d896bda3c739ffd6555be62499716b0a9b0))
+
+
+### Bug Fixes
+
+* **bash:** fix variable leak in Bash integration ([#6143](https://github.com/starship/starship/issues/6143)) ([e1189ed](https://github.com/starship/starship/commit/e1189ed7567de580d8f51c8baf870056a6060789))
+* **cmd_duration:** Make render_time format more consistent ([#5825](https://github.com/starship/starship/issues/5825)) ([4abea6b](https://github.com/starship/starship/commit/4abea6b601c53adfa5719a7aac11069dc054cdf8))
+* **docs:** correct username options ([#6084](https://github.com/starship/starship/issues/6084)) ([d96fbc5](https://github.com/starship/starship/commit/d96fbc5bcb9c039f875c4a55cff31edda57d5e6e))
+* **fish:** improve fish transient prompt ([#6107](https://github.com/starship/starship/issues/6107)) ([274dff3](https://github.com/starship/starship/commit/274dff37dbb375821a90d6976a11cf57d9386e4f))
+* **fish:** use correct input function in transient execute ([#6265](https://github.com/starship/starship/issues/6265)) ([244c2c6](https://github.com/starship/starship/commit/244c2c629e1f358bf849923531d5cf0d69c2db2d))
+* Fixed "Click to download TOML" links ([#6234](https://github.com/starship/starship/issues/6234)) ([0200d75](https://github.com/starship/starship/commit/0200d75b3781977d5335e637858f4e0996ee0384))
+* **git_status:** read proper name for core.fsmonitor flag ([#6173](https://github.com/starship/starship/issues/6173)) ([33b3b8e](https://github.com/starship/starship/commit/33b3b8e3986f6180a8f7b461a5a07fea702ec628))
+* **package:** support alternative gradle module version syntax ([#6080](https://github.com/starship/starship/issues/6080)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+* **python:** improve parsing of `pyvenv.cfg` files ([#6145](https://github.com/starship/starship/issues/6145)) ([7b65ad5](https://github.com/starship/starship/commit/7b65ad51635463003941ec0ecea1d4d315b2df53))
+
+
+### Performance Improvements
+
+* **fish:** Skip unnecessary indirection in starship init fish ([#6253](https://github.com/starship/starship/issues/6253)) ([798f640](https://github.com/starship/starship/commit/798f64033f5348793003ddd74fa0ce1c744c300b))
+* Skip unnecessary indirection in starship init fish ([798f640](https://github.com/starship/starship/commit/798f64033f5348793003ddd74fa0ce1c744c300b))
+
 ## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
 
 
