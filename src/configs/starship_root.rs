@@ -94,6 +94,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "rust",
     "scala",
     "solidity",
+    "spin",
     "swift",
     "terraform",
     "typst",
