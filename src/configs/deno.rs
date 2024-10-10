@@ -30,6 +30,7 @@ impl<'a> Default for DenoConfig<'a> {
             detect_files: vec![
                 "deno.json",
                 "deno.jsonc",
+                "deno.lock",
                 "mod.ts",
                 "deps.ts",
                 "mod.js",
