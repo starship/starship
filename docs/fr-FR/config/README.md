@@ -1050,7 +1050,7 @@ format = 'via [🔰 $version](bold red) '
 
 Le module `deno` affiche la version de [Deno](https://deno.land/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
+- Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
 
 ### Options
 
@@ -1060,7 +1060,7 @@ Le module `deno` affiche la version de [Deno](https://deno.land/) installée. Pa
 | `version_format`                     | `'v${raw}'`                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbole`                            | `'🦕 '`                                                                  | Une chaîne de caractères représentant le symbole de Deno                                   |
 | `detect_extensionsdetect_extensions` | `[]`                                                                    | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
+| `detect_files`                       | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `[]`                                                                    | Les dossiers qui activent ce module.                                                       |
 | `style`                              | `'green bold'`                                                          | Le style pour le module.                                                                   |
 | `disabled`                           | `false`                                                                 | Désactive le module `deno`.                                                                |
