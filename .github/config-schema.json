@@ -311,6 +311,7 @@
         "detect_files": [
           "deno.json",
           "deno.jsonc",
+          "deno.lock",
           "mod.ts",
           "deps.ts",
           "mod.js",
@@ -2739,6 +2740,7 @@
           "default": [
             "deno.json",
             "deno.jsonc",
+            "deno.lock",
             "mod.ts",
             "deps.ts",
             "mod.js",
