@@ -106,7 +106,7 @@ format = '''
 
 \$'''
 
-# com string básica multilinha 
+# com string básica multilinha
 format = """
 
 \\$"""
@@ -1050,7 +1050,7 @@ format = 'via [🔰 $version](bold red) '
 
 O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
+- O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
 
 ### Opções
 
@@ -1060,7 +1060,7 @@ O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). 
 | `version_format`    | `'v${raw}'`                                                             | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦕 '`                                                                  | Um formato de string que representa o simbolo do Deno                                |
 | `detect_extensions` | `[]`                                                                    | Quais extensões devem ativar este módulo.                                            |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                    | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `'green bold'`                                                          | O estilo do módulo.                                                                  |
 | `disabled`          | `false`                                                                 | Desabilita o módulo `deno`.                                                          |

@@ -17,7 +17,7 @@ add_newline = true
 
 # 将提示符中的 '❯' 替换为 '➜'
 [character] # 此组件名称为 'character'
-success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'  
+success_symbol = '[➜](bold green)' # 将 'success_symbol' 字段设置成颜色为 'bold green' 的 '➜'
 
 # 禁用 'package' 组件，将其隐藏
 [package]
@@ -1060,7 +1060,7 @@ format = 'via [🔰 $version](bold red) '
 | `version_format`    | `'v${raw}'`                                                             | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch` |
 | `symbol`            | `'🦕 '`                                                                  | 用于表示 Deno 的格式化字符串                           |
 | `detect_extensions` | `[]`                                                                    | 触发此组件的扩展名                                   |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                   |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                   |
 | `detect_folders`    | `[]`                                                                    | 触发此组件的文件夹                                   |
 | `style`             | `'green bold'`                                                          | 此组件的样式。                                     |
 | `disabled`          | `false`                                                                 | 禁用 `deno` 组件                                |

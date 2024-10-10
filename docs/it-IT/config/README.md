@@ -1050,7 +1050,7 @@ format = 'via [🔰 $version](bold red) '
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opzioni
 
@@ -1060,7 +1060,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `version_format`    | `'v${raw}'`                                                             | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦕 '`                                                                  | A format string representing the symbol of Deno                                             |
 | `detect_extensions` | `[]`                                                                    | Quali estensioni dovrebbero attivare questo modulo.                                         |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                                                    | Quali cartelle dovrebbero attivare questo modulo.                                           |
 | `style`             | `'green bold'`                                                          | Lo stile per il modulo.                                                                     |
 | `disabled`          | `false`                                                                 | Disables the `deno` module.                                                                 |
@@ -2719,7 +2719,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
 | style\*        |               | Mirrors the value of option `style`                                |
 
-*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
+*: This variable can only be used as a part of a style string*\*: The SWAP file information is only displayed if detected on the current system
 
 ### Esempio
 
