@@ -16,7 +16,7 @@ function fish_prompt
         # See https://github.com/fish-shell/fish-shell/issues/8418
         printf \e\[0J
         if type -q starship_transient_prompt_func
-            starship_transient_prompt_func
+            starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
         else
             printf "\e[1;32m❯\e[0m "
         end
@@ -40,7 +40,7 @@ function fish_right_prompt
     if test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
-            starship_transient_rprompt_func
+            starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
         else
             printf ""
         end
