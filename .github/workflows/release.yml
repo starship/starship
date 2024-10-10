@@ -138,18 +138,15 @@ jobs:
       - name: Sign | Sign [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: signpath/github-action-submit-signing-request@v0.4
+        uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
           project-slug: 'starship'
-          signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.unsigned-artifacts.outputs.artifact-id }}'
-          wait-for-completion: false
-          # TODO use release-signing certificate:
-          # signing-policy-slug: 'release-signing'
-          # wait-for-completion: true
-          # output-artifact-directory: 'target/${{ matrix.target }}/release'
+          signing-policy-slug: 'release-signing'
+          wait-for-completion: true
+          output-artifact-directory: 'target/${{ matrix.target }}/release'
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
