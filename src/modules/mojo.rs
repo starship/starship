@@ -3,7 +3,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::mojo::MojoConfig;
 use crate::formatter::StringFormatter;
 
-use std::ops::Deref;
 use std::sync::LazyLock;
 
 /// Creates a module with the current Mojo version
@@ -35,11 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => match version_hash.deref() {
+                "version" => match &*version_hash {
                     Some((version, _)) => Some(Ok(version)),
                     _ => None,
                 },
-                "hash" => match version_hash.deref() {
+                "hash" => match &*version_hash {
                     Some((_, Some(hash))) => Some(Ok(hash)),
                     _ => None,
                 },

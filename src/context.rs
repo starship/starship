@@ -360,7 +360,7 @@ impl<'a> Context<'a> {
                 })
             })
             .as_ref()
-            .map_err(|e| e.as_ref())
+            .map_err(std::convert::AsRef::as_ref)
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
