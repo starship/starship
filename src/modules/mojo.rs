@@ -3,8 +3,8 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::mojo::MojoConfig;
 use crate::formatter::StringFormatter;
 
-use once_cell::sync::Lazy;
 use std::ops::Deref;
+use std::sync::LazyLock;
 
 /// Creates a module with the current Mojo version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let version_hash = Lazy::new(|| get_mojo_version(context));
+    let version_hash = LazyLock::new(|| get_mojo_version(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

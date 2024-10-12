@@ -4,10 +4,10 @@ use crate::configs::c::CConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
-use once_cell::sync::Lazy;
 use semver::Version;
 use std::borrow::Cow;
 use std::ops::Deref;
+use std::sync::LazyLock;
 
 /// Creates a module with the current C compiler and version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -25,7 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let c_compiler_info = Lazy::new(|| context.exec_cmds_return_first(config.commands));
+        let c_compiler_info = LazyLock::new(|| context.exec_cmds_return_first(config.commands));
 
         formatter
             .map_meta(|var, _| match var {

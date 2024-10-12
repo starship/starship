@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use chrono::DateTime;
 use ini::Ini;
-use once_cell::unsync::OnceCell;
+use std::cell::OnceCell;
 
 use super::{Context, Module, ModuleConfig};
 

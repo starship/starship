@@ -2773,7 +2773,6 @@ dependencies = [
  "nix",
  "notify-rust",
  "nu-ansi-term",
- "once_cell",
  "open",
  "os_info",
  "path-slash",

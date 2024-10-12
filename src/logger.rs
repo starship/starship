@@ -1,7 +1,7 @@
 use crate::utils;
 use log::{Level, LevelFilter, Metadata, Record};
 use nu_ansi_term::Color;
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 use std::{
     cmp,
     collections::HashSet,
@@ -13,7 +13,7 @@ use std::{
 };
 
 pub struct StarshipLogger {
-    log_file: OnceCell<Mutex<File>>,
+    log_file: OnceLock<Result<Mutex<File>, std::io::Error>>,
     log_file_path: PathBuf,
     log_file_content: RwLock<HashSet<String>>,
     log_level: Level,
@@ -101,7 +101,7 @@ impl Default for StarshipLogger {
                     .map(std::string::ToString::to_string)
                     .collect(),
             ),
-            log_file: OnceCell::new(),
+            log_file: OnceLock::new(),
             log_file_path: session_log_file,
             log_level: env::var("STARSHIP_LOG")
                 .map(|level| match level.to_ascii_lowercase().as_str() {
@@ -174,7 +174,7 @@ impl log::Log for StarshipLogger {
         // Write warning messages to the log file
         // If log level is error, only write error messages to the log file
         if record.level() <= cmp::min(Level::Warn, self.log_level) {
-            let log_file = match self.log_file.get_or_try_init(|| {
+            let log_file = match self.log_file.get_or_init(|| {
                 OpenOptions::new()
                     .create(true)
                     .append(true)
@@ -224,7 +224,7 @@ impl log::Log for StarshipLogger {
     }
 
     fn flush(&self) {
-        if let Some(m) = self.log_file.get() {
+        if let Some(Ok(m)) = self.log_file.get() {
             let result = match m.lock() {
                 Ok(mut file) => file.flush(),
                 Err(err) => return eprintln!("Log file writer mutex was poisoned: {err:?}"),
