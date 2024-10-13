@@ -233,7 +233,7 @@ jobs:
             target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Sign | Sign [Windows]
-        uses: signpath/github-action-submit-signing-request@v0.4
+        uses: signpath/github-action-submit-signing-request@v1
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
