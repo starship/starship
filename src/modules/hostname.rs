@@ -1,9 +1,10 @@
 use super::{Context, Module};
-use std::ffi::OsString;
 
 use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
+
+use whoami::fallible::hostname;
 
 /// Creates a module with the system hostname
 ///
@@ -23,15 +24,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let os_hostname: OsString = gethostname::gethostname();
-
-    let host = match os_hostname.into_string() {
-        Ok(host) => host,
-        Err(bad) => {
-            log::warn!("hostname is not valid UTF!\n{:?}", bad);
-            return None;
-        }
-    };
+    let host = hostname()
+        .inspect_err(|e| log::warn!("Failed to get hostname: {e}"))
+        .ok()?;
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
@@ -91,7 +86,7 @@ mod tests {
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = gethostname::gethostname().into_string() {
+            if let Ok(hostname) = whoami::fallible::hostname() {
                 hostname
             } else {
                 println!(
