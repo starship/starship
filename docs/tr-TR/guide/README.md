@@ -433,7 +433,7 @@ Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz at
 
 ## 🔒 Code Signing Policy
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Ücretsiz kod imzalama [SignPath.io](https://signpath.io) tarafından sağlanmıştır, sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanmıştır.
 
 Code Signing Roles:
 
