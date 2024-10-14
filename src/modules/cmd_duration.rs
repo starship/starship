@@ -83,6 +83,12 @@ fn undistract_me<'a>(
             };
         }
 
+        if let Some(cmd) = context.properties.cmd.as_deref() {
+            if config.notify_ignore_commands.contains(&cmd) {
+                return module;
+            }
+        }
+
         let body = format!(
             "Command execution {}",
             unstyle(&AnsiStrings(&module.ansi_strings()))
