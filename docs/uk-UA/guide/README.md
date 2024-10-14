@@ -433,7 +433,7 @@ eval "$(starship init zsh)"
 
 ## 🔒 Code Signing Policy
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Безкоштовний підпис похідного коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org).
 
 Code Signing Roles:
 
