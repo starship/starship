@@ -1047,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 `deno` 组件显示当前安装的 [Deno](https://deno.land/) 版本。 默认情况下，此组件将在满足以下任意条件时显示：
 
-- 当前目录包含 `deno.json`、`deno.jsonc`、`mod.ts`、`mod.js`、`deps.ts` 或 `deps.js` 文件
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### 配置项
 
-| 选项                  | 默认值                                                                     | 描述                                          |
-| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | 组件格式化模板。                                    |
-| `version_format`    | `'v${raw}'`                                                             | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch` |
-| `symbol`            | `'🦕 '`                                                                  | 用于表示 Deno 的格式化字符串                           |
-| `detect_extensions` | `[]`                                                                    | 触发此组件的扩展名                                   |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                   |
-| `detect_folders`    | `[]`                                                                    | 触发此组件的文件夹                                   |
-| `style`             | `'green bold'`                                                          | 此组件的样式。                                     |
-| `disabled`          | `false`                                                                 | 禁用 `deno` 组件                                |
+| 选项                  | 默认值                                                                                  | 描述                                          |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | 组件格式化模板。                                    |
+| `version_format`    | `'v${raw}'`                                                                          | 版本格式 可用的有 `raw`, `major`, `minor` 和 `patch` |
+| `symbol`            | `'🦕 '`                                                                               | 用于表示 Deno 的格式化字符串                           |
+| `detect_extensions` | `[]`                                                                                 | 触发此组件的扩展名                                   |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 触发此组件的文件名                                   |
+| `detect_folders`    | `[]`                                                                                 | 触发此组件的文件夹                                   |
+| `style`             | `'green bold'`                                                                       | 此组件的样式。                                     |
+| `disabled`          | `false`                                                                              | 禁用 `deno` 组件                                |
 
 ### 变量
 
@@ -1204,7 +1204,7 @@ disabled = false
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### 配置项
 
@@ -4605,7 +4605,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | 选项                  | 默认值                             | 描述                                                                                                                                                                                                                                                                                            |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `描述`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
@@ -4623,11 +4623,11 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### 变量
 
-| 字段        | 描述             |
-| --------- | -------------- |
-| output    | `shell` 中命令的输出 |
-| symbol    | `symbol`对应值    |
-| style\* | `style`对应值     |
+| 字段        | 描述                                     |
+| --------- | -------------------------------------- |
+| output    | The output of `command` run in `shell` |
+| symbol    | `symbol`对应值                            |
+| style\* | `style`对应值                             |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -4640,7 +4640,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 如果未设置，它将回退到 STARSHIP_SHELL，然后回退到 Linux 上的 "sh" 命令，在 Windows 上则是 "cmd /C"。
 
-`command` 将会被传递给标准输入。
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 PowerShell，则会自动添加 `-NoProfile -Command -` 参数。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `/C` 参数，并且将 `stdin` 设置为 `false`。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `-C` 参数，并且将 `stdin` 设置为 `false`。 可以通过将参数显式传递给 shell 来避免这种行为，例如：
 
