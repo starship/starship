@@ -1047,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opções
 
-| Opções              | Padrão                                                                  | Descrição                                                                            |
-| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | O formato do módulo.                                                                 |
-| `version_format`    | `'v${raw}'`                                                             | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦕 '`                                                                  | Um formato de string que representa o simbolo do Deno                                |
-| `detect_extensions` | `[]`                                                                    | Quais extensões devem ativar este módulo.                                            |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quais nomes de arquivos devem ativar este módulo.                                    |
-| `detect_folders`    | `[]`                                                                    | Quais pastas devem ativar este módulo.                                               |
-| `style`             | `'green bold'`                                                          | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                                 | Desabilita o módulo `deno`.                                                          |
+| Opções              | Padrão                                                                               | Descrição                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | O formato do módulo.                                                                 |
+| `version_format`    | `'v${raw}'`                                                                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🦕 '`                                                                               | Um formato de string que representa o simbolo do Deno                                |
+| `detect_extensions` | `[]`                                                                                 | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                                 | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `'green bold'`                                                                       | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                                              | Desabilita o módulo `deno`.                                                          |
 
 ### Variáveis
 
@@ -1204,7 +1204,7 @@ disabled = false
 
 ## Docker Context
 
-O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) ativo atualmente se não estiver definido como `default` ou se as variáveis de ambiente `DOCKER_MACHINE_NAME`, `DOCKER_HOST` ou `DOCKER_CONTEXT` estiverem definidas (iram sobrescrever o contexto atual).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Opções
 
@@ -4605,7 +4605,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 | Opções              | Padrão                          | Descrição                                                                                                                                                                                                                                                                                                                        |
 | ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                                                                                                                                                                           |
-| `when`              | `false`                         | Ou um valor booleano (`true` ou `false`, sem aspas) ou um comando shell de string usado como condição para mostrar o módulo. No caso de uma string, o módulo será mostrado se o comando retornar um código de status `0`.                                                                                                        |
+| `when`              | `false`                         | Ou um valor booleano (`true` ou `false`, sem aspas) ou um comando shell de string usado como condição para mostrar o módulo. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                                           |
 | `require_repo`      | `false`                         | Se `true`, o módulo será exibido apenas em caminhos que contenham um repositório (git). Esta opção, por si só, não é uma condição de exibição suficiente na ausência de outras opções.                                                                                                                                           |
 | `shell`             |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                                                                                                                                                                             |
 | `description`       | `'<custom module>'`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                                                                                                                                                                     |
@@ -4623,11 +4623,11 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 ### Variáveis
 
-| Variável  | Descrição                         |
-| --------- | --------------------------------- |
-| output    | A saída do comando no `shell`     |
-| symbol    | Espelha o valor da opção `symbol` |
-| style\* | Espelha o valor da opção `style`  |
+| Variável  | Descrição                              |
+| --------- | -------------------------------------- |
+| output    | The output of `command` run in `shell` |
+| symbol    | Espelha o valor da opção `symbol`      |
+| style\* | Espelha o valor da opção `style`       |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -4640,7 +4640,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-O `command` será passado no stdin.
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar PowerShell ele será usado, os seguintes argumentos serão automaticamente adicionados: `-NoProfile -Command -`. Se `shell` não for fornecido ou contiver apenas um elemento e o Starship detectar que o Cmd será usado, o seguinte argumento será adicionado automaticamente: `/C` e `stdin` serão definidos como `false`. Se `shell` não for fornecido ou contiver apenas um elemento e o Starship detectar que o Nushell será usado, os seguintes argumentos serão adicionados automaticamente: `-c` e `stdin` serão definidos como `false`. Este comportamento pode ser evitado passando explicitamente argumento para o shell, ex.
 
