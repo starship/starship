@@ -1047,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 Le module `deno` affiche la version de [Deno](https://deno.land/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Options
 
-| Option                               | Défaut                                                                  | Description                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`                                    | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🦕 '`                                                                  | Une chaîne de caractères représentant le symbole de Deno                                   |
-| `detect_extensionsdetect_extensions` | `[]`                                                                    | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                    | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'green bold'`                                                          | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                 | Désactive le module `deno`.                                                                |
+| Option                               | Défaut                                                                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'`                                                 | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                                                                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'🦕 '`                                                                               | Une chaîne de caractères représentant le symbole de Deno                                   |
+| `detect_extensionsdetect_extensions` | `[]`                                                                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                                                                 | Les dossiers qui activent ce module.                                                       |
+| `style`                              | `'green bold'`                                                                       | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                                                                              | Désactive le module `deno`.                                                                |
 
 ### Variables
 
@@ -1204,7 +1204,7 @@ disabled = false
 
 ## Contexte Docker
 
-Le module `docker_context` affiche le [context Docker](https://docs.docker.com/engine/context/working-with-contexts/) actif, si sa valeur est différente de `default` ou si les variables d’environnement `DOCKER_MACHINE_NAME`, `DOCKER_HOST` ou `DOCKER_CONTEXT` sont définies (puisqu’elles sont utilisées pour changer le contexte utilisé).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Options
 
@@ -4605,7 +4605,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | Option                               | Défaut                          | Description                                                                                                                                                                                                                                                                                   |
 | ------------------------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`                            | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
-| `when`                               | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. Dans le cas d’une chaine, le module sera affiché si la commande renvoie un code de statut `0`.                                                         |
+| `when`                               | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                              |
 | `require_repo`                       | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`                              |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                        |
 | `description`                        | `'<custom module>'`       | La description du module qui est affichée lors de l’exécution de `starship explain`.                                                                                                                                                                                                          |
@@ -4623,11 +4623,11 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### Variables
 
-| Variable  | Description                                 |
-| --------- | ------------------------------------------- |
-| output    | La sortie de la commande shell dans `shell` |
-| symbole   | Reflète la valeur de l'option `symbol`      |
-| style\* | Reflète la valeur de l'option `style`       |
+| Variable  | Description                            |
+| --------- | -------------------------------------- |
+| output    | The output of `command` run in `shell` |
+| symbole   | Reflète la valeur de l'option `symbol` |
+| style\* | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -4640,7 +4640,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-The `command` will be passed in on stdin.
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
