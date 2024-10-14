@@ -1047,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 `deno`モジュールは、現在インストールされている[Deno](https://deno.land/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`deno.json`、`deno.jsonc`、`mod.ts`、`mod.js`、`deps.ts`もしくは`deps.js`が含まれている
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### オプション
 
-| オプション               | デフォルト                                                                   | 説明                                                     |
-| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🦕 '`                                                                  | Deno のシンボルを表すフォーマット文字列                                 |
-| `detect_extensions` | `[]`                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'green bold'`                                                          | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                 | `deno`モジュールを無効化します。                                    |
+| オプション               | デフォルト                                                                                | 説明                                                     |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                                                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🦕 '`                                                                               | Deno のシンボルを表すフォーマット文字列                                 |
+| `detect_extensions` | `[]`                                                                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'green bold'`                                                                       | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                              | `deno`モジュールを無効化します。                                    |
 
 ### 変数
 
@@ -1204,7 +1204,7 @@ disabled = false
 
 ## Docker Context
 
-`docker_context`モジュールは、`default`に設定されていない場合、または環境変数`DOCKER_MACHINE_NAME`、`DOCKER_HOST`または`DOCKER_CONTEXT`が設定されている場合 (使用中のコンテキストを上書きするため)、現在アクティブな[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)を表示します。
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### オプション
 
@@ -4602,32 +4602,32 @@ symbol = '⚡️ '
 
 ### オプション
 
-| オプション               | デフォルト                           | 説明                                                                                                                                                   |
-| ------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                 |
-| `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 文字列の場合、コマンドが終了ステータス `0` を返したときにモジュールが表示されます。                                      |
-| `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 他のオプションが指定されていない場合、このオプション単体では表示条件として不十分です。                                                            |
-| `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                              |
-| `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                               |
-| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                        |
-| `detect_files`      | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイル名を指定します。                                                                                                                    |
-| `detect_folders`    | `[]`                            | 表示条件として確認する作業ディレクトリ内のディレクトリ名を指定します。                                                                                                                  |
-| `detect_extensions` | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイルの拡張子を指定します。                                                                                                                 |
-| `symbol`            | `''`                            | コマンド出力の前に表示される記号です。                                                                                                                                  |
-| `style`             | `'bold green'`                  | モジュールのスタイルです。                                                                                                                                        |
-| `format`            | `'[$symbol($output )]($style)'` | module のフォーマットです。                                                                                                                                    |
-| `disabled`          | `false`                         | `custom` モジュールを無効にします。                                                                                                                               |
-| `os`                |                                 | モジュールが表示されるオペレーティングシステムの名前 (unix, linux, macos, windows, ...)。 [利用可能な値](https://doc.rust-lang.org/std/env/consts/constant.OS.html) を参照してください。        |
-| `use_stdin`         |                                 | シェルに対してコマンドを標準出力を介して指定するか引数を介して指定するかの振る舞い上書きするおまけの boolen 値の設定です。 指定がない場合、(cmd, nushell などのようにシェルのサポート外でない限り) 標準入力が既定で使われます。 設定するとシェル固有の引数処理を無効にします。 |
-| `ignore_timeout`    | `false`                         | グローバルな `command_timeout` 設定を無視して、いくら時間がかかっても外部コマンド実行を継続します。                                                                                          |
+| オプション               | デフォルト                           | 説明                                                                                                                                                                           |
+| ------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                                         |
+| `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it. |
+| `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 他のオプションが指定されていない場合、このオプション単体では表示条件として不十分です。                                                                                    |
+| `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                      |
+| `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                                                       |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                |
+| `detect_files`      | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイル名を指定します。                                                                                                                                            |
+| `detect_folders`    | `[]`                            | 表示条件として確認する作業ディレクトリ内のディレクトリ名を指定します。                                                                                                                                          |
+| `detect_extensions` | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイルの拡張子を指定します。                                                                                                                                         |
+| `symbol`            | `''`                            | コマンド出力の前に表示される記号です。                                                                                                                                                          |
+| `style`             | `'bold green'`                  | モジュールのスタイルです。                                                                                                                                                                |
+| `format`            | `'[$symbol($output )]($style)'` | module のフォーマットです。                                                                                                                                                            |
+| `disabled`          | `false`                         | `custom` モジュールを無効にします。                                                                                                                                                       |
+| `os`                |                                 | モジュールが表示されるオペレーティングシステムの名前 (unix, linux, macos, windows, ...)。 [利用可能な値](https://doc.rust-lang.org/std/env/consts/constant.OS.html) を参照してください。                                |
+| `use_stdin`         |                                 | シェルに対してコマンドを標準出力を介して指定するか引数を介して指定するかの振る舞い上書きするおまけの boolen 値の設定です。 指定がない場合、(cmd, nushell などのようにシェルのサポート外でない限り) 標準入力が既定で使われます。 設定するとシェル固有の引数処理を無効にします。                         |
+| `ignore_timeout`    | `false`                         | グローバルな `command_timeout` 設定を無視して、いくら時間がかかっても外部コマンド実行を継続します。                                                                                                                  |
 
 ### 変数
 
-| 変数        | 説明                        |
-| --------- | ------------------------- |
-| output    | `shell` におけるシェルコマンドの出力結果。 |
-| symbol    | オプション `symbol` の値をミラーする   |
-| style\* | オプション `style` の値をミラーする    |
+| 変数        | 説明                                     |
+| --------- | -------------------------------------- |
+| output    | The output of `command` run in `shell` |
+| symbol    | オプション `symbol` の値をミラーする                |
+| style\* | オプション `style` の値をミラーする                 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4640,7 +4640,7 @@ symbol = '⚡️ '
 
 未設定の場合は、最初に STARSHIP_SHELL に対して、そして Linux では 'sh' に、Windowsでは 'cmd / C' に対してフォールバックが試みられます。
 
-`command` は stdin に渡されます。
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 `shell` が指定されていないか要素の数が1つでかつ Starship が PowerShell が使われると判定した場合、次の引数が自動的に付加されます: `-NoProfile -Command -`。 `shell` が指定されていないか要素の数が1つでかつ Starship が Cmd が使われると判定した場合、引数 `/C` が自動的に付加され、`stdin` が `false` に設定されます。 `shell` が指定されていないか要素の数が1つでかつ Starship が Nushell が使われると判定した場合、引数 `-c` が自動的に付加され、`stdin` が `false` に設定されます。 この動作は、シェルに明示的に引数を渡すことで回避できます。例:
 
