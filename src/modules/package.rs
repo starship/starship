@@ -235,7 +235,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
-        // workspace version string (`package.version.worspace = true`)
+        // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
         // discover the workspace root
