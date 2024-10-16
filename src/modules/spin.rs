@@ -9,7 +9,6 @@ use crate::{
 };
 
 use crate::utils::get_command_string_output;
-const SPIN_CANARY_IDENTIFIER: &str = "pre";
 const SPIN_BINARY: &str = "spin";
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -68,14 +67,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_spin_version(spin_version_stdout: &str) -> Option<String> {
-    let semver_regex = Regex::new(r"\d+\.\d+\.\d+").ok()?;
+    let semver_regex = Regex::new(r"\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?").ok()?;
     let input = spin_version_stdout;
     let capture = semver_regex.find(input)?.as_str();
-    if input.contains(SPIN_CANARY_IDENTIFIER) {
-        Some(format!("{} ({})", capture, SPIN_CANARY_IDENTIFIER))
-    } else {
-        Some(capture.to_string())
-    }
+    Some(capture.to_string())
 }
 
 #[cfg(test)]
@@ -117,7 +112,7 @@ mod tests {
         let input = "spin 2.8.0-pre0 (3e62d2e 2024-09-04)";
         assert_eq!(
             super::parse_spin_version(input),
-            Some(String::from("2.8.0 (pre)"))
+            Some(String::from("2.8.0-pre0"))
         );
     }
 }
