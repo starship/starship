@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Catppuccin](./catppuccin.md)
+
+This is a rewrite of the [gruvbox rainbow](./gruvbox-rainbow.md) preset with different separators and the [catppucin](https://github.com/catppuccin/catppuccin) color theme.
+
+[![Screenshot of Catppuccin preset](/presets/img/catppuccin.png "Click to view Catppucin preset")](./catppuccin)
