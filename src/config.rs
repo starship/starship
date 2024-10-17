@@ -249,6 +249,12 @@ impl StarshipConfig {
         }
         module_config
     }
+    pub fn get_random_module_config(&self, name: &str) -> Option<&Value> {
+        self.get_config(&["random", name]).map(|c| {
+            log::debug!("Random config found for: \"{name}\": {c:?}");
+            c
+        })
+    }
 
     /// Get the table of all the registered custom modules, if any
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
