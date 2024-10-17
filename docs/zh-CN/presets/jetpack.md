@@ -2,7 +2,7 @@
 
 # Jetpack Preset
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+这是一个伪最简的预设，灵感来自 [geometry](https://github.com/geometry-zsh/geometry) 和   [spaceship](https://github.com/spaceship-prompt/spaceship-prompt)。
 
 > Jetpack uses the terminal's color theme.
 
@@ -10,7 +10,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ### Prerequisite
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
+- 需要一个 支持[`右提示词`](https://starship.rs/advanced-config/#enable-right-prompt)的shell。
 - [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
 
 ### 配置
@@ -19,6 +19,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/jetpack.toml)
+[Click to download TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml

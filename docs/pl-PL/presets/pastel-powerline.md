@@ -16,6 +16,6 @@ Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDo
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/pastel-powerline.toml)
+[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml

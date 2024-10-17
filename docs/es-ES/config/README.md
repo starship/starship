@@ -553,10 +553,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
-
-- La CLI de [`buf`](https://github.com/bufbuild/buf) está instalada.
-- El directorio actual contiene un archivo de configuración [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), o [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
+El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### Opciones
 
@@ -635,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -863,7 +860,7 @@ El módulo `conda` muestra el entorno actual [Conda](https://docs.conda.io/en/la
 
 ::: tip
 
-Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
+Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
@@ -1050,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 El módulo `deno` le muestra la versión instalada de [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` o `deps.js`
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opciones
 
-| Opción              | Predeterminado                                                          | Descripción                                                                             |
-| ------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | El formato del módulo.                                                                  |
-| `version_format`    | `'v${raw}'`                                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦕 '`                                                                  | Una cadena de formato que representa el símbolo de Deno                                 |
-| `detect_extensions` | `[]`                                                                    | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `[]`                                                                    | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `'green bold'`                                                          | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                 | Deshabilita el módulo `deno`.                                                           |
+| Opción              | Predeterminado                                                                       | Descripción                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | El formato del módulo.                                                                  |
+| `version_format`    | `'v${raw}'`                                                                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🦕 '`                                                                               | Una cadena de formato que representa el símbolo de Deno                                 |
+| `detect_extensions` | `[]`                                                                                 | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                                 | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `'green bold'`                                                                       | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                                                              | Deshabilita el módulo `deno`.                                                           |
 
 ### Variables
 
@@ -1117,7 +1114,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `fish_style_pwd_dir_length` | `0`            | El número de caracteres a usar al aplicar la lógica de ruta pwd del intérprete de comandos de Fish.                                                                                                                          |
 | `use_logical_path`          | `true`         | Si `true` renderiza la ruta lógica originada desde el intérprete de comandos a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
 
-`substitutions` permite definir reemplazos arbitrarios para cadenas literales que ocurren en la ruta, por ejemplo prefijos largos de red o directorios de desarrollo (p. ej. Java). Ten en cuenta que esto desactivará el estilo PWD de fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Ten en cuenta que esto desactivará el estilo PWD de fish.
 
 ```toml
 [directory.substitutions]
@@ -1207,7 +1204,7 @@ disabled = false
 
 ## Contexto de Docker
 
-El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está definido en `default` o si las variables de entorno `DOCKER_MACHINE_NAME`, `DOCKER_HOST` o `DOCKER_CONTEXT` están definidas (como se entiende para sobrescribir el contexto en uso).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Opciones
 
@@ -1759,7 +1756,7 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 | `only_detached`      | `true`                         | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`"                 |
 | `tag_disabled`       | `true`                         | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                                |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. El valor por defecto sólo permite coincidencias exactas. |
-| `tag_symbol`         | `' 🏷 '`                        | Símbolo de etiqueta prefijando la información mostrada                                                 |
+| `tag_symbol`         | `' 🏷  '`                       | Símbolo de etiqueta prefijando la información mostrada                                                 |
 | `disabled`           | `false`                        | Deshabilita el módulo `git_commit`.                                                                    |
 
 ### Variables
@@ -1890,7 +1887,7 @@ El módulo Git Status es muy lento en los directorios de Windows (por ejemplo ba
 | `staged`            | `'+'`                                           | El formato de `staged`                                                                                                                    |
 | `renamed`           | `'»'`                                           | El formato de `renamed`                                                                                                                   |
 | `eliminado`         | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
-| `typechanged`       | `""`                                            | The format of `typechange`                                                                                                                |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                                               |
 | `style`             | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
 | `ignore_submodules` | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
 | `disabled`          | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
@@ -1911,7 +1908,7 @@ Las siguientes variables se pueden utilizar en `format`:
 | `staged`          | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                                           |
 | `renamed`         | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                                   |
 | `eliminado`       | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                                              |
-| `typechanged`     | Displays `typechange` when a file's type has been changed in the staging area.                                           |
+| `typechanged`     | Displays `typechanged` when a file's type has been changed in the staging area.                                          |
 | style\*         | Refleja el valor de la opción `style`                                                                                    |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
@@ -2257,6 +2254,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                            |
 | `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                             |
 | `disabled`        | `false`                                | Deshabilita el módulo `hostname`.                                                                                                                                 |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.                                        |
 
 ### Variables
 
@@ -2291,6 +2289,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2809,6 +2815,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Opciones
+
+| Opción              | Predeterminado                        | Descripción                                            |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | El formato del módulo.                                 |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | El estilo del módulo.                                  |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Qué extensiones deberían activar este módulo.          |
+| `detect_files`      | `[]`                                  | Qué nombres de archivo deberían activar este módulo.   |
+| `detect_folders`    | `[]`                                  | Qué carpetas deberían activar este módulo.             |
+
+### Variables
+
+| Variable  | Ejemplo  | Descripción                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `24.4.0` | The version of `mojo`                  |
+| symbol    |          | Refleja el valor de la opción `symbol` |
+| style\* |          | Refleja el valor de la opción `style`  |
+
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
@@ -2934,17 +2975,17 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 
 ### Opciones
 
-| Opción              | Predeterminado                             | Descripción                                                                                                     |
-| ------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | El formato del módulo.                                                                                          |
-| `version_format`    | `'v${raw}'`                                | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                         |
-| `symbol`            | `' '`                                     | Una cadena de formato que representa el símbolo de Node.js.                                                     |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Qué extensiones deberían activar este módulo.                                                                   |
-| `detect_files`      | `['package.json', '.node-version']`        | Qué nombres de archivo deberían activar este módulo.                                                            |
-| `detect_folders`    | `['node_modules']`                         | Qué carpetas deberían activar este módulo.                                                                      |
-| `style`             | `'bold green'`                             | El estilo del módulo.                                                                                           |
-| `disabled`          | `false`                                    | Deshabilita el módulo `nodejs`.                                                                                 |
-| `not_capable_style` | `'bold red'`                               | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de Node.js. |
+| Opción              | Predeterminado                                | Descripción                                                                                                     |
+| ------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | El formato del módulo.                                                                                          |
+| `version_format`    | `'v${raw}'`                                   | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                         |
+| `symbol`            | `' '`                                        | Una cadena de formato que representa el símbolo de Node.js.                                                     |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Qué extensiones deberían activar este módulo.                                                                   |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Qué nombres de archivo deberían activar este módulo.                                                            |
+| `detect_folders`    | `['node_modules']`                            | Qué carpetas deberían activar este módulo.                                                                      |
+| `style`             | `'bold green'`                                | El estilo del módulo.                                                                                           |
+| `disabled`          | `false`                                       | Deshabilita el módulo `nodejs`.                                                                                 |
+| `not_capable_style` | `'bold red'`                                  | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de Node.js. |
 
 ### Variables
 
@@ -3492,24 +3533,26 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 - El directorio actual contiene un archivo `requirements.txt`
 - El directorio actual contiene un archivo `setup.py`
 - El directorio actual contiene un archivo `tox.ini`
+- El directorio actual contiene un archivo `pixi.toml`
 - El directorio actual contiene un archivo con la extensión `.py`.
+- The current directory contains a file with the `.ipynb` extension.
 - Un entorno virtual está activado actualmente
 
 ### Opciones
 
-| Opción               | Predeterminado                                                                                               | Descripción                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                  |
-| `version_format`     | `'v${raw}'`                                                                                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`             | `'🐍 '`                                                                                                       | Una cadena de formato que representa el símbolo de Python                               |
-| `style`              | `'yellow bold'`                                                                                              | El estilo del módulo.                                                                   |
-| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
-| `detect_extensions`  | `['py']`                                                                                                     | Qué extensiones deben activar este módulo                                               |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Qué nombres de archivo deben activar este módulo                                        |
-| `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
-| `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
+| Opción               | Predeterminado                                                                                                            | Descripción                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | El formato del módulo.                                                                  |
+| `version_format`     | `'v${raw}'`                                                                                                               | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`             | `'🐍 '`                                                                                                                    | Una cadena de formato que representa el símbolo de Python                               |
+| `style`              | `'yellow bold'`                                                                                                           | El estilo del módulo.                                                                   |
+| `pyenv_version_name` | `false`                                                                                                                   | Usar pyenv para obtener la versión de Python                                            |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Qué extensiones deben activar este módulo                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Qué nombres de archivo deben activar este módulo                                        |
+| `detect_folders`     | `[]`                                                                                                                      | Qué carpetas deben activar este módulo                                                  |
+| `disabled`           | `false`                                                                                                                   | Deshabilita el módulo `python`.                                                         |
 
 ::: tip
 
@@ -4350,7 +4393,7 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 | `format`          | `'[$user]($style) in '` | El formato del módulo.                                |
 | `show_always`     | `false`                 | Siempre muestra el módulo `username`.                 |
 | `disabled`        | `false`                 | Deshabilita el módulo `username`.                     |
-| `aliases`         | `{}`                    | Translate system usernames to something else          |
+| `aliases`         | `{}`                    | Translate system usernames to something else.         |
 
 ### Variables
 
@@ -4361,7 +4404,7 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 
 ### Ejemplo
 
-#### Mostrar siempre el nombre del host
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4416,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### Ocultar el nombre de host en sesiones remotas de tmux
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
@@ -4573,7 +4605,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 | Opción              | Predeterminado                   | Descripción                                                                                                                                                                                                                                                                                                                      |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `comando`           | `''`                             | El comando cuya salida debe ser impresa. El comando se pasará en stdin al intérprete de comandos.                                                                                                                                                                                                                                |
-| `cuando`            | `false`                          | Valor booleano (`true` o `false`, sin comillas) o un comando de shell usado como una condición para mostrar el módulo. En caso de una cadena, el módulo se mostrará si el comando devuelve un código de estado `0`.                                                                                                              |
+| `cuando`            | `false`                          | Valor booleano (`true` o `false`, sin comillas) o un comando de shell usado como una condición para mostrar el módulo. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                                                 |
 | `require_repo`      | `false`                          | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                                              |
 | `shell`             |                                  | [Ver a continuación](#custom-command-shell)                                                                                                                                                                                                                                                                                      |
 | `description`       | `'<módulo personalizado>'` | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                                                                                                                                                                         |
@@ -4591,11 +4623,11 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 
 ### Variables
 
-| Variable  | Descripción                                                 |
-| --------- | ----------------------------------------------------------- |
-| salida    | La salida del comando del intérprete de comandos en `shell` |
-| symbol    | Refleja el valor de la opción `symbol`                      |
-| style\* | Refleja el valor de la opción `style`                       |
+| Variable  | Descripción                            |
+| --------- | -------------------------------------- |
+| salida    | The output of `command` run in `shell` |
+| symbol    | Refleja el valor de la opción `symbol` |
+| style\* | Refleja el valor de la opción `style`  |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -4608,7 +4640,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 
 If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-El `comando` será pasado en stdin.
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell los siguientes argumentos se añadirán automáticamente: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. Este comportamiento puede evitarse pasando explícitamente argumentos al intérprete de comandos, p.ej.
 
