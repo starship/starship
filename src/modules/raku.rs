@@ -3,8 +3,8 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::raku::RakuConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
-use once_cell::sync::Lazy;
 use std::ops::Deref;
+use std::sync::LazyLock;
 
 /// Creates a module with the current raku version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let versions = Lazy::new(|| get_raku_version(context));
+    let versions = LazyLock::new(|| get_raku_version(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

@@ -1,5 +1,5 @@
-use once_cell::sync::OnceCell;
 use regex::Regex;
+use std::sync::OnceLock;
 
 use super::{Context, Module, ModuleConfig};
 
@@ -135,8 +135,8 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     repo: &'a context::Repo,
     config: GitStatusConfig<'a>,
-    repo_status: OnceCell<Option<RepoStatus>>,
-    stashed_count: OnceCell<Option<usize>>,
+    repo_status: OnceLock<Option<RepoStatus>>,
+    stashed_count: OnceLock<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -149,8 +149,8 @@ impl<'a> GitStatusInfo<'a> {
             context,
             repo,
             config,
-            repo_status: OnceCell::new(),
-            stashed_count: OnceCell::new(),
+            repo_status: OnceLock::new(),
+            stashed_count: OnceLock::new(),
         }
     }
 

@@ -1,7 +1,7 @@
 use super::{Context, Module, ModuleConfig};
-use once_cell::sync::Lazy;
 use std::ops::Deref;
 use std::path::Path;
+use std::sync::LazyLock;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let opam_switch: Lazy<Option<OpamSwitch>, _> = Lazy::new(|| get_opam_switch(context));
+    let opam_switch: LazyLock<Option<OpamSwitch>, _> = LazyLock::new(|| get_opam_switch(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

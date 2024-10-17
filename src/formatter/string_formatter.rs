@@ -303,10 +303,6 @@ impl<'a> StringFormatter<'a> {
                             ),
                         )),
                         FormatElement::TextGroup(textgroup) => {
-                            let textgroup = TextGroup {
-                                format: textgroup.format,
-                                style: textgroup.style,
-                            };
                             parse_textgroup(textgroup, variables, style_variables, context)
                         }
                         FormatElement::Variable(name) => variables

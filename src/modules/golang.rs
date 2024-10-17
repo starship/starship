@@ -4,11 +4,11 @@ use crate::configs::go::GoConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
-use once_cell::sync::Lazy;
 use regex::Regex;
 use semver::Version;
 use semver::VersionReq;
 use std::ops::Deref;
+use std::sync::LazyLock;
 
 /// Creates a module with the current Go version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -26,8 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let golang_version =
-        Lazy::new(|| parse_go_version(&context.exec_cmd("go", &["version"])?.stdout));
-    let mod_version = Lazy::new(|| get_go_mod_version(context));
+        LazyLock::new(|| parse_go_version(&context.exec_cmd("go", &["version"])?.stdout));
+    let mod_version = LazyLock::new(|| get_go_mod_version(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

@@ -1,8 +1,8 @@
 use ini::Ini;
-use once_cell::sync::{Lazy, OnceCell};
 use std::borrow::Cow;
 use std::path::Path;
 use std::path::PathBuf;
+use std::sync::{LazyLock, OnceLock};
 
 use super::{Context, Module, ModuleConfig};
 
@@ -15,7 +15,7 @@ type Account<'a> = (&'a str, Option<&'a str>);
 struct GcloudContext {
     config_name: String,
     config_path: PathBuf,
-    config: OnceCell<Option<Ini>>,
+    config: OnceLock<Option<Ini>>,
 }
 
 impl<'a> GcloudContext {
@@ -94,7 +94,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
     let gcloud_context = GcloudContext::new(&config_name, &config_path);
-    let account: Lazy<Option<Account<'_>>, _> = Lazy::new(|| gcloud_context.get_account());
+    let account: LazyLock<Option<Account<'_>>, _> = LazyLock::new(|| gcloud_context.get_account());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

@@ -270,10 +270,7 @@ mod tests {
         toml_config["hostname"]["aliases"]
             .as_table_mut()
             .unwrap()
-            .insert(
-                hostname.clone(),
-                toml::Value::String("homeworld".to_string()),
-            );
+            .insert(hostname, toml::Value::String("homeworld".to_string()));
         let actual = ModuleRenderer::new("hostname")
             .config(toml_config)
             .collect();
