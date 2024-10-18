@@ -31,13 +31,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let php_version = context.exec_cmd(
-                        "php",
-                        &[
+                    let php_version = if config.use_symfony_cli {
+                        let php_binary = "symfony";
+                        let command_parameters = &[
+                            "php",
                             "-nr",
                             "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
-                        ],
-                    )?.stdout;
+                        ];
+
+                        context.exec_cmd(php_binary, command_parameters)?.stdout
+
+                    } else {
+                        let php_binary = "php";
+                        let command_parameters = &[
+                            "-nr",
+                            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
+                        ];
+
+                        context.exec_cmd(php_binary, command_parameters)?.stdout
+                    };
+
                     VersionFormatter::format_module_version(module.get_name(), &php_version, config.version_format).map(Ok)
                 }
                 _ => None,
@@ -114,6 +127,69 @@ mod tests {
         let expected = Some(format!(
             "via {}",
             Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_composer_file_by_using_symfony_cli() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("composer.json"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("php")
+            .config(toml::toml! {
+                [php]
+                use_symfony_cli = true
+            })
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v8.1.13 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_php_version_by_using_symfony_cli() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".php-version"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("php")
+            .config(toml::toml! {
+                [php]
+                use_symfony_cli = true
+            })
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v8.1.13 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_php_file_by_using_symfony_cli() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.php"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("php")
+            .config(toml::toml! {
+                [php]
+                use_symfony_cli = true
+            })
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v8.1.13 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

@@ -3374,16 +3374,17 @@ Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Pa
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐘 '`                               | Le symbole utilisé avant d'afficher la version de PHP.                                     |
-| `detect_extensionsdetect_extensions` | `['php']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['composer.json', '.php-version']`  | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'147 bold'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `php`.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🐘 '`                              | Le symbole utilisé avant d'afficher la version de PHP.                                     |
+| `detect_extensions` | `['php']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['composer.json', '.php-version']`  | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'147 bold'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `php`.                                                                 |
+| `use_symfony_cli`   | `false`                              | Utilise le binaire `symfony-cli` à la place du binaire `php` systéme                       |
 
 ### Variables
 
@@ -3391,7 +3392,7 @@ Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Pa
 | --------- | -------- | -------------------------------------- |
 | version   | `v7.3.8` | La version de `php`                    |
 | symbole   |          | Reflète la valeur de l'option `symbol` |
-| style\* |          | Reflète la valeur de l'option `style`  |
+| style\*   |          | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
