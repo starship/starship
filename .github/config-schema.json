@@ -5989,6 +5989,18 @@
           "default": "bold red",
           "type": "string"
         },
+        "success_style": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "failure_style": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "map_symbol": {
           "default": false,
           "type": "boolean"
