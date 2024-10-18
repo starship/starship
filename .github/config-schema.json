@@ -1722,6 +1722,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
+        "success_symbol_rootuser": "",
         "symbol": "❌"
       },
       "allOf": [
@@ -5966,6 +5967,10 @@
           "type": "string"
         },
         "success_symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "success_symbol_rootuser": {
           "default": "",
           "type": "string"
         },
