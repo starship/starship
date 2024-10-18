@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.1](https://github.com/starship/starship/compare/v1.21.0...v1.21.1) (2024-10-18)
+
+
+### Reverts
+
+* "perf(fish): Skip unnecessary indirection in starship init fish" ([#6326](https://github.com/starship/starship/issues/6326)) ([00d927b](https://github.com/starship/starship/commit/00d927bb20e618b587635876d2e10047f98eff88))
+
 ## [1.21.0](https://github.com/starship/starship/compare/v1.20.1...v1.21.0) (2024-10-17)
 
 
