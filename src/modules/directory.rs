@@ -96,6 +96,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 &contracted_home_dir,
                 &dir_string,
             )
+        } else if config.truncate_to_repo
+            && repo.is_some()
+            && config.repo_truncation_symbol.is_some()
+        {
+            String::from(config.repo_truncation_symbol.unwrap())
         } else {
             String::from(config.truncation_symbol)
         }
@@ -1451,6 +1456,7 @@ mod tests {
                 [directory]
                 truncation_length = 5
                 truncation_symbol = "…/"
+                repo_truncation_symbol = "G "
                 truncate_to_repo = true
             })
             .path(dir)
@@ -1459,7 +1465,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep("…/repo/src/sub/path"))
+                .paint(convert_path_sep("G repo/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
