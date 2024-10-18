@@ -163,6 +163,9 @@ format = '\[[$symbol($version)]($style)\]'
 [spack]
 format = '\[[$symbol$environment]($style)\]'
 
+[spin]
+format = '\[[$symbol($version)]($style)\]'
+
 [sudo]
 format = '\[[as $symbol]($style)\]'
 
