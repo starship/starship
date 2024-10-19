@@ -8,17 +8,23 @@ use crate::utils::get_command_string_output;
 ///
 /// Will display the Pixi environment iff `$PIXI_ENVIRONMENT_NAME` is set.
 /// Will display the Pixi version iff pixi files are detected or `$PIXI_ENVIRONMENT_NAME` is set.
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {    
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("pixi");
     let config: PixiConfig = PixiConfig::try_load(module.config);
 
     let pixi_environment_name = context.get_env("PIXI_ENVIRONMENT_NAME");
-    let is_pixi_project = pixi_environment_name.is_some() || context.try_begin_scan()?.set_files(&config.detect_files).is_match();
+    let is_pixi_project = pixi_environment_name.is_some()
+        || context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .is_match();
     if !is_pixi_project {
         return None;
     }
-    
-    let pixi_environment_name = if !config.show_default_environment && pixi_environment_name == Some("default".to_string()) {
+
+    let pixi_environment_name = if !config.show_default_environment
+        && pixi_environment_name == Some("default".to_string())
+    {
         None
     } else {
         pixi_environment_name
@@ -44,7 +50,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     module.get_name(),
                     &pixi_version,
                     config.version_format,
-                ).map(Ok),
+                )
+                .map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -61,7 +68,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-
 fn get_pixi_version(context: &Context, config: &PixiConfig) -> Option<String> {
     let version = config
         .pixi_binary
@@ -72,7 +78,6 @@ fn get_pixi_version(context: &Context, config: &PixiConfig) -> Option<String> {
 
     Some(version.split_once(" ")?.1.trim().to_string())
 }
-
 
 #[cfg(test)]
 mod tests {

@@ -30,10 +30,7 @@ impl<'a> Default for PixiConfig<'a> {
             symbol: "📦 ",
             style: "yellow bold",
             disabled: false,
-            detect_files: vec![
-                "pixi.toml",
-                "pixi.lock"
-            ],
+            detect_files: vec!["pixi.toml", "pixi.lock"],
         }
     }
 }
