@@ -3603,8 +3603,6 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | symbol      |           | Mirrors the value of option `symbol` |
 | style       |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
-
 ### Example
 
 ```toml
@@ -3612,6 +3610,16 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 
 [pixi]
 format = '[$symbol$environment](yellow) '
+
+[python]
+# customize python binary path for pixi
+python_binary = [
+  # this is the python from PATH if in a pixi shell
+  # (assuming you don't have python on your global PATH)
+  "python",
+  # fall back to pixi's python if it's available
+  ".pixi/envs/default/bin/python",
+]
 ```
 
 ## Pulumi
