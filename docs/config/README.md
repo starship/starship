@@ -4272,7 +4272,7 @@ The `spin` module displays the current [Spin](https://github.com/fermyon/spin) v
 | `symbol`            | `'💫 '`                          | The symbol used before the Spin version.     |
 | `style`             | `'bold bright-purple'`           | The style for the module.                    |
 | `format`            | `'[$symbol($version) ]($style)'` | The format for the module.                   |
-| `version_format`    | `'Spin ${raw}'`                  | The format for the Spin version.             |
+| `version_format`    | `'v${raw}'`                      | The format for the Spin version.             |
 | `disabled`          | `false`                          | Disables the `spin` module.                  |
 
 ### Variables
