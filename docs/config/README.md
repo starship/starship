@@ -3596,12 +3596,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 
 ### Variables
 
-| Variable    | Example      | Description                          |
-| ----------- | ------------ | ------------------------------------ |
-| version     | `v0.33.0`    | The version of `pixi`                |
-| environment | `py311`      | The current pixi environment         |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style       |              | Mirrors the value of option `style`  |
+| Variable    | Example   | Description                          |
+| ----------- | --------- | ------------------------------------ |
+| version     | `v0.33.0` | The version of `pixi`                |
+| environment | `py311`   | The current pixi environment         |
+| symbol      |           | Mirrors the value of option `symbol` |
+| style       |           | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 

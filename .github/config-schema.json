@@ -217,6 +217,7 @@
         "disabled": false,
         "format": "via [$symbol$environment]($style) ",
         "ignore_base": true,
+        "ignore_pixi_envs": true,
         "style": "green bold",
         "symbol": "🅒 ",
         "truncation_length": 1
@@ -1376,6 +1377,28 @@
         }
       ]
     },
+    "pixi": {
+      "default": {
+        "detect_files": [
+          "pixi.toml",
+          "pixi.lock"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )(\\($environment\\) )]($style)",
+        "pixi_binary": [
+          "pixi"
+        ],
+        "show_default_environment": true,
+        "style": "yellow bold",
+        "symbol": "📦 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PixiConfig"
+        }
+      ]
+    },
     "pulumi": {
       "default": {
         "disabled": false,
@@ -1430,8 +1453,7 @@
           "Pipfile",
           "tox.ini",
           "setup.py",
-          "__init__.py",
-          "pixi.toml"
+          "__init__.py"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -2519,6 +2541,10 @@
           "type": "string"
         },
         "ignore_base": {
+          "default": true,
+          "type": "boolean"
+        },
+        "ignore_pixi_envs": {
           "default": true,
           "type": "boolean"
         },
@@ -5174,6 +5200,69 @@
       },
       "additionalProperties": false
     },
+    "PixiConfig": {
+      "type": "object",
+      "properties": {
+        "pixi_binary": {
+          "default": [
+            "pixi"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "show_default_environment": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "via [$symbol($version )(\\($environment\\) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "📦 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_files": {
+          "default": [
+            "pixi.toml",
+            "pixi.lock"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Either_for_String_and_Array_of_String": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "PulumiConfig": {
       "type": "object",
       "properties": {
@@ -5318,8 +5407,7 @@
             "Pipfile",
             "tox.ini",
             "setup.py",
-            "__init__.py",
-            "pixi.toml"
+            "__init__.py"
           ],
           "type": "array",
           "items": {
@@ -5344,19 +5432,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "Either_for_String_and_Array_of_String": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      ]
     },
     "QuartoConfig": {
       "type": "object",
