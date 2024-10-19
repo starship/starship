@@ -916,6 +916,7 @@ If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by ru
 | `style`             | `'bold green'`                         | The style for the module.                                                                                                                                                                                   |
 | `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                                                                                  |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `ignore_pixi_envs`  | `true`                                 | Ignores pixi environments when activated (in favor of the pixi starship module). They are recognized by the `PIXI_ENVIRONMENT_NAME` environemnt variable.                                                   |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Variables
@@ -3570,6 +3571,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### Options
+
+| Option                     | Default                                                 | Description                                                                           |
+| -------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | The format for the module.                                                            |
+| `version_format`           | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.            |
+| `symbol`                   | `'📦 '`                                                 | The symbol used before the environment name.                                          |
+| `style`                    | `'yellow bold'                                          | The style for the module.                                                             |
+| `show_default_environment` | `true`                                                  | Whether to indicate that the `default` environment of your project is activated.      |
+| `pixi_binary`              | `['pixi']`                                              | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_files`             | `['pixi.toml']`                                         | Which filenames should trigger this module                                            |
+| `disabled`                 | `false`                                                 | Disables the `conda` module.                                                          |
+
+### Variables
+
+| Variable    | Example      | Description                          |
+| ----------- | ------------ | ------------------------------------ |
+| version     | `v0.33.0`    | The version of `pixi`                |
+| environment | `py311`      | The current pixi environment         |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style       |              | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
@@ -3688,26 +3732,25 @@ By default, the module will be shown if any of the following conditions are met:
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `setup.py` file
 - The current directory contains a `tox.ini` file
-- The current directory contains a `pixi.toml` file
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
 
 ### Options
 
-| Option               | Default                                                                                                                   | Description                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                                 | The format for the module.                                                             |
-| `version_format`     | `'v${raw}'`                                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
-| `symbol`             | `'🐍 '`                                                                                                                   | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                                           | The style for the module.                                                              |
-| `pyenv_version_name` | `false`                                                                                                                   | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Which extensions should trigger this module                                            |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                                      | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                                   | Disables the `python` module.                                                          |
+| Option               | Default                                                                                                      | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | The format for the module.                                                            |
+| `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
+| `symbol`             | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                     |
+| `style`              | `'yellow bold'`                                                                                              | The style for the module.                                                             |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 ::: tip
 
