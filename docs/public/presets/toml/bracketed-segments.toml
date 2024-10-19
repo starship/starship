@@ -136,6 +136,9 @@ format = '\[[$symbol($version)]($style)\]'
 [pijul_channel]
 format = '\[[$symbol$channel]($style)\]'
 
+[pixi]
+format = '\[[$symbol$version($environment)]($style)\]'
+
 [pulumi]
 format = '\[[$symbol$stack]($style)\]'
 

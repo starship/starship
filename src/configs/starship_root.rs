@@ -105,6 +105,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "guix_shell",
     "nix_shell",
     "conda",
+    "pixi",
     "meson",
     "spack",
     "memory_usage",
