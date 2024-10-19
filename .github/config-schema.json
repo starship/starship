@@ -1719,7 +1719,7 @@
         "permanent": false,
         "style": "bold bright-purple",
         "symbol": "💫 ",
-        "version_format": "Spin ${raw}"
+        "version_format": "v${raw}"
       },
       "allOf": [
         {
