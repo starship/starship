@@ -95,7 +95,7 @@ mod tests {
 
         let expected = Some(format!(
             "{}",
-            Color::LightPurple.bold().paint("💫 Spin 2.7.0 ")
+            Color::LightPurple.bold().paint("💫 v2.7.0 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
