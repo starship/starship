@@ -23,7 +23,7 @@ impl<'a> Default for SpinConfig<'a> {
     fn default() -> Self {
         SpinConfig {
             format: "[$symbol($version) ]($style)",
-            version_format: "Spin ${raw}",
+            version_format: "v${raw}",
             symbol: "💫 ",
             permanent: false,
             style: "bold bright-purple",
