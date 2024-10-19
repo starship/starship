@@ -5979,7 +5979,7 @@
           "type": "string"
         },
         "version_format": {
-          "default": "Spin ${raw}",
+          "default": "v${raw}",
           "type": "string"
         },
         "symbol": {
