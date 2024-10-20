@@ -83,7 +83,7 @@ format = 'via [$symbol]($style)'
 format = 'via [$symbol]($style)'
 
 [pixi]
-format = 'via [$symbol]($style)'
+format = 'via [$symbol($environment )]($style)'
 
 [php]
 format = 'via [$symbol]($style)'

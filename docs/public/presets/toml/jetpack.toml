@@ -264,8 +264,8 @@ symbol = "◯ "
 format = " conda [$symbol$environment]($style)"
 
 [pixi]
-symbol = "◯ "
-format = " pixi [$symbol$environment]($style)"
+symbol = "■ "
+format = " pixi [$symbol$version ($environment )]($style)"
 
 [dart]
 symbol = "◁◅ "

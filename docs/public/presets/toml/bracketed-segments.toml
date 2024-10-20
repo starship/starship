@@ -137,7 +137,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$channel]($style)\]'
 
 [pixi]
-format = '\[[$symbol$version($environment)]($style)\]'
+format = '\[[$symbol$version( $environment)]($style)\]'
 
 [pulumi]
 format = '\[[$symbol$stack]($style)\]'
