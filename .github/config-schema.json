@@ -1921,6 +1921,13 @@
         "$ref": "#/definitions/CustomConfig"
       }
     },
+    "random": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/RandomConfig"
+      }
+    },
     "format": {
       "default": "$all",
       "type": "string"
@@ -6552,6 +6559,45 @@
           "type": "string"
         }
       ]
+    },
+    "RandomConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol ]($style)",
+          "type": "string"
+        },
+        "symbols": {
+          "default": [
+            ">",
+            "$",
+            "%"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "styles": {
+          "default": [
+            "bold",
+            "italic"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "default": "<random module>",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
