@@ -4,8 +4,6 @@ use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 
-use whoami::fallible::hostname;
-
 /// Creates a module with the system hostname
 ///
 /// Will display the hostname if all of the following criteria are met:
@@ -78,15 +76,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn hostname() -> std::io::Result<String> {
+    if cfg!(windows) {
+        // On Windows, whoami::hostname() returns the NetBIOS name,
+        // but we prefer the "hostname" returned by whoami::devicname()
+        // which does a better job of preserving case and returns the
+        // DNS name.
+        whoami::fallible::devicename()
+    } else {
+        whoami::fallible::hostname()
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::hostname;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = whoami::fallible::hostname() {
+            if let Ok(hostname) = hostname() {
                 hostname
             } else {
                 println!(
