@@ -89,6 +89,7 @@ pub const ALL_MODULES: &[&str] = &[
     "singularity",
     "solidity",
     "spack",
+    "spin",
     "status",
     "sudo",
     "swift",
