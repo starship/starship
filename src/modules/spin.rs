@@ -93,10 +93,7 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!(
-            "{}",
-            Color::LightPurple.bold().paint("💫 v2.7.0 ")
-        ));
+        let expected = Some(format!("{}", Color::LightPurple.bold().paint("💫 v2.7.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
