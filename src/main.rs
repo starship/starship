@@ -6,8 +6,8 @@ use std::path::PathBuf;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{CommandFactory, Parser, Subcommand};
-use clap_complete::{generate, Shell as CompletionShell};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
+use clap_complete::generate;
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
@@ -26,6 +26,46 @@ use starship::*;
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
+}
+
+#[derive(clap::Parser, ValueEnum, Debug, Clone, PartialEq, Eq)]
+enum CompletionShell {
+    // For and from clap_complete
+    Bash,
+    Elvish,
+    Fish,
+    PowerShell,
+    Zsh,
+    // For and from clap_complete_Nushell
+    Nushell,
+}
+
+fn generate_main_shell(shell: clap_complete::Shell) {
+    generate(
+        shell,
+        &mut Cli::command(),
+        "starship",
+        &mut io::stdout().lock(),
+    )
+}
+fn generate_nushell(shell: clap_complete_nushell::Nushell) {
+    generate(
+        shell,
+        &mut Cli::command(),
+        "starship",
+        &mut io::stdout().lock(),
+    )
+}
+
+fn generate_completions(shell: CompletionShell) {
+    match shell {
+        CompletionShell::Bash => generate_main_shell(clap_complete::Shell::Bash),
+        CompletionShell::Elvish => generate_main_shell(clap_complete::Shell::Elvish),
+        CompletionShell::Fish => generate_main_shell(clap_complete::Shell::Fish),
+        CompletionShell::PowerShell => generate_main_shell(clap_complete::Shell::PowerShell),
+        CompletionShell::Zsh => generate_main_shell(clap_complete::Shell::Zsh),
+        CompletionShell::Nushell => generate_nushell(clap_complete_nushell::Nushell),
+    }
 }
 
 #[derive(Subcommand, Debug)]
@@ -236,12 +276,7 @@ fn main() {
         }
         Commands::Explain(props) => print::explain(props),
         Commands::Timings(props) => print::timings(props),
-        Commands::Completions { shell } => generate(
-            shell,
-            &mut Cli::command(),
-            "starship",
-            &mut io::stdout().lock(),
-        ),
+        Commands::Completions { shell } => generate_completions(shell),
         Commands::Session => println!(
             "{}",
             rand::thread_rng()
