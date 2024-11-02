@@ -30,14 +30,12 @@ struct Cli {
 
 #[derive(clap::Parser, ValueEnum, Debug, Clone, PartialEq, Eq)]
 enum CompletionShell {
-    // For and from clap_complete
     Bash,
     Elvish,
     Fish,
+    Nushell,
     PowerShell,
     Zsh,
-    // For and from clap_complete_Nushell
-    Nushell,
 }
 
 fn generate_main_shell(shell: clap_complete::Shell) {
