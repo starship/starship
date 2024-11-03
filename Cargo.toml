@@ -45,6 +45,7 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 chrono = { version = "0.4.38", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.5.20", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.36"
+clap_complete_nushell = "4.5.4"
 dirs = "5.0.1"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
