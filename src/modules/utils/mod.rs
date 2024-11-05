@@ -9,3 +9,5 @@ pub mod directory_nix;
 pub mod path;
 
 pub mod truncate;
+
+pub mod is_root_user;
