@@ -158,7 +158,10 @@ fn format_exit_code<'a>(
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => match exit_code_int {
+                    0 => Some(Ok(config.success_style)),
+                    _ => Some(Ok(config.style)),
+                },
                 _ => None,
             })
             .map(|variable| match variable {
@@ -315,6 +318,7 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 success_symbol = "✔️"
+                success_style = "bold red"
                 disabled = false
             })
             .status(0)
@@ -326,6 +330,7 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 success_symbol = "✔️"
+                success_style = "bold red"
                 disabled = false
             })
             .collect();
@@ -785,11 +790,13 @@ mod tests {
         let pipe_exit_code = &[0, 1, 2];
         let main_exit_code = 2;
 
+        let success_style = Style::new().on(Color::Purple).fg(Color::White).bold();
         let style = Style::new().on(Color::Red).fg(Color::White).bold();
         let sep_style = Style::new().on(Color::Green).fg(Color::White).italic();
         let expected = Some(format!(
-            "{}{}{}{}{}",
-            style.paint("[0"),
+            "{}{}{}{}{}{}",
+            style.paint("["),
+            success_style.paint("0"),
             sep_style.paint("|"),
             style.paint("1"),
             sep_style.paint("|"),
@@ -800,6 +807,7 @@ mod tests {
                 [status]
                 format = "\\($status\\)"
                 style = "fg:white bg:red bold"
+                success_style = "fg:white bg:purple bold"
                 pipestatus = true
                 pipestatus_separator = "[|](fg:white bg:green italic)"
                 pipestatus_format = "[\\[]($style)$pipestatus[\\] => <$status>]($style)"
@@ -809,6 +817,8 @@ mod tests {
             .status(main_exit_code)
             .pipestatus(pipe_exit_code)
             .collect();
+        log::trace!("Expected: {}", expected.clone().unwrap());
+        log::trace!("Actual:   {}", actual.clone().unwrap());
         assert_eq!(expected, actual);
     }
 
