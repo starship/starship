@@ -109,12 +109,12 @@ fn is_root_user() -> bool {
     )
 }
 
-#[cfg(all(target_os = "windows", test))]
+#[cfg(test)]
 fn is_root_user() -> bool {
     false
 }
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), not(test)))]
 fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
