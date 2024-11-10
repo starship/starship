@@ -1,124 +1,156 @@
-# Get editor completions based on the config schema
+# Starship Configuration
 "$schema" = 'https://starship.rs/config-schema.json'
 
+add_newline = true
+
 format = """
-[](fg:#003b46 bg:#004f5e)\
-[](fg:#004f5e bg:#006374)\
-[](fg:#006374 bg:#007a8a)\
-[](fg:#007a8a bg:#0093a3)\
-[](fg:#0093a3 bg:#003b46)\
-[](fg:#003b46 bg:#e6454b)\
-$username\
-[](fg:#e6454b bg:#ff6a4b)\
-$battery\
-[](fg:#ff6a4b bg:#ffcc66)\
 $directory\
-[](fg:#ffcc66 bg:#85b57a)\
-$git_branch\
-$git_status\
-[](fg:#85b57a bg:#4da6a6)\
 $cmd_duration\
-[](fg:#4da6a6 bg:#3a82e6)\
-[](fg:#3a82e6 bg:#8c4de6)\
-[](fg:#8c4de6)\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
 $fill\
-[---](fg:#ffcc66)
+$nodejs\
+$python\
+$rust\
+$java\
+$php\
+$perl\
+$swift\
+$dart\
+$scala\
+$kotlin\
+$docker_context\
+$kubernetes\
 $character\
 """
 
 right_format = """
-[󰇥](bold fg:#ffcc66 )
+[󰇥](bold fg:yellow)
 """
-# scheme: "Deep Oceanic Next"
-# author: "spearkkk (https://github.com/spearkkk/deep-oceanic-next)"
-# base00: "003b46" # background
-# base01: "004f5e" # black
-# base02: "006374" # bright black
-# base03: "007a8a" # grey
-# base04: "0093a3" # light grey
-# base05: "dce3e8" # foreground
-# base06: "e6ebf0" # white
-# base07: "f0f5f5" # bright white
-# base08: "e6454b" # red
-# base09: "ff6a4b" # orange
-# base0A: "ffcc66" # yellow
-# base0B: "85b57a" # green
-# base0C: "4da6a6" # cyan/aqua
-# base0D: "3a82e6" # blue
-# base0E: "8c4de6" # magenta/purple
-# base0F: "e673a3" # pink
-# base10: "001114" # darker black
-# base11: "000a0d" # darkest black
-# base12: "ff5a61" # bright red
-# base13: "ffdd80" # bright yellow
-# base14: "99d8a0" # bright green
-# base15: "66cccc" # bright cyan
-# base16: "4da6ff" # bright blue
-# base17: "a366ff" # bright purple
 
+# Palette
 palette = "deep_oceanic_next"
 
 [palettes.deep_oceanic_next]
-black = "#003b46"
-red = "#e6454b"
-green = "#85b57a"
-blue = "#3a82e6"
-yellow = "#ffcc66"
-purple = "#8c4de6"
-cyan = "#4da6a6"
-white = "#dce3e8"
-
-bright-black = "#004f5e"
-bright-red = "#ff9999"
-bright-green = "#c7e6c7"
-bright-blue = "#99ccff"
-bright-yellow = "#ffb380"
-bright-purple = "#d4a1ff"
-bright-cyan = "#99e6e6"
-bright-white = "#e6ebf0"
+background = "#003b46"  
+black = "#004f5e"  
+bright-black = "#006374"  
+grey = "#007a8a"  
+light-grey = "#0093a3"  
+foreground = "#dce3e8"  
+white = "#e6ebf0"  
+bright-white = "#f0f5f5"  
+red = "#e6454b"  
+orange = "#ff6a4b"  
+yellow = "#ffcc66"  
+green = "#85b57a"  
+cyan = "#4da6a6"  
+blue = "#3a82e6"  
+magenta = "#8c4de6"  
+pink = "#e673a3"  
+darker-black = "#001114"  
+darkest-black = "#000a0d"  
+bright-red = "#ff5a61"  
+bright-yellow = "#ffdd80"  
+bright-green = "#99d8a0"  
+bright-cyan = "#66cccc"  
+bright-blue = "#4da6ff"  
+bright-purple = "#a366ff"  
 
 [os]
 disabled = true
 
-[username]
-show_always = true
-style_user = "bg:#f99157 bold fg:#003b46"
-style_root = "bg:#f99157 bold fg:#003b46"
-format = "[ 󰀄 $user ](bold fg:#003b46 bg:#e6454b)"
-
-# Battery configuration
-[battery]
-format = "[ $symbol$percentage ](bold fg:#003b46 bg:#ff6a4b)"
-
-[[battery.display]]
-threshold = 100
-
 [directory]
-truncation_symbol = "…/"
 truncation_length = 6
-format = "[ $path ](bold fg:#003b46 bg:#ffcc66)"
+truncate_to_repo = true
+style = "fg:bright-yellow bg:background"
+read_only = ""
+read_only_style = ""
+truncation_symbol = "…/"
+repo_root_style = "underline fg:yellow bg:background"
 
 [git_branch]
 symbol = ""
-format = "[ $symbol $branch ](bold fg:#003b46 bg:#85b57a)"
+format = "[\ngit: ](bold fg:light-grey bg:background)[$symbol $branch](underline bold fg:light-grey bg:background)"
+truncation_length = 10
 
+# Enhanced Git Status without clean indicator
 [git_status]
-format = "[$all_status$ahead_behind ](bold fg:#003b46 bg:#85b57a)"
+format = "[$all_status$ahead_behind](fg:light-grey bg:background)"
+staged = "●"  # Indicates staged files
+modified = "✚"  # Indicates modified files
+deleted = "✖"  # Indicates deleted files
+renamed = "➜"  # Indicates renamed files
+untracked = "… "  # Indicates untracked files
+conflicted = "≠"  # Indicates conflicts
+ahead = "⇡"  # Indicates commits ahead of the remote
+behind = "⇣"  # Indicates commits behind the remote
+diverged = "⇕"  # Indicates commits diverged from the remote
 
 [package]
 disabled = true
 
 [time]
-disabled = false
-time_format = "%r"
-style = "bg:#003b46 fg:white"
-format = "[ $time ](bold fg:#003b46 bg:#b26cff)"
+disabled = true
 
 [cmd_duration]
-format = "[ $duration ](bold fg:#003b46 bg:#4da6a6)"
+format = "[$duration](fg:bright-black bg:background)"
 
 [fill]
 symbol = " "
 
 [character]
+format = "\n$symbol "
 error_symbol = "[✗](bold red)"
+
+
+# Docker Module with Underlined Context Only
+[docker_context]
+format = "[\ndck: ](bold fg:grey bg:background)[$context](underline bold fg:grey bg:background)"
+disabled = false
+
+# Kubernetes Module with Underlined Context Only
+[kubernetes]
+format = "[\nk8s: ](bold fg:cyan bg:background)[$context](underline bold fg:cyan bg:background)"
+disabled = false
+
+# Language Modules with Underlined Versions Only
+[nodejs]
+format = "[ node: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[python]
+format = "[ python: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[rust]
+format = "[ rust: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[java]
+format = "[ java: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[swift]
+format = "[ swift: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[dart]
+format = "[ dart: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[ruby]
+format = "[ ruby: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[scala]
+format = "[ scala: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+
+[kotlin]
+format = "[ kotlin: ](bold fg:grey bg:background)[$version](bold fg:grey bg:background underline)"
+disabled = false
+

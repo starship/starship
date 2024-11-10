@@ -87,4 +87,4 @@ This deep oceanic next preset makes you feel deep ocean.
 
 [Click to view Deep Oceanic Next preset](./deep-oceanic-next)
 
-[![Screenshot·of·Deep·Oceanic·Next·preset](/presets/img/deep-oceanic-next.png··"Click·to·view·Deep·Oceanic·Next·preset")](./deep-oceanic-next)
+[![Screenshot·of·Deep·Oceanic·Next·preset](/presets/img/deep-oceanic-next.png··"Click·to·view·Deep·Oceanic·Next·preset")](./deep-oceanic-next.md)
