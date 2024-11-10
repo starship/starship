@@ -80,15 +80,15 @@ truncation_length = 10
 # Enhanced Git Status without clean indicator
 [git_status]
 format = "[$all_status$ahead_behind](fg:light-grey bg:background)"
-staged = "●"  # Indicates staged files
-modified = "✚"  # Indicates modified files
-deleted = "✖"  # Indicates deleted files
-renamed = "➜"  # Indicates renamed files
-untracked = "… "  # Indicates untracked files
-conflicted = "≠"  # Indicates conflicts
-ahead = "⇡"  # Indicates commits ahead of the remote
-behind = "⇣"  # Indicates commits behind the remote
-diverged = "⇕"  # Indicates commits diverged from the remote
+staged = "●"
+modified = "✚"
+deleted = "✖"
+renamed = "➜"
+untracked = "…"
+conflicted = "≠"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
 
 [package]
 disabled = true
