@@ -39,24 +39,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "symbol" => Some(Ok(Cow::from(config.symbol))),
-                "rc_path" => Some(Ok(state.rc_path.to_string_lossy())),
-                "allowed" => Some(Ok(match state.allowed {
-                    AllowStatus::Allowed => Cow::from(config.allowed_msg),
-                    AllowStatus::NotAllowed => Cow::from(config.not_allowed_msg),
-                    AllowStatus::Denied => Cow::from(config.denied_msg),
-                })),
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                "rc_path" => match state.rc_path.to_str() {
+                    None => {
+                        log::warn!("direnv rc path has non UTF-8 characters");
+
+                        None
+                    }
+                    ret => ret,
+                },
+                "allowed" => Some(match state.allowed {
+                    AllowStatus::Allowed => config.allowed_msg,
+                    AllowStatus::NotAllowed => config.not_allowed_msg,
+                    AllowStatus::Denied => config.denied_msg,
+                }),
                 "loaded" => state
                     .loaded
                     .then_some(config.loaded_msg)
-                    .or(Some(config.unloaded_msg))
-                    .map(Cow::from)
-                    .map(Ok),
+                    .or(Some(config.unloaded_msg)),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .parse(None, Some(context))
