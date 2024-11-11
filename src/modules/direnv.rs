@@ -429,6 +429,44 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+    #[test]
+    fn msg_formatting() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(rc_path)?.sync_all()?;
+
+        let actual = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+                allowed_msg = "[allowed](green bold)"
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
+                    stderr: String::default(),
+                }),
+            )
+            .collect();
+
+        let default = Color::LightYellow.bold();
+        let nested = Color::Green.bold();
+
+        let expected = Some(format!(
+            "{}{}{}{}{} ",
+            default.prefix(),
+            "direnv loaded/",
+            default.infix(nested),
+            "allowed",
+            nested.suffix()
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
     fn status_cmd_output_without_rc() -> String {
         String::from(
             r"\
