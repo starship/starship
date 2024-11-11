@@ -780,19 +780,53 @@ impl<'a> ScanAncestors<'a> {
     /// files or folders is found.
     ///
     /// The scan does not cross device boundaries.
-    pub fn scan(&self) -> Option<&'a Path> {
-        let initial_device_id = self.path.device_id();
-        for dir in self.path.ancestors() {
-            if initial_device_id != dir.device_id() {
+    pub fn scan(&self) -> Option<PathBuf> {
+        let path = self.path;
+        let initial_device_id = path.device_id();
+
+        // We want to avoid reallocations during the search so we pre-allocate a buffer with enough
+        // capacity to hold the longest path + any marker (we could find the length of the longest
+        // marker programmatically but that would actually cost more than preallocating a few bytes too many).
+        let mut buf = PathBuf::with_capacity(path.as_os_str().len() + 15);
+        path.clone_into(&mut buf);
+
+        loop {
+            if initial_device_id != buf.device_id() {
                 break;
             }
 
-            if self.files.iter().any(|name| dir.join(name).is_file())
-                || self.folders.iter().any(|name| dir.join(name).is_dir())
-            {
-                return Some(dir);
+            for file in self.files {
+                // Then for each file, we look for `buf/file`
+                buf.push(file);
+
+                if buf.is_file() {
+                    buf.pop();
+                    return Some(buf);
+                }
+
+                // Removing the last pushed item means removing `file`, to replace it with either
+                // the next `file` or the first `folder`, if any
+                buf.pop();
+            }
+
+            for folder in self.folders {
+                // Then for each folder, we look for `buf/folder`
+                buf.push(folder);
+
+                if buf.is_dir() {
+                    buf.pop();
+                    return Some(buf);
+                }
+
+                buf.pop();
+            }
+
+            // Then we go up one level until there is no more level to go up with
+            if !buf.pop() {
+                break;
             }
         }
+
         None
     }
 }
