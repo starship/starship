@@ -2,9 +2,9 @@
 
 # No Empty Icons Preset
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+只有确认toolset文件后才显示toolset图标。 如果没有找到toolset的版本号，就不会显示toolset。 本预设改变了图标的显示条件：只有找到toolset信息时显示。
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![No Empty Icons预设的截图](/presets/img/no-empty-icons.png)
 
 ### 配置
 
@@ -12,6 +12,6 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/no-empty-icons.toml)
+[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
 
 <<< @/public/presets/toml/no-empty-icons.toml

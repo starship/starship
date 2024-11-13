@@ -12,7 +12,6 @@ use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state, Repository, ThreadSafeRepository,
 };
-use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -25,6 +24,7 @@ use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
+use std::sync::OnceLock;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
 
@@ -44,13 +44,13 @@ pub struct Context<'a> {
     pub logical_dir: PathBuf,
 
     /// A struct containing directory contents in a lookup-optimized format.
-    dir_contents: OnceCell<DirContents>,
+    dir_contents: OnceLock<Result<DirContents, std::io::Error>>,
 
     /// Properties to provide to modules.
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    repo: OnceCell<Repo>,
+    repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -166,8 +166,8 @@ impl<'a> Context<'a> {
             properties,
             current_dir,
             logical_dir,
-            dir_contents: OnceCell::new(),
-            repo: OnceCell::new(),
+            dir_contents: OnceLock::new(),
+            repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -286,9 +286,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, Box<gix::discover::Error>> {
+    pub fn get_repo(&self) -> Result<&Repo, &gix::discover::Error> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+            .get_or_init(|| -> Result<Repo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -359,17 +359,21 @@ impl<'a> Context<'a> {
                     kind: repository.kind(),
                 })
             })
+            .as_ref()
+            .map_err(std::convert::AsRef::as_ref)
     }
 
-    pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
-        self.dir_contents.get_or_try_init(|| {
-            let timeout = self.root_config.scan_timeout;
-            DirContents::from_path_with_timeout(
-                &self.current_dir,
-                Duration::from_millis(timeout),
-                self.root_config.follow_symlinks,
-            )
-        })
+    pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
+        self.dir_contents
+            .get_or_init(|| {
+                let timeout = self.root_config.scan_timeout;
+                DirContents::from_path_with_timeout(
+                    &self.current_dir,
+                    Duration::from_millis(timeout),
+                    self.root_config.follow_symlinks,
+                )
+            })
+            .as_ref()
     }
 
     fn get_shell() -> Shell {

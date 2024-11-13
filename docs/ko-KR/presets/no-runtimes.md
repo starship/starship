@@ -12,6 +12,6 @@ This preset hides the version of language runtimes. If you work in containers or
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[클릭하여 TOML 다운로드](/presets/toml/no-runtime-versions.toml)
+[Click to download TOML](/presets/toml/no-runtime-versions.toml){download}
 
 <<< @/public/presets/toml/no-runtime-versions.toml

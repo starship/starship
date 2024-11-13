@@ -553,10 +553,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-`buf`モジュールは、現在インストールされている[Buf](https://buf.build)のバージョンを表示します。 デフォルトでは次のすべての条件が満たされると、モジュールが表示されます。
-
-- [`buf`](https://github.com/bufbuild/buf)CLI がインストールされている
-- カレントディレクトリに、[`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml)、[`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml)または[`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml)が含まれている
+`buf`モジュールは、現在インストールされている[Buf](https://buf.build)のバージョンを表示します。 By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### オプション
 
@@ -635,7 +632,7 @@ format = 'via [🍔 $version](bold green) '
 
 Bun ランタイムだけが表示されるように、設定中の [nodejs モジュール](#nodejs) の `detect_files` プロパティを上書きできます。
 
-```
+```toml
 [nodejs]
 detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
@@ -863,7 +860,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
+Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
 
 :::
 
@@ -1050,20 +1047,20 @@ format = 'via [🔰 $version](bold red) '
 
 `deno`モジュールは、現在インストールされている[Deno](https://deno.land/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`deno.json`、`deno.jsonc`、`mod.ts`、`mod.js`、`deps.ts`もしくは`deps.js`が含まれている
+- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### オプション
 
-| オプション               | デフォルト                                                                   | 説明                                                     |
-| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🦕 '`                                                                  | Dart のシンボルを表すフォーマット文字列                                 |
-| `detect_extensions` | `[]`                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'green bold'`                                                          | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                 | `deno`モジュールを無効化します。                                    |
+| オプション               | デフォルト                                                                                | 説明                                                     |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                                                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🦕 '`                                                                               | Deno のシンボルを表すフォーマット文字列                                 |
+| `detect_extensions` | `[]`                                                                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'green bold'`                                                                       | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                              | `deno`モジュールを無効化します。                                    |
 
 ### 変数
 
@@ -1117,7 +1114,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` によってパスに含まれる固定文字列に対する任意の置換を定義できます。固定文字列の例として、長いネットワークプレフィックスや (Java の) 開発ディレクトリが考えられます。 ※これは fish 形式の PWD を無効化します。
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
 
 ```toml
 [directory.substitutions]
@@ -1207,7 +1204,7 @@ disabled = false
 
 ## Docker Context
 
-`docker_context`モジュールは、`default`に設定されていない場合、または環境変数`DOCKER_MACHINE_NAME`、`DOCKER_HOST`または`DOCKER_CONTEXT`が設定されている場合 (使用中のコンテキストを上書きするため)、現在アクティブな[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)を表示します。
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### オプション
 
@@ -1568,7 +1565,7 @@ AA -------------------------------------------- BB -----------------------------
 | `symbol`            | `' '`                           | 現在のディレクトリのチェックアウトのブランチ名の前に使用されるシンボルです。                |
 | `style`             | `'bold purple'`                  | モジュールのスタイルです。                                         |
 | `truncation_length` | `2^63 - 1`                       | Fossil のブランチ名を `N` 書記素までで切り捨てます。                      |
-| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `truncation_symbol` | `'…'`                            | ブランチ名が切り捨てられていることを示すための記号です。 `''` で記号なしにできます。         |
 | `disabled`          | `true`                           | `fossil_branch` モジュールを無効にします。                         |
 
 ### 変数
@@ -1716,7 +1713,7 @@ very-long-project-name = 'vlpn'
 | `symbol`             | `' '`                                            | gitブランチのシンボルを表すフォーマット文字列。                             |
 | `style`              | `'bold purple'`                                   | モジュールのスタイルです。                                         |
 | `truncation_length`  | `2^63 - 1`                                        | gitブランチ名を `N` 書記素までで切り捨てます。                           |
-| `truncation_symbol`  | `'…'`                                             | ブランチ名切り捨てられていることを示すための記号です。 `''` で記号なしにできます。          |
+| `truncation_symbol`  | `'…'`                                             | ブランチ名が切り捨てられていることを示すための記号です。 `''` で記号なしにできます。         |
 | `only_attached`      | `false`                                           | デタッチ `HEAD` 状態にない時はブランチ名のみ表示します。                      |
 | `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 'master' や 'main' に対して有用です。              |
 | `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                             |
@@ -1759,7 +1756,7 @@ ignore_branches = ['master', 'main']
 | `only_detached`      | `true`                         | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
 | `tag_disabled`       | `true`                         | `git_commit` モジュールのタグ情報の表示を無効にする。         |
 | `tag_max_candidates` | `0`                            | タグ表示で考慮するコミットの数。 既定では完全一致のみ許可します。         |
-| `tag_symbol`         | `' 🏷 '`                        | 表示される情報の前に追加されるタグシンボル                     |
+| `tag_symbol`         | `' 🏷  '`                       | 表示される情報の前に追加されるタグシンボル                     |
 | `disabled`           | `false`                        | `git_commit` モジュールを無効にします。                |
 
 ### 変数
@@ -1890,7 +1887,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`            | `'+'`                                           | `staged`のフォーマット                                                        |
 | `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                       |
 | `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                       |
-| `typechanged`       | `""`                                            | `typechange` のフォーマット                                                   |
+| `typechanged`       | `""`                                            | The format of `typechanged`                                            |
 | `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                          |
 | `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                      |
 | `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                              |
@@ -1911,7 +1908,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`       | インデックスに新しく追加されたファイルがあるときに、 `staged` を表示します。                                          |
 | `renamed`      | インデックスに名前が変更されたファイルがあるときに、 `renamed` を表示します。                                         |
 | `deleted`      | インデックスに削除されたファイルがあるときに、 `deleted` を表示します。                                            |
-| `typechanged`  | インデックスにファイルタイプの変更があるときに、 `typechange` を表示します。                                        |
+| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.      |
 | style\*      | オプション `style` の値をミラーする                                                               |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -2248,15 +2245,16 @@ format = 'via [⎈ $version](bold white) '
 
 ### オプション
 
-| オプション             | デフォルト                                  | 説明                                                                                   |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                     |
-| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                 |
-| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。 |
-| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                   |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                    |
-| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                        |
-| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                              |
+| オプション             | デフォルト                                  | 説明                                                                                                                         |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                                           |
+| `ssh_symbol`      | `'🌐 '`                                 | SSH セッションに接続しているときのシンボルを表すフォーマット文字列。                                                                                       |
+| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` は最初の . 以降の文字列を切り捨てます。 `''`を指定した場合、文字列の切り捨ては行われません。                                       |
+| `detect_env_vars` | `[]`                                   | このモジュールを活性化する環境変数。                                                                                                         |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                                          |
+| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                                              |
+| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                                                                    |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced. |
 
 ### 変数
 
@@ -2291,6 +2289,14 @@ disabled = false
 ssh_only = false
 detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
@@ -2784,7 +2790,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `style`             | `'bold purple'`                           | モジュールのスタイルです。                                                                                |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | module のフォーマットです。                                                                            |
 | `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
-| `truncation_symbol` | `'…'`                                     | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `truncation_symbol` | `'…'`                                     | ブランチ名が切り捨てられていることを示すための記号です。                                                                 |
 | `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
 ### 変数
@@ -2807,6 +2813,41 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
+```
+
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### オプション
+
+| オプション               | デフォルト                                 | 説明                                                     |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                  | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                  | どのフォルダーがこのモジュールをアクティブにするか                              |
+
+### 変数
+
+| 変数        | 設定例      | 説明                      |
+| --------- | -------- | ----------------------- |
+| version   | `24.4.0` | The version of `mojo`   |
+| symbol    |          | オプション `symbol` の値をミラーする |
+| style\* |          | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
 ```
 
 ## NATS
@@ -2934,17 +2975,17 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### オプション
 
-| オプション               | デフォルト                                      | 説明                                                                                                    |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | module のフォーマットです。                                                                                     |
-| `version_format`    | `'v${raw}'`                                | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                                |
-| `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | どの拡張子がこのモジュールをアクティブにするか                                                                               |
-| `detect_files`      | `['package.json', '.node-version']`        | どのファイル名がこのモジュールをアクティブにするか                                                                             |
-| `detect_folders`    | `['node_modules']`                         | どのフォルダーがこのモジュールをアクティブにするか                                                                             |
-| `style`             | `'bold green'`                             | モジュールのスタイルです。                                                                                         |
-| `disabled`          | `false`                                    | `nodejs`モジュールを無効にします。                                                                                 |
-| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
+| オプション               | デフォルト                                         | 説明                                                                                                    |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | module のフォーマットです。                                                                                     |
+| `version_format`    | `'v${raw}'`                                   | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                                |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | どの拡張子がこのモジュールをアクティブにするか                                                                               |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | どのファイル名がこのモジュールをアクティブにするか                                                                             |
+| `detect_folders`    | `['node_modules']`                            | どのフォルダーがこのモジュールをアクティブにするか                                                                             |
+| `style`             | `'bold green'`                                | モジュールのスタイルです。                                                                                         |
+| `disabled`          | `false`                                       | `nodejs`モジュールを無効にします。                                                                                 |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### 変数
 
@@ -3375,7 +3416,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `style`             | `'bold purple'`                   | モジュールのスタイルです。                                                                        |
 | `format`            | `'on [$symbol$channel]($style) '` | module のフォーマットです。                                                                    |
 | `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
-| `truncation_symbol` | `'…'`                             | ブランチ名切り捨てられていることを示すための記号です。                                                          |
+| `truncation_symbol` | `'…'`                             | ブランチ名が切り捨てられていることを示すための記号です。                                                         |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
@@ -3492,24 +3533,26 @@ The `python` module shows the currently installed version of [Python](https://ww
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`setup.py`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
+- 現在のディレクトリに`pixi.toml`ファイルが含まれている
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている.
+- The current directory contains a file with the `.ipynb` extension.
 - 仮想環境がアクティブである
 
 ### オプション
 
-| オプション                | デフォルト                                                                                                        | 説明                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | module のフォーマットです。                                                                      |
-| `version_format`     | `'v${raw}'`                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
-| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                              | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py']`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
-| `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
-| `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                  |
+| オプション                | デフォルト                                                                                                                     | 説明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | module のフォーマットです。                                                                      |
+| `version_format`     | `'v${raw}'`                                                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
+| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
+| `style`              | `'yellow bold'`                                                                                                           | モジュールのスタイルです。                                                                          |
+| `pyenv_version_name` | `false`                                                                                                                   | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | どの拡張子がこのモジュールをアクティブにするか                                                                |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
+| `detect_folders`     | `[]`                                                                                                                      | どのフォルダーがこのモジュールをアクティブにするか                                                              |
+| `disabled`           | `false`                                                                                                                   | `python`モジュールを無効にします。                                                                  |
 
 ::: tip
 
@@ -4169,11 +4212,11 @@ disabled = false
 
 ### 変数
 
-| 変数        | 設定例      | 説明                      |
-| --------- | -------- | ----------------------- |
-| version   | `v5.2.4` | `swift` のバージョン          |
-| symbol    |          | オプション `symbol` の値をミラーする |
-| style\* |          | オプション `style` の値をミラーする  |
+| 変数        | 設定例      | 説明                       |
+| --------- | -------- | ------------------------ |
+| version   | `v5.2.4` | `swift` のバージョン           |
+| symbol    |          | オプション `symbol` の値をミラーします |
+| style\* |          | オプション `style` の値をミラーする   |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4216,12 +4259,12 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 変数
 
-| 変数        | 設定例        | 説明                       |
-| --------- | ---------- | ------------------------ |
-| version   | `v0.12.24` | `terraform` のバージョン       |
-| workspace | `default`  | 現在のTerraformワークスペース      |
-| symbol    |            | オプション `symbol` の値をミラーします |
-| style\* |            | オプション `style` の値をミラーする   |
+| 変数        | 設定例        | 説明                      |
+| --------- | ---------- | ----------------------- |
+| version   | `v0.12.24` | `terraform` のバージョン      |
+| workspace | `default`  | 現在のTerraformワークスペース     |
+| symbol    |            | オプション `symbol` の値をミラーする |
+| style\* |            | オプション `style` の値をミラーします |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4271,10 +4314,10 @@ format = '[🏎💨 $workspace]($style) '
 
 ### 変数
 
-| 変数        | 設定例        | 説明                      |
-| --------- | ---------- | ----------------------- |
-| time      | `13:08:10` | 現在時刻                    |
-| style\* |            | オプション `style` の値をミラーします |
+| 変数        | 設定例        | 説明                     |
+| --------- | ---------- | ---------------------- |
+| time      | `13:08:10` | 現在時刻                   |
+| style\* |            | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4342,15 +4385,15 @@ SSH接続は、環境変数 `SSH_CONNECTION`、 `SSH_CLIENT`、および `SSH_TT
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                |
-| ----------------- | ----------------------- | --------------------------------- |
-| `style_root`      | `'bold red'`            | ユーザーが root/admin のときに使用されるスタイルです。 |
-| `style_user`      | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。            |
-| `detect_env_vars` | `[]`                    | このモジュールを活性化する環境変数。                |
-| `format`          | `'[$user]($style) in '` | module のフォーマットです。                 |
-| `show_always`     | `false`                 | `username` モジュールを常に表示します。         |
-| `disabled`        | `false`                 | `username` モジュールを無効にします。          |
-| `aliases`         | `{}`                    | システムユーザー名を別のものに置換します。             |
+| オプション             | デフォルト                   | 説明                                            |
+| ----------------- | ----------------------- | --------------------------------------------- |
+| `style_root`      | `'bold red'`            | ユーザーが root/admin のときに使用されるスタイルです。             |
+| `style_user`      | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。                        |
+| `detect_env_vars` | `[]`                    | このモジュールを活性化する環境変数。                            |
+| `format`          | `'[$user]($style) in '` | module のフォーマットです。                             |
+| `show_always`     | `false`                 | `username` モジュールを常に表示します。                     |
+| `disabled`        | `false`                 | `username` モジュールを無効にします。                      |
+| `aliases`         | `{}`                    | Translate system usernames to something else. |
 
 ### 変数
 
@@ -4361,7 +4404,7 @@ SSH接続は、環境変数 `SSH_CONNECTION`、 `SSH_CLIENT`、および `SSH_TT
 
 ### 設定例
 
-#### ホスト名を常に表示する
+#### Always show the username
 
 ```toml
 # ~/.config/starship.toml
@@ -4373,17 +4416,6 @@ format = 'user: [$user]($style) '
 disabled = false
 show_always = true
 aliases = { "corpuser034g" = "matchai" }
-```
-
-#### リモートのtmuxセッションでホスト名を非表示にする
-
-```toml
-# ~/.config/starship.toml
-
-[hostname]
-ssh_only = false
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
-disabled = false
 ```
 
 ## Vagrant
@@ -4570,32 +4602,32 @@ symbol = '⚡️ '
 
 ### オプション
 
-| オプション               | デフォルト                           | 説明                                                                                                                                                   |
-| ------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                 |
-| `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 文字列の場合、コマンドが終了ステータス `0` を返したときにモジュールが表示されます。                                      |
-| `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 他のオプションが指定されていない場合、このオプション単体では表示条件として不十分です。                                                            |
-| `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                              |
-| `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                               |
-| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                        |
-| `detect_files`      | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイル名を指定します。                                                                                                                    |
-| `detect_folders`    | `[]`                            | 表示条件として確認する作業ディレクトリ内のディレクトリ名を指定します。                                                                                                                  |
-| `detect_extensions` | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイルの拡張子を指定します。                                                                                                                 |
-| `symbol`            | `''`                            | コマンド出力の前に表示される記号です。                                                                                                                                  |
-| `style`             | `'bold green'`                  | モジュールのスタイルです。                                                                                                                                        |
-| `format`            | `'[$symbol($output )]($style)'` | module のフォーマットです。                                                                                                                                    |
-| `disabled`          | `false`                         | `custom` モジュールを無効にします。                                                                                                                               |
-| `os`                |                                 | モジュールが表示されるオペレーティングシステムの名前 (unix, linux, macos, windows, ...)。 [利用可能な値](https://doc.rust-lang.org/std/env/consts/constant.OS.html) を参照してください。        |
-| `use_stdin`         |                                 | シェルに対してコマンドを標準出力を介して指定するか引数を介して指定するかの振る舞い上書きするおまけの boolen 値の設定です。 指定がない場合、(cmd, nushell などのようにシェルのサポート外でない限り) 標準入力が既定で使われます。 設定するとシェル固有の引数処理を無効にします。 |
-| `ignore_timeout`    | `false`                         | グローバルな `command_timeout` 設定を無視して、いくら時間がかかっても外部コマンド実行を継続します。                                                                                          |
+| オプション               | デフォルト                           | 説明                                                                                                                                                                           |
+| ------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | その出力が表示されるコマンド。 コマンドはシェルの標準入力に渡されます。                                                                                                                                         |
+| `when`              | `false`                         | ブール値 (クォートなしの `true` または `false`) かモジュールを表示する条件として使用されるシェルコマンド文字列。 In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it. |
+| `require_repo`      | `false`                         | `true`の場合、モジュールは (Git の) リポジトリを含むパスにのみ表示されます。 他のオプションが指定されていない場合、このオプション単体では表示条件として不十分です。                                                                                    |
+| `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                      |
+| `説明`                | `'<custom module>'`       | `starship explain` 実行の際に表示されるモジュールの説明。                                                                                                                                       |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                |
+| `detect_files`      | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイル名を指定します。                                                                                                                                            |
+| `detect_folders`    | `[]`                            | 表示条件として確認する作業ディレクトリ内のディレクトリ名を指定します。                                                                                                                                          |
+| `detect_extensions` | `[]`                            | 表示条件として確認する作業ディレクトリ内のファイルの拡張子を指定します。                                                                                                                                         |
+| `symbol`            | `''`                            | コマンド出力の前に表示される記号です。                                                                                                                                                          |
+| `style`             | `'bold green'`                  | モジュールのスタイルです。                                                                                                                                                                |
+| `format`            | `'[$symbol($output )]($style)'` | module のフォーマットです。                                                                                                                                                            |
+| `disabled`          | `false`                         | `custom` モジュールを無効にします。                                                                                                                                                       |
+| `os`                |                                 | モジュールが表示されるオペレーティングシステムの名前 (unix, linux, macos, windows, ...)。 [利用可能な値](https://doc.rust-lang.org/std/env/consts/constant.OS.html) を参照してください。                                |
+| `use_stdin`         |                                 | シェルに対してコマンドを標準出力を介して指定するか引数を介して指定するかの振る舞い上書きするおまけの boolen 値の設定です。 指定がない場合、(cmd, nushell などのようにシェルのサポート外でない限り) 標準入力が既定で使われます。 設定するとシェル固有の引数処理を無効にします。                         |
+| `ignore_timeout`    | `false`                         | グローバルな `command_timeout` 設定を無視して、いくら時間がかかっても外部コマンド実行を継続します。                                                                                                                  |
 
 ### 変数
 
-| 変数        | 説明                        |
-| --------- | ------------------------- |
-| output    | `shell` におけるシェルコマンドの出力結果。 |
-| symbol    | オプション `symbol` の値をミラーする   |
-| style\* | オプション `style` の値をミラーする    |
+| 変数        | 説明                                     |
+| --------- | -------------------------------------- |
+| output    | The output of `command` run in `shell` |
+| symbol    | オプション `symbol` の値をミラーする                |
+| style\* | オプション `style` の値をミラーする                 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4608,7 +4640,7 @@ symbol = '⚡️ '
 
 未設定の場合は、最初に STARSHIP_SHELL に対して、そして Linux では 'sh' に、Windowsでは 'cmd / C' に対してフォールバックが試みられます。
 
-`command` は stdin に渡されます。
+The `command` (and `when`, if applicable) will be passed in on stdin.
 
 `shell` が指定されていないか要素の数が1つでかつ Starship が PowerShell が使われると判定した場合、次の引数が自動的に付加されます: `-NoProfile -Command -`。 `shell` が指定されていないか要素の数が1つでかつ Starship が Cmd が使われると判定した場合、引数 `/C` が自動的に付加され、`stdin` が `false` に設定されます。 `shell` が指定されていないか要素の数が1つでかつ Starship が Nushell が使われると判定した場合、引数 `-c` が自動的に付加され、`stdin` が `false` に設定されます。 この動作は、シェルに明示的に引数を渡すことで回避できます。例:
 
