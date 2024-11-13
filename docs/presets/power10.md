@@ -22,6 +22,12 @@ This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlev
 - Filling top solid line (Fill Module [fill])
   - If you do not want to see the filling solid line in the top row:
   - Search for [fill] in the TOML-file and set the fill symbol to ' ' (space character !)
+- Time (Module [time])
+  - If you want to see the current time (on the upper right side):
+  - Search for [time] in the TOML-file and change 'disabled = true' to 'disabled = false'
+- Battery status (Module [battery])
+  - If you want to see the battery status (on the upper right side):
+  - Search for [battery] in the TOML-file and change 'disabled = true' to 'disabled = false'
 
 ### Configuration
 
