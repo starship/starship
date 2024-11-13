@@ -5,19 +5,21 @@
 # ### "Power10"
 # ### ---------
 # - Variant 2: two line prompt, no background in top line, separators on left side, filling solid line in top row
-# - inspired by a powerlevel10k design-variant (https://github.com/romkatv/powerlevel10k)
+# - This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlevel10k) configuration variant.
 #
 # - Recommended / tested with Font 'MesloLGS NF Regular' from: Meslo Nerd Font patched for Powerlevel10k
 #   Link: https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#manual-font-installation
 #         --> "Manual font installation", with currently 4 Font Types
 
 # - If you do not want the filling solid line in top row:
-#   Delete the line containing '$fill\' within format = """ ... """ # or set the fill symbol to ' '
+#   set the fill symbol to ' '
 # - Shell [shell]:
 #   If you want to see the content of the shell module, search for [shell] and change 'disabled = true' to false
 # - '$line_break': everything from the next line on refers to the second line of the prompt
 # - Some modules listed further down will not show up (all the time), as their default value is 'disabled = true' or
 #   they are only displayed under certain conditions
+# - added but disabled modules: [battery], [time]
+#   - if you want to see them: search for the module and set 'disabled' to 'false'
 # - Symbols:
 #   Don't be confused if you don't see any "real" symbols here. If Nerd-fonts are installed on your system, it should work.
 
@@ -43,6 +45,8 @@ $status\
 $jobs\
 $memory_usage\
 $cmd_duration\
+$battery\
+$time\
 $line_break\
 \
 [\u2570\u2574](fg:greydimmed)\
@@ -189,7 +193,7 @@ read_only_style = 'fg:directory'
 truncation_length = 3
 truncation_symbol = '…/'
 truncate_to_repo = true
-repo_root_format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[ ]()" # \u276F ❯ \ueab6 
+repo_root_format = "[\ueab6 ](fg:directory bold)[$read_only]($read_only_style)[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)" # \u276F ❯ \ueab6 
 repo_root_style = 'fg:directory bold'
 use_os_path_sep = true
 disabled = false
@@ -282,6 +286,25 @@ format = "[ \ueab5 \uf017 $duration]($style)" # \ueab5 \uf017   
 style = 'fg:duration'
 min_time = 500
 disabled = false
+
+[battery]
+format = "[ \ueab5 $symbol$percentage]($style)"
+style = 'fg:greydimmed'
+full_symbol = '󰁹 '
+charging_symbol = '󰂄 '
+discharging_symbol = '󰂃 '
+unknown_symbol = '󰁽? '
+empty_symbol = '󰂎 '
+disabled = true # set to 'false', if you want to see the battery status
+
+[[battery.display]]
+threshold = 100 # show always
+style = 'fg:greydimmed'
+
+[time]
+format = "[ \ueab5 $time]($style)"
+style = 'fg:greydimmed'
+disabled = true # set to 'false', if you want to see the time
 
 [localip]
 format = '[$localipv4](fg:localip bold)'
