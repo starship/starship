@@ -289,7 +289,6 @@ disabled = false
 
 [battery]
 format = "[ \ueab5 $symbol$percentage]($style)"
-style = 'fg:greydimmed'
 full_symbol = '󰁹 '
 charging_symbol = '󰂄 '
 discharging_symbol = '󰂃 '
