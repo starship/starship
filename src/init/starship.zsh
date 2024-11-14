@@ -69,10 +69,17 @@ starship_zle-keymap-select() {
     zle reset-prompt
 }
 
-## Check for existing keymap-select widget.
+# Check for existing keymap-select widget.
 if [[ -v widgets[zle-keymap-select] ]]; then
     # zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
     __starship_preserved_zle_keymap_select=${widgets[zle-keymap-select]#user:}
+fi
+
+# Check for redefinition of zle-keymap-select and starship_zle-keymap-select-wrapped.
+if [[ -n ${__starship_preserved_zle_keymap_select:-} ]] && \
+   [[ $__starship_preserved_zle_keymap_select == "starship_zle-keymap-select" || \
+      $__starship_preserved_zle_keymap_select == "starship_zle-keymap-select-wrapped" ]]; then
+    __starship_preserved_zle_keymap_select=""
 fi
 
 if [[ -z ${__starship_preserved_zle_keymap_select:-} ]]; then
@@ -83,8 +90,9 @@ else
         $__starship_preserved_zle_keymap_select "$@";
         starship_zle-keymap-select "$@";
     }
-    zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
+    zle -N zle-keymap-select starship_zle-keymap-select-wrapped
 fi
+
 
 export STARSHIP_SHELL="zsh"
 
