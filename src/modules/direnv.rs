@@ -40,15 +40,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
-                "rc_path" => match state.rc_path.to_str() {
-                    None => {
-                        log::warn!("direnv rc path has non UTF-8 characters");
-
-                        None
-                    }
-                    ret => ret,
-                },
                 "allowed" => Some(match state.allowed {
                     AllowStatus::Allowed => config.allowed_msg,
                     AllowStatus::NotAllowed => config.not_allowed_msg,
@@ -62,6 +53,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "symbol" => Some(Ok(Cow::from(config.symbol))),
+                "rc_path" => Some(Ok(state.rc_path.to_string_lossy())),
                 _ => None,
             })
             .parse(None, Some(context))
