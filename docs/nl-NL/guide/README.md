@@ -213,7 +213,7 @@ Installeer Starship met één van de volgende pakketbeheerders:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Installeer de meest recente versie voor op jouw systeem:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
@@ -240,7 +240,7 @@ Als alternatief kan je Starship installeren met een van de volgende pakketbeheer
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Installeer de meest recente versie voor op jouw systeem:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
@@ -440,7 +440,7 @@ Code Signing Roles:
 - Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
 - Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Dit programma zal geen informatie overdragen naar andere systemen geconnecteerd met het internet tenzij hier specifiek  voor gevraagd word door de gebruiker of het persoon dat het aan het installeren of opereren is.
 
 <p align="center">
     <br>
