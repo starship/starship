@@ -218,7 +218,7 @@ $null = New-Module starship {
                 $originalHandler = (Get-PSReadLineOption).ViModeChangeHandler
                 Set-PSReadLineOption -ViModeChangeHandler {
                     [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
-                    & $originalHandler
+                    & $originalHandler @args
                 }.GetNewClosure()
             }
         } else {
