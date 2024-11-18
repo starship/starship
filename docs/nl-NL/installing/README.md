@@ -1,19 +1,19 @@
-# Advanced Installation
+# Geavanceerde Installatie
 
-To install starship, you need to do two things:
+Om Starship te installeren moet je twee dingen doen:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Sla het **Starship** programma op je computer op
+1. Stel je shell in om het Starship programma te gebruiken bij de invoer door de opstartscripts aan te passen
 
-For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Voor de meeste gebruikers werken de instructies op de [hoofdpagina](../guide/#🚀-installation) prima, maar voor specifieke platformen zijn er andere instructies.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Er bestaan dermate veel platformen dat ze niet meer in het hoofdbestand voor de README, dus zijn andere instructies door de gemeenschap hier samengebracht. Staat jouw platform er niet tussen? Voeg het hier toe als je het werkend krijgt!
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### Benodigdheden
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Ga naar de [installatie pagina van Chocolatey](https://chocolatey.org/install) en volg de instructies op om Chocolatey te installeren.
 
 ### Installatie
 
@@ -39,7 +39,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 
 ### Installatie
 
-On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+Op Funtoo Linux kan Starship worden geïnstalleerd van [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
 
 ```sh
 emerge app-shells/starship
@@ -47,17 +47,17 @@ emerge app-shells/starship
 
 ## [Nix](https://wiki.nixos.org/wiki/Nix)
 
-### Getting the Binary
+### Het programma bemachtigen
 
-#### Imperatively
+#### Imperatief
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Declaratief voor een enkele gebruiker, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Activeer de `programs.starship` module in het `home.nix` bestand en voeg je instellingen in
 
 ```nix
 {
@@ -78,15 +78,15 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+en dan
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Declaratief voor het hele systeem, met NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Voeg `pkgs.starship` toe aan `environment.systemPackages` in `configuration.nix` gevolgd door het aanroepen van
 
 ```sh
 sudo nixos-rebuild switch

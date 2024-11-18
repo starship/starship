@@ -1,7 +1,7 @@
 use crate::utils;
 use log::{Level, LevelFilter, Metadata, Record};
 use nu_ansi_term::Color;
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 use std::{
     cmp,
     collections::HashSet,
@@ -13,7 +13,7 @@ use std::{
 };
 
 pub struct StarshipLogger {
-    log_file: OnceCell<Mutex<File>>,
+    log_file: OnceLock<Result<Mutex<File>, std::io::Error>>,
     log_file_path: PathBuf,
     log_file_content: RwLock<HashSet<String>>,
     log_level: Level,
@@ -101,7 +101,7 @@ impl Default for StarshipLogger {
                     .map(std::string::ToString::to_string)
                     .collect(),
             ),
-            log_file: OnceCell::new(),
+            log_file: OnceLock::new(),
             log_file_path: session_log_file,
             log_level: env::var("STARSHIP_LOG")
                 .map(|level| match level.to_ascii_lowercase().as_str() {
@@ -174,7 +174,7 @@ impl log::Log for StarshipLogger {
         // Write warning messages to the log file
         // If log level is error, only write error messages to the log file
         if record.level() <= cmp::min(Level::Warn, self.log_level) {
-            let log_file = match self.log_file.get_or_try_init(|| {
+            let log_file = match self.log_file.get_or_init(|| {
                 OpenOptions::new()
                     .create(true)
                     .append(true)
@@ -224,7 +224,7 @@ impl log::Log for StarshipLogger {
     }
 
     fn flush(&self) {
-        if let Some(m) = self.log_file.get() {
+        if let Some(Ok(m)) = self.log_file.get() {
             let result = match m.lock() {
                 Ok(mut file) => file.flush(),
                 Err(err) => return eprintln!("Log file writer mutex was poisoned: {err:?}"),
@@ -246,7 +246,9 @@ mod test {
     use super::*;
     use crate::utils::read_file;
     use log::Log;
+    use std::fs::{File, FileTimes};
     use std::io;
+    use std::time::SystemTime;
 
     #[test]
     fn test_log_to_file() -> io::Result<()> {
@@ -353,11 +355,7 @@ mod test {
     }
 
     #[test]
-    #[cfg(unix)]
     fn test_cleanup() -> io::Result<()> {
-        use nix::sys::{stat::utimes, time::TimeVal};
-        use std::fs::File;
-
         let log_dir = tempfile::tempdir()?;
 
         // Should not be deleted
@@ -379,6 +377,10 @@ mod test {
         }
         fs::create_dir(&directory)?;
 
+        let times = FileTimes::new()
+            .set_accessed(SystemTime::UNIX_EPOCH)
+            .set_modified(SystemTime::UNIX_EPOCH);
+
         // Set all files except the new file to be older than 24 hours
         for file in &[
             &non_matching_file,
@@ -386,10 +388,19 @@ mod test {
             &old_file,
             &directory,
         ] {
-            utimes(file.as_path(), &TimeVal::new(0, 0), &TimeVal::new(0, 0))?;
-            if let Ok(f) = File::open(file) {
-                f.sync_all()?;
-            }
+            let Ok(f) = File::open(file) else {
+                panic!("Unable to open file {file:?}!")
+            };
+
+            match f.set_times(times) {
+                Err(err) if err.kind() == io::ErrorKind::PermissionDenied => {
+                    // Ignore permission errors (e.g. on Windows)
+                    eprintln!("Unable to set file times for {file:?}: {err:?}");
+                    return Ok(());
+                }
+                other => other,
+            }?;
+            f.sync_all()?;
         }
 
         cleanup_log_files(log_dir.path());

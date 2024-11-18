@@ -12,7 +12,7 @@ use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils::create_command;
 use home::rustup_home;
 
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 
 use guess_host_triple::guess_host_triple;
 
@@ -22,23 +22,23 @@ type ToolchainString = String;
 /// A struct to cache the output of any commands that need to be run.
 struct RustToolingEnvironmentInfo {
     /// Rustup settings parsed from $HOME/.rustup/settings.toml
-    rustup_settings: OnceCell<RustupSettings>,
+    rustup_settings: OnceLock<RustupSettings>,
     /// Rustc toolchain overrides as contained in the environment or files
-    env_toolchain_override: OnceCell<Option<String>>,
+    env_toolchain_override: OnceLock<Option<String>>,
     /// The output of `rustup rustc --version` with a fixed toolchain
-    rustup_rustc_output: OnceCell<RustupRunRustcVersionOutcome>,
+    rustup_rustc_output: OnceLock<RustupRunRustcVersionOutcome>,
     /// The output of running rustc -vV. Only called if rustup rustc fails or
     /// is unavailable.
-    rustc_verbose_output: OnceCell<Option<(VersionString, ToolchainString)>>,
+    rustc_verbose_output: OnceLock<Option<(VersionString, ToolchainString)>>,
 }
 
 impl RustToolingEnvironmentInfo {
     fn new() -> Self {
         Self {
-            rustup_settings: OnceCell::new(),
-            env_toolchain_override: OnceCell::new(),
-            rustup_rustc_output: OnceCell::new(),
-            rustc_verbose_output: OnceCell::new(),
+            rustup_settings: OnceLock::new(),
+            env_toolchain_override: OnceLock::new(),
+            rustup_rustc_output: OnceLock::new(),
+            rustc_verbose_output: OnceLock::new(),
         }
     }
 
@@ -500,9 +500,9 @@ impl RustupSettings {
 #[cfg(test)]
 mod tests {
     use crate::context::{Shell, Target};
-    use once_cell::sync::Lazy;
     use std::io;
     use std::process::{ExitStatus, Output};
+    use std::sync::LazyLock;
 
     use super::*;
 
@@ -648,7 +648,7 @@ version = "12"
         #[cfg(windows)]
         use std::os::windows::process::ExitStatusExt as _;
 
-        static RUSTC_VERSION: Lazy<Output> = Lazy::new(|| Output {
+        static RUSTC_VERSION: LazyLock<Output> = LazyLock::new(|| Output {
             status: ExitStatus::from_raw(0),
             stdout: b"rustc 1.34.0\n"[..].to_owned(),
             stderr: vec![],
@@ -658,7 +658,7 @@ version = "12"
             RustupRunRustcVersionOutcome::RustcVersion("rustc 1.34.0\n".to_owned()),
         );
 
-        static TOOLCHAIN_NAME: Lazy<Output> = Lazy::new(|| Output {
+        static TOOLCHAIN_NAME: LazyLock<Output> = LazyLock::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: vec![],
             stderr: b"error: toolchain 'channel-triple' is not installed\n"[..].to_owned(),
@@ -668,7 +668,7 @@ version = "12"
             RustupRunRustcVersionOutcome::ToolchainNotInstalled("channel-triple".to_owned()),
         );
 
-        static INVALID_STDOUT: Lazy<Output> = Lazy::new(|| Output {
+        static INVALID_STDOUT: LazyLock<Output> = LazyLock::new(|| Output {
             status: ExitStatus::from_raw(0),
             stdout: b"\xc3\x28"[..].to_owned(),
             stderr: vec![],
@@ -678,7 +678,7 @@ version = "12"
             RustupRunRustcVersionOutcome::Err,
         );
 
-        static INVALID_STDERR: Lazy<Output> = Lazy::new(|| Output {
+        static INVALID_STDERR: LazyLock<Output> = LazyLock::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: vec![],
             stderr: b"\xc3\x28"[..].to_owned(),
@@ -688,7 +688,7 @@ version = "12"
             RustupRunRustcVersionOutcome::Err,
         );
 
-        static UNEXPECTED_FORMAT_OF_ERROR: Lazy<Output> = Lazy::new(|| Output {
+        static UNEXPECTED_FORMAT_OF_ERROR: LazyLock<Output> = LazyLock::new(|| Output {
             status: ExitStatus::from_raw(1),
             stdout: vec![],
             stderr: b"error:"[..].to_owned(),

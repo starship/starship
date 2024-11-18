@@ -8,7 +8,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- Đã cài đặt một [Nerd Font](https://www.nerdfonts.com/) và kích hoạt trong terminal của bạn
 
 ### Cấu hình
 
@@ -16,6 +16,6 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

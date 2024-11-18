@@ -215,7 +215,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
-        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
+        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
         _ => {

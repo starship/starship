@@ -16,6 +16,6 @@ Esta predefinição é inspirado por [tokyo-night-vscode-theme](https://github.c
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Clique para baixar o TOML](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

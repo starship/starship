@@ -313,7 +313,7 @@ impl Style {
     where
         F: FnOnce(&nu_ansi_term::Style) -> nu_ansi_term::Style,
     {
-        Style {
+        Self {
             style: f(&self.style),
             ..*self
         }
@@ -336,7 +336,7 @@ impl Style {
 
 impl From<nu_ansi_term::Style> for Style {
     fn from(value: nu_ansi_term::Style) -> Self {
-        Style {
+        Self {
             style: value,
             ..Default::default()
         }
@@ -345,7 +345,7 @@ impl From<nu_ansi_term::Style> for Style {
 
 impl From<nu_ansi_term::Color> for Style {
     fn from(value: nu_ansi_term::Color) -> Self {
-        Style {
+        Self {
             style: value.into(),
             ..Default::default()
         }
@@ -361,8 +361,8 @@ impl From<nu_ansi_term::Color> for Style {
  - 'italic'
  - 'inverted'
  - 'blink'
- - 'prev_fg'        (specifies the color should be the previous foreground color)
- - 'prev_bg'        (specifies the color should be the previous background color)
+ - '`prev_fg`'        (specifies the color should be the previous foreground color)
+ - '`prev_bg`'        (specifies the color should be the previous background color)
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<Style> {
@@ -382,14 +382,14 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
             };
 
             match token.as_str() {
-                "underline" => Some(style.map_style(|s| s.underline())),
-                "bold" => Some(style.map_style(|s| s.bold())),
-                "italic" => Some(style.map_style(|s| s.italic())),
-                "dimmed" => Some(style.map_style(|s| s.dimmed())),
-                "inverted" => Some(style.map_style(|s| s.reverse())),
-                "blink" => Some(style.map_style(|s| s.blink())),
-                "hidden" => Some(style.map_style(|s| s.hidden())),
-                "strikethrough" => Some(style.map_style(|s| s.strikethrough())),
+                "underline" => Some(style.map_style(nu_ansi_term::Style::underline)),
+                "bold" => Some(style.map_style(nu_ansi_term::Style::bold)),
+                "italic" => Some(style.map_style(nu_ansi_term::Style::italic)),
+                "dimmed" => Some(style.map_style(nu_ansi_term::Style::dimmed)),
+                "inverted" => Some(style.map_style(nu_ansi_term::Style::reverse)),
+                "blink" => Some(style.map_style(nu_ansi_term::Style::blink)),
+                "hidden" => Some(style.map_style(nu_ansi_term::Style::hidden)),
+                "strikethrough" => Some(style.map_style(nu_ansi_term::Style::strikethrough)),
 
                 "prev_fg" if col_fg => Some(style.fg(PrevColor::Fg)),
                 "prev_fg" => Some(style.bg(PrevColor::Fg)),
