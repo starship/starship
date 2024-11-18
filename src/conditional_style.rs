@@ -36,10 +36,10 @@ impl<'de> Deserialize<'de> for StarshipConditionalStyleOperator {
 }
 
 impl StarshipConditionalStyleOperator {
-    fn invoke(&self, left_hand_side: Option<String>, right_hand_side: Option<String>) -> bool {
+    fn invoke(&self, left_arm: Option<String>, right_arm: Option<String>) -> bool {
         match self {
-            StarshipConditionalStyleOperator::Equal => left_hand_side == right_hand_side,
-            StarshipConditionalStyleOperator::Exists => left_hand_side.is_some(),
+            StarshipConditionalStyleOperator::Equal => left_arm == right_arm,
+            StarshipConditionalStyleOperator::Exists => left_arm.is_some(),
         }
     }
 }
