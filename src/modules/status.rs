@@ -29,6 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let exit_code = context.properties.status_code.as_deref().unwrap_or("0");
+    let is_success = exit_code == "0";
 
     let pipestatus_status = match &context.properties.pipestatus {
         None => PipeStatusStatus::Disabled,
@@ -43,19 +44,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
-    // Exit code is zero while success_symbol and pipestatus are all zero or disabled/missing
-    if exit_code == "0"
-        && config.success_symbol.is_empty()
+    // Exit code is zero while pipestatus are all zero or disabled/missing and option is false
+    if is_success
+        && config.success_format.is_none()
         && (match pipestatus_status {
-            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            PipeStatusStatus::Pipe(ps) => {
+                ps.iter().all(|s| s == "0") && config.pipestatus_success_format.is_none()
+            }
             _ => true,
         })
     {
         return None;
     }
-
-    let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
-    let segment_format_with_separator = [segment_format, config.pipestatus_separator].join("");
 
     // Create pipestatus segments
     let pipestatus = match pipestatus_status {
@@ -63,6 +63,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .iter()
             .enumerate()
             .filter_map(|(i, ec)| {
+                let is_success = exit_code == "0";
+                let mut segment_format = None;
+                if is_success {
+                    // pipestatus_success_segment_format // pipestatus_segment_format // success_format
+                    segment_format = config
+                        .pipestatus_success_segment_format
+                        .or(config.pipestatus_segment_format)
+                        .or(config.success_format);
+                }
+                // pipestatus_segment_format // format
+                let segment_format = segment_format
+                    .or(config.pipestatus_segment_format)
+                    .unwrap_or(config.format);
+                let segment_format_with_separator = [segment_format, config.pipestatus_separator].join("");
                 let formatted = format_exit_code(
                     ec.as_str(),
                     if i == ps.len() - 1 {
@@ -87,9 +101,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => Vec::new(),
     };
 
-    let main_format = match pipestatus_status {
-        PipeStatusStatus::Pipe(_) => config.pipestatus_format,
-        _ => config.format,
+    let main_format = match (pipestatus_status, is_success) {
+        (PipeStatusStatus::Pipe(_), false) => config.pipestatus_format,
+        (PipeStatusStatus::Pipe(_), true) => config
+            .pipestatus_success_format
+            .unwrap_or(config.pipestatus_format),
+        (_, true) => config.success_format.unwrap_or(config.format),
+        (_, false) => config.format,
     };
     let parsed = format_exit_code(exit_code, main_format, Some(pipestatus), &config, context);
 
@@ -142,6 +160,7 @@ fn format_exit_code<'a>(
             .map_meta(|var, _| match var {
                 "symbol" => match exit_code_int {
                     0 => Some(config.success_symbol),
+                    124 if config.map_symbol => Some(config.timeout_symbol),
                     126 if config.map_symbol => Some(config.not_executable_symbol),
                     127 if config.map_symbol => Some(config.not_found_symbol),
                     130 if config.recognize_signal_code && config.map_symbol => {
@@ -213,6 +232,7 @@ fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
         77 => Some("NOPERM"),
         78 => Some("CONFIG"),
 
+        124 => Some("TIMEOUT"),
         126 => Some("NOPERM"),
         127 => Some("NOTFOUND"),
         _ => None,
@@ -262,21 +282,21 @@ mod tests {
     use crate::test::ModuleRenderer;
 
     #[test]
-    fn success_status_success_symbol_empty() {
+    fn success_status_display_success_false() {
         let expected = None;
 
-        // Status code 0 and success_symbol = ""
+        // Status code 0 and display_success_pipestatus = false
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
-                success_symbol = ""
+                display_success = false
                 disabled = false
             })
             .status(0)
             .collect();
         assert_eq!(expected, actual);
 
-        // Status code 0 and success_symbol is missing
+        // Status code 0 and display_success default to false
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
@@ -286,17 +306,17 @@ mod tests {
             .collect();
         assert_eq!(expected, actual);
 
-        // No status code and success_symbol = ""
+        // No status code and display_success is false
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
-                success_symbol = ""
+                display_success = false
                 disabled = false
             })
             .collect();
         assert_eq!(expected, actual);
 
-        // No status code and success_symbol is missing
+        // No status code and display_success is missing
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
@@ -307,14 +327,15 @@ mod tests {
     }
 
     #[test]
-    fn success_status_success_symbol_filled() {
-        let expected = Some(format!("{} ", Color::Red.bold().paint("✔️0")));
+    fn success_status_display_success_format() {
+        let expected = Some(format!("{}", Color::Red.bold().paint("SUCCESS")));
 
         // Status code 0
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
-                success_symbol = "✔️"
+                style = "bold red"
+                success_format = "[$common_meaning]($style)"
                 disabled = false
             })
             .status(0)
@@ -325,11 +346,60 @@ mod tests {
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
-                success_symbol = "✔️"
+                success_format = "[$common_meaning]($style)"
                 disabled = false
             })
             .collect();
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn success_pipestatus_display_pipestatus_success_format() {
+        let config = toml::toml! {
+            [status]
+            format = "${int}"
+            pipestatus = true
+            pipestatus_separator = " "
+            pipestatus_format = "ERR $int=$pipestatus"
+            pipestatus_success_format = "PSF $int=$pipestatus"
+            pipestatus_success_segment_format = "${hex_status}"
+            disabled = false
+        };
+
+        let exit_values = [0, 0, 0, 0];
+        let actual = ModuleRenderer::new("status")
+            .config(config)
+            .status(exit_values[0])
+            .pipestatus(&exit_values[1..])
+            .collect();
+        assert_eq!(Some("PSF 0=0x0 0x0 0x0".to_string()), actual);
+    }
+
+    #[test]
+    fn success_pipestatus_none_pipestatus_success_format() {
+        let config = toml::toml! {
+            [status]
+            format = "${hex_status}"
+            pipestatus = true
+            pipestatus_separator = " "
+            pipestatus_format = "PSF $symbol=$pipestatus"
+            pipestatus_success_segment_format = "PSF $symbol=$pipestatus"
+            disabled = false
+        };
+
+        let actual = ModuleRenderer::new("status")
+            .config(config.clone())
+            .status(0)
+            .collect();
+        assert_eq!(None, actual);
+
+        let exit_values = [0, 0, 0, 0];
+        let actual = ModuleRenderer::new("status")
+            .config(config)
+            .status(exit_values[0])
+            .pipestatus(&exit_values[1..])
+            .collect();
+        assert_eq!(None, actual);
     }
 
     #[test]
@@ -434,7 +504,7 @@ mod tests {
     #[test]
     fn exit_code_name_no_signal() {
         let exit_values = [
-            1, 2, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 126, 127, 130, 101,
+            1, 2, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 124, 126, 127, 130, 101,
             132,
         ];
         let exit_values_name = [
@@ -455,6 +525,7 @@ mod tests {
             Some("PROTOCOL"),
             Some("NOPERM"),
             Some("CONFIG"),
+            Some("TIMEOUT"),
             Some("NOPERM"),
             Some("NOTFOUND"),
             None,
@@ -533,8 +604,8 @@ mod tests {
 
     #[test]
     fn special_symbols_no_signals() {
-        let exit_values = [1, 126, 127, 130, 131];
-        let exit_values_name = ["🔴", "🚫", "🔍", "🔴", "🔴"];
+        let exit_values = [1, 124, 126, 127, 130, 131];
+        let exit_values_name = ["🔴", "⏲️", "🚫", "🔍", "🔴", "🔴"];
 
         for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = Some((*name).to_string());
@@ -543,6 +614,7 @@ mod tests {
                     [status]
                     format = "$symbol"
                     symbol = "🔴"
+                    timeout_symbol = "⏲️"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
@@ -581,6 +653,7 @@ mod tests {
                 .config(toml::toml! {
                     [status]
                     format = "$symbol"
+                    success_format = "$symbol"
                     symbol = "🔴"
                     success_symbol = "🟢"
                     not_executable_symbol = "🚫"
@@ -625,6 +698,7 @@ mod tests {
                 .config(toml::toml! {
                     [status]
                     format = "$symbol$int$signal_number"
+                    success_format = "$symbol$int$signal_number"
                     symbol = "🔴"
                     success_symbol = "🟢"
                     not_executable_symbol = "🚫"
@@ -725,8 +799,8 @@ mod tests {
             [1, 0, 0, 0, 30, 127, 126, 3, 142, 0, 230, 0, 2],
         ];
         let exit_values_rendered = [
-            "PSF 130INT=🟢|🟢|🟢|🔴30|🔴|🔴|🔴3|⚡|🟢|🟢|🟢|🧱",
-            "PSF 1ERROR=🟢|🟢|🟢|🔴30|🔍|🚫|🔴3|⚡|🟢|⚡|🟢|🔴",
+            "PSF 130INT=🟢0|🟢0|🟢0|🔴30|🔴|🔴|🔴3|⚡|🟢0|🟢0|🟢0|🧱",
+            "PSF 1ERROR=🟢0|🟢0|🟢0|🔴30|🔍|🚫|🔴3|⚡|🟢0|⚡|🟢0|🔴",
         ];
 
         for (status, rendered) in exit_values.iter().zip(&exit_values_rendered) {
@@ -738,6 +812,7 @@ mod tests {
                 .config(toml::toml! {
                     [status]
                     format = "$symbol$maybe_int"
+                    success_format = "$symbol$int"
                     symbol = "🔴"
                     success_symbol = "🟢"
                     not_executable_symbol = "🚫"
@@ -867,6 +942,30 @@ mod tests {
                 pipestatus = true
                 pipestatus_format = "[\\[]($style)$pipestatus[\\] => <$status>]($style)"
                 pipestatus_segment_format = "${"
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn pipestatus_success_segment_format() {
+        let pipe_exit_code = &[0, 1];
+        let main_exit_code = 1;
+
+        let expected = Some("[0x0]|[1] => <1>".to_string());
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "\\($status\\)"
+                pipestatus = true
+                pipestatus_separator = "|"
+                pipestatus_format = "$pipestatus => <$status>"
+                pipestatus_segment_format = "\\[$status\\]"
+                pipestatus_success_format = "ERR $pipestatus => <$status>"
+                pipestatus_success_segment_format = "\\[$hex_status\\]"
                 disabled = false
             })
             .status(main_exit_code)

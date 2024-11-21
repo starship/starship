@@ -11,6 +11,7 @@ pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub success_symbol: &'a str,
+    pub timeout_symbol: &'a str,
     pub not_executable_symbol: &'a str,
     pub not_found_symbol: &'a str,
     pub sigint_symbol: &'a str,
@@ -23,6 +24,12 @@ pub struct StatusConfig<'a> {
     pub pipestatus_format: &'a str,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipestatus_segment_format: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_format: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipestatus_success_format: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipestatus_success_segment_format: Option<&'a str>,
     pub disabled: bool,
 }
 
@@ -32,6 +39,7 @@ impl<'a> Default for StatusConfig<'a> {
             format: "[$symbol$status]($style) ",
             symbol: "❌",
             success_symbol: "",
+            timeout_symbol: "⏲️",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",
             sigint_symbol: "🧱",
@@ -44,6 +52,9 @@ impl<'a> Default for StatusConfig<'a> {
             pipestatus_format:
                 "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
             pipestatus_segment_format: None,
+            success_format: None,
+            pipestatus_success_format: None,
+            pipestatus_success_segment_format: None,
             disabled: true,
         }
     }
