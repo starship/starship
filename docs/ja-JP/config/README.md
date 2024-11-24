@@ -4092,23 +4092,23 @@ format = '[$symbol$environment](dimmed blue) '
 
 ### オプション
 
-| オプション                       | デフォルト                                                                              | 説明                                                  |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | モジュールのフォーマットです。                                     |
-| `symbol`                    | `'❌'`                                                                              | プログラムエラー時に表示される記号です。                                |
-| `success_symbol`            | `''`                                                                               | プログラム成功時に表示される記号です。                                 |
-| `not_executable_symbol`     | `'🚫'`                                                                              | ファイルが実行可能ファイルでないときに表示されるシンボルです。                     |
-| `not_found_symbol`          | `'🔍'`                                                                              | コマンドが見つからないときに表示されるシンボルです。                          |
-| `sigint_symbol`             | `'🧱'`                                                                              | SIGINT (Ctrl + c) に際して表示されるシンボルです。                  |
-| `signal_symbol`             | `'⚡'`                                                                              | 任意のシグナルに対して表示されるシンボルです。                             |
-| `style`                     | `'bold red'`                                                                       | モジュールのスタイルです。                                       |
-| `recognize_signal_code`     | `true`                                                                             | 終了ステータスからシグナルへのマッピングを有効にします。                        |
-| `map_symbol`                | `false`                                                                            | 終了ステータスからシンボルへのマッピングを有効にします。                        |
-| `pipestatus`                | `false`                                                                            | パイプステータス表示を有効にします。                                  |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | パイプラインの各要素を分割するのに使う記号を指定します。フォーマット文字列がサポートされます。     |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | コマンドがパイプラインである場合のモジュールのフォーマットです。                    |
-| `pipestatus_segment_format` |                                                                                    | 指定されている場合、パイプステータスの要素を書式設定する際に `format` の代わりに使われます。 |
-| `disabled`                  | `true`                                                                             | `status`モジュールを無効にします。                               |
+| オプション                       | デフォルト                                                                               | 説明                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | モジュールのフォーマットです。                                     |
+| `symbol`                    | `'❌'`                                                                               | プログラムエラー時に表示される記号です。                                |
+| `success_symbol`            | `''`                                                                                | プログラム成功時に表示される記号です。                                 |
+| `not_executable_symbol`     | `'🚫'`                                                                               | ファイルが実行可能ファイルでないときに表示されるシンボルです。                     |
+| `not_found_symbol`          | `'🔍'`                                                                               | コマンドが見つからないときに表示されるシンボルです。                          |
+| `sigint_symbol`             | `'🧱'`                                                                               | SIGINT (Ctrl + c) に際して表示されるシンボルです。                  |
+| `signal_symbol`             | `'⚡'`                                                                               | 任意のシグナルに対して表示されるシンボルです。                             |
+| `style`                     | `'bold red'`                                                                        | モジュールのスタイルです。                                       |
+| `recognize_signal_code`     | `true`                                                                              | 終了ステータスからシグナルへのマッピングを有効にします。                        |
+| `map_symbol`                | `false`                                                                             | 終了ステータスからシンボルへのマッピングを有効にします。                        |
+| `pipestatus`                | `false`                                                                             | パイプステータス表示を有効にします。                                  |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | パイプラインの各要素を分割するのに使う記号を指定します。フォーマット文字列がサポートされます。     |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | コマンドがパイプラインである場合のモジュールのフォーマットです。                    |
+| `pipestatus_segment_format` |                                                                                     | 指定されている場合、パイプステータスの要素を書式設定する際に `format` の代わりに使われます。 |
+| `disabled`                  | `true`                                                                              | `status`モジュールを無効にします。                               |
 
 ### 変数
 
