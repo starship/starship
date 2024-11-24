@@ -48,8 +48,8 @@ clap_complete = "4.5.38"
 dirs = "5.0.1"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.67.0", default-features = false, features = ["max-performance-safe", "revision"] }
-gix-features = { version = "0.39.0", optional = true }
+gix = { version = "0.68.0", default-features = false, features = ["max-performance-safe", "revision"] }
+gix-features = { version = "0.39.1", optional = true }
 indexmap = { version = "2.6.0", features = ["serde"] }
 log = { version = "0.4.22", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
