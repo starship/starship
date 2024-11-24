@@ -4092,23 +4092,23 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Opções
 
-| Opções                      | Padrão                                                                             | Descrição                                                                               |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | O formato do módulo                                                                     |
-| `symbol`                    | `'❌'`                                                                              | O simbolo exibido no erro de programa                                                   |
-| `success_symbol`            | `''`                                                                               | O simbolo exibido no sucesso de programa                                                |
-| `not_executable_symbol`     | `'🚫'`                                                                              | O simbolo exibido quando o arquivo não é executável                                     |
-| `not_found_symbol`          | `'🔍'`                                                                              | O simbolo exibido quando o comando não é encontrado                                     |
-| `sigint_symbol`             | `'🧱'`                                                                              | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
-| `signal_symbol`             | `'⚡'`                                                                              | O simbolo exibido em qualquer sinal                                                     |
-| `style`                     | `'bold red'`                                                                       | O estilo do módulo.                                                                     |
-| `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                                   |
-| `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída                                 |
-| `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                                      |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | O símbolo usado para separar segmentos de pipestatus (suporta formatação)               |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                                      |
-| `pipestatus_segment_format` |                                                                                    | Quando especificado, substitui o  `format` quando ha formatação de segmentos pipestatus |
-| `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                                           |
+| Opções                      | Padrão                                                                              | Descrição                                                                               |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | O formato do módulo                                                                     |
+| `symbol`                    | `'❌'`                                                                               | O simbolo exibido no erro de programa                                                   |
+| `success_symbol`            | `''`                                                                                | O simbolo exibido no sucesso de programa                                                |
+| `not_executable_symbol`     | `'🚫'`                                                                               | O simbolo exibido quando o arquivo não é executável                                     |
+| `not_found_symbol`          | `'🔍'`                                                                               | O simbolo exibido quando o comando não é encontrado                                     |
+| `sigint_symbol`             | `'🧱'`                                                                               | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
+| `signal_symbol`             | `'⚡'`                                                                               | O simbolo exibido em qualquer sinal                                                     |
+| `style`                     | `'bold red'`                                                                        | O estilo do módulo.                                                                     |
+| `recognize_signal_code`     | `true`                                                                              | Habilita o mapeamento de sinais para códigos de saída                                   |
+| `map_symbol`                | `false`                                                                             | Habilita o mapeamento de símbolos para códigos de saída                                 |
+| `pipestatus`                | `false`                                                                             | Habilita o relatório de pipestatus                                                      |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | O símbolo usado para separar segmentos de pipestatus (suporta formatação)               |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | O formato do módulo quando o comando é um pipeline                                      |
+| `pipestatus_segment_format` |                                                                                     | Quando especificado, substitui o  `format` quando ha formatação de segmentos pipestatus |
+| `disabled`                  | `true`                                                                              | Desabilita o módulo `status`.                                                           |
 
 ### Variáveis
 
