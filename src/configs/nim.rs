@@ -18,7 +18,7 @@ pub struct NimConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for NimConfig<'a> {
+impl Default for NimConfig<'_> {
     fn default() -> Self {
         NimConfig {
             format: "via [$symbol($version )]($style)",

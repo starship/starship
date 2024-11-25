@@ -20,7 +20,7 @@ enum VariableValue<'a> {
     Meta(Vec<FormatElement<'a>>),
 }
 
-impl<'a> Default for VariableValue<'a> {
+impl Default for VariableValue<'_> {
     fn default() -> Self {
         VariableValue::Plain(Cow::Borrowed(""))
     }
@@ -407,13 +407,13 @@ impl<'a> StringFormatter<'a> {
     }
 }
 
-impl<'a> VariableHolder<String> for StringFormatter<'a> {
+impl VariableHolder<String> for StringFormatter<'_> {
     fn get_variables(&self) -> BTreeSet<String> {
         self.variables.keys().cloned().collect()
     }
 }
 
-impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
+impl StyleVariableHolder<String> for StringFormatter<'_> {
     fn get_style_variables(&self) -> BTreeSet<String> {
         self.style_variables.keys().cloned().collect()
     }

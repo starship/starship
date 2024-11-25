@@ -9,7 +9,6 @@ use crate::config::VecOr;
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-
 pub struct SolidityConfig<'a> {
     pub format: &'a str,
     pub version_format: &'a str,
@@ -22,7 +21,7 @@ pub struct SolidityConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for SolidityConfig<'a> {
+impl Default for SolidityConfig<'_> {
     fn default() -> Self {
         SolidityConfig {
             format: "via [$symbol($version)]($style)",
