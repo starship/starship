@@ -352,13 +352,13 @@ impl<'a> StringFormatter<'a> {
                                     variables
                                         .get(var.as_ref())
                                         // false if can't find the variable in format string
-                                        .map_or(false, |map_result| {
+                                        .is_some_and(|map_result| {
                                             let map_result = map_result.as_ref();
                                             map_result
                                                 .and_then(|result| result.as_ref().ok())
                                                 // false if the variable is None or Err, or a meta variable
                                                 // that shouldn't show
-                                                .map_or(false, |result| match result {
+                                                .is_some_and(|result| match result {
                                                     // If the variable is a meta variable, also
                                                     // check the format string inside it.
                                                     VariableValue::Meta(meta_elements) => {
