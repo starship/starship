@@ -90,9 +90,8 @@ else
         $__starship_preserved_zle_keymap_select "$@";
         starship_zle-keymap-select "$@";
     }
-    zle -N zle-keymap-select starship_zle-keymap-select-wrapped
+    zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
 fi
-
 
 export STARSHIP_SHELL="zsh"
 
