@@ -9,4 +9,5 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct LineBreakConfig {
     pub disabled: bool,
+    pub break_below_width: Option<usize>,
 }
