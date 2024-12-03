@@ -230,5 +230,8 @@ symbol = "typst "
 [terraform]
 symbol = "terraform "
 
+[unity]
+symbol = "unity "
+
 [zig]
 symbol = "zig "
