@@ -431,13 +431,13 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 [スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-## 🔒 Code Signing Policy
+## 🔒 コード署名のポリシー
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+[SignPath.io](https://signpath.io)での無料のコード署名が[SignPath Foundation](https://signpath.org)によって提供されています。
 
-Code Signing Roles:
+コード署名のロール：
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- レビュワー：[Astronauts](https://github.com/orgs/starship/teams/astronauts)
 - Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
 This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
