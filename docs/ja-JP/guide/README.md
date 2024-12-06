@@ -438,7 +438,7 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 コード署名のロール：
 
 - レビュワー：[Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Approver、Author：[Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
 This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
