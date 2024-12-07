@@ -84,6 +84,7 @@ pub mod shlvl;
 pub mod singularity;
 pub mod solidity;
 pub mod spack;
+pub mod spin;
 mod starship_root;
 pub mod status;
 pub mod sudo;
@@ -277,6 +278,8 @@ pub struct FullConfig<'a> {
     solidity: solidity::SolidityConfig<'a>,
     #[serde(borrow)]
     spack: spack::SpackConfig<'a>,
+    #[serde(borrow)]
+    spin: spin::SpinConfig<'a>,
     #[serde(borrow)]
     status: status::StatusConfig<'a>,
     #[serde(borrow)]
