@@ -13,6 +13,7 @@ pub struct CondaConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub ignore_base: bool,
+    pub ignore_pixi_envs: bool,
     pub disabled: bool,
 }
 
@@ -24,6 +25,7 @@ impl<'a> Default for CondaConfig<'a> {
             symbol: "🅒 ",
             style: "green bold",
             ignore_base: true,
+            ignore_pixi_envs: true,
             disabled: false,
         }
     }
