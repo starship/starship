@@ -19,7 +19,7 @@ pub struct EnvVarConfig<'a> {
     pub description: &'a str,
 }
 
-impl<'a> Default for EnvVarConfig<'a> {
+impl Default for EnvVarConfig<'_> {
     fn default() -> Self {
         EnvVarConfig {
             symbol: "",

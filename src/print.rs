@@ -22,7 +22,7 @@ use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
-impl<'a> Grapheme<'a> {
+impl Grapheme<'_> {
     pub fn width(&self) -> usize {
         self.0
             .chars()

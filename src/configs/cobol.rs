@@ -18,7 +18,7 @@ pub struct CobolConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for CobolConfig<'a> {
+impl Default for CobolConfig<'_> {
     fn default() -> Self {
         CobolConfig {
             format: "via [$symbol($version )]($style)",
