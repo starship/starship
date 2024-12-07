@@ -597,6 +597,7 @@
         "commit_hash_length": 7,
         "disabled": false,
         "format": "[\\($hash$tag\\)]($style) ",
+        "hash_disabled": false,
         "only_detached": true,
         "style": "green bold",
         "tag_disabled": true,
@@ -3455,6 +3456,10 @@
         },
         "tag_disabled": {
           "default": true,
+          "type": "boolean"
+        },
+        "hash_disabled": {
+          "default": false,
           "type": "boolean"
         },
         "tag_max_candidates": {
