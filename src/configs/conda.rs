@@ -16,7 +16,7 @@ pub struct CondaConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for CondaConfig<'a> {
+impl Default for CondaConfig<'_> {
     fn default() -> Self {
         CondaConfig {
             truncation_length: 1,

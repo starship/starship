@@ -20,7 +20,7 @@ pub struct CmdDurationConfig<'a> {
     pub notification_timeout: Option<u32>,
 }
 
-impl<'a> Default for CmdDurationConfig<'a> {
+impl Default for CmdDurationConfig<'_> {
     fn default() -> Self {
         CmdDurationConfig {
             min_time: 2_000,

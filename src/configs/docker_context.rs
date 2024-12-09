@@ -18,7 +18,7 @@ pub struct DockerContextConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DockerContextConfig<'a> {
+impl Default for DockerContextConfig<'_> {
     fn default() -> Self {
         DockerContextConfig {
             symbol: "🐳 ",

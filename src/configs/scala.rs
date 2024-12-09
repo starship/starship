@@ -18,7 +18,7 @@ pub struct ScalaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for ScalaConfig<'a> {
+impl Default for ScalaConfig<'_> {
     fn default() -> Self {
         ScalaConfig {
             format: "via [$symbol($version )]($style)",

@@ -18,7 +18,7 @@ pub struct VagrantConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for VagrantConfig<'a> {
+impl Default for VagrantConfig<'_> {
     fn default() -> Self {
         VagrantConfig {
             format: "via [$symbol($version )]($style)",

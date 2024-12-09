@@ -134,7 +134,7 @@ impl<'a> Context<'a> {
         if properties
             .pipestatus
             .as_deref()
-            .map_or(false, |p| p.len() == 1 && p[0].is_empty())
+            .is_some_and(|p| p.len() == 1 && p[0].is_empty())
         {
             properties.pipestatus = None;
         }

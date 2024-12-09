@@ -22,7 +22,7 @@ impl<'a> OSConfig<'a> {
     }
 }
 
-impl<'a> Default for OSConfig<'a> {
+impl Default for OSConfig<'_> {
     fn default() -> Self {
         OSConfig {
             format: "[$symbol]($style)",
