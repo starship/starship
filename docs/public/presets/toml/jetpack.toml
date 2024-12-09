@@ -74,6 +74,7 @@ $buf\
 $conda\
 $meson\
 $spack\
+$spin\
 $memory_usage\
 $aws\
 $gcloud\
@@ -313,3 +314,6 @@ unknown_msg = '[◌](bold dimmed ellow)'
 [spack]
 symbol = "◇ "
 format = " spack [$symbol$environment]($style)"
+
+[spin]
+format = " spin [$symbol($version)]($style)"
