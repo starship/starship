@@ -1131,7 +1131,9 @@
         "detect_files": [
           "package.json",
           ".node-version",
-          ".nvmrc"
+          ".nvmrc",
+          "!bunfig.toml",
+          "!bun.lockb"
         ],
         "detect_folders": [
           "node_modules"
@@ -4720,7 +4722,9 @@
           "default": [
             "package.json",
             ".node-version",
-            ".nvmrc"
+            ".nvmrc",
+            "!bunfig.toml",
+            "!bun.lockb"
           ],
           "type": "array",
           "items": {
