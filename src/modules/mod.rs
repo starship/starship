@@ -66,6 +66,7 @@ mod package;
 mod perl;
 mod php;
 mod pijul_channel;
+mod pixi;
 mod pulumi;
 mod purescript;
 mod python;
@@ -178,6 +179,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "perl" => perl::module(context),
             "php" => php::module(context),
             "pijul_channel" => pijul_channel::module(context),
+            "pixi" => pixi::module(context),
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
@@ -303,6 +305,7 @@ pub fn description(module: &str) -> &'static str {
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
         "pijul_channel" => "The current channel of the repo in the current directory",
+        "pixi" => "The currently installed version of Pixi, and the active environment if $PIXI_ENVIRONMENT_NAME is set",
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
