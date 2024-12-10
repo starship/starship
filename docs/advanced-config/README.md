@@ -141,6 +141,25 @@ bleopt prompt_ps1_final='$(starship module character)'
 bleopt prompt_rps1_final='$(starship module time)'
 ```
 
+## TransientPrompt and TransientRightPrompt in Nushell
+
+Nushell allows enabling transient prompt by configuring enviromental variables
+inside of the `~/.config/nushell/env.nu` file. Transient prompt is
+automatically enabled when variable `TRANSIENT_PROMPT_COMMAND` is set. This
+variable controls what the left side of the input will be replaced with, valid
+values can be `""`, `"❯"` or a command prefixed with `^`. Similarly, variable
+`TRANSIENT_PROMPT_COMMAND_RIGHT` controls what the right side of the input will
+be replaced with. Example configuration for Starship prompt can be seen bellow.
+
+```sh
+$env.TRANSIENT_PROMPT_COMMAND = ^starship module character
+$env.TRANSIENT_PROMPT_INDICATOR = ""
+$env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = ""
+$env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = ""
+$env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = ""
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = ^starship module time
+```
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands
