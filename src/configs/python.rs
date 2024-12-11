@@ -24,7 +24,7 @@ pub struct PythonConfig<'a> {
     pub detect_env_vars: Vec<&'a str>,
 }
 
-impl<'a> Default for PythonConfig<'a> {
+impl Default for PythonConfig<'_> {
     fn default() -> Self {
         PythonConfig {
             pyenv_version_name: false,

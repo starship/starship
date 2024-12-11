@@ -18,7 +18,7 @@ pub struct TypstConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for TypstConfig<'a> {
+impl Default for TypstConfig<'_> {
     fn default() -> Self {
         TypstConfig {
             format: "via [$symbol($version )]($style)",

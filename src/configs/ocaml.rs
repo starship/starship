@@ -20,7 +20,7 @@ pub struct OCamlConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for OCamlConfig<'a> {
+impl Default for OCamlConfig<'_> {
     fn default() -> Self {
         OCamlConfig {
             format: "via [$symbol($version )(\\($switch_indicator$switch_name\\) )]($style)",
