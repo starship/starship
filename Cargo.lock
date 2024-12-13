@@ -1767,9 +1767,9 @@ dependencies = [
 
 [[package]]
 name = "is_debug"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06d198e9919d9822d5f7083ba8530e04de87841eaf21ead9af8f2304efd57c89"
+checksum = "e8ea828c9d6638a5bd3d8b14e37502b4d56cae910ccf8a5b7f51c7a0eb1d0508"
 
 [[package]]
 name = "is_terminal_polyfill"
@@ -2818,9 +2818,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.36.0"
+version = "0.36.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58cfcd0643497a9f780502063aecbcc4a3212cbe4948fd25ee8fd179c2cf9a18"
+checksum = "cd2f59f8b166e94269530e0f47323c8b2a5b2d82ef90363cc7ce1e517e063f78"
 dependencies = [
  "const_format",
  "is_debug",
