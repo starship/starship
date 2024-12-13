@@ -233,7 +233,7 @@ impl<'a> Context<'a> {
         // If the segment has "disabled" set to "true", don't show it
         let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
-        disabled == Some(true)
+        disabled.or(Some(self.root_config.opt_in_modules)) == Some(true)
     }
 
     /// Returns true when a negated environment variable is defined in `env_vars` and is present
