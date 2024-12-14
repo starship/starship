@@ -19,6 +19,9 @@ symbol = "aws "
 [azure]
 symbol = "az "
 
+[buf]
+symbol = "buf "
+
 [bun]
 symbol = "bun "
 

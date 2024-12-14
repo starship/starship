@@ -42,7 +42,7 @@ impl<'a> Default for StatusConfig<'a> {
             pipestatus: false,
             pipestatus_separator: "|",
             pipestatus_format:
-                "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+                "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
             pipestatus_segment_format: None,
             disabled: true,
         }
