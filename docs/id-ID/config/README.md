@@ -3056,7 +3056,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### Opsi
 
@@ -4092,23 +4092,23 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opsi
 
-| Opsi                        | Bawaan                                                                             | Deskripsi                                                             |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `fromat`                    | `'[$symbol$status]($style) '`                                                      | The format of the module                                              |
-| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | Gaya penataan untuk modul.                                            |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
+| Opsi                        | Bawaan                                                                              | Deskripsi                                                             |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `fromat`                    | `'[$symbol$status]($style) '`                                                       | The format of the module                                              |
+| `symbol`                    | `'❌'`                                                                               | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                                | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                               | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                               | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                        | Gaya penataan untuk modul.                                            |
+| `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                     | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                              | Disables the `status` module.                                         |
 
 ### Variabel
 
