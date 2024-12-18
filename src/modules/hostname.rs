@@ -4,7 +4,14 @@ use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 
+#[cfg(not(windows))]
 use whoami::fallible::hostname;
+// On Windows, whoami::hostname() returns the NetBIOS name,
+// but we prefer the "hostname" returned by whoami::devicname()
+// which does a better job of preserving case and returns the
+// DNS name.
+#[cfg(windows)]
+use whoami::fallible::devicename as hostname;
 
 /// Creates a module with the system hostname
 ///
@@ -80,13 +87,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use super::hostname;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = whoami::fallible::hostname() {
+            if let Ok(hostname) = hostname() {
                 hostname
             } else {
                 println!(
