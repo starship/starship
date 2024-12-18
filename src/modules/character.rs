@@ -36,6 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // The result: in non-vi fish, keymap is always reported as "insert"
     let mode = match (&context.shell, keymap) {
         (Shell::Fish, "default")
+        | (Shell::Bash, "vicmd")
         | (Shell::Zsh, "vicmd")
         | (Shell::Cmd | Shell::PowerShell | Shell::Pwsh, "vi") => ShellEditMode::Normal,
         (Shell::Fish, "visual") => ShellEditMode::Visual,
