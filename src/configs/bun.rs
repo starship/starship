@@ -18,7 +18,7 @@ pub struct BunConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for BunConfig<'a> {
+impl Default for BunConfig<'_> {
     fn default() -> Self {
         BunConfig {
             format: "via [$symbol($version )]($style)",

@@ -15,7 +15,7 @@ pub struct SpackConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for SpackConfig<'a> {
+impl Default for SpackConfig<'_> {
     fn default() -> Self {
         SpackConfig {
             truncation_length: 1,

@@ -16,7 +16,7 @@ pub struct GitMetricsConfig<'a> {
     pub ignore_submodules: bool,
 }
 
-impl<'a> Default for GitMetricsConfig<'a> {
+impl Default for GitMetricsConfig<'_> {
     fn default() -> Self {
         GitMetricsConfig {
             added_style: "bold green",

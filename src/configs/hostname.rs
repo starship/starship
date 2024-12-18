@@ -19,7 +19,7 @@ pub struct HostnameConfig<'a> {
     pub aliases: IndexMap<String, &'a str>,
 }
 
-impl<'a> Default for HostnameConfig<'a> {
+impl Default for HostnameConfig<'_> {
     fn default() -> Self {
         HostnameConfig {
             ssh_only: true,
