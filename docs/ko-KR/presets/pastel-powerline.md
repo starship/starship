@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#pastel-powerline)
+[프리셋으로 돌아가기](./#pastel-powerline)
 
 # Pastel Powerline Preset
 
@@ -10,12 +10,12 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
 
-### Configuration
+### 설정
 
 ```sh
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml)
+[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

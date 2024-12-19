@@ -27,7 +27,8 @@ Cargo.lock
 
 # Compiled files for documentation
 docs/node_modules
-docs/.vuepress/dist/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
 
 # Ignore pkg files within the install directory
 install/**/*.pkg

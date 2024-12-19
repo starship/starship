@@ -7,7 +7,7 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
-use yaml_rust::{Yaml, YamlLoader};
+use yaml_rust2::{Yaml, YamlLoader};
 
 use super::{Context, Module, ModuleConfig};
 use crate::configs::pulumi::PulumiConfig;
@@ -285,8 +285,9 @@ mod tests {
         let project_file = PathBuf::from("/hello/Pulumi.yaml");
         assert_eq!(
             get_pulumi_workspace(&context, name, &project_file),
-            Some("/home/sweet/home/.pulumi/workspaces/foobar-test-workspace.json")
-                .map(PathBuf::from)
+            Some(PathBuf::from(
+                "/home/sweet/home/.pulumi/workspaces/foobar-test-workspace.json"
+            ))
         );
     }
 

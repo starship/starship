@@ -20,12 +20,11 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - uses: google-github-actions/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
-          draft: true
 
   # Build sources for every OS
   github_build:
@@ -57,11 +56,11 @@ jobs:
             name: starship-arm-unknown-linux-musleabihf.tar.gz
 
           - target: x86_64-apple-darwin
-            os: macOS-11
+            os: macos-latest
             name: starship-x86_64-apple-darwin.tar.gz
 
           - target: aarch64-apple-darwin
-            os: macOS-11
+            os: macos-latest
             name: starship-aarch64-apple-darwin.tar.gz
 
           - target: x86_64-pc-windows-msvc
@@ -89,7 +88,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@master
@@ -99,8 +98,7 @@ jobs:
 
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
-        # aarch64 is only supported in wix 4.0 development builds
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
@@ -120,11 +118,35 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         run: >
           cargo wix -v --no-build --nocapture -I install/windows/main.wxs
           --target ${{ matrix.target }}
-          --output target/wix/starship-${{ matrix.target }}.msi
+          --output target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Upload [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        id: unsigned-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-${{ matrix.name }}
+          path: |
+            target/${{ matrix.target }}/release/starship.exe
+            target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
+
+      - name: Sign | Sign [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'starship'
+          github-artifact-id: '${{ steps.unsigned-artifacts.outputs.artifact-id }}'
+          signing-policy-slug: 'release-signing'
+          wait-for-completion: true
+          output-artifact-directory: 'target/${{ matrix.target }}/release'
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -141,18 +163,18 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
 
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        uses: actions/upload-artifact@v3
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship-${{ matrix.target }}.msi
+          path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
@@ -176,9 +198,10 @@ jobs:
     env:
       KEYCHAIN_FILENAME: app-signing.keychain-db
       KEYCHAIN_ENTRY: AC_PASSWORD
+      STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
         with:
           # Required to include the recently merged Crowdin PR
           ref: master
@@ -214,6 +237,11 @@ jobs:
           # Add Apple Developer ID credentials to keychain
           xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
+      - name: Setup | Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Notarize | Build docs
         run: |
           cd docs
@@ -221,7 +249,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -233,7 +261,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -242,10 +270,11 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
+          overwrite: true
 
       - name: Cleanup Secrets
         if: ${{ always() }}
@@ -260,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -271,7 +300,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build | Add Artifacts to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: starship-*/starship-*
           tag_name: ${{ needs.release_please.outputs.tag_name }}
@@ -284,7 +313,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -298,7 +327,7 @@ jobs:
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.3
+      - uses: mislav/bump-homebrew-formula-action@v3.2
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
@@ -314,13 +343,22 @@ jobs:
     needs: [release_please, github_build, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
-      URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc.msi
-      URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc.msi
+      URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc
+      URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc
+      URL_ARM: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc
     steps:
+      # Publishing will fail if the repo is too far behind the upstream
+      - run: gh repo sync matchai/winget-pkgs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       - run: |
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
+          ./wingetcreate.exe update Starship.Starship -s -v $version `
+            -u ${{ env.URL_64 }}.msi  ${{ env.URL_64 }}.zip `
+               ${{ env.URL_32 }}.msi  ${{ env.URL_32 }}.zip `
+               ${{ env.URL_ARM }}.msi ${{ env.URL_ARM }}.zip `
+            -t ${{ secrets.GH_PAT }}
 
   choco_update:
     name: Update Chocolatey Package
@@ -329,9 +367,9 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
@@ -345,11 +383,11 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   publish_docs:
     name: Trigger docs deployment
@@ -357,7 +395,7 @@ jobs:
     needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@v4
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
         env:

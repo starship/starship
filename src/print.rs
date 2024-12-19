@@ -18,6 +18,7 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
+use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -115,12 +116,16 @@ pub fn get_prompt(context: Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
+    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
+    // color sequences for this specific shell
+    let shell_wrapped_output =
+        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -391,7 +396,7 @@ pub fn format_duration(duration: &Duration) -> String {
 /// Return the modules from $all that are not already in the list
 fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     let mut prompt_order: Vec<String> = Vec::new();
-    for module in PROMPT_ORDER.iter() {
+    for module in PROMPT_ORDER {
         if !module_list.contains(*module) {
             prompt_order.push(String::from(*module))
         }
@@ -452,7 +457,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let modules = [&lf, &rf]
         .into_iter()
         .flatten()
-        .flat_map(|f| f.get_variables())
+        .flat_map(VariableHolder::get_variables)
         .collect();
 
     let main_formatter = match context.target {
@@ -507,8 +512,10 @@ pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool)
 fn preset_list() -> String {
     Preset::value_variants()
         .iter()
-        .map(|v| format!("{}\n", v.0))
-        .collect()
+        .fold(String::new(), |mut output, b| {
+            let _ = writeln!(output, "{}", b.0);
+            output
+        })
 }
 
 #[cfg(test)]
@@ -647,7 +654,7 @@ mod test {
         preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
 
         let actual = utils::read_file(&path)?;
-        let expected = include_str!("../docs/.vuepress/public/presets/toml/nerd-font-symbols.toml");
+        let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
         assert_eq!(actual, expected);
 
         dir.close()

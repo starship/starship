@@ -1,8 +1,6 @@
-use crate::context::Shell;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
-use crate::utils::wrap_colorseq_for_shell;
-use nu_ansi_term::{AnsiString, AnsiStrings};
+use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use std::fmt;
 use std::time::Duration;
 
@@ -27,6 +25,7 @@ pub const ALL_MODULES: &[&str] = &[
     "dart",
     "deno",
     "directory",
+    "direnv",
     "docker_context",
     "dotnet",
     "elixir",
@@ -42,6 +41,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_metrics",
     "git_state",
     "git_status",
+    "gleam",
     "golang",
     "gradle",
     "guix_shell",
@@ -60,10 +60,13 @@ pub const ALL_MODULES: &[&str] = &[
     "lua",
     "memory_usage",
     "meson",
+    "mojo",
+    "nats",
     "nim",
     "nix_shell",
     "nodejs",
     "ocaml",
+    "odin",
     "opa",
     "openstack",
     "os",
@@ -74,6 +77,7 @@ pub const ALL_MODULES: &[&str] = &[
     "pulumi",
     "purescript",
     "python",
+    "quarto",
     "raku",
     "red",
     "rlang",
@@ -90,6 +94,7 @@ pub const ALL_MODULES: &[&str] = &[
     "swift",
     "terraform",
     "time",
+    "typst",
     "username",
     "vagrant",
     "vcsh",
@@ -118,7 +123,7 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
+    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Self {
         Module {
             config,
             name: name.to_string(),
@@ -159,22 +164,16 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString> {
-        self.ansi_strings_for_shell(Shell::Unknown, None)
+        self.ansi_strings_for_width(None)
     }
 
-    pub fn ansi_strings_for_shell(&self, shell: Shell, width: Option<usize>) -> Vec<AnsiString> {
+    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
             ansi_strings.extend(ansi_line(&mut iter, width));
         }
-
-        match shell {
-            Shell::Bash => ansi_strings_modified(ansi_strings, shell),
-            Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
-            Shell::Tcsh => ansi_strings_modified(ansi_strings, shell),
-            _ => ansi_strings,
-        }
+        ansi_strings
     }
 }
 
@@ -185,16 +184,6 @@ impl<'a> fmt::Display for Module<'a> {
     }
 }
 
-fn ansi_strings_modified(ansi_strings: Vec<AnsiString>, shell: Shell) -> Vec<AnsiString> {
-    ansi_strings
-        .into_iter()
-        .map(|ansi| {
-            let wrapped = wrap_colorseq_for_shell(ansi.to_string(), shell);
-            AnsiString::from(wrapped)
-        })
-        .collect::<Vec<AnsiString>>()
-}
-
 fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
@@ -202,16 +191,21 @@ where
     let mut used = 0usize;
     let mut current: Vec<AnsiString> = Vec::new();
     let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
+    let mut prev_style: Option<AnsiStyle> = None;
 
     for segment in segments {
         match segment {
             Segment::Fill(fs) => {
                 chunks.push((current, fs));
                 current = Vec::new();
+                prev_style = None;
             }
             _ => {
                 used += segment.width_graphemes();
-                current.push(segment.ansi_string());
+                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+
+                prev_style = Some(*current_segment_string.style_ref());
+                current.push(current_segment_string);
             }
         }
 
@@ -229,8 +223,11 @@ where
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
-                strs.into_iter()
-                    .chain(std::iter::once(fill.ansi_string(fill_size)))
+                let fill_string = fill.ansi_string(
+                    fill_size,
+                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
+                );
+                strs.into_iter().chain(std::iter::once(fill_string))
             })
             .chain(current)
             .collect::<Vec<AnsiString>>()

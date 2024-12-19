@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#no-empty-icons)
+[프리셋으로 돌아가기](./#no-empty-icons)
 
 # No Empty Icons Preset
 
@@ -6,12 +6,12 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 
 ![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
 
-### Configuration
+### 설정
 
 ```sh
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-empty-icons.toml)
+[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

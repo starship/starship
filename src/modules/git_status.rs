@@ -1,5 +1,5 @@
-use once_cell::sync::OnceCell;
 use regex::Regex;
+use std::sync::OnceLock;
 
 use super::{Context, Module, ModuleConfig};
 
@@ -33,6 +33,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
+
+    if repo.kind.is_bare() {
+        log::debug!("This is a bare repository, git_status is not applicable");
+        return None;
+    }
 
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
@@ -130,8 +135,8 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     repo: &'a context::Repo,
     config: GitStatusConfig<'a>,
-    repo_status: OnceCell<Option<RepoStatus>>,
-    stashed_count: OnceCell<Option<usize>>,
+    repo_status: OnceLock<Option<RepoStatus>>,
+    stashed_count: OnceLock<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -144,8 +149,8 @@ impl<'a> GitStatusInfo<'a> {
             context,
             repo,
             config,
-            repo_status: OnceCell::new(),
-            stashed_count: OnceCell::new(),
+            repo_status: OnceLock::new(),
+            stashed_count: OnceLock::new(),
         }
     }
 
@@ -251,11 +256,12 @@ fn get_repo_status(
 fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
-        Ok(Some(reference)) => reference,
+        // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
+        Ok(Some(reference)) if reference.name().as_bstr() == b"refs/stash".as_slice() => reference,
         // No stash reference found
-        Ok(None) => return Some(0),
+        Ok(_) => return Some(0),
         Err(err) => {
-            log::warn!("Error finding stash reference: {err}");
+            log::debug!("Error finding stash reference: {err}");
             return None;
         }
     };
@@ -267,7 +273,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
             Some(0)
         }
         Err(err) => {
-            log::warn!("Error getting stash log: {err}");
+            log::debug!("Error getting stash log: {err}");
             None
         }
     }
@@ -420,13 +426,13 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     log::trace!("Using WSL mode");
 
     // Get Windows path
-    let winpath = match create_command("wslpath")
+    let wslpath = create_command("wslpath")
         .map(|mut c| {
             c.arg("-w").arg(&context.current_dir);
             c
         })
-        .and_then(|mut c| c.output())
-    {
+        .and_then(|mut c| c.output());
+    let winpath = match wslpath {
         Ok(r) => r,
         Err(e) => {
             // Not found might means this might not be WSL after all
@@ -466,7 +472,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
         |e| e + ":STARSHIP_CONFIG/wp",
     );
 
-    let out = match create_command(starship_exe)
+    let exe = create_command(starship_exe)
         .map(|mut c| {
             c.env(
                 "STARSHIP_CONFIG",
@@ -478,8 +484,9 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
             .args(["module", "git_status", "--path", winpath]);
             c
         })
-        .and_then(|mut c| c.output())
-    {
+        .and_then(|mut c| c.output());
+
+    let out = match exe {
         Ok(r) => r,
         Err(e) => {
             log::error!("Failed to run Git Status module on Windows:\n{}", e);
@@ -1162,6 +1169,21 @@ mod tests {
         let expected = format_output("DUA");
 
         assert_eq!(actual, expected);
+
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        create_added(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
 
         repo_dir.close()
     }

@@ -58,7 +58,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## Porque eu vejo alertas de `Executing command "..." timed out.`?
 
-O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando o [`command_timeout`key](/config/#prompt) então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
+O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando a [chave](../config/#prompt) `command_timeout` então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
 
 ## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
@@ -72,7 +72,7 @@ Você pode ativar os logs de debug usando a variavel de ambiente `STARSHIP_LOG`.
 env STARSHIP_LOG=trace starship module rust
 ```
 
-Se o starship começa a ficar lento você pode tentar usar o comando `timings` para ver se tem um modulo ou comando para culpar.
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
@@ -120,3 +120,11 @@ Se o Starship foi instalado usando o script de instalação, o comando abaixo ir
 # Localiza e exclui o binário do starship
 sh -c 'rm "$(command -v 'starship')"'
 ```
+
+## How do I install Starship without `sudo`?
+
+The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation directory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+
+For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+
+When using a package manager, see the documentation for your package manager about installing with or without `sudo`.

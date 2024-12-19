@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#pastel-powerline)
+[Повернутися до Шаблонів](./#pastel-powerline)
 
 # Pastel Powerline
 
@@ -16,6 +16,6 @@
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Натисніть, щоб завантажити TOML](/presets/toml/pastel-powerline.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/pastel-powerline.toml){download}
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

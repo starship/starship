@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#bracketed-segments)
+[Return to Presets](./#bracketed-segments)
 
 # Bracketed Segments Preset
 
@@ -12,6 +12,6 @@ Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk men
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+[Click to download TOML](/presets/toml/bracketed-segments.toml){download}
 
-<<< @/.vuepress/public/presets/toml/bracketed-segments.toml
+<<< @/public/presets/toml/bracketed-segments.toml

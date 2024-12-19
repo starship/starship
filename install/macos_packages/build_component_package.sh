@@ -13,7 +13,7 @@ usage() {
     echo "Assumes that the following items already exist:"
     echo "    - A starship binary which has already been notarized"
     echo "    - Documentation created by \`npm run build\`, usually in a dist"
-    echo "      directory at <repo>/docs/.vuepress/dist"
+    echo "      directory at <repo>/docs/.vitepress/dist"
     echo "Usage: $0 <path-to-starship-binary> <path-to-dist-directory>"
 }
 
@@ -87,4 +87,4 @@ trap - INT
 
 # Build the component package
 version="$(starship_version "$starship_program_file")"
-pkgbuild --identifier com.starshipprompt.starship --version "$version" --root $pkgdir starship-component.pkg
+pkgbuild --identifier com.starshipprompt.starship --version "$version" --root "$pkgdir" starship-component.pkg

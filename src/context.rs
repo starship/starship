@@ -8,10 +8,10 @@ use crate::modules;
 use crate::utils;
 use clap::Parser;
 use gix::{
+    repository::Kind,
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state, Repository, ThreadSafeRepository,
 };
-use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -24,6 +24,7 @@ use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
+use std::sync::OnceLock;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
 
@@ -37,19 +38,19 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
-    /// A logical directory path which should represent the same directory as current_dir,
+    /// A logical directory path which should represent the same directory as `current_dir`,
     /// though may appear different.
-    /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
+    /// E.g. when navigating to a `PSDrive` in `PowerShell`, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
 
     /// A struct containing directory contents in a lookup-optimized format.
-    dir_contents: OnceCell<DirContents>,
+    dir_contents: OnceLock<Result<DirContents, std::io::Error>>,
 
     /// Properties to provide to modules.
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    repo: OnceCell<Repo>,
+    repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -60,10 +61,10 @@ pub struct Context<'a> {
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
-    /// A HashMap of environment variable mocks
+    /// A `HashMap` of environment variable mocks
     pub env: Env<'a>,
 
-    /// A HashMap of command mocks
+    /// A `HashMap` of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
@@ -85,7 +86,7 @@ impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it. "logical-path" is used when a shell allows the "current working directory"
     /// to be something other than a file system path (like powershell provider specific paths).
-    pub fn new(arguments: Properties, target: Target) -> Context<'a> {
+    pub fn new(arguments: Properties, target: Target) -> Self {
         let shell = Context::get_shell();
 
         // Retrieve the "current directory".
@@ -125,7 +126,7 @@ impl<'a> Context<'a> {
         path: PathBuf,
         logical_path: PathBuf,
         env: Env<'a>,
-    ) -> Context<'a> {
+    ) -> Self {
         let config = StarshipConfig::initialize(&get_config_path_os(&env));
 
         // If the vector is zero-length, we should pretend that we didn't get a
@@ -165,8 +166,8 @@ impl<'a> Context<'a> {
             properties,
             current_dir,
             logical_dir,
-            dir_contents: OnceCell::new(),
-            repo: OnceCell::new(),
+            dir_contents: OnceLock::new(),
+            repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -183,7 +184,7 @@ impl<'a> Context<'a> {
     }
 
     /// Sets the context config, overwriting the existing config
-    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+    pub fn set_config(mut self, config: toml::Table) -> Self {
         self.root_config = StarshipRootConfig::load(&config);
         self.config = StarshipConfig {
             config: Some(config),
@@ -243,7 +244,7 @@ impl<'a> Context<'a> {
             .any(|env_var| self.get_env(env_var).is_some())
     }
 
-    /// Returns true if 'detect_env_vars' is empty,
+    /// Returns true if `detect_env_vars` is empty,
     /// or if at least one environment variable is set and no negated environment variable is set
     pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
         if env_vars.is_empty() {
@@ -285,9 +286,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, Box<gix::discover::Error>> {
+    pub fn get_repo(&self) -> Result<&Repo, &gix::discover::Error> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+            .get_or_init(|| -> Result<Repo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -318,7 +319,10 @@ impl<'a> Context<'a> {
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
                         &self.current_dir,
-                        Default::default(),
+                        gix::discover::upwards::Options {
+                            match_ceiling_dir_or_error: false,
+                            ..Default::default()
+                        },
                         git_open_opts_map,
                     ) {
                         Ok(repo) => repo,
@@ -335,31 +339,41 @@ impl<'a> Context<'a> {
                 );
 
                 let branch = get_current_branch(&repository);
-                let remote = get_remote_repository_info(&repository, branch.as_deref());
+                let remote =
+                    get_remote_repository_info(&repository, branch.as_ref().map(AsRef::as_ref));
                 let path = repository.path().to_path_buf();
 
                 let fs_monitor_value_is_true = repository
                     .config_snapshot()
-                    .boolean("core.fs_monitor")
+                    .boolean("core.fsmonitor")
                     .unwrap_or(false);
 
                 Ok(Repo {
                     repo: shared_repo,
-                    branch,
+                    branch: branch.map(|b| b.shorten().to_string()),
                     workdir: repository.work_dir().map(PathBuf::from),
                     path,
                     state: repository.state(),
                     remote,
                     fs_monitor_value_is_true,
+                    kind: repository.kind(),
                 })
             })
+            .as_ref()
+            .map_err(std::convert::AsRef::as_ref)
     }
 
-    pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
-        self.dir_contents.get_or_try_init(|| {
-            let timeout = self.root_config.scan_timeout;
-            DirContents::from_path_with_timeout(&self.current_dir, Duration::from_millis(timeout))
-        })
+    pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
+        self.dir_contents
+            .get_or_init(|| {
+                let timeout = self.root_config.scan_timeout;
+                DirContents::from_path_with_timeout(
+                    &self.current_dir,
+                    Duration::from_millis(timeout),
+                    self.root_config.follow_symlinks,
+                )
+            })
+            .as_ref()
     }
 
     fn get_shell() -> Shell {
@@ -368,7 +382,8 @@ impl<'a> Context<'a> {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
-            "powershell" | "pwsh" => Shell::PowerShell,
+            "pwsh" => Shell::Pwsh,
+            "powershell" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
@@ -479,11 +494,15 @@ pub struct DirContents {
 
 impl DirContents {
     #[cfg(test)]
-    fn from_path(base: &Path) -> Result<Self, std::io::Error> {
-        Self::from_path_with_timeout(base, Duration::from_secs(30))
+    fn from_path(base: &Path, follow_symlinks: bool) -> Result<Self, std::io::Error> {
+        Self::from_path_with_timeout(base, Duration::from_secs(30), follow_symlinks)
     }
 
-    fn from_path_with_timeout(base: &Path, timeout: Duration) -> Result<Self, std::io::Error> {
+    fn from_path_with_timeout(
+        base: &Path,
+        timeout: Duration,
+        follow_symlinks: bool,
+    ) -> Result<Self, std::io::Error> {
         let start = Instant::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
@@ -501,7 +520,15 @@ impl DirContents {
             .filter_map(|(_, entry)| entry.ok())
             .for_each(|entry| {
                 let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
-                if entry.path().is_dir() {
+
+                let is_dir = match follow_symlinks {
+                    true => entry.path().is_dir(),
+                    false => fs::symlink_metadata(entry.path())
+                        .map(|m| m.is_dir())
+                        .unwrap_or(false),
+                };
+
+                if is_dir {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
@@ -605,7 +632,8 @@ pub struct Repo {
     pub repo: ThreadSafeRepository,
 
     /// If `current_dir` is a git repository or is contained within one,
-    /// this is the current branch name of that repo.
+    /// this is the short name of the current branch name of that repo,
+    /// i.e. `main`.
     pub branch: Option<String>,
 
     /// If `current_dir` is a git repository or is contained within one,
@@ -624,6 +652,9 @@ pub struct Repo {
     /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
     /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
     fs_monitor_value_is_true: bool,
+
+    // Kind of repository, work tree or bare
+    pub kind: Kind,
 }
 
 impl Repo {
@@ -766,24 +797,21 @@ impl<'a> ScanAncestors<'a> {
     }
 }
 
-fn get_current_branch(repository: &Repository) -> Option<String> {
-    let name = repository.head_name().ok()??;
-    let shorthand = name.shorten();
-
-    Some(shorthand.to_string())
+fn get_current_branch(repository: &Repository) -> Option<gix::refs::FullName> {
+    repository.head_name().ok()?
 }
 
 fn get_remote_repository_info(
     repository: &Repository,
-    branch_name: Option<&str>,
+    branch_name: Option<&gix::refs::FullNameRef>,
 ) -> Option<Remote> {
     let branch_name = branch_name?;
     let branch = repository
-        .branch_remote_ref(branch_name)
+        .branch_remote_ref_name(branch_name, gix::remote::Direction::Fetch)
         .and_then(std::result::Result::ok)
         .map(|r| r.shorten().to_string());
     let name = repository
-        .branch_remote_name(branch_name)
+        .branch_remote_name(branch_name.shorten(), gix::remote::Direction::Fetch)
         .map(|n| n.as_bstr().to_string());
 
     Some(Remote { branch, name })
@@ -794,6 +822,7 @@ pub enum Shell {
     Bash,
     Fish,
     Ion,
+    Pwsh,
     PowerShell,
     Zsh,
     Elvish,
@@ -902,9 +931,62 @@ mod tests {
     }
 
     #[test]
+    fn test_scan_dir_no_symlinks() -> Result<(), Box<dyn std::error::Error>> {
+        #[cfg(not(target_os = "windows"))]
+        use std::os::unix::fs::symlink;
+        #[cfg(target_os = "windows")]
+        use std::os::windows::fs::symlink_dir as symlink;
+
+        let d = testdir(&["file"])?;
+        fs::create_dir(d.path().join("folder"))?;
+
+        symlink(d.path().join("folder"), d.path().join("link_to_folder"))?;
+        symlink(d.path().join("file"), d.path().join("link_to_file"))?;
+
+        let dc_following_symlinks = DirContents::from_path(d.path(), true)?;
+
+        assert!(ScanDir {
+            dir_contents: &dc_following_symlinks,
+            files: &["link_to_file"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+
+        assert!(ScanDir {
+            dir_contents: &dc_following_symlinks,
+            files: &[],
+            extensions: &[],
+            folders: &["link_to_folder"],
+        }
+        .is_match());
+
+        let dc_not_following_symlinks = DirContents::from_path(d.path(), false)?;
+
+        assert!(ScanDir {
+            dir_contents: &dc_not_following_symlinks,
+            files: &["link_to_file"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+
+        assert!(!ScanDir {
+            dir_contents: &dc_not_following_symlinks,
+            files: &[],
+            extensions: &[],
+            folders: &["link_to_folder"],
+        }
+        .is_match());
+
+        Ok(())
+    }
+
+    #[test]
     fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
         let empty = testdir(&[])?;
-        let empty_dc = DirContents::from_path(empty.path())?;
+        let follow_symlinks = true;
+        let empty_dc = DirContents::from_path(empty.path(), follow_symlinks)?;
 
         assert!(!ScanDir {
             dir_contents: &empty_dc,
@@ -916,7 +998,7 @@ mod tests {
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
-        let rust_dc = DirContents::from_path(rust.path())?;
+        let rust_dc = DirContents::from_path(rust.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &rust_dc,
             files: &["package.json"],
@@ -927,7 +1009,7 @@ mod tests {
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
-        let java_dc = DirContents::from_path(java.path())?;
+        let java_dc = DirContents::from_path(java.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &java_dc,
             files: &["package.json"],
@@ -938,7 +1020,7 @@ mod tests {
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
-        let node_dc = DirContents::from_path(node.path())?;
+        let node_dc = DirContents::from_path(node.path(), follow_symlinks)?;
         assert!(ScanDir {
             dir_contents: &node_dc,
             files: &["package.json"],
@@ -949,7 +1031,7 @@ mod tests {
         node.close()?;
 
         let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
-        let tarballs_dc = DirContents::from_path(tarballs.path())?;
+        let tarballs_dc = DirContents::from_path(tarballs.path(), follow_symlinks)?;
         assert!(ScanDir {
             dir_contents: &tarballs_dc,
             files: &[],
@@ -960,7 +1042,7 @@ mod tests {
         tarballs.close()?;
 
         let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
-        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path())?;
+        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_ext_dc,
             files: &[],
@@ -971,7 +1053,7 @@ mod tests {
         dont_match_ext.close()?;
 
         let dont_match_file = testdir(&["goodfile", "evilfile"])?;
-        let dont_match_file_dc = DirContents::from_path(dont_match_file.path())?;
+        let dont_match_file_dc = DirContents::from_path(dont_match_file.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_file_dc,
             files: &["goodfile", "!notfound", "!evilfile"],
@@ -982,7 +1064,8 @@ mod tests {
         dont_match_file.close()?;
 
         let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
-        let dont_match_folder_dc = DirContents::from_path(dont_match_folder.path())?;
+        let dont_match_folder_dc =
+            DirContents::from_path(dont_match_folder.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_folder_dc,
             files: &[],

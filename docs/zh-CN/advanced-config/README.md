@@ -2,7 +2,7 @@
 
 Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
-::: warning
+::: warning 警告
 
 本节所述的配置内容可能随 Starship 未来版本的更新而改变。
 
@@ -58,9 +58,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 若要启用该功能，请在 shell 中运行 `Enable-TransitientPrompt`命令 若要永久启用该功能，请将 上述语句放在您的 `~/.config/fish/config.fish` 中。 通过在shell中运行 `Disable-TransientPrompt`命令来禁用这项功能。
 
-请注意，对于Fish，命令行提示只在命令行非空 和语法正确的情况下才会显示。
+请注意，对于Fish，命令行提示只在命令行非空 且语法正确的情况下才会显示。
 
-- 默认情况下，输入的左侧是 粗体绿色的❯</code>符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 粗体绿色的`❯`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要在这里显示 Starship 的 `character` 组件，您需要如下操作：
 
 ```fish
 function starship_transent_rmpt_func
@@ -78,6 +78,26 @@ function starship_transent_rmpt_func
 end
 starship init fish | source
 enable_transience
+```
+
+## TransientPrompt and TransientRightPrompt in Bash
+
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+
+Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
+
+- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+
+```bash
+bleopt prompt_ps1_final='$(starship module character)'
+```
+
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
+
+```bash
+bleopt prompt_rps1_final='$(starship module time)'
 ```
 
 ## 在 Cmd 中自定义提示符显示前和执行前的命令
@@ -203,9 +223,11 @@ Invoke-Expression (&starship init powershell)
 
 一些 Shell 支持右侧提示, 它与输入区渲染在同一行。 使用 `right_format` 选项来设置 Starship 的右侧提示。 所有支持 `format` 的组件也同时支持 `right_format`。 未显式在 `format` 或 `right_format` 中使用的组件，会保存在变量 `$all` 中。
 
-注意：右侧提示和输入区显示在同一行。 如果需要在输入区的上方显示右对齐的组件，请查阅 [`fill` 组件](/config/#fill)。
+注意：右侧提示和输入区显示在同一行。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### 示例
 
@@ -244,7 +266,7 @@ right_format = """$all"""
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# A continuation prompt that displays two filled-in arrows
 continuation_prompt = '▶▶ '
 ```
 
@@ -265,7 +287,7 @@ continuation_prompt = '▶▶ '
 - `<color>`
 - `none`
 
-`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
+`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
 
 若 `none` 不是 `bg:` 的一部分，则它会覆盖其他的设置：比如 `fg:red none fg:blue` 不会更改任何样式。 `bg:none` 会设置成默认背景色，因此 `fg:red bg:none`、`red`、`fg:red` 的作用相同；类似，`bg:green fg:red bg:none`、`fg:red`、`red` 的作用也相同。 未来可能会将 `none` 与其它单词一起使用视为错误。
 
@@ -279,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 并非每种类型的字符串都会被每个终端正确显示。 特别地，以下是已知的几种情况：
 
-- 许多终端默认禁用对 `blink` 的支持
+- 许多终端默认禁用对 `blink` 的支持.
 - [iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564) 不支持 `hidden`
-- macOS 的默认终端不支持 `strikethrough`
+- macOS 的默认终端不支持 `strikethrough`.

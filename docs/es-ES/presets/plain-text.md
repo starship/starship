@@ -1,4 +1,4 @@
-[Volver a Preajustes](./README.md#plain-text-symbols)
+[Volver a Preajustes](./#plain-text-symbols)
 
 ## Preajuste Símbolos de Texto sin Formato
 
@@ -12,6 +12,6 @@ Este preajuste cambia los símbolos a texto sin formato. Bueno si usted no tiene
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+<<< @/public/presets/toml/plain-text-symbols.toml

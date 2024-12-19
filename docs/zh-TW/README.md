@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
-actionText: 馬上開始 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
+  actions:
+    - 
+      theme: brand
+      text: 馬上開始 →
+      link: ./guide/
 features:
   - 
     title: 相容性優先
@@ -18,15 +22,27 @@ features:
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：跨 Shell 提示字元"
-description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 有針對 Bash、Fish、ZSH、Ion 、Tcsh、Elvish、Nu、Xonsh、Cmd 與 Powershell 的快速安裝指南。
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 先決要求
 
@@ -55,7 +71,8 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+
+   使用 [Winget](https://github.com/microsoft/winget-cli)：
 
    ```powershell
    winget install starship
@@ -121,7 +138,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   只有支援 elvish v0.18 或以上版本。
 
    :::
 
@@ -149,17 +166,18 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   這項設定未來會改變。 只有支援 Nushell v0.78+。
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   新增下列內容至你的 Nushell env 檔案中的最下方（在 Nushell 執行  `$nu.env-path` 找到它）。
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   新增下列的內容至你的 Nushell 設定檔最下方（執行 `$nu.config-path` 找到它）：
 
    ```sh
    use ~/.cache/starship/init.nu
@@ -179,7 +197,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### 命令提示字元
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 新增下列的內容到檔案 `starship.lua`  中並將這個檔案存放在 Clink scripts 的路徑下方：
 
    ```lua
    -- starship.lua
