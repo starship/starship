@@ -90,7 +90,7 @@ whoami = { version = "1.5.2", default-features = false }
 yaml-rust2 = "0.9.0"
 
 guess_host_triple = "0.1.4"
-home = "0.5.9"
+home = "0.5.11"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
