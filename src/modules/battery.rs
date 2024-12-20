@@ -445,26 +445,32 @@ mod tests {
         });
 
         // Larger threshold first
-        let actual = ModuleRenderer::new("battery").config(toml::toml! {
-            [[battery.display]]
-            threshold = 100
-            style = "red"
-            [[battery.display]]
-            threshold = 60
-            style = "green bold"
-        }).battery_info_provider(&mock).collect();
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 100
+                style = "red"
+                [[battery.display]]
+                threshold = 60
+                style = "green bold"
+            })
+            .battery_info_provider(&mock)
+            .collect();
         let expected = Some(format!("{} ", Color::Green.bold().paint("󰂃 50%")));
         assert_eq!(expected, actual);
 
         // Smaller threshold first
-        let actual = ModuleRenderer::new("battery").config(toml::toml! {
-            [[battery.display]]
-            threshold = 60
-            style = "green bold"
-            [[battery.display]]
-            threshold = 100
-            style = "red"
-        }).battery_info_provider(&mock).collect();
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 60
+                style = "green bold"
+                [[battery.display]]
+                threshold = 100
+                style = "red"
+            })
+            .battery_info_provider(&mock)
+            .collect();
         let expected = Some(format!("{} ", Color::Green.bold().paint("󰂃 50%")));
         assert_eq!(expected, actual);
     }
