@@ -17,28 +17,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Parse config under `display`.
     // Select the style that is most minimally greater than the current battery percentage.
     // If no such style exists do not display battery module.
-    let mut closest_style = None;
-    for display_style in &config.display {
-        // Skip style if its threshold is lower than the current battery percentage.
-        if percentage > display_style.threshold as f32 {
-            continue;
-        }
-        // Unwrap the `Option`
-        let Some(closest_so_far) = closest_style else {
-            // If `closest_style` is `None` then this is the first valid style
-            // encountered, so save it and continue to the next loop iteration.
-            closest_style = Some(display_style);
-            continue;
-        };
-        // If this style's threshold is less than the previous closest so far,
-        // save it and continue to the next loop iteration
-        if display_style.threshold < closest_so_far.threshold {
-            closest_style = Some(display_style);
-            continue;
-        }
-    }
-    let display_style = closest_style?;
-    //let display_style = config.display.iter().find(|display_style| percentage <= display_style.threshold as f32)?;
+    let display_style = config
+        .display
+        .iter()
+        .filter(|display_style| percentage <= display_style.threshold as f32)
+        .min_by_key(|display_style| display_style.threshold)?;
 
     // Parse the format string and build the module
     match StringFormatter::new(config.format) {
