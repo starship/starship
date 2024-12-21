@@ -15,12 +15,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: BatteryConfig = BatteryConfig::try_load(module.config);
 
     // Parse config under `display`.
-    // Select the first style that match the threshold,
-    // if all thresholds are lower do not display battery module.
+    // Select the style that is most minimally greater than the current battery percentage.
+    // If no such style exists do not display battery module.
     let display_style = config
         .display
         .iter()
-        .find(|display_style| percentage <= display_style.threshold as f32)?;
+        .filter(|display_style| percentage <= display_style.threshold as f32)
+        .min_by_key(|display_style| display_style.threshold)?;
 
     // Parse the format string and build the module
     match StringFormatter::new(config.format) {
@@ -411,6 +412,49 @@ mod tests {
             .collect();
         let expected = Some(String::from("󰂃 13% "));
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn battery_expected_style() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(2).returning(|| {
+            Some(BatteryInfo {
+                energy: 50.0,
+                energy_full: 100.0,
+                state: battery::State::Discharging,
+            })
+        });
+
+        // Larger threshold first
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 100
+                style = "red"
+                [[battery.display]]
+                threshold = 60
+                style = "green bold"
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(format!("{} ", Color::Green.bold().paint("󰂃 50%")));
+        assert_eq!(expected, actual);
+
+        // Smaller threshold first
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 60
+                style = "green bold"
+                [[battery.display]]
+                threshold = 100
+                style = "red"
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(format!("{} ", Color::Green.bold().paint("󰂃 50%")));
         assert_eq!(expected, actual);
     }
 }
