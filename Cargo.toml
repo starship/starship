@@ -48,7 +48,7 @@ clap_complete = "4.5.40"
 dirs = "5.0.1"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.68.0", default-features = false, features = ["max-performance-safe", "revision"] }
+gix = { version = "0.69.1", default-features = false, features = ["max-performance-safe", "revision"] }
 gix-features = { version = "0.39.1", optional = true }
 indexmap = { version = "2.7.0", features = ["serde"] }
 log = { version = "0.4.22", features = ["std"] }
