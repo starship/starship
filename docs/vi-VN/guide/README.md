@@ -191,7 +191,7 @@ Chọn hệ điều hành của bạn trong danh sách bên dưới để xem h�
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Repository                                                                        | Instructions           |
+| Kho lưu trữ                                                                       | Hướng dẫn              |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -202,11 +202,11 @@ Cài đặt Starship bằng một package manager bất kì:
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| Bản phân phối | Kho lưu trữ                                              | Hướng dẫn                         |
+| ------------- | -------------------------------------------------------- | --------------------------------- |
+| **_Bất kỳ_**  | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD       | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD        | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -221,11 +221,11 @@ curl -sS https://starship.rs/install.sh | sh
 
 Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Bản phân phối      | Kho lưu trữ                                                                                     | Hướng dẫn                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| **_Bất kỳ_**       | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _Bất kỳ_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _Bất kỳ_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -248,7 +248,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
-| Repository                                               | Instructions                            |
+| Kho lưu trữ                                              | Hướng dẫn                               |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -264,7 +264,7 @@ Cài đặt phiên bản mới nhất cho hệ điều hành của bạn với M
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Repository                                                                                   | Instructions                            |
+| Kho lưu trữ                                                                                  | Hướng dẫn                               |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -431,7 +431,16 @@ Xin hãy xem qua những công việc này trước đây, những thứ đã gi
 
 Hỗ trợ project này bằng việc [trở thành nhà tài trợ](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
 
-- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+## 🔒 Code Signing Policy
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

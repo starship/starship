@@ -2,7 +2,7 @@
 
 Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
-::: warning
+::: warning 警告
 
 本节所述的配置内容可能随 Starship 未来版本的更新而改变。
 
@@ -287,7 +287,7 @@ continuation_prompt = '▶▶ '
 - `<color>`
 - `none`
 
-`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
+`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
 
 若 `none` 不是 `bg:` 的一部分，则它会覆盖其他的设置：比如 `fg:red none fg:blue` 不会更改任何样式。 `bg:none` 会设置成默认背景色，因此 `fg:red bg:none`、`red`、`fg:red` 的作用相同；类似，`bg:green fg:red bg:none`、`fg:red`、`red` 的作用也相同。 未来可能会将 `none` 与其它单词一起使用视为错误。
 

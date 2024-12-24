@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use chrono::DateTime;
 use ini::Ini;
-use once_cell::unsync::OnceCell;
+use std::cell::OnceCell;
 
 use super::{Context, Module, ModuleConfig};
 
@@ -702,7 +702,7 @@ credential_process = /opt/bin/awscreds-retriever
                 .collect();
 
             let possible_values = [
-                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+                "30m2s", "30m1s", "30m0s", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
             ];
             let possible_values = possible_values.map(|duration| {
                 let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
@@ -756,7 +756,7 @@ aws_secret_access_key=dummy
                 // In principle, "30m" should be correct. However, bad luck in scheduling
                 // on shared runners may delay it.
                 let possible_values = [
-                    "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+                    "30m2s", "30m1s", "30m0s", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
                 ];
                 let possible_values = possible_values.map(|duration| {
                     let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");

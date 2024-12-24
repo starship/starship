@@ -46,7 +46,7 @@ For a list of all flags accepted by `starship prompt`, use the following command
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Wiersza użyje tyle kontekstu, ile dostaje, ale żadna flaga nie jest "wymagana".
 
 ## Jak uruchomić Starship na dystrybucjach systemu Linux ze starszymi wersjami glibc?
 

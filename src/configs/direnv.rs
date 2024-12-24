@@ -27,7 +27,7 @@ impl<'a> Default for DirenvConfig<'a> {
         Self {
             format: "[$symbol$loaded/$allowed]($style) ",
             symbol: "direnv ",
-            style: "bold orange",
+            style: "bold bright-yellow",
             disabled: true,
             detect_extensions: vec![],
             detect_files: vec![".envrc"],
