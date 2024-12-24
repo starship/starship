@@ -318,7 +318,7 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 success_symbol = "✔️"
-                success_style = "bold red"
+                success_style = "red bold"
                 disabled = false
             })
             .status(0)
