@@ -1167,20 +1167,21 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Optionen
 
-| Option              | Standartwert                           | Beschreibung                                          |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Das Format für das Modul.                             |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | Stil für dieses Modul.                                |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.          |
-| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module.             |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Option              | Standartwert                           | Beschreibung                                            |
+| ------------------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Das Format für das Modul.                               |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
+| `style`             | `'bold orange'`                        | Stil für dieses Modul.                                  |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.            |
+| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.             |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module.               |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.        |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.        |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.    |
 
 ### Variables
 
@@ -4103,6 +4104,8 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
 | `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
 | `style`                     | `'bold red'`                                                                        | Stil für dieses Modul.                                                |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
 | `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
 | `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
 | `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
@@ -4113,18 +4116,18 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Variables
 
-| Variable       | Beispiel | Beschreibung                                                                               |
-| -------------- | -------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`    | The exit code of the last command                                                          |
-| hex_status     | `0x7F`   | The exit code of the last command in hex                                                   |
-| int            | `127`    | The exit code of the last command                                                          |
-| common_meaning | `ERROR`  | Meaning of the code if not a signal                                                        |
-| signal_number  | `9`      | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`   | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`      | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |          | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |          | Spiegelt den Wert der Option `symbol`                                                      |
-| style\*      |          | Spiegelt den Wert der Option `style`                                                       |
+| Variable       | Beispiel | Beschreibung                                                                                 |
+| -------------- | -------- | -------------------------------------------------------------------------------------------- |
+| status         | `127`    | The exit code of the last command                                                            |
+| hex_status     | `0x7F`   | The exit code of the last command in hex                                                     |
+| int            | `127`    | The exit code of the last command                                                            |
+| common_meaning | `ERROR`  | Meaning of the code if not a signal                                                          |
+| signal_number  | `9`      | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`   | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`      | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |          | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbol         |          | Spiegelt den Wert der Option `symbol`                                                        |
+| style\*      |          | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: This variable can only be used as a part of a style string
 
