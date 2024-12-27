@@ -1175,6 +1175,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_extensions` | `[]`                                   | Quais extensões devem ativar este módulo.             |
 | `detect_files`      | `['.envrc']`                           | Quais nomes de arquivos devem ativar este módulo.     |
 | `detect_folders`    | `[]`                                   | Quais pastas devem ativar este módulo.                |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Quais variáveis de ambiente devem ativar este módulo. |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
 | `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
@@ -4102,6 +4103,8 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `sigint_symbol`             | `'🧱'`                                                                               | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
 | `signal_symbol`             | `'⚡'`                                                                               | O simbolo exibido em qualquer sinal                                                     |
 | `style`                     | `'bold red'`                                                                        | O estilo do módulo.                                                                     |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).                       |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).                       |
 | `recognize_signal_code`     | `true`                                                                              | Habilita o mapeamento de sinais para códigos de saída                                   |
 | `map_symbol`                | `false`                                                                             | Habilita o mapeamento de símbolos para códigos de saída                                 |
 | `pipestatus`                | `false`                                                                             | Habilita o relatório de pipestatus                                                      |
@@ -4123,7 +4126,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                                        |
 | pipestatus     |         | Exibição do pipeline de programas com os códigos de saída, este é apenas disponível no pipestatus_format |
 | symbol         |         | Espelha o valor da opção `symbol`                                                                        |
-| style\*      |         | Espelha o valor da opção `style`                                                                         |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise             |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
