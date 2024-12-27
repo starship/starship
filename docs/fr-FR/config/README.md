@@ -1175,6 +1175,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module.             |
 | `detect_files`      | `['.envrc']`                           | Les fichiers qui activent ce module.                  |
 | `detect_folders`    | `[]`                                   | Les dossiers qui activent ce module.                  |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Les variables d’environnement qui activent ce module. |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
 | `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
@@ -4102,6 +4103,8 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
 | `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
 | `style`                     | `'bold red'`                                                                        | Le style pour le module.                                              |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
 | `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
 | `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
 | `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
@@ -4112,18 +4115,18 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Variables
 
-| Variable       | Exemple | Description                                                                                |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| statut         | `127`   | Le code de sortie de la dernière commande                                                  |
-| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                          |
-| int            | `127`   | Le code de sortie de la dernière commande                                                  |
-| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                               |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbole        |         | Reflète la valeur de l'option `symbol`                                                     |
-| style\*      |         | Reflète la valeur de l'option `style`                                                      |
+| Variable       | Exemple | Description                                                                                  |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| statut         | `127`   | Le code de sortie de la dernière commande                                                    |
+| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                            |
+| int            | `127`   | Le code de sortie de la dernière commande                                                    |
+| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                                 |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbole        |         | Reflète la valeur de l'option `symbol`                                                       |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
