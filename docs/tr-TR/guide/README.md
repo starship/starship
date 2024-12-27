@@ -431,7 +431,16 @@ Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz at
 
 [Bir sponsor olarak](https://github.com/sponsors/starship) bu projeye destek ver. İsminiz veya logonuz bağlantınız ile beraber burda görünecek.
 
-- Ücretsiz kod imzalama [SignPath.io](https://signpath.io) tarafından sağlanmıştır, sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanmıştır
+## 🔒 Code Signing Policy
+
+Ücretsiz kod imzalama [SignPath.io](https://signpath.io) tarafından sağlanmıştır, sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanmıştır.
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

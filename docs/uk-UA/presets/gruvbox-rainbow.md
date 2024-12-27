@@ -16,6 +16,6 @@
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Натисніть, щоб завантажити TOML](/presets/toml/gruvbox-rainbow.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml

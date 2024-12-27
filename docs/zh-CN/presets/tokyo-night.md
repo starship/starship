@@ -16,6 +16,6 @@
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

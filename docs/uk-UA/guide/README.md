@@ -431,7 +431,16 @@ eval "$(starship init zsh)"
 
 Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
-- Безкоштовний підпис похідного коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org)
+## 🔒 Code Signing Policy
+
+Безкоштовний підпис похідного коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org).
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

@@ -12,6 +12,6 @@ Ten zestaw ustawień naśladuje wygląd i zachowanie  [Pure](https://github.com/
 starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/pure-preset.toml)
+[Click to download TOML](/presets/toml/pure-preset.toml){download}
 
 <<< @/public/presets/toml/pure-preset.toml

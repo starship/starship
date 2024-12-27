@@ -24,6 +24,6 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v4
       - name: Test | Security Audit
-        uses: EmbarkStudios/cargo-deny-action@v2.0.1
+        uses: EmbarkStudios/cargo-deny-action@v2.0.4
         with:
           command: check ${{ matrix.checks }}

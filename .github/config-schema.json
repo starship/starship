@@ -311,6 +311,7 @@
         "detect_files": [
           "deno.json",
           "deno.jsonc",
+          "deno.lock",
           "mod.ts",
           "deps.ts",
           "mod.js",
@@ -1419,7 +1420,8 @@
           "VIRTUAL_ENV"
         ],
         "detect_extensions": [
-          "py"
+          "py",
+          "ipynb"
         ],
         "detect_files": [
           "requirements.txt",
@@ -1428,7 +1430,8 @@
           "Pipfile",
           "tox.ini",
           "setup.py",
-          "__init__.py"
+          "__init__.py",
+          "pixi.toml"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -1712,7 +1715,7 @@
         "not_executable_symbol": "🚫",
         "not_found_symbol": "🔍",
         "pipestatus": false,
-        "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+        "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
         "pipestatus_separator": "|",
         "recognize_signal_code": true,
         "sigint_symbol": "🧱",
@@ -2737,6 +2740,7 @@
           "default": [
             "deno.json",
             "deno.jsonc",
+            "deno.lock",
             "mod.ts",
             "deps.ts",
             "mod.js",
@@ -5298,7 +5302,8 @@
         },
         "detect_extensions": {
           "default": [
-            "py"
+            "py",
+            "ipynb"
           ],
           "type": "array",
           "items": {
@@ -5313,7 +5318,8 @@
             "Pipfile",
             "tox.ini",
             "setup.py",
-            "__init__.py"
+            "__init__.py",
+            "pixi.toml"
           ],
           "type": "array",
           "items": {
@@ -6012,7 +6018,7 @@
           "type": "string"
         },
         "pipestatus_format": {
-          "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+          "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
           "type": "string"
         },
         "pipestatus_segment_format": {
