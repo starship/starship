@@ -52,3 +52,65 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
+    use nu_ansi_term::Color;
+
+    fn mock_ip_netns_identify(netns_name: &str) -> Option<CommandOutput> {
+        Some(CommandOutput {
+            stdout: format!("{}\n", netns_name),
+            stderr: String::new(),
+        })
+    }
+
+    #[test]
+    fn test_none_if_disabled() {
+        let expected = None;
+        let actual = ModuleRenderer::new("netns")
+            .config(toml::toml! {
+               [netns]
+               disabled = true
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_netns_identify() {
+        let actual = ModuleRenderer::new("netns")
+            .config(toml::toml! {
+               [netns]
+               disabled = false
+            })
+            .cmd("ip netns identify", mock_ip_netns_identify("test_netns"))
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Blue.bold().dimmed().paint("🛜 [test_netns]")
+        ));
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_netns_identify_empty() {
+        let actual = ModuleRenderer::new("netns")
+            .config(toml::toml! {
+               [netns]
+               disabled = false
+            })
+            .cmd("ip netns identify", mock_ip_netns_identify(""))
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
+    }
+}
