@@ -54,6 +54,7 @@ mod memory_usage;
 mod meson;
 mod mojo;
 mod nats;
+mod netns;
 mod nim;
 mod nix_shell;
 mod nodejs;
@@ -166,6 +167,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "meson" => meson::module(context),
             "mojo" => mojo::module(context),
             "nats" => nats::module(context),
+            "netns" => netns::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context),
@@ -291,6 +293,7 @@ pub fn description(module: &str) -> &'static str {
         }
         "mojo" => "The currently installed version of Mojo",
         "nats" => "The current NATS context",
+        "netns" => "The current network namespace",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
