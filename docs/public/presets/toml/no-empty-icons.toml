@@ -1,5 +1,5 @@
 [buf]
-format = '(with [$symbol$version ]($style))'
+format = '(with [$symbol($version )]($style))'
 
 [bun]
 format = '(via [$symbol($version )]($style))'
@@ -74,7 +74,8 @@ format = '(via [$symbol($version )]($style))'
 format = '(via [$symbol($version )(\($switch_indicator$switch_name\) )]($style))'
 
 [opa]
-format = '(via [$symbo($version ]($style))"'
+format = '(via [$symbol($version )]($style))'
+
 [package]
 format = '(is [$symbol$version]($style) )'
 

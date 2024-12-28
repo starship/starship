@@ -110,7 +110,7 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
             let build_file_contents = context.read_file_from_pwd("build.gradle")?;
-            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let re = Regex::new(r#"(?m)^version( |\s*=\s*)['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
             let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
 
@@ -152,7 +152,7 @@ fn get_mix_version(context: &Context, config: &PackageConfig) -> Option<String> 
 fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pom.xml")?;
     let mut reader = QXReader::from_str(&file_contents);
-    reader.trim_text(true);
+    reader.config_mut().trim_text(true);
 
     let mut buf = vec![];
     let mut in_ver = false;
@@ -235,7 +235,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
-        // workspace version string (`package.version.worspace = true`)
+        // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
         // discover the workspace root
@@ -583,7 +583,7 @@ license = "MIT"
 
     #[test]
     fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
-        // Only create an empty directory. There's no .nibmle file for this case.
+        // Only create an empty directory. There's no .nimble file for this case.
         let project_dir = create_project_dir()?;
 
         let starship_config = toml::toml! {
@@ -910,6 +910,25 @@ license = "MIT"
     id 'test.plugin' version '0.2.0'
 }
 version '0.1.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_gradle_version_setter_notation_single_quote() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version = '0.1.0'
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

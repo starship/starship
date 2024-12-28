@@ -16,6 +16,6 @@ Ten zestaw ustawień jest inspirowany [tokyo-night-vscode-theme](https://github.
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

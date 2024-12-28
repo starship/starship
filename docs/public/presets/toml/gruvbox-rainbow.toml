@@ -61,10 +61,12 @@ Amazon = ""
 Android = ""
 Arch = "󰣇"
 Artix = "󰣇"
+EndeavourOS = ""
 CentOS = ""
 Debian = "󰣚"
 Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
+Pop = ""
 
 [username]
 show_always = true
@@ -120,7 +122,7 @@ style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [java]
-symbol = " "
+symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 

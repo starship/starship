@@ -1,8 +1,8 @@
 use super::string_formatter::StringFormatterError;
 use super::StringFormatter;
 use crate::segment;
-use once_cell::sync::Lazy;
 use std::ops::Deref;
+use std::sync::LazyLock;
 use versions::Versioning;
 
 pub struct VersionFormatter<'a> {
@@ -30,7 +30,7 @@ impl<'a> VersionFormatter<'a> {
 
     /// Formats a version structure into a readable string
     pub fn format(self, version: &'a str) -> Result<String, StringFormatterError> {
-        let parsed = Lazy::new(|| Versioning::new(version));
+        let parsed = LazyLock::new(|| Versioning::new(version));
         let formatted = self
             .formatter
             .map(|variable| match variable {

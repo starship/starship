@@ -287,7 +287,7 @@ Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le par
 - `<color>`
 - `none`
 
-dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro. `inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
+dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
 
 Il token `none` sovrascrive tutti gli altri token in una stringa se non fa parte di uno specificatore `bg:`, così ad esempio `fg:red none fg:blue` creerà una stringa senza stile. `bg:none` imposta come colore di sfondo quello predefinito così `fg:red bg:none` è equivalente a `red` o `fg:red` e `bg:green fg:red bg:none` è equivalente a `fg:red` o `red`. Potrà diventare un errore usare `none` in combinazione con altri token in futuro.
 

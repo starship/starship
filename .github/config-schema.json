@@ -311,6 +311,7 @@
         "detect_files": [
           "deno.json",
           "deno.jsonc",
+          "deno.lock",
           "mod.ts",
           "deps.ts",
           "mod.js",
@@ -367,7 +368,7 @@
         "format": "[$symbol$loaded/$allowed]($style) ",
         "loaded_msg": "loaded",
         "not_allowed_msg": "not allowed",
-        "style": "bold orange",
+        "style": "bold bright-yellow",
         "symbol": "direnv ",
         "unloaded_msg": "not loaded"
       },
@@ -842,6 +843,7 @@
     },
     "hostname": {
       "default": {
+        "aliases": {},
         "detect_env_vars": [],
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
@@ -1041,6 +1043,25 @@
       "allOf": [
         {
           "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
+    "mojo": {
+      "default": {
+        "detect_extensions": [
+          "mojo",
+          "🔥"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "with [$symbol($version )]($style)",
+        "style": "bold 208",
+        "symbol": "🔥 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MojoConfig"
         }
       ]
     },
@@ -1376,7 +1397,9 @@
           "purs"
         ],
         "detect_files": [
-          "spago.dhall"
+          "spago.dhall",
+          "spago.yaml",
+          "spago.lock"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -1393,8 +1416,12 @@
     },
     "python": {
       "default": {
+        "detect_env_vars": [
+          "VIRTUAL_ENV"
+        ],
         "detect_extensions": [
-          "py"
+          "py",
+          "ipynb"
         ],
         "detect_files": [
           "requirements.txt",
@@ -1403,7 +1430,8 @@
           "Pipfile",
           "tox.ini",
           "setup.py",
-          "__init__.py"
+          "__init__.py",
+          "pixi.toml"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -1687,7 +1715,7 @@
         "not_executable_symbol": "🚫",
         "not_found_symbol": "🔍",
         "pipestatus": false,
-        "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+        "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
         "pipestatus_separator": "|",
         "recognize_signal_code": true,
         "sigint_symbol": "🧱",
@@ -2712,6 +2740,7 @@
           "default": [
             "deno.json",
             "deno.jsonc",
+            "deno.lock",
             "mod.ts",
             "deps.ts",
             "mod.js",
@@ -2825,7 +2854,7 @@
           "type": "string"
         },
         "style": {
-          "default": "bold orange",
+          "default": "bold bright-yellow",
           "type": "string"
         },
         "disabled": {
@@ -4006,6 +4035,13 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -4476,6 +4512,52 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MojoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "with [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🔥 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 208",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "mojo",
+            "🔥"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -5156,7 +5238,9 @@
         },
         "detect_files": {
           "default": [
-            "spago.dhall"
+            "spago.dhall",
+            "spago.yaml",
+            "spago.lock"
           ],
           "type": "array",
           "items": {
@@ -5218,7 +5302,8 @@
         },
         "detect_extensions": {
           "default": [
-            "py"
+            "py",
+            "ipynb"
           ],
           "type": "array",
           "items": {
@@ -5233,7 +5318,8 @@
             "Pipfile",
             "tox.ini",
             "setup.py",
-            "__init__.py"
+            "__init__.py",
+            "pixi.toml"
           ],
           "type": "array",
           "items": {
@@ -5242,6 +5328,15 @@
         },
         "detect_folders": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [
+            "VIRTUAL_ENV"
+          ],
           "type": "array",
           "items": {
             "type": "string"
@@ -5911,7 +6006,7 @@
           "type": "string"
         },
         "pipestatus_format": {
-          "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+          "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
           "type": "string"
         },
         "pipestatus_segment_format": {
@@ -6438,6 +6533,10 @@
           ]
         },
         "ignore_timeout": {
+          "default": false,
+          "type": "boolean"
+        },
+        "unsafe_no_escape": {
           "default": false,
           "type": "boolean"
         }

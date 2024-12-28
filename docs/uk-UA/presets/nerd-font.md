@@ -16,6 +16,6 @@
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[Натисніть, щоб завантажити TOML](/presets/toml/nerd-font-symbols.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/nerd-font-symbols.toml){download}
 
 <<< @/public/presets/toml/nerd-font-symbols.toml

@@ -8,7 +8,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 ### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- Đã cài đặt một [Nerd Font](https://www.nerdfonts.com/) và kích hoạt trong terminal của bạn
 
 ### Cấu hình
 
@@ -16,6 +16,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-rainbow.toml)
+[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml

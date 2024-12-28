@@ -21,6 +21,7 @@ pub struct PythonConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub detect_env_vars: Vec<&'a str>,
 }
 
 impl<'a> Default for PythonConfig<'a> {
@@ -34,7 +35,7 @@ impl<'a> Default for PythonConfig<'a> {
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,
-            detect_extensions: vec!["py"],
+            detect_extensions: vec!["py", "ipynb"],
             detect_files: vec![
                 "requirements.txt",
                 ".python-version",
@@ -43,8 +44,10 @@ impl<'a> Default for PythonConfig<'a> {
                 "tox.ini",
                 "setup.py",
                 "__init__.py",
+                "pixi.toml",
             ],
             detect_folders: vec![],
+            detect_env_vars: vec!["VIRTUAL_ENV"],
         }
     }
 }

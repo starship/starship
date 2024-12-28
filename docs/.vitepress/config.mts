@@ -308,6 +308,9 @@ export default defineConfig({
                 sidebar: sidebar("zh-CN", {
                     guide: "指南",
                     installing: "高级安装",
+                    config: "配置",
+                    "advanced-config": "高级配置",
+                    faq: "常见问题",
                     presets: "社区配置分享",
                 }),
                 editLink: {

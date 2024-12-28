@@ -12,6 +12,6 @@
 starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/pure-preset.toml)
+[Click to download TOML](/presets/toml/pure-preset.toml){download}
 
 <<< @/public/presets/toml/pure-preset.toml
