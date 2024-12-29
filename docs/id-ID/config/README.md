@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
+- The current directory contains a `bun.lock` file
 - Direktori ini memiliki berkas `bun.lockb`
 - Direktori ini memiliki berkas `bunfig.toml`
 
 ### Opsi
 
-| Opsi                | Bawaan                               | Deskripsi                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
-| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                               | A format string representing the symbol of Bun.                                     |
-| `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `'bold red'`                         | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                              | Disables the `bun` module.                                                          |
+| Opsi                | Bawaan                                     | Deskripsi                                                                           |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`       | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🥟 '`                                     | A format string representing the symbol of Bun.                                     |
+| `detect_extensions` | `[]`                                       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                       | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `'bold red'`                               | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                          |
 
 ### Variabel
 
