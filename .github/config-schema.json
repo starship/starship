@@ -359,6 +359,9 @@
       "default": {
         "allowed_msg": "allowed",
         "denied_msg": "denied",
+        "detect_env_vars": [
+          "DIRENV_FILE"
+        ],
         "detect_extensions": [],
         "detect_files": [
           ".envrc"
@@ -2863,6 +2866,15 @@
         },
         "detect_extensions": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [
+            "DIRENV_FILE"
+          ],
           "type": "array",
           "items": {
             "type": "string"
@@ -5988,6 +6000,18 @@
         "style": {
           "default": "bold red",
           "type": "string"
+        },
+        "success_style": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "failure_style": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "map_symbol": {
           "default": false,
