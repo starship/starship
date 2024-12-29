@@ -87,6 +87,7 @@
       "default": {
         "detect_extensions": [],
         "detect_files": [
+          "bun.lock",
           "bun.lockb",
           "bunfig.toml"
         ],
@@ -2225,6 +2226,7 @@
         },
         "detect_files": {
           "default": [
+            "bun.lock",
             "bun.lockb",
             "bunfig.toml"
           ],
