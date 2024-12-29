@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
+- The current directory contains a `bun.lock` file
 - Le dossier courant contient un fichier `bun.lockb`
 - Le dossier courant contient un fichier `bunfig.toml`
 
 ### Options
 
-| Option              | Défaut                               | Description                                                                                |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`           | `'🥟 '`                               | A format string representing the symbol of Bun.                                            |
-| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`             | `'bold red'`                         | Le style pour le module.                                                                   |
-| `disabled`          | `false`                              | Disables the `bun` module.                                                                 |
+| Option              | Défaut                                     | Description                                                                                |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`       | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🥟 '`                                     | A format string representing the symbol of Bun.                                            |
+| `detect_extensions` | `[]`                                       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                       | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold red'`                               | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                                 |
 
 ### Variables
 
