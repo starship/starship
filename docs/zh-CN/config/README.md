@@ -591,7 +591,7 @@ symbol = '🦬 '
 
 `bun` 组件显示当前安装的 [bun](https://bun.sh) JavaScript 运行时版本。 默认情况下，此组件将在满足以下任意条件时显示：
 
-- The current directory contains a `bun.lock` file
+- 当前目录包含 `bun.lock` 文件
 - 当前目录包含一个 `bun.lockb` 文件
 - 当前目录包含一个 `bunfig.toml` 文件
 
