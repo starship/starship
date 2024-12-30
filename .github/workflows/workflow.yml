@@ -246,7 +246,7 @@ jobs:
           output-artifact-directory: target/debug
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
