@@ -592,7 +592,7 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `bun.lock` file
+- Das aktuelle Verzeichnis enthält eine `bun.lock`-Datei
 - Das aktuelle Verzeichnis enthält eine `bun.lockb`-Datei
 - Das aktuelle Verzeichnis enthält eine `bunfig.toml`-Datei
 
