@@ -28,7 +28,7 @@ pub struct GitStatusConfig<'a> {
     pub windows_starship: Option<&'a str>,
 }
 
-impl<'a> Default for GitStatusConfig<'a> {
+impl Default for GitStatusConfig<'_> {
     fn default() -> Self {
         GitStatusConfig {
             format: "([\\[$all_status$ahead_behind\\]]($style) )",

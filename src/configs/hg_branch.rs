@@ -16,7 +16,7 @@ pub struct HgBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for HgBranchConfig<'a> {
+impl Default for HgBranchConfig<'_> {
     fn default() -> Self {
         HgBranchConfig {
             symbol: " ",

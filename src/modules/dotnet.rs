@@ -17,7 +17,6 @@ const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
-
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("dotnet");
     let config = DotnetConfig::try_load(module.config);
@@ -181,7 +180,7 @@ fn estimate_dotnet_version(
 ///     - The root of the git repository
 ///       (If there is one)
 fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<String> {
-    let current_dir_is_repo_root = repo_root.map_or(false, |r| r == current_dir);
+    let current_dir_is_repo_root = repo_root == Some(current_dir);
     let parent_dir = if current_dir_is_repo_root {
         // Don't scan the parent directory if it's above the root of a git repository
         None

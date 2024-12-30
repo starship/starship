@@ -19,7 +19,7 @@ pub struct NodejsConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for NodejsConfig<'a> {
+impl Default for NodejsConfig<'_> {
     fn default() -> Self {
         NodejsConfig {
             format: "via [$symbol($version )]($style)",

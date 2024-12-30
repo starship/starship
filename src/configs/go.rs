@@ -19,7 +19,7 @@ pub struct GoConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for GoConfig<'a> {
+impl Default for GoConfig<'_> {
     fn default() -> Self {
         GoConfig {
             format: "via [$symbol($version )]($style)",

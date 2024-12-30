@@ -14,7 +14,7 @@ pub struct OspConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for OspConfig<'a> {
+impl Default for OspConfig<'_> {
     fn default() -> Self {
         OspConfig {
             format: "on [$symbol$cloud(\\($project\\))]($style) ",

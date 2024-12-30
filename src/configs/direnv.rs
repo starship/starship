@@ -23,7 +23,7 @@ pub struct DirenvConfig<'a> {
     pub unloaded_msg: &'a str,
 }
 
-impl<'a> Default for DirenvConfig<'a> {
+impl Default for DirenvConfig<'_> {
     fn default() -> Self {
         Self {
             format: "[$symbol$loaded/$allowed]($style) ",
