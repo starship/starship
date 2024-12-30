@@ -591,7 +591,7 @@ symbol = '🦬 '
 
 `bun` モジュールは、現在インストールされている[bun](https://bun.sh) JavaScript ランタイムのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `bun.lock` file
+- 現在のディレクトリに`bun.lock`ファイルが含まれている
 - カレントディレクトリに`bun.lockb`ファイルが含まれている
 - カレントディレクトリに`bunfig.toml`ファイルが含まれている
 
