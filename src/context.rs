@@ -781,18 +781,48 @@ impl<'a> ScanAncestors<'a> {
     ///
     /// The scan does not cross device boundaries.
     pub fn scan(&self) -> Option<&'a Path> {
-        let initial_device_id = self.path.device_id();
-        for dir in self.path.ancestors() {
+        let path = self.path;
+        let initial_device_id = path.device_id();
+
+        // We want to avoid reallocations during the search so we pre-allocate a buffer with enough
+        // capacity to hold the longest path + any marker (we could find the length of the longest
+        // marker programmatically but that would actually cost more than preallocating a few bytes too many).
+        let mut buf = PathBuf::with_capacity(path.as_os_str().len() + 15);
+
+        for dir in path.ancestors() {
             if initial_device_id != dir.device_id() {
                 break;
             }
+            // Then for each dir, we do `dir`, clearing in case `dir` is not an absolute path for
+            // some reason
+            buf.clear();
+            buf.push(dir);
 
-            if self.files.iter().any(|name| dir.join(name).is_file())
-                || self.folders.iter().any(|name| dir.join(name).is_dir())
-            {
-                return Some(dir);
+            for file in self.files {
+                // Then for each file, we look for `dir/file`
+                buf.push(file);
+
+                if buf.is_file() {
+                    return Some(dir);
+                }
+
+                // Removing the last pushed item means removing `file`, to replace it with either
+                // the next `file` or the first `folder`, if any
+                buf.pop();
+            }
+
+            for folder in self.folders {
+                // Then for each folder, we look for `dir/folder`
+                buf.push(folder);
+
+                if buf.is_dir() {
+                    return Some(dir);
+                }
+
+                buf.pop();
             }
         }
+
         None
     }
 }
