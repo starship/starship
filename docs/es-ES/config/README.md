@@ -1187,7 +1187,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 | Variable  | Ejemplo             | Descripción                             |
 | --------- | ------------------- | --------------------------------------- |
-| loaded    | `cargado`           | Whether the current rc file is loaded.  |
+| cargado   | `cargado`           | Whether the current rc file is loaded.  |
 | allowed   | `denied`            | Whether the current rc file is allowed. |
 | rc_path   | `/home/test/.envrc` | The current rc file path.               |
 | symbol    |                     | Refleja el valor de la opción `symbol`. |
