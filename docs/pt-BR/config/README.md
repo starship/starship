@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) runtime do JavaScript. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
+- O diretório atual conter um arquivo `bun.lock`
 - O diretório atual conter um arquivo `bun.lockb`
 - O diretório atual conter um arquivo `bunfig.toml`
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
-| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
-| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                           |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Quais nomes de arquivos devem ativar este módulo.                                   |
-| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
-| `style`             | `'bold red'`                         | O estilo do módulo.                                                                 |
-| `disabled`          | `false`                              | Desativa o módulo `bun`.                                                            |
+| Opções              | Padrão                                     | Descrição                                                                           |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`       | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                                | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🥟 '`                                     | Uma string de formato que representa o símbolo do Bun.                              |
+| `detect_extensions` | `[]`                                       | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `[]`                                       | Quais pastas devem ativar este módulo.                                              |
+| `style`             | `'bold red'`                               | O estilo do módulo.                                                                 |
+| `disabled`          | `false`                                    | Desativa o módulo `bun`.                                                            |
 
 ### Variáveis
 
@@ -1175,6 +1176,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_extensions` | `[]`                                   | Quais extensões devem ativar este módulo.             |
 | `detect_files`      | `['.envrc']`                           | Quais nomes de arquivos devem ativar este módulo.     |
 | `detect_folders`    | `[]`                                   | Quais pastas devem ativar este módulo.                |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Quais variáveis de ambiente devem ativar este módulo. |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
 | `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
@@ -3056,7 +3058,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### Opções
 
@@ -4092,23 +4094,25 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Opções
 
-| Opções                      | Padrão                                                                             | Descrição                                                                               |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | O formato do módulo                                                                     |
-| `symbol`                    | `'❌'`                                                                              | O simbolo exibido no erro de programa                                                   |
-| `success_symbol`            | `''`                                                                               | O simbolo exibido no sucesso de programa                                                |
-| `not_executable_symbol`     | `'🚫'`                                                                              | O simbolo exibido quando o arquivo não é executável                                     |
-| `not_found_symbol`          | `'🔍'`                                                                              | O simbolo exibido quando o comando não é encontrado                                     |
-| `sigint_symbol`             | `'🧱'`                                                                              | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
-| `signal_symbol`             | `'⚡'`                                                                              | O simbolo exibido em qualquer sinal                                                     |
-| `style`                     | `'bold red'`                                                                       | O estilo do módulo.                                                                     |
-| `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                                   |
-| `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída                                 |
-| `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                                      |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | O símbolo usado para separar segmentos de pipestatus (suporta formatação)               |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                                      |
-| `pipestatus_segment_format` |                                                                                    | Quando especificado, substitui o  `format` quando ha formatação de segmentos pipestatus |
-| `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                                           |
+| Opções                      | Padrão                                                                              | Descrição                                                                               |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | O formato do módulo                                                                     |
+| `symbol`                    | `'❌'`                                                                               | O simbolo exibido no erro de programa                                                   |
+| `success_symbol`            | `''`                                                                                | O simbolo exibido no sucesso de programa                                                |
+| `not_executable_symbol`     | `'🚫'`                                                                               | O simbolo exibido quando o arquivo não é executável                                     |
+| `not_found_symbol`          | `'🔍'`                                                                               | O simbolo exibido quando o comando não é encontrado                                     |
+| `sigint_symbol`             | `'🧱'`                                                                               | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
+| `signal_symbol`             | `'⚡'`                                                                               | O simbolo exibido em qualquer sinal                                                     |
+| `style`                     | `'bold red'`                                                                        | O estilo do módulo.                                                                     |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).                       |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).                       |
+| `recognize_signal_code`     | `true`                                                                              | Habilita o mapeamento de sinais para códigos de saída                                   |
+| `map_symbol`                | `false`                                                                             | Habilita o mapeamento de símbolos para códigos de saída                                 |
+| `pipestatus`                | `false`                                                                             | Habilita o relatório de pipestatus                                                      |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | O símbolo usado para separar segmentos de pipestatus (suporta formatação)               |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | O formato do módulo quando o comando é um pipeline                                      |
+| `pipestatus_segment_format` |                                                                                     | Quando especificado, substitui o  `format` quando ha formatação de segmentos pipestatus |
+| `disabled`                  | `true`                                                                              | Desabilita o módulo `status`.                                                           |
 
 ### Variáveis
 
@@ -4123,7 +4127,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                                        |
 | pipestatus     |         | Exibição do pipeline de programas com os códigos de saída, este é apenas disponível no pipestatus_format |
 | symbol         |         | Espelha o valor da opção `symbol`                                                                        |
-| style\*      |         | Espelha o valor da opção `style`                                                                         |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise             |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
