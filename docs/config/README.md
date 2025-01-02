@@ -4095,7 +4095,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 [shell]
 fish_indicator = '󰈺 '
 powershell_indicator = '_'
-unknown_indicator = 'mystery shell'
+unknown_indicator = '🐚'
 style = 'cyan bold'
 disabled = false
 ```

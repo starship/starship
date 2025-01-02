@@ -158,14 +158,14 @@ onMounted(() => {
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (can open with a command like `hx $nu.env-path`, replacing `hx` with your favorite editor):
 
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   And add the following to the end of your Nushell configuration (can open with a command like `hx $nu.config-path`, replacing `hx` with your favorite editor):
 
    ```sh
    use ~/.cache/starship/init.nu
