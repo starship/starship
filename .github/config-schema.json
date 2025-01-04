@@ -1863,6 +1863,37 @@
         }
       ]
     },
+    "vcs": {
+      "default": {
+        "disabled": true,
+        "jujutsu": {
+          "change": {
+            "change_id_length": 7,
+            "disabled": false,
+            "format": "on [$change_id]($style) ",
+            "style": "purple"
+          },
+          "format": "$change$status",
+          "status": {
+            "added": "+",
+            "deleted": "✘",
+            "disabled": false,
+            "format": "[\\[$all_status\\]]($style) ",
+            "modified": "!",
+            "renamed": "»",
+            "style": "yellow"
+          }
+        },
+        "order": [
+          "jujutsu"
+        ]
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VcsConfig"
+        }
+      ]
+    },
     "vcsh": {
       "default": {
         "disabled": false,
@@ -6350,6 +6381,160 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "VcsConfig": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "order": {
+          "default": [
+            "jujutsu"
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Vcs"
+          },
+          "uniqueItems": true
+        },
+        "jujutsu": {
+          "default": {
+            "change": {
+              "change_id_length": 7,
+              "disabled": false,
+              "format": "on [$change_id]($style) ",
+              "style": "purple"
+            },
+            "format": "$change$status",
+            "status": {
+              "added": "+",
+              "deleted": "✘",
+              "disabled": false,
+              "format": "[\\[$all_status\\]]($style) ",
+              "modified": "!",
+              "renamed": "»",
+              "style": "yellow"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/JjConfig"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "Vcs": {
+      "type": "string",
+      "enum": [
+        "jujutsu"
+      ]
+    },
+    "JjConfig": {
+      "type": "object",
+      "required": [
+        "format"
+      ],
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "change": {
+          "default": {
+            "change_id_length": 7,
+            "disabled": false,
+            "format": "on [$change_id]($style) ",
+            "style": "purple"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/JjChangeConfig"
+            }
+          ]
+        },
+        "status": {
+          "default": {
+            "added": "+",
+            "deleted": "✘",
+            "disabled": false,
+            "format": "[\\[$all_status\\]]($style) ",
+            "modified": "!",
+            "renamed": "»",
+            "style": "yellow"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/JjStatusConfig"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "JjChangeConfig": {
+      "type": "object",
+      "required": [
+        "change_id_length",
+        "disabled",
+        "format",
+        "style"
+      ],
+      "properties": {
+        "disabled": {
+          "type": "boolean"
+        },
+        "format": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "change_id_length": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        }
+      },
+      "additionalProperties": false
+    },
+    "JjStatusConfig": {
+      "type": "object",
+      "required": [
+        "added",
+        "deleted",
+        "disabled",
+        "format",
+        "modified",
+        "renamed",
+        "style"
+      ],
+      "properties": {
+        "disabled": {
+          "type": "boolean"
+        },
+        "format": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        },
+        "added": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "string"
+        },
+        "modified": {
+          "type": "string"
+        },
+        "renamed": {
+          "type": "string"
         }
       },
       "additionalProperties": false

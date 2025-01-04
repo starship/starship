@@ -4688,6 +4688,128 @@ By default the module will be shown if any of the following conditions are met:
 format = 'via [V $version](blue bold) '
 ```
 
+## VCS
+
+The `vcs` module displays the current active Version Control System (VCS).
+The module will be shown only if a VCS is currently in use.
+
+### Options
+
+| Option      | Default       | Description                         |
+| ----------- | ------------- | ----------------------------------- |
+| `order`     | `["jujutsu"]` | The order in which to search VCSes. |
+| `jujutsu`   | _see below_   | The Jujutsu configuration.          |
+| `mercurial` | _see below_   | The Mercurial configuration.        |
+| `disabled`  | `true`        | Disables the `vcs` module.          |
+
+Note that an empty `order` has the same effect as disabling the module.
+
+VCS will be searched for following `order`. The first one that returns valid informations will be the one printed,
+e.g. in a repository with both `.git` and `.jj` present, `order = ["jujutsu", "git"]` will always print Jujutsu's output.
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+order = [
+  "jujutsu",
+]
+```
+
+### VCS Options: Jujutsu
+
+| Option   | Default          | Description                           |
+| -------- | ---------------- | ------------------------------------- |
+| `format` | `$change$status` | The format of the Jujutsu VCS module. |
+| `change` | _see below_      | The Jujutsu change configuration.     |
+| `status` | _see below_      | The Jujutsu status configuration.     |
+
+#### Variables
+
+| Variable | Description                |
+| -------- | -------------------------- |
+| `change` | The Jujutsu change module. |
+| `status` | The Jujutsu status module. |
+
+#### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vcs.jujutsu]
+format = "$status$change"
+```
+
+### VCS Options: Jujutsu: Change
+
+| Option             | Default                      | Description                                                                                  |
+| ------------------ | ---------------------------- | -------------------------------------------------------------------------------------------- |
+| `change_id_length` | `7`                          | Minimum size of the unique prefix to use. Pass `0` to always use the shortest possible size. |
+| `style`            | `'purple'`                   | The style for the module.                                                                    |
+| `format`           | `'on [$change_id]($style) '` | The format for the module.                                                                   |
+| `disabled`         | `false`                      | Disables the `vcs.jujutsu.change` module.                                                    |
+
+#### Variables
+
+The following variables can be used in `format`:
+
+| Variable    | Description                         |
+| ----------- | ----------------------------------- |
+| `change_id` | The Jujutsu current Change ID.      |
+| style\*     | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
+
+#### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vcs.jujutsu.change]
+format = "with [$change_id]($style)"
+```
+
+### VCS Options: Jujutsu: Status
+
+| Option     | Default                          | Description                               |
+| ---------- | -------------------------------- | ----------------------------------------- |
+| `added`    | `'+'`                            | The format of `added`                     |
+| `deleted`  | `'✘'`                            | The format of `deleted`                   |
+| `modified` | `'!'`                            | The format of `modified`                  |
+| `renamed`  | `'»'`                            | The format of `renamed`                   |
+| `style`    | `'yellow'`                       | The style for the module.                 |
+| `format`   | `'[\\[$all_status\\]]($style) '` | The format for the module.                |
+| `disabled` | `false`                          | Disables the `vcs.jujutsu.status` module. |
+
+#### Variables
+
+The following variables can be used in `format`:
+
+| Variable     | Description                                        |
+| ------------ | -------------------------------------------------- |
+| `all_status` | Shortcut for`$deleted$renamed$modified$added`      |
+| `added`      | Displays `added` when a new file has been added.   |
+| `deleted`    | Displays `deleted` when a file has been deleted.   |
+| `modified`   | Displays `modified` when a file has been modified. |
+| `renamed`    | Displays `renamed` when a file has been renamed.   |
+| style\*      | Mirrors the value of option `style`                |
+
+*: This variable can only be used as a part of a style string
+
+#### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vcs.jujutsu.status]
+added = "A"
+deleted = "D"
+modified = "M"
+renamed = "R"
+```
+
 ## VCSH
 
 The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository.
