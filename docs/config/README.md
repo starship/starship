@@ -3006,7 +3006,7 @@ The `moonbit` module shows the currently installed version of [MoonBit](https://
 
 | Variable | Example                   | Description                          |
 | -------- | ------------------------- | ------------------------------------ |
-| version  | `v0.1.20241231+ba15a9a4e` | The version of `moonc`                |
+| version  | `v0.1.20241231+ba15a9a4e` | The version of `moonc`               |
 | symbol   |                           | Mirrors the value of option `symbol` |
 | style\*  |                           | Mirrors the value of option `style`  |
 
