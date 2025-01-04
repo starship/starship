@@ -30,9 +30,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("moonc", &["-v"])
-                    .map(|cmd_output| Ok(cmd_output.stdout)),
+                "version" => {
+                    let moonbit_version_output = context.exec_cmd("moonc", &["-v"])?.stdout;
+                    let moonbit_version = moonbit_version_output.trim().to_owned();
+                    Some(Ok(moonbit_version))
+                }
                 _ => None,
             })
             .parse(None, Some(context))
