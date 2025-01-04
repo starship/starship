@@ -75,7 +75,7 @@ mod tests {
         let actual = ModuleRenderer::new("moonbit").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("🐰 v0.1.20241231+ba15a9a4e ")
+            Color::Purple.bold().paint("🐰 v0.1.20241231+aa15a9a4e ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -89,7 +89,7 @@ mod tests {
         let actual = ModuleRenderer::new("moonbit").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("🐰 v0.1.20241231+ba15a9a4e ")
+            Color::Purple.bold().paint("🐰 v0.1.20241231+aa15a9a4e ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -103,7 +103,7 @@ mod tests {
         let actual = ModuleRenderer::new("moonbit").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("🐰 v0.1.20241231+ba15a9a4e ")
+            Color::Purple.bold().paint("🐰 v0.1.20241231+aa15a9a4e ")
         ));
         assert_eq!(expected, actual);
         dir.close()
