@@ -319,6 +319,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("mojo 24.4.0 (2cb57382)\n"),
             stderr: String::default(),
         }),
+        "moonc -v" => Some(CommandOutput {
+            stdout: String::from("v0.1.20241231+ba15a9a4e\n"),
+            stderr: String::default(),
+        }),
         "nats context info --json" => Some(CommandOutput{
             stdout: String::from("{\"name\":\"localhost\",\"url\":\"nats://localhost:4222\"}"),
             stderr: String::default(),
