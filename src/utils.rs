@@ -320,7 +320,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stderr: String::default(),
         }),
         "moonc -v" => Some(CommandOutput {
-            stdout: String::from("v0.1.20241231+ba15a9a4e\n"),
+            stdout: String::from("v0.1.20241231+aa15a9a4e\n"),
             stderr: String::default(),
         }),
         "nats context info --json" => Some(CommandOutput{
