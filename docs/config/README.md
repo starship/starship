@@ -271,6 +271,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$nats\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -284,6 +285,7 @@ $hg_branch\
 $pijul_channel\
 $docker_context\
 $package\
+$bun\
 $c\
 $cmake\
 $cobol\
@@ -297,18 +299,20 @@ $erlang\
 $fennel\
 $gleam\
 $golang\
-$guix_shell\
+$gradle\
 $haskell\
 $haxe\
 $helm\
 $java\
 $julia\
 $kotlin\
-$gradle\
 $lua\
+$mojo\
+$moonbit\
 $nim\
 $nodejs\
 $ocaml\
+$odin\
 $opa\
 $perl\
 $php\
@@ -330,6 +334,7 @@ $vlang\
 $vagrant\
 $zig\
 $buf\
+$guix_shell\
 $nix_shell\
 $conda\
 $meson\
@@ -339,7 +344,6 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
-$nats\
 $direnv\
 $env_var\
 $crystal\
@@ -351,8 +355,8 @@ $jobs\
 $battery\
 $time\
 $status\
-$os\
 $container\
+$os\
 $shell\
 $character"""
 ```
@@ -2980,6 +2984,42 @@ The `mojo` module shows the current version of [Mojo programming language](https
 
 [mojo]
 format = 'via [mojo ($version )($hash )]($style)'
+```
+
+## MoonBit
+
+The `moonbit` module shows the currently installed version of [MoonBit](https://www.moonbitlang.com/).
+
+### Options
+
+| Option              | Default                              | Description                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `format`            | `via [$symbol($version )]($style)`   | The format for the module.                                |
+| `symbol`            | `'🐰 '`                              | The symbol used before displaying the version of MoonBit. |
+| `style`             | `'bold purple'`                      | The style for the module.                                 |
+| `disabled`          | `false`                              | Disables the `moonbit` module.                            |
+| `detect_extensions` | `['mbt', 'mbti']`                    | Which extensions should trigger this module.              |
+| `detect_files`      | `['moon.mod.json', 'moon.pkg.json']` | Which filenames should trigger this module.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
+
+### Variables
+
+| Variable | Example                   | Description                          |
+| -------- | ------------------------- | ------------------------------------ |
+| version  | `v0.1.20241231+ba15a9a4e` | The version of `moonc`                |
+| symbol   |                           | Mirrors the value of option `symbol` |
+| style\*  |                           | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = 'bold #b92381'
+symbol = '🐇 '
 ```
 
 ## NATS
