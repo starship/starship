@@ -2984,27 +2984,30 @@ format = 'via [mojo ($version )($hash )]($style)'
 ```
 
 ## MySQL
+
 The `mysql` module provides visual information about whether the [MySQL](https://mysql.com/) instance specified in the
 configuration is running, whether it's a [replica](https://dev.mysql.com/doc/refman/8.4/en/replication.html), and if so,
 replication health information for the default replication channel (i.e. `CHANNEL_NAME = ''`).
 
 By replication health information we mean:
-* Whether the IO thread is running.
-* Whether the SQL thread is running.
-* The replication lag/delay.
+
+- Whether the IO thread is running.
+- Whether the SQL thread is running.
+- The replication lag/delay.
 
 Replication lag is measured as `LAST_APPLIED_TRANSACTION_END_APPLY_TIMESTAMP - LAST_APPLIED_TRANSACTION_ORIGINAL_COMMIT_TIMESTAMP`
 for the most recently applied transaction, according to `performance_schema.replication_applier_status_by_worker`. Other
 ways of measuring lag are not supported, for the reasons below:
-* 
-* `SECONDS_BEHIND_SOURCE` from `SHOW REPLICA STATUS`: From the MySQL [docs](https://dev.mysql.com/doc/refman/8.4/en/replication-administration-status.html),
-`SECONDS_BEHIND_SOURCE` can be unreliable:
+*
+
+- `SECONDS_BEHIND_SOURCE` from `SHOW REPLICA STATUS`: From the MySQL [docs](https://dev.mysql.com/doc/refman/8.4/en/replication-administration-status.html),
+  `SECONDS_BEHIND_SOURCE` can be unreliable:
+
 > A value of 0 for Seconds_Behind_Source can usually be interpreted as meaning that the replica has caught up with the
 > source, but there are some cases where this is not strictly true. For example, this can occur if the network
 > connection between source and replica is broken but the replication I/O (receiver) thread has not yet noticed this;
 > that is, the time period set by replica_net_timeout has not yet elapsed.
 >
-> 
 > It is also possible that transient values for Seconds_Behind_Source may not reflect the situation accurately. When the
 > replication SQL (applier) thread has caught up on I/O, Seconds_Behind_Source displays 0; but when the replication I/O
 > (receiver) thread is still queuing up a new event, Seconds_Behind_Source may show a large value until the replication
@@ -3012,7 +3015,7 @@ ways of measuring lag are not supported, for the reasons below:
 > such cases, if you execute SHOW REPLICA STATUS several times in a relatively short period, you may see this value
 > change back and forth repeatedly between 0 and a relatively large value.
 
-* Heartbeat tables (e.g. [pt-heartbeat](https://docs.percona.com/percona-toolkit/pt-heartbeat.html), 
+- Heartbeat tables (e.g. [pt-heartbeat](https://docs.percona.com/percona-toolkit/pt-heartbeat.html),
   Vitess' [vttablet](https://vitess.io/docs/21.0/reference/programs/vttablet/ `--heartbeat_enable`): these require
   additional software to be running to measure lag. We don't want the `starship` MySQL module to have such external
   dependency. Furthermore, there are differences across implementations, and some implementations do not play well with
@@ -3024,8 +3027,9 @@ applied since the last time replication was (re)started. Otherwise, `performance
 is empty and therefore replication delay cannot be measured from it.
 
 ### Options
+
 | Option                 | Default                                                                                                          | Description                                                                                             |
-|------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `format`               | `'[$symbol]($style)[$up]($up_style)[/]($style)[$io]($io_style)[/]($style)[$sql]($sql_style) [$lag]($lag_style)'` | The format for the module.                                                                              |
 | `style`                | `'bold white'`                                                                                                   | The default style for the module.                                                                       |
 | `style_ok`             | `'bold green'`                                                                                                   | The style used for OK state.                                                                            |
@@ -3039,9 +3043,9 @@ is empty and therefore replication delay cannot be measured from it.
 The module uses several symbols to represent MySQL stetus information as indicated in the table:
 
 | Symbol name   | Comments                                                           |
-|---------------|--------------------------------------------------------------------|
+| ------------- | ------------------------------------------------------------------ |
 | Database      | Used by the module to indicate the beginning of MySQL information. |
-| Running       | Used to represent MySQL/IO thread/SQL thread are running.          | 
+| Running       | Used to represent MySQL/IO thread/SQL thread are running.          |
 | Stopped       | Used to represent MySQL/IO thread/SQL thread are stopped.          |
 | NotApplicable | Used to represent MySQL/IO thread/SQL thread are stopped.          |
 
@@ -3056,11 +3060,12 @@ NotApplicable = "●"
 ```
 
 ### Variables
+
 The prompt of this module supports the following variables:
 
 | Variable    | Example      | Description                                                                                                                                                                                     |
-|-------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `symbol`    | `🐬 `        | Symbol to indicate the beginning of MySQL Information.                                                                                                                                          |
+| ----------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`    | `🐬`         | Symbol to indicate the beginning of MySQL Information.                                                                                                                                          |
 | `style`     | `bold white` | Mirrors the vaue of option `style`.                                                                                                                                                             |
 | `up`        | `▶`          | Mirrors the value of either the `Running` or `Stopped` symbol depending on whether MySQL is up or not.                                                                                          |
 | `up_style`  | `bold green` | Mirrors the value of either `style_ok` or `style_error` depending on whether MySQL is up or not.                                                                                                |
@@ -3068,11 +3073,11 @@ The prompt of this module supports the following variables:
 | `io_style`  | `bold red`   | In replicas, mirrors the value of either `style_ok` or `style_error` depending on whether the IO thread is running or not. In non-replicas, mirrors the value of `style_not_applicable`.        |
 | `sql`       | `●`          | In replicas, mirrors the value of either the `Running` or `Stopped` symbol depending on whether the SQL thread is running or not. In non-replicas, mirrors the value of `NotApplicable` symbol. |
 | `sql_style` | `bold white` | In replicas, mirrors the value of either `style_ok` or `style_error` depending on whether the SQL thread is running or not. In non-replicas, mirrors the value of `style_not_applicable`.       |
-| `lag`       | `2s `        | In replicas, shows the replication lag. Not shown in non-replicas. When shown, it always has a trailing space.                                                                                  |
+| `lag`       | `2s`         | In replicas, shows the replication lag. Not shown in non-replicas. When shown, it always has a trailing space.                                                                                  |
 | `lag_style` | `bold green` | In replicas, mirrors the value of either `style_ok` or `style_error` depending on whether the replication lag is above or below the threshold.                                                  |
 
-
 ### Example
+
 ```toml
 [mysql]
 disabled = false
