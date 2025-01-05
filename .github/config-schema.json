@@ -1069,6 +1069,29 @@
         }
       ]
     },
+    "mysql": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)[$up]($up_style)[/]($style)[$io]($io_style)[/]($style)[$sql]($sql_style) [$lag]($lag_style)",
+        "lag_threshold_s": 10.0,
+        "style": "bold white",
+        "style_error": "bold red",
+        "style_not_applicable": "bold white",
+        "style_ok": "bold green",
+        "symbols": {
+          "Database": "🐬 ",
+          "NotApplicable": "●",
+          "Running": "▶",
+          "Stopped": "■"
+        },
+        "url": "mysql://root@localhost:3306/"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MySQLConfig"
+        }
+      ]
+    },
     "nats": {
       "default": {
         "disabled": true,
@@ -4572,6 +4595,57 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "MySQLConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)[$up]($up_style)[/]($style)[$io]($io_style)[/]($style)[$sql]($sql_style) [$lag]($lag_style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "style_ok": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "style_error": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "style_not_applicable": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Database": "🐬 ",
+            "NotApplicable": "●",
+            "Running": "▶",
+            "Stopped": "■"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "lag_threshold_s": {
+          "default": 10.0,
+          "type": "number",
+          "format": "double"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "url": {
+          "default": "mysql://root@localhost:3306/",
+          "type": "string"
         }
       },
       "additionalProperties": false

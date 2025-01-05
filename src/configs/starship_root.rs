@@ -112,6 +112,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "gcloud",
     "openstack",
     "azure",
+    "mysql",
     "direnv",
     "env_var",
     "crystal",
