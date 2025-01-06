@@ -42,9 +42,7 @@ clap_complete_nushell = "4.5.5"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.71.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs"] }
-# for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
-parking_lot = "0.12.3"
+gix = { version = "0.71.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
 indexmap = { version = "2.9.0", features = ["serde"] }
 jsonc-parser = { version = "0.26.2", features = ["serde"] }
 log = { version = "0.4.27", features = ["std"] }
@@ -55,6 +53,8 @@ nu-ansi-term = "0.50.1"
 open = "5.3.2"
 # update os module config and tests when upgrading os_info
 os_info = "3.10.0"
+# for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
+parking_lot = "0.12.3"
 path-slash = "0.2.1"
 pest = "2.8.0"
 pest_derive = "2.8.0"
