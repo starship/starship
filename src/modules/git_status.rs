@@ -218,7 +218,7 @@ impl<'a> GitStatusInfo<'a> {
 /// path so the cache is trashed.
 ///
 /// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
-fn get_static_repo_status(
+pub(crate) fn get_static_repo_status(
     context: &Context,
     repo: &context::Repo,
     config: &GitStatusConfig,
@@ -484,10 +484,10 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
 }
 
 #[derive(Default, Debug, Clone)]
-struct RepoStatus {
+pub(crate) struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
-    changes: Vec<gix::status::Item>,
+    pub(crate) changes: Vec<gix::status::Item>,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
@@ -740,7 +740,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
@@ -1605,7 +1605,7 @@ mod tests {
         Ok(())
     }
 
-    fn make_sparse(repo_dir: &Path) -> io::Result<()> {
+    pub(crate) fn make_sparse(repo_dir: &Path) -> io::Result<()> {
         let sparse_dirname = "sparse-dir";
         let dir = repo_dir.join(sparse_dirname);
         std::fs::create_dir(&dir)?;
