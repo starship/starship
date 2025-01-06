@@ -671,7 +671,7 @@ impl Repo {
     pub fn exec_git<T: AsRef<OsStr> + Debug>(
         &self,
         context: &Context,
-        git_args: &[T],
+        git_args: impl IntoIterator<Item = T>,
     ) -> Option<CommandOutput> {
         let mut command = create_command("git").ok()?;
 

@@ -1,8 +1,7 @@
-use regex::Regex;
+use super::{Context, Module, ModuleConfig};
+use gix::bstr::ByteVec;
 use std::path::PathBuf;
 use std::sync::{Arc, OnceLock};
-
-use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_status::GitStatusConfig;
 use crate::context;
@@ -248,9 +247,25 @@ fn get_repo_status(
 
     // for performance reasons, only pass flags if necessary...
     let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
-    let has_up_to_date_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
-    if has_ahead_behind || has_up_to_date_diverged {
-        args.push("--branch");
+    let has_up_to_date_or_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
+    if has_ahead_behind || has_up_to_date_or_diverged {
+        let gix_repo = repo.open();
+        if let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
+            Vec::from(gix::bstr::BString::from(ref_name))
+                .into_string()
+                .ok()
+        }) {
+            let output = repo.exec_git(
+                context,
+                ["for-each-ref", "--format", "%(upstream:track)"]
+                    .into_iter()
+                    .map(ToOwned::to_owned)
+                    .chain(Some(branch_name)),
+            )?;
+            if let Some(line) = output.stdout.lines().next() {
+                repo_status.set_ahead_behind(line);
+            }
+        }
     }
 
     // ... and add flags that omit information the user doesn't want
@@ -268,9 +283,7 @@ fn get_repo_status(
     let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {
-        if status.starts_with("# branch.ab ") {
-            repo_status.set_ahead_behind(status);
-        } else if !status.starts_with('#') {
+        if !status.starts_with('#') {
             repo_status.add(status);
         }
     });
@@ -372,12 +385,24 @@ impl RepoStatus {
         }
     }
 
-    fn set_ahead_behind(&mut self, s: &str) {
-        let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
+    fn set_ahead_behind(&mut self, mut s: &str) {
+        s = s.trim_matches(|c| c == '[' || c == ']');
 
-        if let Some(caps) = re.captures(s) {
-            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
-            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
+        for pair in s.split(',') {
+            let mut tokens = pair.trim().splitn(2, ' ');
+            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
+                let storage = match name {
+                    "ahead" => &mut self.ahead,
+                    "behind" => &mut self.behind,
+                    _ => return,
+                };
+                *storage = number.parse().ok();
+            }
+        }
+        for field in [&mut self.ahead, &mut self.behind] {
+            if field.is_none() {
+                *field = Some(0);
+            }
         }
     }
 }
