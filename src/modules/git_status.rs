@@ -1,5 +1,6 @@
 use regex::Regex;
-use std::sync::OnceLock;
+use std::path::PathBuf;
+use std::sync::{Arc, OnceLock};
 
 use super::{Context, Module, ModuleConfig};
 
@@ -7,7 +8,6 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str =
     "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
@@ -47,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return Some(module);
     }
 
-    let info = Arc::new(GitStatusInfo::load(context, repo, config.clone()));
+    let info = GitStatusInfo::load(context, repo, config.clone());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -60,7 +60,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_variables_to_segments(|variable: &str| {
-                let info = Arc::clone(&info);
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
                         format_count(config.stashed, "git_status.stashed", context, count)
@@ -135,7 +134,7 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     repo: &'a context::Repo,
     config: GitStatusConfig<'a>,
-    repo_status: OnceLock<Option<RepoStatus>>,
+    repo_status: OnceLock<Option<Arc<RepoStatus>>>,
     stashed_count: OnceLock<Option<usize>>,
 }
 
@@ -158,16 +157,19 @@ impl<'a> GitStatusInfo<'a> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
-    pub fn get_repo_status(&self) -> &Option<RepoStatus> {
-        self.repo_status.get_or_init(|| {
-            match get_repo_status(self.context, self.repo, &self.config) {
-                Some(repo_status) => Some(repo_status),
-                None => {
-                    log::debug!("get_repo_status: git status execution failed");
-                    None
-                }
-            }
-        })
+    pub fn get_repo_status(&self) -> Option<&RepoStatus> {
+        self.repo_status
+            .get_or_init(
+                || match get_static_repo_status(self.context, self.repo, &self.config) {
+                    Some(repo_status) => Some(repo_status),
+                    None => {
+                        log::debug!("get_repo_status: git status execution failed");
+                        None
+                    }
+                },
+            )
+            .as_ref()
+            .map(|repo_status| repo_status.as_ref())
     }
 
     pub fn get_stashed(&self) -> &Option<usize> {
@@ -208,6 +210,29 @@ impl<'a> GitStatusInfo<'a> {
     pub fn get_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.typechanged)
     }
+}
+
+/// Return a globally shared version the repository status so it can be reused.
+/// It's shared so those who received a copy can keep it, even if the next call uses a different
+/// path so the cache is trashed.
+///
+/// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
+fn get_static_repo_status(
+    context: &Context,
+    repo: &context::Repo,
+    config: &GitStatusConfig,
+) -> Option<Arc<RepoStatus>> {
+    static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
+        parking_lot::Mutex::new(None);
+    let mut status = REPO_STATUS.lock();
+    let needs_update = status.as_ref().map_or(true, |(_status, status_path)| {
+        status_path != &context.current_dir
+    });
+    if needs_update {
+        *status = get_repo_status(context, repo, config)
+            .map(|status| (Arc::new(status), context.current_dir.clone()));
+    }
+    status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)

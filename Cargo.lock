@@ -3077,6 +3077,7 @@ dependencies = [
  "nu-ansi-term",
  "open",
  "os_info",
+ "parking_lot",
  "path-slash",
  "pest",
  "pest_derive",
