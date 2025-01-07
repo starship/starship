@@ -126,6 +126,11 @@ codegen-units = 1
 lto = true
 strip = true
 
+[profile.bench]
+codegen-units = 16
+lto = "thin"
+strip = false
+
 [[bin]]
 name = "starship"
 path = "src/main.rs"
