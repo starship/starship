@@ -56,9 +56,9 @@ log = { version = "0.4.22", features = ["std"] }
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.11.3", optional = true }
 nu-ansi-term = "0.50.1"
-open = "5.3.1"
+open = "5.3.2"
 # update os module config and tests when upgrading os_info
-os_info = "3.9.1"
+os_info = "3.9.2"
 path-slash = "0.2.1"
 pest = "2.7.15"
 pest_derive = "2.7.15"
@@ -70,7 +70,7 @@ regex = { version = "1.11.1", default-features = false, features = ["perf", "std
 rust-ini = "0.21.1"
 semver = "1.0.24"
 serde = { version = "1.0.217", features = ["derive"] }
-serde_json = "1.0.134"
+serde_json = "1.0.135"
 sha1 = "0.10.6"
 shadow-rs = { version = "0.36.1", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
