@@ -345,7 +345,7 @@ mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+И добавьте следующее в конец вашей конфигурации Nutshell (найдите его, запустив  `$nu.config-path`):
 
 ```sh
 use ~/.cache/starship/init.nu
@@ -431,16 +431,16 @@ eval "$(starship init zsh)"
 
 Поддержите этот проект, [став спонсором](https://github.com/sponsors/starship). Ваше имя или логотип будут отображаться здесь со ссылкой на ваш сайт.
 
-## 🔒 Code Signing Policy
+## 🔒 Политика подписания кода
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Бесплатная подпись кода, предоставляемая  [SignPath.io](https://signpath.io), сертификат от [SignPath Foundation](https://signpath.org).
 
-Code Signing Roles:
+Роли подписания кодов:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Рецензенты: [Астронавты](https://github.com/orgs/starship/teams/astronauts)
+- Утверждающие лица и авторы: [Контролирующие миссию](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Эта программа не будет передавать какую-либо информацию в другие сетевые системы без специального запроса пользователя или лица, устанавливающего или эксплуатирующего ее.
 
 <p align="center">
     <br>
