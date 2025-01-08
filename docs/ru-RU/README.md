@@ -1,12 +1,12 @@
 ---
-layout: home
+layout: дом
 hero:
   image: /logo.svg
   text:
   tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
   actions:
     - 
-      theme: brand
+      theme: бренд
       text: Начало работы →
       link: ./guide/
 features:
@@ -138,7 +138,7 @@ onMounted(() => {
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Только elvish v0.18 или выше поддерживается.
 
    :::
 
@@ -166,18 +166,18 @@ onMounted(() => {
 
    ::: warning
 
-   This will change in the future. Поддерживается только Nushell v0.78+.
+   Это изменится в будущем. Поддерживается только Nushell v0.78+.
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Добавьте следующее в конец вашего файла Nushell env (найдите его, запустив `$nu.env-path` в Nushell):
 
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   И добавьте следующее в конец вашей конфигурации Nutshell (найдите его, запустив  `$nu.config-path`):
 
    ```sh
    use ~/.cache/starship/init.nu
@@ -197,7 +197,7 @@ onMounted(() => {
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Вам нужно использовать [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) с помощью Cmd. Добавьте следующий файл `starship.lua` и поместите этот файл в каталог Clink скриптов:
 
    ```lua
    -- starship.lua
