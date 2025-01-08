@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Catppuccin Macchiato](./catppuccin-macchiato.md)
+
+This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md).
+
+[![Screenshot of Catppuccin Macchiato preset](/presets/img/catppuccin-macchiato.png "Click to view Catppuccin Macchiato preset")](./catppuccin-macchiato)
