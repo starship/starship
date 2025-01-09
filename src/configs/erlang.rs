@@ -18,7 +18,7 @@ pub struct ErlangConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for ErlangConfig<'a> {
+impl Default for ErlangConfig<'_> {
     fn default() -> Self {
         ErlangConfig {
             format: "via [$symbol($version )]($style)",

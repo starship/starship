@@ -30,7 +30,7 @@ pub struct StatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for StatusConfig<'a> {
+impl Default for StatusConfig<'_> {
     fn default() -> Self {
         StatusConfig {
             format: "[$symbol$status]($style) ",

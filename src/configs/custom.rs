@@ -33,7 +33,7 @@ pub struct CustomConfig<'a> {
     pub unsafe_no_escape: bool,
 }
 
-impl<'a> Default for CustomConfig<'a> {
+impl Default for CustomConfig<'_> {
     fn default() -> Self {
         CustomConfig {
             format: "[$symbol($output )]($style)",
