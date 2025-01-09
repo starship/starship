@@ -7,6 +7,9 @@ symbol = " "
 [c]
 symbol = " "
 
+[cmake]
+symbol = " "
+
 [conda]
 symbol = " "
 
