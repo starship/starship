@@ -260,7 +260,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Установите последнюю версию для вашей системы с помощью MSI-installers из [раздела релизов](https://github.com/starship/starship/releases/latest).
 
 Установите Starship с помощью любого из следующих менеджеров пакетов:
 
@@ -330,7 +330,7 @@ starship init fish | source
 Добавьте следующее в конец `~/.config/ion/initrc`:
 
 ```sh
-eval $(starship init ion)
+eval $(starhip init ion)
 ```
 
 </details>
@@ -338,27 +338,21 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Note: Only Nushell v0.78+ is supported
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Добавьте следующее в конец вашей конфигурации PowerShell (найдите его, запустив `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -423,24 +417,24 @@ eval "$(starship init zsh)"
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – ZSH промпт для космонавтов.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Кросс-оболочка тема robbyrussell написанная на JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Кросс-оболочка командной строки настраиваемая как мощная строка с иконками.
 
 ## ❤️ Спонсоры
 
 Поддержите этот проект, [став спонсором](https://github.com/sponsors/starship). Ваше имя или логотип будут отображаться здесь со ссылкой на ваш сайт.
 
-## 🔒 Code Signing Policy
+## 🔒 Политика подписания кода
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Бесплатная подпись кода, предоставляемая  [SignPath.io](https://signpath.io), сертификат от [SignPath Foundation](https://signpath.org).
 
-Code Signing Roles:
+Роли подписания кодов:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Рецензенты: [Астронавты](https://github.com/orgs/starship/teams/astronauts)
+- Утверждающие лица и авторы: [Контролирующие миссию](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Эта программа не будет передавать какую-либо информацию в другие сетевые системы без специального запроса пользователя или лица, устанавливающего или эксплуатирующего ее.
 
 <p align="center">
     <br>

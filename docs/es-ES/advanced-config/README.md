@@ -4,7 +4,7 @@ A pesar de que Starship es una prompt versátil, a veces necesitas hacer más qu
 
 ::: warning
 
-Las configuraciones de esta sección están sujetas a cambios en futuras versiones de Starship.
+Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
 
 :::
 

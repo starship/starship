@@ -10,9 +10,9 @@
 
 ## TransientPrompt для PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить, запустите `Enable-TransientPrompt` в сеансе оболочки. Чтобы включить его глобально, вставьте это в ваш `$PROFILE` Переход может быть отключён на лету с помощью `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+По умолчанию, левая сторона ввода заменяется на `>`. Для настройки определите новую функцию под названием `Invoke-Starship-TransientFunction`. Например, чтобы отобразить модуль Starship `character`, вы должны выполнить
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -24,17 +24,17 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## TransientPrompt and TransientRightPrompt in Cmd
+## TransientPrompt и TransientRightPrompt в Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink позволяет заменить предыдущий выведенный промпт на пользовательские строки. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить это, запустите `clink set prompt.transient <value>`, где \<value\> может быть одним из
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
-- `off`: do not replace the prompt (i.e. turn off transience)
+- `always`: всегда заменять предыдущий промпт
+- `same_dir`: заменять предыдущий промпт только если рабочая директория та же
+- `off`: не заменять промпт (т.е. выключить переход)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Вы должны сделать это только один раз. Внесите следующие изменения в ваш `starship.lua`, чтобы настроить, что отображается слева и справа:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- По умолчанию, левая сторона ввода заменяется на `>`. Чтобы настроить это, определите новую функцию под названием `starship_transient_prompt_func`. Эта функция получает текущий промпт как строку, которую вы можете использовать. Например, чтобы отобразить здесь модуль Starship `character`, вы должны выполнить
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -45,7 +45,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- По умолчанию, правая сторона ввода пуста. Для настройки определите новую функцию под названием `starship_transient_rprompt_func`. Эта функция получает текущий промпт как строку, которую вы можете использовать. Например, чтобы отобразить время, когда здесь была запущена последняя команда, вы должны выполнить
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,13 +54,13 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## TransientPrompt и TransientRightPrompt в Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить это, запустите `enable_transience` в сеансе оболочки. Чтобы включить его глобально, добавьте это в ваш `~/.config/fish/config.fish`. Переход может быть отключён на лету с помощью `disable_transience`.
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+Обратите внимание, что в случае с Fish, временный промпт печатается только в том случае, если командная строка не пустая и синтаксически верна.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- По умолчанию, левая сторона ввода заменяется жирным зеленым `❯`. Для настройки определите новую функцию под названием `starship_transient_prompt_func`. Например, чтобы отобразить здесь модуль Starship `character`, вы должны выполнить
 
 ```fish
 function starship_transient_prompt_func
@@ -70,7 +70,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- По умолчанию, правая сторона ввода пуста. Для настройки определите новую функцию под названием `starship_transient_rprompt_func`. Например, чтобы отобразить время, когда здесь была запущена последняя команда, вы должны выполнить
 
 ```fish
 function starship_transient_rprompt_func
@@ -80,11 +80,13 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## TransientPrompt и TransientRightPrompt в Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+Фреймворк [Ble.sh](https://github.com/akinomyoga/ble.sh) в версии 0.4 или выше позволяет заменить выведенный ранее промпт, пользовательскими строками. Это полезно в тех случаях, когда весть промпт не всегда нужен. Чтобы включить это, добавьте в `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+` здесь - это разделённый двоеточиями список, состоящий из  <value\>always</1>, <1>same-dir</1> и <1>trim</1>.
+Когда <value\>prompt_ps1_final</0> пуст, а опция <0>prompt_ps1_transient</0> - не пустой \<code>, промпт, указанный <0>PS1</0> удаляется при выходе из текущей командной строки.
+Если \<value\> содержит поле <code>trim`, сохраняется только последняя строка многострочного `PS1`, а остальные линии стираются. Иначе командная строка будет перерисована, будто `PS1=` установлено. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
 
 Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
@@ -94,7 +96,7 @@ Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) 
 bleopt prompt_ps1_final='$(starship module character)'
 ```
 
-- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. For example, to display the time at which the last command was started here, you would do
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Например, чтобы отобразить время, когда здесь была запущена последняя команда, вы должны выполнить
 
 ```bash
 bleopt prompt_rps1_final='$(starship module time)'
@@ -253,9 +255,9 @@ Some shells support a continuation prompt along with the normal prompt. This pro
 
 Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Примечание: `continuation_prompt` должно быть изменено на строку без каких-либо переменных.
 
-Note: Continuation prompts are only available in the following shells:
+Примечание: Дальнейшие подсказки доступны только в следующих оболочках:
 
 - `bash`
 - `zsh`
@@ -266,8 +268,8 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled-in arrows
-continuation_prompt = '▶▶ '
+# Запрос на продолжение, в котором отображаются две заполненные стрелки
+continuation_prompt = '▶️▶️ '
 ```
 
 ## Строки стиля
@@ -278,22 +280,22 @@ continuation_prompt = '▶▶ '
 - `italic`
 - `underline`
 - `dimmed`
-- `inverted`
-- `blink`
-- `hidden`
-- `strikethrough`
+- `инвертировано`
+- `мерцать`
+- `скрытый`
+- `зачеркнуто`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
 - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` swaps the background and foreground colors. Порядок слов в строке не имеет значения.
+где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время выполняет то же самое, хотя в будущем это может измениться. `<color>` также может быть установлено значение `prev_fg` или `prev_bg`, которое соответствует цвету переднего плана или фона предыдущего элемента соответственно, если доступно, или `нет` в противном случае. `инвертировано` меняет местами цвета фона и переднего плана. Порядок слов в строке не имеет значения.
 
-Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` устанавливает цвет по умолчанию на цвет `fg:red bg:none` эквивалентно `red` или `fg:red` и `bg:green fg:red bg:none` также эквивалентно `fg:red` или `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
 
 Цветовой спецификатор может быть одним из следующих:
 
-- Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. При желании вы можете добавить к ним префикс `bright-`, чтобы получить версию bright (например, `bright-white`).
 - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 

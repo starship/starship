@@ -14,11 +14,11 @@
 
 Автодополнение команд обеспечивается выбранной вами оболочкой. В данном случае, демо было выполнено с [Fish Shell](https://fishshell.com/), которая обеспечивает дополнения по умолчанию. Если вы используете Z Shell (zsh), я бы посоветовал взглянуть на [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Выполните `format` верхнего уровня и `<module>.disabled` одно и то же?
 
 Да, они могут быть использованы для отключения модулей в подсказке. Если всё, что вы хотите сделать - это отключить модули, `<module>.disabled` - предпочитаемый способ сделать это по следующим причинам:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- Отключение модулей является более явным, чем их исключение из `format` верхнего уровня
 - Новосозданные модули будут добавлены в подсказку по мере обновления Starship
 
 ## Доки говорят, что Starship поддерживается на всех оболочках *(cross-shell)*. Почему моя любимая оболочка не поддерживается?
@@ -34,7 +34,7 @@ STATUS=$?
 # Get the number of jobs running.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Установите запрос на вывод `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
@@ -66,21 +66,21 @@ Starship выполняет различные команды, чтобы пол
 
 ## Starship делает что-то неожиданное, как я могу отладить его?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Вы можете включить отладочные журналы с помощью `STARSHIP_LOG` env var. Эти логи могут быть очень подробными, поэтому часто полезно использовать команду `module` если вы пытаетесь отладить тот или иной модуль, например, если вы пытаетесь отладить модуль `rust`, вы можете выполнить следующую команду, чтобы получить логи и вывод трассировки из модуля.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
+Если starship работает медленно, вы можете попробовать использовать команду `timings`, чтобы узнать, виноват ли в этом какой-то конкретный модуль или команда.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Это выведет журнал трассировки и разбивку по всем модулям, выполнение которых либо заняло более 1 мс, либо привело к некоторому результату.
 
-Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
+Наконец, если вы обнаружили ошибку, вы можете использовать команду `bug-report` для создания проблемы в GitHub.
 
 ```sh
 starship bug-report
@@ -90,8 +90,8 @@ starship bug-report
 
 Наиболее распространенной причиной этого является неправильная конфигурация системы. В частности, некоторые Linux дистрибутивы не предоставляют поддержку шрифта из коробки. Необходимо убедиться, что:
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- Для вашего языка задано значение UTF-8, например `de_DE.UTF-8` или `ja_JP.UTF-8`. Если `LC_ALL` не является значением UTF-8, [вам нужно будет изменить его](https://www.tecmint.com/set-system-locales-in-linux/).
+- У вас установлен шрифт emoji. В большинстве систем по умолчанию используется шрифт emoji, но в некоторых (например, в Arch Linux) его нет. Обычно вы можете установить его через менеджер пакетов вашей системы--[noto emoji](https://www.google.com/get/noto/help/emoji/) является популярным выбором.
 - Вы используете [Nerd Font](https://www.nerdfonts.com/).
 
 Для тестирования системы запустите следующие команды в терминале:
@@ -107,23 +107,23 @@ echo -e "\xee\x82\xa0"
 
 ## Как удалить Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship так же прост в удалении, как и установка его в первую очередь.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Удалите все строки в конфигурации вашей оболочки (например, `~/.bashrc`), используемые для инициализации Starship.
+1. Удалите бинарный файл Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Если Starship был установлен с помощью менеджера пакетов, пожалуйста, обратитесь к их документации для получения инструкций по установке.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Если Starship был установлен с помощью сценария установки, следующая команда удалит бинарный файл:
 
 ```sh
-# Locate and delete the starship binary
+# Найти и удалить бинарный файл starship
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
 ## Как Starship без `sudo`?
 
-Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. The default installation directory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
+Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. Каталогом установки по умолчанию является значение переменной среды `$BIN_DIR` или `/usr/local/bin`, если значение `$BIN_DIR` не задано. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
 
 Для неинтерактивной установки Starship не забудьте добавить опцию `-y` чтобы пропустить подтверждение. Проверьте исходник установочного скрипта, чтобы получить список всех поддерживаемых параметров установки.
 
