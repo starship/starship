@@ -90,8 +90,8 @@ starship bug-report
 
 Наиболее распространенной причиной этого является неправильная конфигурация системы. В частности, некоторые Linux дистрибутивы не предоставляют поддержку шрифта из коробки. Необходимо убедиться, что:
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- Для вашего языка задано значение UTF-8, например `de_DE.UTF-8` или `ja_JP.UTF-8`. Если `LC_ALL` не является значением UTF-8, [вам нужно будет изменить его](https://www.tecmint.com/set-system-locales-in-linux/).
+- У вас установлен шрифт emoji. В большинстве систем по умолчанию используется шрифт emoji, но в некоторых (например, в Arch Linux) его нет. Обычно вы можете установить его через менеджер пакетов вашей системы--[noto emoji](https://www.google.com/get/noto/help/emoji/) является популярным выбором.
 - Вы используете [Nerd Font](https://www.nerdfonts.com/).
 
 Для тестирования системы запустите следующие команды в терминале:
@@ -107,23 +107,23 @@ echo -e "\xee\x82\xa0"
 
 ## Как удалить Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship так же прост в удалении, как и установка его в первую очередь.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Удалите все строки в конфигурации вашей оболочки (например, `~/.bashrc`), используемые для инициализации Starship.
+1. Удалите бинарный файл Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Если Starship был установлен с помощью менеджера пакетов, пожалуйста, обратитесь к их документации для получения инструкций по установке.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Если Starship был установлен с помощью сценария установки, следующая команда удалит бинарный файл:
 
 ```sh
-# Locate and delete the starship binary
+# Найти и удалить бинарный файл starship
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
 ## Как Starship без `sudo`?
 
-Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. The default installation directory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
+Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. Каталогом установки по умолчанию является значение переменной среды `$BIN_DIR` или `/usr/local/bin`, если значение `$BIN_DIR` не задано. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
 
 Для неинтерактивной установки Starship не забудьте добавить опцию `-y` чтобы пропустить подтверждение. Проверьте исходник установочного скрипта, чтобы получить список всех поддерживаемых параметров установки.
 
