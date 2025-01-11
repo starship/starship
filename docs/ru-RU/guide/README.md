@@ -330,7 +330,7 @@ starship init fish | source
 Добавьте следующее в конец `~/.config/ion/initrc`:
 
 ```sh
-eval $(starship init ion)
+eval $(starhip init ion)
 ```
 
 </details>
@@ -351,14 +351,14 @@ starship init nu | save -f ~/.cache/starship/init.nu
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Примечание: Поддерживается только Nushell v0.78+
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Добавьте следующее в конец вашей конфигурации PowerShell (найдите его, запустив `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -423,9 +423,9 @@ eval "$(starship init zsh)"
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – ZSH промпт для космонавтов.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Кросс-оболочка тема robbyrussell написанная на JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Кросс-оболочка командной строки настраиваемая как мощная строка с иконками.
 
 ## ❤️ Спонсоры
 
