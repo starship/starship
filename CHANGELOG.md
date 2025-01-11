@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* **windows:** downgrade libz-ng-sys ([#6489](https://github.com/starship/starship/issues/6489)) ([6f7c67b](https://github.com/starship/starship/commit/6f7c67b4858b755c19754a2ec1063502545a16b6))
+
 ## [1.22.0](https://github.com/starship/starship/compare/v1.21.1...v1.22.0) (2025-01-11)
 
 
