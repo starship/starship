@@ -255,9 +255,9 @@ Some shells support a continuation prompt along with the normal prompt. This pro
 
 Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Примечание: `continuation_prompt` должно быть изменено на строку без каких-либо переменных.
 
-Note: Continuation prompts are only available in the following shells:
+Примечание: Дальнейшие подсказки доступны только в следующих оболочках:
 
 - `bash`
 - `zsh`
@@ -268,8 +268,8 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled-in arrows
-continuation_prompt = '▶▶ '
+# Запрос на продолжение, в котором отображаются две заполненные стрелки
+continuation_prompt = '▶️▶️ '
 ```
 
 ## Строки стиля
@@ -280,22 +280,22 @@ continuation_prompt = '▶▶ '
 - `italic`
 - `underline`
 - `dimmed`
-- `inverted`
-- `blink`
-- `hidden`
-- `strikethrough`
+- `инвертировано`
+- `мерцать`
+- `скрытый`
+- `зачеркнуто`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
 - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` swaps the background and foreground colors. Порядок слов в строке не имеет значения.
+где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время выполняет то же самое, хотя в будущем это может измениться. `<color>` также может быть установлено значение `prev_fg` или `prev_bg`, которое соответствует цвету переднего плана или фона предыдущего элемента соответственно, если доступно, или `нет` в противном случае. `инвертировано` меняет местами цвета фона и переднего плана. Порядок слов в строке не имеет значения.
 
-Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` устанавливает цвет по умолчанию на цвет `fg:red bg:none` эквивалентно `red` или `fg:red` и `bg:green fg:red bg:none` также эквивалентно `fg:red` или `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
 
 Цветовой спецификатор может быть одним из следующих:
 
-- Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. При желании вы можете добавить к ним префикс `bright-`, чтобы получить версию bright (например, `bright-white`).
 - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 
