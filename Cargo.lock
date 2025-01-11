@@ -1953,9 +1953,9 @@ dependencies = [
 
 [[package]]
 name = "libz-ng-sys"
-version = "1.1.20"
+version = "1.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f0f7295a34685977acb2e8cc8b08ee4a8dffd6cf278eeccddbe1ed55ba815d5"
+checksum = "4436751a01da56f1277f323c80d584ffad94a3d14aecd959dd0dff75aa73a438"
 dependencies = [
  "cmake",
  "libc",
@@ -3053,6 +3053,7 @@ dependencies = [
  "guess_host_triple",
  "home",
  "indexmap 2.7.0",
+ "libz-ng-sys",
  "log",
  "mockall",
  "nix",
