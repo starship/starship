@@ -51,7 +51,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
         GetFileSecurityW(
             wpath,
             (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION).0,
-            PSECURITY_DESCRIPTOR::default(),
+            None,
             0,
             &mut length,
         )
@@ -70,7 +70,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
         GetFileSecurityW(
             wpath,
             (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION).0,
-            psecurity_descriptor,
+            Some(psecurity_descriptor),
             length,
             &mut length,
         )
