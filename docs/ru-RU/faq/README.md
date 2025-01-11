@@ -14,11 +14,11 @@
 
 Автодополнение команд обеспечивается выбранной вами оболочкой. В данном случае, демо было выполнено с [Fish Shell](https://fishshell.com/), которая обеспечивает дополнения по умолчанию. Если вы используете Z Shell (zsh), я бы посоветовал взглянуть на [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Выполните `format` верхнего уровня и `<module>.disabled` одно и то же?
 
 Да, они могут быть использованы для отключения модулей в подсказке. Если всё, что вы хотите сделать - это отключить модули, `<module>.disabled` - предпочитаемый способ сделать это по следующим причинам:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- Отключение модулей является более явным, чем их исключение из `format` верхнего уровня
 - Новосозданные модули будут добавлены в подсказку по мере обновления Starship
 
 ## Доки говорят, что Starship поддерживается на всех оболочках *(cross-shell)*. Почему моя любимая оболочка не поддерживается?
@@ -34,7 +34,7 @@ STATUS=$?
 # Get the number of jobs running.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Установите запрос на вывод `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
@@ -66,21 +66,21 @@ Starship выполняет различные команды, чтобы пол
 
 ## Starship делает что-то неожиданное, как я могу отладить его?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Вы можете включить отладочные журналы с помощью `STARSHIP_LOG` env var. Эти логи могут быть очень подробными, поэтому часто полезно использовать команду `module` если вы пытаетесь отладить тот или иной модуль, например, если вы пытаетесь отладить модуль `rust`, вы можете выполнить следующую команду, чтобы получить логи и вывод трассировки из модуля.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
+Если starship работает медленно, вы можете попробовать использовать команду `timings`, чтобы узнать, виноват ли в этом какой-то конкретный модуль или команда.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Это выведет журнал трассировки и разбивку по всем модулям, выполнение которых либо заняло более 1 мс, либо привело к некоторому результату.
 
-Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
+Наконец, если вы обнаружили ошибку, вы можете использовать команду `bug-report` для создания проблемы в GitHub.
 
 ```sh
 starship bug-report
