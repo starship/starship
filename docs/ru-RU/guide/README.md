@@ -338,20 +338,14 @@ eval $(starhip init ion)
 <details>
 <summary>Nushell</summary>
 
-Добавьте следующее в конец вашего файла Nushell env (найдите его, запустив `$nu.env-path` в Nushell):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-И добавьте следующее в конец вашей конфигурации Nutshell (найдите его, запустив  `$nu.config-path`):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Примечание: Поддерживается только Nushell v0.78+
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
