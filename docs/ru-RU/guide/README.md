@@ -260,7 +260,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Установите последнюю версию для вашей системы с помощью MSI-installers из [раздела релизов](https://github.com/starship/starship/releases/latest).
 
 Установите Starship с помощью любого из следующих менеджеров пакетов:
 
