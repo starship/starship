@@ -338,7 +338,7 @@ eval $(starhip init ion)
 <details>
 <summary>Nushell</summary>
 
-Добавьте следующее в конец вашей конфигурации Nutshell (найдите это, запустив `$nu.config-path` в Nushell):
+Добавьте следующее в конец вашей конфигурации Nushell (найдите это, запустив `$nu.config-path` в Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
