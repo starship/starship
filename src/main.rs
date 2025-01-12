@@ -38,15 +38,7 @@ enum CompletionShell {
     Zsh,
 }
 
-fn generate_main_shell(shell: clap_complete::Shell) {
-    generate(
-        shell,
-        &mut Cli::command(),
-        "starship",
-        &mut io::stdout().lock(),
-    )
-}
-fn generate_nushell(shell: clap_complete_nushell::Nushell) {
+fn generate_shell(shell: impl clap_complete::Generator) {
     generate(
         shell,
         &mut Cli::command(),
@@ -57,12 +49,12 @@ fn generate_nushell(shell: clap_complete_nushell::Nushell) {
 
 fn generate_completions(shell: CompletionShell) {
     match shell {
-        CompletionShell::Bash => generate_main_shell(clap_complete::Shell::Bash),
-        CompletionShell::Elvish => generate_main_shell(clap_complete::Shell::Elvish),
-        CompletionShell::Fish => generate_main_shell(clap_complete::Shell::Fish),
-        CompletionShell::PowerShell => generate_main_shell(clap_complete::Shell::PowerShell),
-        CompletionShell::Zsh => generate_main_shell(clap_complete::Shell::Zsh),
-        CompletionShell::Nushell => generate_nushell(clap_complete_nushell::Nushell),
+        CompletionShell::Bash => generate_shell(clap_complete::Shell::Bash),
+        CompletionShell::Elvish => generate_shell(clap_complete::Shell::Elvish),
+        CompletionShell::Fish => generate_shell(clap_complete::Shell::Fish),
+        CompletionShell::PowerShell => generate_shell(clap_complete::Shell::PowerShell),
+        CompletionShell::Zsh => generate_shell(clap_complete::Shell::Zsh),
+        CompletionShell::Nushell => generate_shell(clap_complete_nushell::Nushell),
     }
 }
 
