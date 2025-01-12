@@ -345,7 +345,7 @@ mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Note: Only Nushell v0.96+ is supported
+Uwaga: Obsługiwany jest tylko Nushell w wersji v0.96 wzwyż
 
 </details>
 
