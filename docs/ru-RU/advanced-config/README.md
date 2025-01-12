@@ -281,9 +281,9 @@ continuation_prompt = '▶️▶️ '
 - `underline`
 - `dimmed`
 - `инвертировано`
-- `мерцать`
-- `скрытый`
-- `зачеркнуто`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
