@@ -68,6 +68,23 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     Some(formatted_version)
 }
 
+fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    fn extract_version(
+        file_name: &str,
+        context: &Context,
+        config: &PackageConfig,
+    ) -> Option<String> {
+        let file_contents = context.read_file_from_pwd(file_name)?;
+        let json_content: json::Value = json::from_str(&file_contents).ok()?;
+
+        let raw_version = json_content.get("version")?.as_str()?;
+        format_version(raw_version, config.version_format)
+    }
+
+    extract_version("jsr.json", context, config)
+        .or_else(|| extract_version("deno.json", context, config))
+}
+
 fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
     pyproject
         .get("tool")?
@@ -322,6 +339,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_cargo_version,
         get_nimble_version,
         get_node_package_version,
+        get_jsr_package_version,
         get_pyproject_version,
         get_setup_cfg_version,
         get_composer_version,
@@ -724,6 +742,36 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("semantic"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_jsr_json() -> io::Result<()> {
+        let config_name = "jsr.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_json() -> io::Result<()> {
+        let config_name = "deno.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
