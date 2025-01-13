@@ -206,6 +206,9 @@ symbol = "quarto "
 [raku]
 symbol = "raku "
 
+[rlang]
+symbol = "r "
+
 [ruby]
 symbol = "rb "
 
