@@ -338,20 +338,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-注意: Nushell v0.78以降でサポートされています
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
@@ -431,14 +425,14 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 [スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-## 🔒 Code Signing Policy
+## 🔒 コード署名のポリシー
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+[SignPath.io](https://signpath.io)での無料のコード署名が[SignPath Foundation](https://signpath.org)によって提供されています。
 
-Code Signing Roles:
+コード署名のロール：
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- レビュワー：[Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approver、Author：[Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
 This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 

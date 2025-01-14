@@ -134,7 +134,7 @@ impl<'a> Context<'a> {
         if properties
             .pipestatus
             .as_deref()
-            .map_or(false, |p| p.len() == 1 && p[0].is_empty())
+            .is_some_and(|p| p.len() == 1 && p[0].is_empty())
         {
             properties.pipestatus = None;
         }
@@ -868,8 +868,11 @@ pub struct Properties {
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
-    #[clap(short, long, default_value_t, value_parser=parse_jobs)]
+    #[clap(short, long, default_value_t, value_parser=parse_i64)]
     pub jobs: i64,
+    /// The current value of SHLVL, for shells that mis-handle it in $()
+    #[clap(long, value_parser=parse_i64)]
+    pub shlvl: Option<i64>,
 }
 
 impl Default for Properties {
@@ -883,6 +886,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            shlvl: None,
         }
     }
 }
@@ -896,8 +900,8 @@ fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
     Some(F::from_str(value))
 }
 
-fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
-    parse_trim(jobs).unwrap_or(Ok(0))
+fn parse_i64(value: &str) -> Result<i64, ParseIntError> {
+    parse_trim(value).unwrap_or(Ok(0))
 }
 
 fn default_width() -> usize {

@@ -338,20 +338,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Додайте наступне в кінець вашого файлу env (його можна знайти за допомогою змінної `$nu.env-path` в Nushell):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Примітка: Підтримується лише Nushell v0.78+
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
@@ -431,16 +425,16 @@ eval "$(starship init zsh)"
 
 Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
-## 🔒 Code Signing Policy
+## 🔒 Політика Підпису коду
 
-Безкоштовний підпис похідного коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org).
+Безкоштовний підпис початкового коду надано [SignPath.io](https://signpath.io), сертифікат надано [SignPath Foundation](https://signpath.org).
 
-Code Signing Roles:
+Ролі:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Рецензенти: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Затверджувачі та автори: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Ця програма не передаватиме жодної інформації до інших мережевих систем, якщо користувач або особа, яка її встановлює чи експлуатує, не зробить на це спеціального запиту.
 
 <p align="center">
     <br>

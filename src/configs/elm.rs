@@ -18,7 +18,7 @@ pub struct ElmConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for ElmConfig<'a> {
+impl Default for ElmConfig<'_> {
     fn default() -> Self {
         ElmConfig {
             format: "via [$symbol($version )]($style)",

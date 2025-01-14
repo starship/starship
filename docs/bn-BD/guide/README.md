@@ -338,20 +338,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-আপনার Nushell env ফাইলের (Nushell এ `$nu.env-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনগুলি যোগ করুন:
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-এরপর আপনার Nushell কনফিগের (Nushell এ `$nu.config-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনটি যোগ করুন:
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-বিঃদ্রঃ শুধুমাত্র Nushell v0.78+ কাজ করবে ।
+Note: Only Nushell v0.96+ is supported
 
 </details>
 

@@ -18,7 +18,7 @@ pub struct PhpConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for PhpConfig<'a> {
+impl Default for PhpConfig<'_> {
     fn default() -> Self {
         PhpConfig {
             format: "via [$symbol($version )]($style)",

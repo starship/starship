@@ -22,7 +22,7 @@ impl<'a> OSConfig<'a> {
     }
 }
 
-impl<'a> Default for OSConfig<'a> {
+impl Default for OSConfig<'_> {
     fn default() -> Self {
         OSConfig {
             format: "[$symbol]($style)",
@@ -36,6 +36,7 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Android => "🤖 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
+                Type::CachyOS => "🎗️ ",
                 Type::CentOS => "💠 ",
                 Type::Debian => "🌀 ",
                 Type::DragonFly => "🐉 ",
@@ -57,6 +58,7 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Mint => "🌿 ",
                 Type::NetBSD => "🚩 ",
                 Type::NixOS => "❄️ ",
+                Type::Nobara =>  "🎩 ",
                 Type::OpenBSD => "🐡 ",
                 Type::OpenCloudOS => "☁️ ",
                 Type::openEuler => "🦉 ",
@@ -73,6 +75,7 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Ubuntu => "🎯 ",
                 Type::Ultramarine => "🔷 ",
                 Type::Unknown => "❓ ",
+                Type::Uos => "🐲 ",
                 Type::Void => "  ",
                 Type::Windows => "🪟 ",
                 // Future symbols.

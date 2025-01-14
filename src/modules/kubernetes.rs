@@ -156,7 +156,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     .any(|v| !v.is_empty());
 
     let is_kube_project = have_scan_config.then(|| {
-        context.try_begin_scan().map_or(false, |scanner| {
+        context.try_begin_scan().is_some_and(|scanner| {
             scanner
                 .set_files(&config.detect_files)
                 .set_folders(&config.detect_folders)

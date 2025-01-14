@@ -18,7 +18,7 @@ pub struct VConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for VConfig<'a> {
+impl Default for VConfig<'_> {
     fn default() -> Self {
         VConfig {
             format: "via [$symbol($version )]($style)",

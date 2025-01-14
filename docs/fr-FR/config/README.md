@@ -557,16 +557,16 @@ Le module `buf` affiche la version de [Buf](https://buf.build) installée. By de
 
 ### Options
 
-| Option                               | Défaut                                          | Description                                            |
-| ------------------------------------ | ----------------------------------------------- | ------------------------------------------------------ |
-| `format`                             | `'with [$symbol($version )]($style)'`           | Le format du module `buf`.                             |
-| `version_format`                     | `'v${raw}'`                                     | Le format de la version.                               |
-| `symbole`                            | `'🐃 '`                                          | Le symbole utilisé avant d’afficher la version de Buf. |
-| `detect_extensionsdetect_extensions` | `[]`                                            | Les extensions qui déclenchent ce module.              |
-| `detect_files`                       | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Les fichiers qui activent ce module.                   |
-| `detect_folders`                     | `[]`                                            | Quels dossiers devraient activer ce module.            |
-| `style`                              | `'bold blue'`                                   | Le style pour le module.                               |
-| `disabled`                           | `false`                                         | Désactive le module `elixir`.                          |
+| Option              | Défaut                                          | Description                                            |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'`           | Le format du module `buf`.                             |
+| `version_format`    | `'v${raw}'`                                     | Le format de la version.                               |
+| `symbole`           | `'🐃 '`                                          | Le symbole utilisé avant d’afficher la version de Buf. |
+| `detect_extensions` | `[]`                                            | Les extensions qui déclenchent ce module.              |
+| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Les fichiers qui activent ce module.                   |
+| `detect_folders`    | `[]`                                            | Quels dossiers devraient activer ce module.            |
+| `style`             | `'bold blue'`                                   | Le style pour le module.                               |
+| `disabled`          | `false`                                         | Désactive le module `elixir`.                          |
 
 ### Variables
 
@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
+- Le dossier courant contient un fichier `bun.lock`
 - Le dossier courant contient un fichier `bun.lockb`
 - Le dossier courant contient un fichier `bunfig.toml`
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🥟 '`                               | A format string representing the symbol of Bun.                                            |
-| `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['bun.lockb', 'bunfig.toml']`       | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold red'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Disables the `bun` module.                                                                 |
+| Option              | Défaut                                     | Description                                                                                |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`       | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🥟 '`                                     | A format string representing the symbol of Bun.                                            |
+| `detect_extensions` | `[]`                                       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                       | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold red'`                               | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                                 |
 
 ### Variables
 
@@ -643,17 +644,17 @@ Le module `c` affiche des informations à propos de votre compilateur C. Par dé
 
 ### Options
 
-| Option                               | Défaut                                                                        | Description                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version(-$name) )]($style)'`                                  | La chaîne de format pour le module.                                                        |
-| `version_format`                     | `'v${raw}'`                                                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'C '`                                                                        | Le symbole utilisé avant d’afficher les détails du compilateur                             |
-| `detect_extensionsdetect_extensions` | `['c', 'h']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                                                          | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                          | Les dossiers qui activent ce module.                                                       |
-| `commands`                           | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | Comment détecter quel est le compilateur                                                   |
-| `style`                              | `'bold 149'`                                                                  | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                       | Désactive le module `c`.                                                                   |
+| Option              | Défaut                                                                        | Description                                                                                |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | La chaîne de format pour le module.                                                        |
+| `version_format`    | `'v${raw}'`                                                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'C '`                                                                        | Le symbole utilisé avant d’afficher les détails du compilateur                             |
+| `detect_extensions` | `['c', 'h']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                                                          | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                                          | Les dossiers qui activent ce module.                                                       |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | Comment détecter quel est le compilateur                                                   |
+| `style`             | `'bold 149'`                                                                  | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                       | Désactive le module `c`.                                                                   |
 
 ### Variables
 
@@ -759,16 +760,16 @@ Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. 
 
 ### Options
 
-| Option                               | Défaut                                 | Description                                                                                |
-| ------------------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`   | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                            | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'△ '`                                 | Le symbole utilisé avant la version de cmake.                                              |
-| `detect_extensionsdetect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module                                                   |
-| `detect_files`                       | `['CMakeLists.txt', 'CMakeCache.txt']` | Quels fichiers devraient activer ce module                                                 |
-| `detect_folders`                     | `[]`                                   | Quels dossiers devraient activer ce module                                                 |
-| `style`                              | `'bold blue'`                          | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                | Désactive le module `cmake`.                                                               |
+| Option              | Défaut                                 | Description                                                                                |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`   | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                            | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'△ '`                                 | Le symbole utilisé avant la version de cmake.                                              |
+| `detect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module                                                   |
+| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Quels fichiers devraient activer ce module                                                 |
+| `detect_folders`    | `[]`                                   | Quels dossiers devraient activer ce module                                                 |
+| `style`             | `'bold blue'`                          | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                | Désactive le module `cmake`.                                                               |
 
 ### Variables
 
@@ -789,16 +790,16 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `symbole`                            | `'⚙️ '`                              | Le symbole utilisé avant d’afficher la version de COBOL.                                   |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `style`                              | `'bold blue'`                        | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Désactive le module `cobol`.                                                               |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `symbole`           | `'⚙️ '`                              | Le symbole utilisé avant d’afficher la version de COBOL.                                   |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold blue'`                        | Le style pour le module.                                                                   |
+| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                              | Désactive le module `cobol`.                                                               |
 
 ### Variables
 
@@ -935,16 +936,16 @@ Le module `crystal` affiche la version de [Crystal](https://crystal-lang.org/) i
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `symbole`                            | `'🔮 '`                               | Le symbole utilisé avant d'afficher la version de crystal.                                 |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `style`                              | `'bold red'`                         | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['cr']`                             | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['shard.yml']`                      | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Désactive le module `crystal`.                                                             |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `symbole`           | `'🔮 '`                               | Le symbole utilisé avant d'afficher la version de crystal.                                 |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold red'`                         | Le style pour le module.                                                                   |
+| `detect_extensions` | `['cr']`                             | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['shard.yml']`                      | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                              | Désactive le module `crystal`.                                                             |
 
 ### Variables
 
@@ -973,16 +974,16 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'Λ '`                               | A format string representing the symbol of Daml                                            |
-| `style`                              | `'bold cyan'`                        | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['daml.yaml']`                      | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Disables the `daml` module.                                                                |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'Λ '`                               | A format string representing the symbol of Daml                                            |
+| `style`             | `'bold cyan'`                        | Le style pour le module.                                                                   |
+| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['daml.yaml']`                      | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                              | Disables the `daml` module.                                                                |
 
 ### Variables
 
@@ -1013,16 +1014,16 @@ Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. Par
 
 ### Options
 
-| Option                               | Défaut                                            | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`              | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🎯 '`                                            | Une chaîne de caractères représentant le symbole de Dart                                   |
-| `detect_extensionsdetect_extensions` | `['dart']`                                        | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['.dart_tool']`                                  | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold blue'`                                     | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                           | Désactive le module `dart`.                                                                |
+| Option              | Défaut                                            | Description                                                                                |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`              | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🎯 '`                                            | Une chaîne de caractères représentant le symbole de Dart                                   |
+| `detect_extensions` | `['dart']`                                        | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['.dart_tool']`                                  | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold blue'`                                     | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                           | Désactive le module `dart`.                                                                |
 
 ### Variables
 
@@ -1051,16 +1052,16 @@ Le module `deno` affiche la version de [Deno](https://deno.land/) installée. Pa
 
 ### Options
 
-| Option                               | Défaut                                                                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`                                                 | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🦕 '`                                                                               | Une chaîne de caractères représentant le symbole de Deno                                   |
-| `detect_extensionsdetect_extensions` | `[]`                                                                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'green bold'`                                                                       | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                              | Désactive le module `deno`.                                                                |
+| Option              | Défaut                                                                               | Description                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                                                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🦕 '`                                                                               | Une chaîne de caractères représentant le symbole de Deno                                   |
+| `detect_extensions` | `[]`                                                                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'green bold'`                                                                       | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                              | Désactive le module `deno`.                                                                |
 
 ### Variables
 
@@ -1166,20 +1167,21 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Options
 
-| Option                               | Défaut                                 | Description                                           |
-| ------------------------------------ | -------------------------------------- | ----------------------------------------------------- |
-| `format`                             | `'[$symbol$loaded/$allowed]($style) '` | Format du module.                                     |
-| `symbole`                            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`                              | `'bold orange'`                        | Le style pour le module.                              |
-| `disabled`                           | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensionsdetect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module.             |
-| `detect_files`                       | `['.envrc']`                           | Les fichiers qui activent ce module.                  |
-| `detect_folders`                     | `[]`                                   | Les dossiers qui activent ce module.                  |
-| `allowed_msg`                        | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`                    | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`                         | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`                         | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`                       | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Option              | Défaut                                 | Description                                           |
+| ------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Format du module.                                     |
+| `symbole`           | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`             | `'bold orange'`                        | Le style pour le module.                              |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module.             |
+| `detect_files`      | `['.envrc']`                           | Les fichiers qui activent ce module.                  |
+| `detect_folders`    | `[]`                                   | Les dossiers qui activent ce module.                  |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Les variables d’environnement qui activent ce module. |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
 
 ### Variables
 
@@ -1208,16 +1210,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Option                               | Défaut                                                        | Description                                                                                            |
-| ------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol$context]($style) '`                            | Format du module.                                                                                      |
-| `symbole`                            | `'🐳 '`                                                        | Le symbole utilisé avant d'afficher le contexte Docker.                                                |
-| `only_with_files`                    | `true`                                                        | Afficher uniquement quand il y a une correspondance                                                    |
-| `detect_extensionsdetect_extensions` | `[]`                                                          | Quelles extensions devraient activer ce module (il faut que `only_with_files` soit réglé sur true).    |
-| `detect_files`                       | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quels noms de fichier devraient activer ce module (il faut que `only_with_files` soit réglé sur true). |
-| `detect_folders`                     | `[]`                                                          | Quels dossiers devraient activer ce module (il faut que `only_with_files` soit réglé sur true).        |
-| `style`                              | `'blue bold'`                                                 | Le style pour le module.                                                                               |
-| `disabled`                           | `false`                                                       | Désactive le module `docker_context`.                                                                  |
+| Option              | Défaut                                                        | Description                                                                                            |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$context]($style) '`                            | Format du module.                                                                                      |
+| `symbole`           | `'🐳 '`                                                        | Le symbole utilisé avant d'afficher le contexte Docker.                                                |
+| `only_with_files`   | `true`                                                        | Afficher uniquement quand il y a une correspondance                                                    |
+| `detect_extensions` | `[]`                                                          | Quelles extensions devraient activer ce module (il faut que `only_with_files` soit réglé sur true).    |
+| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quels noms de fichier devraient activer ce module (il faut que `only_with_files` soit réglé sur true). |
+| `detect_folders`    | `[]`                                                          | Quels dossiers devraient activer ce module (il faut que `only_with_files` soit réglé sur true).        |
+| `style`             | `'blue bold'`                                                 | Le style pour le module.                                                                               |
+| `disabled`          | `false`                                                       | Désactive le module `docker_context`.                                                                  |
 
 ### Variables
 
@@ -1261,17 +1263,17 @@ Le module affichera aussi le Moniker de Framework Cible (<https://docs.microsoft
 
 ### Options
 
-| Option                               | Défaut                                                                                                  | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'.NET '`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                                  |
-| `heuristic`                          | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané.             |
-| `detect_extensionsdetect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                                |
-| `style`                              | `'bold blue'`                                                                                           | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                                 | Désactive le module `dotnet`.                                                              |
+| Option              | Défaut                                                                                                  | Description                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'.NET '`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                                  |
+| `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané.             |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `'bold blue'`                                                                                           | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                              |
 
 ### Variables
 
@@ -1303,16 +1305,16 @@ Le module `elixir` affiche la version de [Elixir](https://elixir-lang.org/) et [
 
 ### Options
 
-| Option                               | Défaut                                                      | Description                                                                                |
-| ------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                                   |
-| `version_format`                     | `'v${raw}'`                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'💧 '`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang.                            |
-| `detect_extensionsdetect_extensions` | `[]`                                                        | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['mix.exs']`                                               | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                        | Quels dossiers devraient activer ce module.                                                |
-| `style`                              | `'bold purple'`                                             | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                     | Désactive le module `elixir`.                                                              |
+| Option              | Défaut                                                      | Description                                                                                |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                                   |
+| `version_format`    | `'v${raw}'`                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'💧 '`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang.                            |
+| `detect_extensions` | `[]`                                                        | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['mix.exs']`                                               | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `'bold purple'`                                             | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                                              |
 
 ### Variables
 
@@ -1346,16 +1348,16 @@ Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. P
 
 ### Options
 
-| Option                               | Défaut                                             | Description                                                                                |
-| ------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`               | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                        | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🌳 '`                                             | Une chaîne de format représentant le symbole d'Elm.                                        |
-| `detect_extensionsdetect_extensions` | `['elm']`                                          | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['elm.json', 'elm-package.json', '.elm-version']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['elm-stuff']`                                    | Quels dossiers devraient activer ce module.                                                |
-| `style`                              | `'cyan bold'`                                      | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                            | Désactive le module `elm`.                                                                 |
+| Option              | Défaut                                             | Description                                                                                |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`               | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                        | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🌳 '`                                             | Une chaîne de format représentant le symbole d'Elm.                                        |
+| `detect_extensions` | `['elm']`                                          | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['elm-stuff']`                                    | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `'cyan bold'`                                      | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                            | Désactive le module `elm`.                                                                 |
 
 ### Variables
 
@@ -1456,16 +1458,16 @@ Le module `erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) i
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `' '`                               | Le symbole utilisé avant d'afficher la version d'erlang.                                   |
-| `style`                              | `'bold red'`                         | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['rebar.config', 'elang.mk']`       | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `disabled`                           | `false`                              | Désactive le module `erlang`.                                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `' '`                               | Le symbole utilisé avant d'afficher la version d'erlang.                                   |
+| `style`             | `'bold red'`                         | Le style pour le module.                                                                   |
+| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['rebar.config', 'elang.mk']`       | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `disabled`          | `false`                              | Désactive le module `erlang`.                                                              |
 
 ### Variables
 
@@ -1494,16 +1496,16 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                                   |
-| `style`                              | `'bold green'`                       | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['fnl']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `disabled`                           | `false`                              | Disables the `fennel` module.                                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🧅 '`                               | The symbol used before displaying the version of fennel.                                   |
+| `style`             | `'bold green'`                       | Le style pour le module.                                                                   |
+| `detect_extensions` | `['fnl']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `disabled`          | `false`                              | Disables the `fennel` module.                                                              |
 
 ### Variables
 
@@ -1974,15 +1976,15 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                          |
-| `detect_extensionsdetect_extensions` | `['gleam']`                          | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['gleam.toml']`                     | Les fichiers qui activent ce module.                                                       |
-| `style`                              | `'bold #FFAFF3'`                     | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Disables the `gleam` module.                                                               |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'⭐ '`                               | A format string representing the symbol of Gleam.                                          |
+| `detect_extensions` | `['gleam']`                          | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['gleam.toml']`                     | Les fichiers qui activent ce module.                                                       |
+| `style`             | `'bold #FFAFF3'`                     | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                                               |
 
 ### Variables
 
@@ -2019,17 +2021,17 @@ Le module `golang` affiche la version de [Go](https://golang.org/) installée. P
 
 ### Options
 
-| Option                               | Défaut                                                                                    | Description                                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `format`                             | `'via [$symbol($version )]($style)'`                                                      | Format du module.                                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                 |
-| `symbole`                            | `'🐹 '`                                                                                    | Une chaîne de caractères représentant le symbole de Go.                                                    |
-| `detect_extensionsdetect_extensions` | `['go']`                                                                                  | Les extensions qui déclenchent ce module.                                                                  |
-| `detect_files`                       | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Les fichiers qui activent ce module.                                                                       |
-| `detect_folders`                     | `['Godeps']`                                                                              | Les dossiers qui activent ce module.                                                                       |
-| `style`                              | `'bold cyan'`                                                                             | Le style pour le module.                                                                                   |
-| `not_capable_style`                  | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`                           | `false`                                                                                   | Désactive le module `golang`.                                                                              |
+| Option              | Défaut                                                                                    | Description                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Format du module.                                                                                          |
+| `version_format`    | `'v${raw}'`                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                 |
+| `symbole`           | `'🐹 '`                                                                                    | Une chaîne de caractères représentant le symbole de Go.                                                    |
+| `detect_extensions` | `['go']`                                                                                  | Les extensions qui déclenchent ce module.                                                                  |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Les fichiers qui activent ce module.                                                                       |
+| `detect_folders`    | `['Godeps']`                                                                              | Les dossiers qui activent ce module.                                                                       |
+| `style`             | `'bold cyan'`                                                                             | Le style pour le module.                                                                                   |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Désactive le module `golang`.                                                                              |
 
 ### Variables
 
@@ -2105,17 +2107,17 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🅶 '`                               | A format string representing the symbol of Gradle.                                         |
-| `detect_extensionsdetect_extensions` | `['gradle', 'gradle.kts']`           | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['gradle']`                         | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold bright-cyan'`                 | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Disables the `gradle` module.                                                              |
-| `recursive`                          | `false`                              | Enables recursive finding for the `gradle` directory.                                      |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🅶 '`                               | A format string representing the symbol of Gradle.                                         |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['gradle']`                         | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold bright-cyan'`                 | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                                      |
 
 ### Variables
 
@@ -2138,15 +2140,15 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Options
 
-| Option                               | Défaut                               | Description                                             |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------- |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                       |
-| `symbole`                            | `'λ '`                               | Une chaîne de format représentant le symbole de Haskell |
-| `detect_extensionsdetect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Les extensions qui déclenchent ce module.               |
-| `detect_files`                       | `['stack.yaml', 'cabal.project']`    | Les fichiers qui activent ce module.                    |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                    |
-| `style`                              | `'bold purple'`                      | Le style pour le module.                                |
-| `disabled`                           | `false`                              | Désactive le module `haskell`.                          |
+| Option              | Défaut                               | Description                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                       |
+| `symbole`           | `'λ '`                               | Une chaîne de format représentant le symbole de Haskell |
+| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Les extensions qui déclenchent ce module.               |
+| `detect_files`      | `['stack.yaml', 'cabal.project']`    | Les fichiers qui activent ce module.                    |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                    |
+| `style`             | `'bold purple'`                      | Le style pour le module.                                |
+| `disabled`          | `false`                              | Désactive le module `haskell`.                          |
 
 ### Variables
 
@@ -2170,16 +2172,16 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### Options
 
-| Option                               | Défaut                                                                                          | Description                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`                                                            | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                     | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['hx', 'hxml']`                                                                                | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['.haxelib', 'haxe_libraries']`                                                                | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                           |
-| `style`                              | `'bold fg:202'`                                                                                 | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                         | Disables the `haxe` module.                                                                |
+| Option              | Défaut                                                                                          | Description                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                            | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                                                                     | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                                           |
+| `style`             | `'bold fg:202'`                                                                                 | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                                |
 
 ### Variables
 
@@ -2209,16 +2211,16 @@ Le module `helm` affiche la version de [Helm](https://helm.sh/) installée. Par 
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['helmfile.yaml', 'Chart.yaml']`    | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'⎈ '`                               | Une chaîne de format représentant le symbole de Helm.                                      |
-| `style`                              | `'bold white'`                       | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `helm`.                                                                |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'⎈ '`                               | Une chaîne de format représentant le symbole de Helm.                                      |
+| `style`             | `'bold white'`                       | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `helm`.                                                                |
 
 ### Variables
 
@@ -2308,16 +2310,16 @@ Le module `java` affiche la version de [Java](https://www.oracle.com/java/) inst
 
 ### Options
 
-| Option                               | Défaut                                                                                                                | Description                                                                                |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}(${version} )]($style)'`                                                                              | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                                           | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                                                  | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'☕ '`                                                                                                                | Une chaîne de caractères représentant le symbole de Java                                   |
-| `style`                              | `'red dimmed'`                                                                                                        | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                                               | Désactive le module `java`.                                                                |
+| Option              | Défaut                                                                                                                | Description                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                                                                                           | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                                                                                  | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'☕ '`                                                                                                                | Une chaîne de caractères représentant le symbole de Java                                   |
+| `style`             | `'red dimmed'`                                                                                                        | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                                                               | Désactive le module `java`.                                                                |
 
 ### Variables
 
@@ -2405,16 +2407,16 @@ Le module `julia` affiche la version de [Julia](https://julialang.org/) install�
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['jl']`                             | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Project.toml', 'Manifest.toml']`  | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'ஃ '`                               | Une chaîne de caractères représentant le symbole de Julia.                                 |
-| `style`                              | `'bold purple'`                      | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `Julia`.                                                               |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['jl']`                             | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'ஃ '`                               | Une chaîne de caractères représentant le symbole de Julia.                                 |
+| `style`             | `'bold purple'`                      | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `Julia`.                                                               |
 
 ### Variables
 
@@ -2443,17 +2445,17 @@ Le module `kotlin` affiche la version de [Kotlin](https://kotlinlang.org/) insta
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['kt', 'kts']`                      | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'🅺 '`                               | Une chaîne de caractères représentant le symbole de Kotlin.                                |
-| `style`                              | `'bold blue'`                        | Le style pour le module.                                                                   |
-| `kotlin_binary`                      | `'kotlin'`                           | Configure le binaire kotlin que Starship exécute lors de l'obtention de la version.        |
-| `disabled`                           | `false`                              | Désactive le module `kotlin`.                                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['kt', 'kts']`                      | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'🅺 '`                               | Une chaîne de caractères représentant le symbole de Kotlin.                                |
+| `style`             | `'bold blue'`                        | Le style pour le module.                                                                   |
+| `kotlin_binary`     | `'kotlin'`                           | Configure le binaire kotlin que Starship exécute lors de l'obtention de la version.        |
+| `disabled`          | `false`                              | Désactive le module `kotlin`.                                                              |
 
 ### Variables
 
@@ -2502,19 +2504,19 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 
 :::
 
-| Option                               | Défaut                                               | Description                                                            |
-| ------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------- |
-| `symbole`                            | `'☸ '`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
-| `format`                             | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
-| `style`                              | `'cyan bold'`                                        | Le style pour le module.                                               |
-| `context_aliases`*                   | `{}`                                                 | Tableau des alias de contexte à afficher.                              |
-| `user_aliases`*                      | `{}`                                                 | Table of user aliases to display.                                      |
-| `detect_extensionsdetect_extensions` | `[]`                                                 | Les extensions qui déclenchent ce module.                              |
-| `detect_files`                       | `[]`                                                 | Les fichiers qui activent ce module.                                   |
-| `detect_folders`                     | `[]`                                                 | Quels dossiers devraient activer ce module.                            |
-| `detect_env_vars`                    | `[]`                                                 | Which environmental variables should trigger this module               |
-| `contexts`                           | `[]`                                                 | Customized styles and symbols for specific contexts.                   |
-| `disabled`                           | `true`                                               | Désactiver le module `kubernetes`.                                     |
+| Option              | Défaut                                               | Description                                                            |
+| ------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `symbole`           | `'☸ '`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
+| `style`             | `'cyan bold'`                                        | Le style pour le module.                                               |
+| `context_aliases`*  | `{}`                                                 | Tableau des alias de contexte à afficher.                              |
+| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                      |
+| `detect_extensions` | `[]`                                                 | Les extensions qui déclenchent ce module.                              |
+| `detect_files`      | `[]`                                                 | Les fichiers qui activent ce module.                                   |
+| `detect_folders`    | `[]`                                                 | Quels dossiers devraient activer ce module.                            |
+| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module               |
+| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                   |
+| `disabled`          | `true`                                               | Désactiver le module `kubernetes`.                                     |
 
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
@@ -2661,17 +2663,17 @@ Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. Par
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🌙 '`                               | Une chaîne de caractères représentant le symbole de Lua.                                   |
-| `detect_extensionsdetect_extensions` | `['lua']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['.lua-version']`                   | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['lua']`                            | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold blue'`                        | Le style pour le module.                                                                   |
-| `lua_binary`                         | `'lua'`                              | Configure le binaire lua que Starship exécute lors de l'obtention de la version.           |
-| `disabled`                           | `false`                              | Désactive le module `lua`.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🌙 '`                               | Une chaîne de caractères représentant le symbole de Lua.                                   |
+| `detect_extensions` | `['lua']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['.lua-version']`                   | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['lua']`                            | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold blue'`                        | Le style pour le module.                                                                   |
+| `lua_binary`        | `'lua'`                              | Configure le binaire lua que Starship exécute lors de l'obtention de la version.           |
+| `disabled`          | `false`                              | Désactive le module `lua`.                                                                 |
 
 ### Variables
 
@@ -2821,15 +2823,15 @@ The `mojo` module shows the current version of [Mojo programming language](https
 
 ### Options
 
-| Option                               | Défaut                                | Description                                            |
-| ------------------------------------ | ------------------------------------- | ------------------------------------------------------ |
-| `format`                             | `'with [$symbol($version )]($style)'` | Format du module.                                      |
-| `symbole`                            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
-| `style`                              | `'bold 208'`                          | Le style pour le module.                               |
-| `disabled`                           | `false`                               | Disables the `mojo` module.                            |
-| `detect_extensionsdetect_extensions` | `['mojo', '🔥']`                       | Les extensions qui déclenchent ce module.              |
-| `detect_files`                       | `[]`                                  | Les fichiers qui activent ce module.                   |
-| `detect_folders`                     | `[]`                                  | Les dossiers qui activent ce module.                   |
+| Option              | Défaut                                | Description                                            |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | Format du module.                                      |
+| `symbole`           | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Le style pour le module.                               |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | Les extensions qui déclenchent ce module.              |
+| `detect_files`      | `[]`                                  | Les fichiers qui activent ce module.                   |
+| `detect_folders`    | `[]`                                  | Les dossiers qui activent ce module.                   |
 
 ### Variables
 
@@ -2890,16 +2892,16 @@ Le module `nim` affiche la version de [Nim](https://nim-lang.org/) installée. P
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module                                                                           |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'👑 '`                               | Le symbole utilisé avant d'afficher la version de Nim.                                     |
-| `detect_extensionsdetect_extensions` | `['nim', 'nims', 'nimble']`          | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['nim.cfg']`                        | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold yellow'`                      | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `nim`.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module                                                                           |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'👑 '`                               | Le symbole utilisé avant d'afficher la version de Nim.                                     |
+| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['nim.cfg']`                        | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold yellow'`                      | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `nim`.                                                                 |
 
 ### Variables
 
@@ -2975,17 +2977,17 @@ Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) install�
 
 ### Options
 
-| Option                               | Défaut                                        | Description                                                                                                 |
-| ------------------------------------ | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`                             | `'via [$symbol($version )]($style)'`          | Format du module.                                                                                           |
-| `version_format`                     | `'v${raw}'`                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                  |
-| `symbole`                            | `' '`                                        | Une chaîne de caractères représentant le symbole de Node.js.                                                |
-| `detect_extensionsdetect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Les extensions qui déclenchent ce module.                                                                   |
-| `detect_files`                       | `['package.json', '.node-version', '.nvmrc']` | Les fichiers qui activent ce module.                                                                        |
-| `detect_folders`                     | `['node_modules']`                            | Les dossiers qui activent ce module.                                                                        |
-| `style`                              | `'bold green'`                                | Le style pour le module.                                                                                    |
-| `disabled`                           | `false`                                       | Désactive le module `nodejs`.                                                                               |
-| `not_capable_style`                  | `'bold red'`                                  | Le style du module quand une propriété engines dans le package.json ne correspond pas à la version Node.js. |
+| Option              | Défaut                                        | Description                                                                                                 |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Format du module.                                                                                           |
+| `version_format`    | `'v${raw}'`                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                  |
+| `symbole`           | `' '`                                        | Une chaîne de caractères représentant le symbole de Node.js.                                                |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Les extensions qui déclenchent ce module.                                                                   |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Les fichiers qui activent ce module.                                                                        |
+| `detect_folders`    | `['node_modules']`                            | Les dossiers qui activent ce module.                                                                        |
+| `style`             | `'bold green'`                                | Le style pour le module.                                                                                    |
+| `disabled`          | `false`                                       | Désactive le module `nodejs`.                                                                               |
+| `not_capable_style` | `'bold red'`                                  | Le style du module quand une propriété engines dans le package.json ne correspond pas à la version Node.js. |
 
 ### Variables
 
@@ -3020,18 +3022,18 @@ Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. 
 
 ### Options
 
-| Option                               | Défaut                                                                     | Description                                                                                |
-| ------------------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | La chaîne de format pour le module.                                                        |
-| `version_format`                     | `'v${raw}'`                                                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐫 '`                                                                     | Le symbole utilisé avant d'afficher la version de OCaml.                                   |
-| `global_switch_indicator`            | `''`                                                                       | La chaîne de caractères utilisée pour représenter le commutateur OPAM global.              |
-| `local_switch_indicator`             | `'*'`                                                                      | La chaîne de caractères utilisée pour représenter le commutateur OPAM local.               |
-| `detect_extensionsdetect_extensions` | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['_opam', 'esy.lock']`                                                    | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold yellow'`                                                            | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                    | Désactive le module `ocaml`.                                                               |
+| Option                    | Défaut                                                                     | Description                                                                                |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | La chaîne de format pour le module.                                                        |
+| `version_format`          | `'v${raw}'`                                                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                 | `'🐫 '`                                                                     | Le symbole utilisé avant d'afficher la version de OCaml.                                   |
+| `global_switch_indicator` | `''`                                                                       | La chaîne de caractères utilisée pour représenter le commutateur OPAM global.              |
+| `local_switch_indicator`  | `'*'`                                                                      | La chaîne de caractères utilisée pour représenter le commutateur OPAM local.               |
+| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | Les dossiers qui activent ce module.                                                       |
+| `style`                   | `'bold yellow'`                                                            | Le style pour le module.                                                                   |
+| `disabled`                | `false`                                                                    | Désactive le module `ocaml`.                                                               |
 
 ### Variables
 
@@ -3056,20 +3058,20 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### Options
 
-| Option                               | Défaut                               | Description                                            |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                      |
-| `show_commit`                        | `false`                              | Shows the commit as part of the version.               |
-| `symbole`                            | `'Ø '`                               | Le symbole utilisé avant d'afficher la version de Zig. |
-| `style`                              | `'bold bright-blue'`                 | Le style pour le module.                               |
-| `disabled`                           | `false`                              | Disables the `odin` module.                            |
-| `detect_extensionsdetect_extensions` | `['odin']`                           | Les extensions qui déclenchent ce module.              |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                   |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                   |
+| Option              | Défaut                               | Description                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                      |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbole`           | `'Ø '`                               | Le symbole utilisé avant d'afficher la version de Zig. |
+| `style`             | `'bold bright-blue'`                 | Le style pour le module.                               |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | Les extensions qui déclenchent ce module.              |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                   |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                   |
 
 ### Variables
 
@@ -3097,16 +3099,16 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🪖  '`                              | A format string representing the symbol of OPA.                                            |
-| `detect_extensionsdetect_extensions` | `['rego']`                           | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold blue'`                        | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Disables the `opa` module.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🪖  '`                              | A format string representing the symbol of OPA.                                            |
+| `detect_extensions` | `['rego']`                           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold blue'`                        | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Disables the `opa` module.                                                                 |
 
 ### Variables
 
@@ -3200,6 +3202,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -3221,6 +3224,7 @@ MidnightBSD = "🌘 "
 Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
+Nobara = "🎩 "
 OpenBSD = "🐡 "
 OpenCloudOS = "☁️ "
 openEuler = "🦉 "
@@ -3237,6 +3241,7 @@ SUSE = "🦎 "
 Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
+Uos = "🐲 "
 Void = "  "
 Windows = "🪟 "
 ```
@@ -3336,16 +3341,16 @@ Le module `perl` affiche la version de [Perl](https://www.perl.org/) installée.
 
 ### Options
 
-| Option                               | Défaut                                                                                                   | Description                                                                                |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`                                                                     | La chaîne de format pour le module.                                                        |
-| `version_format`                     | `'v${raw}'`                                                                                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐪 '`                                                                                                   | Le symbole utilisé avant d'afficher la version de Perl                                     |
-| `detect_extensionsdetect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                                     | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold 149'`                                                                                             | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                                  | Désactive le module `perl`.                                                                |
+| Option              | Défaut                                                                                                   | Description                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                     | La chaîne de format pour le module.                                                        |
+| `version_format`    | `'v${raw}'`                                                                                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🐪 '`                                                                                                   | Le symbole utilisé avant d'afficher la version de Perl                                     |
+| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                                                                                     | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold 149'`                                                                                             | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                                                                                  | Désactive le module `perl`.                                                                |
 
 ### Variables
 
@@ -3374,16 +3379,16 @@ Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Pa
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐘 '`                               | Le symbole utilisé avant d'afficher la version de PHP.                                     |
-| `detect_extensionsdetect_extensions` | `['php']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['composer.json', '.php-version']`  | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'147 bold'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `php`.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🐘 '`                               | Le symbole utilisé avant d'afficher la version de PHP.                                     |
+| `detect_extensions` | `['php']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['composer.json', '.php-version']`  | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'147 bold'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `php`.                                                                 |
 
 ### Variables
 
@@ -3488,16 +3493,16 @@ Le module `purescript` affiche la version de [PureScript](https://www.purescript
 
 ### Options
 
-| Option                               | Défaut                                        | Description                                                                                |
-| ------------------------------------ | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`          | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'<=> '`                                | Le symbole utilisé avant d'afficher la version de PureScript.                              |
-| `detect_extensionsdetect_extensions` | `['purs']`                                    | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                          | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold white'`                                | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                       | Désactive le module `purescript`.                                                          |
+| Option              | Défaut                                        | Description                                                                                |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`          | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                   | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'<=> '`                                | Le symbole utilisé avant d'afficher la version de PureScript.                              |
+| `detect_extensions` | `['purs']`                                    | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                          | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold white'`                                | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                       | Désactive le module `purescript`.                                                          |
 
 ### Variables
 
@@ -3540,19 +3545,19 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Options
 
-| Option                               | Défaut                                                                                                                    | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐍 '`                                                                                                                    | Une chaîne de caractères représentant le symbole de Python                                 |
-| `style`                              | `'yellow bold'`                                                                                                           | Le style pour le module.                                                                   |
-| `pyenv_version_name`                 | `false`                                                                                                                   | Utiliser pyenv pour obtenir la version de Python                                           |
-| `pyenv_prefix`                       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                            |
-| `python_binary`                      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version.     |
-| `detect_extensionsdetect_extensions` | `['py', 'ipynb']`                                                                                                         | Les extensions qui déclenchent ce module                                                   |
-| `detect_files`                       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Quels fichiers devraient activer ce module                                                 |
-| `detect_folders`                     | `[]`                                                                                                                      | Quels dossiers devraient activer ce module                                                 |
-| `disabled`                           | `false`                                                                                                                   | Désactive le module `python`.                                                              |
+| Option               | Défaut                                                                                                                    | Description                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Format du module.                                                                          |
+| `version_format`     | `'v${raw}'`                                                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`            | `'🐍 '`                                                                                                                    | Une chaîne de caractères représentant le symbole de Python                                 |
+| `style`              | `'yellow bold'`                                                                                                           | Le style pour le module.                                                                   |
+| `pyenv_version_name` | `false`                                                                                                                   | Utiliser pyenv pour obtenir la version de Python                                           |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                            |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version.     |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Les extensions qui déclenchent ce module                                                   |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Quels fichiers devraient activer ce module                                                 |
+| `detect_folders`     | `[]`                                                                                                                      | Quels dossiers devraient activer ce module                                                 |
+| `disabled`           | `false`                                                                                                                   | Désactive le module `python`.                                                              |
 
 ::: tip
 
@@ -3609,16 +3614,16 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'⨁ '`                               | A format string representing the symbol of Quarto                                          |
-| `style`                              | `'bold #75AADB'`                     | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['.qmd']`                           | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['_quarto.yml']`                    | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Disables the `quarto` module.                                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'⨁ '`                               | A format string representing the symbol of Quarto                                          |
+| `style`             | `'bold #75AADB'`                     | Le style pour le module.                                                                   |
+| `detect_extensions` | `['.qmd']`                           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['_quarto.yml']`                    | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                                              |
 
 ### Variables
 
@@ -3644,16 +3649,16 @@ Le module `rlang` affiche la version de [R](https://www.r-project.org/) install�
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'📐'`                                | Une chaîne de caractères représentant le symbole de R.                                     |
-| `style`                              | `'blue bold'`                        | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Les extensions qui déclenchent ce module                                                   |
-| `detect_files`                       | `['.Rprofile']`                      | Quels fichiers devraient activer ce module                                                 |
-| `detect_folders`                     | `['.Rproj.user']`                    | Quels dossiers devraient activer ce module                                                 |
-| `disabled`                           | `false`                              | Désactive le module `r`.                                                                   |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'📐'`                                | Une chaîne de caractères représentant le symbole de R.                                     |
+| `style`             | `'blue bold'`                        | Le style pour le module.                                                                   |
+| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Les extensions qui déclenchent ce module                                                   |
+| `detect_files`      | `['.Rprofile']`                      | Quels fichiers devraient activer ce module                                                 |
+| `detect_folders`    | `['.Rproj.user']`                    | Quels dossiers devraient activer ce module                                                 |
+| `disabled`          | `false`                              | Désactive le module `r`.                                                                   |
 
 ### Variables
 
@@ -3681,16 +3686,16 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Options
 
-| Option                               | Défaut                                           | Description                                                                                |
-| ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version-$vm_version )]($style)'` | La chaîne de format pour le module.                                                        |
-| `version_format`                     | `'v${raw}'`                                      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🦋 '`                                           | The symbol used before displaying the version of Raku                                      |
-| `detect_extensionsdetect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['META6.json']`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                             | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold 149'`                                     | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                          | Disables the `raku` module.                                                                |
+| Option              | Défaut                                           | Description                                                                                |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | La chaîne de format pour le module.                                                        |
+| `version_format`    | `'v${raw}'`                                      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🦋 '`                                           | The symbol used before displaying the version of Raku                                      |
+| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['META6.json']`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                             | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold 149'`                                     | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                                |
 
 ### Variables
 
@@ -3718,16 +3723,16 @@ Par défaut, le module `red` affiche la version de [Red](https://www.red-lang.or
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🔺 '`                               | Une chaîne de caractères représentant le symbole de Red.                                   |
-| `detect_extensionsdetect_extensions` | `['red']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'red bold'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `red`.                                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🔺 '`                               | Une chaîne de caractères représentant le symbole de Red.                                   |
+| `detect_extensions` | `['red']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'red bold'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `red`.                                                                 |
 
 ### Variables
 
@@ -3761,17 +3766,17 @@ Starship obtient la version actuelle de Ruby en exécutant `ruby -v`.
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'💎 '`                               | Une chaîne de caractères représentant le symbole de Ruby.                                  |
-| `detect_extensionsdetect_extensions` | `['rb']`                             | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Gemfile', '.ruby-version']`       | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `detect_variables`                   | `['RUBY_VERSION', 'RBENV_VERSION']`  | Les variables d’environnement qui activent ce module.                                      |
-| `style`                              | `'bold red'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `ruby`.                                                                |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'💎 '`                               | Une chaîne de caractères représentant le symbole de Ruby.                                  |
+| `detect_extensions` | `['rb']`                             | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Gemfile', '.ruby-version']`       | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Les variables d’environnement qui activent ce module.                                      |
+| `style`             | `'bold red'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `ruby`.                                                                |
 
 ### Variables
 
@@ -3802,16 +3807,16 @@ Le module `rust` affiche la version de [Rust](https://www.rust-lang.org/) instal
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🦀 '`                               | Une chaîne de caractères représentant le symbole de Rust                                   |
-| `detect_extensionsdetect_extensions` | `['rs']`                             | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Cargo.toml']`                     | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold red'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `rust`.                                                                |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🦀 '`                               | Une chaîne de caractères représentant le symbole de Rust                                   |
+| `detect_extensions` | `['rs']`                             | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Cargo.toml']`                     | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold red'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `rust`.                                                                |
 
 ### Variables
 
@@ -3844,16 +3849,16 @@ Le module `scale` affiche la version de [Scala](https://www.scala-lang.org/) ins
 
 ### Options
 
-| Option                               | Défaut                                   | Description                                                                                |
-| ------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}(${version} )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['sbt', 'scala']`                       | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['.metals']`                            | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'🆂 '`                                   | Une chaîne de caractères représentant le symbole de Scala.                                 |
-| `style`                              | `'red dimmed'`                           | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                  | Désactive le module `scala`.                                                               |
+| Option              | Défaut                                   | Description                                                                                |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [${symbol}(${version} )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['sbt', 'scala']`                       | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['.metals']`                            | Quels dossiers devraient activer ce module.                                                |
+| `symbole`           | `'🆂 '`                                   | Une chaîne de caractères représentant le symbole de Scala.                                 |
+| `style`             | `'red dimmed'`                           | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                  | Désactive le module `scala`.                                                               |
 
 ### Variables
 
@@ -4017,17 +4022,17 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${major}.${minor}.${patch}'`      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'S '`                               | A format string representing the symbol of Solidity                                        |
-| `compiler                           | ['solc']                             | The default compiler for Solidity.                                                         |
-| `detect_extensionsdetect_extensions` | `['sol']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold blue'`                        | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Disables this module.                                                                      |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'S '`                               | A format string representing the symbol of Solidity                                        |
+| `compiler          | ['solc']                             | The default compiler for Solidity.                                                         |
+| `detect_extensions` | `['sol']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold blue'`                        | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Disables this module.                                                                      |
 
 ### Variables
 
@@ -4092,38 +4097,40 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option                      | Défaut                                                                             | Description                                                           |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | Le format du module                                                   |
-| `symbole`                   | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | Le style pour le module.                                              |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Désactiver le module `status`.                                        |
+| Option                      | Défaut                                                                              | Description                                                           |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | Le format du module                                                   |
+| `symbole`                   | `'❌'`                                                                               | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                                | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                               | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                               | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                        | Le style pour le module.                                              |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
+| `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                     | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                              | Désactiver le module `status`.                                        |
 
 ### Variables
 
-| Variable       | Exemple | Description                                                                                |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| statut         | `127`   | Le code de sortie de la dernière commande                                                  |
-| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                          |
-| int            | `127`   | Le code de sortie de la dernière commande                                                  |
-| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                               |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbole        |         | Reflète la valeur de l'option `symbol`                                                     |
-| style\*      |         | Reflète la valeur de l'option `style`                                                      |
+| Variable       | Exemple | Description                                                                                  |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| statut         | `127`   | Le code de sortie de la dernière commande                                                    |
+| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                            |
+| int            | `127`   | Le code de sortie de la dernière commande                                                    |
+| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                                 |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbole        |         | Reflète la valeur de l'option `symbol`                                                       |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -4199,16 +4206,16 @@ Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/)
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐦 '`                               | Une chaîne de caractères représentant le symbole de Swift                                  |
-| `detect_extensionsdetect_extensions` | `['swift']`                          | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Package.swift']`                  | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold 202'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactiver le module `swift`.                                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🐦 '`                               | Une chaîne de caractères représentant le symbole de Swift                                  |
+| `detect_extensions` | `['swift']`                          | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Package.swift']`                  | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold 202'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactiver le module `swift`.                                                              |
 
 ### Variables
 
@@ -4246,16 +4253,16 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol$workspace]($style) '` | La chaîne de format pour le module.                                                        |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'💠'`                                | Une chaîne de format montrée avant l'espace de travail terraform.                          |
-| `detect_extensionsdetect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['.terraform']`                     | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold 105'`                         | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `terraform`.                                                           |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$workspace]($style) '` | La chaîne de format pour le module.                                                        |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'💠'`                                | Une chaîne de format montrée avant l'espace de travail terraform.                          |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['.terraform']`                     | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold 105'`                         | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `terraform`.                                                           |
 
 ### Variables
 
@@ -4345,16 +4352,16 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'t '`                               | A format string representing the symbol of Typst                                           |
-| `style`                              | `'bold #0093A7'`                     | Le style pour le module.                                                                   |
-| `detect_extensionsdetect_extensions` | `['.typ']`                           | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['template.typ']`                   | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `disabled`                           | `false`                              | Disables the `typst` module.                                                               |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'t '`                               | A format string representing the symbol of Typst                                           |
+| `style`             | `'bold #0093A7'`                     | Le style pour le module.                                                                   |
+| `detect_extensions` | `['.typ']`                           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['template.typ']`                   | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                              | Disables the `typst` module.                                                               |
 
 ### Variables
 
@@ -4426,16 +4433,16 @@ Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) 
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'⍱ '`                               | Une chaîne de caractères représentant le symbole de Vagrant.                               |
-| `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['Vagrantfile']`                    | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'cyan bold'`                        | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `vagrant`.                                                             |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'⍱ '`                               | Une chaîne de caractères représentant le symbole de Vagrant.                               |
+| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['Vagrantfile']`                    | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'cyan bold'`                        | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `vagrant`.                                                             |
 
 ### Variables
 
@@ -4465,16 +4472,16 @@ Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par d
 
 ### Options
 
-| Option                               | Défaut                                       | Description                                                                                |
-| ------------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`         | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'V '`                                       | Une chaîne de caractères représentant le symbole de V                                      |
-| `detect_extensionsdetect_extensions` | `['v']`                                      | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                         | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'blue bold'`                                | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                      | Désactive le module `vlang`.                                                               |
+| Option              | Défaut                                       | Description                                                                                |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`         | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'V '`                                       | Une chaîne de caractères représentant le symbole de V                                      |
+| `detect_extensions` | `['v']`                                      | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                         | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'blue bold'`                                | Le style pour le module.                                                                   |
+| `disabled`          | `false`                                      | Désactive le module `vlang`.                                                               |
 
 ### Variables
 
@@ -4532,16 +4539,16 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Options
 
-| Option                               | Défaut                               | Description                                                                                |
-| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'↯ '`                               | Le symbole utilisé avant d'afficher la version de Zig.                                     |
-| `style`                              | `'bold yellow'`                      | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `zig`.                                                                 |
-| `detect_extensionsdetect_extensions` | `['zig']`                            | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'↯ '`                               | Le symbole utilisé avant d'afficher la version de Zig.                                     |
+| `style`             | `'bold yellow'`                      | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `zig`.                                                                 |
+| `detect_extensions` | `['zig']`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 
 ### Variables
 
@@ -4602,24 +4609,24 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### Options
 
-| Option                               | Défaut                          | Description                                                                                                                                                                                                                                                                                   |
-| ------------------------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`                            | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
-| `when`                               | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                              |
-| `require_repo`                       | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
-| `shell`                              |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                        |
-| `description`                        | `'<custom module>'`       | La description du module qui est affichée lors de l’exécution de `starship explain`.                                                                                                                                                                                                          |
-| `unsafe_no_escape`                   | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
-| `detect_files`                       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
-| `detect_folders`                     | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
-| `detect_extensionsdetect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
-| `symbole`                            | `''`                            | Le symbole utilisé avant d'afficher la sortie de la commande.                                                                                                                                                                                                                                 |
-| `style`                              | `'bold green'`                  | Le style pour le module.                                                                                                                                                                                                                                                                      |
-| `format`                             | `'[$symbol($output )]($style)'` | Format du module.                                                                                                                                                                                                                                                                             |
-| `disabled`                           | `false`                         | Désactive le module `custom`.                                                                                                                                                                                                                                                                 |
-| `os`                                 |                                 | Nom du système d'exploitation sur lequel le module sera affiché (unix, linux, macos, windows, ... ) [Voir les valeurs possibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                  |
-| `use_stdin`                          |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
-| `ignore_timeout`                     | `false`                         | Ignore le paramètre global `command_timeout` et continuer à exécuter des commandes externes, peu importe le temps qu'elles prennent.                                                                                                                                                          |
+| Option              | Défaut                          | Description                                                                                                                                                                                                                                                                                   |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
+| `when`              | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                              |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
+| `shell`             |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                        |
+| `description`       | `'<custom module>'`       | La description du module qui est affichée lors de l’exécution de `starship explain`.                                                                                                                                                                                                          |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
+| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
+| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
+| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
+| `symbole`           | `''`                            | Le symbole utilisé avant d'afficher la sortie de la commande.                                                                                                                                                                                                                                 |
+| `style`             | `'bold green'`                  | Le style pour le module.                                                                                                                                                                                                                                                                      |
+| `format`            | `'[$symbol($output )]($style)'` | Format du module.                                                                                                                                                                                                                                                                             |
+| `disabled`          | `false`                         | Désactive le module `custom`.                                                                                                                                                                                                                                                                 |
+| `os`                |                                 | Nom du système d'exploitation sur lequel le module sera affiché (unix, linux, macos, windows, ... ) [Voir les valeurs possibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                  |
+| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
+| `ignore_timeout`    | `false`                         | Ignore le paramètre global `command_timeout` et continuer à exécuter des commandes externes, peu importe le temps qu'elles prennent.                                                                                                                                                          |
 
 ### Variables
 

@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
+- Thư mục hiện tại chứa một tập tin `bun.lock`
 - Thư mục hiện tại chứa một tập tin `bun.lockb`
 - Thư mục hiện tại chứa một tập tin `bunfig.toml`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                               | A format string representing the symbol of Bun.                           |
-| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `'bold red'`                         | Kiểu cho module.                                                          |
-| `disabled`          | `false`                              | Disables the `bun` module.                                                |
+| Tuỳ chọn            | Mặc định                                   | Mô tả                                                                     |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`       | Định dạng cho module.                                                     |
+| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🥟 '`                                     | A format string representing the symbol of Bun.                           |
+| `detect_extensions` | `[]`                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                       | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `'bold red'`                               | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                |
 
 ### Các biến
 
@@ -1166,20 +1167,21 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Options
 
-| Tuỳ chọn            | Mặc định                               | Mô tả                                                 |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Định dạng cho module.                                 |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | Kiểu cho module.                                      |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `['.envrc']`                           | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
-| `detect_folders`    | `[]`                                   | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                                   |
+| ------------------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Định dạng cho module.                                   |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
+| `style`             | `'bold orange'`                        | Kiểu cho module.                                        |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
+| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.     |
+| `detect_files`      | `['.envrc']`                           | Những tên tệp nào sẽ kích hoạt mô-đun này.              |
+| `detect_folders`    | `[]`                                   | Những thư mục nào sẽ kích hoạt mô-đun này.              |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.        |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.        |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.    |
 
 ### Các biến
 
@@ -3056,7 +3058,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### Các tuỳ chọn
 
@@ -3200,6 +3202,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -3221,6 +3224,7 @@ MidnightBSD = "🌘 "
 Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
+Nobara = "🎩 "
 OpenBSD = "🐡 "
 OpenCloudOS = "☁️ "
 openEuler = "🦉 "
@@ -3237,6 +3241,7 @@ SUSE = "🦎 "
 Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
+Uos = "🐲 "
 Void = "  "
 Windows = "🪟 "
 ```
@@ -4092,38 +4097,40 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn                    | Mặc định                                                                           | Mô tả                                                                 |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | The format of the module                                              |
-| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | Kiểu cho module.                                                      |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
+| Tuỳ chọn                    | Mặc định                                                                            | Mô tả                                                                 |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | The format of the module                                              |
+| `symbol`                    | `'❌'`                                                                               | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                                | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                               | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                               | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                        | Kiểu cho module.                                                      |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
+| `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                     | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                              | Disables the `status` module.                                         |
 
 ### Các biến
 
-| Biến           | Ví dụ   | Mô tả                                                                                      |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`   | The exit code of the last command                                                          |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
-| int            | `127`   | The exit code of the last command                                                          |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                           |
-| style\*      |         | Giá trị ghi đè của `style`                                                                 |
+| Biến           | Ví dụ   | Mô tả                                                                                        |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| status         | `127`   | The exit code of the last command                                                            |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                     |
+| int            | `127`   | The exit code of the last command                                                            |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                          |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                             |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 

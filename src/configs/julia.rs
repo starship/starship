@@ -18,7 +18,7 @@ pub struct JuliaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for JuliaConfig<'a> {
+impl Default for JuliaConfig<'_> {
     fn default() -> Self {
         JuliaConfig {
             format: "via [$symbol($version )]($style)",

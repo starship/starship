@@ -18,7 +18,7 @@ pub struct BunConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for BunConfig<'a> {
+impl Default for BunConfig<'_> {
     fn default() -> Self {
         BunConfig {
             format: "via [$symbol($version )]($style)",
@@ -27,7 +27,7 @@ impl<'a> Default for BunConfig<'a> {
             style: "bold red",
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec!["bun.lockb", "bunfig.toml"],
+            detect_files: vec!["bun.lock", "bun.lockb", "bunfig.toml"],
             detect_folders: vec![],
         }
     }

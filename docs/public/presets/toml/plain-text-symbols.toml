@@ -19,6 +19,9 @@ symbol = "aws "
 [azure]
 symbol = "az "
 
+[buf]
+symbol = "buf "
+
 [bun]
 symbol = "bun "
 
@@ -133,6 +136,7 @@ Amazon = "amz "
 Android = "andr "
 Arch = "rch "
 Artix = "atx "
+CachyOS = "cach "
 CentOS = "cent "
 Debian = "deb "
 DragonFly = "dfbsd "
@@ -154,6 +158,7 @@ MidnightBSD = "mid "
 Mint = "mint "
 NetBSD = "nbsd "
 NixOS = "nix "
+Nobara = "nbra "
 OpenBSD = "obsd "
 OpenCloudOS = "ocos "
 openEuler = "oeul "
@@ -170,6 +175,7 @@ SUSE = "suse "
 Ubuntu = "ubnt "
 Ultramarine = "ultm "
 Unknown = "unk "
+Uos = "uos "
 Void = "void "
 Windows = "win "
 
@@ -202,6 +208,9 @@ symbol = "quarto "
 
 [raku]
 symbol = "raku "
+
+[rlang]
+symbol = "r "
 
 [ruby]
 symbol = "rb "

@@ -14,7 +14,7 @@ pub struct VcshConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for VcshConfig<'a> {
+impl Default for VcshConfig<'_> {
     fn default() -> Self {
         VcshConfig {
             symbol: "",

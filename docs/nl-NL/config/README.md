@@ -66,7 +66,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Terminology
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Module**: A component in the prompt giving information based on contextual information from your OS. Als voorbeeld, de "nodejs" module laat de versie van Node.js zien dat momenteel is geïnstalleerd op jouw systeem, als je huidige folder een Node.js project is.
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
@@ -553,7 +553,7 @@ discharging_symbol = '💦 '
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+De `buf` module laat de huidige geïnstalleerde versie van [Buf](https://buf.build) zien. By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
 
 ### Options
 
@@ -589,23 +589,24 @@ symbol = '🦬 '
 
 ## Bun
 
-The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+De `bun` module laat de huidige geïnstalleerde versie van de [bun](https://bun.sh) JavaScript runtime zien. By default the module will be shown if any of the following conditions are met:
 
+- The current directory contains a `bun.lock` file
 - The current directory contains a `bun.lockb` file
 - The current directory contains a `bunfig.toml` file
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                               | A format string representing the symbol of Bun.                           |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold red'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `bun` module.                                                |
+| Option              | Default                                    | Description                                                               |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`       | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🥟 '`                                     | A format string representing the symbol of Bun.                           |
+| `detect_extensions` | `[]`                                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                       | Which folders should trigger this module.                                 |
+| `style`             | `'bold red'`                               | The style for the module.                                                 |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                |
 
 ### Variables
 
@@ -752,7 +753,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+De `cmake` module laat de huidige geïnstalleerde versie van [CMake](https://cmake.org/) zien. By default the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
@@ -782,7 +783,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+De `cobol` module laat de huidige geïnstalleerde versie van COBOL zien. By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains any files ending in `.cob` or `.COB`
 - The current directory contains any files ending in `.cbl` or `.CBL`
@@ -928,7 +929,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
+De `crystal` module laat de huidige geïnstalleerde versie van [Crystal](https://crystal-lang.org/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
@@ -1005,7 +1006,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
+De `dart` module laat de huidige geïnstalleerde versie van [Dart](https://dart.dev/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -1045,7 +1046,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+De `deno` module laat de huidige geïnstalleerde versie van [Deno](https://deno.land/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -1166,20 +1167,21 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Options
 
-| Option              | Default                                | Description                                           |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | The format for the module.                            |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | The style for the module.                             |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.          |
-| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module.             |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Option              | Default                                | Description                                             |
+| ------------------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | The format for the module.                              |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
+| `style`             | `'bold orange'`                        | The style for the module.                               |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.            |
+| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.             |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module.               |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.        |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.        |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.    |
 
 ### Variables
 
@@ -1297,7 +1299,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+De `elixir` module laat de huidige geïnstalleerde versie van [Elixir](https://elixir-lang.org/) en [Erlang/OTP](https://erlang.org/doc/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `mix.exs` file.
 
@@ -1336,7 +1338,7 @@ symbol = '🔮 '
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
+De `elm` module laat de huidige geïnstalleerde versie van [Elm](https://elm-lang.org/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
@@ -1449,7 +1451,7 @@ default = 'unknown user'
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+De `erlang` module laat de huidige geïnstalleerde versie van [Erlang/OTP](https://erlang.org/doc/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
@@ -1488,7 +1490,7 @@ format = 'via [e $version](bold red) '
 
 ## Fennel
 
-The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). By default the module will be shown if any of the following conditions are met:
+De `fennel` module laat de huidige geïnstalleerde versie van [Fennel](https://fennel-lang.org) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with the `.fnl` extension
 
@@ -1967,7 +1969,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Gleam
 
-The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
+De `gleam` module laat de huidige geïnstalleerde versie van [Gleam](https://gleam.run/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `gleam.toml` file
 - The current directory contains a file with the `.gleam` extension
@@ -2005,7 +2007,7 @@ format = 'via [⭐ $version](bold red) '
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
+De `golang` module laat de huidige geïnstalleerde versie van [Go](https://golang.org/) zien. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -3056,7 +3058,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### Options
 
@@ -3200,6 +3202,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -3221,6 +3224,7 @@ MidnightBSD = "🌘 "
 Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
+Nobara = "🎩 "
 OpenBSD = "🐡 "
 OpenCloudOS = "☁️ "
 openEuler = "🦉 "
@@ -3237,6 +3241,7 @@ SUSE = "🦎 "
 Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
+Uos = "🐲 "
 Void = "  "
 Windows = "🪟 "
 ```
@@ -4092,38 +4097,40 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                      | Default                                                                            | Description                                                           |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | The format of the module                                              |
-| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | The style for the module.                                             |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
+| Option                      | Default                                                                             | Description                                                           |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | The format of the module                                              |
+| `symbol`                    | `'❌'`                                                                               | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                                | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                               | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                               | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                        | The style for the module.                                             |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
+| `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                     | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                              | Disables the `status` module.                                         |
 
 ### Variables
 
-| Variable       | Example | Description                                                                                |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`   | The exit code of the last command                                                          |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
-| int            | `127`   | The exit code of the last command                                                          |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |         | Mirrors the value of option `symbol`                                                       |
-| style\*      |         | Mirrors the value of option `style`                                                        |
+| Variable       | Example | Description                                                                                  |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| status         | `127`   | The exit code of the last command                                                            |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                     |
+| int            | `127`   | The exit code of the last command                                                            |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                          |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbol         |         | Mirrors the value of option `symbol`                                                         |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: This variable can only be used as a part of a style string
 

@@ -13,14 +13,16 @@ use serde::Deserialize;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("direnv");
     let config = DirenvConfig::try_load(module.config);
+    let has_detected_env_var = context.detect_env_vars(&config.detect_env_vars);
 
     let direnv_applies = !config.disabled
-        && context
-            .try_begin_scan()?
-            .set_extensions(&config.detect_extensions)
-            .set_files(&config.detect_files)
-            .set_folders(&config.detect_folders)
-            .is_match();
+        && (has_detected_env_var
+            || context
+                .try_begin_scan()?
+                .set_extensions(&config.detect_extensions)
+                .set_files(&config.detect_files)
+                .set_folders(&config.detect_folders)
+                .is_match());
 
     if !direnv_applies {
         return None;
@@ -321,6 +323,40 @@ mod tests {
                 disabled = false
             })
             .path(dir.path())
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
+                    stderr: String::default(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv loaded/allowed")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+    #[test]
+    fn folder_with_loaded_rc_file_in_subdirectory() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+        let sub_dir_path = dir.path().join("sub_dir");
+
+        std::fs::File::create(rc_path)?.sync_all()?;
+        std::fs::DirBuilder::new()
+            .recursive(true)
+            .create(&sub_dir_path)?;
+
+        let actual = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                    disabled = false
+            })
+            .path(&sub_dir_path)
+            .env("DIRENV_FILE", "file")
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
