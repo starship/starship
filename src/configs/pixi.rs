@@ -20,7 +20,7 @@ pub struct PixiConfig<'a> {
     pub detect_files: Vec<&'a str>,
 }
 
-impl<'a> Default for PixiConfig<'a> {
+impl Default for PixiConfig<'_> {
     fn default() -> Self {
         PixiConfig {
             pixi_binary: VecOr(vec!["pixi"]),
