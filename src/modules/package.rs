@@ -69,20 +69,22 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
 }
 
 fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    fn extract_version(
-        file_name: &str,
-        context: &Context,
-        config: &PackageConfig,
-    ) -> Option<String> {
-        let file_contents = context.read_file_from_pwd(file_name)?;
-        let json_content: json::Value = json::from_str(&file_contents).ok()?;
+    let (filename, contents) = ["deno.json", "deno.jsonc", "jsr.json", "jsr.jsonc"]
+        .iter()
+        .find_map(|filename| {
+            context
+                .read_file_from_pwd(filename)
+                .map(|contents| (filename, contents))
+        })?;
 
-        let raw_version = json_content.get("version")?.as_str()?;
-        format_version(raw_version, config.version_format)
-    }
+    let json_content: json::Value = if filename.ends_with(".jsonc") {
+        jsonc_parser::parse_to_serde_value(&contents, &Default::default()).ok()??
+    } else {
+        json::from_str(&contents).ok()?
+    };
 
-    extract_version("jsr.json", context, config)
-        .or_else(|| extract_version("deno.json", context, config))
+    let raw_version = json_content.get("version")?.as_str()?;
+    format_version(raw_version, config.version_format)
 }
 
 fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
@@ -761,12 +763,42 @@ license = "MIT"
     }
 
     #[test]
+    fn test_jsr_package_version_with_jsr_jsonc() -> io::Result<()> {
+        let config_name = "jsr.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
     fn test_jsr_package_version_with_deno_json() -> io::Result<()> {
         let config_name = "deno.json";
         let config_content = json::json!({
             "name": "starship",
             "version": "0.1.0"
         })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_jsonc() -> io::Result<()> {
+        let config_name = "deno.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
         .to_string();
 
         let project_dir = create_project_dir()?;
