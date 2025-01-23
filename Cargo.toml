@@ -43,15 +43,15 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.39", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.26", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.5.27", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.42"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.69.1", default-features = false, features = ["max-performance-safe", "revision"] }
-gix-features = { version = "0.39.1", optional = true }
-indexmap = { version = "2.7.0", features = ["serde"] }
-log = { version = "0.4.22", features = ["std"] }
+gix = { version = "0.70.0", default-features = false, features = ["max-performance-safe", "revision"] }
+gix-features = { version = "0.40.0", optional = true }
+indexmap = { version = "2.7.1", features = ["serde"] }
+log = { version = "0.4.25", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.11.4", optional = true }
@@ -68,11 +68,11 @@ rand = "0.8.5"
 rayon = "1.10.0"
 regex = { version = "1.11.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.1"
-semver = "1.0.24"
+semver = "1.0.25"
 serde = { version = "1.0.217", features = ["derive"] }
-serde_json = "1.0.135"
+serde_json = "1.0.137"
 sha1 = "0.10.6"
-shadow-rs = { version = "0.37.0", default-features = false }
+shadow-rs = { version = "0.38.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.10.0", optional = true }
@@ -117,7 +117,7 @@ features = [
 nix = { version = "0.29.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.37.0", default-features = false }
+shadow-rs = { version = "0.38.0", default-features = false }
 dunce = "1.0.5"
 
 [target.'cfg(windows)'.build-dependencies]
