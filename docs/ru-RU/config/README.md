@@ -4630,40 +4630,40 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### Переменные
 
-| Переменная | Описание                               |
-| ---------- | -------------------------------------- |
-| output     | The output of `command` run in `shell` |
-| symbol     | Отражает значение параметра `symbol`   |
-| style\*  | Отражает значение параметра `style`    |
+| Переменная | Описание                             |
+| ---------- | ------------------------------------ |
+| output     | Выводит `command` запустив в `shell` |
+| symbol     | Отражает значение параметра `symbol` |
+| style\*  | Отражает значение параметра `style`  |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
-#### Custom command shell
+#### Пользовательские команды shell
 
 `shell` accepts a non-empty list of strings, where:
 
 - The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+Если этот параметр не установлен, он вернется к STARSHIP_SHELL, а затем к 'sh' на Linux и 'cmd /C' на Windows.
 
-The `command` (and `when`, if applicable) will be passed in on stdin.
+Команда `command` (и `when`, если применимо) будет передана на stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Если `shell` не указан или содержит только один элемент и Starship обнаруживает, что будут использовать PowerShell, то автоматически будут добавлены следующие аргументы: `-NoProfile -Command -`. Если `shell` не указан или содержит только один элемент, и Starship будет использоваться обнаружив Cmd, cледующий аргумент будет автоматически добавлен: `/C` и `stdin` будет установлен на `false`. Если `shell` не указан или содержит только один элемент, Starship обнаружит, что будет использоваться Nushell, cледующие аргументы будут автоматически добавлены: `-c` и `stdin` будут установлены на `false`. Такого поведения можно избежать путем явного передачи аргументов в shell, например.
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: предупреждение Убедитесь, что ваша пользовательская конфигурация оболочки завершается корректно
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Если вы задаете собственную команду, убедитесь, что оболочка по умолчанию, используемая starship, правильно выполняет команду с плавным выходом (через опцию `shell`).
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Например, PowerShell требует параметра `-Command` для выполнения одного лайнера. Пропуск этого параметра может привести к тому, что starship попадет в рекурсивный цикл, в котором оболочка может попытаться снова загрузить среду с полным профилем с помощью starship и, следовательно, повторно выполнить пользовательскую команду, попадая в бесконечный цикл.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Параметры, аналогичные `-NoProfile` в PowerShell, рекомендуются для других оболочек, a также, чтобы избежать дополнительного времени загрузки пользовательского профиля на каждом starship вызове.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+Автоматическое определение оболочек и добавление соответствующих параметров в настоящее время реализованы, но возможно, что не все оболочки покрыты. [Пожалуйста, откройте проблему](https://github.com/starship/starship/issues/new/choose) с подробной информацией о shell и конфигурации starship, если вы столкнетесь с таким сценарием.
 
 :::
 
@@ -4673,19 +4673,19 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # показывает выходные данные команды
+detect_files = ['foo'] # можно указать фильтры, но подстановочные знаки не поддерживаются
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # фильтры *.pst файлов
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # фильтры *.pst файлов
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
