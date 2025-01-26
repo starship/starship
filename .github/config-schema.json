@@ -1377,6 +1377,10 @@
         "pyenv_prefix": "pyenv ",
         "pyenv_version_name": false,
         "python_binary": [["python"], ["python3"], ["python2"]],
+        "override_venv_names": [
+          ".venv",
+          "venv"
+        ],
         "style": "yellow bold",
         "symbol": "🐍 ",
         "version_format": "v${raw}"
@@ -5223,6 +5227,15 @@
         },
         "detect_env_vars": {
           "default": ["VIRTUAL_ENV"],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "override_venv_names": {
+          "default": [
+            ""
+          ],
           "type": "array",
           "items": {
             "type": "string"
