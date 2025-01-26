@@ -1355,6 +1355,10 @@
         "detect_folders": [],
         "detect_env_vars": [
           "VIRTUAL_ENV"
+        ],
+        "override_venvs": [
+          ".venv",
+          "venv"
         ]
       }
     },
@@ -5415,6 +5419,16 @@
           },
           "default": [
             "VIRTUAL_ENV"
+          ]
+        },
+        "override_venvs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".venv",
+            "venv"
           ]
         }
       },
