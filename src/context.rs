@@ -293,12 +293,13 @@ impl<'a> Context<'a> {
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
 
-                // don't use the global git configs
+                // Load all the configuration as it affects aspects of the
+                // `git_status` and `git_metrics` modules.
                 let config = gix::open::permissions::Config {
-                    git_binary: false,
-                    system: false,
-                    git: false,
-                    user: false,
+                    git_binary: true,
+                    system: true,
+                    git: true,
+                    user: true,
                     env: true,
                     includes: true,
                 };
@@ -670,7 +671,7 @@ impl Repo {
     pub fn exec_git<T: AsRef<OsStr> + Debug>(
         &self,
         context: &Context,
-        git_args: &[T],
+        git_args: impl IntoIterator<Item = T>,
     ) -> Option<CommandOutput> {
         let mut command = create_command("git").ok()?;
 
