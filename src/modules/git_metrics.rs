@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
         let status_module = context.new_module("git_status");
         let status_config = GitStatusConfig::try_load(status_module.config);
-        let status = super::git_status::get_static_repo_status(context, &repo, &status_config)?;
+        let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
         let gix_repo = gix_repo.with_object_memory();
         gix_repo.write_blob([]).ok()?; /* create empty blob */
         let tree_index_cache = prevent_external_diff(
@@ -274,6 +274,7 @@ fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blo
     cache
 }
 
+#[allow(clippy::too_many_arguments)]
 fn diff_two_opt(
     lhs_location: &BStr,
     lhs_id: gix::ObjectId,

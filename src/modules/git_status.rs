@@ -248,7 +248,13 @@ fn get_repo_status(
     let gix_repo = repo.open();
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let has_untracked = !config.untracked.is_empty();
-    if gix_repo.index_or_empty().ok()?.is_sparse() {
+    let git_config = gix_repo.config_snapshot();
+    if gix_repo.index_or_empty().ok()?.is_sparse()
+        || (git_config.string("core.fsmonitor").is_some() // can be path to monitor executable
+            && git_config                                 // or can be boolean which should be true
+                .boolean("core.fsmonitor")                // and any boolean is a valid string, and we get None if a path is used.
+                .map_or(true, std::convert::identity))
+    {
         let mut args = vec!["status", "--porcelain=2"];
 
         // for performance reasons, only pass flags if necessary...
@@ -333,7 +339,7 @@ fn get_repo_status(
             } else {
                 gix::status::tree_index::TrackRenames::Given(sanitize_rename_tracking(
                     // Get configured diff-rename configuration, or use default settings.
-                    gix::diff::new_rewrites(&gix_repo.config_snapshot(), true)
+                    gix::diff::new_rewrites(&git_config, true)
                         .unwrap_or_default()
                         .0
                         .unwrap_or_default(),
