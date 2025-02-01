@@ -1,6 +1,6 @@
 use gix::bstr::{BStr, ByteSlice};
-use gix::diff::blob::pipeline::WorktreeRoots;
 use gix::diff::blob::ResourceKind;
+use gix::diff::blob::pipeline::WorktreeRoots;
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use regex::Regex;
 
@@ -64,7 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     gix::diff::blob::pipeline::Mode::ToGit,
                     WorktreeRoots {
                         old_root: None,
-                        new_root: gix_repo.work_dir().map(ToOwned::to_owned),
+                        new_root: gix_repo.workdir().map(ToOwned::to_owned),
                     },
                 )
                 .ok()?,

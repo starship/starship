@@ -226,9 +226,9 @@ pub(crate) fn get_static_repo_status(
     static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
         parking_lot::Mutex::new(None);
     let mut status = REPO_STATUS.lock();
-    let needs_update = status.as_ref().map_or(true, |(_status, status_path)| {
-        status_path != &context.current_dir
-    });
+    let needs_update = status
+        .as_ref()
+        .is_none_or(|(_status, status_path)| status_path != &context.current_dir);
     if needs_update {
         *status = get_repo_status(context, repo, config)
             .map(|status| (Arc::new(status), context.current_dir.clone()));
@@ -249,11 +249,12 @@ fn get_repo_status(
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let has_untracked = !config.untracked.is_empty();
     let git_config = gix_repo.config_snapshot();
-    if gix_repo.index_or_empty().ok()?.is_sparse()
+    if config.use_git_executable
+        || gix_repo.index_or_empty().ok()?.is_sparse()
         || (git_config.string("core.fsmonitor").is_some() // can be path to monitor executable
             && git_config                                 // or can be boolean which should be true
                 .boolean("core.fsmonitor")                // and any boolean is a valid string, and we get None if a path is used.
-                .map_or(true, std::convert::identity))
+                .is_some_and(std::convert::identity))
     {
         let mut args = vec!["status", "--porcelain=2"];
 
@@ -437,7 +438,9 @@ fn get_repo_status(
                             repo_status.untracked += 1;
                         }
                         Item::Rewrite { .. } => {
-                            unreachable!("this kind of rename tracking isn't enabled by default and specific to gitoxide")
+                            unreachable!(
+                                "this kind of rename tracking isn't enabled by default and specific to gitoxide"
+                            )
                         }
                         _ => {}
                     }
@@ -747,7 +750,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 
 #[cfg(test)]
 pub(crate) mod tests {
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
