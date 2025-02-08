@@ -79,6 +79,7 @@ pub mod rlang;
 pub mod ruby;
 pub mod rust;
 pub mod scala;
+pub mod separator;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
