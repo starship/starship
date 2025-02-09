@@ -1,5 +1,5 @@
 use super::{Context, Module, ModuleConfig};
-use crate::{configs::separator::SeperatorConfig, segment::Segment};
+use crate::{configs::separator::SeparatorConfig, segment::Segment};
 use nu_ansi_term::{Color, Style};
 use unicode_width::UnicodeWidthStr;
 
@@ -45,7 +45,7 @@ impl From<TermColor> for Color {
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let config = SeperatorConfig::try_load(context.new_module("separator").config);
+    let config = SeparatorConfig::try_load(context.new_module("separator").config);
 
     // Early return if disabled or no command duration
     if config.disabled || context.get_cmd_duration().is_none() {

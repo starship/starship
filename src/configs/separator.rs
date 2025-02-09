@@ -8,15 +8,15 @@ use serde::{Deserialize, Serialize};
 )]
 #[serde(default)]
 #[derive(Debug)]
-pub struct SeperatorConfig {
+pub struct SeparatorConfig {
     pub symbol: String,
     pub color: String,
     pub disabled: bool,
 }
 
-impl Default for SeperatorConfig {
+impl Default for SeparatorConfig {
     fn default() -> Self {
-        SeperatorConfig {
+        SeparatorConfig {
             symbol: "▄".to_string(),
             color: "blue".to_string(),
             disabled: false,
