@@ -28,8 +28,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_files(&[checkout_db])
         .scan()?;
 
-    // Read the total number of added and deleted lines from "fossil diff --numstat"
-    let output = context.exec_cmd("fossil", &["diff", "--numstat"])?.stdout;
+    // Read the total number of added and deleted lines from "fossil diff -i --numstat"
+    let output = context
+        .exec_cmd("fossil", &["diff", "-i", "--numstat"])?
+        .stdout;
     let stats = FossilDiff::parse(&output, config.only_nonzero_diffs);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -58,7 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Represents the parsed output from a Fossil diff with the --numstat option enabled.
+/// Represents the parsed output from a Fossil diff with the -i --numstat option enabled.
 #[derive(Debug, PartialEq)]
 struct FossilDiff<'a> {
     added: &'a str,
@@ -66,7 +68,7 @@ struct FossilDiff<'a> {
 }
 
 impl<'a> FossilDiff<'a> {
-    /// Parses the output of `fossil diff --numstat` as a `FossilDiff` struct.
+    /// Parses the output of `fossil diff -i --numstat` as a `FossilDiff` struct.
     pub fn parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Self {
         // Fossil formats the last line of the output as "%10d %10d TOTAL over %d changed files\n"
         // where the 1st and 2nd placeholders are the number of added and deleted lines respectively
