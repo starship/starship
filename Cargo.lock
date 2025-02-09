@@ -2288,9 +2288,9 @@ dependencies = [
 
 [[package]]
 name = "os_info"
-version = "3.9.2"
+version = "3.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e6520c8cc998c5741ee68ec1dc369fc47e5f0ea5320018ecf2a1ccd6328f48b"
+checksum = "2a604e53c24761286860eba4e2c8b23a0161526476b1de520139d69cdb85a6b5"
 dependencies = [
  "log",
  "serde",
