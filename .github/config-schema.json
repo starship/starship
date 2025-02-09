@@ -1446,9 +1446,15 @@
         "pyenv_prefix": "pyenv ",
         "pyenv_version_name": false,
         "python_binary": [
-          "python",
-          "python3",
-          "python2"
+          [
+            "python"
+          ],
+          [
+            "python3"
+          ],
+          [
+            "python2"
+          ]
         ],
         "style": "yellow bold",
         "symbol": "🐍 ",
@@ -5290,13 +5296,19 @@
         },
         "python_binary": {
           "default": [
-            "python",
-            "python3",
-            "python2"
+            [
+              "python"
+            ],
+            [
+              "python3"
+            ],
+            [
+              "python2"
+            ]
           ],
           "allOf": [
             {
-              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+              "$ref": "#/definitions/Either_for_Either_for_String_and_Array_of_String_and_Array_of_Either_for_String_and_Array_of_String"
             }
           ]
         },
@@ -5364,6 +5376,19 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either_for_Either_for_String_and_Array_of_String_and_Array_of_Either_for_String_and_Array_of_String": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+          }
+        }
+      ]
     },
     "Either_for_String_and_Array_of_String": {
       "anyOf": [
