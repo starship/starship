@@ -88,7 +88,7 @@ mod tests {
 
         let expected = Some(format!(
             "{}",
-            Color::Green.paint("-".repeat(get_terminal_width()/"-".width()))
+            Color::Green.paint("-".repeat(get_terminal_width() / "-".width()))
         ));
         assert_eq!(actual, expected);
     }
@@ -110,7 +110,7 @@ mod tests {
 
         let expected = Some(format!(
             "{}",
-            Color::Blue.paint("*".repeat(get_terminal_width()/"*".width()))
+            Color::Blue.paint("*".repeat(get_terminal_width() / "*".width()))
         ));
         assert_eq!(actual, expected);
     }
@@ -130,7 +130,7 @@ mod tests {
         log::info!("actual: {:?}", actual);
         let expected = Some(format!(
             "{}",
-            Color::Red.paint("-".repeat(get_terminal_width()/"-".width()))
+            Color::Red.paint("-".repeat(get_terminal_width() / "-".width()))
         ));
         assert_eq!(actual, expected);
     }
@@ -150,7 +150,7 @@ mod tests {
 
         let expected = Some(format!(
             "{}",
-            Color::Purple.paint("=".repeat(get_terminal_width()/"=".width()))
+            Color::Purple.paint("=".repeat(get_terminal_width() / "=".width()))
         ));
         assert_eq!(actual, expected);
     }
@@ -192,7 +192,10 @@ mod tests {
             .collect();
 
         // Default terminal width is usually 80 characters
-        let expected = Some(format!("{}", Color::Green.paint("-".repeat(get_terminal_width()/"-".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::Green.paint("-".repeat(get_terminal_width() / "-".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
@@ -208,7 +211,10 @@ mod tests {
             .cmd_duration(500)
             .collect();
 
-        let expected = Some(format!("{}", Color::Red.paint("=".repeat(get_terminal_width()/"=".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::Red.paint("=".repeat(get_terminal_width() / "=".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
@@ -224,7 +230,10 @@ mod tests {
             .cmd_duration(500)
             .collect();
 
-        let expected = Some(format!("{}", Color::Blue.paint("*".repeat(get_terminal_width()/"*".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::Blue.paint("*".repeat(get_terminal_width() / "*".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
@@ -241,7 +250,10 @@ mod tests {
             .env("COLUMNS", "40") // Set custom terminal width
             .collect();
 
-        let expected = Some(format!("{}", Color::Green.paint("-".repeat(get_terminal_width()/"-".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::Green.paint("-".repeat(get_terminal_width() / "-".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
@@ -257,7 +269,10 @@ mod tests {
             .cmd_duration(500)
             .collect();
 
-        let expected = Some(format!("{}", Color::LightRed.paint("-".repeat(get_terminal_width()/"-".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::LightRed.paint("-".repeat(get_terminal_width() / "-".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
@@ -274,7 +289,10 @@ mod tests {
             .collect();
 
         // Should default to green when color is invalid
-        let expected = Some(format!("{}", Color::Green.paint("-".repeat(get_terminal_width()/"-".width()))));
+        let expected = Some(format!(
+            "{}",
+            Color::Green.paint("-".repeat(get_terminal_width() / "-".width()))
+        ));
         assert_eq!(actual, expected);
     }
 
