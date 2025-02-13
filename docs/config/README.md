@@ -1976,6 +1976,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `behind`            | `'⇣'`                                         | The format of `behind`                                                                                      |
 | `diverged`          | `'⇕'`                                         | The format of `diverged`                                                                                    |
 | `up_to_date`        | `''`                                          | The format of `up_to_date`                                                                                  |
+| `no_upstream`       | `''`                                          | The format of `no_upstream`                                                                                 |
 | `untracked`         | `'?'`                                         | The format of `untracked`                                                                                   |
 | `stashed`           | `'$'`                                         | The format of `stashed`                                                                                     |
 | `modified`          | `'!'`                                         | The format of `modified`                                                                                    |
@@ -2032,6 +2033,7 @@ ahead = '🏎💨'
 behind = '😰'
 diverged = '😵'
 up_to_date = '✓'
+no_upstream = '🥷'
 untracked = '🤷'
 stashed = '📦'
 modified = '📝'
