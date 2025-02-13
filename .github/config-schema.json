@@ -976,6 +976,7 @@
     },
     "line_break": {
       "default": {
+        "break_below_width": null,
         "disabled": false
       },
       "allOf": [
@@ -4391,6 +4392,15 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "break_below_width": {
+          "default": null,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0.0
         }
       },
       "additionalProperties": false
