@@ -81,6 +81,7 @@ mod shlvl;
 mod singularity;
 mod solidity;
 mod spack;
+mod spin;
 mod status;
 mod sudo;
 mod swift;
@@ -193,6 +194,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "solidity" => solidity::module(context),
             "spack" => spack::module(context),
+            "spin" => spin::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
@@ -318,6 +320,7 @@ pub fn description(module: &str) -> &'static str {
         "singularity" => "The currently used Singularity image",
         "solidity" => "The current installed version of Solidity",
         "spack" => "The current spack environment, if $SPACK_ENV is set",
+        "spin" => "The current installed version of Spin",
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",

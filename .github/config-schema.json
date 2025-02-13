@@ -1714,6 +1714,29 @@
         }
       ]
     },
+    "spin": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "spin.toml",
+          "Spin.toml"
+        ],
+        "detect_folders": [
+          ".spin"
+        ],
+        "disabled": false,
+        "format": "[$symbol($version) ]($style)",
+        "permanent": false,
+        "style": "bold bright-purple",
+        "symbol": "💫 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SpinConfig"
+        }
+      ]
+    },
     "status": {
       "default": {
         "disabled": true,
@@ -5970,6 +5993,62 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SpinConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol($version) ]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "💫 ",
+          "type": "string"
+        },
+        "permanent": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold bright-purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "spin.toml",
+            "Spin.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".spin"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
