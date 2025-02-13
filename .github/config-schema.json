@@ -1714,6 +1714,22 @@
         }
       ]
     },
+    "ssh_agent": {
+      "default": {
+        "disabled": true,
+        "format": "[ssh $symbol]($style)",
+        "style": "bold green",
+        "style_none": "bold red",
+        "symbol": "🔑 ",
+        "symbol_multi": "🔑➕ ",
+        "symbol_none": "❌ "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SshAgentConfig"
+        }
+      ]
+    },
     "status": {
       "default": {
         "disabled": true,
@@ -5973,6 +5989,39 @@
         }
       },
       "additionalProperties": false
+    },
+    "SshAgentConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[ssh $symbol]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🔑 ",
+          "type": "string"
+        },
+        "symbol_multi": {
+          "default": "🔑➕ ",
+          "type": "string"
+        },
+        "symbol_none": {
+          "default": "❌ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "style_none": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      }
     },
     "StatusConfig": {
       "type": "object",
