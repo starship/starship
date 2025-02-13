@@ -95,6 +95,7 @@ pub const ALL_MODULES: &[&str] = &[
     "terraform",
     "time",
     "typst",
+    "unity",
     "username",
     "vagrant",
     "vcsh",
