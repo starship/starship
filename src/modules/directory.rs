@@ -95,6 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 config.fish_style_pwd_dir_length as usize,
                 &contracted_home_dir,
                 &dir_string,
+                config.truncation_symbol,
             )
         } else {
             String::from(config.truncation_symbol)
@@ -311,11 +312,17 @@ fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -
 /// Absolute Path: `/Users/Bob/Projects/work/a_repo`
 /// Contracted Path: `a_repo`
 /// With Fish Style: `~/P/w/a_repo`
+/// With Fish Style (truncation suffix = "…"): `~/P…/w…/a_repo`
 ///
 /// Absolute Path: `/some/Path/not/in_a/repo/but_nested`
 /// Contracted Path: `in_a/repo/but_nested`
 /// With Fish Style: `/s/P/n/in_a/repo/but_nested`
-fn to_fish_style(pwd_dir_length: usize, dir_string: &str, truncated_dir_string: &str) -> String {
+fn to_fish_style(
+    pwd_dir_length: usize,
+    dir_string: &str,
+    truncated_dir_string: &str,
+    truncation_suffix: &str,
+) -> String {
     let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string);
     let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
 
@@ -330,8 +337,8 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: &str, truncated_dir_string: 
             match word {
                 "" => String::new(),
                 _ if chars.len() <= pwd_dir_length => word.to_string(),
-                _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
-                _ => chars[..pwd_dir_length].join(""),
+                _ if word.starts_with('.') => chars[..=pwd_dir_length].join("") + truncation_suffix,
+                _ => chars[..pwd_dir_length].join("") + truncation_suffix,
             }
         })
         .collect::<Vec<_>>()
@@ -458,14 +465,14 @@ mod tests {
     #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
-        let output = to_fish_style(1, path, "engines/booster/rocket");
+        let output = to_fish_style(1, path, "engines/booster/rocket", "");
         assert_eq!(output, "~/s/");
     }
 
     #[test]
     fn fish_style_with_user_home_contracted_path_and_dot_dir() {
         let path = "~/.starship/engines/booster/rocket";
-        let output = to_fish_style(1, path, "engines/booster/rocket");
+        let output = to_fish_style(1, path, "engines/booster/rocket", "");
         assert_eq!(output, "~/.s/");
     }
 
@@ -473,29 +480,37 @@ mod tests {
     fn fish_style_with_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(1, path, "repo/but_nested");
+        let output = to_fish_style(1, path, "repo/but_nested", "");
         assert_eq!(output, "/a/P/n/i/");
+    }
+
+    #[test]
+    fn fish_style_with_truncation_suffix() {
+        // `truncation_length = 2`
+        let path = "/absolute/Path/not/in_a/repo/but_nested";
+        let output = to_fish_style(1, path, "repo/but_nested", "…");
+        assert_eq!(output, "/a…/P…/n…/i…/");
     }
 
     #[test]
     fn fish_style_with_pwd_dir_len_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(2, path, "repo/but_nested");
+        let output = to_fish_style(2, path, "repo/but_nested", "");
         assert_eq!(output, "/ab/Pa/no/in/");
     }
 
     #[test]
     fn fish_style_with_duplicate_directories() {
         let path = "~/starship/tmp/C++/C++/C++";
-        let output = to_fish_style(1, path, "C++");
+        let output = to_fish_style(1, path, "C++", "");
         assert_eq!(output, "~/s/t/C/C/");
     }
 
     #[test]
     fn fish_style_with_unicode() {
         let path = "~/starship/tmp/目录/a̐éö̲/目录";
-        let output = to_fish_style(1, path, "目录");
+        let output = to_fish_style(1, path, "目录", "");
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 
@@ -839,6 +854,7 @@ mod tests {
             Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
                 100,
                 &dir.to_slash_lossy(),
+                "",
                 ""
             )))
         ));
@@ -889,7 +905,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
-                to_fish_style(1, &dir.to_slash_lossy(), "/thrusters/rocket")
+                to_fish_style(1, &dir.to_slash_lossy(), "/thrusters/rocket", "")
             )))
         ));
 
@@ -1011,7 +1027,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "", "")
             )))
         ));
 
@@ -1042,7 +1058,12 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    &tmp_dir.path().join("above-repo").to_slash_lossy(),
+                    "",
+                    ""
+                )
             )))
         ));
 
@@ -1217,7 +1238,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "", "")
             )))
         ));
 
@@ -1254,7 +1275,12 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    &tmp_dir.path().join("above-repo").to_slash_lossy(),
+                    "",
+                    ""
+                )
             )))
         ));
 
