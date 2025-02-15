@@ -628,6 +628,20 @@
         }
       ]
     },
+    "git_mob": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol $initials \\($count\\)]($style)",
+        "separator": ",",
+        "style": "green bold",
+        "symbol": "👥"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitMobConfig"
+        }
+      ]
+    },
     "git_state": {
       "default": {
         "am": "AM",
@@ -3509,6 +3523,32 @@
         "ignore_submodules": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitMobConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol $initials \\($count\\)]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "👥",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "separator": {
+          "default": ",",
+          "type": "string"
         }
       },
       "additionalProperties": false
