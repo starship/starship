@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.elvish/rc.elv`:
+Add the following to the end of `$XDG_CONFIG_HOME/elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Note: Only Elvish v0.18+ is supported, v0.21+ ignores legacy `~/.elvish/rc.elv` path
 
 </details>
 
