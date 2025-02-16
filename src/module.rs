@@ -102,6 +102,7 @@ pub const ALL_MODULES: &[&str] = &[
     "typst",
     "username",
     "vagrant",
+    "vcs",
     "vcsh",
     "vlang",
     "xmake",
