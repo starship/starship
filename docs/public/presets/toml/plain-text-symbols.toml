@@ -91,6 +91,9 @@ symbol = "guix "
 [haskell]
 symbol = "haskell "
 
+[helm]
+symbol = "helm "
+
 [hg_branch]
 symbol = "hg "
 
