@@ -25,7 +25,7 @@ impl Default for JavaConfig<'_> {
             version_format: "v${raw}",
             disabled: false,
             style: "red dimmed",
-            symbol: "☕ ",
+            symbol: " ",
             detect_extensions: vec!["java", "class", "jar", "gradle", "clj", "cljc"],
             detect_files: vec![
                 "pom.xml",
