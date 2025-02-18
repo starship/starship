@@ -2317,7 +2317,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                                                                                                  | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `'☕ '`                                                                                                                | Một format string đại diện cho biểu tượng Java                            |
+| `symbol`            | `' '`                                                                                                                | Một format string đại diện cho biểu tượng Java                            |
 | `style`             | `'red dimmed'`                                                                                                        | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                                                                               | Vô hiệu `java` module.                                                    |
 

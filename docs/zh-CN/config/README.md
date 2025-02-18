@@ -2317,7 +2317,7 @@ aliases = { "Max's MacBook Pro" = "home" }
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | 触发此组件的扩展名                                       |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | 触发此组件的文件名                                       |
 | `detect_folders`    | `[]`                                                                                                                  | 触发此组件的文件夹                                       |
-| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java |
+| `symbol`            | `' '`                                                                                                                | A format string representing the symbol of Java |
 | `style`             | `'red dimmed'`                                                                                                        | 此组件的样式。                                         |
 | `disabled`          | `false`                                                                                                               | 禁用 `java` 组件。                                   |
 

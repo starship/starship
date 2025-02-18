@@ -2317,7 +2317,7 @@ aliases = { "Max's MacBook Pro" = "home" }
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                                                                  | Які теки мають запускати цей модуль.                              |
-| `symbol`            | `'☕ '`                                                                                                                | Формат рядка, що представляє символ Java                          |
+| `symbol`            | `' '`                                                                                                                | Формат рядка, що представляє символ Java                          |
 | `style`             | `'red dimmed'`                                                                                                        | Стиль модуля.                                                     |
 | `disabled`          | `false`                                                                                                               | Вимикає модуль `java`.                                            |
 

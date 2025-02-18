@@ -2317,7 +2317,7 @@ El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                                  | Qué carpetas deberían activar estos módulos.                                            |
-| `symbol`            | `'☕ '`                                                                                                                | Una cadena de formato que representa el símbolo de Java                                 |
+| `symbol`            | `' '`                                                                                                                | Una cadena de formato que representa el símbolo de Java                                 |
 | `style`             | `'red dimmed'`                                                                                                        | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                                               | Deshabilita el módulo `java`.                                                           |
 

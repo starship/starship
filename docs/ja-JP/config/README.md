@@ -2317,7 +2317,7 @@ aliases = { "Max's MacBook Pro" = "home" }
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                                                                                                  | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `'☕ '`                                                                                                                | Java の記号を表すフォーマット文字列です。                                |
+| `symbol`            | `' '`                                                                                                                | Java の記号を表すフォーマット文字列です。                                |
 | `style`             | `'red dimmed'`                                                                                                        | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                                                                                                               | `java`モジュールを無効にします。                                    |
 
