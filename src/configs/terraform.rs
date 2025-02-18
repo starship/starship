@@ -16,6 +16,7 @@ pub struct TerraformConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub commands: Vec<Vec<&'a str>>,
 }
 
 impl Default for TerraformConfig<'_> {
@@ -29,6 +30,12 @@ impl Default for TerraformConfig<'_> {
             detect_extensions: vec!["tf", "tfplan", "tfstate"],
             detect_files: vec![],
             detect_folders: vec![".terraform"],
+            commands: vec![
+                // terraform is usually `terraform`
+                vec!["terraform", "version"],
+                // but for opentofu users, it'll be `tofu`
+                vec!["tofu", "version"],
+            ],
         }
     }
 }

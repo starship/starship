@@ -2,10 +2,12 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::terraform::TerraformConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 use crate::utils;
 
-use crate::formatter::VersionFormatter;
+use once_cell::sync::Lazy;
 use std::io;
+use std::ops::Deref;
 use std::path::PathBuf;
 
 /// Creates a module with the current Terraform version and workspace
@@ -25,6 +27,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        let terraform_version = Lazy::new(|| context.exec_cmds_return_first(config.commands));
+
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
@@ -36,12 +40,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let terraform_version = parse_terraform_version(
-                        context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                    let parsed_version = parse_terraform_version(
+                        terraform_version.deref().as_ref()?.stdout.as_str(),
                     )?;
+
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &terraform_version,
+                        &parsed_version,
                         config.version_format,
                     )
                 }
@@ -84,17 +89,22 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
 }
 
 fn parse_terraform_version(version: &str) -> Option<String> {
-    // `terraform version` output looks like this
-    // Terraform v0.12.14
-    // With potential extra output if it detects you are not running the latest version
+    // `terraform version` or `tofu version` output looks like this
+    //   Terraform v0.12.14/OpenTofu v1.7.2
+    // with potential extra output if it detects you are not running the latest version
+    // finds the version by grabbing the first line of output, splitting by spaces, and
+    // then skipping the first word
+
     let version = version
         .lines()
         .next()?
-        .trim_start_matches("Terraform ")
-        .trim()
-        .trim_start_matches('v');
+        .split_whitespace()
+        .skip(1)
+        .collect::<Vec<&str>>()
+        .join(" ");
 
-    Some(version.to_string())
+    // skip the `v` at the beginning of the string
+    Some(version[1..].to_string())
 }
 
 #[cfg(test)]
@@ -112,12 +122,37 @@ mod tests {
     }
 
     #[test]
+    fn test_parse_opentofu_version_release() {
+        let input = "OpenTofu v1.7.2";
+        assert_eq!(parse_terraform_version(input), Some("1.7.2".to_string()));
+    }
+
+    #[test]
+    fn test_parse_opentofu_version_multiline() {
+        let input = "OpenTofu v1.7.2
+on darwin_arm64
++ provider registry.opentofu.org/hashicorp/helm v2.14.0
++ provider registry.opentofu.org/hashicorp/kubernetes v2.31.0
+";
+        assert_eq!(parse_terraform_version(input), Some("1.7.2".to_string()));
+    }
+
+    #[test]
     fn test_parse_terraform_version_prerelease() {
         let input = "Terraform v0.12.14-rc1";
         assert_eq!(
             parse_terraform_version(input),
             Some("0.12.14-rc1".to_string())
         );
+    }
+
+    #[test]
+    fn test_parse_opentofu_version_prerelease() {
+        let input = "OpenTofu v1.8.0-alpha1";
+        assert_eq!(
+            parse_terraform_version(input),
+            Some("1.8.0-alpha1".to_string())
+        )
     }
 
     #[test]
