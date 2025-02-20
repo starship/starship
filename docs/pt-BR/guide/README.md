@@ -167,8 +167,8 @@
 - **Personalizável:** Configure todos os detalhes do seu prompt.
 - **Universal:** Funciona em qualquer shell, em qualquer sistema operacional.
 - **Inteligente:** Mostra informações relevantes rapidamente.
-- **Muitos recursos: **Suporte para todas as suas ferramentas favoritas.
-- **Fácil: **Instalação rápida — comece a usar em minutos.
+- **Muitos recursos:** Suporte para todas as suas ferramentas favoritas.
+- **Fácil:** Instalação rápida – comece a usar em minutos.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
