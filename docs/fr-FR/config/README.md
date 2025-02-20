@@ -1971,7 +1971,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `gleam.toml` file
+- Le dossier courant contient un fichier `gleam.toml`
 - The current directory contains a file with the `.gleam` extension
 
 ### Options
