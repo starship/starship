@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
 
+use crate::configs::cc::LangConfig;
+use crate::impl_lang_config;
+
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
     feature = "config-schema",
@@ -41,3 +44,5 @@ impl Default for CConfig<'_> {
         }
     }
 }
+
+impl_lang_config!(CConfig);
