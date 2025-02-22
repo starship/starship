@@ -53,6 +53,7 @@ pub const ALL_MODULES: &[&str] = &[
     "java",
     "jobs",
     "julia",
+    "kerberos",
     "kotlin",
     "kubernetes",
     "line_break",
