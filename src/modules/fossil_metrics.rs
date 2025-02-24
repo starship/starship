@@ -17,16 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let checkout_db = if cfg!(windows) {
-        "_FOSSIL_"
-    } else {
-        ".fslckout"
-    };
-    // See if we're in a check-out by scanning upwards for a directory containing the checkout_db file
-    context
-        .begin_ancestor_scan()
-        .set_files(&[checkout_db])
-        .scan()?;
+    super::vcs::discover_repo_root(context, crate::configs::vcs::Vcs::Fossil)?;
 
     // Read the total number of added and deleted lines from "fossil diff -i --numstat"
     let output = context
