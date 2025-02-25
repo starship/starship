@@ -96,7 +96,7 @@ libz-ng-sys = { version = "<1.1.20", optional = true }
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "0.8.21"
+version = "0.8.22"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
