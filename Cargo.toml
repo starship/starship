@@ -42,7 +42,7 @@ gix-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
-chrono = { version = "0.4.39", default-features = false, features = ["clock", "std", "wasmbind"] }
+chrono = { version = "0.4.40", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.5.31", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.46"
 dirs = "6.0.0"
