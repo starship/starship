@@ -7,9 +7,10 @@ use crate::formatter::StringFormatter;
 /// The character segment prints an arrow character in a color dependent on the
 /// exit-code of the last executed command:
 /// - If the exit-code was "0", it will be formatted with `success_symbol`
-///   (green arrow by default)
+///   (green arrow by default) or `root_success_symbol` (blue arrow by default)
 /// - If the exit-code was anything else, it will be formatted with
-///   `error_symbol` (red arrow by default)
+///   `error_symbol` (red arrow by default) or `root_error_symbol` (purple arrow
+///   by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
@@ -20,6 +21,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
+
+    let is_root = is_root_user();
 
     let mut module = context.new_module("character");
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
@@ -50,10 +53,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         ShellEditMode::Replace => config.vimcmd_replace_symbol,
         ShellEditMode::ReplaceOne => config.vimcmd_replace_one_symbol,
         ShellEditMode::Insert => {
-            if exit_success {
-                config.success_symbol
+            if is_root {
+                if exit_success {
+                    config.root_success_symbol
+                } else {
+                    config.root_error_symbol
+                }
             } else {
-                config.error_symbol
+                if exit_success {
+                    config.success_symbol
+                } else {
+                    config.error_symbol
+                }
             }
         }
     };
@@ -76,6 +87,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+#[cfg(all(target_os = "windows", not(test)))]
+fn is_root_user() -> bool {
+    use deelevate::{PrivilegeLevel, Token};
+    let token = match Token::with_current_process() {
+        Ok(token) => token,
+        Err(e) => {
+            log::warn!("Failed to get process token: {e:?}");
+            return false;
+        }
+    };
+    matches!(
+        match token.privilege_level() {
+            Ok(level) => level,
+            Err(e) => {
+                log::warn!("Failed to get privilege level: {e:?}");
+                return false;
+            }
+        },
+        PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
+    )
+}
+
+#[cfg(all(target_os = "windows", test))]
+fn is_root_user() -> bool {
+    false
+}
+
+#[cfg(not(target_os = "windows"))]
+fn is_root_user() -> bool {
+    nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
 #[cfg(test)]
@@ -116,6 +159,8 @@ mod test {
 
         let exit_values = [1, 54321, -5000];
 
+        // TODO: test if user is root
+
         // Test failure values
         for status in &exit_values {
             let actual = ModuleRenderer::new("character")
@@ -123,6 +168,8 @@ mod test {
                     [character]
                     success_symbol = "[➜](bold green)"
                     error_symbol = "[✖](bold red)"
+                    root_success_symbol = "[➜](bold blue)"
+                    root_error_symbol = "[✖](bold purple)"
                 })
                 .status(*status)
                 .collect();
@@ -135,6 +182,8 @@ mod test {
                 [character]
                 success_symbol = "[➜](bold green)"
                 error_symbol = "[✖](bold red)"
+                root_success_symbol = "[➜](bold blue)"
+                root_error_symbol = "[✖](bold purple)"
             })
             .status(0)
             .collect();
