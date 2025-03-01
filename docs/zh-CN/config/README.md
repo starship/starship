@@ -393,7 +393,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 
 ### 示例
 
-#### Display everything
+#### 显示所有内容
 
 ```toml
 # ~/.config/starship.toml
