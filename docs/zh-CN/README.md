@@ -170,7 +170,7 @@ onMounted(() => {
 
    :::
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   将以下内容添加到你的 Nushell 配置文件的末尾(在 Nushell 中运行  `$nu.config-path`  可以找到该文件)：
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
