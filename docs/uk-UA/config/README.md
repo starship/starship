@@ -3280,6 +3280,7 @@ Arch = "Arch is the best! "
 Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує такі пакунки: `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` та `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) — версія пакунка `cargo` отримується з `Cargo.toml` з поточної теки
 - [**Nimble**](https://github.com/nim-lang/nimble) — версія пакунка `nimble` з файлу `*.nimble` з поточної теки, отримана командою `nimble dump`
 - [**Poetry**](https://python-poetry.org/) — версія пакунка  `poetry` отримується з `pyproject.toml` з поточної теки

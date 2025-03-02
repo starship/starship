@@ -12,6 +12,6 @@
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
+[点这下载 TOML](/presets/toml/no-empty-icons.toml){download}
 
 <<< @/public/presets/toml/no-empty-icons.toml

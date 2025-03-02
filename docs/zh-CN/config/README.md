@@ -393,7 +393,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 
 ### 示例
 
-#### Display everything
+#### 显示所有内容
 
 ```toml
 # ~/.config/starship.toml
@@ -1971,7 +1971,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). 默认情况下，此组件将在满足以下任意条件时显示：
 
-- The current directory contains a `gleam.toml` file
+- 当前目录包含 `gleam.toml` 文件
 - The current directory contains a file with the `.gleam` extension
 
 ### 配置项
@@ -3280,6 +3280,7 @@ Arch = "Arch is the best! "
 当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
