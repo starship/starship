@@ -57,6 +57,7 @@ pub mod memory_usage;
 pub mod meson;
 pub mod mojo;
 pub mod nats;
+pub mod netns;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
@@ -223,6 +224,8 @@ pub struct FullConfig<'a> {
     mojo: mojo::MojoConfig<'a>,
     #[serde(borrow)]
     nats: nats::NatsConfig<'a>,
+    #[serde(borrow)]
+    netns: netns::NetnsConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
