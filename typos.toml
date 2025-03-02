@@ -6,6 +6,7 @@ edn = "edn"
 esy = "esy"
 numver = "numver"
 afe = "afe"
+typ = "typ"
 extentions = "extentions" # TODO: should be extensions
 worl = "worl" # typo on purpose
 [files]
