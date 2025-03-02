@@ -51,6 +51,7 @@ dunce = "1.0.5"
 gix = { version = "0.70.0", default-features = false, features = ["max-performance-safe", "revision"] }
 gix-features = { version = "0.40.0", optional = true }
 indexmap = { version = "2.7.1", features = ["serde"] }
+jsonc-parser = { version = "0.26.2", features = ["serde"] }
 log = { version = "0.4.26", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
