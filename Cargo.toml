@@ -64,7 +64,7 @@ pest = "2.7.15"
 pest_derive = "2.7.15"
 process_control = "5.0.0"
 quick-xml = "0.37.2"
-rand = "0.8.5"
+rand = "0.9.0"
 rayon = "1.10.0"
 regex = { version = "1.11.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.1"
