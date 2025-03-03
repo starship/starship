@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-03-03)
+
+
+### Features
+
+* **package:** support JSR package version ([#6502](https://github.com/starship/starship/issues/6502)) ([bd2321a](https://github.com/starship/starship/commit/bd2321a12fc47135f316e90f22ccab6a61b50730))
+
+
+### Bug Fixes
+
+* Change to a non-yanked version of the log crate ([#6495](https://github.com/starship/starship/issues/6495)) ([ed20b1d](https://github.com/starship/starship/commit/ed20b1d23b1b7ed914fca30fb6788f3d609f4a52))
+* **fossil_metrics:** Add -i flag to the fossil_metrics module's command ([#6544](https://github.com/starship/starship/issues/6544)) ([eb7d80b](https://github.com/starship/starship/commit/eb7d80bafac8f6ae719ee357aeff129065ddd7e6))
+* **preset:** add missing rlang to plain-text-symbols preset ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+* **preset:** add missing rlang to plain-text-symbols preset ([#6458](https://github.com/starship/starship/issues/6458)) ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+
+
+### Performance Improvements
+
+* **ancestor-scan:** preallocate and reuse a single `PathBuf` ([#6387](https://github.com/starship/starship/issues/6387)) ([b3cb92e](https://github.com/starship/starship/commit/b3cb92e6483a6cc054c6f7db14951c99bd7c9e9b))
+
 ## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
 
 
