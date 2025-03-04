@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .map(Ok)
                 }
                 "virtualenv" => {
-                    let virtual_env = get_python_virtual_env(context);
+                    let virtual_env = get_python_virtual_env(context, &config);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
                 }
                 "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
@@ -113,13 +113,9 @@ fn parse_python_version(python_version_string: &str) -> Option<String> {
     Some(version.to_string())
 }
 
-fn get_python_virtual_env(context: &Context) -> Option<String> {
+fn get_python_virtual_env(context: &Context, config: &PythonConfig) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        get_prompt_from_venv(Path::new(&venv)).or_else(|| {
-            Path::new(&venv)
-                .file_name()
-                .map(|filename| String::from(filename.to_str().unwrap_or("")))
-        })
+        get_prompt_from_venv(Path::new(&venv)).or_else(|| get_venv_name(Path::new(&venv), config))
     })
 }
 
@@ -129,6 +125,19 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .general_section()
         .get("prompt")
         .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
+}
+
+fn get_venv_name(venv_path: &Path, config: &PythonConfig) -> Option<String> {
+    let mut venv_name = venv_path
+        .file_name()
+        .map(|filename| filename.to_str().unwrap_or(""));
+    if venv_name.map(|name| config.override_venv_names.contains(&name))? {
+        venv_name = venv_path
+            .parent()
+            .and_then(|parent| parent.file_name())
+            .map(|filename| filename.to_str().unwrap_or(""));
+    }
+    venv_name.map(|name| name.to_string())
 }
 
 #[cfg(test)]
@@ -390,6 +399,28 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_override_venv_names() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "/foo/bar/my_venv")
+            .config(toml::toml! {
+                [python]
+                override_venv_names = [".venv", "venv", "my_venv"]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (bar) ")
         ));
 
         assert_eq!(actual, expected);
