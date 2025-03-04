@@ -1,0 +1,182 @@
+use std::{error::Error, path::Path};
+
+use systemstat::{Filesystem, Platform, System};
+
+use super::{memory_usage::pct, Context, Module};
+
+use crate::formatter::StringFormatter;
+use crate::{config::ModuleConfig, configs::disk_usage::DiskUsedConfig};
+use crate::{modules::memory_usage::format_usage_total, segment::Segment};
+
+fn get_disk_name(disk: &Filesystem) -> Option<&str> {
+    Path::new(&disk.fs_mounted_on)
+        .file_name()
+        .and_then(|name| name.to_str())
+}
+
+fn format_disk_usage(
+    disk: &Filesystem,
+    config: &DiskUsedConfig,
+    show_disk_name: bool,
+    add_separator: bool,
+    context: &Context,
+) -> Result<Vec<Segment>, Box<dyn Error>> {
+    let used_percentage = pct(disk.total, disk.free);
+
+    let formatted_usage = if config.show_percentage {
+        format!("{:.2}%", used_percentage)
+    } else {
+        format_usage_total(disk.total, disk.free).to_string()
+    };
+
+    let threshold_config = config
+        .threshold_styles
+        .iter()
+        .find(|threshold_style| used_percentage >= (threshold_style.threshold as f64));
+
+    let style = match threshold_config {
+        Some(threshold_config) => threshold_config.style,
+        None => config.default_style,
+    };
+
+    let parsed = StringFormatter::new(
+        "([$name:]($default_style))[$usage]($style)([$separator]($default_style))",
+    )
+    .and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(style)),
+                "default_style" => Some(Ok(config.default_style)),
+                _ => None,
+            })
+            .map(|var| match var {
+                "name" if show_disk_name => get_disk_name(disk).map(Ok),
+                "usage" => Some(Ok(formatted_usage.as_str())),
+                "separator" if add_separator => Some(Ok(config.separator)),
+                _ => None,
+            })
+            .parse(None, Some(context))
+    });
+
+    match parsed {
+        Ok(parsed) => Ok(parsed),
+        Err(e) => Err(Box::new(e)),
+    }
+}
+
+fn should_display_disk(disk: &Filesystem, threshold: i64) -> bool {
+    pct(disk.total, disk.free) >= threshold as f64
+}
+
+fn get_drive_from_path<'a>(path: &Path, disks: &'a [Filesystem]) -> Option<&'a Filesystem> {
+    disks
+        .iter()
+        .find(|disk| path.starts_with(&disk.fs_mounted_on))
+}
+
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("disk_usage");
+    let config = DiskUsedConfig::try_load(module.config);
+
+    if config.disabled {
+        return None;
+    }
+
+    let mut current_disk = None;
+    let mut current_storage = None;
+    let mut other_storage = None;
+    let system = System::new();
+    let all_disks = match system.mounts().ok() {
+        Some(disks) => disks,
+        None => {
+            log::warn!("Failed to get disk information");
+            return None;
+        }
+    };
+
+    if let Some(threshold) = config.current_threshold {
+        match get_drive_from_path(&context.current_dir, &all_disks) {
+            Some(disk) => {
+                current_disk = Some(disk);
+                if should_display_disk(disk, threshold) {
+                    match format_disk_usage(disk, &config, config.show_current_name, false, context)
+                    {
+                        Ok(segments) => {
+                            if !segments.is_empty() {
+                                current_storage = Some(segments);
+                            }
+                        }
+                        Err(e) => {
+                            log::warn!("Couldn't format disk from current path: {}", e);
+                        }
+                    }
+                }
+            }
+            None => {
+                log::warn!("Couldn't get disk from current path");
+            }
+        }
+    }
+
+    if let Some(threshold) = config.all_threshold {
+        let display_disks: Vec<_> = all_disks
+            .iter()
+            .filter(|disk| match current_disk {
+                Some(current) => disk.fs_mounted_on != current.fs_mounted_on,
+                None => true,
+            })
+            .filter(|disk| should_display_disk(disk, threshold))
+            .collect();
+        let mut all_segments = Vec::new();
+
+        for (i, disk) in display_disks.iter().enumerate() {
+            match format_disk_usage(disk, &config, true, display_disks.len() != i + 1, context) {
+                Ok(ref mut segments) => {
+                    all_segments.append(segments);
+                }
+                Err(e) => log::warn!("Couldn't format disk {}: {}", disk.fs_mounted_on, e),
+            }
+        }
+
+        if !all_segments.is_empty() {
+            other_storage = Some(all_segments);
+        }
+    }
+
+    // If there is no storage data return None
+    if current_storage.is_none() && other_storage.is_none() {
+        return None;
+    }
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|mvar, _| match mvar {
+                "symbol" => Some(config.symbol),
+                "prefix" => Some(config.prefix),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.default_style)),
+                _ => None,
+            })
+            .map_variables_to_segments(|var| match var {
+                "current_storage" => current_storage
+                    .as_ref()
+                    .map(|current_storage| Ok(current_storage.to_vec())),
+                "other_storage" => other_storage
+                    .as_ref()
+                    .map(|other_storage| Ok(other_storage.to_vec())),
+                _ => None,
+            })
+            .parse(None, Some(context))
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `storage`:\n{}", error);
+            return None;
+        }
+    });
+
+    Some(module)
+}
