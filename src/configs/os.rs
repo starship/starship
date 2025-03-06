@@ -36,6 +36,7 @@ impl Default for OSConfig<'_> {
                 Type::Android => "🤖 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
+                Type::Bluefin => "🐟 ",
                 Type::CachyOS => "🎗️ ",
                 Type::CentOS => "💠 ",
                 Type::Debian => "🌀 ",
