@@ -25,4 +25,4 @@ By default this preset uses the Mocha flavour of Catppucin, but you can specify 
 
 [Click to download TOML](/presets/toml/catppuccin-powerline.toml)
 
-<<< @/.vuepress/public/presets/toml/catppuccin-powerline.toml
+<<< @/public/presets/toml/catppuccin-powerline.toml
