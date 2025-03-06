@@ -2,7 +2,7 @@ use std::{mem, os::windows::ffi::OsStrExt, path::Path};
 
 use windows::{
     Win32::{
-        Foundation::{BOOL, CloseHandle, ERROR_INSUFFICIENT_BUFFER, HANDLE},
+        Foundation::{CloseHandle, ERROR_INSUFFICIENT_BUFFER, HANDLE},
         Security::{
             AccessCheck, DACL_SECURITY_INFORMATION, DuplicateToken, GENERIC_MAPPING,
             GROUP_SECURITY_INFORMATION, GetFileSecurityW, MapGenericMask,
@@ -15,7 +15,7 @@ use windows::{
         System::Threading::{GetCurrentProcess, OpenProcessToken},
         UI::Shell::PathIsNetworkPathW,
     },
-    core::PCWSTR,
+    core::{BOOL, PCWSTR},
 };
 
 struct Handle(HANDLE);
