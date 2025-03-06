@@ -9,7 +9,6 @@ use std::time::SystemTime;
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
 use rand::Rng;
-use rand::distributions::Alphanumeric;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;
@@ -269,8 +268,8 @@ fn main() {
         Commands::Completions { shell } => generate_completions(shell),
         Commands::Session => println!(
             "{}",
-            rand::thread_rng()
-                .sample_iter(&Alphanumeric)
+            rand::rng()
+                .sample_iter(rand::distr::Alphanumeric)
                 .take(16)
                 .map(char::from)
                 .collect::<String>()
