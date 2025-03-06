@@ -81,8 +81,8 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
-## [Catppuccin](./catppuccin.md)
+## [Catppuccin Powerline](./catppuccin_powerline.md)
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
-[![Screenshot of Catppuccin preset](/presets/img/catppuccin.png "Click to view Catppuccin preset")](./catppuccin)
+[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin_powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin_powerline)

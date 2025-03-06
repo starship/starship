@@ -1,10 +1,10 @@
-[Return to Presets](./README.md#catppuccin)
+[Return to Presets](./README.md#catppuccin_powerline)
 
-# Catppuccin Preset
+# Catppuccin Powerline Preset
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
-![Screenshot of Catppuccin preset](/presets/img/catppuccin.png)
+![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin_powerline.png)
 
 ### Prerequisites
 
@@ -13,7 +13,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 ### Configuration
 
 ```sh
-starship preset catppuccin -o ~/.config/starship.toml
+starship preset catppuccin_powerline -o ~/.config/starship.toml
 ```
 
 By default this preset uses the Mocha flavour of Catppucin, but you can specify any of the flavours by modifying the value of `palette`:
@@ -23,6 +23,6 @@ By default this preset uses the Mocha flavour of Catppucin, but you can specify 
 - `catppuccin_macchiato`
 - `catppucin_latte`
 
-[Click to download TOML](/presets/toml/catppuccin.toml)
+[Click to download TOML](/presets/toml/catppuccin_powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/catppuccin.toml
