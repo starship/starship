@@ -215,7 +215,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
             }
             _ => {
-                eprintln!("Error: Unknown module {module}. Use starship module --list to list out all supported modules.");
+                eprintln!(
+                    "Error: Unknown module {module}. Use starship module --list to list out all supported modules."
+                );
                 None
             }
         }

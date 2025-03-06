@@ -8,8 +8,8 @@ use std::time::SystemTime;
 
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
-use rand::distributions::Alphanumeric;
 use rand::Rng;
+use rand::distributions::Alphanumeric;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;

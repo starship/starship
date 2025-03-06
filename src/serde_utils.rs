@@ -1,7 +1,7 @@
 use crate::module::ALL_MODULES;
 use serde::de::{
-    value::{Error as ValueError, MapDeserializer, SeqDeserializer},
     Deserializer, Error, IntoDeserializer, Visitor,
+    value::{Error as ValueError, MapDeserializer, SeqDeserializer},
 };
 use std::{cmp::Ordering, fmt};
 use toml::Value;

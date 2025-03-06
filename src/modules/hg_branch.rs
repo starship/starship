@@ -94,7 +94,7 @@ mod tests {
     use std::io;
     use std::path::Path;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     enum Expect<'a> {

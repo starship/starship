@@ -5,7 +5,7 @@ use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
 use serde::{
-    de::value::Error as ValueError, de::Error as SerdeError, Deserialize, Deserializer, Serialize,
+    Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
 };
 
 use std::borrow::Cow;

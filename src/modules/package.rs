@@ -3,8 +3,8 @@ use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
 use ini::Ini;
-use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
+use quick_xml::events::Event as QXEvent;
 use regex::Regex;
 use serde_json as json;
 use std::fs;
@@ -571,8 +571,8 @@ license = "MIT"
     }
 
     #[test]
-    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available(
-    ) -> io::Result<()> {
+    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available()
+    -> io::Result<()> {
         let config_name = "test_project.nimble";
 
         let config_content = r#"

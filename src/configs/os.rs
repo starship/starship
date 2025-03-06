@@ -1,4 +1,4 @@
-use indexmap::{indexmap, IndexMap};
+use indexmap::{IndexMap, indexmap};
 use os_info::Type;
 use serde::{Deserialize, Serialize};
 

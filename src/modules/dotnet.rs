@@ -1,5 +1,5 @@
-use quick_xml::events::Event;
 use quick_xml::Reader;
+use quick_xml::events::Event;
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::path::{Path, PathBuf};
@@ -355,7 +355,7 @@ mod tests {
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
-    use utils::{write_file, CommandOutput};
+    use utils::{CommandOutput, write_file};
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {

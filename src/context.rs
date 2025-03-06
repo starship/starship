@@ -2,15 +2,16 @@ use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::context_env::Env;
 use crate::module::Module;
-use crate::utils::{create_command, exec_timeout, read_file, CommandOutput, PathExt};
+use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
 use crate::modules;
 use crate::utils;
 use clap::Parser;
 use gix::{
+    Repository, ThreadSafeRepository,
     repository::Kind,
     sec::{self as git_sec, trust::DefaultForLevel},
-    state as git_state, Repository, ThreadSafeRepository,
+    state as git_state,
 };
 #[cfg(test)]
 use std::collections::HashMap;
@@ -979,39 +980,47 @@ mod tests {
 
         let dc_following_symlinks = DirContents::from_path(d.path(), true)?;
 
-        assert!(ScanDir {
-            dir_contents: &dc_following_symlinks,
-            files: &["link_to_file"],
-            extensions: &[],
-            folders: &[],
-        }
-        .is_match());
+        assert!(
+            ScanDir {
+                dir_contents: &dc_following_symlinks,
+                files: &["link_to_file"],
+                extensions: &[],
+                folders: &[],
+            }
+            .is_match()
+        );
 
-        assert!(ScanDir {
-            dir_contents: &dc_following_symlinks,
-            files: &[],
-            extensions: &[],
-            folders: &["link_to_folder"],
-        }
-        .is_match());
+        assert!(
+            ScanDir {
+                dir_contents: &dc_following_symlinks,
+                files: &[],
+                extensions: &[],
+                folders: &["link_to_folder"],
+            }
+            .is_match()
+        );
 
         let dc_not_following_symlinks = DirContents::from_path(d.path(), false)?;
 
-        assert!(ScanDir {
-            dir_contents: &dc_not_following_symlinks,
-            files: &["link_to_file"],
-            extensions: &[],
-            folders: &[],
-        }
-        .is_match());
+        assert!(
+            ScanDir {
+                dir_contents: &dc_not_following_symlinks,
+                files: &["link_to_file"],
+                extensions: &[],
+                folders: &[],
+            }
+            .is_match()
+        );
 
-        assert!(!ScanDir {
-            dir_contents: &dc_not_following_symlinks,
-            files: &[],
-            extensions: &[],
-            folders: &["link_to_folder"],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &dc_not_following_symlinks,
+                files: &[],
+                extensions: &[],
+                folders: &["link_to_folder"],
+            }
+            .is_match()
+        );
 
         Ok(())
     }
@@ -1022,91 +1031,107 @@ mod tests {
         let follow_symlinks = true;
         let empty_dc = DirContents::from_path(empty.path(), follow_symlinks)?;
 
-        assert!(!ScanDir {
-            dir_contents: &empty_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &empty_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
         let rust_dc = DirContents::from_path(rust.path(), follow_symlinks)?;
-        assert!(!ScanDir {
-            dir_contents: &rust_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &rust_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
         let java_dc = DirContents::from_path(java.path(), follow_symlinks)?;
-        assert!(!ScanDir {
-            dir_contents: &java_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &java_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
         let node_dc = DirContents::from_path(node.path(), follow_symlinks)?;
-        assert!(ScanDir {
-            dir_contents: &node_dc,
-            files: &["package.json"],
-            extensions: &["js"],
-            folders: &["node_modules"],
-        }
-        .is_match());
+        assert!(
+            ScanDir {
+                dir_contents: &node_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
         node.close()?;
 
         let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
         let tarballs_dc = DirContents::from_path(tarballs.path(), follow_symlinks)?;
-        assert!(ScanDir {
-            dir_contents: &tarballs_dc,
-            files: &[],
-            extensions: &["tar.gz"],
-            folders: &[],
-        }
-        .is_match());
+        assert!(
+            ScanDir {
+                dir_contents: &tarballs_dc,
+                files: &[],
+                extensions: &["tar.gz"],
+                folders: &[],
+            }
+            .is_match()
+        );
         tarballs.close()?;
 
         let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
         let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path(), follow_symlinks)?;
-        assert!(!ScanDir {
-            dir_contents: &dont_match_ext_dc,
-            files: &[],
-            extensions: &["js", "!notfound", "!ts"],
-            folders: &[],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &dont_match_ext_dc,
+                files: &[],
+                extensions: &["js", "!notfound", "!ts"],
+                folders: &[],
+            }
+            .is_match()
+        );
         dont_match_ext.close()?;
 
         let dont_match_file = testdir(&["goodfile", "evilfile"])?;
         let dont_match_file_dc = DirContents::from_path(dont_match_file.path(), follow_symlinks)?;
-        assert!(!ScanDir {
-            dir_contents: &dont_match_file_dc,
-            files: &["goodfile", "!notfound", "!evilfile"],
-            extensions: &[],
-            folders: &[],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &dont_match_file_dc,
+                files: &["goodfile", "!notfound", "!evilfile"],
+                extensions: &[],
+                folders: &[],
+            }
+            .is_match()
+        );
         dont_match_file.close()?;
 
         let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
         let dont_match_folder_dc =
             DirContents::from_path(dont_match_folder.path(), follow_symlinks)?;
-        assert!(!ScanDir {
-            dir_contents: &dont_match_folder_dc,
-            files: &[],
-            extensions: &[],
-            folders: &["gooddir", "!notfound", "!evildir"],
-        }
-        .is_match());
+        assert!(
+            !ScanDir {
+                dir_contents: &dont_match_folder_dc,
+                files: &[],
+                extensions: &[],
+                folders: &["gooddir", "!notfound", "!evildir"],
+            }
+            .is_match()
+        );
         dont_match_folder.close()?;
 
         Ok(())
