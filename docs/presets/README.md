@@ -80,3 +80,9 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [OwO](./owo.md)
+
+This preset is inspired by [owo theme from vim-airline-themes](https://github.com/vim-airline/vim-airline-themes/blob/master/autoload/airline/themes/owo.vim).
+
+[![Screenshot of OwO preset](/presets/img/owo.png)](./owo)
