@@ -58,7 +58,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## 为什么我会遇到 `Executing command "..." timed out.` 警告？
 
-Starship 会执行数个不同的命令来获取应该显示的信息，例如某个程序的版本号、现在 Git 的工作树状态。 为保证 Starship 不会在执行某条命令时卡住，Starship 会终止执行时间过长的命令并且输出以上警告。这是正常现象。 若希望增加时长限制，它可以在 [`command_timeout` 设置](/config/#prompt) 处自定义。 您也可以按照下文的调试步骤查看并优化运行慢的命令。 最后，您也可以设置环境变量 `STARSHIP_LOG` 为 `error` 来隐藏这些警告。
+Starship 会执行数个不同的命令来获取应该显示的信息，例如某个程序的版本号、现在 Git 的工作树状态。 为保证 Starship 不会在执行某条命令时卡住，Starship 会终止执行时间过长的命令并且输出以上警告。这是正常现象。 若希望增加时长限制，它可以在 [`command_timeout` 设置](../config/#prompt) 处自定义。 您也可以按照下文的调试步骤查看并优化运行慢的命令。 最后，您也可以设置环境变量 `STARSHIP_LOG` 为 `error` 来隐藏这些警告。
 
 ## 我不理解某些符号，它们是什么意思？
 
@@ -72,7 +72,7 @@ Starship 会执行数个不同的命令来获取应该显示的信息，例如�
 env STARSHIP_LOG=trace starship module rust
 ```
 
-若 Starship 运行缓慢，您可以使用 `timings` 命令查看运行缓慢的组件或命令。
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
@@ -123,8 +123,8 @@ sh -c 'rm "$(command -v 'starship')"'
 
 ## 我如何在没有 `sudo` 的情况下安装 Starship？
 
-Shell 安装脚本(`https://starship.rs/install`) 只尝试使用 `sudo`当安装目录不可被当前用户写入 默认安装目录是环境变量 `$BIN_DIR` 的值或者 `/usr/loca/bin` 如果 if `$BIN_DIR` 未设置 如果你使用一个用户可写的安装目录替代, 你应该可以不使用 `sudo` 安装 Starship 例如, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` 使用 `-b` 选项设置安装目录到 `~/.local/bin`
+Shell 安装脚本（`https://starship.rs/install`）只有在目标安装目录对当前用户不可写时，才会尝试使用 `sudo`。 默认安装目录是环境变量 `$BIN_DIR` 的值或 `/usr/loca/bin`（如果 `$BIN_DIR` 未设置）。 如果您将安装目录设置为当前用户可写的目录，则可以在不使用 `sudo` 的情况下安装 starship。 例如， `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` 使用安装脚本的 `-b` 命令行选项将安装目录设置为 ~/.local/bin。
 
-对于非交互 Starship 安装, 请添加 `-y` 以跳过确认 查看安装脚本源码以获取所有支持的选项
+对于非交互式安装 Starship，记得添加 `-y` 选项以跳过确认。 要获取所有选项，请查看安装脚本的源代码。
 
-当使用包管理器时, 查询包管理器关于有无`sudo`安装的文档
+当使用包管理器时，请参阅您所用包管理器的文档，以了解如何在有或没有 `sudo` 的情况下进行安装。

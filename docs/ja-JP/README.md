@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
-actionText: Get Started →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
+  actions:
+    - 
+      theme: brand
+      text: Get Started →
+      link: ./guide/
 features:
   - 
     title: 互換性優先
@@ -21,12 +25,24 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 必要なもの
 
@@ -55,6 +71,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    brew install starship
    ```
+
    [Winget](https://github.com/microsoft/winget-cli)を使用する
 
    ```powershell
@@ -149,20 +166,15 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   これは将来的に変更される可能性があります。 Nushell v0.78+ のみサポートされています。
+   これは将来的に変更される可能性があります。 Only Nushell v0.96+ is supported.
 
    :::
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
-   ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

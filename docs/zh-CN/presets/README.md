@@ -14,13 +14,13 @@
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip
+::: tip 提示
 
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+在[未来的starship release](https://github.com/starship/starship/pull/3544)中，这一预设将成为默认预设。
 
 :::
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[点击查看No Nerd Fonts预设](./no-nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
@@ -44,7 +44,7 @@ This preset will become the default preset [in a future release of starship](htt
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![No Empty Icons预设的截图](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
@@ -69,3 +69,9 @@ This preset does not show icons if the toolset is not found.
 This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+
+## [Jetpack](./jetpack.md)
+
+这是一个伪最简的预设，灵感来自 [geometry](https://github.com/geometry-zsh/geometry) 和   [spaceship](https://github.com/spaceship-prompt/spaceship-prompt)。
+
+[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)

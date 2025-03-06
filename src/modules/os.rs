@@ -327,26 +327,28 @@ mod tests {
         // - crate::modules::os::tests
         // - docs/config/README.md/#Configuration/#OS/#Options
         // - docs/config/README.md/#Configuration/#OS/#Example
-        // - docs/.vuepress/public/presets/toml/plain-text-symbols.toml
-        // - dosc/.vuepress/public/presets/toml/nerd-font-symbols.toml
+        // - docs/public/presets/toml/plain-text-symbols.toml
+        // - dosc/public/presets/toml/nerd-font-symbols.toml
         // - .github/config-schema.json
         let _ = |t: Type| match t {
+            Type::AIX => "➿ ",
             Type::Alpaquita => "🔔 ",
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
-            Type::Arch | Type::Artix => "🎗️ ",
-            Type::CentOS => "💠 ",
+            Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
+            Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
             Type::Debian => "🌀 ",
             Type::DragonFly => "🐉 ",
             Type::Emscripten => "🔗 ",
             Type::EndeavourOS => "🚀 ",
-            Type::Fedora => "🎩 ",
+            Type::Fedora | Type::Nobara => "🎩 ",
             Type::FreeBSD => "😈 ",
             Type::Garuda => "🦅 ",
             Type::Gentoo => "🗜️ ",
             Type::HardenedBSD => "🛡️ ",
             Type::Illumos => "🐦 ",
+            Type::Kali => "🐉 ",
             Type::Linux => "🐧 ",
             Type::Mabox => "📦 ",
             Type::Macos => "🍎 ",
@@ -369,7 +371,10 @@ mod tests {
             Type::Solus => "⛵ ",
             Type::SUSE => "🦎 ",
             Type::Ubuntu => "🎯 ",
+            Type::Ultramarine => "🔷 ",
             Type::Unknown => "❓ ",
+            Type::Uos => "🐲 ",
+            Type::Void => "  ",
             Type::Windows => "🪟 ",
             _ => "",
         };

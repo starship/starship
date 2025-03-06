@@ -3,12 +3,12 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
-use once_cell::sync::Lazy;
 use regex::Regex;
 use semver::Version;
 use semver::VersionReq;
 use serde_json as json;
 use std::ops::Deref;
+use std::sync::LazyLock;
 
 /// Creates a module with the current Node.js version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,12 +30,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let nodejs_version = Lazy::new(|| {
+    let nodejs_version = LazyLock::new(|| {
         context
             .exec_cmd("node", &["--version"])
             .map(|cmd| cmd.stdout)
     });
-    let engines_version = Lazy::new(|| get_engines_version(context));
+    let engines_version = LazyLock::new(|| get_engines_version(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

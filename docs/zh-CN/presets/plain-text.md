@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#plain-text-symbols)
+[返回全部预设](./#plain-text-symbols)
 
 ## Plain Text Symbols Preset
 
@@ -12,6 +12,6 @@
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+<<< @/public/presets/toml/plain-text-symbols.toml

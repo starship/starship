@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "\"truncation_length\" should be a positive value, found {}",
             config.truncation_length
         );
-        std::usize::MAX
+        usize::MAX
     } else {
         config.truncation_length as usize
     };
@@ -204,12 +204,12 @@ mod tests {
 
     #[test]
     fn test_hindi_truncation() -> io::Result<()> {
-        test_truncate_length("नमस्ते", 3, "नमस्", "…")
+        test_truncate_length("नमस्ते", 2, "नम", "…")
     }
 
     #[test]
     fn test_hindi_truncation2() -> io::Result<()> {
-        test_truncate_length("नमस्त", 3, "नमस्", "…")
+        test_truncate_length("नमस्त", 2, "नम", "…")
     }
 
     #[test]

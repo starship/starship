@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 轻量、迅速、客制化的高颜值终端！
-actionText: 快速上手 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: 轻量、迅速、客制化的高颜值终端！
+  actions:
+    - 
+      theme: brand
+      text: 快速上手 →
+      link: ./guide/
 features:
   - 
     title: 兼容性优先
@@ -21,12 +25,24 @@ metaTitle: "Starship：可用于各种 Shell 的提示符"
 description: Starship是一款轻量、迅速、可客制化的高颜值终端！ 只显示所需要的信息，将优雅和轻量化合二为一。 可以为Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh、Cmd和PowerShell执行快速安装。
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 前置要求
 
@@ -55,6 +71,7 @@ description: Starship是一款轻量、迅速、可客制化的高颜值终端�
    ```sh
    brew install starship
    ```
+
    使用 [ Winget](https://github.com/microsoft/winget-cli)：
 
    ```powershell
@@ -149,20 +166,15 @@ description: Starship是一款轻量、迅速、可客制化的高颜值终端�
 
    ::: warning
 
-   这部分今后可能会改变。 仅支持 Nushell v0.78+。
+   这部分今后可能会改变。 Only Nushell v0.96+ is supported.
 
    :::
 
-   在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
-   ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   然后在您的 Nushell 配置文件的最后（使用 `$nu.config-path` 来获取它的路径），添加以下内容：
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

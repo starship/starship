@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#no-nerd-fonts)
+[프리셋으로 돌아가기](./#no-nerd-fonts)
 
 # No Nerd Fonts Preset
 
@@ -16,4 +16,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/no-nerd-font.toml)
 
-<<< @/.vuepress/public/presets/toml/no-nerd-font.toml
+<<< @/public/presets/toml/no-nerd-font.toml

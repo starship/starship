@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
-actionText: Kullanmaya Başlayın →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
+  actions:
+    - 
+      theme: brand
+      text: Kullanmaya Başlayın →
+      link: ./guide/
 features:
   - 
     title: Önce Uyumluluk
@@ -21,12 +25,24 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship, her prompt için minimal, son derece hızlı ve son derece özelleştirilebilir bir shelldir! Şık ve minimal kalırken ihtiyacınız olan bilgileri gösterir. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd ve PowerShell için hızlı kurulum mevcuttur.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Ön koşullar
 
@@ -55,6 +71,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    ```sh
    brew install starship
    ```
+
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -149,20 +166,15 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   This will change in the future. Only Nushell v0.96+ is supported.
 
    :::
 
-   Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-path` komutunu çalıştırarak bulabilirsiniz):
-   ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

@@ -15,23 +15,40 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user is root (UID = 0) [1]
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
+///     - The option `username.detect_env_vars` is set with a not negated environment variable [4]
+/// Does not display the username:
+///     - If the option `username.detect_env_vars` is set with a negated environment variable [A]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    #[cfg(not(any(test, target_os = "android")))]
+    let mut username = whoami::fallible::username()
+        .inspect_err(|e| log::debug!("Failed to get username {e:?}"))
+        .ok()
+        .or_else(|| context.get_env(USERNAME_ENV_VAR))?;
+
+    #[cfg(any(test, target_os = "android"))]
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
+    let has_detected_env_var = context.detect_env_vars(&config.detect_env_vars);
 
     let is_root = is_root_user();
     if cfg!(target_os = "windows") && is_root {
         username = "Administrator".to_string();
     }
+
     let show_username = config.show_always
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
-        || is_ssh_session(context); // [3]
+        || is_ssh_session(context) // [3]
+        || ( !config.detect_env_vars.is_empty() && has_detected_env_var ); // [4]
 
-    if !show_username {
-        return None;
+    if !show_username || !has_detected_env_var {
+        return None; // [A]
+    }
+
+    if let Some(&alias) = config.aliases.get(&username) {
+        username = alias.to_string();
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -92,12 +109,12 @@ fn is_root_user() -> bool {
     )
 }
 
-#[cfg(all(target_os = "windows", test))]
+#[cfg(test)]
 fn is_root_user() -> bool {
     false
 }
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), not(test)))]
 fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
@@ -109,10 +126,67 @@ fn is_ssh_session(context: &Context) -> bool {
 
 #[cfg(test)]
 mod tests {
+
     use crate::test::ModuleRenderer;
 
     // TODO: Add tests for if root user (UID == 0)
     // Requires mocking
+
+    #[test]
+    fn ssh_with_empty_detect_env_vars() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                style_root = ""
+                style_user = ""
+                detect_env_vars = []
+            })
+            .collect();
+
+        let expected = Some("astronaut in ");
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn ssh_with_matching_detect_env_vars() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+            .env("FORCE_USERNAME", "true")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                style_root = ""
+                style_user = ""
+                detect_env_vars = ["FORCE_USERNAME"]
+            })
+            .collect();
+
+        let expected = Some("astronaut in ");
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn ssh_with_matching_negated_detect_env_vars() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+            .env("NEGATED", "true")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                style_root = ""
+                style_user = ""
+                detect_env_vars = ["!NEGATED"]
+            })
+            .collect();
+
+        let expected = None;
+        assert_eq!(expected, actual.as_deref());
+    }
 
     #[test]
     fn no_env_variables() {
@@ -238,6 +312,60 @@ mod tests {
             })
             .collect();
         let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_always_false() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                show_always = false
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn test_alias() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                aliases = { "astronaut" = "skywalker" }
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("skywalker in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn test_alias_emoji() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "kaas")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                aliases = { "a" = "b", "kaas" = "🧀" }
+
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("🧀 in ");
 
         assert_eq!(expected, actual.as_deref());
     }

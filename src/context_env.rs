@@ -6,7 +6,7 @@ use std::ffi::OsString;
 
 #[derive(Default)]
 pub struct Env<'a> {
-    /// A HashMap of environment variable mocks
+    /// A `HashMap` of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
 
@@ -14,6 +14,7 @@ pub struct Env<'a> {
     _marker: std::marker::PhantomData<&'a ()>,
 }
 
+#[cfg_attr(not(test), allow(clippy::needless_lifetimes))]
 impl<'a> Env<'a> {
     // Retrieves a environment variable from the os or from a table if in testing mode
     #[cfg(test)]

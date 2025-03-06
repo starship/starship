@@ -1,12 +1,12 @@
-[プリセット一覧に戻る](./README.md#gruvbox-rainbow)
+[プリセット一覧に戻る](./#gruvbox-rainbow)
 
-# Gruvbox Rainbow Preset
+# Gruvbox Rainbow プリセット
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+このプリセットは [Pastel Powerline](./pastel-powerline.md) と [Tokyo Night](./tokyo-night.md) に強くインスパイアされています。
 
-![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
+![Gruvbox Rainbow プリセットのスクリーンショット](/presets/img/gruvbox-rainbow.png)
 
-### 必要なもの
+### 前提条件
 
 - [Nerd Font](https://www.nerdfonts.com/)のインストールとターミナルでの有効化
 
@@ -16,6 +16,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[クリックしてTOMLをダウンロード](/presets/toml/gruvbox-rainbow.toml)
+[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

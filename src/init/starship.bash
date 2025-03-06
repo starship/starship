@@ -32,12 +32,12 @@ starship_preexec() {
 # Will be run before the prompt is drawn
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
     fi
     if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt 0 ]]; then
-        STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
+        STARSHIP_PIPE_STATUS=("${BP_PIPESTATUS[@]}")
     fi
 
     # Due to a bug in certain Bash versions, any external process launched
@@ -52,7 +52,7 @@ starship_precmd() {
     # Original bug: https://lists.gnu.org/archive/html/bug-bash/2022-07/msg00117.html
     jobs &>/dev/null
 
-    local NUM_JOBS=0
+    local job NUM_JOBS=0 IFS=$' \t\n'
     # Evaluate the number of jobs before running the preserved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
@@ -65,17 +65,17 @@ starship_precmd() {
     # command pipeline, which may rely on it.
     _starship_set_return "$STARSHIP_CMD_STATUS"
 
-    if [[ -n "${_PRESERVED_PROMPT_COMMAND-}" ]]; then
-        eval "$_PRESERVED_PROMPT_COMMAND"
+    if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
+        eval "$STARSHIP_PROMPT_COMMAND"
     fi
 
-    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
     # Prepare the timer data, if needed.
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
-        unset STARSHIP_START_TIME
+        STARSHIP_START_TIME=""
     fi
     PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     if [[ ${BLE_ATTACHED-} ]]; then
@@ -98,17 +98,28 @@ elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${pree
     preexec_functions+=(starship_preexec_all)
     precmd_functions+=(starship_precmd)
 else
-    # We want to avoid destroying an existing DEBUG hook. If we detect one, create
-    # a new function that runs both the existing function AND our function, then
-    # re-trap DEBUG to use this new function. This prevents a trap clobber.
-    dbg_trap="$(trap -p DEBUG | cut -d' ' -f3 | tr -d \')"
-    if [[ -z "$dbg_trap" ]]; then
-        trap 'starship_preexec "$_"' DEBUG
-    elif [[ "$dbg_trap" != 'starship_preexec "$_"' && "$dbg_trap" != 'starship_preexec_all "$_"' ]]; then
-        starship_preexec_all() {
-            local PREV_LAST_ARG=$1 ; $dbg_trap; starship_preexec; : "$PREV_LAST_ARG";
+    if [[ -n "${BASH_VERSION-}" ]] && [[ "${BASH_VERSINFO[0]}" -gt 4 || ( "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4 ) ]]; then
+        starship_preexec_ps0() {
+            ::STARSHIP:: time
         }
-        trap 'starship_preexec_all "$_"' DEBUG
+        # In order to set STARSHIP_START_TIME use an arithmetic expansion that evaluates to 0
+        # To avoid printing anything, use the return value in an ${var:offset:length} substring expansion
+        # with offset and length evaluating to 0.
+        PS0='${STARSHIP_START_TIME:$((STARSHIP_START_TIME="$(starship_preexec_ps0)",STARSHIP_PREEXEC_READY=0,0)):0}'"${PS0-}"
+    else
+        # We want to avoid destroying an existing DEBUG hook. If we detect one, create
+        # a new function that runs both the existing function AND our function, then
+        # re-trap DEBUG to use this new function. This prevents a trap clobber.
+        eval "STARSHIP_DEBUG_TRAP=($(trap -p DEBUG))"
+        STARSHIP_DEBUG_TRAP=("${STARSHIP_DEBUG_TRAP[2]}")
+        if [[ -z "$STARSHIP_DEBUG_TRAP" ]]; then
+            trap 'starship_preexec "$_"' DEBUG
+        elif [[ "$STARSHIP_DEBUG_TRAP" != 'starship_preexec "$_"' && "$STARSHIP_DEBUG_TRAP" != 'starship_preexec_all "$_"' ]]; then
+            starship_preexec_all() {
+                local PREV_LAST_ARG=$1 ; eval -- "$STARSHIP_DEBUG_TRAP"; starship_preexec; : "$PREV_LAST_ARG";
+            }
+            trap 'starship_preexec_all "$_"' DEBUG
+        fi
     fi
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
@@ -120,7 +131,7 @@ else
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
         # So, we are preserving the existing PROMPT_COMMAND
         # which will be executed later in the starship_precmd function
-        _PRESERVED_PROMPT_COMMAND="$PROMPT_COMMAND"
+        STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
         PROMPT_COMMAND="starship_precmd"
     fi
 fi

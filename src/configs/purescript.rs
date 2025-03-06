@@ -18,7 +18,7 @@ pub struct PureScriptConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for PureScriptConfig<'a> {
+impl Default for PureScriptConfig<'_> {
     fn default() -> Self {
         PureScriptConfig {
             format: "via [$symbol($version )]($style)",
@@ -27,7 +27,7 @@ impl<'a> Default for PureScriptConfig<'a> {
             style: "bold white",
             disabled: false,
             detect_extensions: vec!["purs"],
-            detect_files: vec!["spago.dhall"],
+            detect_files: vec!["spago.dhall", "spago.yaml", "spago.lock"],
             detect_folders: vec![],
         }
     }

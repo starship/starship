@@ -68,6 +68,25 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     Some(formatted_version)
 }
 
+fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let (filename, contents) = ["deno.json", "deno.jsonc", "jsr.json", "jsr.jsonc"]
+        .iter()
+        .find_map(|filename| {
+            context
+                .read_file_from_pwd(filename)
+                .map(|contents| (filename, contents))
+        })?;
+
+    let json_content: json::Value = if filename.ends_with(".jsonc") {
+        jsonc_parser::parse_to_serde_value(&contents, &Default::default()).ok()??
+    } else {
+        json::from_str(&contents).ok()?
+    };
+
+    let raw_version = json_content.get("version")?.as_str()?;
+    format_version(raw_version, config.version_format)
+}
+
 fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
     pyproject
         .get("tool")?
@@ -110,7 +129,7 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
             let build_file_contents = context.read_file_from_pwd("build.gradle")?;
-            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let re = Regex::new(r#"(?m)^version( |\s*=\s*)['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
             let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
 
@@ -135,7 +154,7 @@ fn get_julia_project_version(context: &Context, config: &PackageConfig) -> Optio
 
 fn get_helm_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("Chart.yaml")?;
-    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["version"].as_str()?;
 
     format_version(version, config.version_format)
@@ -152,7 +171,7 @@ fn get_mix_version(context: &Context, config: &PackageConfig) -> Option<String> 
 fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pom.xml")?;
     let mut reader = QXReader::from_str(&file_contents);
-    reader.trim_text(true);
+    reader.config_mut().trim_text(true);
 
     let mut buf = vec![];
     let mut in_ver = false;
@@ -235,7 +254,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
-        // workspace version string (`package.version.worspace = true`)
+        // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
         // discover the workspace root
@@ -286,7 +305,7 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
 fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("shard.yml")?;
 
-    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let data = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = data.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -295,7 +314,7 @@ fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String
 fn get_daml_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("daml.yaml")?;
 
-    let daml_yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let daml_yaml = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = daml_yaml.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -304,7 +323,7 @@ fn get_daml_project_version(context: &Context, config: &PackageConfig) -> Option
 fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pubspec.yaml")?;
 
-    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let data = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
     let raw_version = data.first()?["version"].as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -322,6 +341,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_cargo_version,
         get_nimble_version,
         get_node_package_version,
+        get_jsr_package_version,
         get_pyproject_version,
         get_setup_cfg_version,
         get_composer_version,
@@ -583,7 +603,7 @@ license = "MIT"
 
     #[test]
     fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
-        // Only create an empty directory. There's no .nibmle file for this case.
+        // Only create an empty directory. There's no .nimble file for this case.
         let project_dir = create_project_dir()?;
 
         let starship_config = toml::toml! {
@@ -724,6 +744,66 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("semantic"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_jsr_json() -> io::Result<()> {
+        let config_name = "jsr.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_jsr_jsonc() -> io::Result<()> {
+        let config_name = "jsr.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_json() -> io::Result<()> {
+        let config_name = "deno.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_jsonc() -> io::Result<()> {
+        let config_name = "deno.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -910,6 +990,25 @@ license = "MIT"
     id 'test.plugin' version '0.2.0'
 }
 version '0.1.0'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_gradle_version_setter_notation_single_quote() -> io::Result<()> {
+        let config_name = "build.gradle";
+        let config_content = "plugins {
+    id 'java'
+    id 'test.plugin' version '0.2.0'
+}
+version = '0.1.0'
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

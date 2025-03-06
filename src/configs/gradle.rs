@@ -19,7 +19,7 @@ pub struct GradleConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for GradleConfig<'a> {
+impl Default for GradleConfig<'_> {
     fn default() -> Self {
         GradleConfig {
             format: "via [$symbol($version )]($style)",

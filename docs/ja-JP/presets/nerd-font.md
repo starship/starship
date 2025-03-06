@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#nerd-font-symbols)
+[プリセット一覧に戻る](./#nerd-font-symbols)
 
 # Nerd Font Symbolsプリセット
 
@@ -16,6 +16,6 @@
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[クリックしてTOMLをダウンロード](/presets/toml/nerd-font-symbols.toml)
+[Click to download TOML](/presets/toml/nerd-font-symbols.toml){download}
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

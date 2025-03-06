@@ -16,13 +16,13 @@ pub struct FossilBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for FossilBranchConfig<'a> {
+impl Default for FossilBranchConfig<'_> {
     fn default() -> Self {
         FossilBranchConfig {
             format: "on [$symbol$branch]($style) ",
             symbol: " ",
             style: "bold purple",
-            truncation_length: std::i64::MAX,
+            truncation_length: i64::MAX,
             truncation_symbol: "…",
             disabled: true,
         }

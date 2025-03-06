@@ -161,7 +161,7 @@
   align="right"
  />
 
-**Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
+**Der minimalistische, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
 - **Schnell:** sie ist schnell – _sehr, sehr_ schnell! 🚀
 - **Konfigurierbar:** konfiguriere jedes Detail der Prompt.
@@ -338,20 +338,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Füge folgendes zum Ende deiner Nushell env Datei hinzu (finde sie, indem du `$nu.env-path` in Nushell ausführst):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Und füge Folgendes am Ende deiner Nushell-Konfiguration hinzu (finde sie, indem du folgenden Befehl in Nushell ausführst `$nu.config-path`):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Beachte: Nushell wird erst ab v0.78+ unterstützt
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
@@ -431,9 +425,16 @@ Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspirie
 
 Unterstütze dieses Projekt, indem du [ein Sponsor wirst](https://github.com/sponsors/starship). Dein Name und Logo wird hier mit einem Link zu deiner Website erscheinen.
 
-**Unterstützer**
+## 🔒 Code Signing Policy
 
-- [Appwrite](https://appwrite.io/)
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

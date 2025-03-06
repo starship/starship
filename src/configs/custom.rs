@@ -30,9 +30,10 @@ pub struct CustomConfig<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_stdin: Option<bool>,
     pub ignore_timeout: bool,
+    pub unsafe_no_escape: bool,
 }
 
-impl<'a> Default for CustomConfig<'a> {
+impl Default for CustomConfig<'_> {
     fn default() -> Self {
         CustomConfig {
             format: "[$symbol($output )]($style)",
@@ -50,6 +51,7 @@ impl<'a> Default for CustomConfig<'a> {
             os: None,
             use_stdin: None,
             ignore_timeout: false,
+            unsafe_no_escape: false,
         }
     }
 }

@@ -1,10 +1,14 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
-actionText: 시작하기 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text:
+  tagline: 아무 셸에나 적용할 수 있는 간결하고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
+  actions:
+    - 
+      theme: brand
+      text: 시작하기 →
+      link: ./guide/
 features:
   - 
     title: 호환성 우선
@@ -21,12 +25,24 @@ metaTitle: "Starship: 크로스-셸 프롬프트"
 description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다! 필요한 정보를 깔끔하고 간략하게 표시합니다. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, 및 PowerShell에 빠르게 설치할 수 있습니다.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### 준비 사항
 
@@ -55,6 +71,7 @@ description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 �
    ```sh
    brew install starship
    ```
+
    [Winget](https://github.com/microsoft/winget-cli)으로 설치:
 
    ```powershell
@@ -149,20 +166,15 @@ description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 �
 
    ::: warning
 
-   추후에 변경될 예정입니다. Nushell v0.78 버전 이상에서만 지원됩니다.
+   추후에 변경될 예정입니다. Only Nushell v0.96+ is supported.
 
    :::
 
-   다음 내용을 Nushell env 파일 (찾으려면 Nushell에서 `$nu.env-path` 실행) 마지막 부분에 추가하세요:
-   ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   다음 내용을 Nushell 설정 파일 (찾으려면 Nushell에서 `$nu.config-path` 실행) 마지막 부분에 추가하세요:
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

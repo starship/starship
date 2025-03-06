@@ -5,7 +5,9 @@ use std::io::Write;
 use shadow_rs::SdResult;
 
 fn main() -> SdResult<()> {
-    shadow_rs::new_hook(gen_presets_hook)?;
+    shadow_rs::ShadowBuilder::builder()
+        .hook(gen_presets_hook)
+        .build()?;
 
     #[cfg(windows)]
     {
@@ -19,8 +21,8 @@ fn main() -> SdResult<()> {
 }
 
 fn gen_presets_hook(mut file: &File) -> SdResult<()> {
-    println!("cargo:rerun-if-changed=docs/.vuepress/public/presets/toml");
-    let paths = fs::read_dir("docs/.vuepress/public/presets/toml")?;
+    println!("cargo:rerun-if-changed=docs/public/presets/toml");
+    let paths = fs::read_dir("docs/public/presets/toml")?;
     let mut sortedpaths = paths.collect::<io::Result<Vec<_>>>()?;
     sortedpaths.sort_by_key(std::fs::DirEntry::path);
 

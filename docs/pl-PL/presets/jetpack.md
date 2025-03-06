@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#jetpack)
+[Powrót do ustawień predefiniowanych](./#jetpack)
 
 # Jetpack Preset
 
@@ -19,6 +19,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/jetpack.toml)
+[Click to download TOML](/presets/toml/jetpack.toml){download}
 
-<<< @/.vuepress/public/presets/toml/jetpack.toml
+<<< @/public/presets/toml/jetpack.toml

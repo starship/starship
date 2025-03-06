@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#plain-text-symbols)
+[프리셋으로 돌아가기](./#plain-text-symbols)
 
 ## Plain Text Symbols Preset
 
@@ -14,4 +14,4 @@ starship preset plain-text-symbols -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/plain-text-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+<<< @/public/presets/toml/plain-text-symbols.toml

@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#no-empty-icons)
+[Powrót do ustawień predefiniowanych](./#no-empty-icons)
 
 # Ustawienia No Empty Icons
 
@@ -12,6 +12,6 @@ Ikony zestawów narzędzi będą wyświetlane dla zidentyfikowanych plików zest
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/no-empty-icons.toml)
+[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

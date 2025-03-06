@@ -14,7 +14,7 @@ use crate::utils;
 ///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
-///     - The value of `currentContext` is not `default`
+///     - The value of `currentContext` is not `default` or `desktop-linux`
 ///     - If multiple criteria are met, we use the following order to define the docker context:
 ///     - `DOCKER_HOST`, `DOCKER_CONTEXT`, $HOME/.docker/config.json, $`DOCKER_CONFIG/config.json`
 ///     - (This is the same order docker follows, as `DOCKER_HOST` and `DOCKER_CONTEXT` override the
@@ -57,7 +57,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    if ctx == "default" || ctx.starts_with("unix://") {
+    let default_contexts = ["default", "desktop-linux"];
+    if default_contexts.contains(&ctx.as_str()) || ctx.starts_with("unix://") {
         return None;
     }
 
@@ -335,6 +336,24 @@ mod tests {
 
         let actual = ModuleRenderer::new("docker_context")
             .env("DOCKER_CONTEXT", "default")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_context_default_after_3_5() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONTEXT", "desktop-linux")
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false

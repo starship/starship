@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#gruvbox-rainbow)
+[프리셋으로 돌아가기](./#gruvbox-rainbow)
 
 # Gruvbox Rainbow 프리셋
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

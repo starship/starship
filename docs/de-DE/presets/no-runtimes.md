@@ -1,4 +1,4 @@
-[Zurück zu den Voreinstellungen](./README.md#no-runtime-versions)
+[Zurück zu den Voreinstellungen](./#no-runtime-versions)
 
 # No Runtime Versions Preset
 
@@ -12,6 +12,6 @@ This preset hides the version of language runtimes. If you work in containers or
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Zum Herunterladen der TOML Datei klicken](/presets/toml/no-runtime-versions.toml)
+[Click to download TOML](/presets/toml/no-runtime-versions.toml){download}
 
-<<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
+<<< @/public/presets/toml/no-runtime-versions.toml

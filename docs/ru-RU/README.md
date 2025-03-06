@@ -1,13 +1,17 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
-actionText: Начало работы →
-actionLink: ./guide/
+layout: дом
+hero:
+  image: /logo.svg
+  text:
+  tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
+  actions:
+    - 
+      theme: бренд
+      text: Начало работы →
+      link: ./guide/
 features:
   - 
-    title: Совместивость в первую очередь
+    title: Совместимость в первую очередь
     details: Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!
   - 
     title: Основана на Rust
@@ -21,12 +25,24 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, и PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('uwu') || urlParams.has('kawaii')) {
+    const img = document.querySelector('.VPHero .VPImage.image-src')
+    img.classList.add('uwu')
+    img.src = '/logo-uwu.png'
+    img.alt = 'Kawaii Starship Logo by @sawaratsuki1004'
+  }
+})
+</script>
+
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Обязательные условия
 
@@ -55,6 +71,7 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    brew install starship
    ```
+
    С помощью [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -121,7 +138,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Только elvish v0.18 или выше поддерживается.
 
    :::
 
@@ -149,20 +166,15 @@ description: Starship - минимальная, быстрая и бесконе
 
    ::: warning
 
-   This will change in the future. Поддерживается только Nushell v0.78+.
+   Это изменится в будущем. Поддерживается только Nushell v0.96+.
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
-   ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Добавьте следующее в конец вашей конфигурации Nutshell (найдите это, запустив `$nu.config-path` в Nutshell):
 
    ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 
@@ -179,7 +191,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Вам нужно использовать [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) с помощью Cmd. Добавьте следующий файл `starship.lua` и поместите этот файл в каталог Clink скриптов:
 
    ```lua
    -- starship.lua

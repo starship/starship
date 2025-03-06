@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#plain-text-symbols)
+[Powrót do ustawień predefiniowanych](./#plain-text-symbols)
 
 ## Ustawienia Plain Text Symbols
 
@@ -12,6 +12,6 @@ Ten zestaw ustawień zmienia symbole w zwykły tekst dla każdego modułu. Świe
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/plain-text-symbols.toml)
+[Click to download TOML](/presets/toml/plain-text-symbols.toml){download}
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+<<< @/public/presets/toml/plain-text-symbols.toml

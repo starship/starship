@@ -76,11 +76,11 @@ format = "took [$duration]($style) "
 
 ### Affected Modules
 
-#### Character
+#### 字符
 
 | Removed Property        | Replacement      |
 | ----------------------- | ---------------- |
-| `符号`                    | `success_symbol` |
+| `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### 时间
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |

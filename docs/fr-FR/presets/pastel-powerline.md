@@ -1,4 +1,4 @@
-[Retourner aux préréglages](./README.md#pastel-powerline)
+[Retourner aux préréglages](./#pastel-powerline)
 
 # Préréglage Pastel Powerline
 
@@ -16,6 +16,6 @@ Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Cliquez pour télécharger le TOML](/presets/toml/pastel-powerline.toml)
+[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

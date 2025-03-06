@@ -89,7 +89,17 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("bun.lockb"))?.sync_all()?;
         let actual = ModuleRenderer::new("bun").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🍞 v0.1.4 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🥟 v0.1.4 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_bun_file_text_lockfile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("bun.lock"))?.sync_all()?;
+        let actual = ModuleRenderer::new("bun").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🥟 v0.1.4 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -102,7 +112,20 @@ mod tests {
             .path(dir.path())
             .cmd("bun --version", None)
             .collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🍞 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🥟 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn no_bun_installed_text_lockfile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("bun.lock"))?.sync_all()?;
+        let actual = ModuleRenderer::new("bun")
+            .path(dir.path())
+            .cmd("bun --version", None)
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🥟 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

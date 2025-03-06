@@ -1,4 +1,4 @@
-[Volver a las preselecciones](./README.md#no-empty-icons)
+[Volver a las preselecciones](./#no-empty-icons)
 
 # Preselección de iconos no vacíos
 
@@ -12,6 +12,6 @@ Si se identifican archivos del conjunto de herramientas, entonces se mostrara el
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/no-empty-icons.toml)
+[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

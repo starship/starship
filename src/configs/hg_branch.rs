@@ -16,13 +16,13 @@ pub struct HgBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for HgBranchConfig<'a> {
+impl Default for HgBranchConfig<'_> {
     fn default() -> Self {
         HgBranchConfig {
             symbol: " ",
             style: "bold purple",
             format: "on [$symbol$branch(:$topic)]($style) ",
-            truncation_length: std::i64::MAX,
+            truncation_length: i64::MAX,
             truncation_symbol: "…",
             disabled: true,
         }

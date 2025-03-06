@@ -1,0 +1,112 @@
+.VPHero .container {
+  flex-direction: column;
+  text-align: center !important;
+  gap: 10px;
+}
+
+.VPHero .image {
+  order: 0;
+  margin: 0;
+}
+
+.VPHero .image-container {
+  transform: none;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .VPHero .image-container {
+    max-width: 320px;
+    width: auto;
+  }
+}
+
+.VPHero .image img {
+  width: 100%;
+  max-height: 130px;
+  max-width: none;
+  position: static;
+  transform: none;
+}
+
+.VPHero .image img.uwu {
+  max-height: 290px;
+  max-width: 80vw;
+}
+
+.VPHero .container .actions {
+  justify-content: center !important;
+}
+
+.VPHero .main {
+  margin: 0 auto;
+}
+
+.demo-video {
+  max-width: 700px;
+  width: 100%;
+  margin: 50px auto;
+  border-radius: 6px;
+}
+
+.action-button {
+  background-color: #dd0b78 !important;
+  border-bottom: #c6096b !important;
+}
+
+p[align="center"] img {
+  display: inline-block;
+}
+
+p[align="center"] img[height="20"] {
+  height: 20px;
+}
+
+@font-face {
+  font-family: 'Nerd Font';
+  src: url("/nerd-font.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+e000-f8ff, U+f0000-fffff, U+100000-10ffff;
+}
+
+code {
+  overflow-wrap: break-word;
+}
+
+.vp-doc [class*='language-']>button.copy {
+  top: unset;
+  bottom: 12px;
+}
+
+:root {
+  --vp-font-family-mono: 'Nerd Font', source-code-pro, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --vp-c-brand-1: #9b0854;
+  --vp-c-brand-2: #f31186;
+  --vp-c-brand-3: #dd0b78;
+  --vp-c-brand-soft: rgba(221, 11, 120, 0.14);
+  /* The following colors were extracted from the dark variant of the default VitePress theme
+   * Styled variables from: https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css#L319-L362
+   */
+  --vp-code-block-bg: #282c34;
+  --vp-code-color: #282c34;
+  --vp-code-block-divider-color: #000;
+  --vp-code-lang-color: rgba(235, 235, 245, 0.38);
+  --vp-code-line-highlight-color: rgba(101, 117, 133, 0.16);
+  --vp-code-line-number-color: rgba(235, 235, 245, 0.38);
+  --vp-code-copy-code-border-color: #2e2e32;
+  --vp-code-copy-code-bg: #202127;
+  --vp-code-copy-code-hover-border-color: #2e2e32;
+  --vp-code-copy-code-hover-bg: #1b1b1f;
+  --vp-code-copy-code-active-text: rgba(235, 235, 245, 0.6);
+}
+
+.dark {
+  --vp-c-brand-1: #ff70cd;
+  --vp-c-brand-2: #ff14ad;
+  --vp-c-brand-3: #ff33b8;
+  --vp-c-brand-soft: rgba(255, 51, 184, 0.14);
+  --vp-code-color: #fff;
+}

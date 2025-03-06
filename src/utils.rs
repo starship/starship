@@ -136,7 +136,7 @@ pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
 ) -> String {
     std::iter::once(cmd.as_ref())
-        .chain(args.iter().map(std::convert::AsRef::as_ref))
+        .chain(args.iter().map(AsRef::as_ref))
         .map(|i| i.to_string_lossy().into_owned())
         .collect::<Vec<String>>()
         .join(" ")
@@ -257,7 +257,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
-        "fossil diff --numstat" => Some(CommandOutput{
+        "fossil diff -i --numstat" => Some(CommandOutput{
             stdout: String::from("\
          3          2 README.md
          3          2 TOTAL over 1 changed files"),
@@ -265,6 +265,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "fossil update topic-branch" => Some(CommandOutput{
             stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "gleam --version" => Some(CommandOutput {
+            stdout: String::from("gleam 1.0.0\n"),
             stderr: String::default(),
         }),
         "go version" => Some(CommandOutput {
@@ -281,6 +285,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
             stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
+            stderr: String::default(),
+        }),
+        "scala-cli version --scala" => Some(CommandOutput {
+            stdout: String::from("3.4.1"),
             stderr: String::default(),
         }),
         "scalac -version" => Some(CommandOutput {
@@ -307,6 +315,14 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
             stderr: String::default(),
         }),
+        "mojo --version" => Some(CommandOutput {
+            stdout: String::from("mojo 24.4.0 (2cb57382)\n"),
+            stderr: String::default(),
+        }),
+        "nats context info --json" => Some(CommandOutput{
+            stdout: String::from("{\"name\":\"localhost\",\"url\":\"nats://localhost:4222\"}"),
+            stderr: String::default(),
+        }),
         "nim --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -324,6 +340,10 @@ active boot switches: -d:release\n",
         }),
         "ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.10.0\n"),
+            stderr: String::default(),
+        }),
+        "odin version" => Some(CommandOutput {
+            stdout: String::from("odin version dev-2024-03:fc587c507\n"),
             stderr: String::default(),
         }),
         "opa version" => Some(CommandOutput {
@@ -391,6 +411,10 @@ WebAssembly: unavailable
         }),
         "python3 --version" => Some(CommandOutput {
             stdout: String::from("Python 3.8.0\n"),
+            stderr: String::default(),
+        }),
+        "quarto --version" => Some(CommandOutput {
+            stdout: String::from("1.4.549\n"),
             stderr: String::default(),
         }),
         "R --version" => Some(CommandOutput {
@@ -498,12 +522,13 @@ pub fn wrap_seq_for_shell(
     escape_begin: char,
     escape_end: char,
 ) -> String {
-    const BASH_BEG: &str = "\u{5c}\u{5b}"; // \[
-    const BASH_END: &str = "\u{5c}\u{5d}"; // \]
-    const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const ZSH_END: &str = "\u{25}\u{7d}"; // %}
-    const TCSH_BEG: &str = "\u{25}\u{7b}"; // %{
-    const TCSH_END: &str = "\u{25}\u{7d}"; // %}
+    let (beg, end) = match shell {
+        // \[ and \]
+        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        // %{ and %}
+        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
+        _ => return ansi,
+    };
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
     // in an escape or not with a single boolean variable
@@ -513,20 +538,10 @@ pub fn wrap_seq_for_shell(
         .map(|x| {
             if x == escape_begin && !escaped {
                 escaped = true;
-                match shell {
-                    Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
-                    Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
-                    Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
-                    _ => x.to_string(),
-                }
+                format!("{beg}{escape_begin}")
             } else if x == escape_end && escaped {
                 escaped = false;
-                match shell {
-                    Shell::Bash => format!("{escape_end}{BASH_END}"),
-                    Shell::Zsh => format!("{escape_end}{ZSH_END}"),
-                    Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
-                    _ => x.to_string(),
-                }
+                format!("{escape_end}{end}")
             } else {
                 x.to_string()
             }
@@ -611,9 +626,11 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
-    // Make sure it renders something if the time equals zero instead of an empty string
-    if raw_millis == 0 {
-        return "0ms".into();
+    // Fast returns for zero cases to render something
+    match (raw_millis, show_millis) {
+        (0, true) => return "0ms".into(),
+        (0..=999, false) => return "0s".into(),
+        _ => (),
     }
 
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
@@ -622,30 +639,34 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    let components = [days, hours, minutes, seconds];
-    let suffixes = ["d", "h", "m", "s"];
+    // Calculate how long the string will be to allocate once in most cases
+    let result_capacity = match raw_millis {
+        1..=59 => 3,
+        60..=3599 => 6,
+        3600..=86399 => 9,
+        _ => 12,
+    } + if show_millis { 5 } else { 0 };
 
-    let mut rendered_components: Vec<String> = components
-        .iter()
-        .zip(&suffixes)
-        .map(render_time_component)
-        .collect();
-    if show_millis || raw_millis < 1000 {
-        rendered_components.push(render_time_component((&millis, &"ms")));
-    }
-    rendered_components.join("")
-}
+    let components = [(days, "d"), (hours, "h"), (minutes, "m"), (seconds, "s")];
 
-/// Render a single component of the time string, giving an empty string if component is zero
-fn render_time_component((component, suffix): (&u128, &&str)) -> String {
-    match component {
-        0 => String::new(),
-        n => format!("{n}{suffix}"),
+    // Concat components ito result starting from the first non-zero one
+    let result = components.iter().fold(
+        String::with_capacity(result_capacity),
+        |acc, (component, suffix)| match component {
+            0 if acc.is_empty() => acc,
+            n => acc + &n.to_string() + suffix,
+        },
+    );
+
+    if show_millis {
+        result + &millis.to_string() + "ms"
+    } else {
+        result
     }
 }
 
 pub fn home_dir() -> Option<PathBuf> {
-    dirs_next::home_dir()
+    dirs::home_dir()
 }
 
 const HEXTABLE: &[char] = &[
@@ -702,28 +723,36 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_0ms() {
+    fn render_time_test_0ms() {
         assert_eq!(render_time(0_u128, true), "0ms")
     }
     #[test]
-    fn test_500ms() {
+    fn render_time_test_0s() {
+        assert_eq!(render_time(0_u128, false), "0s")
+    }
+    #[test]
+    fn render_time_test_500ms() {
         assert_eq!(render_time(500_u128, true), "500ms")
     }
     #[test]
-    fn test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s")
+    fn render_time_test_500ms_no_millis() {
+        assert_eq!(render_time(500_u128, false), "0s")
     }
     #[test]
-    fn test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s")
+    fn render_time_test_10s() {
+        assert_eq!(render_time(10_000_u128, true), "10s0ms")
     }
     #[test]
-    fn test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
+    fn render_time_test_90s() {
+        assert_eq!(render_time(90_000_u128, true), "1m30s0ms")
     }
     #[test]
-    fn test_1d() {
-        assert_eq!(render_time(86_400_000_u128, true), "1d")
+    fn render_time_test_10110s() {
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms")
+    }
+    #[test]
+    fn render_time_test_1d() {
+        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s")
     }
 
     #[test]

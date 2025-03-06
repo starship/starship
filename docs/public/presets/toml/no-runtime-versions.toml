@@ -37,6 +37,9 @@ format = 'via [$symbol]($style)'
 [fennel]
 format = 'via [$symbol]($style)'
 
+[gleam]
+format = 'via [$symbol]($style)'
+
 [golang]
 format = 'via [$symbol]($style)'
 
@@ -89,6 +92,9 @@ format = 'via [$symbol$stack]($style)'
 format = 'via [$symbol]($style)'
 
 [python]
+format = 'via [$symbol]($style)'
+
+[quarto]
 format = 'via [$symbol]($style)'
 
 [raku]

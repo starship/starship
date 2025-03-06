@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#pastel-powerline)
+[프리셋으로 돌아가기](./#pastel-powerline)
 
 # Pastel Powerline Preset
 
@@ -18,4 +18,4 @@ starship preset pastel-powerline -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/pastel-powerline.toml)
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

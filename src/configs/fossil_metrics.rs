@@ -15,7 +15,7 @@ pub struct FossilMetricsConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for FossilMetricsConfig<'a> {
+impl Default for FossilMetricsConfig<'_> {
     fn default() -> Self {
         FossilMetricsConfig {
             format: "([+$added]($added_style) )([-$deleted]($deleted_style) )",

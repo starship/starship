@@ -26,18 +26,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             "\"truncation_length\" should be a positive value, found {}",
             config.truncation_length
         );
-        std::usize::MAX
+        usize::MAX
     } else {
         config.truncation_length as usize
     };
 
     let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
-    let branch_name = get_hg_current_bookmark(repo_root).unwrap_or_else(|_| {
-        get_hg_branch_name(repo_root).unwrap_or_else(|_| String::from("default"))
+    let branch_name = get_hg_current_bookmark(&repo_root).unwrap_or_else(|_| {
+        get_hg_branch_name(&repo_root).unwrap_or_else(|_| String::from("default"))
     });
 
     let branch_graphemes = truncate_text(&branch_name, len, config.truncation_symbol);
-    let topic_graphemes = if let Ok(topic) = get_hg_topic_name(repo_root) {
+    let topic_graphemes = if let Ok(topic) = get_hg_topic_name(&repo_root) {
         truncate_text(&topic, len, config.truncation_symbol)
     } else {
         String::new()

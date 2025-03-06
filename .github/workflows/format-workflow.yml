@@ -24,19 +24,57 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v4
       - name: Install | Taplo
-        run: cargo install --debug --locked --version 0.9.0 taplo-cli
+        run: cargo install --debug --locked --version 0.9.3 taplo-cli
       - name: Presets | Validate with schema
-        run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/.vuepress/public/presets/toml/*.toml
+        run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/public/presets/toml/*.toml
 
   # If this is not a Crowdin PR, block changes to translated documentation
   block-crowdin:
     name: Block Translated Changes
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'i18n_master' }}
     steps:
-      - name: Prevent File Change
-        uses: xalvarez/prevent-file-change-action@v1.6.0
-        if: ${{ github.event.pull_request.head.ref != 'i18n_master' }}
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
+          fetch-depth: 0
+      - name: Prevent File Change
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            const pattern = /^docs\/[a-z][a-z][a-z]?-[A-Z][A-Z]?\/.*$/;
+            const base = context.payload.pull_request.base.sha;
+            const head = context.payload.pull_request.head.sha;
+
+            const result = execSync(`git diff --name-only ${base} ${head}`).toString().split('\n');
+
+            for (const file of result) {
+              if (pattern.test(file)) {
+                core.setFailed(`To avoid conflicts, changes to the translated documentation are only allowed via Crowdin at https://translate.starship.rs.`);
+                break;
+              }
+            }
+
+  # Vitepress build
+  vitepress:
+    name: Vitepress [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup | Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: docs/package-lock.json
+
+      - name: Setup | Install dependencies
+        run: npm install
+        working-directory: docs
+
+      - name: Build | Build docs site
+        run: npm run build
+        working-directory: docs

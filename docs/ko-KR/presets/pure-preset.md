@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#pure)
+[프리셋으로 돌아가기](./#pure)
 
 # Pure 프리셋
 
@@ -14,4 +14,4 @@ starship preset pure-preset -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/pure-preset.toml)
 
-<<< @/.vuepress/public/presets/toml/pure-preset.toml
+<<< @/public/presets/toml/pure-preset.toml

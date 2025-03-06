@@ -18,10 +18,11 @@ pub struct KubernetesConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub detect_env_vars: Vec<&'a str>,
     pub contexts: Vec<KubernetesContextConfig<'a>>,
 }
 
-impl<'a> Default for KubernetesConfig<'a> {
+impl Default for KubernetesConfig<'_> {
     fn default() -> Self {
         KubernetesConfig {
             symbol: "☸ ",
@@ -33,6 +34,7 @@ impl<'a> Default for KubernetesConfig<'a> {
             detect_extensions: vec![],
             detect_files: vec![],
             detect_folders: vec![],
+            detect_env_vars: vec![],
             contexts: vec![],
         }
     }
