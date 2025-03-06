@@ -106,8 +106,8 @@ where
         Either::<T, Vec<T>>::schema_name()
     }
 
-    fn json_schema(gen: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
-        Either::<T, Vec<T>>::json_schema(gen)
+    fn json_schema(generator: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
+        Either::<T, Vec<T>>::json_schema(generator)
     }
 
     fn is_referenceable() -> bool {

@@ -5,7 +5,7 @@ authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
 documentation = "https://starship.rs/guide/"
-edition = "2021"
+edition = "2024"
 homepage = "https://starship.rs"
 # Keep `/` in front of `README.md` to exclude localized readmes
 include = [
@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.80"
+rust-version = "1.85"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
