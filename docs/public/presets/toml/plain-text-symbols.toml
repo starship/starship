@@ -200,6 +200,9 @@ symbol = "php "
 [pijul_channel]
 symbol = "pijul "
 
+[pixi]
+symbol = "pixi "
+
 [pulumi]
 symbol = "pulumi "
 
