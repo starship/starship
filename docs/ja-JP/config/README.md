@@ -630,15 +630,6 @@ symbol = '🦬 '
 format = 'via [🍔 $version](bold green) '
 ```
 
-#### Node.js を置き換える
-
-Bun ランタイムだけが表示されるように、設定中の [nodejs モジュール](#nodejs) の `detect_files` プロパティを上書きできます。
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
-```
-
 ## C
 
 `c` モジュールは、利用しているCコンパイラに関するいくつかの情報を表示します。 デフォルトでは、カレントディレクトリに`.c`または`.h`ファイルが含まれている場合、モジュールが表示されます。
@@ -1102,7 +1093,7 @@ format = 'via [🦕 $version](green bold) '
 | `read_only_style`        | `'red'`                                                                                                                      | 読み取り専用シンボルのスタイルです。                                                     |
 | `truncation_symbol`      | `''`                                                                                                                         | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: '…/'                                     |
 | `before_repo_root_style` |                                                                                                                              | パス名のうち、git リポジトリのルートより上の階層のスタイル。 デフォルトの値は `style` と同じです。               |
-| `repo_root_style`        |                                                                                                                              | gitリポジトリのルートのスタイルです。 デフォルトの値は `style` と同じです。                           |
+| `repo_root_style`        |                                                                                                                              | gitリポジトリのルートのスタイルです。 The default value is equivalent to `style`.       |
 | `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | `before_repo_root_style` と `repo_root_style` が定義されているときの git リポジトリの書式。 |
 | `home_symbol`            | `'~'`                                                                                                                        | ホームディレクトリを示すシンボルです。                                                    |
 | `use_os_path_sep`        | `true`                                                                                                                       | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`)                 |
@@ -3007,6 +2998,8 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 - カレントディレクトリに拡張子が`.js`、`.mjs`または`.cjs`のファイルが含まれている
 - カレントディレクトリに拡張子が`.ts`、`.mts`または`.cts`のファイルが含まれている
 
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+
 ### オプション
 
 | オプション               | デフォルト                                         | 説明                                                                                                    |
@@ -3234,6 +3227,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
