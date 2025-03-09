@@ -334,12 +334,12 @@ mod deprecated {
         match alias {
             Some(alias) => {
                 log::warn!(
-                        "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{}_alias' instead. (`{}` -> `{}`)",
-                        &name,
-                        &name,
-                        &current_value,
-                        &alias
-                    );
+                    "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{}_alias' instead. (`{}` -> `{}`)",
+                    &name,
+                    &name,
+                    &current_value,
+                    &alias
+                );
                 Some(alias)
             }
             None => Some(current_value),
@@ -349,12 +349,12 @@ mod deprecated {
 
 #[cfg(test)]
 mod tests {
-    use crate::modules::kubernetes::parse_kubeconfigs;
     use crate::modules::kubernetes::Document;
+    use crate::modules::kubernetes::parse_kubeconfigs;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
     use std::env;
-    use std::fs::{create_dir, File};
+    use std::fs::{File, create_dir};
     use std::io::{self, Write};
 
     #[test]

@@ -1,4 +1,4 @@
-use clap::{builder::PossibleValue, ValueEnum};
+use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
@@ -13,8 +13,8 @@ use unicode_width::UnicodeWidthChar;
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
 use crate::formatter::{StringFormatter, VariableHolder};
-use crate::module::Module;
 use crate::module::ALL_MODULES;
+use crate::module::Module;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;

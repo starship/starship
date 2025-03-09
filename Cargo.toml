@@ -5,7 +5,7 @@ authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
 documentation = "https://starship.rs/guide/"
-edition = "2021"
+edition = "2024"
 homepage = "https://starship.rs"
 # Keep `/` in front of `README.md` to exclude localized readmes
 include = [
@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.80"
+rust-version = "1.85"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -66,7 +66,7 @@ pest = "2.7.15"
 pest_derive = "2.7.15"
 process_control = "5.0.0"
 quick-xml = "0.37.2"
-rand = "0.8.5"
+rand = "0.9.0"
 rayon = "1.10.0"
 regex = { version = "1.11.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.1"
@@ -74,7 +74,7 @@ semver = "1.0.26"
 serde = { version = "1.0.218", features = ["derive"] }
 serde_json = "1.0.140"
 sha1 = "0.10.6"
-shadow-rs = { version = "0.38.1", default-features = false }
+shadow-rs = { version = "1.0.1", default-features = false, features = ["build"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.10.0", optional = true }
@@ -106,7 +106,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.59.0"
+version = "0.60.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -119,7 +119,7 @@ features = [
 nix = { version = "0.29.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.38.1", default-features = false }
+shadow-rs = { version = "1.0.1", default-features = false, features = ["build"] }
 dunce = "1.0.5"
 
 [target.'cfg(windows)'.build-dependencies]

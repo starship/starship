@@ -123,7 +123,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::io;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     #[test]
