@@ -353,6 +353,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -3011,6 +3012,38 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
+## Network Namespace
+
+The `netns` module shows the current network namespace.
+This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Options
+
+| Option     | Default                         | Description                                                       |
+| ---------- | ------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | The format for the module.                                        |
+| `symbol`   | `'🛜 '`                         | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`            | The style for the module.                                         |
+| `disabled` | `false`                         | Disables the `netns` module.                                      |
+
+### Variables
+
+| Variable | Example    | Description                               |
+| -------- | ---------- | ----------------------------------------- |
+| name     | `my-netns` | The name of the current network namespace |
+| symbol   |            | Mirrors the value of option `symbol`      |
+| style\*  |            | Mirrors the value of option `style`       |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/).
@@ -3426,6 +3459,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
