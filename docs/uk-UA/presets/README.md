@@ -78,6 +78,6 @@
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+Цей шаблон є трохи зміненою версією [Gruvbox Rainbow](./gruvbox-rainbow.md), що використовує палітру [Catppuccin](https://github.com/catppuccin/catppuccin).
 
-[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+[![Скріншот шаблона Catppuccin Powerline](/presets/img/catppuccin-powerline.png "Натисніть, щоб переглянути шаблон Catppucin Powerline")](./catppuccin-powerline)
