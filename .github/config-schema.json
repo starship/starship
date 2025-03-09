@@ -1082,6 +1082,19 @@
         }
       ]
     },
+    "netns": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol \\[$name\\]]($style) ",
+        "style": "blue bold dimmed",
+        "symbol": "🛜"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NetnsConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -4596,6 +4609,28 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NetnsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol \\[$name\\]]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🛜",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold dimmed",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
           "type": "boolean"
         }
       },

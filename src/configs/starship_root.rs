@@ -125,6 +125,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "time",
     "status",
     "container",
+    "netns",
     "os",
     "shell",
     "character",
