@@ -339,6 +339,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -2879,6 +2880,37 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 [nats]
 format = '[$symbol]($style)'
 style = 'bold purple'
+```
+
+## Network Namespace
+
+The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn   | Mặc định                          | Mô tả                                                             |
+| ---------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | Định dạng cho module.                                             |
+| `symbol`   | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`              | Kiểu cho module.                                                  |
+| `disabled` | `false`                           | Disables the `netns` module.                                      |
+
+### Các biến
+
+| Biến      | Ví dụ      | Mô tả                                     |
+| --------- | ---------- | ----------------------------------------- |
+| name      | `my-netns` | The name of the current network namespace |
+| symbol    |            | Giá trị ghi đè tuỳ chọn `symbol`          |
+| style\* |            | Giá trị ghi đè của `style`                |
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
 ```
 
 ## Nim
