@@ -336,6 +336,12 @@ fn get_rlang_version(context: &Context, config: &PackageConfig) -> Option<String
     format_version(&caps["version"], config.version_format)
 }
 
+fn get_moonbit_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("moon.mod.json")?;
+    let moon_mod_json: json::Value = json::from_str(&file_contents).ok()?;
+    format_version(moon_mod_json["version"].as_str()?, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -358,6 +364,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_daml_project_version,
         get_dart_pub_version,
         get_rlang_version,
+        get_moonbit_project_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1524,6 +1531,27 @@ Title: Starship
     }
     fn create_project_dir() -> io::Result<TempDir> {
         tempfile::tempdir()
+    }
+
+    #[test]
+    fn test_extract_moonbit_project_version() -> io::Result<()> {
+        let config_name = "moon.mod.json";
+        let config_content = r#"
+{
+  "name": "jinser/tour-of-moonbit-string",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "",
+  "license": "MIT",
+  "keywords": [],
+  "description": "",
+  "source": "src"
+}
+"#;
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
     }
 
     fn fill_config(

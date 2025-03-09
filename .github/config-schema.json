@@ -1069,6 +1069,28 @@
         }
       ]
     },
+    "moonbit": {
+      "default": {
+        "detect_extensions": [
+          "mbt",
+          "mbti"
+        ],
+        "detect_files": [
+          "moon.mod.json",
+          "moon.pkg.json"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold purple",
+        "symbol": "🐰 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MoonBitConfig"
+        }
+      ]
+    },
     "nats": {
       "default": {
         "disabled": true,
@@ -4564,6 +4586,55 @@
         },
         "detect_files": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "MoonBitConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐰 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "mbt",
+            "mbti"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "moon.mod.json",
+            "moon.pkg.json"
+          ],
           "type": "array",
           "items": {
             "type": "string"
