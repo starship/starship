@@ -619,7 +619,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
-### Exemples
+### Exemple
 
 #### Customize the format
 
@@ -628,15 +628,6 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Replace Node.js
-
-You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -1102,7 +1093,7 @@ Par exemple, `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'
 | `read_only_style`        | `'red'`                                                                                                                      | Le style du symbole de lecture seule.                                                                                     |
 | `truncation_symbol`      | `''`                                                                                                                         | Le symbole pour préfixer les chemins tronqués. eg: '…/'                                                                   |
 | `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. La valeur par défaut est équivalent à `style`.             |
-| `repo_root_style`        |                                                                                                                              | Le style pour la racine du dépôt Git. La valeur par défaut est équivalent à `style`.                                      |
+| `repo_root_style`        |                                                                                                                              | Le style pour la racine du dépôt Git. The default value is equivalent to `style`.                                         |
 | `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                                  |
 | `home_symbol`            | `'~'`                                                                                                                        | Le symbole indiquant le répertoire personnel.                                                                             |
 | `use_os_path_sep`        | `true`                                                                                                                       | Utiliser le séparateur de chemin du système d’exploitation au lieu de toujours utiliser `/` (par ex. `\` sous Windows) |
@@ -3007,6 +2998,8 @@ Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) install�
 - Le dossier courant contient un fichier avec l’extension `.js`, `.mjs` ou `.cjs`
 - Le dossier courant contient un fichier avec l’extension `.ts`, `.mts` ou `.cts`
 
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+
 ### Options
 
 | Option              | Défaut                                        | Description                                                                                                 |
@@ -3234,6 +3227,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
