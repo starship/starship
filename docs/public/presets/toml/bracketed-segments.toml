@@ -7,6 +7,9 @@ format = '\[[$symbol($version)]($style)\]'
 [c]
 format = '\[[$symbol($version(-$name))]($style)\]'
 
+[cpp]
+format = '\[[$symbol($version(-$name))]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
