@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом до
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -339,6 +339,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -618,7 +619,7 @@ symbol = '🦬 '
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-### Приклади
+### Приклад
 
 #### Налаштуйте формат
 
@@ -627,15 +628,6 @@ symbol = '🦬 '
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Замінити Node.js
-
-Ви можете перевизначити параметр `detect_files` властивості [модуля nodejs](#nodejs) у вашій конфігурації, щоб показати середу виконання bun:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -2881,6 +2873,37 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
+## Network Namespace
+
+The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Параметри
+
+| Параметр   | Стандартно                        | Опис                                                              |
+| ---------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | Формат модуля.                                                    |
+| `symbol`   | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`              | Стиль модуля.                                                     |
+| `disabled` | `false`                           | Disables the `netns` module.                                      |
+
+### Змінні
+
+| Змінна    | Приклад    | Опис                                      |
+| --------- | ---------- | ----------------------------------------- |
+| name      | `my-netns` | The name of the current network namespace |
+| symbol    |            | Віддзеркалює значення параметра `symbol`  |
+| style\* |            | Віддзеркалює значення параметра `style`   |
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
+```
+
 ## Nim
 
 Модуль `nim` показує поточну встановлену версію [Nim](https://nim-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
@@ -2974,6 +2997,8 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 - Поточна тека містить теку `node_modules`
 - Поточна тека містить файли з розширеннями `.js`, `.mjs` або `.cjs`
 - Поточна тека містить файли з розширеннями `.ts`, `.mts` чи `.cts`
+
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Параметри
 
@@ -3202,6 +3227,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
@@ -3280,6 +3306,7 @@ Arch = "Arch is the best! "
 Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує такі пакунки: `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` та `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
+- [**JSR**](https://jsr.io/) — версія пакунка `jsr` отримана з файлів `jsr.json`/`jsr.jsonc` чи `deno.json`/`deno.jsonc` у поточній теці
 - [**Cargo**](https://doc.rust-lang.org/cargo/) — версія пакунка `cargo` отримується з `Cargo.toml` з поточної теки
 - [**Nimble**](https://github.com/nim-lang/nimble) — версія пакунка `nimble` з файлу `*.nimble` з поточної теки, отримана командою `nimble dump`
 - [**Poetry**](https://python-poetry.org/) — версія пакунка  `poetry` отримується з `pyproject.toml` з поточної теки

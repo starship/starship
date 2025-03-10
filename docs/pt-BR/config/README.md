@@ -339,6 +339,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -618,7 +619,7 @@ O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) r
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-### Exemplos
+### Exemplo
 
 #### Customize the format
 
@@ -627,15 +628,6 @@ O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) r
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Replace Node.js
-
-You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -1971,7 +1963,7 @@ windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/stars
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `gleam.toml` file
+- O diretório atual conter um arquivo `gleam.toml`
 - The current directory contains a file with the `.gleam` extension
 
 ### Opções
@@ -2881,6 +2873,37 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
+## Network Namespace
+
+The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Opções
+
+| Opções     | Padrão                            | Descrição                                                         |
+| ---------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | O formato do módulo.                                              |
+| `symbol`   | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`              | O estilo do módulo.                                               |
+| `disabled` | `false`                           | Disables the `netns` module.                                      |
+
+### Variáveis
+
+| Variável  | Exemplo    | Descrição                                 |
+| --------- | ---------- | ----------------------------------------- |
+| name      | `my-netns` | The name of the current network namespace |
+| symbol    |            | Espelha o valor da opção `symbol`         |
+| style\* |            | Espelha o valor da opção `style`          |
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
+```
+
 ## Nim
 
 O módulo `nim` exibe a versão atual instalada do [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
@@ -2974,6 +2997,8 @@ O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.o
 - O diretório atual tenha um diretório `node_modules`
 - O diretório atual tenha um arquivo com a extensão `.js`, `.mjs` or `.cjs`
 - O diretório atual contém um arquivo com a extensão `.ts`, `.mts` ou `.cts`
+
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Opções
 
@@ -3202,6 +3227,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
@@ -3280,6 +3306,7 @@ Arch = "Arch is the best! "
 O módulo `package` é mostrado quando o diretório atual é o repositório de um pacote e mostra sua versão atual. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
 - [**Nimble**](https://github.com/nim-lang/nimble) - O versionamento de pacotes `nimble` é extraído do arquivo `*.nimble` presente no diretório atual com o comando`nimble dump`
 - [**Poetry**](https://python-poetry.org/) – O versionamento de pacotes `poetry` é extraído do arquivo `pyproject.toml` presente no diretório atual
