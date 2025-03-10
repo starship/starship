@@ -140,29 +140,27 @@ fn get_credentials_duration(
         .find_map(|env_var| context.get_env(env_var))
     {
         chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
+    } else if let Some(section) =
+        get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
+    {
+        let expiration_keys = ["expiration", "x_security_token_expires"];
+        expiration_keys
+            .iter()
+            .find_map(|expiration_key| section.get(expiration_key))
+            .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     } else {
-        if let Some(section) =
-            get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
-        {
-            let expiration_keys = ["expiration", "x_security_token_expires"];
-            expiration_keys
-                .iter()
-                .find_map(|expiration_key| section.get(expiration_key))
-                .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
-        } else {
-            let config = get_config(context, aws_config)?;
-            let section = get_profile_config(config, aws_profile)?;
-            let start_url = section.get("sso_start_url")?;
-            // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
-            let cache_key = crate::utils::encode_to_hex(&Sha1::digest(start_url.as_bytes()));
-            // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
-            let mut sso_cred_path = context.get_home()?;
-            sso_cred_path.push(format!(".aws/sso/cache/{}.json", cache_key));
-            let sso_cred_json: json::Value =
-                json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
-            let expires_at = sso_cred_json.get("expiresAt")?.as_str();
-            DateTime::parse_from_rfc3339(expires_at?).ok()
-        }
+        let config = get_config(context, aws_config)?;
+        let section = get_profile_config(config, aws_profile)?;
+        let start_url = section.get("sso_start_url")?;
+        // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
+        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(start_url.as_bytes()));
+        // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
+        let mut sso_cred_path = context.get_home()?;
+        sso_cred_path.push(format!(".aws/sso/cache/{}.json", cache_key));
+        let sso_cred_json: json::Value =
+            json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
+        let expires_at = sso_cred_json.get("expiresAt")?.as_str();
+        DateTime::parse_from_rfc3339(expires_at?).ok()
     }?;
 
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
