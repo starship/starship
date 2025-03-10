@@ -96,6 +96,7 @@ mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
+pub mod separator;
 mod typst;
 
 #[cfg(feature = "battery")]
@@ -190,6 +191,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
             "scala" => scala::module(context),
+            "separator" => separator::module(context),
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
@@ -318,6 +320,7 @@ pub fn description(module: &str) -> &'static str {
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "scala" => "The currently installed version of Scala",
+        "separator" => "The symbol and style used to separate modules",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
