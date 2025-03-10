@@ -166,11 +166,11 @@ onMounted(() => {
 
    ::: warning
 
-   这部分今后可能会改变。 Only Nushell v0.96+ is supported.
+   这部分今后可能会改变。 仅支持 Nushell v0.96+。
 
    :::
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   将以下内容添加到你的 Nushell 配置文件的末尾(在 Nushell 中运行  `$nu.config-path`  可以找到该文件)：
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")

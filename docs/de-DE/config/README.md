@@ -340,6 +340,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -619,7 +620,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: This variable can only be used as a part of a style string
 
-### Beispiele
+### Beispiel
 
 #### Customize the format
 
@@ -628,15 +629,6 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Replace Node.js
-
-You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -1972,7 +1964,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `gleam.toml` file
+- Das aktuelle Verzeichnis enthält eine `gleam.toml`-Datei
 - The current directory contains a file with the `.gleam` extension
 
 ### Optionen
@@ -2882,6 +2874,37 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
+## Network Namespace
+
+The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Optionen
+
+| Option     | Standartwert                      | Beschreibung                                                      |
+| ---------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | Das Format für das Modul.                                         |
+| `symbol`   | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`              | Stil für dieses Modul.                                            |
+| `disabled` | `false`                           | Disables the `netns` module.                                      |
+
+### Variables
+
+| Variable  | Beispiel   | Beschreibung                              |
+| --------- | ---------- | ----------------------------------------- |
+| name      | `my-netns` | The name of the current network namespace |
+| symbol    |            | Spiegelt den Wert der Option `symbol`     |
+| style\* |            | Spiegelt den Wert der Option `style`      |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
@@ -2975,6 +2998,8 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Optionen
 
@@ -3203,6 +3228,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
@@ -3281,6 +3307,7 @@ Arch = "Arch is the best! "
 Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
