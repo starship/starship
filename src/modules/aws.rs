@@ -141,8 +141,9 @@ fn get_credentials_duration(
     {
         chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
     } else {
-        let creds = get_creds(context, aws_creds)?;
-        if let Some(section) = get_profile_creds(creds, aws_profile) {
+        if let Some(section) =
+            get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
+        {
             let expiration_keys = ["expiration", "x_security_token_expires"];
             expiration_keys
                 .iter()
