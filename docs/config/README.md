@@ -1267,16 +1267,16 @@ the context in use).
 
 ### Options
 
-| Option              | Default                                                       | Description                                                                       |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | The format for the module.                                                        |
-| `symbol`            | `'🐳 '`                                                       | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `'blue bold'`                                                 | The style for the module.                                                         |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Option              | Default                                                                                      | Description                                                                       |
+| ------------------- |----------------------------------------------------------------------------------------------| --------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | The format for the module.                                                        |
+| `symbol`            | `'🐳 '`                                                                                      | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                                                       | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                                                         | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                                                         | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `'blue bold'`                                                                                | The style for the module.                                                         |
+| `disabled`          | `false`                                                                                      | Disables the `docker_context` module.                                             |
 
 ### Variables
 
