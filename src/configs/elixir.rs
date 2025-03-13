@@ -21,7 +21,7 @@ pub struct ElixirConfig<'a> {
 impl Default for ElixirConfig<'_> {
     fn default() -> Self {
         ElixirConfig {
-            format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
+            format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "💧 ",
             style: "bold purple",
