@@ -109,6 +109,64 @@ mod tests {
     }
 
     #[test]
+    fn test_with_compose_yml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
+    }
+
+    #[test]
+    fn test_with_compose_yaml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yaml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
+    }
+
+    #[test]
     fn test_with_docker_compose_yml() -> io::Result<()> {
         let cfg_dir = tempfile::tempdir()?;
         let cfg_file = cfg_dir.path().join("config.json");
