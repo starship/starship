@@ -168,6 +168,9 @@ symbol = " "
 [swift]
 symbol = " "
 
+[unity]
+symbol = "󰚯 "
+
 [zig]
 symbol = " "
 
