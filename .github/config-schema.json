@@ -1797,6 +1797,16 @@
     },
     "terraform": {
       "default": {
+        "commands": [
+          [
+            "terraform",
+            "version"
+          ],
+          [
+            "tofu",
+            "version"
+          ]
+        ],
         "detect_extensions": [
           "tf",
           "tfplan",
@@ -6247,6 +6257,25 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "commands": {
+          "default": [
+            [
+              "terraform",
+              "version"
+            ],
+            [
+              "tofu",
+              "version"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
