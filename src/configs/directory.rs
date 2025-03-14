@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
+    pub truncate_repo_length: i64,
     pub substitutions: IndexMap<String, &'a str>,
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
@@ -33,6 +34,7 @@ impl Default for DirectoryConfig<'_> {
         DirectoryConfig {
             truncation_length: 3,
             truncate_to_repo: true,
+            truncate_repo_length: 1,
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
             substitutions: IndexMap::new(),
