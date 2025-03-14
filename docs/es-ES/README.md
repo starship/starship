@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   Esto cambiará en el futuro. Only Nushell v0.96+ is supported.
+   Esto cambiará en el futuro. Sólo se admite Nushell v0.96+.
 
    :::
 

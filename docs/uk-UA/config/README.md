@@ -339,6 +339,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -618,7 +619,7 @@ symbol = '🦬 '
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-### Приклади
+### Приклад
 
 #### Налаштуйте формат
 
@@ -627,15 +628,6 @@ symbol = '🦬 '
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Замінити Node.js
-
-Ви можете перевизначити параметр `detect_files` властивості [модуля nodejs](#nodejs) у вашій конфігурації, щоб показати середу виконання bun:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -2854,7 +2846,7 @@ format = 'via [mojo ($version )($hash )]($style)'
 
 ## NATS
 
-Модуль `nats` показує назву поточного контексту[NATS](https://nats.io).
+Модуль `nats` показує назву поточного контексту [NATS](https://nats.io).
 
 ### Параметри
 
@@ -2879,6 +2871,37 @@ format = 'via [mojo ($version )($hash )]($style)'
 [nats]
 format = '[$symbol]($style)'
 style = 'bold purple'
+```
+
+## Простір імен мережі
+
+Модуль `netns` показує поточний простір імен мережі. Для отримання простору мережевих імен використовується `ip netns identify`, тому буде виявлено лише простори мережевих імен, змонтовані за адресою `/var/run/netns`.
+
+### Параметри
+
+| Параметр   | Стандартно                        | Опис                                                                       |
+| ---------- | --------------------------------- | -------------------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | Формат модуля.                                                             |
+| `symbol`   | `'🛜 '`                            | Символ, що використовується перед простором імен мережі (типово порожньо). |
+| `style`    | `'blue bold dimmed'`              | Стиль модуля.                                                              |
+| `disabled` | `false`                           | Вимикає модуль ` netns `.                                                  |
+
+### Змінні
+
+| Змінна    | Приклад    | Опис                                     |
+| --------- | ---------- | ---------------------------------------- |
+| name      | `my-netns` | Імʼя поточного простору імен мережі      |
+| symbol    |            | Віддзеркалює значення параметра `symbol` |
+| style\* |            | Віддзеркалює значення параметра `style`  |
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
 ```
 
 ## Nim
@@ -2974,6 +2997,8 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 - Поточна тека містить теку `node_modules`
 - Поточна тека містить файли з розширеннями `.js`, `.mjs` або `.cjs`
 - Поточна тека містить файли з розширеннями `.ts`, `.mts` чи `.cts`
+
+Додатково, модуль буде стандартно прихованим, якщо тека містить `bunfig. oml`, `bun.lock`або `bun.lockb` файл, що замінює перелічені вище умови.
 
 ### Параметри
 
@@ -3202,6 +3227,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
@@ -3280,6 +3306,7 @@ Arch = "Arch is the best! "
 Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує такі пакунки: `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` та `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
+- [**JSR**](https://jsr.io/) — версія пакунка `jsr` отримана з файлів `jsr.json`/`jsr.jsonc` чи `deno.json`/`deno.jsonc` у поточній теці
 - [**Cargo**](https://doc.rust-lang.org/cargo/) — версія пакунка `cargo` отримується з `Cargo.toml` з поточної теки
 - [**Nimble**](https://github.com/nim-lang/nimble) — версія пакунка `nimble` з файлу `*.nimble` з поточної теки, отримана командою `nimble dump`
 - [**Poetry**](https://python-poetry.org/) — версія пакунка  `poetry` отримується з `pyproject.toml` з поточної теки
