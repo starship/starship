@@ -734,6 +734,7 @@ are only supported in fish due to [upstream issues with mode detection in zsh](h
 | `format`                    | `'$symbol '`         | The format string used before the text input.                                           |
 | `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.         |
 | `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.            |
+| `success_exit_codes`        | `[]`                 | List of additional exit codes that are rendered as a success (0 is always a success).   |
 | `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.        |
 | `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
 | `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
