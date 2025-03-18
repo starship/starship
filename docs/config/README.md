@@ -3625,7 +3625,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `show_default_environment` | `true`                                                  | Whether to indicate that the `default` environment of your project is activated.      |
 | `pixi_binary`              | `['pixi']`                                              | Configures the python binaries that Starship should execute when getting the version. |
 | `detect_files`             | `['pixi.toml']`                                         | Which filenames should trigger this module                                            |
-| `disabled`                 | `false`                                                 | Disables the `pixi` module.                                                          |
+| `disabled`                 | `false`                                                 | Disables the `pixi` module.                                                           |
 
 ### Variables
 
