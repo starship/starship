@@ -310,7 +310,9 @@ pub fn description(module: &str) -> &'static str {
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
         "pijul_channel" => "The current channel of the repo in the current directory",
-        "pixi" => "The currently installed version of Pixi, and the active environment if $PIXI_ENVIRONMENT_NAME is set",
+        "pixi" => {
+            "The currently installed version of Pixi, and the active environment if $PIXI_ENVIRONMENT_NAME is set"
+        }
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
