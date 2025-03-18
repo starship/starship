@@ -5,12 +5,12 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
 
-use crate::config::{parse_style_string, Style};
+use crate::config::{Style, parse_style_string};
 use crate::context::{Context, Shell};
 use crate::segment::Segment;
 
 use super::model::*;
-use super::parser::{parse, Rule};
+use super::parser::{Rule, parse};
 
 #[derive(Clone)]
 enum VariableValue<'a> {

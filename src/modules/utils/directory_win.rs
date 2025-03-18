@@ -1,14 +1,13 @@
 use std::{mem, os::windows::ffi::OsStrExt, path::Path};
 
 use windows::{
-    core::PCWSTR,
     Win32::{
-        Foundation::{CloseHandle, BOOL, ERROR_INSUFFICIENT_BUFFER, HANDLE},
+        Foundation::{CloseHandle, ERROR_INSUFFICIENT_BUFFER, HANDLE},
         Security::{
-            AccessCheck, DuplicateToken, GetFileSecurityW, MapGenericMask, SecurityImpersonation,
-            DACL_SECURITY_INFORMATION, GENERIC_MAPPING, GROUP_SECURITY_INFORMATION,
-            OWNER_SECURITY_INFORMATION, PRIVILEGE_SET, PSECURITY_DESCRIPTOR, TOKEN_DUPLICATE,
-            TOKEN_IMPERSONATE, TOKEN_QUERY, TOKEN_READ_CONTROL,
+            AccessCheck, DACL_SECURITY_INFORMATION, DuplicateToken, GENERIC_MAPPING,
+            GROUP_SECURITY_INFORMATION, GetFileSecurityW, MapGenericMask,
+            OWNER_SECURITY_INFORMATION, PRIVILEGE_SET, PSECURITY_DESCRIPTOR, SecurityImpersonation,
+            TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY, TOKEN_READ_CONTROL,
         },
         Storage::FileSystem::{
             FILE_ALL_ACCESS, FILE_GENERIC_EXECUTE, FILE_GENERIC_READ, FILE_GENERIC_WRITE,
@@ -16,6 +15,7 @@ use windows::{
         System::Threading::{GetCurrentProcess, OpenProcessToken},
         UI::Shell::PathIsNetworkPathW,
     },
+    core::{BOOL, PCWSTR},
 };
 
 struct Handle(HANDLE);
@@ -60,7 +60,11 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
     // expect ERROR_INSUFFICIENT_BUFFER
     match rc.ok() {
         Err(e) if e.code() == ERROR_INSUFFICIENT_BUFFER.into() => (),
-        result => return Err(format!("GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {result:?}")),
+        result => {
+            return Err(format!(
+                "GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {result:?}"
+            ));
+        }
     }
 
     let mut buf = vec![0u8; length as usize];

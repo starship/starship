@@ -93,14 +93,24 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
 }
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
-    let version = config
+    config
         .python_binary
         .0
         .iter()
-        .find_map(|binary| context.exec_cmd(binary, &["--version"]))
-        .map(get_command_string_output)?;
+        .find_map(|binary| {
+            let command = binary.0.first()?;
+            let args: Vec<_> = binary
+                .0
+                .iter()
+                .skip(1)
+                .copied()
+                .chain(std::iter::once("--version"))
+                .collect();
 
-    parse_python_version(&version)
+            context.exec_cmd(command, &args)
+        })
+        .map(get_command_string_output)
+        .map(|output| parse_python_version(&output))?
 }
 
 fn parse_python_version(python_version_string: &str) -> Option<String> {
@@ -136,7 +146,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
-    use std::fs::{create_dir_all, File};
+    use std::fs::{File, create_dir_all};
     use std::io;
     use std::io::Write;
 

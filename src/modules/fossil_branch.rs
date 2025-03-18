@@ -78,7 +78,7 @@ mod tests {
 
     use nu_ansi_term::{Color, Style};
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
 
     enum Expect<'a> {
         BranchName(&'a str),

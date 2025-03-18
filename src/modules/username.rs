@@ -84,7 +84,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn is_login_user(context: &Context, username: &str) -> bool {
     context
         .get_env("LOGNAME")
-        .map_or(true, |logname| logname == username)
+        .is_none_or(|logname| logname == username)
 }
 
 #[cfg(all(target_os = "windows", not(test)))]

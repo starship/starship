@@ -25,7 +25,10 @@ pub fn create() {
         Style::new().bold().paint("Generated bug report:")
     );
     println!("Forward the pre-filled report above to GitHub in your browser?");
-    println!("{} To avoid any sensitive data from being exposed, please review the included information before proceeding. Data forwarded to GitHub is subject to GitHub's privacy policy.", Style::new().bold().paint("Warning:"));
+    println!(
+        "{} To avoid any sensitive data from being exposed, please review the included information before proceeding. Data forwarded to GitHub is subject to GitHub's privacy policy.",
+        Style::new().bold().paint("Warning:")
+    );
     println!(
         "Enter `{}` to accept, or anything else to decline, and `{}` to confirm your choice:\n",
         Style::new().bold().paint("y"),
@@ -39,10 +42,14 @@ pub fn create() {
         let link = make_github_issue_link(&issue_body);
         if let Err(e) = open::that(&link) {
             println!("Failed to open issue report in your browser: {e}");
-            println!("Please copy the above report and open an issue manually, or try opening the following link:\n{link}");
+            println!(
+                "Please copy the above report and open an issue manually, or try opening the following link:\n{link}"
+            );
         }
     } else {
-        println!("Will not open an issue in your browser! Please copy the above report and open an issue manually.");
+        println!(
+            "Will not open an issue in your browser! Please copy the above report and open an issue manually."
+        );
     }
     println!("Thanks for using the Starship bug report tool!");
 }

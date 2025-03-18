@@ -62,6 +62,7 @@ pub const ALL_MODULES: &[&str] = &[
     "meson",
     "mojo",
     "nats",
+    "netns",
     "nim",
     "nix_shell",
     "nodejs",

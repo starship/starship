@@ -118,8 +118,8 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         return config;
     } else if let Some(modules) = context.config.get_custom_modules() {
         log::debug!(
-                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                DebugCustomModules(modules),
+            "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+            DebugCustomModules(modules),
         );
     } else {
         log::debug!(
@@ -216,7 +216,9 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     match output.wait().ok()? {
         None => {
             log::warn!("Executing custom command {cmd:?} timed out.");
-            log::warn!("You can set command_timeout in your config to a higher value or set ignore_timeout to true for this module to allow longer-running commands to keep executing.");
+            log::warn!(
+                "You can set command_timeout in your config to a higher value or set ignore_timeout to true for this module to allow longer-running commands to keep executing."
+            );
             None
         }
         Some(status) => Some(status),
@@ -312,7 +314,7 @@ mod tests {
     use super::*;
 
     use crate::context::Shell;
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;

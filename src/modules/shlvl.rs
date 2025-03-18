@@ -257,7 +257,7 @@ mod tests {
         assert_eq!(get_actual(2, 2, 0), None); // offset same as shlvl; hide
         assert_eq!(get_actual(2, 3, 0), None); // offset larger than shlvl; hide
         assert_eq!(get_actual(2, 1, 3), None); // high threshold; hide
-                                               // threshold not high enough; hide
+        // threshold not high enough; hide
         assert_eq!(get_actual(2, 1, 2), Some(format!("{}", style().paint("~"))));
     }
 }

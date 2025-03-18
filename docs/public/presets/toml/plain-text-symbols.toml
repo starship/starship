@@ -34,6 +34,9 @@ symbol = "cobol "
 [conda]
 symbol = "conda "
 
+[container]
+symbol = "container "
+
 [crystal]
 symbol = "cr "
 
@@ -88,6 +91,12 @@ symbol = "gradle "
 [guix_shell]
 symbol = "guix "
 
+[haskell]
+symbol = "haskell "
+
+[helm]
+symbol = "helm "
+
 [hg_branch]
 symbol = "hg "
 
@@ -136,6 +145,7 @@ Amazon = "amz "
 Android = "andr "
 Arch = "rch "
 Artix = "atx "
+Bluefin = "blfn "
 CachyOS = "cach "
 CentOS = "cent "
 Debian = "deb "
