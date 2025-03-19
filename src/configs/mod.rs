@@ -92,6 +92,7 @@ pub mod swift;
 pub mod terraform;
 pub mod time;
 pub mod typst;
+pub mod unity;
 pub mod username;
 pub mod v;
 pub mod vagrant;
@@ -292,6 +293,8 @@ pub struct FullConfig<'a> {
     time: time::TimeConfig<'a>,
     #[serde(borrow)]
     typst: typst::TypstConfig<'a>,
+    #[serde(borrow)]
+    unity: unity::UnityConfig<'a>,
     #[serde(borrow)]
     username: username::UsernameConfig<'a>,
     #[serde(borrow)]
