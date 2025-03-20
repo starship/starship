@@ -60,6 +60,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "daml",
     "dart",
     "deno",
+    "fly",
     "dotnet",
     "elixir",
     "elm",
