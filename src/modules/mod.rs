@@ -14,6 +14,7 @@ mod crystal;
 pub mod custom;
 mod daml;
 mod dart;
+mod dbt;
 mod deno;
 mod directory;
 mod direnv;
@@ -127,6 +128,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "container" => container::module(context),
             "daml" => daml::module(context),
             "dart" => dart::module(context),
+            "dbt" => dbt::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
             "direnv" => direnv::module(context),
@@ -254,6 +256,7 @@ pub fn description(module: &str) -> &'static str {
         "crystal" => "The currently installed version of Crystal",
         "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
+        "dbt" => "The currently installed version of dbt and current dbt project",
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "direnv" => "The currently applied direnv file",
