@@ -220,6 +220,7 @@ This is the list of prompt-wide configuration options.
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| `opt_in_modules`  | `false`                        | Inverts the default value for each modules `disabled` key. When set to `true`, omitting the `disabled` key for a module is equivalent to setting `disabled = true`.                |
 
 ::: tip
 
