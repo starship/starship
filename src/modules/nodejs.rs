@@ -10,6 +10,16 @@ use serde_json as json;
 use std::ops::Deref;
 use std::sync::LazyLock;
 
+static VERSION_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"v?(\d+\.\d+\.\d+)").unwrap());
+
+fn format_nodejs_version(captures: &regex::Captures) -> String {
+    if captures[0].starts_with('v') {
+        captures[0].to_string()
+    } else {
+        format!("v{}", &captures[1])
+    }
+}
+
 /// Creates a module with the current Node.js version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
@@ -31,9 +41,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let nodejs_version = LazyLock::new(|| {
-        context
-            .exec_cmd("node", &["--version"])
-            .map(|cmd| cmd.stdout)
+        context.exec_cmd("node", &["--version"]).and_then(|cmd| {
+            // If output is a single line and matches version format, return it directly
+            let trimmed = cmd.stdout.trim();
+            if !trimmed.contains('\n') && VERSION_REGEX.is_match(trimmed) {
+                return Some(if trimmed.starts_with('v') {
+                    trimmed.to_string()
+                } else {
+                    format!("v{}", trimmed)
+                });
+            }
+
+            let lines: Vec<&str> = trimmed.lines().collect();
+
+            if let Some(last_line) = lines.last() {
+                if let Some(captures) = VERSION_REGEX.captures(last_line) {
+                    return Some(format_nodejs_version(&captures));
+                }
+            }
+
+            for line in lines.iter().rev() {
+                if let Some(captures) = VERSION_REGEX.captures(line) {
+                    return Some(format_nodejs_version(&captures));
+                }
+            }
+
+            VERSION_REGEX
+                .captures(trimmed)
+                .map(|cap| format_nodejs_version(&cap))
+        })
     });
     let engines_version = LazyLock::new(|| get_engines_version(context));
 
@@ -115,15 +151,12 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<&
         return true;
     };
 
-    let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
-    let version = re
-        .captures(nodejs_version)
-        .unwrap()
-        .get(0)
-        .unwrap()
-        .as_str();
+    let version_matches = match VERSION_REGEX.captures(nodejs_version) {
+        Some(cap) => cap[1].to_string(),
+        None => return true,
+    };
 
-    let v = match Version::parse(version) {
+    let v = match Version::parse(&version_matches) {
         Ok(v) => v,
         Err(_e) => return true,
     };
@@ -133,6 +166,7 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<&
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -369,6 +403,115 @@ mod tests {
             .cmd("node --version", None)
             .collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_clean_node_version_output() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .cmd(
+                "node --version",
+                Some(CommandOutput {
+                    stdout: "v16.14.2\n".to_string(),
+                    stderr: "".to_string(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v16.14.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_polluted_node_version_output() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let polluted_output =
+            "Installing Node.js v18.17.1...\nDownloading binary...\nExtracting...\nv18.17.1\n";
+
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .cmd(
+                "node --version",
+                Some(CommandOutput {
+                    stdout: polluted_output.to_string(),
+                    stderr: "".to_string(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v18.17.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_output_with_multiple_versions() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let multi_version_output = "Checking dependencies...\nRequired Node.js version: v14.15.0\nInstalling Node.js v20.10.0...\nv20.10.0\n";
+
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .cmd(
+                "node --version",
+                Some(CommandOutput {
+                    stdout: multi_version_output.to_string(),
+                    stderr: "".to_string(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v20.10.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_complex_output_case() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let complex_output = "Checking Node.js v14.17.0...\nRequired version: v16.14.2\nInstalling Node.js v16.14.2...\nDownload complete!\nInstallation successful.\n";
+
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .cmd(
+                "node --version",
+                Some(CommandOutput {
+                    stdout: complex_output.to_string(),
+                    stderr: "".to_string(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v16.14.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_proto_auto_install_logs() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("package.json"))?.sync_all()?;
+
+        let proto_output = " vAuto-install is enabled, attempting to install Node.js 22.13.0 \n\n[node] Installing Node. js 22.13.0\n\n[node] Downloading pre-built archive node-v22.13.0-darwin-arm64. tar. xz\n\n[node] Verifying checksum against SHASUMS256.txt\n\n[node] Unpacking archive node-v22.13.0-darwin-arm64. tar.xz\n\n[node] Node. js 22.13.0 installed (3s)\n\n[npm] npm 10.9.2 installed (2s)\n\n| INFO\n| npm 10.9.2 has already been installed at /Users/user/. proto/tools/npm/10.9.2!\n\nv22.13.0\n";
+
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .cmd(
+                "node --version",
+                Some(CommandOutput {
+                    stdout: proto_output.to_string(),
+                    stderr: "".to_string(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v22.13.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
