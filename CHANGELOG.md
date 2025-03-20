@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-03-20)
+
+
+### Features
+
+* add network namespace module ([#6449](https://github.com/starship/starship/issues/6449)) ([eb42f5a](https://github.com/starship/starship/commit/eb42f5ac7003da1f9543f5258dd674cec96a7320))
+* **completions:** Offer Nushell completions ([#6366](https://github.com/starship/starship/issues/6366)) ([df454d5](https://github.com/starship/starship/commit/df454d5a64fa6de5d2e334c5aa9b07150bf09ae6))
+* **nodejs:** disable if bun project files detected ([#6346](https://github.com/starship/starship/issues/6346)) ([00ce705](https://github.com/starship/starship/commit/00ce7057efb7c431e7f9b526ca3ee941573e9f40))
+* **package:** support JSR package version ([#6502](https://github.com/starship/starship/issues/6502)) ([bd2321a](https://github.com/starship/starship/commit/bd2321a12fc47135f316e90f22ccab6a61b50730))
+* **python:** add support for `python_binary` arguments in config ([#6523](https://github.com/starship/starship/issues/6523)) ([7667555](https://github.com/starship/starship/commit/76675559c041fa2ae6a85cb946218e5e1f04bf75))
+
+
+### Bug Fixes
+
+* **battery:** prefer charge ratio over current capacity ([#6603](https://github.com/starship/starship/issues/6603)) ([d245939](https://github.com/starship/starship/commit/d2459391194cf5a142d98b1297fe5f630c3415f5))
+* Change to a non-yanked version of the log crate ([#6495](https://github.com/starship/starship/issues/6495)) ([ed20b1d](https://github.com/starship/starship/commit/ed20b1d23b1b7ed914fca30fb6788f3d609f4a52))
+* **fossil_metrics:** Add -i flag to the fossil_metrics module's command ([#6544](https://github.com/starship/starship/issues/6544)) ([eb7d80b](https://github.com/starship/starship/commit/eb7d80bafac8f6ae719ee357aeff129065ddd7e6))
+* **preset:** add missing rlang to plain-text-symbols preset ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+* **preset:** add missing rlang to plain-text-symbols preset ([#6458](https://github.com/starship/starship/issues/6458)) ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+
+
+### Performance Improvements
+
+* **ancestor-scan:** preallocate and reuse a single `PathBuf` ([#6387](https://github.com/starship/starship/issues/6387)) ([b3cb92e](https://github.com/starship/starship/commit/b3cb92e6483a6cc054c6f7db14951c99bd7c9e9b))
+
 ## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
 
 
