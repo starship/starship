@@ -335,51 +335,53 @@ mod tests {
     }
 
     #[test]
-    fn region_set() {
-        let actual = ModuleRenderer::new("aws")
+    fn region_set() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
-            .config(toml::toml! {
-                [aws]
-                format = "$region"
-            })
             .collect();
-        let expected = Some(String::from("ap-northeast-2"));
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
-    fn region_set_with_alias() {
-        let actual = ModuleRenderer::new("aws")
+    fn region_set_with_alias() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-southeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .config(toml::toml! {
-                [aws]
-                format = "$region"
                 [aws.region_aliases]
                 ap-southeast-2 = "au"
             })
             .collect();
-        let expected = Some(String::from("au"));
+        let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  (au) ")));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
-    fn default_region_set() {
-        let actual = ModuleRenderer::new("aws")
+    fn default_region_set() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
             .env("AWS_ACCESS_KEY_ID", "dummy")
-            .config(toml::toml! {
-                [aws]
-                format = "$region"
-            })
             .collect();
-        let expected = Some(String::from("ap-northeast-2"));
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
@@ -638,13 +640,8 @@ credential_process = /opt/bin/awscreds-retriever
 
     #[test]
     fn region_set_with_display_all() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("config");
-        let mut config_file = File::create(&config_path)?;
-
-        config_file.write_all("[default]\nregion = us-east-1\n".as_bytes())?;
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-1")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .collect();
@@ -1032,7 +1029,7 @@ credential_process = /opt/bin/awscreds-for-tests
 
     #[test]
     fn sso_legacy_set() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
         let config_path = dir.path().join("config");
         let mut file = File::create(&config_path)?;
 
@@ -1049,7 +1046,7 @@ sso_role_name = <AWS-ROLE-NAME>
 
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = module_renderer
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .collect();
         let expected = Some(format!(
