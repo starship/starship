@@ -1029,10 +1029,12 @@ credential_process = /opt/bin/awscreds-for-tests
 
     #[test]
     fn sso_legacy_set() -> io::Result<()> {
-        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
-        let config_path = dir.path().join("config");
-        let mut file = File::create(&config_path)?;
+        use chrono::{DateTime, SecondsFormat, Utc};
 
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let mut file = File::create(dir.path().join(".aws/config"))?;
         file.write_all(
             "[default]
 region = ap-northeast-2
@@ -1043,15 +1045,30 @@ sso_role_name = <AWS-ROLE-NAME>
 "
             .as_bytes(),
         )?;
-
         file.sync_all()?;
 
-        let actual = module_renderer
-            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
-            .collect();
+        let mut file = File::create(
+            dir.path()
+                // SHA-1 of "https://starship.rs/sso"
+                .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
+        )?;
+
+        let one_second_ago: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1, 0).unwrap();
+
+        file.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                one_second_ago.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        file.sync_all()?;
+
+        let actual = module_renderer.collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) [X] ")
         ));
 
         assert_eq!(expected, actual);
