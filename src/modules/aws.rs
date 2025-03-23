@@ -139,16 +139,19 @@ fn get_credentials_duration(
         .into_iter()
         .find_map(|env_var| context.get_env(env_var))
     {
+        // get expiration from environment variables
         chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
     } else if let Some(section) =
         get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
     {
+        // get expiration from credentials file
         let expiration_keys = ["expiration", "x_security_token_expires"];
         expiration_keys
             .iter()
             .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     } else {
+        // get expiration from cached SSO credentials
         let config = get_config(context, aws_config)?;
         let section = get_profile_config(config, aws_profile)?;
         let start_url = section.get("sso_start_url")?;
