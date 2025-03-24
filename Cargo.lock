@@ -3794,9 +3794,9 @@ dependencies = [
 
 [[package]]
 name = "whoami"
-version = "1.5.2"
+version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "372d5b87f58ec45c384ba03563b03544dc5fadc3983e434b286913f5b4a9bb6d"
+checksum = "6994d13118ab492c3c80c1f81928718159254c53c472bf9ce36f8dae4add02a7"
 dependencies = [
  "redox_syscall",
  "wasite",
