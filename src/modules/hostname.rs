@@ -4,14 +4,7 @@ use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 
-#[cfg(not(windows))]
 use whoami::fallible::hostname;
-// On Windows, whoami::hostname() returns the NetBIOS name,
-// but we prefer the "hostname" returned by whoami::devicname()
-// which does a better job of preserving case and returns the
-// DNS name.
-#[cfg(windows)]
-use whoami::fallible::devicename as hostname;
 
 /// Creates a module with the system hostname
 ///
