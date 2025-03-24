@@ -459,10 +459,6 @@ mod tests {
         let ws_config_content = toml::toml! {
             [workspace.package]
             version = "0.1.0"
-
-            [package]
-            name = "root-crate"
-            version.workspace = true
         }
         .to_string();
 
