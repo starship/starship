@@ -110,7 +110,7 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_opam_switch, SwitchType};
+    use super::{SwitchType, parse_opam_switch};
     use crate::{test::ModuleRenderer, utils::CommandOutput};
     use nu_ansi_term::Color;
     use std::fs::{self, File};

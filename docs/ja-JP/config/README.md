@@ -591,21 +591,22 @@ symbol = '🦬 '
 
 `bun` モジュールは、現在インストールされている[bun](https://bun.sh) JavaScript ランタイムのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
+- 現在のディレクトリに`bun.lock`ファイルが含まれている
 - カレントディレクトリに`bun.lockb`ファイルが含まれている
 - カレントディレクトリに`bunfig.toml`ファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🥟 '`                               | Bun のシンボルを表すフォーマット文字列                                  |
-| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'bold red'`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `bun` モジュールを無効にします。                                    |
+| オプション               | デフォルト                                      | 説明                                                     |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`       | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🥟 '`                                     | Bun のシンボルを表すフォーマット文字列                                  |
+| `detect_extensions` | `[]`                                       | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                       | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'bold red'`                               | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                    | `bun` モジュールを無効にします。                                    |
 
 ### 変数
 
@@ -1166,20 +1167,21 @@ truncation_symbol = '…/'
 
 ### オプション
 
-| オプション               | デフォルト                                  | 説明                                         |
-| ------------------- | -------------------------------------- | ------------------------------------------ |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | module のフォーマットです。                          |
-| `symbol`            | `'direnv '`                            | Direnv コンテキストの前に表示される記号です。                 |
-| `style`             | `'bold orange'`                        | モジュールのスタイルです。                              |
-| `disabled`          | `true`                                 | `Direnv`モジュールを無効にします。                      |
-| `detect_extensions` | `[]`                                   | どの拡張子がこのモジュールをアクティブにするか                    |
-| `detect_files`      | `['.envrc']`                           | どのファイル名がこのモジュールをアクティブにするか                  |
-| `detect_folders`    | `[]`                                   | どのフォルダーがこのモジュールをアクティブにするか                  |
-| `allowed_msg`       | `'allowed'`                            | Rcファイルが許可されているとき (allowed) に表示されるメッセージです。  |
-| `not_allowed_msg`   | `'not allowed'`                        | Rcファイルが不許可のとき (not_allowed) に表示されるメッセージです。 |
-| `denied_msg`        | `'denied'`                             | Rcファイルが拒否されているとき (denied) に表示されるメッセージです。   |
-| `loaded_msg`        | `'loaded'`                             | Rcファイルがロードされているときに表示されるメッセージです。            |
-| `unloaded_msg`      | `'not loaded'`                         | Rcファイルがロードされていないときに表示されるメッセージです。           |
+| オプション               | デフォルト                                  | 説明                                                      |
+| ------------------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | module のフォーマットです。                                       |
+| `symbol`            | `'direnv '`                            | Direnv コンテキストの前に表示される記号です。                              |
+| `style`             | `'bold orange'`                        | モジュールのスタイルです。                                           |
+| `disabled`          | `true`                                 | `Direnv`モジュールを無効にします。                                   |
+| `detect_extensions` | `[]`                                   | どの拡張子がこのモジュールをアクティブにするか                                 |
+| `detect_files`      | `['.envrc']`                           | どのファイル名がこのモジュールをアクティブにするか                               |
+| `detect_folders`    | `[]`                                   | どのフォルダーがこのモジュールをアクティブにするか                               |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
+| `allowed_msg`       | `'allowed'`                            | Rcファイルが許可されているとき (allowed) に表示されるメッセージです。               |
+| `not_allowed_msg`   | `'not allowed'`                        | Rcファイルが不許可のとき (not_allowed) に表示されるメッセージです。              |
+| `denied_msg`        | `'denied'`                             | Rcファイルが拒否されているとき (denied) に表示されるメッセージです。                |
+| `loaded_msg`        | `'loaded'`                             | Rcファイルがロードされているときに表示されるメッセージです。                         |
+| `unloaded_msg`      | `'not loaded'`                         | Rcファイルがロードされていないときに表示されるメッセージです。                        |
 
 ### 変数
 
@@ -3056,7 +3058,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The 'odin' module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
 
 ### オプション
 
@@ -3200,6 +3202,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -3221,6 +3224,7 @@ MidnightBSD = "🌘 "
 Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
+Nobara = "🎩 "
 OpenBSD = "🐡 "
 OpenCloudOS = "☁️ "
 openEuler = "🦉 "
@@ -3237,6 +3241,7 @@ SUSE = "🦎 "
 Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
+Uos = "🐲 "
 Void = "  "
 Windows = "🪟 "
 ```
@@ -4092,38 +4097,40 @@ format = '[$symbol$environment](dimmed blue) '
 
 ### オプション
 
-| オプション                       | デフォルト                                                                              | 説明                                                  |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | モジュールのフォーマットです。                                     |
-| `symbol`                    | `'❌'`                                                                              | プログラムエラー時に表示される記号です。                                |
-| `success_symbol`            | `''`                                                                               | プログラム成功時に表示される記号です。                                 |
-| `not_executable_symbol`     | `'🚫'`                                                                              | ファイルが実行可能ファイルでないときに表示されるシンボルです。                     |
-| `not_found_symbol`          | `'🔍'`                                                                              | コマンドが見つからないときに表示されるシンボルです。                          |
-| `sigint_symbol`             | `'🧱'`                                                                              | SIGINT (Ctrl + c) に際して表示されるシンボルです。                  |
-| `signal_symbol`             | `'⚡'`                                                                              | 任意のシグナルに対して表示されるシンボルです。                             |
-| `style`                     | `'bold red'`                                                                       | モジュールのスタイルです。                                       |
-| `recognize_signal_code`     | `true`                                                                             | 終了ステータスからシグナルへのマッピングを有効にします。                        |
-| `map_symbol`                | `false`                                                                            | 終了ステータスからシンボルへのマッピングを有効にします。                        |
-| `pipestatus`                | `false`                                                                            | パイプステータス表示を有効にします。                                  |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | パイプラインの各要素を分割するのに使う記号を指定します。フォーマット文字列がサポートされます。     |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | コマンドがパイプラインである場合のモジュールのフォーマットです。                    |
-| `pipestatus_segment_format` |                                                                                    | 指定されている場合、パイプステータスの要素を書式設定する際に `format` の代わりに使われます。 |
-| `disabled`                  | `true`                                                                             | `status`モジュールを無効にします。                               |
+| オプション                       | デフォルト                                                                               | 説明                                                                |
+| --------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                       | モジュールのフォーマットです。                                                   |
+| `symbol`                    | `'❌'`                                                                               | プログラムエラー時に表示される記号です。                                              |
+| `success_symbol`            | `''`                                                                                | プログラム成功時に表示される記号です。                                               |
+| `not_executable_symbol`     | `'🚫'`                                                                               | ファイルが実行可能ファイルでないときに表示されるシンボルです。                                   |
+| `not_found_symbol`          | `'🔍'`                                                                               | コマンドが見つからないときに表示されるシンボルです。                                        |
+| `sigint_symbol`             | `'🧱'`                                                                               | SIGINT (Ctrl + c) に際して表示されるシンボルです。                                |
+| `signal_symbol`             | `'⚡'`                                                                               | 任意のシグナルに対して表示されるシンボルです。                                           |
+| `style`                     | `'bold red'`                                                                        | モジュールのスタイルです。                                                     |
+| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset). |
+| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset). |
+| `recognize_signal_code`     | `true`                                                                              | 終了ステータスからシグナルへのマッピングを有効にします。                                      |
+| `map_symbol`                | `false`                                                                             | 終了ステータスからシンボルへのマッピングを有効にします。                                      |
+| `pipestatus`                | `false`                                                                             | パイプステータス表示を有効にします。                                                |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | パイプラインの各要素を分割するのに使う記号を指定します。フォーマット文字列がサポートされます。                   |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | コマンドがパイプラインである場合のモジュールのフォーマットです。                                  |
+| `pipestatus_segment_format` |                                                                                     | 指定されている場合、パイプステータスの要素を書式設定する際に `format` の代わりに使われます。               |
+| `disabled`                  | `true`                                                                              | `status`モジュールを無効にします。                                             |
 
 ### 変数
 
-| 変数             | 設定例     | 説明                                                      |
-| -------------- | ------- | ------------------------------------------------------- |
-| status         | `127`   | 直前のコマンドの終了ステータス                                         |
-| hex_status     | `0x7F`  | 直前のコマンドの終了ステータスを16進数で表記したもの                             |
-| int            | `127`   | 直前のコマンドの終了ステータス                                         |
-| common_meaning | `ERROR` | シグナルでない場合、終了ステータスの意味                                    |
-| signal_number  | `9`     | シグナルで終了した場合、終了ステータスに対応するシグナル番号                          |
-| signal_name    | `KILL`  | シグナルで終了した場合、終了ステータスに対応するシグナル名                           |
-| maybe_int      | `7`     | 対応する意味が見つからない場合にのみ、終了コード番号を含みます。                        |
-| pipestatus     |         | パイプラインプログラムの終了ステータスの表示です。pipestatus_format の中でのみ使用できます。 |
-| symbol         |         | オプション `symbol` の値をミラーする                                 |
-| style\*      |         | オプション `style` の値をミラーする                                  |
+| 変数             | 設定例     | 説明                                                                                           |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| status         | `127`   | 直前のコマンドの終了ステータス                                                                              |
+| hex_status     | `0x7F`  | 直前のコマンドの終了ステータスを16進数で表記したもの                                                                  |
+| int            | `127`   | 直前のコマンドの終了ステータス                                                                              |
+| common_meaning | `ERROR` | シグナルでない場合、終了ステータスの意味                                                                         |
+| signal_number  | `9`     | シグナルで終了した場合、終了ステータスに対応するシグナル番号                                                               |
+| signal_name    | `KILL`  | シグナルで終了した場合、終了ステータスに対応するシグナル名                                                                |
+| maybe_int      | `7`     | 対応する意味が見つからない場合にのみ、終了コード番号を含みます。                                                             |
+| pipestatus     |         | パイプラインプログラムの終了ステータスの表示です。pipestatus_format の中でのみ使用できます。                                      |
+| symbol         |         | オプション `symbol` の値をミラーする                                                                      |
+| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4264,7 +4271,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 | version   | `v0.12.24` | `terraform` のバージョン      |
 | workspace | `default`  | 現在のTerraformワークスペース     |
 | symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーします |
+| style\* |            | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4314,10 +4321,10 @@ format = '[🏎💨 $workspace]($style) '
 
 ### 変数
 
-| 変数        | 設定例        | 説明                     |
-| --------- | ---------- | ---------------------- |
-| time      | `13:08:10` | 現在時刻                   |
-| style\* |            | オプション `style` の値をミラーする |
+| 変数        | 設定例        | 説明                      |
+| --------- | ---------- | ----------------------- |
+| time      | `13:08:10` | 現在時刻                    |
+| style\* |            | オプション `style` の値をミラーします |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 

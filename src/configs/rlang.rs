@@ -18,7 +18,7 @@ pub struct RLangConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for RLangConfig<'a> {
+impl Default for RLangConfig<'_> {
     fn default() -> Self {
         RLangConfig {
             format: "via [$symbol($version )]($style)",

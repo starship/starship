@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,
-    pub python_binary: VecOr<&'a str>,
+    pub python_binary: VecOr<VecOr<&'a str>>,
     pub format: &'a str,
     pub version_format: &'a str,
     pub style: &'a str,
@@ -24,12 +24,16 @@ pub struct PythonConfig<'a> {
     pub detect_env_vars: Vec<&'a str>,
 }
 
-impl<'a> Default for PythonConfig<'a> {
+impl Default for PythonConfig<'_> {
     fn default() -> Self {
         PythonConfig {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",
-            python_binary: VecOr(vec!["python", "python3", "python2"]),
+            python_binary: VecOr(vec![
+                VecOr(vec!["python"]),
+                VecOr(vec!["python3"]),
+                VecOr(vec!["python2"]),
+            ]),
             format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
             version_format: "v${raw}",
             style: "yellow bold",

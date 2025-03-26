@@ -81,7 +81,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::{io, str};
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     #[test]
@@ -365,7 +365,7 @@ mod tests {
             .current_dir(repo_dir.path())
             .output()?;
 
-        // Annotaged tags are preferred over lightweight tags
+        // Annotated tags are preferred over lightweight tags
         create_command("git")?
             .args(["tag", "l0"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:02 +0000")

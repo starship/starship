@@ -87,6 +87,7 @@
       "default": {
         "detect_extensions": [],
         "detect_files": [
+          "bun.lock",
           "bun.lockb",
           "bunfig.toml"
         ],
@@ -366,6 +367,9 @@
       "default": {
         "allowed_msg": "allowed",
         "denied_msg": "denied",
+        "detect_env_vars": [
+          "DIRENV_FILE"
+        ],
         "detect_extensions": [],
         "detect_files": [
           ".envrc"
@@ -1085,6 +1089,19 @@
         }
       ]
     },
+    "netns": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol \\[$name\\]]($style) ",
+        "style": "blue bold dimmed",
+        "symbol": "🛜"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NetnsConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -1138,7 +1155,10 @@
         "detect_files": [
           "package.json",
           ".node-version",
-          ".nvmrc"
+          ".nvmrc",
+          "!bunfig.toml",
+          "!bun.lock",
+          "!bun.lockb"
         ],
         "detect_folders": [
           "node_modules"
@@ -1255,6 +1275,8 @@
           "Android": "🤖 ",
           "Arch": "🎗️ ",
           "Artix": "🎗️ ",
+          "Bluefin": "🐟 ",
+          "CachyOS": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
           "DragonFly": "🐉 ",
@@ -1276,6 +1298,7 @@
           "Mint": "🌿 ",
           "NetBSD": "🚩 ",
           "NixOS": "❄️ ",
+          "Nobara": "🎩 ",
           "OpenBSD": "🐡 ",
           "OpenCloudOS": "☁️ ",
           "OracleLinux": "🦴 ",
@@ -1290,6 +1313,7 @@
           "Ubuntu": "🎯 ",
           "Ultramarine": "🔷 ",
           "Unknown": "❓ ",
+          "Uos": "🐲 ",
           "Void": "  ",
           "Windows": "🪟 ",
           "openEuler": "🦉 ",
@@ -1446,9 +1470,15 @@
         "pyenv_prefix": "pyenv ",
         "pyenv_version_name": false,
         "python_binary": [
-          "python",
-          "python3",
-          "python2"
+          [
+            "python"
+          ],
+          [
+            "python3"
+          ],
+          [
+            "python2"
+          ]
         ],
         "style": "yellow bold",
         "symbol": "🐍 ",
@@ -2229,6 +2259,7 @@
         },
         "detect_files": {
           "default": [
+            "bun.lock",
             "bun.lockb",
             "bunfig.toml"
           ],
@@ -2945,6 +2976,15 @@
         },
         "detect_extensions": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [
+            "DIRENV_FILE"
+          ],
           "type": "array",
           "items": {
             "type": "string"
@@ -4666,6 +4706,28 @@
       },
       "additionalProperties": false
     },
+    "NetnsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol \\[$name\\]]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🛜",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold dimmed",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "NimConfig": {
       "type": "object",
       "properties": {
@@ -4802,7 +4864,10 @@
           "default": [
             "package.json",
             ".node-version",
-            ".nvmrc"
+            ".nvmrc",
+            "!bunfig.toml",
+            "!bun.lock",
+            "!bun.lockb"
           ],
           "type": "array",
           "items": {
@@ -5032,6 +5097,8 @@
             "Android": "🤖 ",
             "Arch": "🎗️ ",
             "Artix": "🎗️ ",
+            "Bluefin": "🐟 ",
+            "CachyOS": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
             "DragonFly": "🐉 ",
@@ -5053,6 +5120,7 @@
             "Mint": "🌿 ",
             "NetBSD": "🚩 ",
             "NixOS": "❄️ ",
+            "Nobara": "🎩 ",
             "OpenBSD": "🐡 ",
             "OpenCloudOS": "☁️ ",
             "OracleLinux": "🦴 ",
@@ -5067,6 +5135,7 @@
             "Ubuntu": "🎯 ",
             "Ultramarine": "🔷 ",
             "Unknown": "❓ ",
+            "Uos": "🐲 ",
             "Void": "  ",
             "Windows": "🪟 ",
             "openEuler": "🦉 ",
@@ -5352,13 +5421,19 @@
         },
         "python_binary": {
           "default": [
-            "python",
-            "python3",
-            "python2"
+            [
+              "python"
+            ],
+            [
+              "python3"
+            ],
+            [
+              "python2"
+            ]
           ],
           "allOf": [
             {
-              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+              "$ref": "#/definitions/Either_for_Either_for_String_and_Array_of_String_and_Array_of_Either_for_String_and_Array_of_String"
             }
           ]
         },
@@ -5426,6 +5501,19 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either_for_Either_for_String_and_Array_of_String_and_Array_of_Either_for_String_and_Array_of_String": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+          }
+        }
+      ]
     },
     "Either_for_String_and_Array_of_String": {
       "anyOf": [
@@ -6070,6 +6158,18 @@
         "style": {
           "default": "bold red",
           "type": "string"
+        },
+        "success_style": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "failure_style": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "map_symbol": {
           "default": false,

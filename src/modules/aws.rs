@@ -305,7 +305,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
-    use std::fs::{create_dir, File};
+    use std::fs::{File, create_dir};
     use std::io::{self, Write};
 
     #[test]
@@ -497,13 +497,15 @@ mod tests {
         let config_path = dir.path().join("credentials");
         create_dir(&config_path)?;
 
-        assert!(ModuleRenderer::new("aws")
-            .env(
-                "AWS_SHARED_CREDENTIALS_FILE",
-                config_path.to_string_lossy().as_ref(),
-            )
-            .collect()
-            .is_none());
+        assert!(
+            ModuleRenderer::new("aws")
+                .env(
+                    "AWS_SHARED_CREDENTIALS_FILE",
+                    config_path.to_string_lossy().as_ref(),
+                )
+                .collect()
+                .is_none()
+        );
 
         dir.close()
     }
@@ -514,10 +516,12 @@ mod tests {
         let config_path = dir.path().join("config");
         create_dir(&config_path)?;
 
-        assert!(ModuleRenderer::new("aws")
-            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
-            .collect()
-            .is_none());
+        assert!(
+            ModuleRenderer::new("aws")
+                .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+                .collect()
+                .is_none()
+        );
 
         dir.close()
     }

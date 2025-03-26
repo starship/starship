@@ -229,10 +229,12 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
 | Arch Linux         | [Arch Linux Extra]      | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+         | [Debian Main]           | `apt install starship`                                        |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
 | openSUSE           | [OSS]                   | `zypper in starship`                                          |
+| Ubuntu 25.04+      | [Ubuntu Universe]       | `apt install starship`                                        |
 | Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
@@ -339,20 +341,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Note: Only Nushell v0.78+ is supported
+Note: Only Nushell v0.96+ is supported
 
 </details>
 
@@ -460,6 +456,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [conda-forge]: https://anaconda.org/conda-forge/starship
 [copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
 [crates.io]: https://crates.io/crates/starship
+[debian main]: https://sources.debian.org/src/starship/1.22.1-1/
 [freshports]: https://www.freshports.org/shells/starship
 [gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
 [linuxbrew]: https://formulae.brew.sh/formula/starship
@@ -472,5 +469,6 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [SignPath Foundation]: https://signpath.org
 [SignPath.io]: https://signpath.io
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
+[ubuntu universe]: https://packages.ubuntu.com/source/plucky/starship
 [void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
 [winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

@@ -74,4 +74,4 @@
 
 Это псевдоминималистичный пресет, вдохновленный приглашениями командной оболочки [geometry](https://github.com/geometry-zsh/geometry) и [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-[![Скриншот пресета Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Скриншот пресета Jetpack](/presets/img/jetpack.png "Нажмите, чтобы просмотреть пресет Jetpack")](./jetpack)
