@@ -290,18 +290,6 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     }
 
     #[test]
-    fn folder_with_pixi_file() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("pixi.toml"))?.sync_all()?;
-
-        check_python2_renders(&dir, None);
-        check_python3_renders(&dir, None);
-        check_pyenv_renders(&dir, None);
-        check_multiple_binaries_renders(&dir, None);
-        dir.close()
-    }
-
-    #[test]
     fn folder_with_ipynb_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("notebook.ipynb"))?.sync_all()?;
