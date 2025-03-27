@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Миграция на v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 - это релиз, содержащий важные изменения в рамках подготовки к выпуску большой v1.0.0. Мы внесли несколько существенных изменений в то, как выполняется настройка в промпте, чтобы обеспечить большую степень настройки.
 
-This guide is intended to walk you through the breaking changes.
+Это руководство предназначено для того, чтобы ознакомить вас с основными изменениями.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` был заменен на корневой уровень `format`
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Ранее, до v0.45.0, `prompt_order` принимал массив имен модулей в том порядке, в котором они должны были отображаться Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Вместо Starship v0.45.0 принимает значение `format`, что позволяет настраивать промпт вне самих модулей.
 
-**Example pre-v0.45.0 configuration**
+**Пример конфигурации pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Пример конфигурации v0.45.0**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Модуль `prefix` и `suffix` были заменены на `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Ранее, до v0.45.0, некоторые модули принимали `prefix` и/или `suffix`, чтобы стилизовать способ отображения модулей.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Вместо Starship v0.45.0 принимает значение `format`, что позволяет дополнительно настроить отображение модулей. Вместо определения префикса и суффикса для контекстных переменных, теперь можно заменить переменные из строки формата, которая представляет вывод модуля.
 
-**Example pre-v0.45.0 configuration**
+**Пример конфигурации pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Пример конфигурации v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -74,18 +74,18 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Затронутые модули
 
 #### Символ
 
-| Removed Property        | Replacement      |
+| Удалено                 | Замена           |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Ранее свойство `use_symbol_for_status` использовалось для настройки промпта на отображение `error_symbol`, когда результатом выполнения последней команды был ненулевой код состояния.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+С выходом v0.45.0 мы теперь всегда используем `error_symbol` после ненулевых кодов состояния, объединяя свойства `use_symbol_for_status` и `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Чтобы настроить промпт на использование более старой конфигурации `use_symbol_for_status = true`, добавьте в свой конфигурационный файл следующее:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Примечание:_ После элемента `character` автоматически добавляется пробел, поэтому, в отличие от других строк `format`, мы специально не добавляем его в приведенных выше примерах.
 
 #### Длительность команды
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Каталог
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [directory]
@@ -141,28 +141,28 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Переменная Окружения
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [env_var]
 -- prefix = ""
 -- suffix = ""
-++ format = "with [$env_value]($style) "
+++ format = "with [$env_value]($style) " 
 ```
 
 #### Коммит Git
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Статус Git
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Удалено           | Замена   |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Ранее свойство `show_sync_count` использовалось для настройки промпта на отображение количества коммитов, которые ветвь выполняла перед удаленной ветвью или позади нее.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+С выпуском v0.45.0 это было заменено тремя отдельными свойствами: `ahead`, `behind` и `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Чтобы настроить промпт на использование более старой конфигурации `show_sync_count = true`, задайте в вашем конфигурационном файле следующее:
 
 ```toml
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Имя хоста
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `label`  | `format` |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### Время
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Удалено  | Замена        |
+| -------- | ------------- |
+| `format` | `time_format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Пользовательские команды
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Удалено  | Замена   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Изменения в конфигурации по умолчанию**
 
 ```diff
 [custom.example]
