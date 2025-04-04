@@ -5,6 +5,7 @@ use std::os::unix::fs::MetadataExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
+#[allow(clippy::doc_overindented_list_items)]
 /// Checks if the current user can write to the `folder_path`.
 ///
 /// It extracts Unix access rights from the directory and checks whether
