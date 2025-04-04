@@ -1,6 +1,7 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::read_file;
 
 use ini::Ini;
 use quick_xml::Reader as QXReader;
@@ -87,25 +88,71 @@ fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<
     format_version(raw_version, config.version_format)
 }
 
-fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
+fn get_poetry_version(pyproject: &toml::Table) -> Option<String> {
     pyproject
         .get("tool")?
         .get("poetry")?
         .get("version")?
         .as_str()
+        .map(|s| s.to_owned())
 }
 
-fn get_pep621_version(pyproject: &toml::Table) -> Option<&str> {
-    pyproject.get("project")?.get("version")?.as_str()
+fn parse_file_version(context: &Context, path: &str) -> Option<String> {
+    let file_contents = read_file(context.current_dir.join(path)).ok()?;
+    let re = Regex::new(r#"(__version__|VERSION)\s*=\s*["']([^"']+)["']"#).ok()?;
+    Some(
+        re.captures(&file_contents)
+            .and_then(|cap| cap.get(2))?
+            .as_str()
+            .to_owned(),
+    )
+}
+
+fn parse_hatchling_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    let version_path = pyproject
+        .get("tool")?
+        .get("hatch")?
+        .get("version")?
+        .get("path")?
+        .as_str()?;
+    // TODO: custom regex pattern
+    parse_file_version(context, version_path)
+}
+
+fn parse_pep621_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    // TODO: Flit, PDM, Setuptools
+    parse_hatchling_dynamic_version(context, pyproject)
+}
+
+fn get_pep621_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    pyproject
+        .get("project")?
+        .get("dynamic")?
+        .as_array()?
+        .iter()
+        .any(|v| v.as_str() == Some("version"))
+        .then(|| parse_pep621_dynamic_version(context, pyproject))?
+}
+
+fn get_pep621_static_version(pyproject: &toml::Table) -> Option<String> {
+    pyproject
+        .get("project")?
+        .get("version")?
+        .as_str()
+        .map(|s| s.to_owned())
+}
+
+fn get_pep621_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    get_pep621_static_version(pyproject).or_else(|| get_pep621_dynamic_version(context, pyproject))
 }
 
 fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pyproject.toml")?;
     let pyproject_toml: toml::Table = toml::from_str(&file_contents).ok()?;
 
-    get_pep621_version(&pyproject_toml)
+    get_pep621_version(context, &pyproject_toml)
         .or_else(|| get_poetry_version(&pyproject_toml))
-        .and_then(|raw_version| format_version(raw_version, config.version_format))
+        .and_then(|raw_version| format_string_version(raw_version, config.version_format))
 }
 
 fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -363,7 +410,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     package_version_fn.iter().find_map(|f| f(context, config))
 }
 
-fn format_version(version: &str, version_format: &str) -> Option<String> {
+fn format_string_version(version: String, version_format: &str) -> Option<String> {
     let cleaned = version
         .replace('"', "")
         .trim()
@@ -371,6 +418,10 @@ fn format_version(version: &str, version_format: &str) -> Option<String> {
         .to_string();
 
     VersionFormatter::format_module_version("package", &cleaned, version_format)
+}
+
+fn format_version(version: &str, version_format: &str) -> Option<String> {
+    format_string_version(version.to_string(), version_format)
 }
 
 #[cfg(test)]
@@ -926,6 +977,46 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_dynamic_version_hatchling_1() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            dynamic = ["version"]
+            [tool.hatch.version]
+            path = "src/__init__.py"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let init_contents = "__version__ = \"0.1.0\"".to_string();
+        fill_config(&project_dir, "src/__init__.py", Some(&init_contents))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_dynamic_version_hatchling_2() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            dynamic = ["version"]
+            [tool.hatch.version]
+            path = "foo.py"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let init_contents = "# foo\nVERSION = \"0.1.0\"".to_string();
+        fill_config(&project_dir, "foo.py", Some(&init_contents))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -1528,10 +1619,16 @@ Title: Starship
 
     fn fill_config(
         project_dir: &TempDir,
-        file_name: &str,
+        file_path: &str,
         contents: Option<&str>,
     ) -> io::Result<()> {
-        let mut file = File::create(project_dir.path().join(file_name))?;
+        let mut file = {
+            let path = project_dir.path().join(file_path);
+            if let Some(parent) = path.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            File::create(path)?
+        };
         file.write_all(contents.unwrap_or("").as_bytes())?;
         file.sync_all()
     }
