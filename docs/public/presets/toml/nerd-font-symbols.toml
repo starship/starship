@@ -7,6 +7,10 @@ symbol = " "
 [c]
 symbol = " "
 
+[cpp]
+disabled = false
+symbol = " "
+
 [cmake]
 symbol = " "
 

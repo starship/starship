@@ -241,6 +241,47 @@
         }
       ]
     },
+    "cpp": {
+      "default": {
+        "commands": [
+          [
+            "c++",
+            "--version"
+          ],
+          [
+            "g++",
+            "--version"
+          ],
+          [
+            "clang++",
+            "--version"
+          ]
+        ],
+        "detect_extensions": [
+          "cpp",
+          "cc",
+          "cxx",
+          "c++",
+          "hpp",
+          "hh",
+          "hxx",
+          "h++",
+          "tcc"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "style": "149 bold",
+        "symbol": "C++ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CppConfig"
+        }
+      ]
+    },
     "crystal": {
       "default": {
         "detect_extensions": [
@@ -2578,6 +2619,86 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CppConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version(-$name) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "C++ ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "cpp",
+            "cc",
+            "cxx",
+            "c++",
+            "hpp",
+            "hh",
+            "hxx",
+            "h++",
+            "tcc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commands": {
+          "default": [
+            [
+              "c++",
+              "--version"
+            ],
+            [
+              "g++",
+              "--version"
+            ],
+            [
+              "clang++",
+              "--version"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
       "additionalProperties": false
