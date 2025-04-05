@@ -1,10 +1,12 @@
+use std::cell::OnceCell;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::str::FromStr;
 
 use chrono::DateTime;
 use ini::Ini;
-use std::cell::OnceCell;
+use serde_json as json;
+use sha1::{Digest, Sha1};
 
 use super::{Context, Module, ModuleConfig};
 
@@ -125,6 +127,7 @@ fn get_aws_profile_and_region(
 fn get_credentials_duration(
     context: &Context,
     aws_profile: Option<&Profile>,
+    aws_config: &AwsConfigFile,
     aws_creds: &AwsCredsFile,
 ) -> Option<i64> {
     let expiration_env_vars = [
@@ -133,19 +136,34 @@ fn get_credentials_duration(
         "AWSUME_EXPIRATION",
     ];
     let expiration_date = if let Some(expiration_date) = expiration_env_vars
-        .iter()
+        .into_iter()
         .find_map(|env_var| context.get_env(env_var))
     {
+        // get expiration from environment variables
         chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
-    } else {
-        let creds = get_creds(context, aws_creds)?;
-        let section = get_profile_creds(creds, aws_profile)?;
-
+    } else if let Some(section) =
+        get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
+    {
+        // get expiration from credentials file
         let expiration_keys = ["expiration", "x_security_token_expires"];
         expiration_keys
             .iter()
             .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
+    } else {
+        // get expiration from cached SSO credentials
+        let config = get_config(context, aws_config)?;
+        let section = get_profile_config(config, aws_profile)?;
+        let start_url = section.get("sso_start_url")?;
+        // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
+        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(start_url.as_bytes()));
+        // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
+        let mut sso_cred_path = context.get_home()?;
+        sso_cred_path.push(format!(".aws/sso/cache/{}.json", cache_key));
+        let sso_cred_json: json::Value =
+            json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
+        let expires_at = sso_cred_json.get("expiresAt")?.as_str();
+        DateTime::parse_from_rfc3339(expires_at?).ok()
     }?;
 
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
@@ -258,13 +276,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let duration = {
-        get_credentials_duration(context, aws_profile.as_ref(), &aws_creds).map(|duration| {
-            if duration > 0 {
-                render_time((duration * 1000) as u128, false)
-            } else {
-                config.expiration_symbol.to_string()
-            }
-        })
+        get_credentials_duration(context, aws_profile.as_ref(), &aws_config, &aws_creds).map(
+            |duration| {
+                if duration > 0 {
+                    render_time((duration * 1000) as u128, false)
+                } else {
+                    config.expiration_symbol.to_string()
+                }
+            },
+        )
     };
 
     let mapped_region = alias_name(aws_region, &config.region_aliases);
@@ -318,8 +338,9 @@ mod tests {
     }
 
     #[test]
-    fn region_set() {
-        let actual = ModuleRenderer::new("aws")
+    fn region_set() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .collect();
@@ -329,11 +350,13 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
-    fn region_set_with_alias() {
-        let actual = ModuleRenderer::new("aws")
+    fn region_set_with_alias() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-southeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .config(toml::toml! {
@@ -344,11 +367,13 @@ mod tests {
         let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  (au) ")));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
-    fn default_region_set() {
-        let actual = ModuleRenderer::new("aws")
+    fn default_region_set() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
             .env("AWS_ACCESS_KEY_ID", "dummy")
@@ -359,6 +384,7 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
@@ -620,8 +646,9 @@ credential_process = /opt/bin/awscreds-retriever
     }
 
     #[test]
-    fn region_set_with_display_all() {
-        let actual = ModuleRenderer::new("aws")
+    fn region_set_with_display_all() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
             .env("AWS_REGION", "ap-northeast-1")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .collect();
@@ -631,6 +658,7 @@ credential_process = /opt/bin/awscreds-retriever
         ));
 
         assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]
@@ -1008,10 +1036,12 @@ credential_process = /opt/bin/awscreds-for-tests
 
     #[test]
     fn sso_legacy_set() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("config");
-        let mut file = File::create(&config_path)?;
+        use chrono::{DateTime, SecondsFormat, Utc};
 
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let mut file = File::create(dir.path().join(".aws/config"))?;
         file.write_all(
             "[default]
 region = ap-northeast-2
@@ -1022,15 +1052,30 @@ sso_role_name = <AWS-ROLE-NAME>
 "
             .as_bytes(),
         )?;
-
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
-            .collect();
+        let mut file = File::create(
+            dir.path()
+                // SHA-1 of "https://starship.rs/sso"
+                .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
+        )?;
+
+        let one_second_ago: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1, 0).unwrap();
+
+        file.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                one_second_ago.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        file.sync_all()?;
+
+        let actual = module_renderer.collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) [X] ")
         ));
 
         assert_eq!(expected, actual);
