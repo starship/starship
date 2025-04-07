@@ -1050,6 +1050,31 @@
         }
       ]
     },
+    "mise": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "mise.toml",
+          "mise.local.toml",
+          ".mise.toml",
+          ".mise.local.toml"
+        ],
+        "detect_folders": [
+          ".mise"
+        ],
+        "disabled": true,
+        "format": "[$symbol$health]($style) ",
+        "healthy_symbol": "healthy",
+        "style": "bold purple",
+        "symbol": "mise ",
+        "unhealthy_symbol": "unhealthy"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MiseConfig"
+        }
+      ]
+    },
     "mojo": {
       "default": {
         "detect_extensions": [
@@ -4552,6 +4577,64 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MiseConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol$health]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "mise ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "mise.toml",
+            "mise.local.toml",
+            ".mise.toml",
+            ".mise.local.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".mise"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "healthy_symbol": {
+          "default": "healthy",
+          "type": "string"
+        },
+        "unhealthy_symbol": {
+          "default": "unhealthy",
+          "type": "string"
         }
       },
       "additionalProperties": false
