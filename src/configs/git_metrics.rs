@@ -14,6 +14,7 @@ pub struct GitMetricsConfig<'a> {
     pub format: &'a str,
     pub disabled: bool,
     pub ignore_submodules: bool,
+    pub include_staged: bool,
 }
 
 impl Default for GitMetricsConfig<'_> {
@@ -25,6 +26,7 @@ impl Default for GitMetricsConfig<'_> {
             format: "([+$added]($added_style) )([-$deleted]($deleted_style) )",
             disabled: true,
             ignore_submodules: false,
+            include_staged: false,
         }
     }
 }
