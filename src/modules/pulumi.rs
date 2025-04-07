@@ -316,7 +316,7 @@ mod tests {
     /// stack name.
     fn render_valid_paths() -> io::Result<()> {
         use io::Write;
-        let dir = tempfile::tempdir()?;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("pulumi")?;
         let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
@@ -360,22 +360,20 @@ mod tests {
             ),
         )?;
         credential.sync_all()?;
-        let rendered = ModuleRenderer::new("pulumi")
+        let rendered = module_renderer
             .path(root.clone())
             .logical_path(root.clone())
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
             })
-            .env("HOME", root.to_str().unwrap())
             .collect();
         let expected = format!(
             "via {} ",
             Color::Fixed(5).bold().paint(" test-user@launch")
         );
         assert_eq!(expected, rendered.expect("a result"));
-        dir.close()?;
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -383,7 +381,7 @@ mod tests {
     /// the current API.
     fn partial_login() -> io::Result<()> {
         use io::Write;
-        let dir = tempfile::tempdir()?;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("pulumi")?;
         let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
@@ -422,19 +420,17 @@ mod tests {
             ),
         )?;
         credential.sync_all()?;
-        let rendered = ModuleRenderer::new("pulumi")
+        let rendered = module_renderer
             .path(root.clone())
             .logical_path(root.clone())
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
             })
-            .env("HOME", root.to_str().unwrap())
             .collect();
         let expected = format!("via {} ", Color::Fixed(5).bold().paint(" launch"));
         assert_eq!(expected, rendered.expect("a result"));
-        dir.close()?;
-        Ok(())
+        dir.close()
     }
 
     #[test]
