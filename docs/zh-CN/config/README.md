@@ -185,7 +185,7 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 对于文件扩展名，文件名中第一个点后的内容和最后一个点后的内容会被分别匹配一次。 例如，`foo.bar.tar.gz` 在 `detect_extensions` 字段中既会匹配 `bar.tar.gz`，也会匹配 `gz`。 文件名以点开头的文件则被视为没有扩展名。
 
-To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+实践中的例子，你可以这样来匹配 TypeScript，同时排除 MPEG 传输流文件：
 
 ```toml
 detect_extensions = ['ts', '!video.ts', '!audio.ts']
@@ -206,7 +206,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                                 |
 | `palette`         | `''`                          | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                          | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                        | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| `follow_symlinks` | `true`                        | 跟随系统链接检查他们是否是一个路径。在诸如 Git 等组件中使用。                                                                                                                                                  |
 
 ::: tip 提示
 
