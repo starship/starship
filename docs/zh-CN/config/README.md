@@ -128,9 +128,9 @@ line2
 """
 ```
 
-### 样式字符串
+### 格式字符串
 
-组件将根据样式字符串输出其中字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
+组件将根据格式字符串输出其中字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
 
 #### 字段
 
@@ -138,17 +138,17 @@ line2
 
 例如：
 
-- 样式字符串 `'$version'` 仅包含字段 `version`。
-- 样式字符串 `'$git_branch$git_commit'` 包含两个字段，`git_branch` 和 `git_commit`。
-- 样式字符串 `'$git_branch $git_commit'` 包含两个以空格分隔的字段。
+- 格式字符串 `'$version'` 仅包含字段 `version`。
+- 格式字符串 `'$git_branch$git_commit'` 包含两个字段，`git_branch` 和 `git_commit`。
+- 格式字符串 `'$git_branch $git_commit'` 包含两个字段，以一个空格分隔。
 
 #### 文本组
 
-文本由以下两种括号来进行分组：
+一个文本组以两个括号部分组成：
 
-第一种`[]`括号中的内容是[格式字符串](#format-strings)， 你可以在当中添加文本，变量甚至嵌套其他括号。
+第一个部分包含在 `[]` 中，内容是一个[格式字符串](#format-strings)， 你可以在当中添加文本、字段，甚至嵌套其他文本组。
 
-第二种`()`括号中的内容是[样式字符串](#style-strings)， 可用于指定第一种括号中内容的样式。
+第二个部分包含在 `()`中，内容是一个[样式字符串](#style-strings)， 用于指定第一部分括号中内容的样式。
 
 例如：
 
@@ -167,23 +167,23 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 - `'bold italic fg:purple'` 设置粗体、斜体、紫色文本
 - `''` 显式禁用所有样式
 
-请注意，最终的显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要获得意大利体文本（一般设计为斜体），您的终端必须支持意大利体显示。
+请注意，最终显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要显示斜体文本，也需要您的终端的支持。
 
-#### 条件格式设定
+#### 条件格式字符串
 
-在格式设定里，由 `(``)` 包裹的内容是条件格式设定：若其包含的字段为空则不会渲染。
+由 `(``)` 包裹的内容是条件格式字符串： 当其中包含的字段全部为空时，该字符串不会渲染。
 
 例如：
 
-- `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
-- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
+- `'(@$region)'`：如果字段 `region` 为 `None` 或空字符串，什么都不显示；否则显示 `@` 和 region 字段的值。
+- `'(some text)'`：永远不会显示，因为括号里没有任何字段。
+- 如果 `$combined` 是 `\[$a$b\]` 的简写，则 `'($combined)'` 当切仅当 `$a` 和 `$b` 都为 `None` 时什么都不显示。 这和 `'(\[$a$b\] )'` 的效果相同。
 
-### 错误匹配
+### 反向匹配
 
-许多组件都有  `detect_extensions`、`detect_files` 和  `detect_folders` 变量。 These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+许多组件都有  `detect_extensions`、`detect_files` 和  `detect_folders` 变量。 这些变量接受用于匹配或不匹配的字符串。 反向匹配指用于指定不匹配的字符串，以字符 '!' 开头。 目录中出现反向匹配的_任何_文件会导致组件不被匹配。
 
-Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+对于文件扩展名，文件名中第一个点后的内容和最后一个点后的内容会被分别匹配一次。 例如，`foo.bar.tar.gz` 在 `detect_extensions` 字段中既会匹配 `bar.tar.gz`，也会匹配 `gz`。 文件名以点开头的文件则被视为没有扩展名。
 
 To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
 
