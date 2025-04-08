@@ -352,7 +352,7 @@ impl<'a> Context<'a> {
                 Ok(Repo {
                     repo: shared_repo,
                     branch: branch.map(|b| b.shorten().to_string()),
-                    workdir: repository.work_dir().map(PathBuf::from),
+                    workdir: repository.workdir().map(PathBuf::from),
                     path,
                     state: repository.state(),
                     remote,

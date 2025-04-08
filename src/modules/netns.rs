@@ -56,9 +56,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    #[cfg(target_os = "linux")]
     use crate::utils::CommandOutput;
+    #[cfg(target_os = "linux")]
     use nu_ansi_term::Color;
 
+    #[cfg(target_os = "linux")]
     fn mock_ip_netns_identify(netns_name: &str) -> Option<CommandOutput> {
         Some(CommandOutput {
             stdout: format!("{}\n", netns_name),
