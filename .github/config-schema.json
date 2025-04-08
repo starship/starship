@@ -143,6 +143,7 @@
         "disabled": false,
         "error_symbol": "[❯](bold red)",
         "format": "$symbol ",
+        "success_exit_codes": [],
         "success_symbol": "[❯](bold green)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
@@ -2358,6 +2359,14 @@
         "error_symbol": {
           "default": "[❯](bold red)",
           "type": "string"
+        },
+        "success_exit_codes": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
         },
         "vimcmd_symbol": {
           "default": "[❮](bold green)",
