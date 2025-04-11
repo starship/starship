@@ -7,6 +7,10 @@ format = '(via [$symbol($version )]($style))'
 [c]
 format = '(via [$symbol($version(-$name) )]($style))'
 
+[cpp]
+disabled = false
+format = '(via [$symbol($version(-$name) )]($style))'
+
 [cmake]
 format = '(via [$symbol($version )]($style))'
 

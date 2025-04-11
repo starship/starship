@@ -29,6 +29,7 @@ $pijul_channel\
 $docker_context\
 $package\
 $c\
+$cpp\
 $cmake\
 $cobol\
 $daml\
@@ -255,6 +256,11 @@ symbol = "■ "
 format = " [buf](italic) [$symbol $version $buf_version]($style)"
 
 [c]
+symbol = "ℂ "
+format = " [$symbol($version(-$name))]($style)"
+
+[cpp]
+disabled = false
 symbol = "ℂ "
 format = " [$symbol($version(-$name))]($style)"
 

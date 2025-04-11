@@ -28,6 +28,10 @@ symbol = "bun "
 [c]
 symbol = "C "
 
+[cpp]
+disabled = false
+symbol = "C++ "
+
 [cobol]
 symbol = "cobol "
 
