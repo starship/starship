@@ -295,6 +295,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -1629,6 +1630,33 @@ Produces a prompt that looks like:
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran, by default `gfortran`.
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `' '`                               | The symbol used before displaying the version of COBOL.                   |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'${raw}'`                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold purple'`                      | The style for the module.                                                 |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `['fpm.toml']`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `fortran` module.                                              |
+| `compiler`          | `'gfortran'`                         | Selects Fortran compiler |
+
+### Variables
+
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| version  | `14.2.0`   | The version of the Fortran compiler  |
+| symbol   |            | Mirrors the value of option `symbol` |
+| style\*  |            | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
 
 ## Fossil Branch
 
