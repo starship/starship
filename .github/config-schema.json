@@ -533,6 +533,45 @@
         }
       ]
     },
+    "fortran": {
+      "default": {
+        "compiler": "gfortran",
+        "detect_extensions": [
+          "f",
+          "F",
+          "for",
+          "FOR",
+          "ftn",
+          "FTN",
+          "f77",
+          "F77",
+          "f90",
+          "F90",
+          "f95",
+          "F95",
+          "f03",
+          "F03",
+          "f08",
+          "F08",
+          "f18",
+          "F18"
+        ],
+        "detect_files": [
+          "fpm.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold purple",
+        "symbol": "󱈚 ",
+        "version_format": "${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FortranConfig"
+        }
+      ]
+    },
     "fossil_branch": {
       "default": {
         "disabled": true,
@@ -3314,6 +3353,78 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FortranConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "󱈚 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "f",
+            "F",
+            "for",
+            "FOR",
+            "ftn",
+            "FTN",
+            "f77",
+            "F77",
+            "f90",
+            "F90",
+            "f95",
+            "F95",
+            "f03",
+            "F03",
+            "f08",
+            "F08",
+            "f18",
+            "F18"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "fpm.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "compiler": {
+          "default": "gfortran",
+          "type": "string"
         }
       },
       "additionalProperties": false
