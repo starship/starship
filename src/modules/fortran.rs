@@ -61,14 +61,14 @@ fn get_version(context: &Context) -> Option<String> {
     // first line of output like "GNU Fortran (Homebrew GCC 14.2.0_1) 14.2.0"
 
     let version = context
-            .exec_cmd("gfortran", &["--version"])?
-            .stdout
-            .split("\n")
-            .collect::<Vec<&str>>()
-            .first()?
-            .split_whitespace()
-            .last()?
-            .to_string();
+        .exec_cmd("gfortran", &["--version"])?
+        .stdout
+        .split("\n")
+        .collect::<Vec<&str>>()
+        .first()?
+        .split_whitespace()
+        .last()?
+        .to_string();
     Some(version)
 }
 
