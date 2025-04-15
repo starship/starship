@@ -120,4 +120,18 @@ mod tests {
 
         dir.close()
     }
+
+    #[test]
+    fn folder_with_fpm_config_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("fpm.toml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("fortran").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Purple.bold().paint("󱈚 14.2.0 ")));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
 }
