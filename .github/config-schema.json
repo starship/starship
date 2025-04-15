@@ -535,7 +535,6 @@
     },
     "fortran": {
       "default": {
-        "compiler": "gfortran",
         "detect_extensions": [
           "f",
           "F",
@@ -3421,10 +3420,6 @@
           "items": {
             "type": "string"
           }
-        },
-        "compiler": {
-          "default": "gfortran",
-          "type": "string"
         }
       },
       "additionalProperties": false

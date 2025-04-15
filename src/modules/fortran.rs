@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let fortran_version = get_version(context, &config)?;
+                    let fortran_version = get_version(context)?;
                     VersionFormatter::format_module_version(
                         &module.get_name(),
                         &fortran_version,
@@ -57,11 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_version(context: &Context, config: &FortranConfig) -> Option<String> {
+fn get_version(context: &Context) -> Option<String> {
     // first line of output like "GNU Fortran (Homebrew GCC 14.2.0_1) 14.2.0"
 
-    let version = match config.compiler {
-        "gfortran" => context
+    let version = context
             .exec_cmd("gfortran", &["--version"])?
             .stdout
             .split("\n")
@@ -69,23 +68,7 @@ fn get_version(context: &Context, config: &FortranConfig) -> Option<String> {
             .first()?
             .split_whitespace()
             .last()?
-            .to_string(),
-        "ifort" => todo!(),
-        "ifx" => todo!(),
-        "nagfor" => todo!(),
-        "pgfortran" => todo!(),
-        "ftn" => todo!(),
-        "xlf" => todo!(),
-        "ftn95" => todo!(),
-        "lf95" => todo!(),
-        _ => {
-            log::warn!(
-                "Supported compilers are 'gfortran', 'ifort', 'ifx', 'nagfor', 'pgfortran', 'ftn', 'xlf', 'ftn95' and 'lf95', found {}",
-                config.compiler
-            );
-            return None;
-        }
-    };
+            .to_string();
     Some(version)
 }
 

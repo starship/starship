@@ -1632,7 +1632,7 @@ AA -------------------------------------------- BB -----------------------------
 ```
 ## Fortran
 
-The `fortran` module shows the current compiler version of Fortran, by default `gfortran`.
+The `fortran` module shows the current compiler version of Fortran (`gfortran`).
 
 ### Options
 
@@ -1646,7 +1646,6 @@ The `fortran` module shows the current compiler version of Fortran, by default `
 | `detect_files`      | `['fpm.toml']`                        | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `fortran` module.                                              |
-| `compiler`          | `'gfortran'`                         | Selects Fortran compiler |
 
 ### Variables
 

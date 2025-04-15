@@ -16,7 +16,6 @@ pub struct FortranConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
-    pub compiler: &'a str,
 }
 
 impl Default for FortranConfig<'_> {
@@ -33,7 +32,6 @@ impl Default for FortranConfig<'_> {
             ],
             detect_files: vec!["fpm.toml"],
             detect_folders: vec![],
-            compiler: "gfortran",
         }
     }
 }
