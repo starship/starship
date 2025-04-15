@@ -33,6 +33,7 @@ pub const ALL_MODULES: &[&str] = &[
     "erlang",
     "fennel",
     "fill",
+    "fortran",
     "fossil_branch",
     "fossil_metrics",
     "gcloud",
