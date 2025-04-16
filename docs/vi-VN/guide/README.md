@@ -436,7 +436,7 @@ Code Signing Roles:
 - Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
 - Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Chương trình này sẽ không chuyển bất kỳ thông tin nào sang các hệ thống mạng khác trừ khi có yêu cầu cụ thể của người dùng hoặc người cài đặt hoặc vận hành chương trình.
 
 <p align="center">
     <br>
