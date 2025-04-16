@@ -27,7 +27,7 @@ impl Default for PixiConfig<'_> {
             show_default_environment: true,
             format: "via [$symbol($version )(\\($environment\\) )]($style)",
             version_format: "v${raw}",
-            symbol: "📦 ",
+            symbol: "🧚 ",
             style: "yellow bold",
             disabled: false,
             detect_files: vec!["pixi.toml", "pixi.lock"],

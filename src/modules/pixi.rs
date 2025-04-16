@@ -105,7 +105,7 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("📦 v0.33.0 ")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🧚 v0.33.0 ")));
 
         assert_eq!(expected, actual);
     }
@@ -118,7 +118,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("📦 v0.33.0 (py312) ")
+            Color::Yellow.bold().paint("🧚 v0.33.0 (py312) ")
         ));
 
         assert_eq!(expected, actual);
@@ -131,7 +131,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("pixi").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("📦 v0.33.0 ")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🧚 v0.33.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
