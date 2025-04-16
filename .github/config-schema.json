@@ -664,7 +664,8 @@
         "style": "red bold",
         "typechanged": "",
         "untracked": "?",
-        "up_to_date": ""
+        "up_to_date": "",
+        "use_git_executable": false
       },
       "allOf": [
         {
@@ -3646,6 +3647,10 @@
           "type": "boolean"
         },
         "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "use_git_executable": {
           "default": false,
           "type": "boolean"
         },

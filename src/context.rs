@@ -653,7 +653,7 @@ pub struct Repo {
 
     /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
     /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
-    fs_monitor_value_is_true: bool,
+    pub(crate) fs_monitor_value_is_true: bool,
 
     // Kind of repository, work tree or bare
     pub kind: Kind,

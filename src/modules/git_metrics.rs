@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
-    let stats = if gix_repo.index_or_empty().ok()?.is_sparse() {
+    let stats = if gix_repo.index_or_empty().ok()?.is_sparse() || repo.fs_monitor_value_is_true {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
