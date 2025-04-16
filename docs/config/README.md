@@ -3623,7 +3623,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `symbol`                   | `'📦 '`                                                 | The symbol used before the environment name.                                          |
 | `style`                    | `'yellow bold'                                          | The style for the module.                                                             |
 | `show_default_environment` | `true`                                                  | Whether to indicate that the `default` environment of your project is activated.      |
-| `pixi_binary`              | `['pixi']`                                              | Configures the python binaries that Starship should execute when getting the version. |
+| `pixi_binary`              | `['pixi']`                                              | Configures the pixi binary that Starship should execute when getting the version.     |
 | `detect_files`             | `['pixi.toml']`                                         | Which filenames should trigger this module                                            |
 | `disabled`                 | `false`                                                 | Disables the `pixi` module.                                                           |
 
