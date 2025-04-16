@@ -17,7 +17,9 @@ pub struct PixiConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl Default for PixiConfig<'_> {
@@ -30,7 +32,9 @@ impl Default for PixiConfig<'_> {
             symbol: "🧚 ",
             style: "yellow bold",
             disabled: false,
+            detect_extensions: vec![],
             detect_files: vec!["pixi.toml", "pixi.lock"],
+            detect_folders: vec![".pixi"],
         }
     }
 }
