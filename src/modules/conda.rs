@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.ignore_base && conda_env == "base" {
         return None;
     }
-    if config.ignore_pixi_envs && context.get_env("PIXI_ENVIRONMENT_NAME").is_some() {
+    if !context.detect_env_vars(&config.detect_env_vars) {
         return None;
     }
 

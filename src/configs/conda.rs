@@ -13,7 +13,7 @@ pub struct CondaConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub ignore_base: bool,
-    pub ignore_pixi_envs: bool,
+    pub detect_env_vars: Vec<&'a str>,
     pub disabled: bool,
 }
 
@@ -25,7 +25,7 @@ impl Default for CondaConfig<'_> {
             symbol: "🅒 ",
             style: "green bold",
             ignore_base: true,
-            ignore_pixi_envs: true,
+            detect_env_vars: vec!["!PIXI_ENVIRONMENT_NAME"],
             disabled: false,
         }
     }
