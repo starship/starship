@@ -88,10 +88,6 @@ mod tests {
         let actual = ModuleRenderer::new("conda")
             .env("CONDA_DEFAULT_ENV", "my-env")
             .env("PIXI_ENVIRONMENT_NAME", "my-env")
-            .config(toml::toml! {
-                [conda]
-                ignore_pixi_envs = true
-            })
             .collect();
 
         let expected = None;
