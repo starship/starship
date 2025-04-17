@@ -1,4 +1,4 @@
-use indexmap::{indexmap, IndexMap};
+use indexmap::{IndexMap, indexmap};
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[allow(non_camel_case_types, clippy::upper_case_acronyms)]

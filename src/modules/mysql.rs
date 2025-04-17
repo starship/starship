@@ -1,8 +1,8 @@
 use super::{Context, Module, ModuleConfig};
 #[cfg(not(test))]
-use mysql::prelude::Queryable;
-#[cfg(not(test))]
 use mysql::Pool;
+#[cfg(not(test))]
+use mysql::prelude::Queryable;
 use pretty_duration::pretty_duration;
 use std::time::Duration;
 
