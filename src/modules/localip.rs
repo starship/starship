@@ -103,9 +103,11 @@ mod tests {
     #[test]
     fn is_ipv4_format() {
         let localip = get_localip!();
-        assert!(regex::Regex::new(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
-            .unwrap()
-            .is_match(&localip));
+        assert!(
+            regex::Regex::new(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+                .unwrap()
+                .is_match(&localip)
+        );
     }
 
     #[test]

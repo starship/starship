@@ -166,21 +166,15 @@ onMounted(() => {
 
    ::: warning
 
-   これは将来的に変更される可能性があります。 Nushell v0.78+ のみサポートされています。
+   これは将来的に変更される可能性があります。 Only Nushell v0.96+ is supported.
 
    :::
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
-
-   ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

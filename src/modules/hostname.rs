@@ -80,13 +80,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use super::hostname;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = whoami::fallible::hostname() {
+            if let Ok(hostname) = hostname() {
                 hostname
             } else {
                 println!(

@@ -18,7 +18,7 @@ pub struct GcloudConfig<'a> {
     pub detect_env_vars: Vec<&'a str>,
 }
 
-impl<'a> Default for GcloudConfig<'a> {
+impl Default for GcloudConfig<'_> {
     fn default() -> Self {
         GcloudConfig {
             format: "on [$symbol$account(@$domain)(\\($region\\))]($style) ",

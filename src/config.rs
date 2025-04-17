@@ -5,7 +5,7 @@ use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
 use serde::{
-    de::value::Error as ValueError, de::Error as SerdeError, Deserialize, Deserializer, Serialize,
+    Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
 };
 
 use std::borrow::Cow;
@@ -106,8 +106,8 @@ where
         Either::<T, Vec<T>>::schema_name()
     }
 
-    fn json_schema(gen: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
-        Either::<T, Vec<T>>::json_schema(gen)
+    fn json_schema(generator: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
+        Either::<T, Vec<T>>::json_schema(generator)
     }
 
     fn is_referenceable() -> bool {

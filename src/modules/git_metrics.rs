@@ -1,8 +1,8 @@
 use regex::Regex;
 
 use crate::{
-    config::ModuleConfig, configs::git_metrics::GitMetricsConfig,
-    formatter::string_formatter::StringFormatterError, formatter::StringFormatter, module::Module,
+    config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
+    formatter::string_formatter::StringFormatterError, module::Module,
 };
 
 use super::Context;

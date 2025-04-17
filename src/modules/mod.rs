@@ -55,6 +55,7 @@ mod meson;
 mod mojo;
 mod mysql;
 mod nats;
+mod netns;
 mod nim;
 mod nix_shell;
 mod nodejs;
@@ -168,6 +169,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "mojo" => mojo::module(context),
             "mysql" => mysql::module(context),
             "nats" => nats::module(context),
+            "netns" => netns::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context),
@@ -215,7 +217,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
             }
             _ => {
-                eprintln!("Error: Unknown module {module}. Use starship module --list to list out all supported modules.");
+                eprintln!(
+                    "Error: Unknown module {module}. Use starship module --list to list out all supported modules."
+                );
                 None
             }
         }
@@ -294,6 +298,7 @@ pub fn description(module: &str) -> &'static str {
         "mojo" => "The currently installed version of Mojo",
         "mysql" => "MySQL Service & replication status information",
         "nats" => "The current NATS context",
+        "netns" => "The current network namespace",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",

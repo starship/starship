@@ -76,7 +76,7 @@ mod tests {
     use std::io;
     use std::path::Path;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
 
     enum Expect<'a> {
         ChannelName(&'a str),

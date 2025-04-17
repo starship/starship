@@ -3,8 +3,8 @@ use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
 use ini::Ini;
-use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
+use quick_xml::events::Event as QXEvent;
 use regex::Regex;
 use serde_json as json;
 use std::fs;
@@ -66,6 +66,25 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     };
 
     Some(formatted_version)
+}
+
+fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let (filename, contents) = ["deno.json", "deno.jsonc", "jsr.json", "jsr.jsonc"]
+        .iter()
+        .find_map(|filename| {
+            context
+                .read_file_from_pwd(filename)
+                .map(|contents| (filename, contents))
+        })?;
+
+    let json_content: json::Value = if filename.ends_with(".jsonc") {
+        jsonc_parser::parse_to_serde_value(&contents, &Default::default()).ok()??
+    } else {
+        json::from_str(&contents).ok()?
+    };
+
+    let raw_version = json_content.get("version")?.as_str()?;
+    format_version(raw_version, config.version_format)
 }
 
 fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
@@ -238,19 +257,25 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         // workspace version string (`package.version.workspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
-        // discover the workspace root
-        for path in context.current_dir.ancestors().skip(1) {
-            // Assume the workspace root is the first ancestor that contains a Cargo.toml file
-            if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
-                file.read_to_string(&mut file_contents).ok()?;
-                cargo_toml = toml::from_str(&file_contents).ok()?;
-                // Read workspace.package.version
-                version = cargo_toml
-                    .get("workspace")?
-                    .get("package")?
-                    .get("version")?
-                    .as_str();
-                break;
+        if let Some(workspace) = cargo_toml.get("workspace") {
+            // current Cargo.toml file is also the workspace root
+            version = workspace.get("package")?.get("version")?.as_str();
+        } else {
+            // discover the workspace root
+            for path in context.current_dir.ancestors().skip(1) {
+                // Assume the workspace root is the first ancestor that contains a Cargo.toml file
+                if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
+                    file_contents.clear(); // clear the buffer for reading new Cargo.toml
+                    file.read_to_string(&mut file_contents).ok()?;
+                    cargo_toml = toml::from_str(&file_contents).ok()?;
+                    // Read workspace.package.version
+                    version = cargo_toml
+                        .get("workspace")?
+                        .get("package")?
+                        .get("version")?
+                        .as_str();
+                    break;
+                }
             }
         }
         version?
@@ -322,6 +347,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_cargo_version,
         get_nimble_version,
         get_node_package_version,
+        get_jsr_package_version,
         get_pyproject_version,
         get_setup_cfg_version,
         get_composer_version,
@@ -400,6 +426,24 @@ mod tests {
             [package]
             name = "starship"
             version = "0.1.0"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_cargo_version_ws_single() -> io::Result<()> {
+        let config_name = "Cargo.toml";
+        let config_content = toml::toml! {
+            [workspace.package]
+            version = "0.1.0"
+            [package]
+            name = "starship"
+            version.workspace = true
         }
         .to_string();
 
@@ -551,8 +595,8 @@ license = "MIT"
     }
 
     #[test]
-    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available(
-    ) -> io::Result<()> {
+    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available()
+    -> io::Result<()> {
         let config_name = "test_project.nimble";
 
         let config_content = r#"
@@ -724,6 +768,66 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("semantic"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_jsr_json() -> io::Result<()> {
+        let config_name = "jsr.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_jsr_jsonc() -> io::Result<()> {
+        let config_name = "jsr.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_json() -> io::Result<()> {
+        let config_name = "deno.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_jsr_package_version_with_deno_jsonc() -> io::Result<()> {
+        let config_name = "deno.jsonc";
+        let config_content = r#"{
+    "name": "starship", // comment
+    "version": "0.1.0",
+}"#
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 

@@ -166,21 +166,15 @@ onMounted(() => {
 
    ::: warning
 
-   Điều này có thể thay đổi trong tương lai. Chỉ hỗ trợ nushell từ phiên bản 0.78 trở lên.
+   Điều này có thể thay đổi trong tương lai. Only Nushell v0.96+ is supported.
 
    :::
 
-   Thêm đoạn code dưới đây vào cuối file Nushell env của bạn (Bạn có thể tìm đường dẫn tới file Nushell env bằng cách chạy `$nu.env-path` trong Nushell):
+   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save -f ~/.cache/starship/init.nu
-   ```
-
-   Thêm đoạn code sau vào cuối file cấu hình Nushell (bạn có thể tìm đường dẫn tới file cấu hình Nushell bằng cách chạy câu lệnh `$nu.config-path`):
-
-   ```sh
-   use ~/.cache/starship/init.nu
+   mkdir ($nu.data-dir | path join "vendor/autoload")
+   starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
 
 

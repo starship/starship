@@ -14,7 +14,7 @@ pub struct LocalipConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for LocalipConfig<'a> {
+impl Default for LocalipConfig<'_> {
     fn default() -> Self {
         LocalipConfig {
             ssh_only: true,

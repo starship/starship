@@ -15,7 +15,7 @@ pub struct MemoryConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for MemoryConfig<'a> {
+impl Default for MemoryConfig<'_> {
     fn default() -> Self {
         MemoryConfig {
             threshold: 75,

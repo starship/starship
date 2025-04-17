@@ -63,6 +63,7 @@ pub const ALL_MODULES: &[&str] = &[
     "mojo",
     "mysql",
     "nats",
+    "netns",
     "nim",
     "nix_shell",
     "nodejs",
@@ -178,7 +179,7 @@ impl<'a> Module<'a> {
     }
 }
 
-impl<'a> fmt::Display for Module<'a> {
+impl fmt::Display for Module<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let ansi_strings = self.ansi_strings();
         write!(f, "{}", AnsiStrings(&ansi_strings))

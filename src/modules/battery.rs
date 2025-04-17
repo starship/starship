@@ -132,9 +132,12 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
                 .filter_map(|battery| match battery {
                     Ok(battery) => {
                         log::debug!("Battery found: {:?}", battery);
+
+                        let charge_rate = battery.state_of_charge().value;
+                        let energy_full = battery.energy_full().value;
                         Some(BatteryInfo {
-                            energy: battery.energy().value,
-                            energy_full: battery.energy_full().value,
+                            energy: charge_rate * energy_full,
+                            energy_full,
                             state: battery.state(),
                         })
                     }

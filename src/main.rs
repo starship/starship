@@ -6,9 +6,8 @@ use std::path::PathBuf;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{CommandFactory, Parser, Subcommand};
-use clap_complete::{generate, Shell as CompletionShell};
-use rand::distributions::Alphanumeric;
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
+use clap_complete::generate;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
@@ -26,6 +25,36 @@ use starship::*;
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
+}
+
+#[derive(clap::Parser, ValueEnum, Debug, Clone, PartialEq, Eq)]
+enum CompletionShell {
+    Bash,
+    Elvish,
+    Fish,
+    Nushell,
+    PowerShell,
+    Zsh,
+}
+
+fn generate_shell(shell: impl clap_complete::Generator) {
+    generate(
+        shell,
+        &mut Cli::command(),
+        "starship",
+        &mut io::stdout().lock(),
+    )
+}
+
+fn generate_completions(shell: CompletionShell) {
+    match shell {
+        CompletionShell::Bash => generate_shell(clap_complete::Shell::Bash),
+        CompletionShell::Elvish => generate_shell(clap_complete::Shell::Elvish),
+        CompletionShell::Fish => generate_shell(clap_complete::Shell::Fish),
+        CompletionShell::PowerShell => generate_shell(clap_complete::Shell::PowerShell),
+        CompletionShell::Zsh => generate_shell(clap_complete::Shell::Zsh),
+        CompletionShell::Nushell => generate_shell(clap_complete_nushell::Nushell),
+    }
 }
 
 #[derive(Subcommand, Debug)]
@@ -236,16 +265,11 @@ fn main() {
         }
         Commands::Explain(props) => print::explain(props),
         Commands::Timings(props) => print::timings(props),
-        Commands::Completions { shell } => generate(
-            shell,
-            &mut Cli::command(),
-            "starship",
-            &mut io::stdout().lock(),
-        ),
+        Commands::Completions { shell } => generate_completions(shell),
         Commands::Session => println!(
             "{}",
-            rand::thread_rng()
-                .sample_iter(&Alphanumeric)
+            rand::rng()
+                .sample_iter(rand::distr::Alphanumeric)
                 .take(16)
                 .map(char::from)
                 .collect::<String>()

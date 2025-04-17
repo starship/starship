@@ -132,7 +132,7 @@ jobs:
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        uses: reviewdog/action-suggester@v1.18.0
+        uses: reviewdog/action-suggester@v1.21.0
         with:
           tool_name: starship config-schema
           filter_mode: nofilter
@@ -176,7 +176,7 @@ jobs:
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.4 cargo-wix
+        run: cargo install --version 0.3.8 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
@@ -246,7 +246,7 @@ jobs:
           output-artifact-directory: target/debug
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

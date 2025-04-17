@@ -20,7 +20,7 @@ pub struct MojoConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for MojoConfig<'a> {
+impl Default for MojoConfig<'_> {
     fn default() -> Self {
         MojoConfig {
             format: "with [$symbol($version )]($style)",

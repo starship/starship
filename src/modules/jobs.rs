@@ -47,7 +47,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module_symbol = "";
     let mut module_number = String::new();
     if config.threshold != default_threshold {
-        log::warn!("`threshold` in [jobs] is deprecated . Please remove it and use `symbol_threshold` and `number_threshold`.");
+        log::warn!(
+            "`threshold` in [jobs] is deprecated . Please remove it and use `symbol_threshold` and `number_threshold`."
+        );
 
         // The symbol should be shown if there are *any* background
         // jobs running.

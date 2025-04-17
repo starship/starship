@@ -318,7 +318,7 @@ mod tests {
 
     #[test]
     fn warn_on_os_info_update() {
-        #[warn(clippy::wildcard_enum_match_arm)]
+        #[deny(clippy::wildcard_enum_match_arm)]
         // This closure is the same as the default config symbols list.
         // When this clippy test fails, a new default symbol should be added to
         // `config/os.rs` to exhaustively match new possible `os_info::Type` cases.
@@ -336,13 +336,14 @@ mod tests {
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
-            Type::Arch | Type::Artix => "🎗️ ",
+            Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
+            Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
             Type::Debian => "🌀 ",
             Type::DragonFly => "🐉 ",
             Type::Emscripten => "🔗 ",
             Type::EndeavourOS => "🚀 ",
-            Type::Fedora => "🎩 ",
+            Type::Fedora | Type::Nobara => "🎩 ",
             Type::FreeBSD => "😈 ",
             Type::Garuda => "🦅 ",
             Type::Gentoo => "🗜️ ",
@@ -373,6 +374,7 @@ mod tests {
             Type::Ubuntu => "🎯 ",
             Type::Ultramarine => "🔷 ",
             Type::Unknown => "❓ ",
+            Type::Uos => "🐲 ",
             Type::Void => "  ",
             Type::Windows => "🪟 ",
             _ => "",

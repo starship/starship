@@ -13,7 +13,7 @@ pub struct FillConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for FillConfig<'a> {
+impl Default for FillConfig<'_> {
     fn default() -> Self {
         FillConfig {
             style: "bold black",

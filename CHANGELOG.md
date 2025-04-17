@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* **windows:** downgrade libz-ng-sys ([#6489](https://github.com/starship/starship/issues/6489)) ([6f7c67b](https://github.com/starship/starship/commit/6f7c67b4858b755c19754a2ec1063502545a16b6))
+
+## [1.22.0](https://github.com/starship/starship/compare/v1.21.1...v1.22.0) (2025-01-11)
+
+
+### Features
+
+* **battery:** Use best match instead of first match for `battery.display` threshold ([#6442](https://github.com/starship/starship/issues/6442)) ([2690a32](https://github.com/starship/starship/commit/2690a329cf9a6b4a160d024674193007fb292e1a))
+* **bun:** Detect bun using new text-format lockfile ([#6441](https://github.com/starship/starship/issues/6441)) ([2df521c](https://github.com/starship/starship/commit/2df521c69b0b1400edee7b7b332b5e2a900c7775))
+* **direnv:** allow direnv to detect environment variables ([#6196](https://github.com/starship/starship/issues/6196)) ([4593716](https://github.com/starship/starship/commit/45937166c8b3cb53f09b29c65d0f547aa7f2f022))
+* **status:** add `{success,failure}_style` options ([#6269](https://github.com/starship/starship/issues/6269)) ([e21775c](https://github.com/starship/starship/commit/e21775c694a81cf092eafa3c9a7b169ae9c8ebf2))
+
+
+### Bug Fixes
+
+* **fish:** restore support for fish &lt;v3.4.0 ([#6337](https://github.com/starship/starship/issues/6337)) ([85d3fb2](https://github.com/starship/starship/commit/85d3fb2e2ab96e639fe6b67ba1afbb94b6c5b83e))
+* handle variable bash $SHLVL behavior with explicit option ([#4912](https://github.com/starship/starship/issues/4912)) ([7ead2b5](https://github.com/starship/starship/commit/7ead2b55eb58a878dc3ea8d87204f84862bd8148))
+* **hostname:** use DNS instead of NetBIOS name on Windows ([#6343](https://github.com/starship/starship/issues/6343)) ([43f097e](https://github.com/starship/starship/commit/43f097eae838c1fba52659113826669802081918))
+* **init/pwsh:** preserve ViModeChangeHandler ([#6225](https://github.com/starship/starship/issues/6225)) ([9b6d394](https://github.com/starship/starship/commit/9b6d394e01d50db4395cfe402531bfd96c540462))
+* **init:** do not use cygpath for elvish ([#6376](https://github.com/starship/starship/issues/6376)) ([576aa14](https://github.com/starship/starship/commit/576aa14d15f57abf7d1c28e3486f2682e45c2f62))
+* **status:** add trailing space to `pipestatus_format` ([#6404](https://github.com/starship/starship/issues/6404)) ([8a38b8f](https://github.com/starship/starship/commit/8a38b8f6f19fa6f17098e32f22183beac0498764))
+* **username:** avoid using `whoami` on android ([#6342](https://github.com/starship/starship/issues/6342)) ([af5d139](https://github.com/starship/starship/commit/af5d139060bbb60690196dc53e05424ac3c0fb5d)), closes [#6340](https://github.com/starship/starship/issues/6340)
+
 ## [1.21.1](https://github.com/starship/starship/compare/v1.21.0...v1.21.1) (2024-10-18)
 
 

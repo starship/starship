@@ -30,7 +30,7 @@ pub struct StatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for StatusConfig<'a> {
+impl Default for StatusConfig<'_> {
     fn default() -> Self {
         StatusConfig {
             format: "[$symbol$status]($style) ",
@@ -47,8 +47,7 @@ impl<'a> Default for StatusConfig<'a> {
             recognize_signal_code: true,
             pipestatus: false,
             pipestatus_separator: "|",
-            pipestatus_format:
-                "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
+            pipestatus_format: "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style) ",
             pipestatus_segment_format: None,
             disabled: true,
         }

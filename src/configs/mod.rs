@@ -58,6 +58,7 @@ pub mod meson;
 pub mod mojo;
 pub mod mysql;
 pub mod nats;
+pub mod netns;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
@@ -226,6 +227,8 @@ pub struct FullConfig<'a> {
     mysql: mysql::MySQLConfig<'a>,
     #[serde(borrow)]
     nats: nats::NatsConfig<'a>,
+    #[serde(borrow)]
+    netns: netns::NetnsConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]

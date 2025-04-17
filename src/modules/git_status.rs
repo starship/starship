@@ -521,7 +521,7 @@ mod tests {
     use std::io::{self, prelude::*};
     use std::path::Path;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     #[allow(clippy::unnecessary_wraps)]

@@ -2,7 +2,7 @@ use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
-    utils::{create_command, CommandOutput},
+    utils::{CommandOutput, create_command},
 };
 use log::{Level, LevelFilter};
 use std::fs;
