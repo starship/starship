@@ -53,6 +53,7 @@ mod lua;
 mod memory_usage;
 mod meson;
 mod mojo;
+mod mysql;
 mod nats;
 mod netns;
 mod nim;
@@ -166,6 +167,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
             "mojo" => mojo::module(context),
+            "mysql" => mysql::module(context),
             "nats" => nats::module(context),
             "netns" => netns::module(context),
             "nim" => nim::module(context),
@@ -294,6 +296,7 @@ pub fn description(module: &str) -> &'static str {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
         }
         "mojo" => "The currently installed version of Mojo",
+        "mysql" => "MySQL Service & replication status information",
         "nats" => "The current NATS context",
         "netns" => "The current network namespace",
         "nim" => "The currently installed version of Nim",

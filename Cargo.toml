@@ -85,6 +85,8 @@ yaml-rust2 = "0.10.1"
 
 guess_host_triple = "0.1.4"
 home = "0.5.11"
+mysql = "25.0.1"
+pretty-duration = "0.1.1"
 shell-words = "1.1.0"
 
 [dependencies.schemars]

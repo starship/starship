@@ -56,6 +56,7 @@ pub mod lua;
 pub mod memory_usage;
 pub mod meson;
 pub mod mojo;
+pub mod mysql;
 pub mod nats;
 pub mod netns;
 pub mod nim;
@@ -222,6 +223,8 @@ pub struct FullConfig<'a> {
     meson: meson::MesonConfig<'a>,
     #[serde(borrow)]
     mojo: mojo::MojoConfig<'a>,
+    #[serde(borrow)]
+    mysql: mysql::MySQLConfig<'a>,
     #[serde(borrow)]
     nats: nats::NatsConfig<'a>,
     #[serde(borrow)]
