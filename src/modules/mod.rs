@@ -32,7 +32,7 @@ mod git_branch;
 mod git_commit;
 mod git_metrics;
 mod git_state;
-mod git_status;
+pub(crate) mod git_status;
 mod gleam;
 mod golang;
 mod gradle;
