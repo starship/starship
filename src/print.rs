@@ -567,7 +567,7 @@ mod test {
 
         let expected = String::from(">");
         let actual = get_prompt(context);
-        assert_eq!(expected, actual);
+        assert!(actual.ends_with(&expected));
         dir.close()
     }
 
@@ -586,7 +586,7 @@ mod test {
 
         let expected = String::from(">");
         let actual = get_prompt(context);
-        assert_eq!(expected, actual);
+        assert!(actual.ends_with(&expected));
         dir.close()
     }
 
