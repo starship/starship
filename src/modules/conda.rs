@@ -20,6 +20,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.ignore_base && conda_env == "base" {
         return None;
     }
+    if !context.detect_env_vars(&config.detect_env_vars) {
+        return None;
+    }
 
     let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
 
@@ -73,6 +76,18 @@ mod tests {
                 [conda]
                 ignore_base = true
             })
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ignore_pixi_envs() {
+        let actual = ModuleRenderer::new("conda")
+            .env("CONDA_DEFAULT_ENV", "my-env")
+            .env("PIXI_ENVIRONMENT_NAME", "my-env")
             .collect();
 
         let expected = None;
