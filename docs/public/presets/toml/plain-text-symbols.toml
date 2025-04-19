@@ -70,6 +70,9 @@ symbol = "elm "
 [fennel]
 symbol = "fnl "
 
+[fortran]
+symbol = "fortran "
+
 [fossil_branch]
 symbol = "fossil "
 
