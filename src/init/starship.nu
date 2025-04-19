@@ -13,12 +13,12 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
     PROMPT_INDICATOR: ""
 
     PROMPT_COMMAND: {||
-        # jobs are not supported
         (
             ^::STARSHIP:: prompt
                 --cmd-duration $env.CMD_DURATION_MS
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
+                --jobs (job list | length)
         )
     }
 
@@ -33,6 +33,7 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
                 --cmd-duration $env.CMD_DURATION_MS
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
+                --jobs (job list | length)
         )
     }
 }}
