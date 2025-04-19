@@ -1979,7 +1979,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `ignore_submodules`  | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`           | `false`                                       | Disables the `git_status` module.                                                                           |
 | `windows_starship`   |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` |                                               | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| `use_git_executable` | `false`                                       | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Variables
 

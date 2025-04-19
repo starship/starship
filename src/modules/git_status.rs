@@ -1,8 +1,8 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
-use crate::context;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
+use crate::{context, num_configured_starship_threads, num_rayon_threads};
 use gix::bstr::ByteVec;
 use gix::status::Submodule;
 use regex::Regex;
@@ -316,12 +316,14 @@ fn get_repo_status(
                 Submodule::AsConfigured { check_dirty }
             })
             .index_worktree_options_mut(|opts| {
-                // TODO: figure out good defaults for other platforms, maybe make it configurable.
-                //       Git uses everything (if repo-size permits), but that's not the best choice for MacOS.
                 opts.thread_limit = if cfg!(target_os = "macos") {
-                    Some(3)
+                    Some(num_configured_starship_threads().unwrap_or(
+                        // TODO: figure out good defaults for other platforms, maybe make it configurable.
+                        //       Git uses everything (if repo-size permits), but that's not the best choice for MacOS.
+                        3,
+                    ))
                 } else {
-                    None
+                    Some(num_rayon_threads())
                 };
                 if config.untracked.is_empty() {
                     opts.dirwalk_options.take();
