@@ -25,6 +25,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
+    if gix_repo.is_bare() {
+        return None;
+    }
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let stats = if gix_repo.index_or_empty().ok()?.is_sparse() || repo.fs_monitor_value_is_true {
         let mut git_args = vec!["diff", "--shortstat"];
@@ -399,7 +402,7 @@ mod tests {
     use std::process::Stdio;
 
     use crate::modules::git_status::tests::make_sparse;
-    use crate::test::ModuleRenderer;
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
 
     #[test]
@@ -631,6 +634,16 @@ mod tests {
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_metrics_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        let actual = render_metrics(repo_dir.path());
+        assert_eq!(None, actual);
+
         repo_dir.close()
     }
 
