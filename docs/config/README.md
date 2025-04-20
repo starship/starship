@@ -909,7 +909,7 @@ If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by ru
 | `style`             | `'bold green'`                         | The style for the module.                                                                                                                                                                                   |
 | `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                                                                                  |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `detect_env_vars`   | `["! PIXI_ENVIRONMENT_NAME"]`          | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered.                                                                                   |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`          | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default.                                                                                   |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Variables
