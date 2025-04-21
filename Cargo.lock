@@ -323,9 +323,9 @@ dependencies = [
 
 [[package]]
 name = "block2"
-version = "0.6.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d59b4c170e16f0405a2e95aff44432a0d41aa97675f3d52623effe95792a037"
+checksum = "340d2f0bdb2a43c1d3cd40513185b2bd7def0aa1052f956455114bc98f82dcf2"
 dependencies = [
  "objc2",
 ]
@@ -688,6 +688,16 @@ dependencies = [
  "option-ext",
  "redox_users 0.5.0",
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "dispatch2"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "89a09f22a6c6069a18470eb92d2298acf25463f14256d24778e1230d789a2aec"
+dependencies = [
+ "bitflags 2.9.0",
+ "objc2",
 ]
 
 [[package]]
@@ -1849,9 +1859,9 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "jiff"
-version = "0.2.8"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5ad87c89110f55e4cd4dc2893a9790820206729eaf221555f742d540b0724a0"
+checksum = "59ec30f7142be6fe14e1b021f50b85db8df2d4324ea6e91ec3e5dcde092021d0"
 dependencies = [
  "jiff-static",
  "jiff-tzdb-platform",
@@ -1864,9 +1874,9 @@ dependencies = [
 
 [[package]]
 name = "jiff-static"
-version = "0.2.8"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d076d5b64a7e2fe6f0743f02c43ca4a6725c0f904203bfe276a5b3e793103605"
+checksum = "526b834d727fd59d37b076b0c3236d9adde1b1729a4361e20b2026f738cc1dbe"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1921,9 +1931,9 @@ checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
 
 [[package]]
 name = "libc"
-version = "0.2.171"
+version = "0.2.172"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c19937216e9d3aa9956d9bb8dfc0b0c8beb6058fc4f7a4dc4d850edf86a237d6"
+checksum = "d750af042f7ef4f724306de029d18836c26c1765a54a6a3f094cbd23a7267ffa"
 
 [[package]]
 name = "libredox"
@@ -2184,20 +2194,21 @@ dependencies = [
 
 [[package]]
 name = "objc2"
-version = "0.6.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3531f65190d9cff863b77a99857e74c314dd16bf56c538c4b57c7cbc3f3a6e59"
+checksum = "88c6597e14493ab2e44ce58f2fdecf095a51f12ca57bec060a11c57332520551"
 dependencies = [
  "objc2-encode",
 ]
 
 [[package]]
 name = "objc2-core-foundation"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "daeaf60f25471d26948a1c2f840e3f7d86f4109e3af4e8e4b5cd70c39690d925"
+checksum = "1c10c2894a6fed806ade6027bcd50662746363a9589d3ec9d9bef30a4e4bc166"
 dependencies = [
  "bitflags 2.9.0",
+ "dispatch2",
  "objc2",
 ]
 
@@ -2209,9 +2220,9 @@ checksum = "ef25abbcd74fb2609453eb695bd2f860d389e457f67dc17cafc8b8cbc89d0c33"
 
 [[package]]
 name = "objc2-foundation"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a21c6c9014b82c39515db5b396f91645182611c97d24637cf56ac01e5f8d998"
+checksum = "900831247d2fe1a09a683278e5384cfb8c80c79fe6b166f9d14bfdde0ea1b03c"
 dependencies = [
  "bitflags 2.9.0",
  "block2",
@@ -2541,9 +2552,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.94"
+version = "1.0.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a31971752e70b8b2686d7e46ec17fb38dad4051d94024c88df49b667caea9c84"
+checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
 dependencies = [
  "unicode-ident",
 ]
@@ -3019,9 +3030,9 @@ dependencies = [
 
 [[package]]
 name = "signal-hook-registry"
-version = "1.4.2"
+version = "1.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9e9e0b4211b72e7b8b6e85c807d36c212bdb33ea8587f7569562a84df5465b1"
+checksum = "9203b8055f63a2a00e2f593bb0510367fe707d7ff1e5c872de2f537b339e5410"
 dependencies = [
  "libc",
 ]
@@ -3495,9 +3506,9 @@ dependencies = [
 
 [[package]]
 name = "tzdb_data"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0604b35c1f390a774fdb138cac75a99981078895d24bcab175987440bbff803b"
+checksum = "9c4c81d75033770e40fbd3643ce7472a1a9fd301f90b7139038228daf8af03ec"
 dependencies = [
  "tz-rs",
 ]
