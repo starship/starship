@@ -25,7 +25,7 @@ use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
-use std::sync::{OnceLock, mpsc};
+use std::sync::{Arc, OnceLock, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
@@ -505,6 +505,8 @@ impl DirContents {
         timeout: Duration,
         follow_symlinks: bool,
     ) -> Result<Self, std::io::Error> {
+        let _ = fs::read_dir(base)?; // Early return if invalid base
+
         let start = Instant::now();
         let mut remaining_time = timeout;
 
@@ -513,36 +515,41 @@ impl DirContents {
         let mut file_names: HashSet<String> = HashSet::new();
         let mut extensions: HashSet<String> = HashSet::new();
 
+        let base_path = base;
+        let base = Arc::from(base);
         let (tx, rx) = mpsc::channel();
-        let (tx_stop, rx_stop) = mpsc::channel();
 
-        let enumerated_dir = fs::read_dir(base)?.enumerate();
-        let worker = move || {
-            for entry in enumerated_dir
-                .take_while(|(n, _)| {
-                    cfg!(test) // ignore timeout during tests
-                || rx_stop.try_recv().is_err() // check that signal to stop has not occurred
-                || n & 0xFF != 0 // only check timeout once every 2^8 entries
-                || start.elapsed() < timeout
-                })
-                .filter_map(|(_, entry)| entry.ok())
-            {
-                match tx.send(entry) {
-                    Ok(_) => continue,
-                    Err(e) => {
-                        log::warn!("Error occurred while sending across mpsc: {e}");
-                        break;
+        {
+            let worker = move || {
+                let timeout = &timeout;
+                let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
+                for entry in enumerated_dir
+                    .take_while(|(n, _)| {
+                        cfg!(test) // ignore timeout during tests
+                        || n & 0xFF != 0 // only check timeout once every 2^8 entries
+                        || start.elapsed() < *timeout
+                    })
+                    .filter_map(|(_, entry)| entry.ok())
+                {
+                    match tx.send(entry) {
+                        Ok(_) => continue,
+                        Err(e) => {
+                            log::warn!("Error occurred while sending across mpsc: {e}");
+                            break;
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        thread::spawn(worker);
+            let _ = thread::Builder::new()
+                .name("from_path_with_timeout worker".into())
+                .spawn(worker)?;
+        }
 
         loop {
             match rx.recv_timeout(remaining_time) {
                 Ok(entry) => {
-                    let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
+                    let path = PathBuf::from(entry.path().strip_prefix(base_path).unwrap());
 
                     let is_dir = match follow_symlinks {
                         true => entry.path().is_dir(),
@@ -581,19 +588,19 @@ impl DirContents {
                         files.insert(path);
                     }
 
-                    // recv_deadline is nightly
-                    remaining_time =
-                        timeout.saturating_sub(Instant::now().saturating_duration_since(start));
-                    if remaining_time <= Duration::from_millis(0) {
-                        // Timed-out, stop child-thread
-                        log::warn!("Timed-out!");
-                        tx_stop.send(()).unwrap();
+                    if remaining_time <= Duration::from_millis(0) && rx.try_recv().is_err() {
+                        // Timed-out, and rx has been drained.
+                        log::warn!("from_path_with_timeout has timed-out!");
                         break;
                     }
+
+                    // recv_deadline is nightly: calculate the remaining time instead.
+                    // after loop break to give chance to drain rx
+                    remaining_time =
+                        timeout.saturating_sub(Instant::now().saturating_duration_since(start));
                 }
                 Err(mpsc::RecvTimeoutError::Timeout) => {
-                    log::warn!("Timed-out!");
-                    tx_stop.send(()).unwrap(); // Stop child thread
+                    log::warn!("from_path_with_timeout has timed-out!");
                     break;
                 }
                 Err(mpsc::RecvTimeoutError::Disconnected) => {
