@@ -73,8 +73,8 @@ starship-battery = { version = "0.10.1", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.4"
 terminal_size = "0.4.2"
-toml = { version = "0.8.20", features = ["preserve_order"] }
-toml_edit = "0.22.24"
+toml = { version = "0.8.21", features = ["preserve_order"] }
+toml_edit = "0.22.25"
 unicode-segmentation = "1.12.0"
 unicode-width = "0.2.0"
 urlencoding = "2.1.3"
