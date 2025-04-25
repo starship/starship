@@ -1188,6 +1188,40 @@ mod tests {
     }
 
     #[test]
+    fn test_scan_dir_timeout() -> io::Result<()> {
+        let empty = testdir(&[])?;
+        let follow_symlinks = true;
+        let timeout = Duration::new(0, 0);
+        let empty_dc = DirContents::from_path_with_timeout(empty.path(), timeout, follow_symlinks)?;
+
+        assert!(
+            !ScanDir {
+                dir_contents: &empty_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
+        empty.close()?;
+
+        let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
+        let rust_dc = DirContents::from_path_with_timeout(rust.path(), timeout, follow_symlinks)?;
+        assert!(
+            !ScanDir {
+                dir_contents: &rust_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
+        rust.close()?;
+
+        Ok(())
+    }
+
+    #[test]
     fn context_constructor_should_canonicalize_current_dir() -> io::Result<()> {
         #[cfg(not(windows))]
         use std::os::unix::fs::symlink as symlink_dir;
