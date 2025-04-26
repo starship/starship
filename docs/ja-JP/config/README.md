@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -676,6 +677,53 @@ format = 'via [🍔 $version](bold green) '
 format = 'via [$name $version]($style)'
 ```
 
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### オプション
+
+| オプション               | デフォルト                                                                            | 説明                                                     |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | モジュールのフォーマット文字列。                                       |
+| `version_format`    | `'v${raw}'`                                                                      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'C++ '`                                                                         | コンパイラの詳細を表示する前に使用される記号です。                              |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                                                             | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                             | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | コンパイラを検出する方法                                           |
+| `style`             | `'bold 149'`                                                                     | モジュールのスタイルです。                                          |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                             |
+
+### 変数
+
+| 変数      | 設定例     | 説明                      |
+| ------- | ------- | ----------------------- |
+| name    | clang++ | コンパイラ名                  |
+| version | 13.0.0  | コンパイラのバージョン             |
+| symbol  |         | オプション `symbol` の値をミラーする |
+| style   |         | オプション `style` の値をミラーする  |
+
+`version`はデフォルトのフォーマットではないことに注意してください。
+
+### Commands
+
+`commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
 ## Character
 
 `character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
@@ -866,6 +914,7 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 | `style`             | `'bold green'`                         | モジュールのスタイルです。                                                                                                    |
 | `format`            | `'via [$symbol$environment]($style) '` | module のフォーマットです。                                                                                                |
 | `ignore_base`       | `true`                                 | アクティブになった時、環境`base`を無視します。                                                                                       |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | このモジュールを活性化する環境変数。 If it's a pixi environment, this module is not being triggered by default.                    |
 | `disabled`          | `false`                                | `conda`モジュールを無効にします。                                                                                             |
 
 ### 変数
@@ -2114,11 +2163,11 @@ format = 'via [🐂](yellow bold) '
 
 ### 変数
 
-| 変数      | 設定例      | 説明                      |
-| ------- | -------- | ----------------------- |
-| version | `v7.5.1` | `gradle`のバージョン          |
-| symbol  |          | オプション `symbol` の値をミラーする |
-| style*  |          | オプション `style` の値をミラーする  |
+| 変数      | 設定例      | 説明                        |
+| ------- | -------- | ------------------------- |
+| version | `v7.5.1` | `gradle`のバージョン            |
+| symbol  |          | オプション `symbol` の値をミラーします。 |
+| style*  |          | オプション `style` の値をミラーします。  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2150,8 +2199,8 @@ format = 'via [🐂](yellow bold) '
 | version        |             | 現在のプロジェクトが Stack プロジェクトかどうかに応じて `ghc_version` または `snapshot` を反映します。 |
 | snapshot       | `lts-18.12` | 現在選択されている Stack スナップショットです。                                          |
 | ghc\_version | `9.2.1`     | 現在インストールされている GHC バージョンです。                                           |
-| symbol         |             | オプション `symbol` の値をミラーします。                                            |
-| style\*      |             | オプション `style` の値をミラーします。                                             |
+| symbol         |             | オプション `symbol` の値をミラーする                                              |
+| style\*      |             | オプション `style` の値をミラーする                                               |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2217,11 +2266,11 @@ format = "via [⌘ $version](bold fg:202) "
 
 ### 変数
 
-| 変数        | 設定例      | 説明                      |
-| --------- | -------- | ----------------------- |
-| version   | `v3.1.1` | `helm` のバージョン           |
-| symbol    |          | オプション `symbol` の値をミラーする |
-| style\* |          | オプション `style` の値をミラーする  |
+| 変数        | 設定例      | 説明                       |
+| --------- | -------- | ------------------------ |
+| version   | `v3.1.1` | `helm` のバージョン            |
+| symbol    |          | オプション `symbol` の値をミラーする  |
+| style\* |          | オプション `style` の値をミラーします。 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2256,7 +2305,7 @@ format = 'via [⎈ $version](bold white) '
 | 変数         | 設定例        | 説明                       |
 | ---------- | ---------- | ------------------------ |
 | hostname   | `computer` | コンピュータのホスト名です。           |
-| style\*  |            | オプション `style` の値をミラーします。 |
+| style\*  |            | オプション `style` の値をミラーする   |
 | ssh_symbol | `'🌏 '`     | SSHセッションに接続していることを表すシンボル |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -2808,6 +2857,40 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
+```
+
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### オプション
+
+| オプション              | デフォルト                            | 説明                                               |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | モジュールのスタイルです。                                    |
+| `format`           | `'on [$symbol$health]($style) '` | module のフォーマットです。                                |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### 変数
+
+| 変数        | 設定例       | 説明                      |
+| --------- | --------- | ----------------------- |
+| health    | `healthy` | The health of _mise_    |
+| symbol    |           | オプション `symbol` の値をミラーする |
+| style\* |           | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
 ```
 
 ## Mojo
@@ -3452,6 +3535,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | ブランチ名が切り捨てられていることを示すための記号です。                                                         |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### オプション
+
+| オプション                      | デフォルト                                                     | 説明                                                                                |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | module のフォーマットです。                                                                 |
+| `version_format`           | `'v${raw}'`                                               | バージョンのフォーマット。 Available vars are `raw`, `major`, `minor`, & `patch`.              |
+| `symbol`                   | `'🧚 '`                                                    | 環境名の直前に使用されるシンボルです。                                                               |
+| `style`                    | `'yellow bold'                                           | モジュールのスタイルです。                                                                     |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | どの拡張子がこのモジュールをアクティブにするか                                                           |
+| `detect_files`             | `['pixi.toml']`                                           | どのファイル名がこのモジュールをアクティブにするか                                                         |
+| `detect_folders`           | `['.pixi']`                                               | どのフォルダーがこのモジュールをアクティブにするか                                                         |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### 変数
+
+| 変数          | 設定例       | 説明                           |
+| ----------- | --------- | ---------------------------- |
+| version     | `v0.33.0` | The version of `pixi`        |
+| environment | `py311`   | The current pixi environment |
+| symbol      |           | オプション `symbol` の値をミラーする      |
+| style       |           | オプション `style` の値をミラーする       |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
@@ -3566,26 +3692,25 @@ The `python` module shows the currently installed version of [Python](https://ww
 - カレントディレクトリに`requirements.txt`ファイルが含まれている
 - カレントディレクトリに`setup.py`ファイルが含まれている
 - カレントディレクトリに`tox.ini`ファイルが含まれている
-- 現在のディレクトリに`pixi.toml`ファイルが含まれている
 - カレントディレクトリに`.py`の拡張子のファイルが含まれている.
 - The current directory contains a file with the `.ipynb` extension.
 - 仮想環境がアクティブである
 
 ### オプション
 
-| オプション                | デフォルト                                                                                                                     | 説明                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | module のフォーマットです。                                                                      |
-| `version_format`     | `'v${raw}'`                                                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
-| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                                           | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                                                                   | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | どの拡張子がこのモジュールをアクティブにするか                                                                |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
-| `detect_folders`     | `[]`                                                                                                                      | どのフォルダーがこのモジュールをアクティブにするか                                                              |
-| `disabled`           | `false`                                                                                                                   | `python`モジュールを無効にします。                                                                  |
+| オプション                | デフォルト                                                                                                        | 説明                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | module のフォーマットです。                                                                     |
+| `version_format`     | `'v${raw}'`                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                |
+| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                     |
+| `style`              | `'yellow bold'`                                                                                              | モジュールのスタイルです。                                                                         |
+| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                           |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | どの拡張子がこのモジュールをアクティブにするか                                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                             |
+| `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                             |
+| `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                 |
 
 ::: tip
 
@@ -4067,7 +4192,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | 変数        | 設定例      | 説明                        |
 | --------- | -------- | ------------------------- |
 | version   | `v0.8.1` | The version of `solidity` |
-| symbol    |          | オプション `symbol` の値をミラーする   |
+| symbol    |          | オプション `symbol` の値をミラーします  |
 | style\* |          | オプション `style` の値をミラーする    |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -4100,7 +4225,7 @@ format = "via [S $version](blue bold)"
 | ----------- | ------------ | ----------------------- |
 | environment | `astronauts` | 現在の spack 環境            |
 | symbol      |              | オプション `symbol` の値をミラーする |
-| style\*   |              | オプション `style` の値をミラーする  |
+| style\*   |              | オプション `style` の値をミラーします |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4198,10 +4323,10 @@ disabled = false
 
 ### 変数
 
-| 変数        | 設定例 | 説明                       |
-| --------- | --- | ------------------------ |
-| symbol    |     | オプション `symbol` の値をミラーします |
-| style\* |     | オプション `style` の値をミラーする   |
+| 変数        | 設定例 | 説明                      |
+| --------- | --- | ----------------------- |
+| symbol    |     | オプション `symbol` の値をミラーする |
+| style\* |     | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4299,7 +4424,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 | version   | `v0.12.24` | `terraform` のバージョン      |
 | workspace | `default`  | 現在のTerraformワークスペース     |
 | symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーします |
+| style\* |            | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
