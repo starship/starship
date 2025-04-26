@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -676,6 +677,53 @@ If a C compiler is not supported by this module, you can request it by [raising 
 format = 'via [$name $version]($style)'
 ```
 
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### Opsi
+
+| Opsi                | Bawaan                                                                           | Deskripsi                                                                           |
+| ------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                                   |
+| `version_format`    | `'v${raw}'`                                                                      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                              |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                                                             | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                             | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                                  |
+| `style`             | `'bold 149'`                                                                     | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                          |
+
+### Variabel
+
+| Variabel | Contoh  | Deskripsi                         |
+| -------- | ------- | --------------------------------- |
+| name     | clang++ | The name of the compiler          |
+| version  | 13.0.0  | The version of the compiler       |
+| symbol   |         | Menyalin nilai dari opsi `symbol` |
+| style    |         | Menyalin nilai dari opsi `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
 ## Karakter
 
 Modul `character` menampilkan sebuah karakter (biasanya anak panah) di samping teks pada terminalmu.
@@ -866,6 +914,7 @@ Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungki
 | `style`             | `'bold green'`                         | Gaya penataan untuk modul.                                                                                                                                                                      |
 | `format`            | `'via [$symbol$environment]($style) '` | Format dari modul.                                                                                                                                                                              |
 | `ignore_base`       | `true`                                 | Mengabaikan `base` environment saat aktif.                                                                                                                                                      |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default.                                                            |
 | `disabled`          | `false`                                | Menonaktifkan modul `conda`.                                                                                                                                                                    |
 
 ### Variabel
@@ -1405,7 +1454,7 @@ default = 'unknown user'
 | `symbol`    | `""`                           | Simbol yang digunakan sebelum menampilkan nilai dari variabel.                        |
 | `variabel`  |                                | Variabel environment yang akan ditampilkan.                                           |
 | `bawaan`    |                                | Nilai bawaan yang akan ditampilkan ketika variabel yang terpilih tidak didefinisikan. |
-| `format`    | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
+| `fromat`    | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
 | `deskripsi` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.          |
 | `disabled`  | `false`                        | Menonaktifkan modul `env_var`.                                                        |
 
@@ -1830,7 +1879,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `added_style`        | `'bold green'`                                               | The style for the added count.        |
 | `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `fromat`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format dari modul.                    |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format dari modul.                    |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 | `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
@@ -1971,7 +2020,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                                   |
 | `detect_extensions` | `['gleam']`                          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2810,6 +2859,40 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### Opsi
+
+| Opsi               | Bawaan                           | Deskripsi                                        |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | Gaya penataan untuk modul.                       |
+| `fromat`           | `'on [$symbol$health]($style) '` | Format dari modul.                               |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### Variabel
+
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| health    | `healthy` | The health of _mise_              |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
 ## Mojo
 
 The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
@@ -3452,6 +3535,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### Opsi
+
+| Opsi                       | Bawaan                                                    | Deskripsi                                                                         |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `fromat`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Format dari modul.                                                                |
+| `version_format`           | `'v${raw}'`                                               | Format dari versi. Available vars are `raw`, `major`, `minor`, & `patch`.         |
+| `symbol`                   | `'🧚 '`                                                    | Simbol yang digunakan sebelum nama environment.                                   |
+| `style`                    | `'yellow bold'                                           | Gaya penataan untuk modul.                                                        |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | Ekstensi mana yang sebaiknya memicu modul ini.                                    |
+| `detect_files`             | `['pixi.toml']`                                           | filenames mana yang sebaiknya memicu modul ini.                                   |
+| `detect_folders`           | `['.pixi']`                                               | Folder mana yang sebaiknya memicul modul ini.                                     |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### Variabel
+
+| Variabel    | Contoh    | Deskripsi                         |
+| ----------- | --------- | --------------------------------- |
+| version     | `v0.33.0` | The version of `pixi`             |
+| environment | `py311`   | The current pixi environment      |
+| symbol      |           | Menyalin nilai dari opsi `symbol` |
+| style       |           | Menyalin nilai dari opsi `style`  |
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
@@ -3566,26 +3692,25 @@ By default, the module will be shown if any of the following conditions are met:
 - Direktori ini memiliki berkas `requirements.txt`
 - Direktori ini memiliki berkas `setup.py`
 - Direktori ini memiliki berkas `tox.ini`
-- Direktori ini memiliki berkas `pixi.toml`
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
 
 ### Opsi
 
-| Opsi                 | Bawaan                                                                                                                    | Deskripsi                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `fromat`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Format dari modul.                                                                     |
-| `version_format`     | `'v${raw}'`                                                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`    |
-| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                                           | Gaya penataan untuk modul.                                                             |
-| `pyenv_version_name` | `false`                                                                                                                   | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Ekstensi mana yang sebaiknya memicu modul ini                                          |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | filenames mana yang sebaiknya memicu modul ini                                         |
-| `detect_folders`     | `[]`                                                                                                                      | Folder mana yang sebaiknya memicul modul ini                                           |
-| `disabled`           | `false`                                                                                                                   | Disables the `python` module.                                                          |
+| Opsi                 | Bawaan                                                                                                       | Deskripsi                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `fromat`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format dari modul.                                                                    |
+| `version_format`     | `'v${raw}'`                                                                                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`   |
+| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                     |
+| `style`              | `'yellow bold'`                                                                                              | Gaya penataan untuk modul.                                                            |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Ekstensi mana yang sebaiknya memicu modul ini                                         |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | filenames mana yang sebaiknya memicu modul ini                                        |
+| `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                          |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 ::: tip
 
