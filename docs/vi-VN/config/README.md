@@ -1867,25 +1867,26 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                        | Mô tả                                                                                                       |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
-| `conflicted`        | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
-| `ahead`             | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
-| `behind`            | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
-| `diverged`          | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
-| `up_to_date`        | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`         | `'?'`                                           | Định dạng của `untracked`                                                                                   |
-| `stashed`           | `'$'`                                           | Định dạng của `stashed`                                                                                     |
-| `modified`          | `'!'`                                           | Định dạng của `modified`                                                                                    |
-| `staged`            | `'+'`                                           | Định dạng của `modified`                                                                                    |
-| `renamed`           | `'»'`                                           | Định dạng của `renamed`                                                                                     |
-| `deleted`           | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
-| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`             | `'bold red'`                                    | Kiểu cho module.                                                                                            |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Vô hiệu `git_status` module.                                                                                |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Tuỳ chọn             | Mặc định                                        | Mô tả                                                                                                       |
+| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
+| `conflicted`         | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
+| `ahead`              | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
+| `behind`             | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
+| `diverged`           | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
+| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`          | `'?'`                                           | Định dạng của `untracked`                                                                                   |
+| `stashed`            | `'$'`                                           | Định dạng của `stashed`                                                                                     |
+| `modified`           | `'!'`                                           | Định dạng của `modified`                                                                                    |
+| `staged`             | `'+'`                                           | Định dạng của `modified`                                                                                    |
+| `renamed`            | `'»'`                                           | Định dạng của `renamed`                                                                                     |
+| `deleted`            | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
+| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
+| `style`              | `'bold red'`                                    | Kiểu cho module.                                                                                            |
+| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`           | `false`                                         | Vô hiệu `git_status` module.                                                                                |
+| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Các biến
 
