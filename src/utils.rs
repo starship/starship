@@ -201,6 +201,36 @@ InstalledDir: /usr/bin",
             ),
             stderr: String::default(),
         }),
+        "c++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+c++ (GCC) 14.2.1 20240910
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+            ),
+            stderr: String::default(),
+        }),
+        "g++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+g++ (GCC) 14.2.1 20240910
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+            ),
+            stderr: String::default(),
+        }),
+        "clang++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+clang version 19.1.7
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin",
+            ),
+            stderr: String::default(),
+        }),
         "cobc -version" => Some(CommandOutput {
             stdout: String::from(
                 "\

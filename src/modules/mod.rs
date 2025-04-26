@@ -4,12 +4,14 @@ mod azure;
 mod buf;
 mod bun;
 mod c;
+mod cc;
 mod character;
 mod cmake;
 mod cmd_duration;
 mod cobol;
 mod conda;
 mod container;
+mod cpp;
 mod crystal;
 pub mod custom;
 mod daml;
@@ -125,6 +127,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "container" => container::module(context),
+            "cpp" => cpp::module(context),
             "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
@@ -251,6 +254,7 @@ pub fn description(module: &str) -> &'static str {
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "container" => "The container indicator, if inside a container.",
+        "cpp" => "your cpp compiler type",
         "crystal" => "The currently installed version of Crystal",
         "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
