@@ -1867,25 +1867,26 @@ Le module Statut Git est très lent dans les dossiers Windows (par exemple sous 
 
 ### Options
 
-| Option              | Défaut                                          | Description                                                                                                                     |
-| ------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status`                                                                                     |
-| `conflicted`        | `'='`                                           | Cette branche a des conflits de fusion.                                                                                         |
-| `ahead`             | `'⇡'`                                           | Le format de `ahead`                                                                                                            |
-| `behind`            | `'⇣'`                                           | Le format de `behind`                                                                                                           |
-| `diverged`          | `'⇕'`                                           | Le format de `diverged`                                                                                                         |
-| `up_to_date`        | `''`                                            | The format de `up_to_date`                                                                                                      |
-| `untracked`         | `'?'`                                           | Le format de `untracked`                                                                                                        |
-| `stashed`           | `'$'`                                           | Le format de `stashed`                                                                                                          |
-| `modified`          | `'!'`                                           | Le format de `modified`                                                                                                         |
-| `staged`            | `'+'`                                           | Le format de `staged`                                                                                                           |
-| `renamed`           | `'»'`                                           | Le format de `renamed`                                                                                                          |
-| `deleted`           | `'✘'`                                           | Le format de `deleted`                                                                                                          |
-| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                                     |
-| `style`             | `'bold red'`                                    | Le style pour le module.                                                                                                        |
-| `ignore_submodules` | `false`                                         | Ignorer les changements des sous-modules.                                                                                       |
-| `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                                               |
-| `windows_starship`  |                                                 | Utiliser ce chemin (Linux) vers un exécutable Starship Windows pour afficher le `git_status` pour les chemins Windows dans WSL. |
+| Option               | Défaut                                          | Description                                                                                                                     |
+| -------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status`                                                                                     |
+| `conflicted`         | `'='`                                           | Cette branche a des conflits de fusion.                                                                                         |
+| `ahead`              | `'⇡'`                                           | Le format de `ahead`                                                                                                            |
+| `behind`             | `'⇣'`                                           | Le format de `behind`                                                                                                           |
+| `diverged`           | `'⇕'`                                           | Le format de `diverged`                                                                                                         |
+| `up_to_date`         | `''`                                            | The format de `up_to_date`                                                                                                      |
+| `untracked`          | `'?'`                                           | Le format de `untracked`                                                                                                        |
+| `stashed`            | `'$'`                                           | Le format de `stashed`                                                                                                          |
+| `modified`           | `'!'`                                           | Le format de `modified`                                                                                                         |
+| `staged`             | `'+'`                                           | Le format de `staged`                                                                                                           |
+| `renamed`            | `'»'`                                           | Le format de `renamed`                                                                                                          |
+| `deleted`            | `'✘'`                                           | Le format de `deleted`                                                                                                          |
+| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                                     |
+| `style`              | `'bold red'`                                    | Le style pour le module.                                                                                                        |
+| `ignore_submodules`  | `false`                                         | Ignorer les changements des sous-modules.                                                                                       |
+| `disabled`           | `false`                                         | Désactive le module `git_status`.                                                                                               |
+| `windows_starship`   |                                                 | Utiliser ce chemin (Linux) vers un exécutable Starship Windows pour afficher le `git_status` pour les chemins Windows dans WSL. |
+| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                           |
 
 ### Variables
 
