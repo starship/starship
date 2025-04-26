@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -676,6 +677,53 @@ If a C compiler is not supported by this module, you can request it by [raising 
 format = 'via [$name $version]($style)'
 ```
 
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### Options
+
+| Tuỳ chọn            | Mặc định                                                                         | Mô tả                                                                     |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[]`                                                                             | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                                                             | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                        |
+| `style`             | `'bold 149'`                                                                     | Kiểu cho module.                                                          |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
+
+### Các biến
+
+| Biến    | Ví dụ   | Mô tả                            |
+| ------- | ------- | -------------------------------- |
+| name    | clang++ | The name of the compiler         |
+| version | 13.0.0  | The version of the compiler      |
+| symbol  |         | Giá trị ghi đè tuỳ chọn `symbol` |
+| style   |         | Giá trị ghi đè của `style`       |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
 ## Character
 
 Module `character` cho biết một kí tự (thường là một mũi tên) bên cạnh nơi văn bản được nhập trong terminal của bạn.
@@ -750,7 +798,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                               | Mô tả                                                                     |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
@@ -780,7 +828,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 - The current directory contains any files ending in `.cob` or `.COB`
 - The current directory contains any files ending in `.cbl` or `.CBL`
 
-### Các tuỳ chọn
+### Options
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -866,6 +914,7 @@ Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể 
 | `style`             | `'bold green'`                         | Kiểu cho module.                                                                                                                                                                                            |
 | `format`            | `'via [$symbol$environment]($style) '` | Định dạng cho module.                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Bỏ qua biến môi trường `base` khi đã kích hoạt.                                                                                                                                                             |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default.                                                                        |
 | `disabled`          | `false`                                | Vô hiệu module `conda`.                                                                                                                                                                                     |
 
 ### Các biến
@@ -1448,7 +1497,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 - Thư mục hiện tại chứa một tập tin `rebar.config`.
 - Thư mục hiện tại chứa một tập tin `erlang.mk`.
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1486,7 +1535,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 - The current directory contains a file with the `.fnl` extension
 
-### Các tuỳ chọn
+### Options
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1823,7 +1872,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 :::
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn             | Mặc định                                                     | Mô tả                                 |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
@@ -2810,6 +2859,40 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn           | Mặc định                         | Mô tả                                            |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | Kiểu cho module.                                 |
+| `format`           | `'on [$symbol$health]($style) '` | Định dạng cho module.                            |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### Các biến
+
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| health    | `healthy` | The health of _mise_             |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
 ## Mojo
 
 The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
@@ -3452,6 +3535,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn.                          |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### Các tuỳ chọn
+
+| Tuỳ chọn                   | Mặc định                                                  | Mô tả                                                                             |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Định dạng cho module.                                                             |
+| `version_format`           | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
+| `symbol`                   | `'🧚 '`                                                    | Kí hiệu sử dụng trước tên biến môi trường.                                        |
+| `style`                    | `'yellow bold'                                           | Kiểu cho module.                                                                  |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                               |
+| `detect_files`             | `['pixi.toml']`                                           | Những tên tệp nào sẽ kích hoạt mô-đun này.                                        |
+| `detect_folders`           | `['.pixi']`                                               | Những thư mục nào sẽ kích hoạt mô-đun này.                                        |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### Các biến
+
+| Biến        | Ví dụ     | Mô tả                            |
+| ----------- | --------- | -------------------------------- |
+| version     | `v0.33.0` | The version of `pixi`            |
+| environment | `py311`   | The current pixi environment     |
+| symbol      |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style       |           | Giá trị ghi đè của `style`       |
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
@@ -3566,26 +3692,25 @@ By default, the module will be shown if any of the following conditions are met:
 - Thư mục hiện tại chứa một tập tin `requirements.txt`
 - Thư mục hiện tại chứa một tập tin `setup.py`
 - Thư mục hiện tại chứa một tập tin `tox.ini`
-- Thư mục hiện tại chứa một tập tin `pixi.toml`
 - The current directory contains a file with the `.py` extension.
 - The current directory contains a file with the `.ipynb` extension.
 - A virtual environment is currently activated
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                                                                                                  | Mô tả                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Định dạng cho module.                                                                  |
-| `version_format`     | `'v${raw}'`                                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
-| `symbol`             | `'🐍 '`                                                                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                                           | Kiểu cho module.                                                                       |
-| `pyenv_version_name` | `false`                                                                                                                   | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                     |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Tên tệp nào sẽ kích hoạt mô-đun này                                                    |
-| `detect_folders`     | `[]`                                                                                                                      | Thư mục nào sẽ kích hoạt mô-đun này                                                    |
-| `disabled`           | `false`                                                                                                                   | Disables the `python` module.                                                          |
+| Tuỳ chọn             | Mặc định                                                                                                     | Mô tả                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Định dạng cho module.                                                                 |
+| `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
+| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                     |
+| `style`              | `'yellow bold'`                                                                                              | Kiểu cho module.                                                                      |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                    |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Tên tệp nào sẽ kích hoạt mô-đun này                                                   |
+| `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                   |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 ::: tip
 
