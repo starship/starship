@@ -1867,25 +1867,26 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### Параметри
 
-| Параметр            | Стандартно                                      | Опис                                                                                                                    |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`        | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
-| `ahead`             | `'⇡'`                                           | Формат `ahead`                                                                                                          |
-| `behind`            | `'⇣'`                                           | Формат `behind`                                                                                                         |
-| `diverged`          | `'⇕'`                                           | Формат `diverged`                                                                                                       |
-| `up_to_date`        | `''`                                            | Формат `up_to_date`                                                                                                     |
-| `untracked`         | `'?'`                                           | Формат `untracked`                                                                                                      |
-| `stashed`           | `'$'`                                           | Формат `stashed`                                                                                                        |
-| `modified`          | `'!'`                                           | Формат `modified`                                                                                                       |
-| `staged`            | `'+'`                                           | Формат `staged`                                                                                                         |
-| `renamed`           | `'»'`                                           | Формат `renamed`                                                                                                        |
-| `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`       | `""`                                            | Формат `typechanged`                                                                                                    |
-| `style`             | `'bold red'`                                    | Стиль модуля.                                                                                                           |
-| `ignore_submodules` | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
-| `windows_starship`  |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
+| Параметр             | Стандартно                                      | Опис                                                                                                                    |
+| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
+| `conflicted`         | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
+| `ahead`              | `'⇡'`                                           | Формат `ahead`                                                                                                          |
+| `behind`             | `'⇣'`                                           | Формат `behind`                                                                                                         |
+| `diverged`           | `'⇕'`                                           | Формат `diverged`                                                                                                       |
+| `up_to_date`         | `''`                                            | Формат `up_to_date`                                                                                                     |
+| `untracked`          | `'?'`                                           | Формат `untracked`                                                                                                      |
+| `stashed`            | `'$'`                                           | Формат `stashed`                                                                                                        |
+| `modified`           | `'!'`                                           | Формат `modified`                                                                                                       |
+| `staged`             | `'+'`                                           | Формат `staged`                                                                                                         |
+| `renamed`            | `'»'`                                           | Формат `renamed`                                                                                                        |
+| `deleted`            | `'✘'`                                           | Формат `deleted`                                                                                                        |
+| `typechanged`        | `""`                                            | Формат `typechanged`                                                                                                    |
+| `style`              | `'bold red'`                                    | Стиль модуля.                                                                                                           |
+| `ignore_submodules`  | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
+| `disabled`           | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
+| `windows_starship`   |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
+| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                   |
 
 ### Змінні
 
