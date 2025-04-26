@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -676,6 +677,53 @@ If a C compiler is not supported by this module, you can request it by [raising 
 format = 'via [$name $version]($style)'
 ```
 
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### 配置项
+
+| 选项                  | 默认值                                                                              | 描述                                                     |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                      |
+| `version_format`    | `'v${raw}'`                                                                      | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`          |
+| `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 触发此组件的扩展名                                              |
+| `detect_files`      | `[]`                                                                             | 触发此组件的文件名                                              |
+| `detect_folders`    | `[]`                                                                             | 触发此组件的文件夹                                              |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                     |
+| `style`             | `'bold 149'`                                                                     | 此组件的样式。                                                |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                             |
+
+### 变量
+
+| 字段      | 示例      | 描述          |
+| ------- | ------- | ----------- |
+| name    | clang++ | 编译器的名称      |
+| version | 13.0.0  | 编译器的版本      |
+| symbol  |         | `symbol`对应值 |
+| style   |         | `style`对应值  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
 ## 字符
 
 `character` 组件用于在您输入终端的文本旁显示一个字符（通常是一个箭头）。
@@ -859,14 +907,15 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ### 配置项
 
-| 选项                  | 默认值                                    | 描述                                                                                                               |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | 如果这个 conda 环境是通过 `conda create -p [path]` 创建的，环境路径的目录深度应该被截断到此数量。 `0` 表示不用截断。 另请参阅 [`directory`](#directory) 组件。 |
-| `symbol`            | `'🅒 '`                                 | 在环境名之前显示的符号。                                                                                                     |
-| `style`             | `'bold green'`                         | 此组件的样式。                                                                                                          |
-| `format`            | `'via [$symbol$environment]($style) '` | 组件格式化模板。                                                                                                         |
-| `ignore_base`       | `true`                                 | 激活时忽略 `base` 环境。                                                                                                 |
-| `disabled`          | `false`                                | 禁用 `conda` 组件。                                                                                                   |
+| 选项                  | 默认值                                    | 描述                                                                                                                                   |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `truncation_length` | `1`                                    | 如果这个 conda 环境是通过 `conda create -p [path]` 创建的，环境路径的目录深度应该被截断到此数量。 `0` 表示不用截断。 另请参阅 [`directory`](#directory) 组件。                     |
+| `symbol`            | `'🅒 '`                                 | 在环境名之前显示的符号。                                                                                                                         |
+| `style`             | `'bold green'`                         | 此组件的样式。                                                                                                                              |
+| `format`            | `'via [$symbol$environment]($style) '` | 组件格式化模板。                                                                                                                             |
+| `ignore_base`       | `true`                                 | 激活时忽略 `base` 环境。                                                                                                                     |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default. |
+| `disabled`          | `false`                                | 禁用 `conda` 组件。                                                                                                                       |
 
 ### 变量
 
@@ -2810,6 +2859,40 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### 配置项
+
+| 选项                 | 默认值                              | 描述                                               |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | 此组件的样式。                                          |
+| `format`           | `'on [$symbol$health]($style) '` | 组件格式化模板。                                         |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### 变量
+
+| 字段        | 示例        | 描述                   |
+| --------- | --------- | -------------------- |
+| health    | `healthy` | The health of _mise_ |
+| symbol    |           | `symbol`对应值          |
+| style\* |           | `style`对应值           |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
 ## Mojo
 
 The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
@@ -3452,6 +3535,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | 此字段的内容用来表示分支名称被截断。                                                                   |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip 提示
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### 配置项
+
+| 选项                         | 默认值                                                       | 描述                                                                                |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | 组件格式化模板。                                                                          |
+| `version_format`           | `'v${raw}'`                                               | 版本格式 Available vars are `raw`, `major`, `minor`, & `patch`.                       |
+| `symbol`                   | `'🧚 '`                                                    | 在环境名之前显示的符号。                                                                      |
+| `style`                    | `'yellow bold'                                           | 此组件的样式。                                                                           |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | 触发此组件的扩展名                                                                         |
+| `detect_files`             | `['pixi.toml']`                                           | 触发此组件的文件名                                                                         |
+| `detect_folders`           | `['.pixi']`                                               | 触发此组件的文件夹                                                                         |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### 变量
+
+| 字段          | 示例        | 描述                           |
+| ----------- | --------- | ---------------------------- |
+| version     | `v0.33.0` | The version of `pixi`        |
+| environment | `py311`   | The current pixi environment |
+| symbol      |           | `symbol`对应值                  |
+| style       |           | `style`对应值                   |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
@@ -3566,26 +3692,25 @@ By default, the module will be shown if any of the following conditions are met:
 - 当前目录包含 `requirements.txt` 文件
 - 当前目录包含一个 `setup.py` 文件
 - 当前目录包含一个 `tox.ini` 文件
-- 当前目录包含 `pixi.toml` 文件
 - 当前目录包含一个使用 `.py` 扩展名的文件.
 - The current directory contains a file with the `.ipynb` extension.
 - 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
-| 选项                   | 默认值                                                                                                                       | 描述                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | 组件格式化模板。                                                                               |
-| `version_format`     | `'v${raw}'`                                                                                                               | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`                                          |
-| `symbol`             | `'🐍 '`                                                                                                                    | 用于表示Python的格式化字符串。                                                                     |
-| `style`              | `'yellow bold'`                                                                                                           | 此组件的样式。                                                                                |
-| `pyenv_version_name` | `false`                                                                                                                   | 使用 pyenv 获取 Python 版本                                                                  |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Which extensions should trigger this module                                            |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                                      | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                                   | 禁用 `python` 组件。                                                                        |
+| 选项                   | 默认值                                                                                                          | 描述                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | 组件格式化模板。                                                                              |
+| `version_format`     | `'v${raw}'`                                                                                                  | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`                                         |
+| `symbol`             | `'🐍 '`                                                                                                       | 用于表示Python的格式化字符串。                                                                    |
+| `style`              | `'yellow bold'`                                                                                              | 此组件的样式。                                                                               |
+| `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 获取 Python 版本                                                                 |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                       |
 
 ::: tip 提示
 
