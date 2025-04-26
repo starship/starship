@@ -54,6 +54,7 @@ mod localip;
 mod lua;
 mod memory_usage;
 mod meson;
+mod mise;
 mod mojo;
 mod nats;
 mod netns;
@@ -169,6 +170,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
+            "mise" => mise::module(context),
             "mojo" => mojo::module(context),
             "nats" => nats::module(context),
             "netns" => netns::module(context),
@@ -299,6 +301,7 @@ pub fn description(module: &str) -> &'static str {
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
         }
+        "mise" => "The current mise status",
         "mojo" => "The currently installed version of Mojo",
         "nats" => "The current NATS context",
         "netns" => "The current network namespace",

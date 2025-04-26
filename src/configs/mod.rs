@@ -57,6 +57,7 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod mise;
 pub mod mojo;
 pub mod nats;
 pub mod netns;
@@ -225,6 +226,8 @@ pub struct FullConfig<'a> {
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
+    mise: mise::MiseConfig<'a>,
     #[serde(borrow)]
     mojo: mojo::MojoConfig<'a>,
     #[serde(borrow)]
