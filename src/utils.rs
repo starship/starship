@@ -440,6 +440,10 @@ WebAssembly: unavailable
             stdout: String::from("Outputting repository ↖"),
             stderr: String::default(),
         }),
+        "pixi --version" => Some(CommandOutput {
+            stdout: String::from("pixi 0.33.0"),
+            stderr: String::default(),
+        }),
         "pulumi version" => Some(CommandOutput {
             stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
             stderr: String::default(),
