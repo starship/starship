@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом до
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -676,6 +677,53 @@ NB `версія` не має стандартного формату.
 format = 'via [$name $version]($style)'
 ```
 
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### Параметри
+
+| Параметр            | Стандартно                                                                       | Опис                                                              |
+| ------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                                                                      | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'C++ '`                                                                         | Символ, який знаходиться перед інформацією про компілятор         |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                                                             | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                             | В яких теках цей модуль має запускатись.                          |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Як виявити компілятор                                             |
+| `style`             | `'bold 149'`                                                                     | Стиль модуля.                                                     |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                        |
+
+### Змінні
+
+| Змінна  | Приклад | Опис                                     |
+| ------- | ------- | ---------------------------------------- |
+| name    | clang++ | Назва компілятора                        |
+| version | 13.0.0  | Версія компілятора                       |
+| symbol  |         | Віддзеркалює значення параметра `symbol` |
+| style   |         | Віддзеркалює значення параметра `style`  |
+
+NB `версія` не має стандартного формату.
+
+### Команди
+
+Параметр `commands` отримує список команд для визначення версії та назви компілятора.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
 ## Character
 
 Модуль `character` показує символ (зазвичай стрілку) поруч з текстом, який вводиться в терміналі.
@@ -866,6 +914,7 @@ format = 'underwent [$duration](bold yellow)'
 | `style`             | `'bold green'`                         | Стиль модуля.                                                                                                                                                                                                        |
 | `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Ігнорувати середовище `base`.                                                                                                                                                                                        |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Які змінні середовища повинні запускати цей модуль. If it's a pixi environment, this module is not being triggered by default.                                                                                       |
 | `disabled`          | `false`                                | Вимикає модуль `conda`.                                                                                                                                                                                              |
 
 ### Змінні
@@ -2810,6 +2859,40 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### Параметри
+
+| Параметр           | Стандартно                       | Опис                                             |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | Стиль модуля.                                    |
+| `format`           | `'on [$symbol$health]($style) '` | Формат модуля.                                   |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### Змінні
+
+| Змінна    | Приклад   | Опис                                     |
+| --------- | --------- | ---------------------------------------- |
+| health    | `healthy` | The health of _mise_                     |
+| symbol    |           | Віддзеркалює значення параметра `symbol` |
+| style\* |           | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
 ## Mojo
 
 Модуль `mojo` показує поточну версію встановленої мови програмування [Mojo](https://www.modular.com/mojo)
@@ -3452,6 +3535,49 @@ format = 'via [🔹 $version](147 bold) '
 | `truncation_symbol` | `'…'`                             | Символ, що використовується для позначення назви гілки, яка була скорочена. |
 | `disabled`          | `true`                            | Вимикає модуль `pijul`.                                                     |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### Параметри
+
+| Параметр                   | Стандартно                                                | Опис                                                                              |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                    |
+| `version_format`           | `'v${raw}'`                                               | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`.             |
+| `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                 |
+| `style`                    | `'yellow bold'                                           | Стиль модуля.                                                                     |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                      |
+| `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                      |
+| `detect_folders`           | `['.pixi']`                                               | В яких теках цей модуль має запускатись.                                          |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### Змінні
+
+| Змінна      | Приклад   | Опис                                     |
+| ----------- | --------- | ---------------------------------------- |
+| version     | `v0.33.0` | The version of `pixi`                    |
+| environment | `py311`   | The current pixi environment             |
+| symbol      |           | Віддзеркалює значення параметра `symbol` |
+| style       |           | Віддзеркалює значення параметра `style`  |
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 Модуль `pulumi` показує імʼя поточного користувача та версію обраного [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/).
@@ -3566,26 +3692,25 @@ format = 'via [$symbol$version](bold white)'
 - Поточна тека містить файл `requirements.txt`
 - Поточна тека містить файл `setup.py`
 - Поточна тека містить файл `tox.ini`
-- Поточна тека містить файл `pixi.toml`
 - Поточна тека містить файл `.py`.
 - Поточна тека містить файли з розширенням `.ipynb`.
 - Віртуальне середовище активовано
 
 ### Параметри
 
-| Параметр             | Стандартно                                                                                                                | Опис                                                                                      |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | Формат модуля.                                                                            |
-| `version_format`     | `'v${raw}'`                                                                                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                         |
-| `symbol`             | `'🐍 '`                                                                                                                    | Формат рядка, що представляє символ Python                                                |
-| `style`              | `'yellow bold'`                                                                                                           | Стиль модуля.                                                                             |
-| `pyenv_version_name` | `false`                                                                                                                   | Використовувати pyenv для отримання версії Python                                         |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Префікс перед версією pyenv, показується якщо pyenv використовується                      |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Налаштовує бінарні файли python, який Starship буде використовувати для отримання версії. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Які розширення повинні запускати цей модуль                                               |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Назви файлів, які активують модуль                                                        |
-| `detect_folders`     | `[]`                                                                                                                      | Назви тек, що активують модуль                                                            |
-| `disabled`           | `false`                                                                                                                   | Вимикає модуль `python`.                                                                  |
+| Параметр             | Стандартно                                                                                                   | Опис                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                        |
+| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                     |
+| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                            |
+| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                         |
+| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                     |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                  |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                           |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                    |
+| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                        |
+| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                              |
 
 ::: tip
 
