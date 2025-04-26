@@ -1960,25 +1960,26 @@ You can disable the module or use the `windows_starship` option to use a Windows
 
 ### Options
 
-| Option              | Default                                       | Description                                                                                                 |
-| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`        | `'='`                                         | This branch has merge conflicts.                                                                            |
-| `ahead`             | `'⇡'`                                         | The format of `ahead`                                                                                       |
-| `behind`            | `'⇣'`                                         | The format of `behind`                                                                                      |
-| `diverged`          | `'⇕'`                                         | The format of `diverged`                                                                                    |
-| `up_to_date`        | `''`                                          | The format of `up_to_date`                                                                                  |
-| `untracked`         | `'?'`                                         | The format of `untracked`                                                                                   |
-| `stashed`           | `'$'`                                         | The format of `stashed`                                                                                     |
-| `modified`          | `'!'`                                         | The format of `modified`                                                                                    |
-| `staged`            | `'+'`                                         | The format of `staged`                                                                                      |
-| `renamed`           | `'»'`                                         | The format of `renamed`                                                                                     |
-| `deleted`           | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                          | The format of `typechanged`                                                                                 |
-| `style`             | `'bold red'`                                  | The style for the module.                                                                                   |
-| `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
-| `windows_starship`  |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Option               | Default                                       | Description                                                                                                 |
+| -------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`         | `'='`                                         | This branch has merge conflicts.                                                                            |
+| `ahead`              | `'⇡'`                                         | The format of `ahead`                                                                                       |
+| `behind`             | `'⇣'`                                         | The format of `behind`                                                                                      |
+| `diverged`           | `'⇕'`                                         | The format of `diverged`                                                                                    |
+| `up_to_date`         | `''`                                          | The format of `up_to_date`                                                                                  |
+| `untracked`          | `'?'`                                         | The format of `untracked`                                                                                   |
+| `stashed`            | `'$'`                                         | The format of `stashed`                                                                                     |
+| `modified`           | `'!'`                                         | The format of `modified`                                                                                    |
+| `staged`             | `'+'`                                         | The format of `staged`                                                                                      |
+| `renamed`            | `'»'`                                         | The format of `renamed`                                                                                     |
+| `deleted`            | `'✘'`                                         | The format of `deleted`                                                                                     |
+| `typechanged`        | `""`                                          | The format of `typechanged`                                                                                 |
+| `style`              | `'bold red'`                                  | The style for the module.                                                                                   |
+| `ignore_submodules`  | `false`                                       | Ignore changes to submodules.                                                                               |
+| `disabled`           | `false`                                       | Disables the `git_status` module.                                                                           |
+| `windows_starship`   |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable` | `false`                                       | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Variables
 
