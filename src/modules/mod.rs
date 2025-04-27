@@ -4,12 +4,14 @@ mod azure;
 mod buf;
 mod bun;
 mod c;
+mod cc;
 mod character;
 mod cmake;
 mod cmd_duration;
 mod cobol;
 mod conda;
 mod container;
+mod cpp;
 mod crystal;
 pub mod custom;
 mod daml;
@@ -33,7 +35,7 @@ mod git_branch;
 mod git_commit;
 mod git_metrics;
 mod git_state;
-mod git_status;
+pub(crate) mod git_status;
 mod gleam;
 mod golang;
 mod gradle;
@@ -53,6 +55,7 @@ mod localip;
 mod lua;
 mod memory_usage;
 mod meson;
+mod mise;
 mod mojo;
 mod nats;
 mod netns;
@@ -68,6 +71,7 @@ mod package;
 mod perl;
 mod php;
 mod pijul_channel;
+mod pixi;
 mod pulumi;
 mod purescript;
 mod python;
@@ -126,6 +130,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "container" => container::module(context),
+            "cpp" => cpp::module(context),
             "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
@@ -167,6 +172,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
+            "mise" => mise::module(context),
             "mojo" => mojo::module(context),
             "nats" => nats::module(context),
             "netns" => netns::module(context),
@@ -182,6 +188,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "perl" => perl::module(context),
             "php" => php::module(context),
             "pijul_channel" => pijul_channel::module(context),
+            "pixi" => pixi::module(context),
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
@@ -253,6 +260,7 @@ pub fn description(module: &str) -> &'static str {
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "container" => "The container indicator, if inside a container.",
+        "cpp" => "your cpp compiler type",
         "crystal" => "The currently installed version of Crystal",
         "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
@@ -296,6 +304,7 @@ pub fn description(module: &str) -> &'static str {
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
         }
+        "mise" => "The current mise status",
         "mojo" => "The currently installed version of Mojo",
         "nats" => "The current NATS context",
         "netns" => "The current network namespace",
@@ -311,6 +320,9 @@ pub fn description(module: &str) -> &'static str {
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
         "pijul_channel" => "The current channel of the repo in the current directory",
+        "pixi" => {
+            "The currently installed version of Pixi, and the active environment if $PIXI_ENVIRONMENT_NAME is set"
+        }
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
