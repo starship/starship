@@ -1,14 +1,14 @@
-[Return to Presets](./README.md#catppuccin-powerline)
+[プリセット一覧に戻る](./README.md#catppuccin-powerline)
 
-# Catppuccin Powerline Preset
+# Catppuccin Powerline プリセット
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+[Catppuccin](https://github.com/catppuccin/catppuccin) のテーマを利用して [Gruvbox Rainbow](./gruvbox-rainbow.md) に最小限の変更を加えたプリセットです。
 
-![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png)
+![Catppuccin Powerline プリセットのスクリーンショット](/presets/img/catppuccin-powerline.png)
 
 ### 必要なもの
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- [Nerd Font](https://www.nerdfonts.com/) をインストールし、ターミナルで有効化する
 
 ### 設定
 
@@ -16,13 +16,13 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 starship preset catppuccin-powerline -o ~/.config/starship.toml
 ```
 
-By default this preset uses the Mocha flavour of Catppucin, but you can specify any of the flavours by modifying the value of `palette`:
+デフォルトでは、このプリセットは Catppuchin の Mocha テーマを使用します。 `palette` の値を変更することで、他のテーマを使用することができます：
 
 - `catppuccin_mocha`
 - `catppuccin_frappe`
-- `catppuccin_macchiato`
-- `catppucin_latte`
+- `catppuccin_macciato`
+- `catppuccin_latte`
 
-[Click to download TOML](/presets/toml/catppuccin-powerline.toml)
+[クリックしてTOMLファイルをダウンロード](/presets/toml/catppuccin-powerline.toml)
 
 <<< @/public/presets/toml/catppuccin-powerline.toml
