@@ -7,12 +7,14 @@ pub mod battery;
 pub mod buf;
 pub mod bun;
 pub mod c;
+pub mod cc;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
 pub mod conda;
 pub mod container;
+pub mod cpp;
 pub mod crystal;
 pub mod custom;
 pub mod daml;
@@ -55,6 +57,7 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod mise;
 pub mod mojo;
 pub mod nats;
 pub mod netns;
@@ -70,6 +73,7 @@ pub mod package;
 pub mod perl;
 pub mod php;
 pub mod pijul_channel;
+pub mod pixi;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
@@ -139,6 +143,8 @@ pub struct FullConfig<'a> {
     conda: conda::CondaConfig<'a>,
     #[serde(borrow)]
     container: container::ContainerConfig<'a>,
+    #[serde(borrow)]
+    cpp: cpp::CppConfig<'a>,
     #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
     #[serde(borrow)]
@@ -221,6 +227,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
     #[serde(borrow)]
+    mise: mise::MiseConfig<'a>,
+    #[serde(borrow)]
     mojo: mojo::MojoConfig<'a>,
     #[serde(borrow)]
     nats: nats::NatsConfig<'a>,
@@ -250,6 +258,8 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     #[serde(borrow)]
     pijul_channel: pijul_channel::PijulConfig<'a>,
+    #[serde(borrow)]
+    pixi: pixi::PixiConfig<'a>,
     #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
     #[serde(borrow)]

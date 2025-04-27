@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   這項設定未來會改變。 Only Nushell v0.96+ is supported.
+   這項設定未來會改變。 只有支援 Nushell v0.96+。
 
    :::
 
