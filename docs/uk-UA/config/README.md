@@ -3550,7 +3550,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | Параметр                   | Стандартно                                                | Опис                                                                              |
 | -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                    |
-| `version_format`           | `'v${raw}'`                                               | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`.             |
+| `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                |
 | `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                 |
 | `style`                    | `'yellow bold'                                           | Стиль модуля.                                                                     |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
