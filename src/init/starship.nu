@@ -18,7 +18,13 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
                 --cmd-duration $env.CMD_DURATION_MS
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
-                --jobs (job list | length)
+                ...(
+                    if (which "job list" | where type == built-in | is-not-empty) {
+                        ["--jobs", (job list | length)]
+                    } else {
+                        []
+                    }
+                )
         )
     }
 
@@ -33,7 +39,13 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
                 --cmd-duration $env.CMD_DURATION_MS
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
-                --jobs (job list | length)
+                ...(
+                    if (which "job list" | where type == built-in | is-not-empty) {
+                        ["--jobs", (job list | length)]
+                    } else {
+                        []
+                    }
+                )
         )
     }
 }}
