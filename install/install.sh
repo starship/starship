@@ -302,6 +302,20 @@ check_bin_dir() {
   fi
 }
 
+check_upto_date(){
+
+  if [ "${VERSION}" = "latest" ] && [ -e "${BIN_DIR}/starship" ]; then
+    curr="$(${BIN_DIR}/starship -V)"
+    curr="v$(echo "$curr" | sed 's/^starship //')"
+    latest="$(curl -fsSL -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/starship/starship/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
+    if [ "$curr" = "$latest" ]; then
+      echo "Starship is already up-to-date ($curr)."
+      exit 0
+    fi
+  fi
+
+}
+
 print_install() {
   # if the shell does not fit the default case change the config file
   # and or the config cmd variable
@@ -507,6 +521,10 @@ TARGET="$(detect_target "${ARCH}" "${PLATFORM}")"
 
 is_build_available "${ARCH}" "${PLATFORM}" "${TARGET}"
 
+if [ "${VERSION}" = "latest" ]; then
+  check_upto_date
+fi
+
 printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}:      ${GREEN}${PLATFORM}${NO_COLOR}"
@@ -532,6 +550,8 @@ if [ "${VERSION}" != "latest" ]; then
 else
   URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
 fi
+
+check_upto_date
 
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 confirm "Install Starship ${GREEN}${VERSION}${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
