@@ -1,11 +1,5 @@
 # Configuration
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
-
-```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
-```
-
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
@@ -24,9 +18,23 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
+To get started configuring starship, create the following file: `~/.config/starship/config.toml`.
+
+```sh
+mkdir -p ~/.config/starship && touch ~/.config/starship/config.toml
+```
+
 ### Config File Location
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+::: tip
+
+If the `XDG_CONFIG_HOME` environment variable is set, starship will _always_ give precedence to it over `~/.config` as the 'config home'.
+
+If the path `{config_home}/starship/config.toml` doesn't exist, starship will fall back to the deprecated `{config_home}/starship.toml`.
+
+:::
+
+You can override the default config file location by setting the `STARSHIP_CONFIG` environment variable:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
