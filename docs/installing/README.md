@@ -61,7 +61,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuration written to ~/.config/starship/config.toml
     settings = {
       # add_newline = false;
 

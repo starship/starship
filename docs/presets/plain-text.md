@@ -10,7 +10,7 @@ don't have access to Unicode.
 ### Configuration
 
 ```sh
-starship preset plain-text-symbols -o ~/.config/starship.toml
+starship preset plain-text-symbols -o ~/.config/starship/config.toml
 ```
 
 [Click to download TOML](/presets/toml/plain-text-symbols.toml){download}

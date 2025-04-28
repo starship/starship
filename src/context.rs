@@ -34,7 +34,7 @@ use terminal_size::terminal_size;
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
 pub struct Context<'a> {
-    /// The deserialized configuration map from the user's `starship.toml` file.
+    /// The deserialized configuration map from the user's `config.toml` file.
     pub config: StarshipConfig,
 
     /// The current working directory that starship is being called in.
@@ -1354,6 +1354,23 @@ mod tests {
         });
 
         assert_ne!(context.config.config, mod_context.config.config);
+    }
+
+    #[test]
+    fn migrate_deprecated_starship_toml_test() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let dir_path = dir.path();
+        let config_dir = dir_path.join(".config");
+        let deprecated_starship_toml = config_dir.join("starship.toml");
+        let mut env = Env::default();
+
+        fs::create_dir(&config_dir)?;
+        fs::File::create(&deprecated_starship_toml)?;
+        env.insert("HOME", dir_path.to_string_lossy().to_string());
+
+        let _ = get_config_path_os(&env);
+        assert!(!deprecated_starship_toml.exists());
+        dir.close()
     }
 
     #[cfg(windows)]

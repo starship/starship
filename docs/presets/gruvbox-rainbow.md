@@ -13,7 +13,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 ### Configuration
 
 ```sh
-starship preset gruvbox-rainbow -o ~/.config/starship.toml
+starship preset gruvbox-rainbow -o ~/.config/starship/config.toml
 ```
 
 [Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
