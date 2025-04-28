@@ -33,7 +33,7 @@ use terminal_size::terminal_size;
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
 pub struct Context<'a> {
-    /// The deserialized configuration map from the user's `starship.toml` file.
+    /// The deserialized configuration map from the user's `config.toml` file.
     pub config: StarshipConfig,
 
     /// The current working directory that starship is being called in.
