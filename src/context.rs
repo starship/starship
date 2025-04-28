@@ -506,11 +506,32 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
+fn config_home_dir(env: &Env) -> Option<PathBuf> {
+    if cfg!(test) {
+        if let Some(home) = env.get_env("HOME") {
+            return Some(PathBuf::from(home).join(".config"));
+        }
+    }
+    utils::config_home_dir()
+}
+
 fn get_config_path_os(env: &Env) -> Option<OsString> {
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
         return Some(config_path);
     }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
+
+    let config_home_dir = config_home_dir(env)?;
+    let config_dir = config_home_dir.join("starship");
+    let deprecated_starship_toml = config_home_dir.join("starship.toml");
+    let config_toml = config_dir.join("config.toml");
+
+    if !config_toml.exists() && deprecated_starship_toml.exists() {
+        fs::create_dir_all(&config_dir).unwrap();
+        fs::rename(&deprecated_starship_toml, &config_toml).unwrap();
+        eprintln!("starship.toml has been moved to {}", config_toml.display());
+    }
+
+    Some(config_toml.into())
 }
 
 #[derive(Debug)]
