@@ -866,6 +866,7 @@ pub enum Shell {
     Nu,
     Xonsh,
     Cmd,
+    Osh,
     Unknown,
 }
 
