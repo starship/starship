@@ -1,3 +1,7 @@
+use std::{borrow::Cow, ops::Deref, sync::LazyLock};
+
+use semver::Version;
+
 use crate::{
     config::ModuleConfig,
     configs::fortran::FortranConfig,
@@ -22,6 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        let compiler_info = LazyLock::new(|| context.exec_cmds_return_first(config.commands));
+
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -32,13 +38,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
+                "name" => {
+                    let compiler_info = &compiler_info.deref().as_ref()?.stdout;
+
+                    let compiler = if compiler_info.contains("GNU") {
+                        "gfortran"
+                    } else if compiler_info.contains("flang-new") {
+                        "flang-new"
+                    } else {
+                        return None;
+                    };
+                    Some(Ok(Cow::Borrowed(compiler)))
+                },
                 "version" => {
-                    let fortran_version = get_version(context)?;
+                    let compiler_info = &compiler_info.deref().as_ref()?.stdout;
+
                     VersionFormatter::format_module_version(
                         &module.get_name(),
-                        &fortran_version,
+                        compiler_info
+                            .split_whitespace()
+                            .find(|word| Version::parse(word).is_ok())?,
                         config.version_format,
                     )
+                    .map(Cow::Owned)
                     .map(Ok)
                 }
                 _ => None,
@@ -55,21 +77,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn get_version(context: &Context) -> Option<String> {
-    // first line of output like "GNU Fortran (Homebrew GCC 14.2.0_1) 14.2.0"
-
-    let version = context
-        .exec_cmd("gfortran", &["--version"])?
-        .stdout
-        .split("\n")
-        .collect::<Vec<&str>>()
-        .first()?
-        .split_whitespace()
-        .last()?
-        .to_string();
-    Some(version)
 }
 
 #[cfg(test)]
