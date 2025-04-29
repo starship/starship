@@ -1,92 +1,9 @@
-use super::{Context, Module, ModuleConfig};
-
-use crate::configs::c::CConfig;
-use crate::formatter::StringFormatter;
-use crate::formatter::VersionFormatter;
-
-use semver::Version;
-use std::borrow::Cow;
-use std::ops::Deref;
-use std::sync::LazyLock;
+use super::{Context, Module};
+use crate::modules::cc::{Lang, module as cc_module};
 
 /// Creates a module with the current C compiler and version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("c");
-    let config: CConfig = CConfig::try_load(module.config);
-    let is_c_project = context
-        .try_begin_scan()?
-        .set_extensions(&config.detect_extensions)
-        .set_files(&config.detect_files)
-        .set_folders(&config.detect_folders)
-        .is_match();
-
-    if !is_c_project {
-        return None;
-    }
-
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let c_compiler_info = LazyLock::new(|| context.exec_cmds_return_first(config.commands));
-
-        formatter
-            .map_meta(|var, _| match var {
-                "symbol" => Some(config.symbol),
-                _ => None,
-            })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "name" => {
-                    let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
-
-                    let c_compiler = if c_compiler_info.contains("clang") {
-                        "clang"
-                    } else if c_compiler_info.contains("Free Software Foundation") {
-                        "gcc"
-                    } else {
-                        return None;
-                    };
-                    Some(Ok(Cow::Borrowed(c_compiler)))
-                }
-                "version" => {
-                    let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
-
-                    // Clang says ...
-                    //   Apple clang version 13.0.0 ...\n
-                    //   OpenBSD clang version 11.1.0\n...
-                    //   FreeBSD clang version 11.0.1 ...\n
-                    // so we always want the first semver-ish whitespace-
-                    // separated "word".
-                    // gcc says ...
-                    //   gcc (OmniOS 151036/9.3.0-il-1) 9.3.0\n...
-                    //   gcc (Debian 10.2.1-6) 10.2.1 ...\n
-                    //   cc (GCC) 3.3.5 (Debian 1:3.3.5-13)\n...
-                    // so again we always want the first semver-ish word.
-                    VersionFormatter::format_module_version(
-                        module.get_name(),
-                        c_compiler_info
-                            .split_whitespace()
-                            .find(|word| Version::parse(word).is_ok())?,
-                        config.version_format,
-                    )
-                    .map(Cow::Owned)
-                    .map(Ok)
-                }
-                _ => None,
-            })
-            .parse(None, Some(context))
-    });
-
-    module.set_segments(match parsed {
-        Ok(segments) => segments,
-        Err(error) => {
-            log::warn!("Error in module `c`:\n{}", error);
-            return None;
-        }
-    });
-
-    Some(module)
+    cc_module(context, Lang::C)
 }
 
 #[cfg(test)]

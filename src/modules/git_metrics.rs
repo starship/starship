@@ -1,11 +1,15 @@
+use gix::bstr::{BStr, ByteSlice};
+use gix::diff::blob::ResourceKind;
+use gix::diff::blob::pipeline::WorktreeRoots;
+use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use regex::Regex;
 
+use super::Context;
+use crate::configs::git_status::GitStatusConfig;
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
     formatter::string_formatter::StringFormatterError, module::Module,
 };
-
-use super::Context;
 
 /// Creates a module with the current added/deleted lines in the git repository at the
 /// current directory
@@ -20,14 +24,227 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let mut git_args = vec!["diff", "--shortstat"];
-    if config.ignore_submodules {
-        git_args.push("--ignore-submodules");
+    let gix_repo = repo.open();
+    if gix_repo.is_bare() {
+        return None;
     }
+    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
+    let stats = if gix_repo.index_or_empty().ok()?.is_sparse() || repo.fs_monitor_value_is_true {
+        let mut git_args = vec!["diff", "--shortstat"];
+        if config.ignore_submodules {
+            git_args.push("--ignore-submodules");
+        }
 
-    let diff = repo.exec_git(context, &git_args)?.stdout;
+        let diff = repo.exec_git(context, &git_args)?.stdout;
 
-    let stats = GitDiff::parse(&diff);
+        GitDiff::parse(&diff)
+    } else {
+        #[derive(Default)]
+        struct Diff {
+            added: usize,
+            deleted: usize,
+        }
+        impl Diff {
+            fn add(&mut self, c: Option<gix::diff::blob::sink::Counter<()>>) {
+                let Some(c) = c else { return };
+                self.added += c.insertions as usize;
+                self.deleted += c.removals as usize;
+            }
+        }
+        let status_module = context.new_module("git_status");
+        let status_config = GitStatusConfig::try_load(status_module.config);
+        let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
+        let gix_repo = gix_repo.with_object_memory();
+        gix_repo.write_blob([]).ok()?; /* create empty blob */
+        let tree_index_cache = prevent_external_diff(
+            gix_repo
+                .diff_resource_cache(gix::diff::blob::pipeline::Mode::ToGit, Default::default())
+                .ok()?,
+        );
+        let index_worktree_cache = prevent_external_diff(
+            gix_repo
+                .diff_resource_cache(
+                    gix::diff::blob::pipeline::Mode::ToGit,
+                    WorktreeRoots {
+                        old_root: None,
+                        new_root: gix_repo.workdir().map(ToOwned::to_owned),
+                    },
+                )
+                .ok()?,
+        );
+        let diff = status
+            .changes
+            .par_iter()
+            .map_init(
+                {
+                    let repo = gix_repo.into_sync();
+                    move || {
+                        let repo = repo.to_thread_local();
+                        (repo, tree_index_cache.clone(), index_worktree_cache.clone())
+                    }
+                },
+                |(repo, tree_index_cache, index_worktree_cache), change| {
+                    use gix::status;
+                    let mut diff = Diff::default();
+                    match change {
+                        status::Item::TreeIndex(change) => {
+                            use gix::diff::index::Change;
+                            match change {
+                                Change::Addition {
+                                    entry_mode,
+                                    location,
+                                    id,
+                                    ..
+                                } => {
+                                    diff.added += count_lines(
+                                        location,
+                                        id.as_ref().into(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    );
+                                }
+                                Change::Deletion {
+                                    entry_mode,
+                                    location,
+                                    id,
+                                    ..
+                                } => {
+                                    diff.deleted += count_lines(
+                                        location,
+                                        id.as_ref().into(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    );
+                                }
+                                Change::Modification {
+                                    location,
+                                    previous_entry_mode,
+                                    previous_id,
+                                    entry_mode,
+                                    id,
+                                    ..
+                                } => {
+                                    let location = location.as_ref();
+                                    diff.add(diff_two_opt(
+                                        location,
+                                        previous_id.as_ref().to_owned(),
+                                        *previous_entry_mode,
+                                        location,
+                                        id.as_ref().to_owned(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    ));
+                                }
+                                Change::Rewrite {
+                                    source_location,
+                                    source_entry_mode,
+                                    source_id,
+                                    location,
+                                    entry_mode,
+                                    id,
+                                    copy,
+                                    ..
+                                } => {
+                                    if *copy {
+                                        diff.added += count_lines(
+                                            location,
+                                            id.as_ref().into(),
+                                            *entry_mode,
+                                            tree_index_cache,
+                                            repo,
+                                        );
+                                    } else {
+                                        diff.add(diff_two_opt(
+                                            source_location.as_ref(),
+                                            source_id.as_ref().to_owned(),
+                                            *source_entry_mode,
+                                            location,
+                                            id.as_ref().to_owned(),
+                                            *entry_mode,
+                                            tree_index_cache,
+                                            repo,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
+                        status::Item::IndexWorktree(change) => {
+                            use gix::status::index_worktree::Item;
+                            use gix::status::plumbing::index_as_worktree::{Change, EntryStatus};
+                            match change {
+                                Item::Modification {
+                                    rela_path,
+                                    entry,
+                                    status: EntryStatus::Change(Change::Removed),
+                                    ..
+                                } => {
+                                    diff.deleted += count_lines(
+                                        rela_path.as_bstr(),
+                                        entry.id,
+                                        entry.mode,
+                                        tree_index_cache,
+                                        repo,
+                                    );
+                                }
+                                Item::Modification {
+                                    rela_path,
+                                    entry,
+                                    status:
+                                        EntryStatus::Change(Change::Modification {
+                                            content_change: Some(_),
+                                            ..
+                                        }),
+                                    ..
+                                } => {
+                                    let location = rela_path.as_bstr();
+                                    diff.add(diff_two_opt(
+                                        location,
+                                        entry.id,
+                                        entry.mode,
+                                        location,
+                                        repo.object_hash().null(),
+                                        entry.mode,
+                                        index_worktree_cache,
+                                        repo,
+                                    ));
+                                }
+                                Item::Modification {
+                                    rela_path,
+                                    entry,
+                                    status: EntryStatus::IntentToAdd,
+                                    ..
+                                } => {
+                                    diff.added += count_lines(
+                                        rela_path.as_bstr(),
+                                        repo.object_hash().null(),
+                                        entry.mode,
+                                        index_worktree_cache,
+                                        repo,
+                                    );
+                                }
+                                Item::Rewrite { .. } => {
+                                    unreachable!("not activated")
+                                }
+                                _ => {}
+                            }
+                        }
+                    };
+                    diff
+                },
+            )
+            .reduce(Diff::default, |a, b| Diff {
+                added: a.added + b.added,
+                deleted: a.deleted + b.deleted,
+            });
+
+        GitDiff {
+            added: diff.added.to_string(),
+            deleted: diff.deleted.to_string(),
+        }
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -37,8 +254,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "added" => GitDiff::get_variable(config.only_nonzero_diffs, stats.added),
-                "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, stats.deleted),
+                "added" => GitDiff::get_variable(config.only_nonzero_diffs, &stats.added),
+                "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, &stats.deleted),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -55,16 +272,95 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Represents the parsed output from a git diff.
-struct GitDiff<'a> {
-    added: &'a str,
-    deleted: &'a str,
+fn prevent_external_diff(mut cache: gix::diff::blob::Platform) -> gix::diff::blob::Platform {
+    cache.options.skip_internal_diff_if_external_is_configured = false;
+    cache
 }
 
-impl<'a> GitDiff<'a> {
+#[allow(clippy::too_many_arguments)]
+fn diff_two_opt(
+    lhs_location: &BStr,
+    lhs_id: gix::ObjectId,
+    lhs_kind: gix::index::entry::Mode,
+    rhs_location: &BStr,
+    rhs_id: gix::ObjectId,
+    rhs_kind: gix::index::entry::Mode,
+    cache: &mut gix::diff::blob::Platform,
+    find: &impl gix::objs::FindObjectOrHeader,
+) -> Option<gix::diff::blob::sink::Counter<()>> {
+    cache
+        .set_resource(
+            lhs_id,
+            lhs_kind.to_tree_entry_mode()?.kind(),
+            lhs_location,
+            ResourceKind::OldOrSource,
+            find,
+        )
+        .ok()?;
+    cache
+        .set_resource(
+            rhs_id,
+            rhs_kind.to_tree_entry_mode()?.kind(),
+            rhs_location,
+            ResourceKind::NewOrDestination,
+            find,
+        )
+        .ok()?;
+    count_diff_lines(cache.prepare_diff().ok()?)
+}
+
+fn count_lines(
+    location: &BStr,
+    id: gix::ObjectId,
+    kind: gix::index::entry::Mode,
+    cache: &mut gix::diff::blob::Platform,
+    find: &impl gix::objs::FindObjectOrHeader,
+) -> usize {
+    diff_two_opt(
+        location,
+        id.kind().null(),
+        kind,
+        location,
+        id,
+        kind,
+        cache,
+        find,
+    )
+    .map_or(0, |diff| diff.insertions as usize)
+}
+
+fn count_diff_lines(
+    prep: gix::diff::blob::platform::prepare_diff::Outcome<'_>,
+) -> Option<gix::diff::blob::sink::Counter<()>> {
+    use gix::diff::blob::platform::prepare_diff::Operation;
+    match prep.operation {
+        Operation::InternalDiff { algorithm } => {
+            let tokens = prep.interned_input();
+            let counter = gix::diff::blob::diff(
+                algorithm,
+                &tokens,
+                gix::diff::blob::sink::Counter::default(),
+            );
+            Some(counter)
+        }
+        Operation::ExternalCommand { .. } => {
+            unreachable!("we disabled that")
+        }
+        Operation::SourceOrDestinationIsBinary => None,
+    }
+}
+
+/// Represents the parsed output from a git diff.
+#[derive(Default)]
+struct GitDiff {
+    added: String,
+    deleted: String,
+}
+
+impl GitDiff {
     /// Returns the first capture group given a regular expression and a string.
     /// If it fails to get the capture group it will return "0".
-    fn get_matched_str(diff: &'a str, re: &Regex) -> &'a str {
+    fn get_matched_str<'a>(diff: &'a str, re: &Regex) -> &'a str {
         match re.captures(diff) {
             Some(caps) => caps.get(1).unwrap().as_str(),
             _ => "0",
@@ -72,13 +368,13 @@ impl<'a> GitDiff<'a> {
     }
 
     /// Parses the result of 'git diff --shortstat' as a `GitDiff` struct.
-    pub fn parse(diff: &'a str) -> Self {
+    pub fn parse(diff: &str) -> Self {
         let added_re = Regex::new(r"(\d+) \w+\(\+\)").unwrap();
         let deleted_re = Regex::new(r"(\d+) \w+\(\-\)").unwrap();
 
         Self {
-            added: GitDiff::get_matched_str(diff, &added_re),
-            deleted: GitDiff::get_matched_str(diff, &deleted_re),
+            added: GitDiff::get_matched_str(diff, &added_re).to_owned(),
+            deleted: GitDiff::get_matched_str(diff, &deleted_re).to_owned(),
         }
     }
 
@@ -105,9 +401,9 @@ mod tests {
     use std::path::Path;
     use std::process::Stdio;
 
+    use crate::modules::git_status::tests::make_sparse;
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
-
-    use crate::test::ModuleRenderer;
 
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
@@ -141,6 +437,78 @@ mod tests {
     }
 
     #[test]
+    fn shows_staged_addition() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("new-file"), "new line")?;
+        run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_rename_modification() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let the_file = path.join("the_file");
+        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
+        writeln!(the_file, "Added line")?;
+        the_file.sync_all()?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
+        run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_addition_intended() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("new-file"), "new line")?;
+        run_git_cmd(["add", "-N", "new-file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_modification() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("the_file"), "modify all")?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+1"),
+            Color::Red.bold().paint("-3")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_deleted_lines() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
@@ -151,6 +519,36 @@ mod tests {
         let actual = render_metrics(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_deleted_lines_of_entire_file() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::remove_file(path.join("the_file"))?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_deletion() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        run_git_cmd(["rm", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -189,6 +587,32 @@ mod tests {
     }
 
     #[test]
+    fn shows_nothing_on_untracked() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+        std::fs::write(path.join("untracked"), "a line")?;
+
+        let actual = render_metrics(path);
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_nothing_if_no_changes_sparse() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        make_sparse(path)?;
+        let actual = render_metrics(path);
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_all_if_only_nonzero_diffs_is_false() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
@@ -202,18 +626,24 @@ mod tests {
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
-                only_nonzero_diffs = false
+                only_nonzero_diffs = true
             })
             .path(path)
             .collect();
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-0")
-        ));
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_metrics_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        let actual = render_metrics(repo_dir.path());
+        assert_eq!(None, actual);
+
         repo_dir.close()
     }
 
