@@ -92,8 +92,7 @@ if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
-    # bash-preexec needs a single function--wrap the args into a closure and pass
+elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]] && ! ([[ "${preexec_functions[@]}" =~ "starship_preexec_all" ]] || [[ "${precmd_functions[@]}" =~ "starship_precmd" ]]); then    # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
     precmd_functions+=(starship_precmd)
