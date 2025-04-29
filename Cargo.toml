@@ -35,7 +35,7 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
-chrono = { version = "0.4.40", default-features = false, features = ["clock", "std", "wasmbind"] }
+chrono = { version = "0.4.41", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.5.37", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.48"
 clap_complete_nushell = "4.5.5"
