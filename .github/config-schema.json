@@ -518,6 +518,10 @@
             "--version"
           ],
           [
+            "flang",
+            "--version"
+          ],
+          [
             "flang-new",
             "--version"
           ]
@@ -3260,6 +3264,10 @@
           "default": [
             [
               "gfortran",
+              "--version"
+            ],
+            [
+              "flang",
               "--version"
             ],
             [
