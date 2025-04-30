@@ -535,6 +535,20 @@
     },
     "fortran": {
       "default": {
+        "commands": [
+          [
+            "gfortran",
+            "--version"
+          ],
+          [
+            "flang",
+            "--version"
+          ],
+          [
+            "flang-new",
+            "--version"
+          ]
+        ],
         "detect_extensions": [
           "f",
           "F",
@@ -560,7 +574,7 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "via [$symbol($version )]($style)",
+        "format": "via [$symbol($version(-$name) )]($style)",
         "style": "bold purple",
         "symbol": "󱈚 ",
         "version_format": "${raw}"
@@ -3360,7 +3374,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($version )]($style)",
+          "default": "via [$symbol($version(-$name) )]($style)",
           "type": "string"
         },
         "version_format": {
@@ -3419,6 +3433,29 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        },
+        "commands": {
+          "default": [
+            [
+              "gfortran",
+              "--version"
+            ],
+            [
+              "flang",
+              "--version"
+            ],
+            [
+              "flang-new",
+              "--version"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

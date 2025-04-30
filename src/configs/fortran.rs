@@ -36,8 +36,9 @@ impl Default for FortranConfig<'_> {
             commands: vec![
                 // first check for most common 'gfortran' by default
                 vec!["gfortran", "--version"],
-                vec!["flang-new", "--version"]
-            ]
+                vec!["flang", "--version"],
+                vec!["flang-new", "--version"],
+            ],
         }
     }
 }

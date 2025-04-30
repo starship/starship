@@ -1646,7 +1646,7 @@ The `fortran` module shows the current compiler version of Fortran.
 | `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Which extensions should trigger this module.                              |
 | `detect_files`      | `['fpm.toml']`                                                                                                              | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                                        | Which folders should trigger this module.                                 |
-| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang-new', '--version' ] ]`                                                             | How to detect what the compiler is                                        |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | How to detect what the compiler is                                        |
 | `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                            |
 
 ### Variables
