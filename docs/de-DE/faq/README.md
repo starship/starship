@@ -66,7 +66,7 @@ If you see symbols that you don't recognise you can use `starship explain` to ex
 
 ## Starship is doing something unexpected, how can I debug it?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Sie können die Debug-Logs aktivieren, indem Sie die `STARSHIP_LOG` Umgebungsvariable verwenden. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
