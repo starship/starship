@@ -168,7 +168,7 @@
 - **Universal:** Funciona em qualquer shell, em qualquer sistema operacional.
 - **Inteligente:** Mostra informações relevantes rapidamente.
 - **Muitos recursos:** Suporte para todas as suas ferramentas favoritas.
-- **Fácil:**Instalação rápida – comece a usar em minutos.
+- **Fácil:** Instalação rápida – comece a usar em minutos.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Consulte a documentação&nbsp;&nbsp;▶</strong></a>
@@ -229,10 +229,12 @@ Ou instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                | `apt install starship`                                                         |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
+| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                           | `apt install starship`                                                         |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -345,7 +347,7 @@ mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Note: Only Nushell v0.96+ is supported
+Nota: Somente o Nushell v0.96+ é suportado
 
 </details>
 

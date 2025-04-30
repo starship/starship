@@ -49,6 +49,9 @@ symbol = "󱈚 "
 [fossil_branch]
 symbol = " "
 
+[gcloud]
+symbol = "  "
+
 [git_branch]
 symbol = " "
 

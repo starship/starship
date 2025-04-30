@@ -14,6 +14,6 @@
 starship preset no-nerd-font -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-nerd-font.toml){download}
+[点这下载 TOML](/presets/toml/no-nerd-font.toml){download}
 
 <<< @/public/presets/toml/no-nerd-font.toml
