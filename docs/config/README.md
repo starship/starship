@@ -2777,9 +2777,10 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Default | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Option              | Default | Description                                                                    |
+| ------------------- | ------- | ------------------------------------------------------------------------------ |
+| `disabled`          | `false` | Disables the `line_break` module, making the prompt a single line.             |
+| `break_below_width` |         | If specified, insert a line break only when your terminal is below this width. |
 
 ### Example
 
