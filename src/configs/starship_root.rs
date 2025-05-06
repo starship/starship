@@ -119,6 +119,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "mise",
     "crystal",
     "custom",
+    "ssh_agent",
     "sudo",
     "cmd_duration",
     "line_break",
