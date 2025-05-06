@@ -949,6 +949,7 @@
       "default": {
         "disabled": true,
         "format": "via $symbol[$ram( | $swap)]($style) ",
+        "single_unit_fractions": false,
         "style": "white bold dimmed",
         "symbol": "🐏 ",
         "threshold": 75
@@ -4276,6 +4277,10 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        },
+        "single_unit_fractions": {
+          "default": false,
           "type": "boolean"
         }
       },
