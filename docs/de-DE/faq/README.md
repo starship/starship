@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# Häufig gestellte Fragen
 
 ## Wie ist die Konfiguration im Demo GIF?
 
@@ -10,9 +10,9 @@
   - **Konfiguration**: [Matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Wie bekomme ich die Autovervollständigung, wie sie im Demo-GIF gezeigt wird?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Autovervollständigung wird von der Shell deiner Wahl bereitgestellt. In der Demo wurde die [Fish Shell](https://fishshell.com/) benutzt, welche Standardmäßig eine Autovervollständigung beinhaltet. Wenn du die Z Shell (zsh) nutzt, empfehle ich dir, einen Blick auf [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) zu werfen.
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -48,7 +48,7 @@ starship prompt --help
 
 Die Eingabeaufforderung verwendet so viel Kontext wie möglich, aber keine Flagge ist "notwendig".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Wie führe ich Starship auf Linux-Distributionen mit älteren Versionen von glibc aus?
 
 If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
@@ -60,9 +60,9 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](../config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
-## I see symbols I don't understand or expect, what do they mean?
+## Ich sehe Symbole, die ich nicht verstehe oder erwarte, was bedeuten sie?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Wenn du Symbole siehst, die du nicht kennst, kannst du `starship explain` verwenden um die aktuell angezeigten Module erklären zu lassen.
 
 ## Starship is doing something unexpected, how can I debug it?
 
