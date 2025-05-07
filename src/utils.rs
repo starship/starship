@@ -343,6 +343,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("julia version 1.4.0\n"),
             stderr: String::default(),
         }),
+        s if s.starts_with("jj log -r@") => Some(CommandOutput {
+            stdout: String::from("main \"initial commit\""),
+            stderr: String::default(),
+        }),
         "kotlin -version" => Some(CommandOutput {
             stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
             stderr: String::default(),

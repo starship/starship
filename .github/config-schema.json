@@ -849,6 +849,22 @@
         }
       ]
     },
+    "jujutsu": {
+      "default": {
+        "detect_folders": [
+          ".jj"
+        ],
+        "disabled": false,
+        "format": "$symbol $commit_info ",
+        "symbol": "jj",
+        "template": "\nseparate(\" \",\n  change_id.shortest(6),\n  branches.map(|x| if(\n    x.name().substr(0, 20).starts_with(x.name()),\n    x.name().substr(0, 20),\n    x.name().substr(0, 19) ++ \"…\")\n  ).join(\" \"),\n  if(\n    description.first_line().substr(0, 24).starts_with(description.first_line()),\n    description.first_line().substr(0, 24),\n    description.first_line().substr(0, 23) ++ \"…\"\n  ),\n  if(conflict, \"conflict\"),\n  if(divergent, \"divergent\"),\n  if(hidden, \"hidden\"),\n)"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JujutsuConfig"
+        }
+      ]
+    },
     "julia": {
       "default": {
         "detect_extensions": ["jl"],
@@ -3968,6 +3984,37 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "$symbol $commit_info ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "jj",
+          "type": "string"
+        },
+        "template": {
+          "default": "\nseparate(\" \",\n  change_id.shortest(6),\n  branches.map(|x| if(\n    x.name().substr(0, 20).starts_with(x.name()),\n    x.name().substr(0, 20),\n    x.name().substr(0, 19) ++ \"…\")\n  ).join(\" \"),\n  if(\n    description.first_line().substr(0, 24).starts_with(description.first_line()),\n    description.first_line().substr(0, 24),\n    description.first_line().substr(0, 23) ++ \"…\"\n  ),\n  if(conflict, \"conflict\"),\n  if(divergent, \"divergent\"),\n  if(hidden, \"hidden\"),\n)",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_folders": {
+          "default": [
+            ".jj"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
