@@ -125,7 +125,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("󱈚 14.2.0-gfortran ")
+            Color::Purple.bold().paint("🅵  14.2.0-gfortran ")
         ));
 
         assert_eq!(expected, actual);
@@ -145,7 +145,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
             .path(dir.path())
             .collect();
 
-        let expected = Some(format!("via {}", Color::Purple.bold().paint("󱈚 ")));
+        let expected = Some(format!("via {}", Color::Purple.bold().paint("🅵  ")));
 
         assert_eq!(expected, actual);
 
@@ -179,7 +179,7 @@ Configuration file: /opt/homebrew/etc/clang/arm64-apple-darwin24.cfg",
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("󱈚 20.1.3-flang ")
+            Color::Purple.bold().paint("🅵  20.1.3-flang ")
         ));
 
         assert_eq!(expected, actual);
@@ -215,7 +215,7 @@ Configuration file: /opt/homebrew/etc/clang/arm64-apple-darwin24.cfg",
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("󱈚 20.1.3-flang ")
+            Color::Purple.bold().paint("🅵  20.1.3-flang ")
         ));
 
         assert_eq!(expected, actual);
@@ -247,7 +247,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("󱈚 14.2.0-gfortran ")
+            Color::Purple.bold().paint("🅵  14.2.0-gfortran ")
         ));
 
         assert_eq!(expected, actual);
@@ -279,7 +279,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("󱈚 14.2.0-gfortran ")
+            Color::Purple.bold().paint("🅵  14.2.0-gfortran ")
         ));
 
         assert_eq!(expected, actual);
