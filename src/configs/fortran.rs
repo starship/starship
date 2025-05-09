@@ -24,7 +24,7 @@ impl Default for FortranConfig<'_> {
         FortranConfig {
             format: "via [$symbol($version(-$name) )]($style)",
             version_format: "${raw}",
-            symbol: "󱈚 ",
+            symbol: "🅵  ",
             style: "bold purple",
             disabled: false,
             detect_extensions: vec![
