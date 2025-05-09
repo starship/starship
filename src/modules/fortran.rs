@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let compiler_info = &compiler_info.deref().as_ref()?.stdout;
 
                     VersionFormatter::format_module_version(
-                        &module.get_name(),
+                        module.get_name(),
                         compiler_info
                             .split_whitespace()
                             .find(|word| Version::parse(word).is_ok())?,
