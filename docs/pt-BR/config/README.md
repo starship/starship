@@ -901,7 +901,7 @@ O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/lat
 
 ::: tip
 
-Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1251,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opções
 
-| Opções              | Padrão                                                        | Descrição                                                                            |
-| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol$context]($style) '`                            | O formato do módulo.                                                                 |
-| `symbol`            | `'🐳 '`                                                        | O simbolo usado antes de exibir a versão do contexto docker.                         |
-| `only_with_files`   | `true`                                                        | Exibe somente quando houver um arquivo                                               |
-| `detect_extensions` | `[]`                                                          | Quais extensões devem acionar este módulo (precisa que `only_with_files` seja true). |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quais arquivos devem acionar este módulo (precisa que `only_with_files` seja true).  |
-| `detect_folders`    | `[]`                                                          | Quais pastas devem acionar este módulo (precisa que `only_with_files` seja true).    |
-| `style`             | `'blue bold'`                                                 | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                       | Desabilita o módulo `docker_context`.                                                |
+| Opções              | Padrão                                                                                       | Descrição                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | O formato do módulo.                                                                 |
+| `symbol`            | `'🐳 '`                                                                                       | O simbolo usado antes de exibir a versão do contexto docker.                         |
+| `only_with_files`   | `true`                                                                                       | Exibe somente quando houver um arquivo                                               |
+| `detect_extensions` | `[]`                                                                                         | Quais extensões devem acionar este módulo (precisa que `only_with_files` seja true). |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quais arquivos devem acionar este módulo (precisa que `only_with_files` seja true).  |
+| `detect_folders`    | `[]`                                                                                         | Quais pastas devem acionar este módulo (precisa que `only_with_files` seja true).    |
+| `style`             | `'blue bold'`                                                                                | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                                                      | Desabilita o módulo `docker_context`.                                                |
 
 ### Variáveis
 
@@ -3541,7 +3541,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,7 +3552,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | O formato do módulo.                                                              |
 | `version_format`           | `'v${raw}'`                                               | A versão formatada. Available vars are `raw`, `major`, `minor`, & `patch`.        |
 | `symbol`                   | `'🧚 '`                                                    | O simbolo usado antes do nome do environment.                                     |
-| `style`                    | `'yellow bold'                                           | O estilo do módulo.                                                               |
+| `style`                    | `'yellow bold'`                                           | O estilo do módulo.                                                               |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Quais extensões devem ativar este módulo.                                         |
