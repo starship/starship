@@ -901,7 +901,7 @@ El módulo `conda` muestra el entorno actual [Conda](https://docs.conda.io/en/la
 
 ::: tip
 
-Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1251,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opciones
 
-| Opción              | Predeterminado                                                | Descripción                                                                                                              |
-| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol$context]($style) '`                            | El formato del módulo.                                                                                                   |
-| `symbol`            | `'🐳 '`                                                        | El símbolo usado antes de mostrar el contexto de Docker.                                                                 |
-| `only_with_files`   | `true`                                                        | Mostrar solo cuando haya una coincidencia                                                                                |
-| `detect_extensions` | `[]`                                                          | Qué extensiones deben activar este módulo (necesita `solly_with_files` para ser verdadero).                              |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Qué nombres de archivo deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true"). |
-| `detect_folders`    | `[]`                                                          | Qué carpetas deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").           |
-| `style`             | `'blue bold'`                                                 | El estilo del módulo.                                                                                                    |
-| `disabled`          | `false`                                                       | Deshabilita el módulo `docker_context`.                                                                                  |
+| Opción              | Predeterminado                                                                               | Descripción                                                                                                              |
+| ------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | El formato del módulo.                                                                                                   |
+| `symbol`            | `'🐳 '`                                                                                       | El símbolo usado antes de mostrar el contexto de Docker.                                                                 |
+| `only_with_files`   | `true`                                                                                       | Mostrar solo cuando haya una coincidencia                                                                                |
+| `detect_extensions` | `[]`                                                                                         | Qué extensiones deben activar este módulo (necesita `solly_with_files` para ser verdadero).                              |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Qué nombres de archivo deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true"). |
+| `detect_folders`    | `[]`                                                                                         | Qué carpetas deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").           |
+| `style`             | `'blue bold'`                                                                                | El estilo del módulo.                                                                                                    |
+| `disabled`          | `false`                                                                                      | Deshabilita el módulo `docker_context`.                                                                                  |
 
 ### Variables
 
@@ -3541,7 +3541,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,7 +3552,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | El formato del módulo.                                                            |
 | `version_format`           | `'v${raw}'`                                               | El formato de versión. Available vars are `raw`, `major`, `minor`, & `patch`.     |
 | `symbol`                   | `'🧚 '`                                                    | El símbolo usado antes del nombre del entorno.                                    |
-| `style`                    | `'yellow bold'                                           | El estilo del módulo.                                                             |
+| `style`                    | `'yellow bold'`                                           | El estilo del módulo.                                                             |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Qué extensiones deberían activar este módulo.                                     |
