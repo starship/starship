@@ -3557,7 +3557,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Qué extensiones deberían activar este módulo.                                     |
 | `detect_files`             | `['pixi.toml']`                                           | Qué nombres de archivo deberían activar este módulo.                              |
-| `detect_folders`           | `['.pixi']`                                               | Qué carpetas deberían activar este módulo.                                        |
+| `detect_folders`           | `[]`                                                      | Qué carpetas deberían activar este módulo.                                        |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Variables
