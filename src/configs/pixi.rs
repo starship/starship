@@ -34,7 +34,7 @@ impl Default for PixiConfig<'_> {
             disabled: false,
             detect_extensions: vec![],
             detect_files: vec!["pixi.toml", "pixi.lock"],
-            detect_folders: vec![".pixi"],
+            detect_folders: vec![],
         }
     }
 }

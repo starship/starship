@@ -1479,9 +1479,7 @@
           "pixi.toml",
           "pixi.lock"
         ],
-        "detect_folders": [
-          ".pixi"
-        ],
+        "detect_folders": [],
         "disabled": false,
         "format": "via [$symbol($version )(\\($environment\\) )]($style)",
         "pixi_binary": [
@@ -5548,9 +5546,7 @@
           }
         },
         "detect_folders": {
-          "default": [
-            ".pixi"
-          ],
+          "default": [],
           "type": "array",
           "items": {
             "type": "string"
