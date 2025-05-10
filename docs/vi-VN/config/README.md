@@ -3557,7 +3557,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                               |
 | `detect_files`             | `['pixi.toml']`                                           | Những tên tệp nào sẽ kích hoạt mô-đun này.                                        |
-| `detect_folders`           | `['.pixi']`                                               | Những thư mục nào sẽ kích hoạt mô-đun này.                                        |
+| `detect_folders`           | `[]`                                                      | Những thư mục nào sẽ kích hoạt mô-đun này.                                        |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Các biến
