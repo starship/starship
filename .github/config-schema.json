@@ -430,6 +430,8 @@
       "default": {
         "detect_extensions": [],
         "detect_files": [
+          "compose.yml",
+          "compose.yaml",
           "docker-compose.yml",
           "docker-compose.yaml",
           "Dockerfile"
@@ -3163,6 +3165,8 @@
         },
         "detect_files": {
           "default": [
+            "compose.yml",
+            "compose.yaml",
             "docker-compose.yml",
             "docker-compose.yaml",
             "Dockerfile"
