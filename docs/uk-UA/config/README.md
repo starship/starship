@@ -901,7 +901,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, запустивши `pixi config set change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1251,16 @@ disabled = false
 
 ### Параметри
 
-| Параметр            | Стандартно                                                    | Опис                                                                                      |
-| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Формат модуля.                                                                            |
-| `symbol`            | `'🐳 '`                                                        | Символ, який знаходиться перед Docker context.                                            |
-| `only_with_files`   | `true`                                                        | Показувати, лише коли є збіг                                                              |
-| `detect_extensions` | `[]`                                                          | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
-| `detect_folders`    | `[]`                                                          | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
-| `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                             |
-| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                          |
+| Параметр            | Стандартно                                                                                   | Опис                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Формат модуля.                                                                            |
+| `symbol`            | `'🐳 '`                                                                                       | Символ, який знаходиться перед Docker context.                                            |
+| `only_with_files`   | `true`                                                                                       | Показувати, лише коли є збіг                                                              |
+| `detect_extensions` | `[]`                                                                                         | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
+| `detect_folders`    | `[]`                                                                                         | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
+| `style`             | `'blue bold'`                                                                                | Стиль модуля.                                                                             |
+| `disabled`          | `false`                                                                                      | Вимикає модуль `docker_context`.                                                          |
 
 ### Змінні
 
@@ -3541,7 +3541,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3552,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                    |
 | `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                |
 | `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                 |
-| `style`                    | `'yellow bold'                                           | Стиль модуля.                                                                     |
+| `style`                    | `'yellow bold'`                                           | Стиль модуля.                                                                     |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                      |
 | `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                      |
-| `detect_folders`           | `['.pixi']`                                               | В яких теках цей модуль має запускатись.                                          |
+| `detect_folders`           | `[]`                                                      | В яких теках цей модуль має запускатись.                                          |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Змінні

@@ -901,7 +901,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1251,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### オプション
 
-| オプション               | デフォルト                                                         | 説明                                                             |
-| ------------------- | ------------------------------------------------------------- | -------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | module のフォーマットです。                                              |
-| `symbol`            | `'🐳 '`                                                        | Dockerコンテキストを表示する前に使用される記号です。                                  |
-| `only_with_files`   | `true`                                                        | ファイルに一致する場合にのみ表示                                               |
-| `detect_extensions` | `[]`                                                          | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
-| `detect_folders`    | `[]`                                                          | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
-| `style`             | `'blue bold'`                                                 | モジュールのスタイルです。                                                  |
-| `disabled`          | `false`                                                       | `docker_context`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                        | 説明                                                             |
+| ------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | module のフォーマットです。                                              |
+| `symbol`            | `'🐳 '`                                                                                       | Dockerコンテキストを表示する前に使用される記号です。                                  |
+| `only_with_files`   | `true`                                                                                       | ファイルに一致する場合にのみ表示                                               |
+| `detect_extensions` | `[]`                                                                                         | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
+| `detect_folders`    | `[]`                                                                                         | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
+| `style`             | `'blue bold'`                                                                                | モジュールのスタイルです。                                                  |
+| `disabled`          | `false`                                                                                      | `docker_context`モジュールを無効にします。                                  |
 
 ### 変数
 
@@ -3541,7 +3541,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3552,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | module のフォーマットです。                                                                 |
 | `version_format`           | `'v${raw}'`                                               | バージョンのフォーマット。 Available vars are `raw`, `major`, `minor`, & `patch`.              |
 | `symbol`                   | `'🧚 '`                                                    | 環境名の直前に使用されるシンボルです。                                                               |
-| `style`                    | `'yellow bold'                                           | モジュールのスタイルです。                                                                     |
+| `style`                    | `'yellow bold'`                                           | モジュールのスタイルです。                                                                     |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | どの拡張子がこのモジュールをアクティブにするか                                                           |
 | `detect_files`             | `['pixi.toml']`                                           | どのファイル名がこのモジュールをアクティブにするか                                                         |
-| `detect_folders`           | `['.pixi']`                                               | どのフォルダーがこのモジュールをアクティブにするか                                                         |
+| `detect_folders`           | `[]`                                                      | どのフォルダーがこのモジュールをアクティブにするか                                                         |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### 変数
