@@ -3705,7 +3705,7 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | The format for the module.                                                        |
 | `version_format`           | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
 | `symbol`                   | `'🧚 '`                                                 | The symbol used before the environment name.                                      |
-| `style`                    | `'yellow bold'                                          | The style for the module.                                                         |
+| `style`                    | `'yellow bold'`                                         | The style for the module.                                                         |
 | `show_default_environment` | `true`                                                  | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                              | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                    | Which extensions should trigger this module.                                      |
