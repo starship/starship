@@ -35,9 +35,9 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
-chrono = { version = "0.4.40", default-features = false, features = ["clock", "std", "wasmbind"] }
+chrono = { version = "0.4.41", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.5.37", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.47"
+clap_complete = "4.5.50"
 clap_complete_nushell = "4.5.5"
 dirs = "6.0.0"
 dunce = "1.0.5"
@@ -75,8 +75,8 @@ starship-battery = { version = "0.10.1", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.4"
 terminal_size = "0.4.2"
-toml = { version = "0.8.21", features = ["preserve_order"] }
-toml_edit = "0.22.25"
+toml = { version = "0.8.22", features = ["preserve_order"] }
+toml_edit = "0.22.26"
 unicode-segmentation = "1.12.0"
 unicode-width = "0.2.0"
 urlencoding = "2.1.3"
