@@ -3,6 +3,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::cmd_duration::CmdDurationConfig;
 use crate::formatter::StringFormatter;
 use crate::utils::render_time;
+use chrono::Local;
 
 /// Outputs the time it took the last command to execute
 ///
@@ -27,6 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let duration_str = render_time(elapsed, config.show_milliseconds);
+    let formatted = if config.show_time_end {
+        let time_end = Local::now().format("ending %H:%M:%S").to_string();
+        format!("{duration_str} {time_end}")
+    } else {
+        duration_str
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
@@ -34,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration" => Some(Ok(formatted.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
