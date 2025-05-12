@@ -31,9 +31,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let duration_str = render_time(elapsed, config.show_milliseconds);
     let formatted = if config.show_time_end {
         let time_end = if elapsed >= config.show_full_time_min_seconds as u128 * 1000 {
-                Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
-            } else {
-                Local::now().format("%H:%M:%S").to_string()
+            Local::now().format("%Y-%m-%d %H:%M:%S").to_string()
+        } else {
+            Local::now().format("%H:%M:%S").to_string()
         };
         format!("{duration_str} ending {time_end}")
     } else {
