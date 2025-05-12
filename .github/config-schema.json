@@ -144,6 +144,8 @@
         "error_symbol": "[❯](bold red)",
         "format": "$symbol ",
         "success_symbol": "[❯](bold green)",
+        "root_error_symbol": "[❯](bold purple)",
+        "root_success_symbol": "[❯](bold blue)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_symbol": "[❮](bold green)",
@@ -2452,6 +2454,14 @@
         },
         "error_symbol": {
           "default": "[❯](bold red)",
+          "type": "string"
+        },
+        "root_success_symbol": {
+          "default": "[❯](bold blue)",
+          "type": "string"
+        },
+        "root_error_symbol": {
+          "default": "[❯](bold purple)",
           "type": "string"
         },
         "vimcmd_symbol": {
