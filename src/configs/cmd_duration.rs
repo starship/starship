@@ -16,6 +16,7 @@ pub struct CmdDurationConfig<'a> {
     pub show_notifications: bool,
     pub min_time_to_notify: i64,
     pub show_time_end: bool,
+    pub show_full_time_min_seconds: u64,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_timeout: Option<u32>,
@@ -33,6 +34,7 @@ impl Default for CmdDurationConfig<'_> {
             min_time_to_notify: 45_000,
             notification_timeout: None,
             show_time_end: false,
+            show_full_time_min_seconds: 43200, // 12 hours
         }
     }
 }
