@@ -21,7 +21,7 @@ pub struct GradleConfig<'a> {
 
 impl Default for GradleConfig<'_> {
     fn default() -> Self {
-        GradleConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🅶 ",

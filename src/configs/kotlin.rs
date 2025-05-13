@@ -21,7 +21,7 @@ pub struct KotlinConfig<'a> {
 
 impl Default for KotlinConfig<'_> {
     fn default() -> Self {
-        KotlinConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🅺 ",

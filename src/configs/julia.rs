@@ -20,7 +20,7 @@ pub struct JuliaConfig<'a> {
 
 impl Default for JuliaConfig<'_> {
     fn default() -> Self {
-        JuliaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "ஃ ",
