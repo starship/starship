@@ -35,12 +35,12 @@ pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathB
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
-    log::trace!("Trying to read from {:?}", file_name);
+    log::trace!("Trying to read from {file_name:?}");
 
     let result = read_to_string(file_name);
 
     if result.is_err() {
-        log::debug!("Error reading file: {:?}", result);
+        log::debug!("Error reading file: {result:?}");
     } else {
         log::trace!("File read successfully");
     };
@@ -65,7 +65,7 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
     {
         Ok(file) => file,
         Err(err) => {
-            log::warn!("Error creating file: {:?}", err);
+            log::warn!("Error creating file: {err:?}");
             return Err(err);
         }
     };
@@ -96,15 +96,15 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
 /// This function also initializes std{err,out,in} to protect against processes changing the console mode
 pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
-    log::trace!("Creating Command for binary {:?}", binary_name);
+    log::trace!("Creating Command for binary {binary_name:?}");
 
     let full_path = match which::which(binary_name) {
         Ok(full_path) => {
-            log::trace!("Using {:?} as {:?}", full_path, binary_name);
+            log::trace!("Using {full_path:?} as {binary_name:?}");
             full_path
         }
         Err(error) => {
-            log::trace!("Unable to find {:?} in PATH, {:?}", binary_name, error);
+            log::trace!("Unable to find {binary_name:?} in PATH, {error:?}");
             return Err(Error::new(ErrorKind::NotFound, error));
         }
     };
@@ -148,7 +148,7 @@ pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
     time_limit: Duration,
 ) -> Option<CommandOutput> {
-    log::trace!("Executing command {:?} with args {:?}", cmd, args);
+    log::trace!("Executing command {cmd:?} with args {args:?}");
     #[cfg(test)]
     if let Some(o) = mock_cmd(&cmd, args) {
         return o;
@@ -634,14 +634,14 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,
                 Err(error) => {
-                    log::warn!("Unable to decode stdout: {:?}", error);
+                    log::warn!("Unable to decode stdout: {error:?}");
                     return None;
                 }
             };
             let stderr_string = match String::from_utf8(output.stderr) {
                 Ok(stderr) => stderr,
                 Err(error) => {
-                    log::warn!("Unable to decode stderr: {:?}", error);
+                    log::warn!("Unable to decode stderr: {error:?}");
                     return None;
                 }
             };
