@@ -24,7 +24,7 @@ pub struct PixiConfig<'a> {
 
 impl Default for PixiConfig<'_> {
     fn default() -> Self {
-        PixiConfig {
+        Self {
             pixi_binary: VecOr(vec!["pixi"]),
             show_default_environment: true,
             format: "via [$symbol($version )(\\($environment\\) )]($style)",

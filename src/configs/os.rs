@@ -24,7 +24,7 @@ impl<'a> OSConfig<'a> {
 
 impl Default for OSConfig<'_> {
     fn default() -> Self {
-        OSConfig {
+        Self {
             format: "[$symbol]($style)",
             style: "bold white",
             symbols: indexmap! {

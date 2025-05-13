@@ -22,7 +22,7 @@ enum VariableValue<'a> {
 
 impl Default for VariableValue<'_> {
     fn default() -> Self {
-        VariableValue::Plain(Cow::Borrowed(""))
+        Self::Plain(Cow::Borrowed(""))
     }
 }
 

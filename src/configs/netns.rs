@@ -16,7 +16,7 @@ pub struct NetnsConfig<'a> {
 
 impl Default for NetnsConfig<'_> {
     fn default() -> Self {
-        NetnsConfig {
+        Self {
             format: "[$symbol \\[$name\\]]($style) ",
             symbol: "🛜",
             style: "blue bold dimmed",

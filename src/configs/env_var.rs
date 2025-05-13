@@ -21,7 +21,7 @@ pub struct EnvVarConfig<'a> {
 
 impl Default for EnvVarConfig<'_> {
     fn default() -> Self {
-        EnvVarConfig {
+        Self {
             symbol: "",
             style: "black bold dimmed",
             variable: None,

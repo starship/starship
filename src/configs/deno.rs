@@ -20,7 +20,7 @@ pub struct DenoConfig<'a> {
 
 impl Default for DenoConfig<'_> {
     fn default() -> Self {
-        DenoConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🦕 ",

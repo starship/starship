@@ -20,7 +20,7 @@ pub struct ErlangConfig<'a> {
 
 impl Default for ErlangConfig<'_> {
     fn default() -> Self {
-        ErlangConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: " ",

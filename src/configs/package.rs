@@ -18,7 +18,7 @@ pub struct PackageConfig<'a> {
 
 impl Default for PackageConfig<'_> {
     fn default() -> Self {
-        PackageConfig {
+        Self {
             format: "is [$symbol$version]($style) ",
             symbol: "📦 ",
             style: "208 bold",

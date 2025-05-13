@@ -21,7 +21,7 @@ pub struct LuaConfig<'a> {
 
 impl Default for LuaConfig<'_> {
     fn default() -> Self {
-        LuaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🌙 ",

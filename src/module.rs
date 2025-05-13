@@ -128,7 +128,7 @@ pub struct Module<'a> {
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
     pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Self {
-        Module {
+        Self {
             config,
             name: name.to_string(),
             description: desc.to_string(),

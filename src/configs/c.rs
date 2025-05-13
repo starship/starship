@@ -13,7 +13,7 @@ pub type CConfig<'a> = CcConfig<'a, CConfigMarker>;
 
 impl Default for CConfig<'_> {
     fn default() -> Self {
-        CcConfig {
+        Self {
             marker: std::marker::PhantomData::<CConfigMarker>,
 
             format: "via [$symbol($version(-$name) )]($style)",

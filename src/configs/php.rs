@@ -20,7 +20,7 @@ pub struct PhpConfig<'a> {
 
 impl Default for PhpConfig<'_> {
     fn default() -> Self {
-        PhpConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐘 ",

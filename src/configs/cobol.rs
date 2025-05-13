@@ -20,7 +20,7 @@ pub struct CobolConfig<'a> {
 
 impl Default for CobolConfig<'_> {
     fn default() -> Self {
-        CobolConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⚙️ ",

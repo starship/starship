@@ -20,7 +20,7 @@ pub struct GcloudConfig<'a> {
 
 impl Default for GcloudConfig<'_> {
     fn default() -> Self {
-        GcloudConfig {
+        Self {
             format: "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
             symbol: "☁️  ",
             style: "bold blue",

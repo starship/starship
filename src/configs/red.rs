@@ -20,7 +20,7 @@ pub struct RedConfig<'a> {
 
 impl Default for RedConfig<'_> {
     fn default() -> Self {
-        RedConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🔺 ",

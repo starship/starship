@@ -19,7 +19,7 @@ pub struct CondaConfig<'a> {
 
 impl Default for CondaConfig<'_> {
     fn default() -> Self {
-        CondaConfig {
+        Self {
             truncation_length: 1,
             format: "via [$symbol$environment]($style) ",
             symbol: "🅒 ",

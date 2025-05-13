@@ -21,7 +21,7 @@ pub struct NodejsConfig<'a> {
 
 impl Default for NodejsConfig<'_> {
     fn default() -> Self {
-        NodejsConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: " ",

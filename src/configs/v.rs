@@ -20,7 +20,7 @@ pub struct VConfig<'a> {
 
 impl Default for VConfig<'_> {
     fn default() -> Self {
-        VConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "V ",

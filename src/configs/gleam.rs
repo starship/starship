@@ -20,7 +20,7 @@ pub struct GleamConfig<'a> {
 
 impl Default for GleamConfig<'_> {
     fn default() -> Self {
-        GleamConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⭐ ",

@@ -30,7 +30,7 @@ pub struct DirectoryConfig<'a> {
 
 impl Default for DirectoryConfig<'_> {
     fn default() -> Self {
-        DirectoryConfig {
+        Self {
             truncation_length: 3,
             truncate_to_repo: true,
             fish_style_pwd_dir_length: 0,
