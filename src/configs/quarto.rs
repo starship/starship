@@ -20,7 +20,7 @@ pub struct QuartoConfig<'a> {
 
 impl Default for QuartoConfig<'_> {
     fn default() -> Self {
-        QuartoConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⨁ ",

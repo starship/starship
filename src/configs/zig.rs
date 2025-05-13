@@ -20,7 +20,7 @@ pub struct ZigConfig<'a> {
 
 impl Default for ZigConfig<'_> {
     fn default() -> Self {
-        ZigConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "↯ ",

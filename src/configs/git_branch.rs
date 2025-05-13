@@ -21,7 +21,7 @@ pub struct GitBranchConfig<'a> {
 
 impl Default for GitBranchConfig<'_> {
     fn default() -> Self {
-        GitBranchConfig {
+        Self {
             format: "on [$symbol$branch(:$remote_branch)]($style) ",
             symbol: " ",
             style: "bold purple",
