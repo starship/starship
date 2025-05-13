@@ -39,7 +39,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Note: Forward config if `Module` ends up needing `config`
-    let mut module = Module::new(&format!("custom.{name}"), config.description, None);
+    let mut module = Module::new(format!("custom.{name}"), config.description, None);
 
     let mut is_match = context
         .try_begin_scan()?
