@@ -62,13 +62,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok((mem, _)) => (mem, None),
         Err(e) => {
             log::debug!(
-                "Failed to retrieve both memory and swap, falling back to memory only: {}",
-                e
+                "Failed to retrieve both memory and swap, falling back to memory only: {e}"
             );
             let mem = match system.memory() {
                 Ok(mem) => mem,
                 Err(e) => {
-                    log::warn!("Failed to retrieve memory: {}", e);
+                    log::warn!("Failed to retrieve memory: {e}");
                     return None;
                 }
             };
@@ -112,7 +111,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `memory_usage`:\n{}", error);
+            log::warn!("Error in module `memory_usage`:\n{error}");
             return None;
         }
     });

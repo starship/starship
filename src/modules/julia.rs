@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `julia`:\n{}", error);
+            log::warn!("Error in module `julia`:\n{error}");
             return None;
         }
     });

@@ -82,7 +82,7 @@ impl RustToolingEnvironmentInfo {
                     })
                     .or_else(|| execute_rustup_default(context));
 
-                log::debug!("Environmental toolchain override is {:?}", out);
+                log::debug!("Environmental toolchain override is {out:?}");
                 out
             })
             .as_deref()
@@ -103,7 +103,7 @@ impl RustToolingEnvironmentInfo {
                             .join("rustc")
                     })
                     .and_then(|rustc| {
-                        log::trace!("Running rustc --version directly with {:?}", rustc);
+                        log::trace!("Running rustc --version directly with {rustc:?}");
                         create_command(rustc).map(|mut cmd| {
                             cmd.arg("--version");
                             cmd
@@ -125,7 +125,7 @@ impl RustToolingEnvironmentInfo {
                 RustupRunRustcVersionOutcome::ToolchainUnknown
             };
 
-            log::debug!("Rustup rustc version is {:?}", out);
+            log::debug!("Rustup rustc version is {out:?}");
             out
         })
     }
@@ -147,7 +147,7 @@ impl RustToolingEnvironmentInfo {
                 let out =
                     format_rustc_version_verbose(std::str::from_utf8(&stdout).ok()?, toolchain);
 
-                log::debug!("Rustup verbose version is {:?}", out);
+                log::debug!("Rustup verbose version is {out:?}");
                 out
             })
             .as_ref()
@@ -195,7 +195,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `rust`:\n{}", error);
+            log::warn!("Error in module `rust`:\n{error}");
             return None;
         }
     });
@@ -393,7 +393,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formatting `rust` version:\n{}", error);
+            log::warn!("Error formatting `rust` version:\n{error}");
             Some(format!("v{version}"))
         }
     }

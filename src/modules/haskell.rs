@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `haskell`:\n{}", error);
+            log::warn!("Error in module `haskell`:\n{error}");
             return None;
         }
     });
