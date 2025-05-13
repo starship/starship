@@ -123,6 +123,7 @@ tempfile = "3.21.0"
 
 [target.'cfg(unix)'.dev-dependencies]
 fuser = "0.15.1"
+libc = "0.2.172"
 
 [profile.release]
 codegen-units = 1

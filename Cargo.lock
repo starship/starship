@@ -3294,6 +3294,7 @@ dependencies = [
  "home",
  "indexmap",
  "jsonc-parser",
+ "libc",
  "log",
  "mockall",
  "nix",
