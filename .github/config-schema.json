@@ -1304,7 +1304,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🪖  ",
+        "symbol": "🪖 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1379,7 +1379,7 @@
           "Ultramarine": "🔷 ",
           "Unknown": "❓ ",
           "Uos": "🐲 ",
-          "Void": "  ",
+          "Void": " ",
           "Windows": "🪟 ",
           "openEuler": "🦉 ",
           "openSUSE": "🦎 "
@@ -5183,7 +5183,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🪖  ",
+          "default": "🪖 ",
           "type": "string"
         },
         "style": {
@@ -5302,7 +5302,7 @@
             "Ultramarine": "🔷 ",
             "Unknown": "❓ ",
             "Uos": "🐲 ",
-            "Void": "  ",
+            "Void": " ",
             "Windows": "🪟 ",
             "openEuler": "🦉 ",
             "openSUSE": "🦎 "
