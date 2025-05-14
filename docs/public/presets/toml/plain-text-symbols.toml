@@ -28,6 +28,9 @@ symbol = "bun "
 [c]
 symbol = "C "
 
+[cpp]
+symbol = "C++ "
+
 [cobol]
 symbol = "cobol "
 
@@ -200,6 +203,9 @@ symbol = "php "
 
 [pijul_channel]
 symbol = "pijul "
+
+[pixi]
+symbol = "pixi "
 
 [pulumi]
 symbol = "pulumi "

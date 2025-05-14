@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
+
+
+### Features
+
+* add network namespace module ([#6449](https://github.com/starship/starship/issues/6449)) ([eb42f5a](https://github.com/starship/starship/commit/eb42f5ac7003da1f9543f5258dd674cec96a7320))
+* Add support for pixi ([#6335](https://github.com/starship/starship/issues/6335)) ([7e88ba9](https://github.com/starship/starship/commit/7e88ba9561bead33cefaba1003637e0213199a15))
+* added mise module ([#5747](https://github.com/starship/starship/issues/5747)) ([d24e787](https://github.com/starship/starship/commit/d24e78754a0ce1d5ea77eae0a7d3b19aaa7bcfc8))
+* **c++:** adding c++ module ([#6570](https://github.com/starship/starship/issues/6570)) ([ed07646](https://github.com/starship/starship/commit/ed076460995cb5175e47442dc11b46ff0f039b4a))
+* **completions:** Offer Nushell completions ([#6366](https://github.com/starship/starship/issues/6366)) ([df454d5](https://github.com/starship/starship/commit/df454d5a64fa6de5d2e334c5aa9b07150bf09ae6))
+* **nodejs:** disable if bun project files detected ([#6346](https://github.com/starship/starship/issues/6346)) ([00ce705](https://github.com/starship/starship/commit/00ce7057efb7c431e7f9b526ca3ee941573e9f40))
+* **package:** support JSR package version ([#6502](https://github.com/starship/starship/issues/6502)) ([bd2321a](https://github.com/starship/starship/commit/bd2321a12fc47135f316e90f22ccab6a61b50730))
+* **preset:** Add gcloud symbol to nerd-fonts preset to match aws ([#6693](https://github.com/starship/starship/issues/6693)) ([348c23f](https://github.com/starship/starship/commit/348c23fd58d90352cb128d32c495c1107a98d930))
+* **python:** add support for `python_binary` arguments in config ([#6523](https://github.com/starship/starship/issues/6523)) ([7667555](https://github.com/starship/starship/commit/76675559c041fa2ae6a85cb946218e5e1f04bf75))
+
+
+### Bug Fixes
+
+* **battery:** prefer charge ratio over current capacity ([#6603](https://github.com/starship/starship/issues/6603)) ([d245939](https://github.com/starship/starship/commit/d2459391194cf5a142d98b1297fe5f630c3415f5))
+* Change to a non-yanked version of the log crate ([#6495](https://github.com/starship/starship/issues/6495)) ([ed20b1d](https://github.com/starship/starship/commit/ed20b1d23b1b7ed914fca30fb6788f3d609f4a52))
+* **fossil_metrics:** Add -i flag to the fossil_metrics module's command ([#6544](https://github.com/starship/starship/issues/6544)) ([eb7d80b](https://github.com/starship/starship/commit/eb7d80bafac8f6ae719ee357aeff129065ddd7e6))
+* **package:** fix cargo workspace version ([#6626](https://github.com/starship/starship/issues/6626)) ([834bbf5](https://github.com/starship/starship/commit/834bbf53e53fc7f46f168e6d13677b737af73dbf))
+* **preset:** add missing rlang to plain-text-symbols preset ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+* **preset:** add missing rlang to plain-text-symbols preset ([#6458](https://github.com/starship/starship/issues/6458)) ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+
+
+### Performance Improvements
+
+* **ancestor-scan:** preallocate and reuse a single `PathBuf` ([#6387](https://github.com/starship/starship/issues/6387)) ([b3cb92e](https://github.com/starship/starship/commit/b3cb92e6483a6cc054c6f7db14951c99bd7c9e9b))
+* use `gitoxide` for `git_status` and `git_metrics` modules ([#6476](https://github.com/starship/starship/issues/6476)) ([daf8d93](https://github.com/starship/starship/commit/daf8d93d27fdc70b110a4a56799d7dc3a10c3810))
+
+
+### Reverts
+
+* Remove specialized whoami hostname function choice for windows ([#6651](https://github.com/starship/starship/issues/6651)) ([8eefdb2](https://github.com/starship/starship/commit/8eefdb21a6099d86b831ff1d42ae7f2a1678185a))
+
 ## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
 
 
