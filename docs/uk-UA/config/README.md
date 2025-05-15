@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
@@ -901,7 +901,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, використовуючи `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3541,7 +3541,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в pixi. Можливо, вам доведеться  виконати `pixi config set shell.change-ps1 false`.
 
 :::
 
