@@ -13,6 +13,7 @@ pub struct MemoryConfig<'a> {
     pub style: &'a str,
     pub symbol: &'a str,
     pub disabled: bool,
+    pub single_unit_fractions: bool,
 }
 
 impl Default for MemoryConfig<'_> {
@@ -23,6 +24,7 @@ impl Default for MemoryConfig<'_> {
             style: "white bold dimmed",
             symbol: "🐏 ",
             disabled: true,
+            single_unit_fractions: false,
         }
     }
 }
