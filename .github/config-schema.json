@@ -183,7 +183,8 @@
         "min_time_to_notify": 45000,
         "show_milliseconds": false,
         "show_notifications": false,
-        "style": "yellow bold"
+        "style": "yellow bold",
+        "transient": false
       },
       "allOf": [
         {
@@ -2567,6 +2568,10 @@
           ],
           "format": "uint32",
           "minimum": 0.0
+        },
+        "transient": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
