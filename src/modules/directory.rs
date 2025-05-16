@@ -64,6 +64,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
+    // If truncate_repo_length > 1, expand path to the left of the git repo
+    // Expand only when truncate_to_repo is true
+    let dir_string = if config.truncate_to_repo && config.truncate_repo_length > 1 {
+        if let Some(dir_string) = dir_string {
+            repo.and_then(|r| r.workdir.as_ref()).and_then(|r| {
+                repo_add_left(
+                    display_dir,
+                    r,
+                    &dir_string,
+                    config.truncate_repo_length as usize,
+                )
+            })
+        } else {
+            dir_string
+        }
+    } else {
+        dir_string
+    };
+
     let mut is_truncated = dir_string.is_some();
 
     // the home directory if required.
@@ -271,6 +290,40 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         ));
     }
     None
+}
+
+fn repo_add_left(
+    full_path: &Path,
+    top_level_path: &Path,
+    repo_dir: &String,
+    trunc: usize,
+) -> Option<String> {
+    let top_level_real_path = real_path(top_level_path);
+    for (i, ancestor) in full_path.ancestors().enumerate() {
+        let ancestor_real_path = real_path(ancestor);
+        if ancestor_real_path != top_level_real_path {
+            continue;
+        }
+
+        let components: Vec<_> = full_path.components().collect();
+        let left = if components.len() >= i + trunc {
+            components.len() - i - trunc
+        } else {
+            0
+        };
+        // namely components.len()-1-i-1 <= 0, which is the left of the repo dir(components.len()-1-i)
+        if components.len() <= 2 + i {
+            return Some(String::from(repo_dir));
+        }
+        let path = PathBuf::from_iter(&components[left..components.len() - 1 - i]);
+        return Some(format!(
+            "{path}{delimiter}{repo_dir}",
+            path = path.to_slash_lossy(),
+            delimiter = "/",
+            repo_dir = repo_dir,
+        ));
+    }
+    Some(String::from(repo_dir))
 }
 
 fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
@@ -1073,6 +1126,37 @@ mod tests {
             Color::Cyan
                 .bold()
                 .paint(convert_path_sep("rocket-controls/src/meters/fuel-gauge"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn directory_in_git_repo_truncate_repo_length() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        let dir = repo_dir.join("src/meters/fuel-gauge");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncate_to_repo = true
+                // should display <dir to the left>/<truncated path>
+                truncate_repo_length = 2
+                // make truncation_length bigger for not cutting the path
+                truncation_length = 6
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep(
+                "above-repo/rocket-controls/src/meters/fuel-gauge"
+            ))
         ));
 
         assert_eq!(expected, actual);
