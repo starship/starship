@@ -50,6 +50,7 @@ pub const ALL_MODULES: &[&str] = &[
     "haxe",
     "helm",
     "hg_branch",
+    "hg_state",
     "hostname",
     "java",
     "jobs",
