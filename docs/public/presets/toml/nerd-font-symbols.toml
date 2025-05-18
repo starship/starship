@@ -180,6 +180,9 @@ symbol = "󱘗 "
 [scala]
 symbol = " "
 
+[status]
+symbol = " "
+
 [swift]
 symbol = " "
 
