@@ -44,9 +44,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
+                    // Always try to parse the `pyenv.cfg` file, even if not in activated
+                    // environment.
+                    if config.venv_pyenvcfg_version && config.force_venv_pyenvcfg_version {
+                        // Only return if there is a version found
+                        if let Some(version) = get_venv_pyenvcfg_version(context) {
+                            return Some(Ok(version));
+                        }
+                    } else if config.venv_pyenvcfg_version
+                        && context.get_env("VIRTUAL_ENV").is_some()
+                    {
+                        // Virtual environment should be activated and thus
+                        // should always return any version found in the `pyenv.cfg` file.
+                        return get_venv_pyenvcfg_version(context).map(Ok);
+                    }
+
                     if config.pyenv_version_name {
                         return get_pyenv_version(context).map(Ok);
                     }
+
                     let python_version = get_python_version(context, &config)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
@@ -121,6 +137,26 @@ fn parse_python_version(python_version_string: &str) -> Option<String> {
         .nth(1)?;
 
     Some(version.to_string())
+}
+
+fn get_venv_pyenvcfg_version(context: &Context) -> Option<String> {
+    // If `pyenv.cfg` exists, and has the `version_info`
+    // field, read, and return first, prioritizing this version
+    // over the binary's.
+    for venv in [".venv", "venv"] {
+        if let Some(version) =
+            Ini::load_from_file_noescape(context.current_dir.join(venv).join("pyvenv.cfg"))
+                .ok()?
+                .general_section()
+                .get("version_info")
+        {
+            if semver::Version::parse(version).is_ok() {
+                return Some(version.to_string());
+            }
+        }
+    }
+
+    None
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
