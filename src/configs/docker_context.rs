@@ -27,7 +27,13 @@ impl Default for DockerContextConfig<'_> {
             only_with_files: true,
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec!["docker-compose.yml", "docker-compose.yaml", "Dockerfile"],
+            detect_files: vec![
+                "compose.yml",
+                "compose.yaml",
+                "docker-compose.yml",
+                "docker-compose.yaml",
+                "Dockerfile",
+            ],
             detect_folders: vec![],
         }
     }

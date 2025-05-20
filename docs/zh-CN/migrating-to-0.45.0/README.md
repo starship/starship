@@ -111,7 +111,7 @@ error_symbol = "[✖](bold red)"
 
 _Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
-#### Command Duration
+#### Command Duration 命令执行时长
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
@@ -125,7 +125,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = "took [$duration]($style) "
 ```
 
-#### Directory
+#### Directory 目录
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |

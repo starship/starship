@@ -328,6 +328,7 @@ $azure\
 $nats\
 $direnv\
 $env_var\
+$mise\
 $crystal\
 $custom\
 $sudo\
@@ -339,6 +340,7 @@ $time\
 $status\
 $os\
 $container\
+$netns\
 $shell\
 $character"""
 ```
@@ -618,7 +620,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
-### Ejemplos
+### Ejemplo
 
 #### Customize the format
 
@@ -627,15 +629,6 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 [bun]
 format = 'via [🍔 $version](bold green) '
-```
-
-#### Replace Node.js
-
-You can override the `detect_files` property of [the nodejs module](#nodejs) in your config so as to only show the bun runtime:
-
-```toml
-[nodejs]
-detect_files = ['package.json', '.node-version', '!bunfig.toml', '!bun.lockb']
 ```
 
 ## C
@@ -681,6 +674,53 @@ Si un compilador C no es compatible con este módulo, puede solicitarlo [plantea
 # ~/.config/starship.toml
 
 [c]
+format = 'via [$name $version]($style)'
+```
+
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+### Opciones
+
+| Opción              | Predeterminado                                                                   | Descripción                                                                             |
+| ------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | La cadena de formato para el módulo.                                                    |
+| `version_format`    | `'v${raw}'`                                                                      | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C++ '`                                                                         | El símbolo usado antes de mostrar los detalles del compilador                           |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `[]`                                                                             | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                             | Qué carpetas deberían activar este módulo.                                              |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Cómo detectar cuál compilador es                                                        |
+| `style`             | `'bold 149'`                                                                     | El estilo del módulo.                                                                   |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                              |
+
+### Variables
+
+| Variable | Ejemplo | Descripción                            |
+| -------- | ------- | -------------------------------------- |
+| name     | clang++ | El nombre del compilador               |
+| version  | 13.0.0  | La versión del compilador              |
+| symbol   |         | Refleja el valor de la opción `symbol` |
+| style    |         | Refleja el valor de la opción `style`  |
+
+NB que `versión` no está en el formato por defecto.
+
+### Commands
+
+La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship intentará ejecutar cada comando hasta que obtenga un resultado en STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
 format = 'via [$name $version]($style)'
 ```
 
@@ -874,6 +914,7 @@ Esto no modifica el propio símbolo de sistema de Conda. En caso de querer supri
 | `style`             | `'bold green'`                         | El estilo del módulo.                                                                                                                                                                                                  |
 | `format`            | `'via [$symbol$environment]($style) '` | El formato del módulo.                                                                                                                                                                                                 |
 | `ignore_base`       | `true`                                 | Ignora el entorno `base` cuando se activa.                                                                                                                                                                             |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Qué variable(s) de entorno deben activar este módulo. If it's a pixi environment, this module is not being triggered by default.                                                                                       |
 | `disabled`          | `false`                                | Deshabilita el módulo `conda`.                                                                                                                                                                                         |
 
 ### Variables
@@ -1875,25 +1916,26 @@ El módulo Git Status es muy lento en los directorios de Windows (por ejemplo ba
 
 ### Opciones
 
-| Opción              | Predeterminado                                  | Descripción                                                                                                                               |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
-| `conflicted`        | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
-| `ahead`             | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
-| `behind`            | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
-| `diverged`          | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
-| `up_to_date`        | `''`                                            | El formato de `up_to_date`                                                                                                                |
-| `sin seguimiento`   | `'?'`                                           | El formato de `untracked`                                                                                                                 |
-| `stashed`           | `'$'`                                           | El formato de `stashed`                                                                                                                   |
-| `modificado`        | `'!'`                                           | El formato de `modified`                                                                                                                  |
-| `staged`            | `'+'`                                           | El formato de `staged`                                                                                                                    |
-| `renamed`           | `'»'`                                           | El formato de `renamed`                                                                                                                   |
-| `eliminado`         | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
-| `typechanged`       | `""`                                            | The format of `typechanged`                                                                                                               |
-| `style`             | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
-| `ignore_submodules` | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
-| `disabled`          | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
-| `windows_starship`  |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
+| Opción               | Predeterminado                                  | Descripción                                                                                                                               |
+| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
+| `conflicted`         | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
+| `ahead`              | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
+| `behind`             | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
+| `diverged`           | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
+| `up_to_date`         | `''`                                            | El formato de `up_to_date`                                                                                                                |
+| `sin seguimiento`    | `'?'`                                           | El formato de `untracked`                                                                                                                 |
+| `stashed`            | `'$'`                                           | El formato de `stashed`                                                                                                                   |
+| `modificado`         | `'!'`                                           | El formato de `modified`                                                                                                                  |
+| `staged`             | `'+'`                                           | El formato de `staged`                                                                                                                    |
+| `renamed`            | `'»'`                                           | El formato de `renamed`                                                                                                                   |
+| `eliminado`          | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
+| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                                               |
+| `style`              | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
+| `ignore_submodules`  | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
+| `disabled`           | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
+| `windows_starship`   |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
+| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
 
 ### Variables
 
@@ -1971,7 +2013,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `gleam.toml` file
+- El directorio actual contiene un archivo `gleam.toml`
 - The current directory contains a file with the `.gleam` extension
 
 ### Opciones
@@ -2817,6 +2859,40 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+### Opciones
+
+| Opción             | Predeterminado                   | Descripción                                      |
+| ------------------ | -------------------------------- | ------------------------------------------------ |
+| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
+| `style`            | `'bold purple'`                  | El estilo del módulo.                            |
+| `format`           | `'on [$symbol$health]($style) '` | El formato del módulo.                           |
+| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
+| `disabled`         | `true`                           | Disables the `mise` module.                      |
+
+### Variables
+
+| Variable  | Ejemplo   | Descripción                            |
+| --------- | --------- | -------------------------------------- |
+| health    | `healthy` | The health of _mise_                   |
+| symbol    |           | Refleja el valor de la opción `symbol` |
+| style\* |           | Refleja el valor de la opción `style`  |
+
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
 ## Mojo
 
 The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
@@ -2879,6 +2955,37 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 [nats]
 format = '[$symbol]($style)'
 style = 'bold purple'
+```
+
+## Network Namespace
+
+The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Opciones
+
+| Opción     | Predeterminado                    | Descripción                                                       |
+| ---------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | El formato del módulo.                                            |
+| `symbol`   | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`              | El estilo del módulo.                                             |
+| `disabled` | `false`                           | Disables the `netns` module.                                      |
+
+### Variables
+
+| Variable  | Ejemplo    | Descripción                               |
+| --------- | ---------- | ----------------------------------------- |
+| name      | `my-netns` | The name of the current network namespace |
+| symbol    |            | Refleja el valor de la opción `symbol`    |
+| style\* |            | Refleja el valor de la opción `style`     |
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
 ```
 
 ## Nim
@@ -2974,6 +3081,8 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 - El directorio actual contiene un directorio `node_modules`
 - El directorio actual contiene un archivo con la extensión `.js`, `.mjs` o `.cjs`
 - El directorio actual contiene un archivo con la extensión `.ts`, `.mts` o `.cts`
+
+Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Opciones
 
@@ -3202,6 +3311,7 @@ Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
@@ -3280,6 +3390,7 @@ Arch = "Arch es lo mejor! "
 El módulo `package` se muestra cuando el directorio actual es el repositorio de un paquete, y muestra su versión actual. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – La versión del paquete `npm` se extrae del `package.json` presente en el directorio actual
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – La versión del paquete `cargo` se extrae del `Cargo.toml` presente en el directorio actual
 - [**Nimble**](https://github.com/nim-lang/nimble) - La versión del paquete `nimble` se extrae del archivo `*.nimble` presente en el directorio actual con el comando `nimble dump`
 - [**Poetry**](https://python-poetry.org/) – La versión del paquete `poetry` se extrae del `pyproject.toml` presente en el directorio actual
@@ -3424,6 +3535,49 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | El símbolo usado para indicar que un nombre de rama fue truncado.                    |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+::: tip
+
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+
+:::
+
+### Opciones
+
+| Opción                     | Predeterminado                                            | Descripción                                                                       |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | El formato del módulo.                                                            |
+| `version_format`           | `'v${raw}'`                                               | El formato de versión. Available vars are `raw`, `major`, `minor`, & `patch`.     |
+| `symbol`                   | `'🧚 '`                                                    | El símbolo usado antes del nombre del entorno.                                    |
+| `style`                    | `'yellow bold'                                           | El estilo del módulo.                                                             |
+| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                      | Qué extensiones deberían activar este módulo.                                     |
+| `detect_files`             | `['pixi.toml']`                                           | Qué nombres de archivo deberían activar este módulo.                              |
+| `detect_folders`           | `['.pixi']`                                               | Qué carpetas deberían activar este módulo.                                        |
+| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+
+### Variables
+
+| Variable    | Ejemplo   | Descripción                            |
+| ----------- | --------- | -------------------------------------- |
+| version     | `v0.33.0` | The version of `pixi`                  |
+| environment | `py311`   | The current pixi environment           |
+| symbol      |           | Refleja el valor de la opción `symbol` |
+| style       |           | Refleja el valor de la opción `style`  |
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
 ## Pulumi
 
 El módulo `pulumi` muestra el nombre de usuario actual, [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/)seleccionado y la versión.
@@ -3538,26 +3692,25 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 - El directorio actual contiene un archivo `requirements.txt`
 - El directorio actual contiene un archivo `setup.py`
 - El directorio actual contiene un archivo `tox.ini`
-- El directorio actual contiene un archivo `pixi.toml`
 - El directorio actual contiene un archivo con la extensión `.py`.
 - The current directory contains a file with the `.ipynb` extension.
 - Un entorno virtual está activado actualmente
 
 ### Opciones
 
-| Opción               | Predeterminado                                                                                                            | Descripción                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                               | El formato del módulo.                                                                  |
-| `version_format`     | `'v${raw}'`                                                                                                               | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`             | `'🐍 '`                                                                                                                    | Una cadena de formato que representa el símbolo de Python                               |
-| `style`              | `'yellow bold'`                                                                                                           | El estilo del módulo.                                                                   |
-| `pyenv_version_name` | `false`                                                                                                                   | Usar pyenv para obtener la versión de Python                                            |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                                 | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                                        | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                                         | Qué extensiones deben activar este módulo                                               |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini', 'pixi.toml']` | Qué nombres de archivo deben activar este módulo                                        |
-| `detect_folders`     | `[]`                                                                                                                      | Qué carpetas deben activar este módulo                                                  |
-| `disabled`           | `false`                                                                                                                   | Deshabilita el módulo `python`.                                                         |
+| Opción               | Predeterminado                                                                                               | Descripción                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                  |
+| `version_format`     | `'v${raw}'`                                                                                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`             | `'🐍 '`                                                                                                       | Una cadena de formato que representa el símbolo de Python                               |
+| `style`              | `'yellow bold'`                                                                                              | El estilo del módulo.                                                                   |
+| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version.   |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Qué extensiones deben activar este módulo                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Qué nombres de archivo deben activar este módulo                                        |
+| `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
+| `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
 
 ::: tip
 

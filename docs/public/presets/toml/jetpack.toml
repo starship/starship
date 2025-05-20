@@ -29,6 +29,7 @@ $pijul_channel\
 $docker_context\
 $package\
 $c\
+$cpp\
 $cmake\
 $cobol\
 $daml\
@@ -72,6 +73,7 @@ $vagrant\
 $zig\
 $buf\
 $conda\
+$pixi\
 $meson\
 $spack\
 $memory_usage\
@@ -258,9 +260,17 @@ format = " [buf](italic) [$symbol $version $buf_version]($style)"
 symbol = "ℂ "
 format = " [$symbol($version(-$name))]($style)"
 
+[cpp]
+symbol = "ℂ "
+format = " [$symbol($version(-$name))]($style)"
+
 [conda]
 symbol = "◯ "
 format = " conda [$symbol$environment]($style)"
+
+[pixi]
+symbol = "■ "
+format = " pixi [$symbol$version ($environment )]($style)"
 
 [dart]
 symbol = "◁◅ "

@@ -1,27 +1,21 @@
+use crate::configs::cc::CcConfig;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Default, Clone, Deserialize, Serialize)]
 #[cfg_attr(
     feature = "config-schema",
     derive(schemars::JsonSchema),
     schemars(deny_unknown_fields)
 )]
-#[serde(default)]
-pub struct CConfig<'a> {
-    pub format: &'a str,
-    pub version_format: &'a str,
-    pub style: &'a str,
-    pub symbol: &'a str,
-    pub disabled: bool,
-    pub detect_extensions: Vec<&'a str>,
-    pub detect_files: Vec<&'a str>,
-    pub detect_folders: Vec<&'a str>,
-    pub commands: Vec<Vec<&'a str>>,
-}
+pub struct CConfigMarker;
+
+pub type CConfig<'a> = CcConfig<'a, CConfigMarker>;
 
 impl Default for CConfig<'_> {
     fn default() -> Self {
-        CConfig {
+        CcConfig {
+            marker: std::marker::PhantomData::<CConfigMarker>,
+
             format: "via [$symbol($version(-$name) )]($style)",
             version_format: "v${raw}",
             style: "149 bold",
