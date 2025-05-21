@@ -14,11 +14,11 @@
 
 Autovervollständigung wird von der Shell deiner Wahl bereitgestellt. In der Demo wurde die [Fish Shell](https://fishshell.com/) benutzt, welche Standardmäßig eine Autovervollständigung beinhaltet. Wenn du die Z Shell (zsh) nutzt, empfehle ich dir, einen Blick auf [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) zu werfen.
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Bewirken Top Level `format` und `<module>.disabled`  dasselbe?
 
 Ja, beide können benutzt werden, um Module in der Prompt zu deaktivieren. Wenn nur Module deaktiviert werden wollen, sollte `<module>.disabled` benutzt werden, aus den folgenden Gründen:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- Die Deaktivierung von Modulen ist expliziter, als nur das Weglassen vom Top Level `format`
 - Mit der Aktualisierung von Starship werden neu erstellte Module an die Eingabezeile angefügt
 
 ## Die Dokumentation sagt, dass die Starship interkompatibel ist. Warum wird meine bevorzugte Shell nicht unterstützt?
@@ -50,7 +50,7 @@ Die Eingabeaufforderung verwendet so viel Kontext wie möglich, aber keine Flagg
 
 ## Wie führe ich Starship auf Linux-Distributionen mit älteren Versionen von glibc aus?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Wenn Sie einen Fehler wie "_Version 'GLIBC_2 erhalten.' nicht gefunden (wird von starship benötigt)_" wenn das vorkompilierte Programm verwendet wird (zum Beispiel auf CentOS 6 oder 7), Sie können eine Binärdatei verwenden, die mit `musl` anstelle von `glibc` kompiliert wurde:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
