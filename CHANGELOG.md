@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.23.1](https://github.com/starship/starship/compare/v1.23.0...v1.23.1) (2025-05-23)
+
+
+### Bug Fixes
+
+* **docker_context:** add `compose.yml` and `compose.yaml` to files ([#6625](https://github.com/starship/starship/issues/6625)) ([a98a05f](https://github.com/starship/starship/commit/a98a05f1ac4dfc215337a266c784cd62256f0c33))
+* **pixi:** Don't trigger pixi module by `.pixi` directory ([#6709](https://github.com/starship/starship/issues/6709)) ([a477186](https://github.com/starship/starship/commit/a477186e52e156eeac780e9b79210a19715f4919))
+
 ## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
 
 
