@@ -20,7 +20,7 @@ pub struct NimConfig<'a> {
 
 impl Default for NimConfig<'_> {
     fn default() -> Self {
-        NimConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "👑 ",
