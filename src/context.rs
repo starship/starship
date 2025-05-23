@@ -411,11 +411,7 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
-        log::trace!(
-            "Executing command {:?} with args {:?} from context",
-            cmd,
-            args
-        );
+        log::trace!("Executing command {cmd:?} with args {args:?} from context");
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
@@ -698,7 +694,7 @@ impl Repo {
         }
 
         command.args(git_args);
-        log::trace!("Executing git command: {:?}", command);
+        log::trace!("Executing git command: {command:?}");
 
         exec_timeout(
             &mut command,
