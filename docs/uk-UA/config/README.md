@@ -2394,7 +2394,7 @@ symbol = '🌟 '
 
 ::: warning
 
-Модуль не підтримується в tcsh та nu.
+This module is not supported on tcsh.
 
 :::
 
