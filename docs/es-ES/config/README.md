@@ -2394,7 +2394,7 @@ La funcionalidad por defecto es:
 
 ::: warning
 
-Este módulo no está soportado por tcsh y nu.
+This module is not supported on tcsh.
 
 :::
 
