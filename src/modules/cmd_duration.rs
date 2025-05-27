@@ -171,7 +171,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "Austin"
+                time_format = "Austin"
             })
             .cmd_duration(182100)
             .collect();
@@ -186,7 +186,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "roundrock"
+                time_format = "roundrock"
             })
             .cmd_duration(182100)
             .collect();
@@ -204,7 +204,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "dallas"
+                time_format = "dallas"
             })
             .cmd_duration(182100)
             .collect();
@@ -219,7 +219,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "galveston"
+                time_format = "galveston"
             })
             .cmd_duration(182100)
             .collect();
@@ -234,7 +234,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "galvestonms"
+                time_format = "galvestonms"
             })
             .cmd_duration(182100)
             .collect();
@@ -252,7 +252,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "Houston"
+                time_format = "Houston"
             })
             .cmd_duration(182100)
             .collect();
@@ -270,7 +270,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "amarillo"
+                time_format = "amarillo"
             })
             .cmd_duration(182100)
             .collect();
@@ -285,7 +285,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "round"
+                time_format = "round"
             })
             .cmd_duration(182100)
             .collect();
@@ -300,7 +300,7 @@ mod tests {
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
-                time_style = "Lucky7"
+                time_format = "Lucky7"
             })
             .cmd_duration(182100)
             .collect();
