@@ -2394,7 +2394,7 @@ The default functionality is:
 
 ::: uyarı
 
-This module is not supported on tcsh and nu.
+This module is not supported on tcsh.
 
 :::
 
