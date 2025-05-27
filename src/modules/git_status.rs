@@ -363,7 +363,7 @@ fn get_repo_status(
             }) {
                 let output = repo.exec_git(
                     context,
-                    ["for-each-ref", "--format", "%(upstream:track)"]
+                    ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
                         .into_iter()
                         .map(ToOwned::to_owned)
                         .chain(Some(branch_name)),
@@ -570,23 +570,32 @@ impl RepoStatus {
     }
 
     fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        s = s.trim_matches(|c| c == '[' || c == ']');
+        let re = Regex::new(r"^([^ ]+) (\[(.*)\])?$").unwrap();
+        if let Some(caps) = re.captures(s) {
+            let ahead_behind_match = caps.get(3);
+            if let Some(ahead_behind_match) = ahead_behind_match {
+                s = ahead_behind_match.as_str();
 
-        for pair in s.split(',') {
-            let mut tokens = pair.trim().splitn(2, ' ');
-            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
-                let storage = match name {
-                    "ahead" => &mut self.ahead,
-                    "behind" => &mut self.behind,
-                    _ => return,
-                };
-                *storage = number.parse().ok();
+                for pair in s.split(',') {
+                    let mut tokens = pair.trim().splitn(2, ' ');
+                    if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
+                        let storage = match name {
+                            "ahead" => &mut self.ahead,
+                            "behind" => &mut self.behind,
+                            _ => return,
+                        };
+                        *storage = number.parse().ok();
+                    }
+                }
             }
-        }
-        for field in [&mut self.ahead, &mut self.behind] {
-            if field.is_none() {
-                *field = Some(0);
+            for field in [&mut self.ahead, &mut self.behind] {
+                if field.is_none() {
+                    *field = Some(0);
+                }
             }
+        } else {
+            self.ahead = None;
+            self.behind = None;
         }
     }
 }
@@ -891,6 +900,25 @@ pub(crate) mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1723,6 +1751,15 @@ pub(crate) mod tests {
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_branch(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "new-branch"])
+            .current_dir(repo_dir)
+            .output()?;
 
         Ok(())
     }
