@@ -2394,7 +2394,7 @@ The default functionality is:
 
 ::: ئاگادارکردنەوە
 
-This module is not supported on tcsh and nu.
+This module is not supported on tcsh.
 
 :::
 
