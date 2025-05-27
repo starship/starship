@@ -34,7 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration" => Some(Ok(render_time(
+                    elapsed,
+                    config.show_milliseconds,
+                    &config.time_format.into(),
+                ))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -158,6 +162,150 @@ mod tests {
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_austin() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "Austin"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("3m 2.1s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_roundrock() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "roundrock"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!(
+            "took {} ",
+            Color::Yellow.bold().paint("3m 2s 100ms")
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_dallas() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "dallas"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("3:2.1")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_galveston() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "galveston"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("00:03:02")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_galvestonms() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "galvestonms"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!(
+            "took {} ",
+            Color::Yellow.bold().paint("00:03:02:100")
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_houston() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "Houston"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!(
+            "took {} ",
+            Color::Yellow.bold().paint("00:03:02.1")
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_amarillo() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "amarillo"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("182.1s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_round() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "round"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("3m 2s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_lucky7() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 5000
+                time_style = "Lucky7"
+            })
+            .cmd_duration(182100)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint(" 3m  2s")));
         assert_eq!(expected, actual);
     }
 

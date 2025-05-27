@@ -9,6 +9,7 @@ use std::cell::OnceCell;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::aws::AwsConfig;
+use crate::configs::cmd_duration::TimeFormat;
 use crate::formatter::StringFormatter;
 use crate::utils::render_time;
 
@@ -260,7 +261,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let duration = {
         get_credentials_duration(context, aws_profile.as_ref(), &aws_creds).map(|duration| {
             if duration > 0 {
-                render_time((duration * 1000) as u128, false)
+                render_time((duration * 1000) as u128, false, &TimeFormat::None)
             } else {
                 config.expiration_symbol.to_string()
             }

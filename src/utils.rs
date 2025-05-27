@@ -7,6 +7,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use crate::configs::cmd_duration::TimeFormat;
 use crate::context::Context;
 use crate::context::Shell;
 
@@ -682,43 +683,158 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
 }
 
 // Render the time into a nice human-readable string
-pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
-    // Fast returns for zero cases to render something
-    match (raw_millis, show_millis) {
-        (0, true) => return "0ms".into(),
-        (0..=999, false) => return "0s".into(),
-        _ => (),
-    }
-
+pub fn render_time(raw_millis: u128, show_millis: bool, time_style: &TimeFormat) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    // Calculate how long the string will be to allocate once in most cases
-    let result_capacity = match raw_millis {
-        1..=59 => 3,
-        60..=3599 => 6,
-        3600..=86399 => 9,
-        _ => 12,
-    } + if show_millis { 5 } else { 0 };
+    // This could alternatively always be computed
+    let millis_truncated = |input: &u128| -> String {
+        let millis_str = format!("{:03}", input);
+        match millis_str.trim_end_matches('0') {
+            s if !s.is_empty() => s.to_owned(),
+            "" => String::from("0"),
+            _ => unreachable!(),
+        }
+    };
 
-    let components = [(days, "d"), (hours, "h"), (minutes, "m"), (seconds, "s")];
+    // Build result string
+    match time_style {
+        TimeFormat::None => {
+            // Previous behavior
 
-    // Concat components ito result starting from the first non-zero one
-    let result = components.iter().fold(
-        String::with_capacity(result_capacity),
-        |acc, (component, suffix)| match component {
-            0 if acc.is_empty() => acc,
-            n => acc + &n.to_string() + suffix,
+            // Fast returns for zero cases to render something
+            match (raw_millis, show_millis) {
+                (0, true) => return "0ms".into(),
+                (0..=999, false) => return "0s".into(),
+                _ => (),
+            }
+
+            // Calculate how long the string will be to allocate once in most cases
+            let result_capacity = match raw_millis {
+                1..=59 => 3,
+                60..=3599 => 6,
+                3600..=86399 => 9,
+                _ => 12,
+            } + if show_millis { 5 } else { 0 };
+
+            let components = [(days, "d"), (hours, "h"), (minutes, "m"), (seconds, "s")];
+
+            // Concat components ito result starting from the first non-zero one
+            let result = components.iter().fold(
+                String::with_capacity(result_capacity),
+                |acc, (component, suffix)| match component {
+                    0 if acc.is_empty() => acc,
+                    n => acc + &n.to_string() + suffix,
+                },
+            );
+
+            if show_millis {
+                result + &millis.to_string() + "ms"
+            } else {
+                result
+            }
+        }
+        TimeFormat::Austin => {
+            // handle seconds and milliseconds separately
+            let seconds = match (seconds, millis) {
+                (0, 0) => "0s".to_string(),
+                (0, ms) => format!("{}ms", ms),
+                (s, 0) => format!("{}s", s),
+                (s, _ms) => format!("{}.{}s", s, millis_truncated(&millis)),
+            };
+
+            let result = match (days, hours, minutes) {
+                (0, 0, 0) => String::new(),
+                (0, 0, m) => format!("{}m", m),
+                (0, h, m) => format!("{}h {}m", h, m),
+                (d, h, m) => format!("{}d {}h {}m", d, h, m),
+            };
+            if result.is_empty() {
+                seconds
+            } else {
+                result + " " + &seconds
+            }
+        }
+        TimeFormat::Roundrock => match (days, hours, minutes, seconds, millis) {
+            (0, 0, 0, 0, ms) => format!("{}ms", ms),
+            (0, 0, 0, s, ms) => format!("{}s {}ms", s, ms),
+            (0, 0, m, s, ms) => format!("{}m {}s {}ms", m, s, ms),
+            (0, h, m, s, ms) => format!("{}h {}m {}s {}ms", h, m, s, ms),
+            (d, h, m, s, ms) => format!("{}d {}h {}m {}s {}ms", d, h, m, s, ms),
         },
-    );
+        TimeFormat::Dallas => {
+            let result = match (days, hours, minutes, seconds) {
+                (0, 0, 0, 0) => "0".to_string(),
+                (0, 0, 0, s) => format!("{}", s),
+                (0, 0, m, s) => format!("{}:{}", m, s),
+                (0, h, m, s) => format!("{}:{}:{}", h, m, s),
+                (d, h, m, s) => format!("{}:{}:{}:{}", d, h, m, s),
+            };
+            if millis > 0 {
+                result + "." + &millis_truncated(&millis)
+            } else {
+                result
+            }
+        }
+        TimeFormat::Galveston => format!("{:02}:{:02}:{:02}", raw_hours, minutes, seconds),
+        TimeFormat::Galvestonms => {
+            format!(
+                "{:02}:{:02}:{:02}:{:03}",
+                raw_hours, minutes, seconds, millis
+            )
+        }
+        TimeFormat::Houston => {
+            format!(
+                "{:02}:{:02}:{:02}.{}",
+                raw_hours,
+                minutes,
+                seconds,
+                millis_truncated(&millis)
+            )
+        }
+        TimeFormat::Amarillo => {
+            let s = raw_seconds.to_string();
+            let len = s.len() + s.len() / 3 + 1;
+            let mut result = String::with_capacity(len);
 
-    if show_millis {
-        result + &millis.to_string() + "ms"
-    } else {
-        result
+            // Is there a better way? Probably with `itertools`
+            let mut result = {
+                for (count, c) in s.chars().rev().enumerate() {
+                    if count != 0 && count % 3 == 0 {
+                        result.push(',');
+                    }
+                    result.push(c);
+                }
+                result.chars().rev().collect::<String>()
+            };
+
+            if millis > 0 {
+                result.push('.');
+                result.push_str(&millis_truncated(&millis));
+            }
+            result + "s"
+        }
+        TimeFormat::Round => match (days, hours, minutes, seconds, millis) {
+            (0, 0, 0, 0, ms) => format!("{}ms", ms),
+            (0, 0, 0, s, _) => format!("{}s", s),
+            (0, 0, m, 0, _) => format!("{}m", m),
+            (0, 0, m, s, _) => format!("{}m {}s", m, s),
+            (0, h, 0, ..) => format!("{}h", h),
+            (0, h, m, ..) => format!("{}h {}m", h, m),
+            (d, 0, ..) => format!("{}d", d),
+            (d, h, ..) => format!("{}d {}h", d, h),
+        },
+
+        TimeFormat::Lucky7 => match (days, hours, minutes, seconds, millis) {
+            (0, 0, 0, 0, ms) => format!("{:>5}ms", ms),
+            (0, 0, 0, s, ms) => format!("{:>2}.{:02}s ", s, (ms as f64 / 10.0).round()),
+            (0, 0, m, s, ..) => format!("{:>2}m {:>2}s", m, s),
+            (0, h, m, ..) => format!("{:>2}h {:>2}m", h, m),
+            (d, h, ..) => format!("{:>2}d {:>2}h", d, h),
+        },
     }
 }
 
@@ -781,35 +897,242 @@ mod tests {
 
     #[test]
     fn render_time_test_0ms() {
-        assert_eq!(render_time(0_u128, true), "0ms")
+        assert_eq!(render_time(0_u128, true, &TimeFormat::None), "0ms")
     }
     #[test]
     fn render_time_test_0s() {
-        assert_eq!(render_time(0_u128, false), "0s")
+        assert_eq!(render_time(0_u128, false, &TimeFormat::None), "0s")
     }
     #[test]
     fn render_time_test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true, &TimeFormat::None), "500ms")
     }
     #[test]
     fn render_time_test_500ms_no_millis() {
-        assert_eq!(render_time(500_u128, false), "0s")
+        assert_eq!(render_time(500_u128, false, &TimeFormat::None), "0s")
     }
     #[test]
     fn render_time_test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s0ms")
+        assert_eq!(render_time(10_000_u128, true, &TimeFormat::None), "10s0ms")
     }
     #[test]
     fn render_time_test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s0ms")
+        assert_eq!(
+            render_time(90_000_u128, true, &TimeFormat::None),
+            "1m30s0ms"
+        )
     }
     #[test]
     fn render_time_test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms")
+        assert_eq!(
+            render_time(10_110_000_u128, true, &TimeFormat::None),
+            "2h48m30s0ms"
+        )
     }
     #[test]
     fn render_time_test_1d() {
-        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s")
+        assert_eq!(
+            render_time(86_400_000_u128, false, &TimeFormat::None),
+            "1d0h0m0s"
+        )
+    }
+    #[test]
+    fn render_time_austin() {
+        [
+            (1_u128, "1ms"),
+            (100_u128, "100ms"),
+            (1_000_u128, "1s"),
+            (2_100_u128, "2.1s"),
+            (60_000_u128, "1m 0s"),
+            (182_100_u128, "3m 2.1s"),
+            (3_600_000_u128, "1h 0m 0s"),
+            (14_582_100_u128, "4h 3m 2.1s"),
+            (446_582_100_u128, "5d 4h 3m 2.1s"),
+            (446_582_000_u128, "5d 4h 3m 2s"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Austin),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_roundrock() {
+        [
+            (1_u128, "1ms"),
+            (100_u128, "100ms"),
+            (1_000_u128, "1s 0ms"),
+            (2_100_u128, "2s 100ms"),
+            (60_000_u128, "1m 0s 0ms"),
+            (182_100_u128, "3m 2s 100ms"),
+            (3_600_000_u128, "1h 0m 0s 0ms"),
+            (14_582_100_u128, "4h 3m 2s 100ms"),
+            (446_582_100_u128, "5d 4h 3m 2s 100ms"),
+            (446_582_000_u128, "5d 4h 3m 2s 0ms"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Roundrock),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_dallas() {
+        [
+            (1_u128, "0.001"),
+            (100_u128, "0.1"),
+            (1_000_u128, "1"),
+            (2_100_u128, "2.1"),
+            (60_000_u128, "1:0"),
+            (182_100_u128, "3:2.1"),
+            (3_600_000_u128, "1:0:0"),
+            (14_582_100_u128, "4:3:2.1"),
+            (446_582_100_u128, "5:4:3:2.1"),
+            (446_582_000_u128, "5:4:3:2"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Dallas),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_galveston() {
+        [
+            (1_u128, "00:00:00"),
+            (100_u128, "00:00:00"),
+            (1_000_u128, "00:00:01"),
+            (2_100_u128, "00:00:02"),
+            (60_000_u128, "00:01:00"),
+            (182_100_u128, "00:03:02"),
+            (3_600_000_u128, "01:00:00"),
+            (14_582_100_u128, "04:03:02"),
+            (446_582_100_u128, "124:03:02"),
+            (446_582_000_u128, "124:03:02"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Galveston),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_galvestonms() {
+        [
+            (1_u128, "00:00:00:001"),
+            (100_u128, "00:00:00:100"),
+            (1_000_u128, "00:00:01:000"),
+            (2_100_u128, "00:00:02:100"),
+            (60_000_u128, "00:01:00:000"),
+            (182_100_u128, "00:03:02:100"),
+            (3_600_000_u128, "01:00:00:000"),
+            (14_582_100_u128, "04:03:02:100"),
+            (446_582_100_u128, "124:03:02:100"),
+            (446_582_000_u128, "124:03:02:000"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Galvestonms),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_houston() {
+        [
+            (1_u128, "00:00:00.001"),
+            (100_u128, "00:00:00.1"),
+            (1_000_u128, "00:00:01.0"),
+            (2_100_u128, "00:00:02.1"),
+            (60_000_u128, "00:01:00.0"),
+            (182_100_u128, "00:03:02.1"),
+            (3_600_000_u128, "01:00:00.0"),
+            (14_582_100_u128, "04:03:02.1"),
+            (446_582_100_u128, "124:03:02.1"),
+            (446_582_000_u128, "124:03:02.0"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Houston),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_amarillo() {
+        [
+            (1_u128, "0.001s"),
+            (100_u128, "0.1s"),
+            (1_000_u128, "1s"),
+            (2_100_u128, "2.1s"),
+            (60_000_u128, "60s"),
+            (182_100_u128, "182.1s"),
+            (3_600_000_u128, "3,600s"),
+            (14_582_100_u128, "14,582.1s"),
+            (446_582_100_u128, "446,582.1s"),
+            (446_582_000_u128, "446,582s"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Amarillo),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_round() {
+        [
+            (1_u128, "1ms"),
+            (100_u128, "100ms"),
+            (1_000_u128, "1s"),
+            (2_100_u128, "2s"),
+            (60_000_u128, "1m"),
+            (182_100_u128, "3m 2s"),
+            (3_600_000_u128, "1h"),
+            (14_582_100_u128, "4h 3m"),
+            (446_582_100_u128, "5d 4h"),
+            (446_582_000_u128, "5d 4h"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Round),
+                expectation
+            )
+        });
+    }
+    #[test]
+    fn render_time_lucky7() {
+        [
+            (1_u128, "    1ms"),
+            (100_u128, "  100ms"),
+            (1_000_u128, " 1.00s "),
+            (2_100_u128, " 2.10s "),
+            (60_000_u128, " 1m  0s"),
+            (182_100_u128, " 3m  2s"),
+            (3_600_000_u128, " 1h  0m"),
+            (14_582_100_u128, " 4h  3m"),
+            (446_582_100_u128, " 5d  4h"),
+            (446_582_000_u128, " 5d  4h"),
+        ]
+        .into_iter()
+        .for_each(|(duration, expectation)| {
+            assert_eq!(
+                render_time(duration, false, &TimeFormat::Lucky7),
+                expectation
+            )
+        });
     }
 
     #[test]
