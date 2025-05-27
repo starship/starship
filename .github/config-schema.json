@@ -183,7 +183,8 @@
         "min_time_to_notify": 45000,
         "show_milliseconds": false,
         "show_notifications": false,
-        "style": "yellow bold"
+        "style": "yellow bold",
+        "time_format": "None"
       },
       "allOf": [
         {
@@ -2559,6 +2560,10 @@
           "default": 45000,
           "type": "integer",
           "format": "int64"
+        },
+        "time_format": {
+          "default": "None",
+          "type": "string"
         },
         "notification_timeout": {
           "type": [

@@ -918,6 +918,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| `time_format`          | `None`                        | Defines how the duration will be formatted (ignores `show_milliseconds` if not `None`), see below for examples and valid values.                                  |
 
 ### Variables
 
@@ -927,6 +928,23 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | style\*  |          | Mirrors the value of option `style`     |
 
 *: This variable can only be used as a part of a style string
+
+### Format
+
+Specifies the format in which the time will be displayed. The table below shows some example times in each option.
+
+| format        | 0.001s         | 2.1s           | 3m2.1s         | 4h3m2.1s         |
+| ------------- | -------------- | -------------- | -------------- | ---------------- |
+| `austin`      | `1ms`          | `2.1s`         | `3m 2.1s`      | `4h 3m 2.1s`     |
+| `roundrock`   | `1ms`          | `2s 100ms`     | `3m 2s 100ms`  | `4h 3m 2s 100ms` |
+| `dallas`      | `0.001`        | `2.1`          | `3:2.1`        | `4:3:2.1`        |
+| `galveston`   | `00:00:00`     | `00:00:02`     | `00:03:02`     | `04:03:02`       |
+| `galvestonms` | `00:00:00:001` | `00:00:02:100` | `00:03:02:100` | `04:03:02:100`   |
+| `houston`     | `00:00:00.001` | `00:00:02.1`   | `00:03:02.1`   | `04:03:02.1`     |
+| `amarillo`    | `0.001s`       | `2.1s`         | `182.1s`       | `14,582.1s`      |
+| `round`       | `1ms`          | `2s`           | `3m 2s`        | `4h 3m`          |
+| `lucky7`      | `    1ms`      | ` 2.00s `      | ` 3m  2s`      | ` 4h  3m`        |
+
 
 ### Example
 
