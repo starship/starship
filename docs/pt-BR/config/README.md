@@ -2394,7 +2394,7 @@ A funcionalidade padrão é:
 
 ::: atenção
 
-Este módulo não é suportado em tcsh e nu.
+This module is not supported on tcsh.
 
 :::
 
