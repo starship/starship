@@ -2394,7 +2394,7 @@ Le fonctionnement par défaut est:
 
 ::: warning
 
-This module is not supported on tcsh.
+Ce module n'est pas pris en charge sur tcsh.
 
 :::
 
