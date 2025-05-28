@@ -2394,7 +2394,7 @@ The default functionality is:
 
 ::: cảnh báo
 
-This module is not supported on tcsh.
+Mô đun này không hỗ trợ trên tcsh.
 
 :::
 
