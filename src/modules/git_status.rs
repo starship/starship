@@ -576,6 +576,12 @@ impl RepoStatus {
             if let Some(ahead_behind_match) = ahead_behind_match {
                 s = ahead_behind_match.as_str();
 
+                if s == "gone" {
+                    self.ahead = None;
+                    self.behind = None;
+                    return;
+                }
+
                 for pair in s.split(',') {
                     let mut tokens = pair.trim().splitn(2, ' ');
                     if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
@@ -759,7 +765,7 @@ pub(crate) mod tests {
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
-    use std::fs::{self, File};
+    use std::fs::{self, File, OpenOptions};
     use std::io::{self, prelude::*};
     use std::path::Path;
 
@@ -910,6 +916,25 @@ pub(crate) mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch_with_gone_upstream(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -1760,6 +1785,22 @@ pub(crate) mod tests {
             .args(["switch", "-c", "new-branch"])
             .current_dir(repo_dir)
             .output()?;
+
+        Ok(())
+    }
+
+    fn create_branch_with_gone_upstream(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "gone-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        let config_path = repo_dir.join(".git").join("config");
+        let mut config_file = OpenOptions::new().append(true).open(&config_path)?;
+        writeln!(
+            config_file,
+            "\n[branch \"gone-branch\"]\n\tremote = origin\n\tmerge = refs/heads/gone-upstream\n"
+        )?;
 
         Ok(())
     }
