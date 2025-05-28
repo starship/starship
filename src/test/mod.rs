@@ -65,6 +65,14 @@ impl<'a> ModuleRenderer<'a> {
         Self { name, context }
     }
 
+    /// Creates a new `ModuleRenderer` with `HOME` set to a `TempDir`
+    pub fn new_with_home(name: &'a str) -> io::Result<(Self, tempfile::TempDir)> {
+        let module_renderer = ModuleRenderer::new(name);
+        let homedir = tempfile::tempdir()?;
+        let home = dunce::canonicalize(homedir.path())?;
+        Ok((module_renderer.env("HOME", home.to_str().unwrap()), homedir))
+    }
+
     pub fn path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
