@@ -54,7 +54,7 @@ open = "5.3.2"
 # update os module config and tests when upgrading os_info
 os_info = "3.11.0"
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
-parking_lot = "0.12.3"
+parking_lot = "0.12.4"
 path-slash = "0.2.1"
 pest = "2.8.0"
 pest_derive = "2.8.0"
