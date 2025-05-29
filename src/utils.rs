@@ -692,12 +692,13 @@ pub fn render_time(raw_millis: u128, show_millis: bool, time_style: &TimeFormat)
 
     // This could alternatively always be computed
     let millis_truncated = |input: &u128| -> String {
-        let millis_str = format!("{:03}", input);
-        match millis_str.trim_end_matches('0') {
-            s if !s.is_empty() => s.to_owned(),
-            "" => String::from("0"),
-            _ => unreachable!(),
+        if *input == 0 {
+            return "0".into();
         }
+
+        // include leading zeros
+        let millis_str = format!("{:03}", input);
+        millis_str.trim_end_matches('0').into()
     };
 
     // Build result string
@@ -746,16 +747,15 @@ pub fn render_time(raw_millis: u128, show_millis: bool, time_style: &TimeFormat)
                 (s, _ms) => format!("{}.{}s", s, millis_truncated(&millis)),
             };
 
-            let result = match (days, hours, minutes) {
-                (0, 0, 0) => String::new(),
-                (0, 0, m) => format!("{}m", m),
-                (0, h, m) => format!("{}h {}m", h, m),
-                (d, h, m) => format!("{}d {}h {}m", d, h, m),
-            };
-            if result.is_empty() {
+            if (days, hours, minutes) == (0, 0, 0) {
                 seconds
             } else {
-                result + " " + &seconds
+                match (days, hours, minutes) {
+                    // (0, 0, 0) already handled above
+                    (0, 0, m) => format!("{}m {}", m, seconds),
+                    (0, h, m) => format!("{}h {}m {}", h, m, seconds),
+                    (d, h, m) => format!("{}d {}h {}m {}", d, h, m, seconds),
+                }
             }
         }
         TimeFormat::Roundrock => match (days, hours, minutes, seconds, millis) {
@@ -827,7 +827,6 @@ pub fn render_time(raw_millis: u128, show_millis: bool, time_style: &TimeFormat)
             (d, 0, ..) => format!("{}d", d),
             (d, h, ..) => format!("{}d {}h", d, h),
         },
-
         TimeFormat::Lucky7 => match (days, hours, minutes, seconds, millis) {
             (0, 0, 0, 0, ms) => format!("{:>5}ms", ms),
             (0, 0, 0, s, ms) => format!("{:>2}.{:02}s ", s, (ms as f64 / 10.0).round()),
