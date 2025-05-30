@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.24.0](https://github.com/starship/starship/compare/v1.23.0...v1.24.0) (2025-05-30)
+
+
+### Features
+
+* **aws:** support duration for aws sso ([#6614](https://github.com/starship/starship/issues/6614)) ([44e9e56](https://github.com/starship/starship/commit/44e9e56480a748ccda1a64a9f623dc2b19ecfe98))
+* **nu:** Add job support for nushell ([#6684](https://github.com/starship/starship/issues/6684)) ([ac2359c](https://github.com/starship/starship/commit/ac2359ca8a020825b5c68b5e3b8da35d4917f46e))
+
+
+### Bug Fixes
+
+* **docker_context:** add `compose.yml` and `compose.yaml` to files ([#6625](https://github.com/starship/starship/issues/6625)) ([a98a05f](https://github.com/starship/starship/commit/a98a05f1ac4dfc215337a266c784cd62256f0c33))
+* **pixi:** Don't trigger pixi module by `.pixi` directory ([#6709](https://github.com/starship/starship/issues/6709)) ([a477186](https://github.com/starship/starship/commit/a477186e52e156eeac780e9b79210a19715f4919))
+
 ## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
 
 
