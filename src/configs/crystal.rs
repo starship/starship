@@ -20,7 +20,7 @@ pub struct CrystalConfig<'a> {
 
 impl Default for CrystalConfig<'_> {
     fn default() -> Self {
-        CrystalConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🔮 ",

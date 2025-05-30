@@ -21,7 +21,7 @@ pub struct GoConfig<'a> {
 
 impl Default for GoConfig<'_> {
     fn default() -> Self {
-        GoConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐹 ",

@@ -20,7 +20,7 @@ pub struct TimeConfig<'a> {
 
 impl Default for TimeConfig<'_> {
     fn default() -> Self {
-        TimeConfig {
+        Self {
             format: "at [$time]($style) ",
             style: "bold yellow",
             use_12hr: false,
