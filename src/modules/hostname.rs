@@ -70,7 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `hostname`:\n{}", error);
+            log::warn!("Error in module `hostname`:\n{error}");
             return None;
         }
     });
