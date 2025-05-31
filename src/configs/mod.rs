@@ -46,6 +46,7 @@ pub mod haskell;
 pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
+pub mod hg_state;
 pub mod hostname;
 pub mod java;
 pub mod jobs;
@@ -205,6 +206,8 @@ pub struct FullConfig<'a> {
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]
     hg_branch: hg_branch::HgBranchConfig<'a>,
+    #[serde(borrow)]
+    hg_state: hg_state::HgStateConfig<'a>,
     #[serde(borrow)]
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]

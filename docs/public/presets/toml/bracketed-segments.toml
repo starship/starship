@@ -85,6 +85,9 @@ format = '\[[$symbol($version)]($style)\]'
 [hg_branch]
 format = '\[[$symbol$branch]($style)\]'
 
+[hg_state]
+format = '\([$state]($style)\) '
+
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
