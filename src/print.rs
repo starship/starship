@@ -336,20 +336,28 @@ fn handle_module<'a>(
         }
 
         // Write out all custom modules, except for those that are explicitly set
-        for (child, config) in context
-            .config
-            .get_config(&[module])
-            .and_then(|config| config.as_table().map(toml::map::Map::iter))
-            .into_iter()
-            .flatten()
-        {
-            // Some env var keys may be part of a top-level module definition
-            if module == "env_var" && !config.is_table() {
-                continue;
-            } else if should_add_implicit_module(module, child, config, module_list) {
-                modules.extend(modules::handle(&format!("{module}.{child}"), context));
-            }
-        }
+        modules.extend(
+            context
+                .config
+                .get_config(&[module])
+                .and_then(|config| config.as_table().map(toml::map::Map::iter))
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .par_iter()
+                .filter_map(|(child, config)| {
+                    // Some env var keys may be part of a top-level module definition
+                    if module == "env_var" && !config.is_table() {
+                        None
+                    } else if should_add_implicit_module(module, child, config, module_list) {
+                        Some(modules::handle(&format!("{module}.{child}"), context))
+                    } else {
+                        None
+                    }
+                })
+                .flatten()
+                .collect::<Vec<Module>>(),
+        );
     } else {
         log::debug!(
             "Expected top level format to contain value from {:?}. Instead received {}",
