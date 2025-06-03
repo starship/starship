@@ -4577,10 +4577,11 @@ format = 'via [🏎  $version](red bold)'
 ## Terraform
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+It supports both Hashicorp Terraform and OpenTofu for version detection.
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use.
+By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use.
 If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
@@ -4592,16 +4593,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                               | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
-| `style`             | `'bold 105'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
+| Option              | Default                                                 | Description                                                               |
+| ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
+| `style`             | `'bold 105'`                                            | The style for the module.                                                 |
+| `disabled`          | `false`                                                 | Disables the `terraform` module.                                          |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is                               |
 
 ### Variables
 
@@ -4622,7 +4624,7 @@ By default the module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Without Terraform version
@@ -4631,7 +4633,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Time
