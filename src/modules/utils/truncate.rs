@@ -12,14 +12,13 @@ pub fn truncate_text(text: &str, length: usize, truncation_symbol: &str) -> Stri
 
     let truncated_graphemes = get_graphemes(text, length);
     // The truncation symbol should only be added if we truncated
-    let truncated_and_symbol = if length < graphemes_len(text) {
+
+    if length < graphemes_len(text) {
         let truncation_symbol = get_graphemes(truncation_symbol, 1);
         truncated_graphemes + truncation_symbol.as_str()
     } else {
         truncated_graphemes
-    };
-
-    truncated_and_symbol
+    }
 }
 
 fn get_graphemes(text: &str, length: usize) -> String {
