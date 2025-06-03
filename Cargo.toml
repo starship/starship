@@ -56,6 +56,7 @@ os_info = "3.13.0"
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
 parking_lot = "0.12.5"
 path-slash = "0.2.1"
+pathdiff = "0.2.3"
 pest = "2.8.4"
 pest_derive = "2.8.4"
 process_control = "5.2.0"

@@ -60,6 +60,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
                 }
                 "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
+                "dir" => {
+                    let relpath = get_python_virtual_env_relative_path(context);
+                    relpath.map(Ok)
+                }
+                "prompt" => {
+                    let prompt = get_python_virtual_env_prompt(context);
+                    prompt.map(Ok)
+                }
                 _ => None,
             })
             .parse(None, Some(context))
@@ -130,6 +138,35 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
                 .file_name()
                 .map(|filename| String::from(filename.to_str().unwrap_or("")))
         })
+    })
+}
+
+fn get_python_virtual_env_relative_path(context: &Context) -> Option<String> {
+    context
+        .get_env("VIRTUAL_ENV")
+        .and_then(|venv| relative_to(&context.current_dir, Path::new(&venv)))
+}
+
+fn get_python_virtual_env_prompt(context: &Context) -> Option<String> {
+    context
+        .get_env("VIRTUAL_ENV")
+        .and_then(|venv| get_prompt_from_venv(Path::new(&venv)))
+}
+
+fn relative_to(base: impl AsRef<Path>, path: impl AsRef<Path>) -> Option<String> {
+    static PARENT_PREFIX: &str = if cfg!(windows) { "..\\" } else { "../" };
+    pathdiff::diff_paths(path, base)?.to_str().map(|rel| {
+        if rel.is_empty() {
+            ".".to_owned()
+        } else if !rel.starts_with(PARENT_PREFIX) {
+            if cfg!(windows) {
+                format!(".\\{rel}")
+            } else {
+                format!("./{rel}")
+            }
+        } else {
+            rel.to_owned()
+        }
     })
 }
 
@@ -458,6 +495,102 @@ prompt = 'foo'
     }
 
     #[test]
+    fn just_prompt_with_active_venv_and_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = 'foo'
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let just_prompt_config = toml::toml! {
+            [python]
+            format = "$prompt"
+        };
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .config(just_prompt_config)
+            .collect();
+
+        let expected = Some("foo".to_string());
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn relative_dir() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let venv_dir = dir.path().join("my_venv");
+        create_dir_all(&venv_dir)?;
+        let other_dir = dir.path().join("other");
+        create_dir_all(&other_dir)?;
+        let mut venv_cfg = File::create(venv_dir.join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = 'foo'
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let just_dir_config = toml::toml! {
+            [python]
+            format = "$dir"
+        };
+
+        let venv_dir = venv_dir.to_str().unwrap();
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", venv_dir)
+            .config(just_dir_config.clone())
+            .collect();
+
+        let expected = Some(
+            if cfg!(windows) {
+                ".\\my_venv"
+            } else {
+                "./my_venv"
+            }
+            .to_owned(),
+        );
+        assert_eq!(actual, expected);
+
+        let actual = ModuleRenderer::new("python")
+            .path(other_dir.to_str().unwrap())
+            .env("VIRTUAL_ENV", venv_dir)
+            .config(just_dir_config.clone())
+            .collect();
+
+        let expected = Some(
+            if cfg!(windows) {
+                "..\\my_venv"
+            } else {
+                "../my_venv"
+            }
+            .to_owned(),
+        );
+        assert_eq!(actual, expected);
+
+        let actual = ModuleRenderer::new("python")
+            .path(venv_dir)
+            .env("VIRTUAL_ENV", venv_dir)
+            .config(just_dir_config)
+            .collect();
+
+        let expected = Some(".".to_owned());
+        assert_eq!(actual, expected);
+
+        dir.close()
+    }
+
+    #[test]
     fn with_active_venv_and_dirty_prompt() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         create_dir_all(dir.path().join("my_venv"))?;
@@ -485,6 +618,35 @@ prompt = '(foo)'
     }
 
     #[test]
+    fn just_prompt_with_active_venv_and_dirty_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = '(foo)'
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let just_prompt_config = toml::toml! {
+            [python]
+            format = "$prompt"
+        };
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .config(just_prompt_config)
+            .collect();
+
+        let expected = Some("foo".to_string());
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
     fn with_active_venv_and_line_break_like_prompt() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         create_dir_all(dir.path().join("my_venv"))?;
@@ -506,6 +668,35 @@ prompt = foo\nbar
             "via {}",
             Color::Yellow.bold().paint(r"🐍 v3.8.0 (foo\nbar) ")
         ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn just_prompt_with_active_venv_and_line_break_like_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = foo\nbar
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let just_prompt_config = toml::toml! {
+            [python]
+            format = "$prompt"
+        };
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .config(just_prompt_config)
+            .collect();
+
+        let expected = Some(r"foo\nbar".to_string());
 
         assert_eq!(actual, expected);
         dir.close()
