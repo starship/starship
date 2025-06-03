@@ -473,12 +473,23 @@ fn get_repo_status(
                     match change {
                         Change::Addition { .. } => {
                             repo_status.staged += 1;
+                            repo_status.index_added += 1;
                         }
                         Change::Deletion { .. } => {
                             repo_status.deleted += 1;
+                            repo_status.index_deleted += 1;
                         }
-                        Change::Modification { .. } => {
+                        Change::Modification {
+                            previous_entry_mode,
+                            entry_mode,
+                            ..
+                        } => {
                             repo_status.staged += 1;
+                            if previous_entry_mode == entry_mode {
+                                repo_status.index_modified += 1;
+                            } else {
+                                repo_status.index_typechanged += 1;
+                            }
                         }
                         Change::Rewrite { .. } => {
                             repo_status.renamed += 1;
@@ -500,22 +511,31 @@ fn get_repo_status(
                             ..
                         } => {
                             repo_status.deleted += 1;
+                            repo_status.worktree_deleted += 1
+                        }
+                        Item::Modification {
+                            status: EntryStatus::IntentToAdd,
+                            ..
+                        } => {
+                            repo_status.modified += 1;
+                            repo_status.worktree_added += 1
                         }
                         Item::Modification {
                             status:
-                                EntryStatus::IntentToAdd
-                                | EntryStatus::Change(
+                                EntryStatus::Change(
                                     Change::Modification { .. } | Change::SubmoduleModification(_),
                                 ),
                             ..
                         } => {
                             repo_status.modified += 1;
+                            repo_status.worktree_modified += 1
                         }
                         Item::Modification {
                             status: EntryStatus::Change(Change::Type { .. }),
                             ..
                         } => {
                             repo_status.typechanged += 1;
+                            repo_status.worktree_typechanged += 1
                         }
                         Item::DirectoryContents {
                             entry:
