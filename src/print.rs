@@ -289,7 +289,7 @@ pub fn explain(args: Properties) {
                 " ".repeat(max_module_width - info.value_len),
                 info.desc,
             );
-        };
+        }
     }
 }
 
@@ -346,7 +346,8 @@ fn handle_module<'a>(
             // Some env var keys may be part of a top-level module definition
             if module == "env_var" && !config.is_table() {
                 continue;
-            } else if should_add_implicit_module(module, child, config, module_list) {
+            }
+            if should_add_implicit_module(module, child, config, module_list) {
                 modules.extend(modules::handle(&format!("{module}.{child}"), context));
             }
         }
@@ -398,7 +399,7 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     let mut prompt_order: Vec<String> = Vec::new();
     for module in PROMPT_ORDER {
         if !module_list.contains(*module) {
-            prompt_order.push(String::from(*module))
+            prompt_order.push(String::from(*module));
         }
     }
 
@@ -448,7 +449,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
             "format".to_string()
         };
         log::error!("Error parsing {name:?}: {e}");
-    };
+    }
 
     if let Err(ref e) = rf {
         log::error!("Error parsing right_format: {e}");

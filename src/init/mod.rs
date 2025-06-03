@@ -35,7 +35,7 @@ impl StarshipPath {
         let current_exe = self
             .native_path
             .to_str()
-            .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?;
+            .ok_or_else(|| io::Error::other("can't convert to str"))?;
         Ok(current_exe)
     }
 
@@ -162,21 +162,21 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         "powershell" => print!(
-            r#"Invoke-Expression (& {} init powershell --print-full-init | Out-String)"#,
+            r"Invoke-Expression (& {} init powershell --print-full-init | Out-String)",
             starship.sprint_pwsh()?
         ),
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
-            r#"eval ({} init elvish --print-full-init | slurp)"#,
+            r"eval ({} init elvish --print-full-init | slurp)",
             starship.sprint()?
         ),
         "tcsh" => print!(
-            r#"eval `({} init tcsh --print-full-init)`"#,
+            r"eval `({} init tcsh --print-full-init)`",
             starship.sprint_posix()?
         ),
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
-            r#"execx($({} init xonsh --print-full-init))"#,
+            r"execx($({} init xonsh --print-full-init))",
             starship.sprint_posix()?
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),

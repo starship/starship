@@ -96,9 +96,8 @@ fn parse_version(version: &str) -> &str {
         if *c == b'.' {
             if periods == 2 {
                 return &sanitized_version[0..i];
-            } else {
-                periods += 1;
             }
+            periods += 1;
         }
     }
     // We didn't hit 3 periods, so we just return the whole string.

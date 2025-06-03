@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if !is_py_project && !has_env_vars {
         return None;
-    };
+    }
 
     let pyenv_prefix = if config.pyenv_version_name {
         config.pyenv_prefix
@@ -86,7 +86,7 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
                 .stdout
                 .trim()
                 .to_string(),
-        )
+        );
     }
 
     version_name

@@ -26,21 +26,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let exit_code = context.properties.status_code.as_deref().unwrap_or("0");
 
     let pipestatus_status = match &context.properties.pipestatus {
         None => PipeStatusStatus::Disabled,
-        Some(ps) => match ps.len() > 1 {
-            true => PipeStatusStatus::Pipe(ps),
-            false => PipeStatusStatus::NoPipe,
-        },
+        Some(ps) => {
+            if ps.len() > 1 {
+                PipeStatusStatus::Pipe(ps)
+            } else {
+                PipeStatusStatus::NoPipe
+            }
+        }
     };
 
-    let pipestatus_status = match config.pipestatus {
-        true => pipestatus_status,
-        false => PipeStatusStatus::Disabled,
+    let pipestatus_status = if config.pipestatus {
+        pipestatus_status
+    } else {
+        PipeStatusStatus::Disabled
     };
 
     // Exit code is zero while success_symbol and pipestatus are all zero or disabled/missing
@@ -111,30 +115,31 @@ fn format_exit_code<'a>(
     context: &'a Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
     // First, parse as i64 to accept both i32 or u32, then normalize to i32.
-    let exit_code_int: ExitCode = match exit_code.parse::<i64>() {
-        Ok(i) => i as ExitCode,
-        Err(_) => {
-            log::warn!("Error parsing exit_code string to int");
-            return Ok(Vec::new());
-        }
+    let exit_code_int = if let Ok(i) = exit_code.parse::<i64>() {
+        i as ExitCode
+    } else {
+        log::warn!("Error parsing exit_code string to int");
+        return Ok(Vec::new());
     };
 
     let hex_status = format!("0x{exit_code_int:X}");
 
     let common_meaning = status_common_meaning(exit_code_int);
 
-    let raw_signal_number = match config.recognize_signal_code {
-        true => status_to_signal(exit_code_int),
-        false => None,
+    let raw_signal_number = if config.recognize_signal_code {
+        status_to_signal(exit_code_int)
+    } else {
+        None
     };
     let signal_number = raw_signal_number.map(|sn| sn.to_string());
     let signal_name =
         raw_signal_number.and_then(|sn| status_signal_name(sn).or(signal_number.as_deref()));
 
     // If not a signal and not a common meaning, it should at least print the raw exit code number
-    let maybe_exit_code_number = match common_meaning.is_none() && signal_name.is_none() {
-        true => Some(exit_code),
-        false => None,
+    let maybe_exit_code_number = if common_meaning.is_none() && signal_name.is_none() {
+        Some(exit_code)
+    } else {
+        None
     };
 
     StringFormatter::new(format).and_then(|formatter| {

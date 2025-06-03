@@ -336,6 +336,7 @@ mod tests {
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
+            Type::AOSC => "",
             Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
             Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",

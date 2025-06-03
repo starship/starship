@@ -103,12 +103,12 @@ impl Segment {
         let mut segs: Vec<Self> = Vec::new();
         value.into().split(LINE_TERMINATOR).for_each(|s| {
             if !segs.is_empty() {
-                segs.push(Self::LineTerm)
+                segs.push(Self::LineTerm);
             }
             segs.push(Self::Text(TextSegment {
                 value: String::from(s),
                 style,
-            }))
+            }));
         });
         segs
     }
@@ -136,12 +136,12 @@ impl Segment {
         match self {
             Self::Fill(fs) => {
                 if fs.style.is_none() {
-                    fs.style = style
+                    fs.style = style;
                 }
             }
             Self::Text(ts) => {
                 if ts.style.is_none() {
-                    ts.style = style
+                    ts.style = style;
                 }
             }
             Self::LineTerm => {}
