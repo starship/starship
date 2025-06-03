@@ -224,14 +224,14 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
 }
 
 pub fn get_configuration(context: &Context) -> toml::Table {
-    let starship_config = StarshipConfig::initialize(&context.get_config_path_os());
+    let starship_config = StarshipConfig::initialize(context.get_config_path_os().as_deref());
 
     starship_config.config.unwrap_or_default()
 }
 
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
     let config_file_path = context.get_config_path_os();
-    let toml_content = StarshipConfig::read_config_content_as_str(&config_file_path);
+    let toml_content = StarshipConfig::read_config_content_as_str(config_file_path.as_deref());
 
     toml_content
         .unwrap_or_default()

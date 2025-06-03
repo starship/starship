@@ -144,12 +144,12 @@ pub fn get_prompt(context: Context) -> String {
 
 pub fn module(module_name: &str, args: Properties) {
     let context = Context::new(args, Target::Main);
-    let module = get_module(module_name, context).unwrap_or_default();
+    let module = get_module(module_name, &context).unwrap_or_default();
     print!("{module}");
 }
 
-pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context).map(|m| m.to_string())
+pub fn get_module(module_name: &str, context: &Context) -> Option<String> {
+    modules::handle(module_name, context).map(|m| m.to_string())
 }
 
 pub fn timings(args: Properties) {

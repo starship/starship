@@ -884,7 +884,7 @@ mod tests {
             stderr: String::from("world\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -893,7 +893,7 @@ mod tests {
         let result = internal_exec_cmd("false", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -902,7 +902,7 @@ mod tests {
         let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
