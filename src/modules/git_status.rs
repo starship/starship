@@ -118,9 +118,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok(segments) => {
             if segments.is_empty() {
                 return None;
-            } else {
-                segments
             }
+            segments
         }
         Err(error) => {
             log::warn!("Error in module `git_status`:\n{error}");
@@ -550,7 +549,7 @@ impl RepoStatus {
             Some('1') => self.parse_normal_status(&s[2..4]),
             Some('2') => {
                 self.renamed += 1;
-                self.parse_normal_status(&s[2..4])
+                self.parse_normal_status(&s[2..4]);
             }
             Some('u') => self.conflicted += 1,
             Some('?') => self.untracked += 1,

@@ -12,7 +12,6 @@ pub fn truncate_text(text: &str, length: usize, truncation_symbol: &str) -> Stri
 
     let truncated_graphemes = get_graphemes(text, length);
     // The truncation symbol should only be added if we truncated
-
     if length < graphemes_len(text) {
         let truncation_symbol = get_graphemes(truncation_symbol, 1);
         truncated_graphemes + truncation_symbol.as_str()

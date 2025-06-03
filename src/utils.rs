@@ -43,7 +43,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
         log::debug!("Error reading file: {result:?}");
     } else {
         log::trace!("File read successfully");
-    };
+    }
 
     result
 }
