@@ -134,6 +134,7 @@ mod tests {
             (Type::Alpine, Some("🏔️ ")),
             (Type::Amazon, Some("🙂 ")),
             (Type::Android, Some("🤖 ")),
+            (Type::AOSC, Some("🐱 ")),
             (Type::Arch, Some("🎗️ ")),
             (Type::CentOS, Some("💠 ")),
             (Type::Debian, Some("🌀 ")),
@@ -181,6 +182,7 @@ mod tests {
             Alpine = " "
             Amazon = " "
             Android = " "
+            AOSC = " "
             Arch = " "
             CentOS = " "
             Debian = " "
@@ -222,6 +224,7 @@ mod tests {
             (Type::Alpine, Some(" ")),
             (Type::Amazon, Some(" ")),
             (Type::Android, Some(" ")),
+            (Type::AOSC, Some(" ")),
             (Type::Arch, Some(" ")),
             (Type::CentOS, Some(" ")),
             (Type::Debian, Some(" ")),
@@ -276,6 +279,7 @@ mod tests {
             (Type::Alpine, Some("🏔️ ")),
             (Type::Amazon, Some("🙂 ")),
             (Type::Android, Some("🤖 ")),
+            (Type::AOSC, Some("🐱 ")),
             (Type::Arch, Some("Arch is the best!")),
             (Type::CentOS, Some("💠 ")),
             (Type::Debian, Some("🌀 ")),
@@ -336,6 +340,7 @@ mod tests {
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
+            Type::AOSC => "🐱 ",
             Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
             Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
