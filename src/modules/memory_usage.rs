@@ -171,7 +171,7 @@ mod test {
             })
             .collect();
 
-        assert!(output.is_some())
+        assert!(output.is_some());
     }
 
     #[test]
@@ -184,6 +184,6 @@ mod test {
             })
             .collect();
 
-        assert!(output.is_none())
+        assert!(output.is_none());
     }
 }

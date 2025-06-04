@@ -809,7 +809,7 @@ mod tests {
     }
     #[test]
     fn render_time_test_1d() {
-        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s")
+        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s");
     }
 
     #[test]
@@ -824,7 +824,7 @@ mod tests {
             stderr: String::from("stderr ok!\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     // While the exec_cmd should work on Windows some of these tests assume a Unix-like
@@ -839,7 +839,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -852,7 +852,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -868,7 +868,7 @@ mod tests {
             stderr: String::from("hello\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]

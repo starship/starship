@@ -120,7 +120,7 @@ mod tests {
         assert_eq!(
             Some("4.3.0-rc.1+".to_string()),
             parse_haxe_version(sample_haxe_output)
-        )
+        );
     }
 
     #[test]
