@@ -719,7 +719,7 @@ credential_process = /opt/bin/awscreds-retriever
         use chrono::{DateTime, SecondsFormat, Utc};
 
         let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
-        expiration_env_vars.iter().for_each(|env_var| {
+        for env_var in expiration_env_vars {
             let now_plus_half_hour: DateTime<Utc> =
                 DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
 
@@ -747,7 +747,7 @@ credential_process = /opt/bin/awscreds-retriever
                 possible_values.contains(&actual),
                 "time is not in range: {actual:?}"
             );
-        });
+        }
     }
 
     #[test]
@@ -764,7 +764,7 @@ credential_process = /opt/bin/awscreds-retriever
         let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
 
         let expiration_keys = ["expiration", "x_security_token_expires"];
-        expiration_keys.iter().for_each(|key| {
+        for key in expiration_keys {
             file.write_all(
                 format!(
                     "[astronauts]
@@ -803,7 +803,7 @@ aws_secret_access_key=dummy
                     "time is not in range: {actual:?}"
                 );
             }
-        });
+        }
 
         dir.close()
     }

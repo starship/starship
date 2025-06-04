@@ -578,7 +578,7 @@ mod tests {
             doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
                 .as_bool()
                 .unwrap()
-        )
+        );
     }
 
     #[test]
