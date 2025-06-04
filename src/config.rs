@@ -212,15 +212,13 @@ impl StarshipConfig {
                     );
                     return None;
                 }
-            } else {
-                if prev_table.contains_key(*option) {
-                    log::trace!(
-                        "No config found for \"{}\": \"{}\" is not a table",
-                        path.join("."),
-                        &option
-                    );
-                    return None;
-                }
+            } else if prev_table.contains_key(*option) {
+                log::trace!(
+                    "No config found for \"{}\": \"{}\" is not a table",
+                    path.join("."),
+                    &option
+                );
+                return None;
             }
         }
 

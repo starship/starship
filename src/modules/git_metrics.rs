@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
@@ -194,7 +194,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     entry,
                                     status:
                                         EntryStatus::Change(Change::Modification {
-                                            content_change: Some(_),
+                                            content_change: Some(()),
                                             ..
                                         }),
                                     ..
@@ -231,7 +231,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 _ => {}
                             }
                         }
-                    };
+                    }
                     diff
                 },
             )
@@ -382,12 +382,13 @@ impl GitDiff {
         only_nonzero_diffs: bool,
         changed: &str,
     ) -> Option<Result<&str, StringFormatterError>> {
-        match only_nonzero_diffs {
-            true => match changed {
+        if only_nonzero_diffs {
+            match changed {
                 "0" => None,
                 _ => Some(Ok(changed)),
-            },
-            false => Some(Ok(changed)),
+            }
+        } else {
+            Some(Ok(changed))
         }
     }
 }

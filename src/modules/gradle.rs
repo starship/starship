@@ -94,7 +94,7 @@ fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<Str
                 .join("gradle/wrapper/gradle-wrapper.properties"),
         )
         .ok();
-    };
+    }
     if recursive && properties.is_none() {
         for dir in context.current_dir.ancestors().skip(1) {
             properties =
