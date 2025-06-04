@@ -230,7 +230,7 @@ impl StarshipConfig {
                 path.join("."),
                 &last_option
             );
-        };
+        }
         value
     }
 
