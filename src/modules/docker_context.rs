@@ -45,16 +45,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .into_iter()
         .find_map(|env| context.get_env(env));
 
-    let ctx = match docker_context_env {
-        Some(data) => data,
-        _ => {
-            if !docker_config.exists() {
-                return None;
-            }
-            let json = utils::read_file(docker_config).ok()?;
-            let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
-            parsed_json.get("currentContext")?.as_str()?.to_owned()
+    let ctx = if let Some(data) = docker_context_env {
+        data
+    } else {
+        if !docker_config.exists() {
+            return None;
         }
+        let json = utils::read_file(docker_config).ok()?;
+        let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
+        parsed_json.get("currentContext")?.as_str()?.to_owned()
     };
 
     let default_contexts = ["default", "desktop-linux"];
