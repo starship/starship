@@ -88,6 +88,7 @@ pub const ALL_MODULES: &[&str] = &[
     "ruby",
     "rust",
     "scala",
+    "separator",
     "shell",
     "shlvl",
     "singularity",
