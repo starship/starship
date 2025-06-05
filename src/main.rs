@@ -10,7 +10,7 @@ use clap_complete::generate;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::*;
+use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
 
 #[derive(Parser, Debug)]
 #[clap(

@@ -1023,7 +1023,7 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
-        )
+        );
     }
 
     #[test]
