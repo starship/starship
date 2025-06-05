@@ -10,7 +10,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if config.disabled {
         return None;
-    };
+    }
 
     let ctx_str = context
         .exec_cmd("nats", &["context", "info", "--json"])?

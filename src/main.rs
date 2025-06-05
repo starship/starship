@@ -10,7 +10,7 @@ use clap_complete::generate;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::*;
+use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -26,7 +26,7 @@ struct Cli {
     command: Commands,
 }
 
-#[derive(clap::Parser, ValueEnum, Debug, Clone, PartialEq, Eq)]
+#[derive(clap::Parser, ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
 enum CompletionShell {
     Bash,
     Elvish,
@@ -42,7 +42,7 @@ fn generate_shell(shell: impl clap_complete::Generator) {
         &mut Cli::command(),
         "starship",
         &mut io::stdout().lock(),
-    )
+    );
 }
 
 fn generate_completions(shell: CompletionShell) {

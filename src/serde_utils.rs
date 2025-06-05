@@ -398,7 +398,7 @@ mod test {
         let deserializer = ValueDeserializer::new(&value);
 
         let result = StarshipRootConfig::deserialize(deserializer);
-        assert!(result.is_ok())
+        assert!(result.is_ok());
     }
 
     #[test]

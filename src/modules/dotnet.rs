@@ -282,7 +282,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
         Some("csproj" | "fsproj" | "xproj") => return Some(FileType::ProjectFile),
         Some("props" | "targets") => return Some(FileType::MsBuildFile),
         _ => (),
-    };
+    }
 
     None
 }
@@ -297,38 +297,35 @@ fn get_version_from_cli(context: &Context) -> Option<String> {
 }
 
 fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
-    match context.exec_cmd("dotnet", &["--list-sdks"]) {
-        Some(sdks_output) => {
-            fn parse_failed<T>() -> Option<T> {
-                log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
-                None
-            }
-            let latest_sdk = sdks_output
-                .stdout
-                .lines()
-                .map(str::trim)
-                .filter(|l| !l.is_empty())
-                .next_back()
-                .or_else(parse_failed)?;
-            let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
-            if take_until > 1 {
-                let version = &latest_sdk[..take_until];
-                let mut buffer = String::with_capacity(version.len() + 1);
-                buffer.push_str(version);
-                Some(buffer)
-            } else {
-                parse_failed()
-            }
+    if let Some(sdks_output) = context.exec_cmd("dotnet", &["--list-sdks"]) {
+        fn parse_failed<T>() -> Option<T> {
+            log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
+            None
         }
-        None => {
-            // Older versions of the dotnet cli do not support the --list-sdks command
-            // So, if the status code indicates failure, fall back to `dotnet --version`
-            log::debug!(
-                "Received a non-success exit code from `dotnet --list-sdks`. \
+        let latest_sdk = sdks_output
+            .stdout
+            .lines()
+            .map(str::trim)
+            .filter(|l| !l.is_empty())
+            .next_back()
+            .or_else(parse_failed)?;
+        let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
+        if take_until > 1 {
+            let version = &latest_sdk[..take_until];
+            let mut buffer = String::with_capacity(version.len() + 1);
+            buffer.push_str(version);
+            Some(buffer)
+        } else {
+            parse_failed()
+        }
+    } else {
+        // Older versions of the dotnet cli do not support the --list-sdks command
+        // So, if the status code indicates failure, fall back to `dotnet --version`
+        log::debug!(
+            "Received a non-success exit code from `dotnet --list-sdks`. \
                  Falling back to `dotnet --version`.",
-            );
-            get_version_from_cli(context)
-        }
+        );
+        get_version_from_cli(context)
     }
 }
 
