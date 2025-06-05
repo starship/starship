@@ -759,19 +759,13 @@ impl PathExt for Path {
     #[cfg(target_os = "linux")]
     fn device_id(&self) -> Option<u64> {
         use std::os::linux::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.st_dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.st_dev())
     }
 
     #[cfg(all(unix, not(target_os = "linux")))]
     fn device_id(&self) -> Option<u64> {
         use std::os::unix::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.dev())
     }
 }
 

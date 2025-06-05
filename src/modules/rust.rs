@@ -466,7 +466,7 @@ impl RustupSettings {
 
     fn from_toml_str(toml_str: &str) -> Option<Self> {
         let settings = toml::from_str::<Self>(toml_str).ok()?;
-        if let Some("12") = settings.version.as_deref() {
+        if settings.version.as_deref() == Some("12") {
             Some(settings)
         } else {
             log::warn!(
