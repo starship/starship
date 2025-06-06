@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -2859,6 +2860,37 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn     | Mặc định                    | Mô tả                                                            |
+| ------------ | --------------------------- | ---------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | Một format sring hiển thị khi một `merge` đang trong quá trình.  |
+| `rebase`     | `'REBASING'`                | Một format sring hiển thị khi một `rebase` đang trong quá trình. |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.        |
+| `bisect`     | `'BISECTING'`               | Một format sring hiển thị khi một `bisect` đang trong quá trình. |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.        |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.         |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.    |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.      |
+| `style`      | `'bold yellow'`             | Kiểu cho module.                                                 |
+| `format`     | `'\([$state]($style)\) '` | Định dạng cho module.                                            |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                                  |
+
+### Các biến
+
+| Biến             | Ví dụ      | Mô tả                             |
+| ---------------- | ---------- | --------------------------------- |
+| state            | `REBASING` | Trạng thái của repo hiện tại      |
+| progress_current | `1`        | Trạng thái của quá trình hiện tại |
+| progress_total   | `2`        | Tổng số các quá trình             |
+| style\*        |            | Giá trị ghi đè của `style`        |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
