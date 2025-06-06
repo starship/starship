@@ -77,7 +77,7 @@ impl Default for OSConfig<'_> {
                 Type::Ultramarine => "🔷 ",
                 Type::Unknown => "❓ ",
                 Type::Uos => "🐲 ",
-                Type::Void => "  ",
+                Type::Void => " ",
                 Type::Windows => "🪟 ",
                 // Future symbols.
                 //aosc =>       " ",
