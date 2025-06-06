@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом до
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -2859,6 +2860,37 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Параметри
+
+| Параметр     | Стандартно                  | Опис                                                          |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | Формат рядка під час процесу `merge`.                         |
+| `rebase`     | `'REBASING'`                | Формат рядка під час процесу `rebase`.                        |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`               | Формат рядка під час процесу `bisect`.                        |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`             | Стиль модуля.                                                 |
+| `format`     | `'\([$state]($style)\) '` | Формат модуля.                                                |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+
+### Змінні
+
+| Змінна           | Приклад    | Опис                                    |
+| ---------------- | ---------- | --------------------------------------- |
+| state            | `REBASING` | Поточний стан репозиторію               |
+| progress_current | `1`        | Прогрес поточної операції               |
+| progress_total   | `2`        | Загальний прогрес операції              |
+| style\*        |            | Віддзеркалює значення параметра `style` |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
 ## Mise
 
 Модуль `mise` показує поточний стан mise, про який повідомляє запуск `mise doctor`.
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
