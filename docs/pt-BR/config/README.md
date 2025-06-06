@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -2859,6 +2860,37 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Opções
+
+| Opções       | Padrão                      | Descrição                                                         |
+| ------------ | --------------------------- | ----------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | O formato de string exibida quando um `merge` esta em progresso.  |
+| `rebase`     | `'REBASING'`                | O formato de string exibida quando um `rebase` esta em progresso. |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.         |
+| `bisect`     | `'BISECTING'`               | O formato de string exibida quando um `bisect` esta em progresso. |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.         |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.          |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.     |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.       |
+| `style`      | `'bold yellow'`             | O estilo do módulo.                                               |
+| `format`     | `'\([$state]($style)\) '` | O formato do módulo.                                              |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                                   |
+
+### Variáveis
+
+| Variável         | Exemplo    | Descrição                              |
+| ---------------- | ---------- | -------------------------------------- |
+| state            | `REBASING` | O estado atual do repo                 |
+| progress_current | `1`        | O progresso da operação atual          |
+| progress_total   | `2`        | O total do progresso da operação atual |
+| style\*        |            | Espelha o valor da opção `style`       |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
