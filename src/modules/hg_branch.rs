@@ -84,7 +84,10 @@ fn get_hg_current_bookmark(hg_root: &Path) -> Result<String, Error> {
 }
 
 fn get_hg_topic_name(hg_root: &Path) -> Result<String, Error> {
-    read_file(hg_root.join(".hg").join("topic"))
+    match read_file(hg_root.join(".hg").join("topic")) {
+        Ok(b) => Ok(b.trim().to_string()),
+        Err(e) => Err(e),
+    }
 }
 
 #[cfg(test)]
@@ -182,7 +185,7 @@ mod tests {
     fn test_hg_topic() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
-        fs::write(repo_dir.join(".hg").join("topic"), "feature")?;
+        fs::write(repo_dir.join(".hg").join("topic"), "feature\n")?;
 
         let actual = ModuleRenderer::new("hg_branch")
             .path(repo_dir.to_str().unwrap())
