@@ -81,7 +81,7 @@ unicode-segmentation = "1.12.0"
 unicode-width = "0.2.0"
 urlencoding = "2.1.3"
 versions = "7.0.0"
-which = "7.0.3"
+which = "8.0.0"
 whoami = { version = "1.6.0", default-features = false }
 yaml-rust2 = "0.10.2"
 
