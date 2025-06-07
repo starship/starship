@@ -33,7 +33,7 @@ use terminal_size::terminal_size;
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
 pub struct Context<'a> {
-    /// The deserialized configuration map from the user's `starship.toml` file.
+    /// The deserialized configuration map from the user's `config.toml` file.
     pub config: StarshipConfig,
 
     /// The current working directory that starship is being called in.
@@ -475,11 +475,30 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
+fn config_home_dir(env: &Env) -> Option<PathBuf> {
+    if let Some(xdg_config_home) = env.get_env_os("XDG_CONFIG_HOME") {
+        Some(PathBuf::from(xdg_config_home))
+    } else {
+        Some(home_dir(env)?.join(".config"))
+    }
+}
+
 fn get_config_path_os(env: &Env) -> Option<OsString> {
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
         return Some(config_path);
     }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
+
+    let config_home_dir = config_home_dir(env)?;
+    let config_path = config_home_dir.join("starship/config.toml");
+    let deprecated_config_path = config_home_dir.join("starship.toml");
+
+    if config_path.exists() {
+        Some(config_path.into())
+    } else if deprecated_config_path.exists() {
+        Some(deprecated_config_path.into())
+    } else {
+        None
+    }
 }
 
 #[derive(Debug)]

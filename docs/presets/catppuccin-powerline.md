@@ -13,7 +13,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 ### Configuration
 
 ```sh
-starship preset catppuccin-powerline -o ~/.config/starship.toml
+starship preset catppuccin-powerline -o ~/.config/starship/config.toml
 ```
 
 By default this preset uses the Mocha flavour of Catppucin, but you can specify any of the flavours by modifying the value of `palette`:
