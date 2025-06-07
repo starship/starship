@@ -77,6 +77,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_pyenv_version(context: &Context) -> Option<String> {
+    // If `.venv/pyenv.cfg` exists, and has the `version_info` field, read, and return
+    // first, prioritizing this version over the binary's.
+    if let Some(version) =
+        Ini::load_from_file_noescape(context.current_dir.join(".venv").join("pyvenv.cfg"))
+            .ok()?
+            .general_section()
+            .get("version_info")
+            .map(|version| version.to_string())
+    {
+        return Some(version);
+    }
+
     let mut version_name = context.get_env("PYENV_VERSION");
 
     if version_name.is_none() {
