@@ -20,7 +20,7 @@ pub struct BunConfig<'a> {
 
 impl Default for BunConfig<'_> {
     fn default() -> Self {
-        BunConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🥟 ",

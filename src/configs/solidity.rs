@@ -23,7 +23,7 @@ pub struct SolidityConfig<'a> {
 
 impl Default for SolidityConfig<'_> {
     fn default() -> Self {
-        SolidityConfig {
+        Self {
             format: "via [$symbol($version)]($style)",
             symbol: "S ",
             style: "bold blue",

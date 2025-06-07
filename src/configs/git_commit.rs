@@ -20,7 +20,7 @@ pub struct GitCommitConfig<'a> {
 
 impl Default for GitCommitConfig<'_> {
     fn default() -> Self {
-        GitCommitConfig {
+        Self {
             // be consistent with git by default, which has DEFAULT_ABBREV set to 7
             commit_hash_length: 7,
             format: "[\\($hash$tag\\)]($style) ",

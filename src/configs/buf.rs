@@ -20,7 +20,7 @@ pub struct BufConfig<'a> {
 
 impl Default for BufConfig<'_> {
     fn default() -> Self {
-        BufConfig {
+        Self {
             format: "with [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐃 ",

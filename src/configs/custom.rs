@@ -35,7 +35,7 @@ pub struct CustomConfig<'a> {
 
 impl Default for CustomConfig<'_> {
     fn default() -> Self {
-        CustomConfig {
+        Self {
             format: "[$symbol($output )]($style)",
             symbol: "",
             command: "",
