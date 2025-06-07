@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#catppuccin-powerline)
+[Return to Presets](./#catppuccin-powerline)
 
 # Catppuccin Powerline Preset
 
