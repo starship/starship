@@ -2860,7 +2860,7 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
-## Mercurial State
+## Estado Mercurial
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
@@ -2870,15 +2870,15 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 | ------------ | --------------------------- | ------------------------------------------------------------------------- |
 | `fusionar`   | `'FUSIONANDO'`              | Una cadena de formato que se muestra cuando un `merge` está en progreso.  |
 | `rebase`     | `'REBASING'`                | Una cadena de formato que se muestra cuando un `rebase` está en progreso. |
-| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.                 |
+| `actualizar` | `'ACTUALIZANDO'`            | A format string displayed when a `update` is in progress.                 |
 | `bisect`     | `'BISECTING'`               | Una cadena de formato que se muestra cuando un `bisect` está en progreso. |
 | `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.                 |
 | `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.                  |
-| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.             |
+| `trasplante` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.             |
 | `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.               |
 | `style`      | `'bold yellow'`             | El estilo del módulo.                                                     |
 | `format`     | `'\([$state]($style)\) '` | El formato del módulo.                                                    |
-| `disabled`   | `true`                      | Disables the `hg_state` module.                                           |
+| `disabled`   | `true`                      | Desactiva el módulo `git_state`.                                          |
 
 ### Variables
 
