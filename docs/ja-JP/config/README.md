@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -901,7 +902,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。 If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1252,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### オプション
 
-| オプション               | デフォルト                                                         | 説明                                                             |
-| ------------------- | ------------------------------------------------------------- | -------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | module のフォーマットです。                                              |
-| `symbol`            | `'🐳 '`                                                        | Dockerコンテキストを表示する前に使用される記号です。                                  |
-| `only_with_files`   | `true`                                                        | ファイルに一致する場合にのみ表示                                               |
-| `detect_extensions` | `[]`                                                          | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
-| `detect_folders`    | `[]`                                                          | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
-| `style`             | `'blue bold'`                                                 | モジュールのスタイルです。                                                  |
-| `disabled`          | `false`                                                       | `docker_context`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                        | 説明                                                             |
+| ------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | module のフォーマットです。                                              |
+| `symbol`            | `'🐳 '`                                                                                       | Dockerコンテキストを表示する前に使用される記号です。                                  |
+| `only_with_files`   | `true`                                                                                       | ファイルに一致する場合にのみ表示                                               |
+| `detect_extensions` | `[]`                                                                                         | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
+| `detect_folders`    | `[]`                                                                                         | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
+| `style`             | `'blue bold'`                                                                                | モジュールのスタイルです。                                                  |
+| `disabled`          | `false`                                                                                      | `docker_context`モジュールを無効にします。                                  |
 
 ### 変数
 
@@ -2394,7 +2395,7 @@ symbol = '🌟 '
 
 ::: warning
 
-このモジュールは tcsh と nu ではサポートされません。
+このモジュールは tcsh ではサポートされていません。
 
 :::
 
@@ -2858,6 +2859,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### オプション
+
+| オプション        | デフォルト                       | 説明                                                            |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | `merge`進行中に表示されるフォーマット文字列です。                                  |
+| `rebase`     | `'REBASING'`                | `rebase`進行中に表示されるフォーマット文字列です。                                 |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`               | `bisect`進行中に表示されるフォーマット文字列です。                                 |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`             | モジュールのスタイルです。                                                 |
+| `format`     | `'\([$state]($style)\) '` | module のフォーマットです。                                             |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+
+### 変数
+
+| 変数               | 設定例        | 説明                     |
+| ---------------- | ---------- | ---------------------- |
+| state            | `REBASING` | 現在のリポジトリの状態            |
+| progress_current | `1`        | 現在の進行状態                |
+| progress_total   | `2`        | 全体の進行状態                |
+| style\*        |            | オプション `style` の値をミラーする |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 ## Mise
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3541,7 +3573,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3584,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | module のフォーマットです。                                                                 |
 | `version_format`           | `'v${raw}'`                                               | バージョンのフォーマット。 Available vars are `raw`, `major`, `minor`, & `patch`.              |
 | `symbol`                   | `'🧚 '`                                                    | 環境名の直前に使用されるシンボルです。                                                               |
-| `style`                    | `'yellow bold'                                           | モジュールのスタイルです。                                                                     |
+| `style`                    | `'yellow bold'`                                           | モジュールのスタイルです。                                                                     |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | どの拡張子がこのモジュールをアクティブにするか                                                           |
 | `detect_files`             | `['pixi.toml']`                                           | どのファイル名がこのモジュールをアクティブにするか                                                         |
-| `detect_folders`           | `['.pixi']`                                               | どのフォルダーがこのモジュールをアクティブにするか                                                         |
+| `detect_folders`           | `[]`                                                      | どのフォルダーがこのモジュールをアクティブにするか                                                         |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### 変数
@@ -4193,7 +4225,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | --------- | -------- | ------------------------- |
 | version   | `v0.8.1` | The version of `solidity` |
 | symbol    |          | オプション `symbol` の値をミラーします  |
-| style\* |          | オプション `style` の値をミラーする    |
+| style\* |          | オプション `style` の値をミラーします   |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4225,7 +4257,7 @@ format = "via [S $version](blue bold)"
 | ----------- | ------------ | ----------------------- |
 | environment | `astronauts` | 現在の spack 環境            |
 | symbol      |              | オプション `symbol` の値をミラーする |
-| style\*   |              | オプション `style` の値をミラーします |
+| style\*   |              | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 

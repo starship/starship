@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -901,7 +902,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ::: tip
 
-Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1252,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opsi
 
-| Opsi                | Bawaan                                                        | Deskripsi                                                                                 |
-| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Format dari modul.                                                                        |
-| `symbol`            | `'🐳 '`                                                        | Simbol yang digunakan sebelum menampilkan Docker context.                                 |
-| `only_with_files`   | `true`                                                        | Hanya ditampilkan jika terdapat kecocokan                                                 |
-| `detect_extensions` | `[]`                                                          | Extensions mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).    |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | filenames mana yang harusnya memicu modul ini (butuh `only_with_files` untuk diset true). |
-| `detect_folders`    | `[]`                                                          | Folder mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).        |
-| `style`             | `'blue bold'`                                                 | Gaya penataan untuk modul.                                                                |
-| `disabled`          | `false`                                                       | Menonaktifkan module `docket_context`.                                                    |
+| Opsi                | Bawaan                                                                                       | Deskripsi                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Format dari modul.                                                                        |
+| `symbol`            | `'🐳 '`                                                                                       | Simbol yang digunakan sebelum menampilkan Docker context.                                 |
+| `only_with_files`   | `true`                                                                                       | Hanya ditampilkan jika terdapat kecocokan                                                 |
+| `detect_extensions` | `[]`                                                                                         | Extensions mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).    |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | filenames mana yang harusnya memicu modul ini (butuh `only_with_files` untuk diset true). |
+| `detect_folders`    | `[]`                                                                                         | Folder mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).        |
+| `style`             | `'blue bold'`                                                                                | Gaya penataan untuk modul.                                                                |
+| `disabled`          | `false`                                                                                      | Menonaktifkan module `docket_context`.                                                    |
 
 ### Variabel
 
@@ -2394,7 +2395,7 @@ The default functionality is:
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+This module is not supported on tcsh.
 
 :::
 
@@ -2858,6 +2859,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Opsi
+
+| Opsi         | Bawaan                      | Deskripsi                                                     |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | A format string displayed when a `merge` is in progress.      |
+| `rebase`     | `'REBASING'`                | A format string displayed when a `rebase` is in progress.     |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`               | A format string displayed when a `bisect` is in progress.     |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`             | Gaya penataan untuk modul.                                    |
+| `fromat`     | `'\([$state]($style)\) '` | Format dari modul.                                            |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+
+### Variabel
+
+| Variabel         | Contoh     | Deskripsi                        |
+| ---------------- | ---------- | -------------------------------- |
+| state            | `REBASING` | The current state of the repo    |
+| progress_current | `1`        | The current operation progress   |
+| progress_total   | `2`        | The total operation progress     |
+| style\*        |            | Menyalin nilai dari opsi `style` |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 ## Mise
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3541,7 +3573,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3584,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `fromat`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Format dari modul.                                                                |
 | `version_format`           | `'v${raw}'`                                               | Format dari versi. Available vars are `raw`, `major`, `minor`, & `patch`.         |
 | `symbol`                   | `'🧚 '`                                                    | Simbol yang digunakan sebelum nama environment.                                   |
-| `style`                    | `'yellow bold'                                           | Gaya penataan untuk modul.                                                        |
+| `style`                    | `'yellow bold'`                                           | Gaya penataan untuk modul.                                                        |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Ekstensi mana yang sebaiknya memicu modul ini.                                    |
 | `detect_files`             | `['pixi.toml']`                                           | filenames mana yang sebaiknya memicu modul ini.                                   |
-| `detect_folders`           | `['.pixi']`                                               | Folder mana yang sebaiknya memicul modul ini.                                     |
+| `detect_folders`           | `[]`                                                      | Folder mana yang sebaiknya memicul modul ini.                                     |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Variabel

@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -901,7 +902,7 @@ Le module `conda` affiche l’environnement [Conda](https://docs.conda.io/en/lat
 
 ::: tip
 
-Cela ne supprime pas le modificateur d'invite de conda, vous pourriez vouloir exécuter `conda config --set changeps1 False` pour le désactiver. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Cela ne supprime pas le modificateur d'invite de conda, vous pourriez vouloir exécuter `conda config --set changeps1 False` pour le désactiver. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1252,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Option              | Défaut                                                        | Description                                                                                            |
-| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol$context]($style) '`                            | Format du module.                                                                                      |
-| `symbole`           | `'🐳 '`                                                        | Le symbole utilisé avant d'afficher le contexte Docker.                                                |
-| `only_with_files`   | `true`                                                        | Afficher uniquement quand il y a une correspondance                                                    |
-| `detect_extensions` | `[]`                                                          | Quelles extensions devraient activer ce module (il faut que `only_with_files` soit réglé sur true).    |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quels noms de fichier devraient activer ce module (il faut que `only_with_files` soit réglé sur true). |
-| `detect_folders`    | `[]`                                                          | Quels dossiers devraient activer ce module (il faut que `only_with_files` soit réglé sur true).        |
-| `style`             | `'blue bold'`                                                 | Le style pour le module.                                                                               |
-| `disabled`          | `false`                                                       | Désactive le module `docker_context`.                                                                  |
+| Option              | Défaut                                                                                       | Description                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Format du module.                                                                                      |
+| `symbole`           | `'🐳 '`                                                                                       | Le symbole utilisé avant d'afficher le contexte Docker.                                                |
+| `only_with_files`   | `true`                                                                                       | Afficher uniquement quand il y a une correspondance                                                    |
+| `detect_extensions` | `[]`                                                                                         | Quelles extensions devraient activer ce module (il faut que `only_with_files` soit réglé sur true).    |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Quels noms de fichier devraient activer ce module (il faut que `only_with_files` soit réglé sur true). |
+| `detect_folders`    | `[]`                                                                                         | Quels dossiers devraient activer ce module (il faut que `only_with_files` soit réglé sur true).        |
+| `style`             | `'blue bold'`                                                                                | Le style pour le module.                                                                               |
+| `disabled`          | `false`                                                                                      | Désactive le module `docker_context`.                                                                  |
 
 ### Variables
 
@@ -2394,7 +2395,7 @@ Le fonctionnement par défaut est:
 
 ::: warning
 
-Ce module n'est pas pris en charge sur tcsh et nu.
+Ce module n'est pas pris en charge sur tcsh.
 
 :::
 
@@ -2858,6 +2859,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Options
+
+| Option       | Défaut                      | Description                                                    |
+| ------------ | --------------------------- | -------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | Une chaîne de format affichée quand un `merge` est en cours.   |
+| `rebase`     | `'REBASING'`                | Une chaîne de format affichée lorsqu'un `rebase` est en cours. |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.      |
+| `bisect`     | `'BISECTING'`               | Une chaîne de format affichée quand un `bisect` est en cours.  |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.      |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.       |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.  |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.    |
+| `style`      | `'bold yellow'`             | Le style pour le module.                                       |
+| `format`     | `'\([$state]($style)\) '` | Format du module.                                              |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                                |
+
+### Variables
+
+| Variable         | Exemple    | Description                           |
+| ---------------- | ---------- | ------------------------------------- |
+| state            | `REBASING` | L'état actuel du dépôt                |
+| progress_current | `1`        | Progression de l'opération en cours   |
+| progress_total   | `2`        | Progression maximale de l'opération   |
+| style\*        |            | Reflète la valeur de l'option `style` |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ## Mise
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3541,7 +3573,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3584,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Format du module.                                                                 |
 | `version_format`           | `'v${raw}'`                                               | Le format de la version. Available vars are `raw`, `major`, `minor`, & `patch`.   |
 | `symbole`                  | `'🧚 '`                                                    | Le symbole utilisé avant le nom d'environnement.                                  |
-| `style`                    | `'yellow bold'                                           | Le style pour le module.                                                          |
+| `style`                    | `'yellow bold'`                                           | Le style pour le module.                                                          |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Les extensions qui déclenchent ce module.                                         |
 | `detect_files`             | `['pixi.toml']`                                           | Les fichiers qui activent ce module.                                              |
-| `detect_folders`           | `['.pixi']`                                               | Les dossiers qui activent ce module.                                              |
+| `detect_folders`           | `[]`                                                      | Les dossiers qui activent ce module.                                              |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Variables

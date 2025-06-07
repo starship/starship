@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -679,7 +680,7 @@ format = 'via [$name $version]($style)'
 
 ## CPP
 
-The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+Модуль `cpp` показує інформацію про ваш компілятор `C++`. Стандартно модуль буде показаний, якщо поточна тека містить файли `.cpp`, `.hpp`, або інші файли повїязані з `C++`.
 
 ### Параметри
 
@@ -693,7 +694,7 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `detect_folders`    | `[]`                                                                             | В яких теках цей модуль має запускатись.                          |
 | `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Як виявити компілятор                                             |
 | `style`             | `'bold 149'`                                                                     | Стиль модуля.                                                     |
-| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                        |
+| `disabled`          | `true`                                                                           | Вимикає модуль `cpp`.                                             |
 
 ### Змінні
 
@@ -710,9 +711,9 @@ NB `версія` не має стандартного формату.
 
 Параметр `commands` отримує список команд для визначення версії та назви компілятора.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
+Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Якщо компілятор C++ компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/).
 
 ### Приклад
 
@@ -901,7 +902,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ::: tip
 
-Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, запустивши `pixi config set change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, використовуючи `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -914,7 +915,7 @@ format = 'underwent [$duration](bold yellow)'
 | `style`             | `'bold green'`                         | Стиль модуля.                                                                                                                                                                                                        |
 | `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Ігнорувати середовище `base`.                                                                                                                                                                                        |
-| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Які змінні середовища повинні запускати цей модуль. If it's a pixi environment, this module is not being triggered by default.                                                                                       |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Які змінні середовища повинні запускати цей модуль. Якщо це середовище pixi, цей модуль стандартно не запускається.                                                                                                  |
 | `disabled`          | `false`                                | Вимикає модуль `conda`.                                                                                                                                                                                              |
 
 ### Змінні
@@ -1251,16 +1252,16 @@ disabled = false
 
 ### Параметри
 
-| Параметр            | Стандартно                                                    | Опис                                                                                      |
-| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Формат модуля.                                                                            |
-| `symbol`            | `'🐳 '`                                                        | Символ, який знаходиться перед Docker context.                                            |
-| `only_with_files`   | `true`                                                        | Показувати, лише коли є збіг                                                              |
-| `detect_extensions` | `[]`                                                          | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
-| `detect_folders`    | `[]`                                                          | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
-| `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                             |
-| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                          |
+| Параметр            | Стандартно                                                                                   | Опис                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Формат модуля.                                                                            |
+| `symbol`            | `'🐳 '`                                                                                       | Символ, який знаходиться перед Docker context.                                            |
+| `only_with_files`   | `true`                                                                                       | Показувати, лише коли є збіг                                                              |
+| `detect_extensions` | `[]`                                                                                         | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
+| `detect_folders`    | `[]`                                                                                         | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
+| `style`             | `'blue bold'`                                                                                | Стиль модуля.                                                                             |
+| `disabled`          | `false`                                                                                      | Вимикає модуль `docker_context`.                                                          |
 
 ### Змінні
 
@@ -1935,7 +1936,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `ignore_submodules`  | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
 | `disabled`           | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
 | `windows_starship`   |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                   |
+| `use_git_executable` | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
 
 ### Змінні
 
@@ -2394,7 +2395,7 @@ symbol = '🌟 '
 
 ::: warning
 
-Модуль не підтримується в tcsh та nu.
+Цей модуль не підтримується в tcsh.
 
 :::
 
@@ -2859,26 +2860,57 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
-## Mise
+## Mercurial State
 
-The `mise` module shows the current mise health as reported by running `mise doctor`.
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
 ### Параметри
 
-| Параметр           | Стандартно                       | Опис                                             |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | Стиль модуля.                                    |
-| `format`           | `'on [$symbol$health]($style) '` | Формат модуля.                                   |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Параметр     | Стандартно                  | Опис                                                          |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | Формат рядка під час процесу `merge`.                         |
+| `rebase`     | `'REBASING'`                | Формат рядка під час процесу `rebase`.                        |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`               | Формат рядка під час процесу `bisect`.                        |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`             | Стиль модуля.                                                 |
+| `format`     | `'\([$state]($style)\) '` | Формат модуля.                                                |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+
+### Змінні
+
+| Змінна           | Приклад    | Опис                                    |
+| ---------------- | ---------- | --------------------------------------- |
+| state            | `REBASING` | Поточний стан репозиторію               |
+| progress_current | `1`        | Прогрес поточної операції               |
+| progress_total   | `2`        | Загальний прогрес операції              |
+| style\*        |            | Віддзеркалює значення параметра `style` |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+## Mise
+
+Модуль `mise` показує поточний стан mise, про який повідомляє запуск `mise doctor`.
+
+### Параметри
+
+| Параметр           | Стандартно                       | Опис                                                      |
+| ------------------ | -------------------------------- | --------------------------------------------------------- |
+| `symbol`           | `'mise '`                        | Символ, який використовується перед показом стану _mise_. |
+| `style`            | `'bold purple'`                  | Стиль модуля.                                             |
+| `format`           | `'on [$symbol$health]($style) '` | Формат модуля.                                            |
+| `healthy_symbol`   | `healthy`                        | Повідомлення, яке показується, коли _mise_ справний.      |
+| `unhealthy_symbol` | `unhealthy`                      | Повідомлення, яке показується, коли _mise_ несправний.    |
+| `disabled`         | `true`                           | Вимикає модуль `mise`.                                    |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| health    | `healthy` | The health of _mise_                     |
+| health    | `healthy` | Стан справності _mise_                   |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3537,35 +3569,35 @@ format = 'via [🔹 $version](147 bold) '
 
 ## Pixi
 
-The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+Модуль `pixi` показує встановлену версію [pixi](https://pixi.sh), а також активоване середовище, якщо `$PIXI_ENVIRONMENT_NAME` встановлено.
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+Це не призводить до вимикання власного модифікатора командного рядка в pixi. Можливо, вам доведеться  виконати `pixi config set shell.change-ps1 false`.
 
 :::
 
 ### Параметри
 
-| Параметр                   | Стандартно                                                | Опис                                                                              |
-| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                    |
-| `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                |
-| `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                 |
-| `style`                    | `'yellow bold'                                           | Стиль модуля.                                                                     |
-| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
-| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
-| `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                      |
-| `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                      |
-| `detect_folders`           | `['.pixi']`                                               | В яких теках цей модуль має запускатись.                                          |
-| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+| Параметр                   | Стандартно                                                | Опис                                                                                    |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                          |
+| `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                      |
+| `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                       |
+| `style`                    | `'yellow bold'`                                           | Стиль модуля.                                                                           |
+| `show_default_environment` | `true`                                                    | Чи вказувати, що у вашому проєкті активовано середовище `default`.                      |
+| `pixi_binary`              | `['pixi']`                                                | Налаштовує бінарний файл pixi, який Starship буде використовувати для отримання версії. |
+| `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                            |
+| `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                            |
+| `detect_folders`           | `[]`                                                      | В яких теках цей модуль має запускатись.                                                |
+| `disabled`                 | `false`                                                   | Вимикає модуль `pixi`.                                                                  |
 
 ### Змінні
 
 | Змінна      | Приклад   | Опис                                     |
 | ----------- | --------- | ---------------------------------------- |
-| version     | `v0.33.0` | The version of `pixi`                    |
-| environment | `py311`   | The current pixi environment             |
+| version     | `v0.33.0` | Версія `pixi`                            |
+| environment | `py311`   | Поточне середовище pixi                  |
 | symbol      |           | Віддзеркалює значення параметра `symbol` |
 | style       |           | Віддзеркалює значення параметра `style`  |
 
@@ -3698,19 +3730,19 @@ format = 'via [$symbol$version](bold white)'
 
 ### Параметри
 
-| Параметр             | Стандартно                                                                                                   | Опис                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                        |
-| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                     |
-| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                            |
-| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                         |
-| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                     |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                  |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                           |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                    |
-| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                        |
-| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                              |
+| Параметр             | Стандартно                                                                                                   | Опис                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                           |
+| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                        |
+| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                               |
+| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                            |
+| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                     |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Налаштовує бінарні файли python, які Starship буде використовувати для отримання версії. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                              |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                       |
+| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                           |
+| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                 |
 
 ::: tip
 

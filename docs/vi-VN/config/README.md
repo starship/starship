@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -901,7 +902,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ::: tip
 
-Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể muốn chạy `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể muốn chạy `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1252,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Tuỳ chọn            | Mặc định                                                      | Mô tả                                                                                    |
-| ------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Định dạng cho module.                                                                    |
-| `symbol`            | `'🐳 '`                                                        | Biểu tượng sử dụng để hiển thị trước Docker context.                                     |
-| `only_with_files`   | `true`                                                        | Chỉ hiển thị khi có một tệp tin khớp                                                     |
-| `detect_extensions` | `[]`                                                          | Các mở rộng nào nên kích hoạt mô đun này (cần `only_with_files` thiết lập là true).      |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Tên tệp tin nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true). |
-| `detect_folders`    | `[]`                                                          | Thư mục nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true).     |
-| `style`             | `'blue bold'`                                                 | Kiểu cho module.                                                                         |
-| `disabled`          | `false`                                                       | Vô hiệu mô đun `docker_context`.                                                         |
+| Tuỳ chọn            | Mặc định                                                                                     | Mô tả                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Định dạng cho module.                                                                    |
+| `symbol`            | `'🐳 '`                                                                                       | Biểu tượng sử dụng để hiển thị trước Docker context.                                     |
+| `only_with_files`   | `true`                                                                                       | Chỉ hiển thị khi có một tệp tin khớp                                                     |
+| `detect_extensions` | `[]`                                                                                         | Các mở rộng nào nên kích hoạt mô đun này (cần `only_with_files` thiết lập là true).      |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Tên tệp tin nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true). |
+| `detect_folders`    | `[]`                                                                                         | Thư mục nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true).     |
+| `style`             | `'blue bold'`                                                                                | Kiểu cho module.                                                                         |
+| `disabled`          | `false`                                                                                      | Vô hiệu mô đun `docker_context`.                                                         |
 
 ### Các biến
 
@@ -2394,7 +2395,7 @@ The default functionality is:
 
 ::: cảnh báo
 
-This module is not supported on tcsh and nu.
+Mô đun này không hỗ trợ trên tcsh.
 
 :::
 
@@ -2858,6 +2859,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn     | Mặc định                    | Mô tả                                                            |
+| ------------ | --------------------------- | ---------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | Một format sring hiển thị khi một `merge` đang trong quá trình.  |
+| `rebase`     | `'REBASING'`                | Một format sring hiển thị khi một `rebase` đang trong quá trình. |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.        |
+| `bisect`     | `'BISECTING'`               | Một format sring hiển thị khi một `bisect` đang trong quá trình. |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.        |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.         |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.    |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.      |
+| `style`      | `'bold yellow'`             | Kiểu cho module.                                                 |
+| `format`     | `'\([$state]($style)\) '` | Định dạng cho module.                                            |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                                  |
+
+### Các biến
+
+| Biến             | Ví dụ      | Mô tả                             |
+| ---------------- | ---------- | --------------------------------- |
+| state            | `REBASING` | Trạng thái của repo hiện tại      |
+| progress_current | `1`        | Trạng thái của quá trình hiện tại |
+| progress_total   | `2`        | Tổng số các quá trình             |
+| style\*        |            | Giá trị ghi đè của `style`        |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ## Mise
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3541,7 +3573,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3584,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Định dạng cho module.                                                             |
 | `version_format`           | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
 | `symbol`                   | `'🧚 '`                                                    | Kí hiệu sử dụng trước tên biến môi trường.                                        |
-| `style`                    | `'yellow bold'                                           | Kiểu cho module.                                                                  |
+| `style`                    | `'yellow bold'`                                           | Kiểu cho module.                                                                  |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                               |
 | `detect_files`             | `['pixi.toml']`                                           | Những tên tệp nào sẽ kích hoạt mô-đun này.                                        |
-| `detect_folders`           | `['.pixi']`                                               | Những thư mục nào sẽ kích hoạt mô-đun này.                                        |
+| `detect_folders`           | `[]`                                                      | Những thư mục nào sẽ kích hoạt mô-đun này.                                        |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Các biến

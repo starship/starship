@@ -267,6 +267,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -901,7 +902,7 @@ El módulo `conda` muestra el entorno actual [Conda](https://docs.conda.io/en/la
 
 ::: tip
 
-Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+Esto no modifica el propio símbolo de sistema de Conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -1251,16 +1252,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opciones
 
-| Opción              | Predeterminado                                                | Descripción                                                                                                              |
-| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `format`            | `'via [$symbol$context]($style) '`                            | El formato del módulo.                                                                                                   |
-| `symbol`            | `'🐳 '`                                                        | El símbolo usado antes de mostrar el contexto de Docker.                                                                 |
-| `only_with_files`   | `true`                                                        | Mostrar solo cuando haya una coincidencia                                                                                |
-| `detect_extensions` | `[]`                                                          | Qué extensiones deben activar este módulo (necesita `solly_with_files` para ser verdadero).                              |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Qué nombres de archivo deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true"). |
-| `detect_folders`    | `[]`                                                          | Qué carpetas deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").           |
-| `style`             | `'blue bold'`                                                 | El estilo del módulo.                                                                                                    |
-| `disabled`          | `false`                                                       | Deshabilita el módulo `docker_context`.                                                                                  |
+| Opción              | Predeterminado                                                                               | Descripción                                                                                                              |
+| ------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | El formato del módulo.                                                                                                   |
+| `symbol`            | `'🐳 '`                                                                                       | El símbolo usado antes de mostrar el contexto de Docker.                                                                 |
+| `only_with_files`   | `true`                                                                                       | Mostrar solo cuando haya una coincidencia                                                                                |
+| `detect_extensions` | `[]`                                                                                         | Qué extensiones deben activar este módulo (necesita `solly_with_files` para ser verdadero).                              |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Qué nombres de archivo deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true"). |
+| `detect_folders`    | `[]`                                                                                         | Qué carpetas deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").           |
+| `style`             | `'blue bold'`                                                                                | El estilo del módulo.                                                                                                    |
+| `disabled`          | `false`                                                                                      | Deshabilita el módulo `docker_context`.                                                                                  |
 
 ### Variables
 
@@ -2394,7 +2395,7 @@ La funcionalidad por defecto es:
 
 ::: warning
 
-Este módulo no está soportado por tcsh y nu.
+Este módulo no está soportado en tcsh.
 
 :::
 
@@ -2858,6 +2859,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Estado Mercurial
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### Opciones
+
+| Opción       | Predeterminado              | Descripción                                                               |
+| ------------ | --------------------------- | ------------------------------------------------------------------------- |
+| `fusionar`   | `'FUSIONANDO'`              | Una cadena de formato que se muestra cuando un `merge` está en progreso.  |
+| `rebase`     | `'REBASING'`                | Una cadena de formato que se muestra cuando un `rebase` está en progreso. |
+| `actualizar` | `'ACTUALIZANDO'`            | A format string displayed when a `update` is in progress.                 |
+| `bisect`     | `'BISECTING'`               | Una cadena de formato que se muestra cuando un `bisect` está en progreso. |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.                 |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.                  |
+| `trasplante` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress.             |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.               |
+| `style`      | `'bold yellow'`             | El estilo del módulo.                                                     |
+| `format`     | `'\([$state]($style)\) '` | El formato del módulo.                                                    |
+| `disabled`   | `true`                      | Desactiva el módulo `git_state`.                                          |
+
+### Variables
+
+| Variable         | Ejemplo    | Descripción                           |
+| ---------------- | ---------- | ------------------------------------- |
+| state            | `REBASING` | The current state of the repo         |
+| progress_current | `1`        | El progreso de la operación actual    |
+| progress_total   | `2`        | El progreso total de la operación     |
+| style\*        |            | Refleja el valor de la opción `style` |
+
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
 ## Mise
 
@@ -3352,7 +3384,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3541,7 +3573,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 :::
 
@@ -3552,12 +3584,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | El formato del módulo.                                                            |
 | `version_format`           | `'v${raw}'`                                               | El formato de versión. Available vars are `raw`, `major`, `minor`, & `patch`.     |
 | `symbol`                   | `'🧚 '`                                                    | El símbolo usado antes del nombre del entorno.                                    |
-| `style`                    | `'yellow bold'                                           | El estilo del módulo.                                                             |
+| `style`                    | `'yellow bold'`                                           | El estilo del módulo.                                                             |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Qué extensiones deberían activar este módulo.                                     |
 | `detect_files`             | `['pixi.toml']`                                           | Qué nombres de archivo deberían activar este módulo.                              |
-| `detect_folders`           | `['.pixi']`                                               | Qué carpetas deberían activar este módulo.                                        |
+| `detect_folders`           | `[]`                                                      | Qué carpetas deberían activar este módulo.                                        |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### Variables
