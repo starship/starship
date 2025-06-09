@@ -1,7 +1,7 @@
 # Advanced Configuration
 
 While Starship is a versatile shell, sometimes you need to do more than edit
-`starship.toml` to get it to do certain things. This page details some of the more
+`config.toml` to get it to do certain things. This page details some of the more
 advanced configuration techniques used in starship.
 
 ::: warning
@@ -303,7 +303,7 @@ Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or highe
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 # A minimal left prompt
 format = """$character"""
@@ -335,7 +335,7 @@ Note: Continuation prompts are only available in the following shells:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 # A continuation prompt that displays two filled-in arrows
 continuation_prompt = '▶▶ '
