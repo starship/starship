@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
@@ -2860,25 +2860,25 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
-## Mercurial State
+## Стан Mercurial
 
-The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+Модуль `hg_state` показуватиметься в теках, які є частиною сховища mercurial, і в яких виконується операція, наприклад: _REBASING_, _BISECTING_ тощо.
 
 ### Параметри
 
-| Параметр     | Стандартно                  | Опис                                                          |
-| ------------ | --------------------------- | ------------------------------------------------------------- |
-| `merge`      | `'MERGING'`                 | Формат рядка під час процесу `merge`.                         |
-| `rebase`     | `'REBASING'`                | Формат рядка під час процесу `rebase`.                        |
-| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
-| `bisect`     | `'BISECTING'`               | Формат рядка під час процесу `bisect`.                        |
-| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
-| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
-| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
-| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
-| `style`      | `'bold yellow'`             | Стиль модуля.                                                 |
-| `format`     | `'\([$state]($style)\) '` | Формат модуля.                                                |
-| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+| Параметр     | Стандартно                  | Опис                                       |
+| ------------ | --------------------------- | ------------------------------------------ |
+| `merge`      | `'MERGING'`                 | Формат рядка під час процесу `merge`.      |
+| `rebase`     | `'REBASING'`                | Формат рядка під час процесу `rebase`.     |
+| `update`     | `'UPDATING'`                | Формат рядка під час процесу `update`.     |
+| `bisect`     | `'BISECTING'`               | Формат рядка під час процесу `bisect`.     |
+| `shelve`     | `'SHELVING'`                | Формат рядка під час процесу `shelve`.     |
+| `graft`      | `'GRAFTING'`                | Формат рядка під час процесу `graft`.      |
+| `transplant` | `'TRANSPLANTING'`           | Формат рядка під час процесу `transplant`. |
+| `histedit`   | `'HISTEDITING'`             | Формат рядка під час процесу `histedit`.   |
+| `style`      | `'bold yellow'`             | Стиль модуля.                              |
+| `format`     | `'\([$state]($style)\) '` | Формат модуля.                             |
+| `disabled`   | `true`                      | Вимикає модуль `hg_state`.                 |
 
 ### Змінні
 
