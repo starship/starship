@@ -184,6 +184,9 @@ format = '\[[$symbol$workspace]($style)\]'
 [time]
 format = '\[[$time]($style)\]'
 
+[unity]
+format = '\[[$symbol$version ]($style)\]'
+
 [username]
 format = '\[[$user]($style)\]'
 

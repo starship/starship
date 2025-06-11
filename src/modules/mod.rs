@@ -92,6 +92,7 @@ mod sudo;
 mod swift;
 mod terraform;
 mod time;
+mod unity;
 mod username;
 mod utils;
 mod vagrant;
@@ -211,6 +212,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "time" => time::module(context),
             "typst" => typst::module(context),
             "crystal" => crystal::module(context),
+            "unity" => unity::module(context),
             "username" => username::module(context),
             "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
@@ -344,6 +346,7 @@ pub fn description(module: &str) -> &'static str {
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "typst" => "The current installed version of typst",
+        "unity" => "The version of Unity of the project in the current directory",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",

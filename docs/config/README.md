@@ -291,6 +291,7 @@ $cobol\
 $daml\
 $dart\
 $deno\
+$unity\
 $dotnet\
 $elixir\
 $elm\
@@ -4747,6 +4748,33 @@ By default, the module will be shown if any of the following conditions are met:
 | typst_version | `default` | The current Typst version                       |
 | symbol        |           | Mirrors the value of option `symbol`            |
 | style\*       |           | Mirrors the value of option `style`             |
+
+*: This variable can only be used as a part of a style string
+
+## Unity
+
+The `unity` module shows the currently installed version of [Unity](https://unity.com).
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains both `ProjectSettings` and `Assets` directories.
+
+### Options
+
+| Option           | Default                           | Description                                                               |
+| ---------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `'via [$symbol$version]($style)'` | The format for the module unity.                                          |
+| `version_format` | `'v${raw}'`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `'🎮 '`                           | The symbol used before displaying the version of Unity.                   |
+| `style`          | `'bold blue'`                     | The style for the module.                                                 |
+| `disabled`       | `false`                           | Disables the `unity` module.                                              |
+
+### Variables
+
+| Variable | Example         | Description                          |
+| -------- | --------------- | ------------------------------------ |
+| version  | `v2022.30.12f3` | The version of `unity`               |
+| symbol   |                 | Mirrors the value of option `symbol` |
+| style\*  |                 | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
