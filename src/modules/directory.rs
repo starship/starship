@@ -3,6 +3,7 @@ use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
+use crate::conditional_style::get_conditional_style;
 use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
 use std::borrow::Cow;
@@ -134,13 +135,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         config.repo_root_format
     };
-    let repo_root_style = config.repo_root_style.unwrap_or(config.style);
-    let before_repo_root_style = config.before_repo_root_style.unwrap_or(config.style);
+    let default_style = get_conditional_style(context, &config.style.0);
+
+    let repo_root_style = config.repo_root_style.unwrap_or(default_style);
+    let before_repo_root_style = config.before_repo_root_style.unwrap_or(default_style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(default_style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
                 "before_repo_root_style" => Some(Ok(before_repo_root_style)),
