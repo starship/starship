@@ -134,3 +134,6 @@ strip = false
 [[bin]]
 name = "starship"
 path = "src/main.rs"
+
+[lints.clippy]
+use_self = "warn"

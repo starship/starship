@@ -20,7 +20,7 @@ pub struct PerlConfig<'a> {
 
 impl Default for PerlConfig<'_> {
     fn default() -> Self {
-        PerlConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐪 ",

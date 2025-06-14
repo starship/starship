@@ -20,7 +20,7 @@ pub struct CMakeConfig<'a> {
 
 impl Default for CMakeConfig<'_> {
     fn default() -> Self {
-        CMakeConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "△ ",

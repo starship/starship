@@ -21,7 +21,7 @@ pub struct DotnetConfig<'a> {
 
 impl Default for DotnetConfig<'_> {
     fn default() -> Self {
-        DotnetConfig {
+        Self {
             format: "via [$symbol($version )(🎯 $tfm )]($style)",
             version_format: "v${raw}",
             symbol: ".NET ",

@@ -133,7 +133,7 @@ impl<'a> Module<'a> {
         desc: impl Into<String>,
         config: Option<&'a toml::Value>,
     ) -> Self {
-        Module {
+        Self {
             config,
             name: name.into(),
             description: desc.into(),
