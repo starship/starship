@@ -2,11 +2,7 @@
 
 Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
-::: warning 警告
-
-本节所述的配置内容可能随 Starship 未来版本的更新而改变。
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## PowerShell 中的 TransientPrompt
 
