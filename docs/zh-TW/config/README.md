@@ -208,11 +208,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `palettes`        | `{}`                         | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                       | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
-::: tip
-
-If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
-
-:::
+> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
 
 ### 範例
 
@@ -267,6 +263,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -735,11 +732,7 @@ format = 'via [$name $version]($style)'
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
-
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
-
-:::
+> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### 選項
 
@@ -855,11 +848,9 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 `cmd_duration` 模組顯示最後一個指令執行所花費的時間。 這個模組只會在指令花費超過兩秒或是有設定 `min_time` 時，超過設定值時出現。
 
-::: warning 不要在 Bash 中設置 DEBUG trap
-
-如果你在 `bash` 中使用 Starship，不要在執行 `eval $(starship init $0)` 之後設置 `DEBUG` trap，不然這個模組**會**壞掉。
-
-:::
+> [!WARNING] Do not hook the DEBUG trap in Bash
+> 
+> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 想使用類似 preexec 功能的 Bash 使用者可以 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只要在 `eval $(starship init $0)` 之前簡單地定義 `preexec_functions` 與 `precmd_functions` 兩個陣列，然後就可以照常進行。
 
@@ -899,11 +890,7 @@ format = 'underwent [$duration](bold yellow)'
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
-
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 ### 選項
 
@@ -1251,16 +1238,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 選項
 
-| 選項                  | 預設                                                            | 說明                                                                                |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | The format for the module.                                                        |
-| `symbol`            | `'🐳 '`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `'blue bold'`                                                 | 這個模組的風格。                                                                          |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| 選項                  | 預設                                                                                           | 說明                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | The format for the module.                                                        |
+| `symbol`            | `'🐳 '`                                                                                       | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                                                       | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                                                         | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                                                         | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `'blue bold'`                                                                                | 這個模組的風格。                                                                          |
+| `disabled`          | `false`                                                                                      | Disables the `docker_context` module.                                             |
 
 ### 變數
 
@@ -1426,26 +1413,17 @@ The `env_var` module displays the current value of a selected environment variab
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
 
-::: tip
+> [!TIP] The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
-
-:::
-
-::: tip
-
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
-
-Example: following configuration will display value of USER environment variable
-
-```toml
-# ~/.config/starship.toml
-
-[env_var.USER]
-default = 'unknown user'
-```
-
-:::
+> [!TIP] Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+> 
+> Example: following configuration will display value of USER environment variable
+> 
+> ```toml
+> 
+> # ~/.config/starship.toml
+> 
+> [env_var.USER] default = 'unknown user' ```
 
 ### 選項
 
@@ -1866,11 +1844,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -1908,11 +1882,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 `git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
 
-::: tip
-
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
-
-:::
+> [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
 ### 選項
 
@@ -2392,17 +2362,9 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+> [!WARNING] This module is not supported on tcsh.
 
-This module is not supported on tcsh and nu.
-
-:::
-
-::: warning
-
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
-
-:::
+> [!WARNING] The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ### 選項
 
@@ -2530,21 +2492,13 @@ kotlin_binary = 'kotlinc'
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> 
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 ### 選項
 
-::: warning
-
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
-
-:::
+> [!WARNING] The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
 | 選項                  | 預設                                                   | 說明                                                                    |
 | ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
@@ -2742,11 +2696,7 @@ format = 'via [🌕 $version](bold blue) '
 
 預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2858,6 +2808,37 @@ format = 'on [🌱 $branch](bold purple)'
 truncation_length = 4
 truncation_symbol = ''
 ```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
+
+### 選項
+
+| 選項           | 預設                          | 說明                                                            |
+| ------------ | --------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`                 | A format string displayed when a `merge` is in progress.      |
+| `rebase`     | `'REBASING'`                | A format string displayed when a `rebase` is in progress.     |
+| `update`     | `'UPDATING'`                | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`               | A format string displayed when a `bisect` is in progress.     |
+| `shelve`     | `'SHELVING'`                | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`                | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`           | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`             | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`             | 這個模組的風格。                                                      |
+| `format`     | `'\([$state]($style)\) '` | The format for the module.                                    |
+| `disabled`   | `true`                      | Disables the `hg_state` module.                               |
+
+### 變數
+
+| 變數               | 範例         | 說明                                  |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*        |            | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
 
 ## Mise
 
@@ -3277,17 +3258,9 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: warning
+> [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
-
-:::
-
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -3309,6 +3282,7 @@ AlmaLinux = "💠 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
+AOSC = "🐱 "
 Arch = "🎗️ "
 Artix = "🎗️ "
 Bluefin = "🐟 "
@@ -3352,7 +3326,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3539,11 +3513,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
 
-::: tip
-
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 ### 選項
 
@@ -3552,12 +3522,12 @@ This does not suppress pixi's own prompt modifier, you may want to run `pixi con
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | The format for the module.                                                        |
 | `version_format`           | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
 | `symbol`                   | `'🧚 '`                                                    | 環境名稱前使用的符號。                                                                       |
-| `style`                    | `'yellow bold'                                           | 這個模組的風格。                                                                          |
+| `style`                    | `'yellow bold'`                                           | 這個模組的風格。                                                                          |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
 | `detect_extensions`        | `[]`                                                      | Which extensions should trigger this module.                                      |
 | `detect_files`             | `['pixi.toml']`                                           | Which filenames should trigger this module.                                       |
-| `detect_folders`           | `['.pixi']`                                               | Which folders should trigger this module.                                         |
+| `detect_folders`           | `[]`                                                      | Which folders should trigger this module.                                         |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### 變數
@@ -3582,11 +3552,7 @@ format = '[$symbol$environment](yellow) '
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
-::: tip
-
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
-
-:::
+> [!TIP] By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -3712,13 +3678,9 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
 | `disabled`           | `false`                                                                                                      | 停用 `python` 模組。                                                                       |
 
-::: tip
-
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
-
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
-
-:::
+> [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+> 
+> The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
 ### 變數
 
@@ -4036,11 +3998,7 @@ symbol = '🌟 '
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4242,11 +4200,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4305,11 +4259,7 @@ disabled = false
 
 The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4393,11 +4343,7 @@ format = 'via [🏎  $version](red bold)'
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
-
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
-
-:::
+> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -4452,11 +4398,7 @@ format = '[🏎💨 $workspace]($style) '
 
 `time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
-::: tip
-
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
-
-:::
+> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4537,11 +4479,7 @@ By default, the module will be shown if any of the following conditions are met:
 - 變數 `show_always` 被設為 true
 - The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
-::: tip
-
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
-
-:::
+> [!TIP] SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 ### 選項
 
@@ -4734,31 +4672,17 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
-::: tip
+> [!TIP] Multiple custom modules can be defined by using a `.`.
 
-Multiple custom modules can be defined by using a `.`.
+> [!TIP] The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
-:::
+> [!TIP] [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
-::: tip
-
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
-
-:::
-
-::: tip
-
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
-
-:::
-
-::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
-
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
-
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
-
-:::
+> [!WARNING] If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+> 
+> Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+> 
+> Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 ### 選項
 
@@ -4808,17 +4732,15 @@ If `shell` is not given or only contains one element and Starship detects PowerS
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
-
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
-
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
-
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
-
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
-
-:::
+> [!WARNING] Make sure your custom shell configuration exits gracefully
+> 
+> If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+> 
+> For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+> 
+> Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+> 
+> Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 ### 範例
 

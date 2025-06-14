@@ -208,11 +208,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `palettes`        | `{}`                           | Колекція колірних палітр, для призначення [кольорів](../advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
 | `follow_symlinks` | `true`                         | Перевіряти символічні посилання чи вони посилаються на теки; використовується в таких модулях як git.                                                                                                               |
 
-::: tip
-
-Якщо у вас є символічні посилання не мережеві файлові системи, зважте на встановлення `follow_symlink` у `false`.
-
-:::
+> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
 
 ### Приклад
 
@@ -249,7 +245,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
@@ -267,6 +263,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$hg_state\
 $pijul_channel\
 $docker_context\
 $package\
@@ -679,7 +676,7 @@ format = 'via [$name $version]($style)'
 
 ## CPP
 
-The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+Модуль `cpp` показує інформацію про ваш компілятор `C++`. Стандартно модуль буде показаний, якщо поточна тека містить файли `.cpp`, `.hpp`, або інші файли повїязані з `C++`.
 
 ### Параметри
 
@@ -693,7 +690,7 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `detect_folders`    | `[]`                                                                             | В яких теках цей модуль має запускатись.                          |
 | `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Як виявити компілятор                                             |
 | `style`             | `'bold 149'`                                                                     | Стиль модуля.                                                     |
-| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                        |
+| `disabled`          | `true`                                                                           | Вимикає модуль `cpp`.                                             |
 
 ### Змінні
 
@@ -710,9 +707,9 @@ NB `версія` не має стандартного формату.
 
 Параметр `commands` отримує список команд для визначення версії та назви компілятора.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
+Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Якщо компілятор C++ компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/).
 
 ### Приклад
 
@@ -735,11 +732,7 @@ format = 'via [$name $version]($style)'
 
 Стандартно відбувається зміна кольору. Якщо ви також хочете змінювати й символ, подивитися на [цей приклад](#with-custom-error-shape).
 
-::: warning
-
-`vimcmd_symbol` працює лише з cmd, fish та zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` працює лише з fish через [проблему визначення режиму роботи в  zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
-
-:::
+> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### Параметри
 
@@ -855,11 +848,9 @@ vimcmd_symbol = '[V](bold green) '
 
 Модуль `cmd_duration` показує, скільки часу виконувалась  остання команда. Модуль буде показаний лише в тому випадку, якщо на виконання команди пішло понад дві секунди або більше, ніж значення змінної `min_time`, якщо воно задане.
 
-::: warning Не вмикайте DEBUG trap в Bash
-
-Якщо ви запускаєте Starship у `bash`, не вмикайте `DEBUG trap` після запуску `eval $(starship init $0)`, бо цей модуль **не працюватиме**.
-
-:::
+> [!WARNING] Do not hook the DEBUG trap in Bash
+> 
+> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 Користувачі Bash, яким потрібна функція preexec, можуть використовувати [фреймворк bash_preexec від rcaloras](https://github.com/rcaloras/bash-preexec). Просто визначте масиви `preexec_function` і `precmd_functions` перед запуском `eval $(starship init $0)`, а потім продовжуйте як зазвичай.
 
@@ -899,11 +890,7 @@ format = 'underwent [$duration](bold yellow)'
 
 Модуль `conda` показує інформацію про поточне оточення [Conda](https://docs.conda.io/en/latest/), якщо змінна `$CONDA_DEFAULT_ENV` встановлена.
 
-::: tip
-
-Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, запустивши `pixi config set change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, використовуючи `pixi config set shell.change-ps1 false`.
 
 ### Параметри
 
@@ -914,7 +901,7 @@ format = 'underwent [$duration](bold yellow)'
 | `style`             | `'bold green'`                         | Стиль модуля.                                                                                                                                                                                                        |
 | `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Ігнорувати середовище `base`.                                                                                                                                                                                        |
-| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Які змінні середовища повинні запускати цей модуль. If it's a pixi environment, this module is not being triggered by default.                                                                                       |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Які змінні середовища повинні запускати цей модуль. Якщо це середовище pixi, цей модуль стандартно не запускається.                                                                                                  |
 | `disabled`          | `false`                                | Вимикає модуль `conda`.                                                                                                                                                                                              |
 
 ### Змінні
@@ -1251,16 +1238,16 @@ disabled = false
 
 ### Параметри
 
-| Параметр            | Стандартно                                                    | Опис                                                                                      |
-| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Формат модуля.                                                                            |
-| `symbol`            | `'🐳 '`                                                        | Символ, який знаходиться перед Docker context.                                            |
-| `only_with_files`   | `true`                                                        | Показувати, лише коли є збіг                                                              |
-| `detect_extensions` | `[]`                                                          | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
-| `detect_folders`    | `[]`                                                          | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
-| `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                             |
-| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                          |
+| Параметр            | Стандартно                                                                                   | Опис                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Формат модуля.                                                                            |
+| `symbol`            | `'🐳 '`                                                                                       | Символ, який знаходиться перед Docker context.                                            |
+| `only_with_files`   | `true`                                                                                       | Показувати, лише коли є збіг                                                              |
+| `detect_extensions` | `[]`                                                                                         | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
+| `detect_folders`    | `[]`                                                                                         | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
+| `style`             | `'blue bold'`                                                                                | Стиль модуля.                                                                             |
+| `disabled`          | `false`                                                                                      | Вимикає модуль `docker_context`.                                                          |
 
 ### Змінні
 
@@ -1426,26 +1413,17 @@ format = 'via [ $version](cyan bold) '
 - Параметр `variable` відповідає наявній змінній середовища
 - Параметр `variable` не визначено, але є параметр `default`
 
-::: tip
+> [!TIP] The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). Типово, модуль `env_var` покаже усі модулі env_var, в тому порядку, в якому вони були визначені.
 
-Порядок в якому модуль env_var показується може встановлюватись індивідуально додаванням `${env_var.foo}` в `format` верхнього рівня (через те, що використовуються крапки, потрібно використовувати `${...}`). Типово, модуль `env_var` покаже усі модулі env_var, в тому порядку, в якому вони були визначені.
-
-:::
-
-::: tip
-
-Кілька змінних оточення можуть бути показані за допомоги `.`. (див. приклад) Якщо параметр конфігурації `variable` не встановлено, модуль показуватиме значення змінної під назвою тексту після символу `.`.
-
-Приклад: наступна конфігурація показуватиме значення змінної середовища USER
-
-```toml
-# ~/.config/starship.toml
-
-[env_var.USER]
-default = 'unknown user'
-```
-
-:::
+> [!TIP] Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+> 
+> Приклад: наступна конфігурація показуватиме значення змінної середовища USER
+> 
+> ```toml
+> 
+> # ~/.config/starship.toml
+> 
+> [env_var.USER] default = 'unknown user' ```
 
 ### Параметри
 
@@ -1866,11 +1844,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 Модуль `git_metrics` покаже кількість доданих та видалених рядків у поточному репозиторії git.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -1908,11 +1882,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Модуль `git_status` показує символ, що описує стан репозиторію в поточній теці.
 
-::: tip
-
-Модуль Git Status дуже повільно працює в теках Windows у середовищі WSL (наприклад, під `/mnt/c/`). Ви можете вимкнути модуль або використати `windows_starship` для використання Windows-версії Starship для тримання `git_status` для цих шляхів.
-
-:::
+> [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. Ви можете вимкнути модуль або використати `windows_starship` для використання Windows-версії Starship для тримання `git_status` для цих шляхів.
 
 ### Параметри
 
@@ -1935,7 +1905,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `ignore_submodules`  | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
 | `disabled`           | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
 | `windows_starship`   |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                   |
+| `use_git_executable` | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
 
 ### Змінні
 
@@ -2392,17 +2362,9 @@ symbol = '🌟 '
 - 1 завдання -> показується `symbol`.
 - 2 чи більше завдань -> показується `symbol` + `число`.
 
-::: warning
+> [!WARNING] This module is not supported on tcsh.
 
-Модуль не підтримується в tcsh та nu.
-
-:::
-
-::: warning
-
-Параметр `threshold` є застарілим, але якщо ви бажаєте його використовувати, модуль буде показувати кількість запущених завдань, якщо у вас більше одного фонового завдання, або завдань більше за `threshold`. Якщо `threshold` встановлено у 0, то модуль також показуватиметься, коли немає запущених завдань.
-
-:::
+> [!WARNING] The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ### Параметри
 
@@ -2530,21 +2492,13 @@ kotlin_binary = 'kotlinc'
 
 Показує поточну назву [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) та, якщо встановлено, простір імен, користувача та кластер з файлу kubeconfig. Простір імен повинен бути встановлений у файлі kubeconfig файл, це можна зробити через `kubectl config set-context starship-context --namespace astronaut`. Так само можна встановити користувача та  кластер за допомогою `kubectl config set-context starship-context --user starship-user` та `kubectl config set-context context context context --cluster starship-cluster`, відповідно. Якщо параметр `$KUBECONFIG` встановлено, то модуль буде використовувати його, якщо ні — `~/.kube/config`.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_env_vars`, `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
+> 
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 ### Параметри
 
-::: warning
-
-Параметри `context_aliases` та `user_aliases` є застарілими. Використовуйте `contexts` та, відповідно, `context_alias` та `user_alias`, натомість.
-
-:::
+> [!WARNING] The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
 | Параметр            | Стандартно                                           | Опис                                                      |
 | ------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
@@ -2742,11 +2696,7 @@ format = 'via [🌕 $version](bold blue) '
 
 Стандартно використання файлу підкачки показується якщо його розмір не є нульовим.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -2859,26 +2809,57 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
-## Mise
+## Стан Mercurial
 
-The `mise` module shows the current mise health as reported by running `mise doctor`.
+Модуль `hg_state` показуватиметься в теках, які є частиною сховища mercurial, і в яких виконується операція, наприклад: _REBASING_, _BISECTING_ тощо.
 
 ### Параметри
 
-| Параметр           | Стандартно                       | Опис                                             |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | Стиль модуля.                                    |
-| `format`           | `'on [$symbol$health]($style) '` | Формат модуля.                                   |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Параметр     | Стандартно                  | Опис                                       |
+| ------------ | --------------------------- | ------------------------------------------ |
+| `merge`      | `'MERGING'`                 | Формат рядка під час процесу `merge`.      |
+| `rebase`     | `'REBASING'`                | Формат рядка під час процесу `rebase`.     |
+| `update`     | `'UPDATING'`                | Формат рядка під час процесу `update`.     |
+| `bisect`     | `'BISECTING'`               | Формат рядка під час процесу `bisect`.     |
+| `shelve`     | `'SHELVING'`                | Формат рядка під час процесу `shelve`.     |
+| `graft`      | `'GRAFTING'`                | Формат рядка під час процесу `graft`.      |
+| `transplant` | `'TRANSPLANTING'`           | Формат рядка під час процесу `transplant`. |
+| `histedit`   | `'HISTEDITING'`             | Формат рядка під час процесу `histedit`.   |
+| `style`      | `'bold yellow'`             | Стиль модуля.                              |
+| `format`     | `'\([$state]($style)\) '` | Формат модуля.                             |
+| `disabled`   | `true`                      | Вимикає модуль `hg_state`.                 |
+
+### Змінні
+
+| Змінна           | Приклад    | Опис                                    |
+| ---------------- | ---------- | --------------------------------------- |
+| state            | `REBASING` | Поточний стан репозиторію               |
+| progress_current | `1`        | Прогрес поточної операції               |
+| progress_total   | `2`        | Загальний прогрес операції              |
+| style\*        |            | Віддзеркалює значення параметра `style` |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+## Mise
+
+Модуль `mise` показує поточний стан mise, про який повідомляє запуск `mise doctor`.
+
+### Параметри
+
+| Параметр           | Стандартно                       | Опис                                                      |
+| ------------------ | -------------------------------- | --------------------------------------------------------- |
+| `symbol`           | `'mise '`                        | Символ, який використовується перед показом стану _mise_. |
+| `style`            | `'bold purple'`                  | Стиль модуля.                                             |
+| `format`           | `'on [$symbol$health]($style) '` | Формат модуля.                                            |
+| `healthy_symbol`   | `healthy`                        | Повідомлення, яке показується, коли _mise_ справний.      |
+| `unhealthy_symbol` | `unhealthy`                      | Повідомлення, яке показується, коли _mise_ несправний.    |
+| `disabled`         | `true`                           | Вимикає модуль `mise`.                                    |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| health    | `healthy` | The health of _mise_                     |
+| health    | `healthy` | Стан справності _mise_                   |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -3277,17 +3258,9 @@ symbol = '☁️ '
 
 Модуль `os` показує поточну операційну систему. Інформація про ОС отримується через [os_info](https://lib.rs/crates/os_info).
 
-::: warning
+> [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-[os_info](https://lib.rs/crates/os_info), що використовується в цьому модулі, може бути неточним для деяких систем.
-
-:::
-
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -3309,6 +3282,7 @@ AlmaLinux = "💠 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
+AOSC = "🐱 "
 Arch = "🎗️ "
 Artix = "🎗️ "
 Bluefin = "🐟 "
@@ -3352,7 +3326,7 @@ Ubuntu = "🎯 "
 Ultramarine = "🔷 "
 Unknown = "❓ "
 Uos = "🐲 "
-Void = "  "
+Void = " "
 Windows = "🪟 "
 ```
 
@@ -3537,35 +3511,31 @@ format = 'via [🔹 $version](147 bold) '
 
 ## Pixi
 
-The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+Модуль `pixi` показує встановлену версію [pixi](https://pixi.sh), а також активоване середовище, якщо `$PIXI_ENVIRONMENT_NAME` встановлено.
 
-::: tip
-
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 ### Параметри
 
-| Параметр                   | Стандартно                                                | Опис                                                                              |
-| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                    |
-| `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                |
-| `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                 |
-| `style`                    | `'yellow bold'                                           | Стиль модуля.                                                                     |
-| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
-| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
-| `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                      |
-| `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                      |
-| `detect_folders`           | `['.pixi']`                                               | В яких теках цей модуль має запускатись.                                          |
-| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
+| Параметр                   | Стандартно                                                | Опис                                                                                    |
+| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Формат модуля.                                                                          |
+| `version_format`           | `'v${raw}'`                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`.                      |
+| `symbol`                   | `'🧚 '`                                                    | Символ що передує назві оточення.                                                       |
+| `style`                    | `'yellow bold'`                                           | Стиль модуля.                                                                           |
+| `show_default_environment` | `true`                                                    | Чи вказувати, що у вашому проєкті активовано середовище `default`.                      |
+| `pixi_binary`              | `['pixi']`                                                | Налаштовує бінарний файл pixi, який Starship буде використовувати для отримання версії. |
+| `detect_extensions`        | `[]`                                                      | Які розширення повинні запускати цей модуль.                                            |
+| `detect_files`             | `['pixi.toml']`                                           | Які імена файлів мають запускати цей модуль.                                            |
+| `detect_folders`           | `[]`                                                      | В яких теках цей модуль має запускатись.                                                |
+| `disabled`                 | `false`                                                   | Вимикає модуль `pixi`.                                                                  |
 
 ### Змінні
 
 | Змінна      | Приклад   | Опис                                     |
 | ----------- | --------- | ---------------------------------------- |
-| version     | `v0.33.0` | The version of `pixi`                    |
-| environment | `py311`   | The current pixi environment             |
+| version     | `v0.33.0` | Версія `pixi`                            |
+| environment | `py311`   | Поточне середовище pixi                  |
 | symbol      |           | Віддзеркалює значення параметра `symbol` |
 | style       |           | Віддзеркалює значення параметра `style`  |
 
@@ -3582,11 +3552,7 @@ format = '[$symbol$environment](yellow) '
 
 Модуль `pulumi` показує імʼя поточного користувача та версію обраного [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/).
 
-::: tip
-
-Стандартно версія Pulumi не показується, через те що для цього потрібно набагато більше часу ніж на завантаження більшості втулків (~70ms). Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-pulumi-version).
-
-:::
+> [!TIP] By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-pulumi-version).
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -3698,27 +3664,23 @@ format = 'via [$symbol$version](bold white)'
 
 ### Параметри
 
-| Параметр             | Стандартно                                                                                                   | Опис                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                        |
-| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                     |
-| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                            |
-| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                         |
-| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                     |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                  |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                           |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                    |
-| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                        |
-| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                              |
+| Параметр             | Стандартно                                                                                                   | Опис                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                           |
+| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                        |
+| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                               |
+| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                            |
+| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Префікс перед версією pyenv, показується якщо pyenv використовується                     |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Налаштовує бінарні файли python, які Starship буде використовувати для отримання версії. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                              |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                       |
+| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                           |
+| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                 |
 
-::: tip
-
-Змінна `python_binary` приймає як рядок, так і список рядків. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Зауважте, що можна змінити двійковий файл, який використовується Starship, щоб отримати версію Python, а не параметрів, які використовуються.
-
-Стандартні значення та порядок для `python_binary` було вибрано так, щоб спочатку ідентифікувати версію Python у середовищах virtualenv/conda (які наразі все ще додають `python`, незалежно від того, чи вказує він на `python3` чи на `python2`). Це може мати побічний ефект: якщо у вас все ще встановлено системний Python 2, він може бути обраний перед будь-яким Python 3 (принаймні в дистрибутивах Linux, які завжди містять символічне посилання `/usr/bin/python` на Python 2). Якщо ви більше не працюєте з Python 2, але не можете видалити системний Python 2, змінивши його на `'python3'`, ви приховаєте будь-яку версію Python 2, див. приклад нижче.
-
-:::
+> [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+> 
+> The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
 ### Змінні
 
@@ -4036,11 +3998,7 @@ symbol = '🌟 '
 
 Модуль `shell` показує індикатор поточної оболонки.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -4242,11 +4200,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 Модуль `status` показує код завершення роботи попередньої команди. Якщо $success_symbol пустий (типово), модуль буде показаний тільки якщо код виходу не `0`. Код status буде перетворений у 32-бітне ціле число.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -4305,11 +4259,7 @@ disabled = false
 
 Модуль `sudo` показує, чи облікові дані sudo зараз є в кеші. Модуль показується лише за наявності даних в кеші.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -4393,11 +4343,7 @@ format = 'via [🏎  $version](red bold)'
 
 Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
 
-::: tip
-
-Стандартно версія Terraform не показується, оскільки це повільно для поточних версій Terraform, особливо коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
-
-:::
+> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -4452,11 +4398,7 @@ format = '[🏎💨 $workspace]($style) '
 
 Модуль `time` показує поточний **місцевий** час. Значення `format` використовується крейтом [`chrono`](https://crates.io/crates/chrono) для визначення формату показу часу. Перегляньте [документацію chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), щоб побачити, які параметри доступні.
 
-::: tip
-
-Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
-
-:::
+> [!TIP] This module is disabled by default. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 ### Параметри
 
@@ -4537,11 +4479,7 @@ time_range = '10:00:00-14:00:00'
 - Змінна `show_always` встановлена в true
 - Масив `detect_env_vars` містить принаймні одну змінну середовища, яку було встановлено
 
-::: tip
-
-Модуль виявляє підключення SSH перевіряючи змінні середовища `SSH_CONNECTION`, `SSH_CLIENT` і `SSH_TTY`. Якщо ваш хост SSH не налаштував ці змінні, одним зі способів розвʼязання проблеми є встановлення для однієї з них фіктивного значення.
-
-:::
+> [!TIP] SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 ### Параметри
 
@@ -4734,31 +4672,17 @@ symbol = '⚡️ '
 - Команда `when` повертає 0
 - Поточна операційна система (std::env::consts::OS) збігається з полем `os`, якщо визначено.
 
-::: tip
+> [!TIP] Multiple custom modules can be defined by using a `.`.
 
-Кілька власних модулів можна визначити за допомогою символу "`.`".
+> [!TIP] The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
 
-:::
+> [!TIP] [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
 
-::: tip
-
-Порядок в якому власні модулі будуть показуватись може бути встановлений індивідуально додаванням `${custom.foo}` до змінної `format` верхнього рівня (через те, що назви містять точки вам треба використовувати`${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
-
-:::
-
-::: tip
-
-[Квиток #1252](https://github.com/starship/starship/discussions/1252) містить приклади власних модулів. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
-
-:::
-
-::: warning Якщо увімкнено `unsafe_no_escape` або до версії starship v1.20 вивід команди буде виведено без екранування.
-
-Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід  містить специфічні для оболонки інтерпретовані послідовності, вони можуть бути інтерпретовані безпосередньо під час виведення на екран. Залежно від оболонки, це може означати, що, наприклад, рядки, у зворотніх лапках, виконуються оболонкою. Такі послідовності зазвичай залежать від оболонки, наприклад, ви можете написати командний модуль, який пише послідовності для bash, наприклад, `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
-
-Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
-
-:::
+> [!WARNING] If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+> 
+> Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Залежно від оболонки, це може означати, що, наприклад, рядки, у зворотніх лапках, виконуються оболонкою. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+> 
+> Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 ### Параметри
 
@@ -4808,17 +4732,15 @@ symbol = '⚡️ '
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Переконайтеся, що ваша оболонка завершує процеси правильно
-
-Якщо ви вказуєте власну команду, переконайтеся, що стандартний Shell, який використовується starship, буде виконувати команди з чистим (graceful) завершенням, за допомогою параметра `shell`.
-
-Наприклад, PowerShell потребує параметр `-Command` для виконання однорядкової команди. Пропуск цього параметра може призвести до рекурсивного циклу starship, де оболонка може спробувати знову завантажити повний профіль середовища з самим starship і, отже, повторно виконати власну команду, потрапивши в нескінченний цикл.
-
-Параметри, подібні до `-NoProfile` у PowerShell, також рекомендовані для інших оболонок, щоб уникнути додаткового часу завантаження власного профілю під час кожного виклику Starship.
-
-Наразі реалізовано автоматичне виявлення оболонок і правильне додавання параметрів, але можливо, що охоплено не всі оболонки. [Будь ласка, сповістіть про проблему](https://github.com/starship/starship/issues/new/choose) з подробицями про термінал та конфігурацію автозапуску, якщо ви зіткнулись з таким сценарієм.
-
-:::
+> [!WARNING] Make sure your custom shell configuration exits gracefully
+> 
+> If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+> 
+> For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+> 
+> Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+> 
+> Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 ### Приклад
 

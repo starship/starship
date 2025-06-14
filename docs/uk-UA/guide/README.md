@@ -232,7 +232,7 @@ curl -sS https://starship.rs/install.sh | sh
 | Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                | `apt install starship`                                                         |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                           | `apt install starship`                                                         |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
@@ -407,7 +407,7 @@ eval "$(starship init zsh)"
 
 ## 🤝 Участь
 
-Ми завжди раді вашому внеску, незалежно від рівня **вашого досвіду**! Якщо ви шукаєте спосіб допомоги проєкту, але ще не визначились, що можна зробити, спробуйте [завдання для початківців](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Ми завжди раді вашому внеску, незалежно від рівня **вашого досвіду**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Якщо ви вільно володієте мовою відмінною від англійської, ми будемо дуже вдячні, якщо ви допоможете в перекладі документації та її підтримці в актуальному стані. Якщо у вас є бажання, переклади можна робити за допомогою [Starship Crowdin](https://translate.starship.rs/).
 
