@@ -40,6 +40,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $golang\
 $guix_shell\
 $haskell\

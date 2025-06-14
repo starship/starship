@@ -43,6 +43,9 @@ format = '(via [$symbol($version )]($style))'
 [fennel]
 format = '(via [$symbol($version )]($style))'
 
+[fortran]
+format = "(via [$symbol($version )]($style))"
+
 [gleam]
 format = '(via [$symbol($version )]($style))'
 
