@@ -208,11 +208,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `palettes`        | `{}`                             | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                           | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
-::: tip
-
-If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
-
-:::
+> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
 
 ### Пример
 
@@ -736,11 +732,7 @@ format = 'via [$name $version]($style)'
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
-
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
-
-:::
+> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### Опции
 
@@ -856,11 +848,9 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
 
-::: warning Не подключайте ловушку DEBUG к Bash
-
-Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
-
-:::
+> [!WARNING] Do not hook the DEBUG trap in Bash
+> 
+> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
 
@@ -900,11 +890,7 @@ format = 'underwent [$duration](bold yellow)'
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
-
-Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 ### Опции
 
@@ -1427,26 +1413,17 @@ The `env_var` module displays the current value of a selected environment variab
 - Опция `variable` соответствует существующей переменной среды
 - Опция `variable` не определена, но определена опция `default`
 
-::: tip
+> [!TIP] The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
-
-:::
-
-::: tip
-
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
-
-Example: following configuration will display value of USER environment variable
-
-```toml
-# ~/.config/starship.toml
-
-[env_var.USER]
-default = 'unknown user'
-```
-
-:::
+> [!TIP] Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+> 
+> Example: following configuration will display value of USER environment variable
+> 
+> ```toml
+> 
+> # ~/.config/starship.toml
+> 
+> [env_var.USER] default = 'unknown user' ```
 
 ### Опции
 
@@ -1867,11 +1844,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -1909,11 +1882,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
 
-::: tip
-
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
-
-:::
+> [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
 ### Опции
 
@@ -2393,17 +2362,9 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+> [!WARNING] This module is not supported on tcsh.
 
-This module is not supported on tcsh.
-
-:::
-
-::: warning
-
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
-
-:::
+> [!WARNING] The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ### Опции
 
@@ -2531,21 +2492,13 @@ kotlin_binary = 'kotlinc'
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+> 
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 ### Опции
 
-::: warning
-
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
-
-:::
+> [!WARNING] The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
 | Параметр            | По умолчанию                                         | Описание                                                              |
 | ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
@@ -2743,11 +2696,7 @@ format = 'via [🌕 $version](bold blue) '
 
 По умолчанию использование подкачки отображается, если общая сумма подкачки системы не равна нулю.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -3309,17 +3258,9 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: warning
+> [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
-
-:::
-
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -3571,11 +3512,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
 
-::: tip
-
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 ### Опции
 
@@ -3614,11 +3551,7 @@ format = '[$symbol$environment](yellow) '
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
-::: tip
-
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
-
-:::
+> [!TIP] By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -3744,13 +3677,9 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
-::: tip
-
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
-
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
-
-:::
+> [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+> 
+> The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
 ### Переменные
 
@@ -4068,11 +3997,7 @@ symbol = '🌟 '
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -4274,11 +4199,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -4337,11 +4258,7 @@ disabled = false
 
 The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -4425,11 +4342,7 @@ format = 'via [🏎  $version](red bold)'
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
-
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
-
-:::
+> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -4484,11 +4397,7 @@ format = '[🏎💨 $workspace]($style) '
 
 Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
-::: tip
-
-По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
-
-:::
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -4569,11 +4478,7 @@ By default, the module will be shown if any of the following conditions are met:
 - Переменная `show_always` равна true
 - The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
-::: tip
-
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
-
-:::
+> [!TIP] SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 ### Опции
 
@@ -4766,31 +4671,17 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
-::: tip
+> [!TIP] Multiple custom modules can be defined by using a `.`.
 
-Multiple custom modules can be defined by using a `.`.
+> [!TIP] The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
-:::
+> [!TIP] [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
-::: tip
-
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
-
-:::
-
-::: tip
-
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
-
-:::
-
-::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
-
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
-
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
-
-:::
+> [!WARNING] If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+> 
+> Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+> 
+> Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 ### Опции
 
@@ -4840,17 +4731,15 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: предупреждение Убедитесь, что ваша пользовательская конфигурация оболочки завершается корректно
-
-Если вы задаете собственную команду, убедитесь, что оболочка по умолчанию, используемая starship, правильно выполняет команду с плавным выходом (через опцию `shell`).
-
-Например, PowerShell требует параметра `-Command` для выполнения одного лайнера. Пропуск этого параметра может привести к тому, что starship попадет в рекурсивный цикл, в котором оболочка может попытаться снова загрузить среду с полным профилем с помощью starship и, следовательно, повторно выполнить пользовательскую команду, попадая в бесконечный цикл.
-
-Параметры, аналогичные `-NoProfile` в PowerShell, рекомендуются для других оболочек, a также, чтобы избежать дополнительного времени загрузки пользовательского профиля на каждом starship вызове.
-
-Автоматическое определение оболочек и добавление соответствующих параметров в настоящее время реализованы, но возможно, что не все оболочки покрыты. [Пожалуйста, откройте проблему](https://github.com/starship/starship/issues/new/choose) с подробной информацией о shell и конфигурации starship, если вы столкнетесь с таким сценарием.
-
-:::
+> [!WARNING] Make sure your custom shell configuration exits gracefully
+> 
+> If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+> 
+> For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+> 
+> Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+> 
+> Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 ### Пример
 
