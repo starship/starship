@@ -14,11 +14,7 @@ Essa predefinição altera os símbolos para cada módulo usar símbolos com Ner
 
 Essa predefinição altera os símbolos para vários módulos para que nenhum utilize símbolos das Nerd Fonts em nenhum lugar no prompt.
 
-::: tip
-
-Esta predefinição se tornará padrão em [uma futura release do starship](https://github.com/starship/starship/pull/3544).
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [Clique para visualizar a predefinição de sem Nerd Font](./no-nerd-font)
 
