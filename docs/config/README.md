@@ -2345,34 +2345,60 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+The `haskell` module finds the current selected compiler version and/or the selected Stack snapshot.
+In order to decide how to populate the output fields this module does the
+following (in that order):
+
+1. Check if the current directory is part of a Stack project.
+
+   This is done using the `stack_*` configuration options.
+
+2. Check if the current directory is part of a Cabal project.
+
+   This is done using the `cabal_*` configuration options.
+
+3. If neither is the case, check if there are other Haskell files in the
+   current directory.
+
+   This is done using the `detect_*` configuration options.
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `stack.yaml` file
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- The current directory or an ancestor directory contains a `stack.yaml` file.
+- The current directory or an ancestor directory contains a `cabal.project` file, or the current directory contains a `.cabal` file.
+- The current directory contains any `.hs`, or `.hs-boot` file.
 
 ### Options
 
-| Option              | Default                              | Description                                        |
-| ------------------- | ------------------------------------ | -------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                         |
-| `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell |
-| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Which extensions should trigger this module.       |
-| `detect_files`      | `['stack.yaml', 'cabal.project']`    | Which filenames should trigger this module.        |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
-| `style`             | `'bold purple'`                      | The style for the module.                          |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| Option              | Default                              | Description                                                                       |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                        |
+| `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell.                               |
+| `default_compiler`  | `'ghc'`                              | The executable name of the Haskell compiler used outside of Cabal/Stack projects. |
+| `detect_extensions` | `['hs', 'hs-boot']`                  | Extensions used to discover a non-project Haskell setup.                          |
+| `detect_files`      | `[]`                                 | Filenames used to discover a non-project Haskell setup.                           |
+| `detect_folders`    | `[]`                                 | Folders names used to discover a non-project Haskell setup.                       |
+| `cabal_extensions`  | `['cabal']`                          | Extensions used to discover a Cabal project.                                      |
+| `cabal_files`       | `['cabal.project']`                  | Filenames used to discover a Cabal project.                                       |
+| `cabal_folders`     | `[]`                                 | Folders used to discover a Cabal project.                                         |
+| `stack_extensions`  | `[]`                                 | Extensions used to discover a Stack project.                                      |
+| `stack_files`       | `['stack.yaml']`                     | Filenames used to discover a Stack project.                                       |
+| `stack_folders`     | `[]`                                 | Folders used to discover a Stack project.                                         |
+| `style`             | `'bold purple'`                      | The style for the module.                                                         |
+| `disabled`          | `false`                              | Disables the `haskell` module.                                                    |
 
 ### Variables
 
-| Variable     | Example     | Description                                                                             |
-| ------------ | ----------- | --------------------------------------------------------------------------------------- |
-| version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
-| snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
-| symbol       |             | Mirrors the value of option `symbol`                                                    |
-| style\*      |             | Mirrors the value of option `style`                                                     |
+| Variable         | Example     | Description                                                                             |
+| ---------------- | ----------- | --------------------------------------------------------------------------------------- |
+| version          |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot         | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| compiler_id      | `ghc-9.2.1` | The ID (i.e. "NAME-VERSION") of the currently used compiler                             |
+| compiler_name    | `ghc`       | The name of the currently used compiler                                                 |
+| compiler_version | `9.2.1`     | The version of the currently used compiler                                              |
+| ghc\_version     | `9.2.1`     | An alias for `compiler_version`                                                         |
+| symbol           |             | Mirrors the value of option `symbol`                                                    |
+| style\*          |             | Mirrors the value of option `style`                                                     |
 
 *: This variable can only be used as a part of a style string
 
