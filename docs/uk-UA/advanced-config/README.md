@@ -2,11 +2,7 @@
 
 Хоча Starship і універсальна оболонка, іноді необхідно зробити більше ніж просто змінити `star.toml`, щоб можна було робити певні речі. Ця сторінка містить деякі з найбільш докладних методів налаштувань, які використовуються у starship.
 
-::: warning
-
-Налаштування у цьому розділі можуть змінюватись у майбутніх релізах Starship.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt у PowerShell
 
