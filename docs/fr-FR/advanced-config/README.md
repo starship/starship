@@ -2,11 +2,7 @@
 
 Même si Starship est un shell polyvalent, éditer `starship.toml` ne suffit parfois pas pour faire certaines choses. Cette page détaille quelques techniques de configuration avancées utilisées dans starship.
 
-::: warning
-
-Les configurations dans cette section sont sujettes à modification dans les futures versions de Starship.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt in PowerShell
 
