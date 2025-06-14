@@ -2,11 +2,7 @@
 
 A pesar de que Starship es una prompt versátil, a veces necesitas hacer más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
 
-::: warning
-
-Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## Prompt Transitoria en PowerShell
 
