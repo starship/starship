@@ -681,6 +681,12 @@ format = 'via [$name $version]($style)'
 
 The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
 
+::: tip
+
+Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
+
+:::
+
 ### Параметри
 
 | Параметр            | Стандартно                                                                       | Опис                                                              |

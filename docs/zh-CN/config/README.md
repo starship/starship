@@ -681,6 +681,13 @@ format = 'via [$name $version]($style)'
 
 The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
 
+::: tip 提示
+
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
+
+:::
+
+
 ### 配置项
 
 | 选项                  | 默认值                                                                              | 描述                                                     |
