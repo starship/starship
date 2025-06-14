@@ -141,7 +141,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::error!("Error in module `gcloud`: \n{}", error);
+            log::error!("Error in module `gcloud`: \n{error}");
             return None;
         }
     });

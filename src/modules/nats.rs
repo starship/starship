@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .stdout;
     let nats_context: json::Value = json::from_str(&ctx_str)
         .map_err(|e| {
-            log::warn!("Error parsing nats context JSON: {}\n", e);
+            log::warn!("Error parsing nats context JSON: {e}\n");
             drop(e);
         })
         .ok()?;
@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `nats`:\n{}", error);
+            log::warn!("Error in module `nats`:\n{error}");
             return None;
         }
     });

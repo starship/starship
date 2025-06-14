@@ -56,13 +56,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Some(module)
                 }
                 Err(e) => {
-                    log::warn!("Cannot parse `battery.format`: {}", e);
+                    log::warn!("Cannot parse `battery.format`: {e}");
                     None
                 }
             }
         }
         Err(e) => {
-            log::warn!("Cannot load `battery.format`: {}", e);
+            log::warn!("Cannot load `battery.format`: {e}");
             None
         }
     }
@@ -75,7 +75,7 @@ fn get_battery_status(context: &Context) -> Option<BatteryStatus> {
             percentage: battery_info.energy / battery_info.energy_full * 100.0,
             state: battery_info.state,
         };
-        log::debug!("Battery status: {:?}", battery);
+        log::debug!("Battery status: {battery:?}");
         Some(battery)
     } else {
         None
@@ -131,7 +131,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
             batteries
                 .filter_map(|battery| match battery {
                     Ok(battery) => {
-                        log::debug!("Battery found: {:?}", battery);
+                        log::debug!("Battery found: {battery:?}");
 
                         let charge_rate = battery.state_of_charge().value;
                         let energy_full = battery.energy_full().value;
