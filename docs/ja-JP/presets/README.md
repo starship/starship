@@ -14,11 +14,7 @@
 
 このプリセットは一部のモジュールで使われるシンボルを変更して、Nerd Font シンボルをどこにも使わないようにします。
 
-::: tip
-
-このプリセットは [Starship の将来のリリース](https://github.com/starship/starship/pull/3544) でデフォルトのプリセットになります。
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [No Nerd Font プリセットを表示するにはクリックしてください。](./no-nerd-font)
 
