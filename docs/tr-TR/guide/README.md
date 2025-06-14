@@ -407,7 +407,7 @@ Daha fazla özelleştirme seçeneği için:
 
 ## 🤝 Katkıda Bulunmak
 
-Katılımcılara **yetenek düzeyleri fark etmeksizin**, her zaman açığız! Eğer katkıda bulunmaya kolay bir şekilde başlamak istiyorsanız [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)'lardan bir tanesini deneyin.
+Katılımcılara **yetenek düzeyleri fark etmeksizin**, her zaman açığız! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Eğer ingilizce harici bir dili akıcı seviyede kullanabiliyorsanız, dosyaların diğer diller ile güncel bir şekilde çevirilebilmesi için yardımlarınızı bekliyoruz. Çeviriye [Starship Crowdin](https://translate.starship.rs/)'den destekte bulunabilirsiniz.
 
