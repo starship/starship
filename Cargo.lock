@@ -2756,14 +2756,14 @@ dependencies = [
 
 [[package]]
 name = "process_control"
-version = "5.1.0"
+version = "5.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de8e5a3876090fd5956330e2a0b10bda2ba2ccdaa1638e038daea361321d4353"
+checksum = "3932bfcf9bb84265b1ec43eca9e32f2ba73fef819e365c99779f6268540a1bcd"
 dependencies = [
  "attr_alias",
  "libc",
  "signal-hook 0.3.18",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
