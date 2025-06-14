@@ -2,11 +2,7 @@
 
 Хотя Starship - это универсальная оболочка, иногда вам нужно сделать больше, чем просто редактировать `starship.toml`, для того чтобы сделать определенные вещи. Эта страница описывает некоторые из дополнительных техник конфигурации, используемых в Starship.
 
-::: warning
-
-Конфигурации в этом разделе могут быть изменены в будущих выпусках Starship.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt для PowerShell
 
