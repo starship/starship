@@ -136,11 +136,7 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
-
-   Seul elvish v0.18 ou supérieur est pris en charge.
-
-   :::
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
    Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 
@@ -164,11 +160,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   Ceci va changer dans le futur. Seul Nushell v0.96+ est supporté.
-
-   :::
+   > [!WARNING] This will change in the future. Seul Nushell v0.96+ est supporté.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
