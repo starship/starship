@@ -3889,19 +3889,20 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                                                      | Description                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | The format for the module.                                                            |
-| `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
-| `symbol`             | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                     |
-| `style`              | `'yellow bold'`                                                                                              | The style for the module.                                                             |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
+| Option                | Default                                                                                                      | Description                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`              | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | The format for the module.                                                            |
+| `version_format`      | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
+| `symbol`              | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                     |
+| `style`               | `'yellow bold'`                                                                                              | The style for the module.                                                             |
+| `pyenv_version_name`  | `false`                                                                                                      | Use pyenv to get Python version                                                       |
+| `pyenv_prefix`        | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`       | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`   | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
+| `detect_files`        | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
+| `detect_folders`      | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `override_venv_names` | `['.venv', 'venv']`                                                                                          | Which venv names should be replaced with the parent directory name.                   |
+| `disabled`            | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 ::: tip
 
