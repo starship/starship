@@ -34,6 +34,7 @@ impl Default for OSConfig<'_> {
                 Type::Alpine => "🏔️ ",
                 Type::Amazon => "🙂 ",
                 Type::Android => "🤖 ",
+                Type::AOSC => "🐱 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
                 Type::Bluefin => "🐟 ",
