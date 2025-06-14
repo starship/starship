@@ -208,11 +208,7 @@ Esta é a lista de opções de configuração em todo o prompt.
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
 | `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                  |
 
-::: tip
-
-If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
-
-:::
+> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
 
 ### Exemplo
 
@@ -736,11 +732,7 @@ O caractere vai te dizer se o ultimo comando foi bem sucedido ou não. Você pod
 
 Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olhada [neste exemplo](#with-custom-error-shape).
 
-::: atenção
-
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
-
-:::
+> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### Opções
 
@@ -856,11 +848,9 @@ O módulo `cobol` exibe a versão instalada atual do COBOL. Por padrão, o módu
 
 O módulo `cmd_duration` exibi o tempo que o ultimo comando levou para executar. O módulo vai exibir somente se o comando levar mais de dois segundos, ou o valor de configuração `min_time` existir.
 
-::: warning Não utilize o DEBUG-trap no Bash
-
-Se você esta rodando o Starship no `bash`, você não deve ativar a armadilha `DEBUG` após rodar `eval $(starship init $0)`, ou este módulo **vai** quebrar.
-
-:::
+> [!WARNING] Do not hook the DEBUG trap in Bash
+> 
+> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 Usuários do bash que precisam de funções pre-executadas podem usar [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simplesmente defina os arrays `preexec_functions` e `precmd_functions` antes de rodar `eval $(starship init $0)`, e depois pode proceder normalmente.
 
@@ -900,11 +890,7 @@ format = 'underwent [$duration](bold yellow)'
 
 O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/latest/), se o `$CONDA_DEFAULT_ENV` estiver definido.
 
-::: tip
-
-Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
 ### Opções
 
@@ -1427,26 +1413,17 @@ O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada
 - A opção de configuração da `variable` corresponde a uma variável existente
 - A configuração `variable` não está definida, mas a `default` está
 
-::: tip
+> [!TIP] The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
-
-:::
-
-::: tip
-
-Múltiplas variáveis de ambiente podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
-
-Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
-
-```toml
-# ~/.config/starship.toml
-
-[env_var.USER]
-default = 'unknown user'
-```
-
-:::
+> [!TIP] Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+> 
+> Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
+> 
+> ```toml
+> 
+> # ~/.config/starship.toml
+> 
+> [env_var.USER] default = 'unknown user' ```
 
 ### Opções
 
@@ -1867,11 +1844,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 O módulo `git_metrics` vai exibir o número de adições e exclusões de linhas no repositório git atual.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -1909,11 +1882,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 O módulo `git_status` exibe o simbolo que representa o estado do repositório no diretório atual.
 
-::: tip
-
-O módulo Git Status é muito lento nos diretórios do Windows (por exemplo, em `/mnt/c/`) quando em um ambiente WSL. Você pode desabilitar o módulo ou usar a opção `windows_starship` para usar um executável Starship nativo do Windows para calcular o `git_status` para esses caminhos.
-
-:::
+> [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. Você pode desabilitar o módulo ou usar a opção `windows_starship` para usar um executável Starship nativo do Windows para calcular o `git_status` para esses caminhos.
 
 ### Opções
 
@@ -2393,17 +2362,9 @@ A funcionalidade padrão é:
 - 1 job -> `symbol` é exibido.
 - 2 jobs or more -> `symbol` + `number` é exibido.
 
-::: atenção
+> [!WARNING] This module is not supported on tcsh.
 
-This module is not supported on tcsh.
-
-:::
-
-::: atenção
-
-A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai exibir o numero de jobs rodando se for maior que 1 ou maior que o valor configurado na `threshold`, se ele existir. Se o valor `threshold` for definido como 0, então o módulo vai exibir quando tiver 0 jobs rodando.
-
-:::
+> [!WARNING] The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ### Opções
 
@@ -2531,21 +2492,13 @@ kotlin_binary = 'kotlinc'
 
 Exibe o nome atual do [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) e, se definido, o namespace, usuário e cluster do arquivo kubeconfig. O namespace precisa ser definido no arquivo kubeconfig, isso pode ser feito via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+> 
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
 
 ### Opções
 
-::: atenção
-
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
-
-:::
+> [!WARNING] The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
 | Opções              | Padrão                                               | Descrição                                                     |
 | ------------------- | ---------------------------------------------------- | ------------------------------------------------------------- |
@@ -2743,11 +2696,7 @@ O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
 
 Por padrão o uso do swap é exibido se o total de swap do sistema é diferente de zero.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -3309,17 +3258,9 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: atenção
+> [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
-
-:::
-
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -3571,11 +3512,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
 
-::: tip
-
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
-
-:::
+> [!TIP] This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
 
 ### Opções
 
@@ -3614,11 +3551,7 @@ format = '[$symbol$environment](yellow) '
 
 O módulo `pulumi` mostra o nome de usuário atual, a [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) selcionada e a versão.
 
-::: tip
-
-Por padrão a versão do Pulumi não é exibida, pois leva um tempo maior para ser carregada. Em média a maioria dos plugins leva (~70ms). Se você ainda deseja ativa-la, [siga o exemplo abaixo](#with-pulumi-version).
-
-:::
+> [!TIP] By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). Se você ainda deseja ativa-la, [siga o exemplo abaixo](#with-pulumi-version).
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
@@ -3744,13 +3677,9 @@ Por padrão, o módulo será exibido se qualquer das seguintes condições for a
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                 |
 | `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                         |
 
-::: tip
-
-A variável `python_binary` aceita uma string ou uma lista de strings. O Starship vai tentar executar cada binário até obter um resultado. Note que você pode apenas alterar o binário em que o Starship executa para pegar a versão do Python não os argumentos que são utilizados.
-
-O valor padrão e a ordem para o `python_binary` foram escolhidos para identificar primeiro uma versão do Python em um ambiente virtualenv/conda (que atualmente adiciona um `python`, não importa se ele aponta pro `python3` ou `python2`). Este tem efeito de lado, se você tenha um sistema com Python 2 instalado, pode ser usado antes de qualquer Python 3 (pelo menos nas Distros Linux que sempre fazem um symlink `/usr/bin/python` para Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
-
-:::
+> [!TIP] The `python_binary` variable accepts either a string or a list of strings. O Starship vai tentar executar cada binário até obter um resultado. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+> 
+> The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
 ### Variáveis
 
@@ -4068,11 +3997,7 @@ symbol = '🌟 '
 
 O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -4274,11 +4199,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 O módulo `status` exibe o código de saída do comando anterior. Se o $success_symbol estiver vazio (padrão), o módulo será exibido apenas se o código de saída não for `0.`. O código de status será convertido em um inteiro de 32 bits signed.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -4337,11 +4258,7 @@ disabled = false
 
 O módulo `sudo` é exibido se uma credencial sudo estiver em cache. O módulo vai ser exibido somente se as credenciais estiverem em cache.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -4425,11 +4342,7 @@ format = 'via [🏎  $version](red bold)'
 
 O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão.
 
-::: tip
-
-Por padrão a versão do Terraform não é exibida, desde que é lento recuperar a versão atual quando muitos plugins estão em uso. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
-
-:::
+> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
@@ -4484,11 +4397,7 @@ format = '[🏎💨 $workspace]($style) '
 
 O módulo `time` exibe a hora **local** atual. A configuração de `format` é usada pelo [`chrono`](https://crates.io/crates/chrono) para controlar qual hora é exibida. Dê uma olhada na [documentação do chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver quais opções estão disponíveis.
 
-::: tip
-
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
-
-:::
+> [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
 ### Opções
 
@@ -4569,11 +4478,7 @@ O módulo `username` mostra o nome de usuário do usuário ativo. O módulo ser�
 - A variável `show_always` esta definida como true
 - The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
-::: tip
-
-Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. Se seu host SSH não tem estas variáveis configuradas, uma alternativa é definir uma delas com valor burro.
-
-:::
+> [!TIP] SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 ### Opções
 
@@ -4766,31 +4671,17 @@ Esses módulos serão mostrados se alguma das seguintes condições for atendida
 - O comando `when` retorna 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
-::: tip
+> [!TIP] Multiple custom modules can be defined by using a `.`.
 
-Vários módulos personalizados podem ser definidos usando um `.`.
+> [!TIP] The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
 
-:::
+> [!TIP] [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. Se você tem um exemplo interessante que não esta coberto lá, sinta-se livre para compartilha-lo!
 
-::: tip
-
-A ordem na qual os módulos personalizados são mostrados pode ser definida individualmente incluindo `${custom.foo}` no `format` de nível superior (como inclui um ponto, você precisa usar `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
-
-:::
-
-::: tip
-
-A [Issue #1252](https://github.com/starship/starship/discussions/1252) contém exemplos de módulos personalizados. Se você tem um exemplo interessante que não esta coberto lá, sinta-se livre para compartilha-lo!
-
-:::
-
-::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
-
-Seja qual for a saída o comando irá gerar uma saída sem modificações no prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
-
-Strings de formatação também podem conter sequencias de prompt especificas de shell, ex: [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
-
-:::
+> [!WARNING] If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+> 
+> Seja qual for a saída o comando irá gerar uma saída sem modificações no prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+> 
+> Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 ### Opções
 
@@ -4840,17 +4731,15 @@ Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar Po
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Tenha certeza que tenha uma configuração de shell
-
-Se você definir um comando personalizado, tenha certeza que o shell padrão usado pelo starship execute este comando com uma saída graciosa (via the `shell` option).
-
-Por exemplo, PowerShell requer o parâmetro `-Command` para executar um liner. Omitindo este parâmetro pode ser que o starship entre em um loop recursivo, onde o shell tente carrega um ambiente completo de perfil com o próprio starship novamente e portanto execute novamente o comando, entrando em um loop sem fim.
-
-Parâmetros similares ao `-NoProfile` no PowerShell são recomendados para outras shells, bem como para evitar um tempo de carregamento maior toda vez que o starship for chamado.
-
-Detecção automática de shell e adição de parâmetros estão sendo implementados atualmente, mas é possível que nem todas as shells sejam cobertas. [Por favor abra uma issue](https://github.com/starship/starship/issues/new/choose) com detalhes do shell e configurações do starship se você acertar algum cenário.
-
-:::
+> [!WARNING] Make sure your custom shell configuration exits gracefully
+> 
+> If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+> 
+> For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+> 
+> Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+> 
+> Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 ### Exemplo
 
