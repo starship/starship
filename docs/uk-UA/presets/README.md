@@ -14,11 +14,7 @@
 
 Цей стиль змінює символи для кількох модулів, щоб жодні символи Nerd Font не використовувалися в командному рядку.
 
-::: tip
-
-Цей шаблон стане стандартним в [майбутньому випуску starship](https://github.com/starship/starship/pull/3544).
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [Натисніть для перегляду шаблона No Nerd Font](./no-nerd-font)
 
