@@ -232,6 +232,25 @@ mod tests {
     }
 
     #[test]
+    fn parse_single_file() {
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed file\n",
+            true,
+        );
+        let expected = FossilDiff {
+            added: "3",
+            deleted: "2",
+        };
+        assert_eq!(expected, actual);
+
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed files\n",
+            true,
+        );
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn parse_ignore_empty() {
         let actual = FossilDiff::parse("", true);
         let expected = FossilDiff {
