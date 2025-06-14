@@ -50,6 +50,7 @@ pub const ALL_MODULES: &[&str] = &[
     "haxe",
     "helm",
     "hg_branch",
+    "hg_state",
     "hostname",
     "java",
     "jobs",
@@ -127,11 +128,15 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Self {
+    pub fn new(
+        name: impl Into<String>,
+        desc: impl Into<String>,
+        config: Option<&'a toml::Value>,
+    ) -> Self {
         Module {
             config,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.into(),
+            description: desc.into(),
             segments: Vec::new(),
             duration: Duration::default(),
         }

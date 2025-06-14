@@ -892,6 +892,26 @@
         }
       ]
     },
+    "hg_state": {
+      "default": {
+        "bisect": "BISECTING",
+        "disabled": true,
+        "format": "\\([$state]($style)\\) ",
+        "graft": "GRAFTING",
+        "histedit": "HISTEDITING",
+        "merge": "MERGING",
+        "rebase": "REBASING",
+        "shelve": "SHELVING",
+        "style": "bold yellow",
+        "transplant": "TRANSPLANTING",
+        "update": "UPDATING"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HgStateConfig"
+        }
+      ]
+    },
     "hostname": {
       "default": {
         "aliases": {},
@@ -1304,7 +1324,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🪖  ",
+        "symbol": "🪖 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1379,7 +1399,7 @@
           "Ultramarine": "🔷 ",
           "Unknown": "❓ ",
           "Uos": "🐲 ",
-          "Void": "  ",
+          "Void": " ",
           "Windows": "🪟 ",
           "openEuler": "🦉 ",
           "openSUSE": "🦎 "
@@ -4232,6 +4252,56 @@
       },
       "additionalProperties": false
     },
+    "HgStateConfig": {
+      "type": "object",
+      "properties": {
+        "merge": {
+          "default": "MERGING",
+          "type": "string"
+        },
+        "rebase": {
+          "default": "REBASING",
+          "type": "string"
+        },
+        "update": {
+          "default": "UPDATING",
+          "type": "string"
+        },
+        "bisect": {
+          "default": "BISECTING",
+          "type": "string"
+        },
+        "shelve": {
+          "default": "SHELVING",
+          "type": "string"
+        },
+        "graft": {
+          "default": "GRAFTING",
+          "type": "string"
+        },
+        "transplant": {
+          "default": "TRANSPLANTING",
+          "type": "string"
+        },
+        "histedit": {
+          "default": "HISTEDITING",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "format": {
+          "default": "\\([$state]($style)\\) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "HostnameConfig": {
       "type": "object",
       "properties": {
@@ -5183,7 +5253,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🪖  ",
+          "default": "🪖 ",
           "type": "string"
         },
         "style": {
@@ -5302,7 +5372,7 @@
             "Ultramarine": "🔷 ",
             "Unknown": "❓ ",
             "Uos": "🐲 ",
-            "Void": "  ",
+            "Void": " ",
             "Windows": "🪟 ",
             "openEuler": "🦉 ",
             "openSUSE": "🦎 "
