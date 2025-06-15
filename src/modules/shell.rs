@@ -414,7 +414,7 @@ mod tests {
             .shell(Shell::Fish)
             .config(toml::toml! {
                 [shell]
-                bash_indicator = "B"
+                fish_indicator = ""
                 format = "($indicator )"
                 disabled = false
             })
