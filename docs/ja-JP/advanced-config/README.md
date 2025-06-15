@@ -2,11 +2,7 @@
 
 Starship は汎用性の高いシェルですが、時には特定の処理を行うために `starship.toml` を編集する以上のことをする必要があります。 このページでは starship で使用される、より高度な設定の一部を詳しく説明していきます。
 
-::: warning
-
-ここに載せられた設定は、Starship の将来のリリースで変更される可能性があります。
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## PowerShell の TransientPrompt
 

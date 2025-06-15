@@ -232,7 +232,7 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 | Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                               | `apt install starship`                                                         |
 | Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                          | `zypper in starship`                                                           |
 | Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                          | `apt install starship`                                                         |
 | Void Linux         | [Paquets Void Linux](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
@@ -407,7 +407,7 @@ Si vous cherchez à personnaliser davantage Starship :
 
 ## 🤝 Contribuer
 
-Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Si vous parlez couramment une langue autre que l'anglais, nous apprécions grandement toute aide pour traduire et mettre à jour notre documentation dans d'autres langues. Si vous souhaitez nous aider, les traductions se font sur le [Crowdin Starship](https://translate.starship.rs/).
 
