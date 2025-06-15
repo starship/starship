@@ -208,7 +208,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `palettes`        | `{}`                           | Колекція колірних палітр, для призначення [кольорів](../advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
 | `follow_symlinks` | `true`                         | Перевіряти символічні посилання чи вони посилаються на теки; використовується в таких модулях як git.                                                                                                               |
 
-> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+> [!TIP] Якщо у вас є символічні посилання до мережевих файлових систем, встановіть `follow_symlinks` у `false`.
 
 ### Приклад
 
@@ -732,7 +732,7 @@ format = 'via [$name $version]($style)'
 
 Стандартно відбувається зміна кольору. Якщо ви також хочете змінювати й символ, подивитися на [цей приклад](#with-custom-error-shape).
 
-> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+> [!WARNING] `vimcmd_symbol` підтримується лише у cmd, fish та zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol` та `vimcmd_visual_symbol` підтримуються лише у fish через [проблеми з визначенням режиму у zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### Параметри
 
@@ -848,7 +848,7 @@ vimcmd_symbol = '[V](bold green) '
 
 Модуль `cmd_duration` показує, скільки часу виконувалась  остання команда. Модуль буде показаний лише в тому випадку, якщо на виконання команди пішло понад дві секунди або більше, ніж значення змінної `min_time`, якщо воно задане.
 
-> [!WARNING] Do not hook the DEBUG trap in Bash
+> [!WARNING] Не перехоплюйте trap DEBUG у Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
