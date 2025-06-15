@@ -717,6 +717,7 @@ This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
 :::
+
 ### Options
 
 | Option              | Default                                                                          | Description                                                               |
