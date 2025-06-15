@@ -15,6 +15,8 @@ use starship::*;
 #[derive(Parser, Debug)]
 #[clap(
     author=crate_authors!(),
+    // NOTE: Do not change the output format of the `-V` option,
+    // as `install.sh` uses it to determine the installed version.
     version=shadow::PKG_VERSION,
     long_version=shadow::CLAP_LONG_VERSION,
     about="The cross-shell prompt for astronauts. ☄🌌️",
