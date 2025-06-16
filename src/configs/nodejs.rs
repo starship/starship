@@ -19,7 +19,7 @@ pub struct NodejsConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for NodejsConfig<'a> {
+impl Default for NodejsConfig<'_> {
     fn default() -> Self {
         NodejsConfig {
             format: "via [$symbol($version )]($style)",
@@ -29,7 +29,14 @@ impl<'a> Default for NodejsConfig<'a> {
             disabled: false,
             not_capable_style: "bold red",
             detect_extensions: vec!["js", "mjs", "cjs", "ts", "mts", "cts"],
-            detect_files: vec!["package.json", ".node-version", ".nvmrc"],
+            detect_files: vec![
+                "package.json",
+                ".node-version",
+                ".nvmrc",
+                "!bunfig.toml",
+                "!bun.lock",
+                "!bun.lockb",
+            ],
             detect_folders: vec!["node_modules"],
         }
     }

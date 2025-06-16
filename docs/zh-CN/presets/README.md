@@ -74,4 +74,10 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 这是一个伪最简的预设，灵感来自 [geometry](https://github.com/geometry-zsh/geometry) 和   [spaceship](https://github.com/spaceship-prompt/spaceship-prompt)。
 
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Jetpack 预设的屏幕截图](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Catppuccin Powerline](./catppuccin-powerline.md)
+
+This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+
+[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)

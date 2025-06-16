@@ -1,5 +1,5 @@
-use quick_xml::events::Event;
 use quick_xml::Reader;
+use quick_xml::events::Event;
 use std::ffi::OsStr;
 use std::iter::Iterator;
 use std::path::{Path, PathBuf};
@@ -17,7 +17,6 @@ const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
-
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("dotnet");
     let config = DotnetConfig::try_load(module.config);
@@ -181,7 +180,7 @@ fn estimate_dotnet_version(
 ///     - The root of the git repository
 ///       (If there is one)
 fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<String> {
-    let current_dir_is_repo_root = repo_root.map_or(false, |r| r == current_dir);
+    let current_dir_is_repo_root = repo_root == Some(current_dir);
     let parent_dir = if current_dir_is_repo_root {
         // Don't scan the parent directory if it's above the root of a git repository
         None
@@ -309,7 +308,7 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
                 .lines()
                 .map(str::trim)
                 .filter(|l| !l.is_empty())
-                .last()
+                .next_back()
                 .or_else(parse_failed)?;
             let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
             if take_until > 1 {
@@ -356,7 +355,7 @@ mod tests {
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
-    use utils::{write_file, CommandOutput};
+    use utils::{CommandOutput, write_file};
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {

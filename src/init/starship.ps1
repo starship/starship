@@ -211,8 +211,20 @@ $null = New-Module starship {
     )
 
     try {
-        Set-PSReadLineOption -ViModeIndicator script -ViModeChangeHandler {
-            [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+        # Combine user defined ViModeChangeHandler if it exists
+        if((Get-PSReadLineOption).ViModeChangeHandler){
+            # &{...} to limit the scope of the GetNewClosure
+            & {
+                $originalHandler = (Get-PSReadLineOption).ViModeChangeHandler
+                Set-PSReadLineOption -ViModeChangeHandler {
+                    [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+                    & $originalHandler @args
+                }.GetNewClosure()
+            }
+        } else {
+            Set-PSReadLineOption -ViModeIndicator script -ViModeChangeHandler {
+                [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+            }
         }
     } catch {}
 

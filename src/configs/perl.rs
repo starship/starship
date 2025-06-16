@@ -18,7 +18,7 @@ pub struct PerlConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for PerlConfig<'a> {
+impl Default for PerlConfig<'_> {
     fn default() -> Self {
         PerlConfig {
             format: "via [$symbol($version )]($style)",

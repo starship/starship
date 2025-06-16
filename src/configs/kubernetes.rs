@@ -22,7 +22,7 @@ pub struct KubernetesConfig<'a> {
     pub contexts: Vec<KubernetesContextConfig<'a>>,
 }
 
-impl<'a> Default for KubernetesConfig<'a> {
+impl Default for KubernetesConfig<'_> {
     fn default() -> Self {
         KubernetesConfig {
             symbol: "☸ ",

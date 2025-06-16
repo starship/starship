@@ -77,7 +77,6 @@ fn parse_solidity_version(version: &str) -> Option<String> {
 }
 
 #[cfg(test)]
-
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;

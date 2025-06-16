@@ -1,5 +1,5 @@
-use super::string_formatter::StringFormatterError;
 use super::StringFormatter;
+use super::string_formatter::StringFormatterError;
 use crate::segment;
 use std::ops::Deref;
 use std::sync::LazyLock;

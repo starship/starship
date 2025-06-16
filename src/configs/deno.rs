@@ -18,7 +18,7 @@ pub struct DenoConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DenoConfig<'a> {
+impl Default for DenoConfig<'_> {
     fn default() -> Self {
         DenoConfig {
             format: "via [$symbol($version )]($style)",

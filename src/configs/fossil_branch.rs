@@ -16,7 +16,7 @@ pub struct FossilBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for FossilBranchConfig<'a> {
+impl Default for FossilBranchConfig<'_> {
     fn default() -> Self {
         FossilBranchConfig {
             format: "on [$symbol$branch]($style) ",

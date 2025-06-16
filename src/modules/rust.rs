@@ -332,7 +332,7 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
 
     if context
         .dir_contents()
-        .map_or(false, |dir| dir.has_file("rust-toolchain"))
+        .is_ok_and(|dir| dir.has_file("rust-toolchain"))
     {
         if let Some(toolchain) = read_channel(Path::new("rust-toolchain"), false) {
             return Some(toolchain);
@@ -341,7 +341,7 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
 
     if context
         .dir_contents()
-        .map_or(false, |dir| dir.has_file("rust-toolchain.toml"))
+        .is_ok_and(|dir| dir.has_file("rust-toolchain.toml"))
     {
         if let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml"), true) {
             return Some(toolchain);

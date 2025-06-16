@@ -17,7 +17,7 @@ pub struct ShLvlConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for ShLvlConfig<'a> {
+impl Default for ShLvlConfig<'_> {
     fn default() -> Self {
         ShLvlConfig {
             threshold: 2,

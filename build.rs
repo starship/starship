@@ -5,7 +5,9 @@ use std::io::Write;
 use shadow_rs::SdResult;
 
 fn main() -> SdResult<()> {
-    shadow_rs::new_hook(gen_presets_hook)?;
+    shadow_rs::ShadowBuilder::builder()
+        .hook(gen_presets_hook)
+        .build()?;
 
     #[cfg(windows)]
     {

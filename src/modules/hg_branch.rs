@@ -32,12 +32,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
-    let branch_name = get_hg_current_bookmark(repo_root).unwrap_or_else(|_| {
-        get_hg_branch_name(repo_root).unwrap_or_else(|_| String::from("default"))
+    let branch_name = get_hg_current_bookmark(&repo_root).unwrap_or_else(|_| {
+        get_hg_branch_name(&repo_root).unwrap_or_else(|_| String::from("default"))
     });
 
     let branch_graphemes = truncate_text(&branch_name, len, config.truncation_symbol);
-    let topic_graphemes = if let Ok(topic) = get_hg_topic_name(repo_root) {
+    let topic_graphemes = if let Ok(topic) = get_hg_topic_name(&repo_root) {
         truncate_text(&topic, len, config.truncation_symbol)
     } else {
         String::new()
@@ -84,7 +84,10 @@ fn get_hg_current_bookmark(hg_root: &Path) -> Result<String, Error> {
 }
 
 fn get_hg_topic_name(hg_root: &Path) -> Result<String, Error> {
-    read_file(hg_root.join(".hg").join("topic"))
+    match read_file(hg_root.join(".hg").join("topic")) {
+        Ok(b) => Ok(b.trim().to_string()),
+        Err(e) => Err(e),
+    }
 }
 
 #[cfg(test)]
@@ -94,7 +97,7 @@ mod tests {
     use std::io;
     use std::path::Path;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     enum Expect<'a> {
@@ -182,7 +185,7 @@ mod tests {
     fn test_hg_topic() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
-        fs::write(repo_dir.join(".hg").join("topic"), "feature")?;
+        fs::write(repo_dir.join(".hg").join("topic"), "feature\n")?;
 
         let actual = ModuleRenderer::new("hg_branch")
             .path(repo_dir.to_str().unwrap())

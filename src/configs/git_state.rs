@@ -20,7 +20,7 @@ pub struct GitStateConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for GitStateConfig<'a> {
+impl Default for GitStateConfig<'_> {
     fn default() -> Self {
         GitStateConfig {
             rebase: "REBASING",

@@ -16,7 +16,7 @@ pub struct PijulConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for PijulConfig<'a> {
+impl Default for PijulConfig<'_> {
     fn default() -> Self {
         PijulConfig {
             symbol: " ",

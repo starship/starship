@@ -227,7 +227,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
+Opmerking: De [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 of hoger zou geïnstalleerd moeten zijn om Rechterkant prompt in bash te gebruiken.
 
 ### Example
 

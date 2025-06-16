@@ -1,4 +1,4 @@
-use indexmap::{indexmap, IndexMap};
+use indexmap::{IndexMap, indexmap};
 use os_info::Type;
 use serde::{Deserialize, Serialize};
 
@@ -22,7 +22,7 @@ impl<'a> OSConfig<'a> {
     }
 }
 
-impl<'a> Default for OSConfig<'a> {
+impl Default for OSConfig<'_> {
     fn default() -> Self {
         OSConfig {
             format: "[$symbol]($style)",
@@ -34,8 +34,11 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Alpine => "🏔️ ",
                 Type::Amazon => "🙂 ",
                 Type::Android => "🤖 ",
+                Type::AOSC => "🐱 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
+                Type::Bluefin => "🐟 ",
+                Type::CachyOS => "🎗️ ",
                 Type::CentOS => "💠 ",
                 Type::Debian => "🌀 ",
                 Type::DragonFly => "🐉 ",
@@ -57,6 +60,7 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Mint => "🌿 ",
                 Type::NetBSD => "🚩 ",
                 Type::NixOS => "❄️ ",
+                Type::Nobara =>  "🎩 ",
                 Type::OpenBSD => "🐡 ",
                 Type::OpenCloudOS => "☁️ ",
                 Type::openEuler => "🦉 ",
@@ -73,7 +77,8 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Ubuntu => "🎯 ",
                 Type::Ultramarine => "🔷 ",
                 Type::Unknown => "❓ ",
-                Type::Void => "  ",
+                Type::Uos => "🐲 ",
+                Type::Void => " ",
                 Type::Windows => "🪟 ",
                 // Future symbols.
                 //aosc =>       " ",

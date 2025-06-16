@@ -18,7 +18,7 @@ pub struct CrystalConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for CrystalConfig<'a> {
+impl Default for CrystalConfig<'_> {
     fn default() -> Self {
         CrystalConfig {
             format: "via [$symbol($version )]($style)",

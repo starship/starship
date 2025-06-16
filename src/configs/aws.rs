@@ -49,7 +49,7 @@ pub struct AwsConfig<'a> {
     pub force_display: bool,
 }
 
-impl<'a> Default for AwsConfig<'a> {
+impl Default for AwsConfig<'_> {
     fn default() -> Self {
         AwsConfig {
             format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",

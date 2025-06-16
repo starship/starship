@@ -16,7 +16,7 @@ pub struct PackageConfig<'a> {
     pub version_format: &'a str,
 }
 
-impl<'a> Default for PackageConfig<'a> {
+impl Default for PackageConfig<'_> {
     fn default() -> Self {
         PackageConfig {
             format: "is [$symbol$version]($style) ",

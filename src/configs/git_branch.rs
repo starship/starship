@@ -19,7 +19,7 @@ pub struct GitBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for GitBranchConfig<'a> {
+impl Default for GitBranchConfig<'_> {
     fn default() -> Self {
         GitBranchConfig {
             format: "on [$symbol$branch(:$remote_branch)]($style) ",

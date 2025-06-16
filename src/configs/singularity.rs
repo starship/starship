@@ -14,7 +14,7 @@ pub struct SingularityConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for SingularityConfig<'a> {
+impl Default for SingularityConfig<'_> {
     fn default() -> Self {
         SingularityConfig {
             format: "[$symbol\\[$env\\]]($style) ",

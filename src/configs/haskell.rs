@@ -18,7 +18,7 @@ pub struct HaskellConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for HaskellConfig<'a> {
+impl Default for HaskellConfig<'_> {
     fn default() -> Self {
         HaskellConfig {
             format: "via [$symbol($version )]($style)",

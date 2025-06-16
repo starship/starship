@@ -340,7 +340,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: &str, truncated_dir_string: 
 
 /// Convert the path separators in `path` to the OS specific path separators.
 fn convert_path_sep(path: &str) -> String {
-    return PathBuf::from_slash(path).to_string_lossy().into_owned();
+    PathBuf::from_slash(path).to_string_lossy().into_owned()
 }
 
 /// Get the path before the git repo root by trim the most right repo name.

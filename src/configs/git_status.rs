@@ -24,11 +24,12 @@ pub struct GitStatusConfig<'a> {
     pub typechanged: &'a str,
     pub ignore_submodules: bool,
     pub disabled: bool,
+    pub use_git_executable: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub windows_starship: Option<&'a str>,
 }
 
-impl<'a> Default for GitStatusConfig<'a> {
+impl Default for GitStatusConfig<'_> {
     fn default() -> Self {
         GitStatusConfig {
             format: "([\\[$all_status$ahead_behind\\]]($style) )",
@@ -47,6 +48,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             typechanged: "",
             ignore_submodules: false,
             disabled: false,
+            use_git_executable: false,
             windows_starship: None,
         }
     }

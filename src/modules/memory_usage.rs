@@ -1,6 +1,6 @@
 use systemstat::{
-    data::{saturating_sub_bytes, ByteSize},
     Platform, System,
+    data::{ByteSize, saturating_sub_bytes},
 };
 
 use super::{Context, Module, ModuleConfig};

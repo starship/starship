@@ -2,7 +2,7 @@ use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
-    utils::{create_command, CommandOutput},
+    utils::{CommandOutput, create_command},
 };
 use log::{Level, LevelFilter};
 use std::fs;
@@ -63,6 +63,14 @@ impl<'a> ModuleRenderer<'a> {
         let context = default_context();
 
         Self { name, context }
+    }
+
+    /// Creates a new `ModuleRenderer` with `HOME` set to a `TempDir`
+    pub fn new_with_home(name: &'a str) -> io::Result<(Self, tempfile::TempDir)> {
+        let module_renderer = ModuleRenderer::new(name);
+        let homedir = tempfile::tempdir()?;
+        let home = dunce::canonicalize(homedir.path())?;
+        Ok((module_renderer.env("HOME", home.to_str().unwrap()), homedir))
     }
 
     pub fn path<T>(mut self, path: T) -> Self
@@ -246,12 +254,13 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         }
         FixtureProvider::GitBare => {
             let path = tempfile::tempdir()?;
-            gix::ThreadSafeRepository::init(
-                &path,
-                gix::create::Kind::Bare,
-                gix::create::Options::default(),
-            )
-            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
+
+            create_command("git")?
+                .current_dir(path.path())
+                .args(["clone", "-b", "master", "--bare"])
+                .arg(GIT_FIXTURE.as_os_str())
+                .arg(path.path())
+                .output()?;
             Ok(path)
         }
         FixtureProvider::Hg => {

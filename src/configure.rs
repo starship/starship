@@ -574,9 +574,11 @@ mod tests {
 
         handle_update_configuration(&mut doc, "a.b.c.d.e.f.g.h", "true").unwrap();
 
-        assert!(doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
-            .as_bool()
-            .unwrap())
+        assert!(
+            doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
+                .as_bool()
+                .unwrap()
+        )
     }
 
     #[test]

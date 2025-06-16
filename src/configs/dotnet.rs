@@ -19,7 +19,7 @@ pub struct DotnetConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DotnetConfig<'a> {
+impl Default for DotnetConfig<'_> {
     fn default() -> Self {
         DotnetConfig {
             format: "via [$symbol($version )(🎯 $tfm )]($style)",

@@ -18,7 +18,7 @@ pub struct DockerContextConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DockerContextConfig<'a> {
+impl Default for DockerContextConfig<'_> {
     fn default() -> Self {
         DockerContextConfig {
             symbol: "🐳 ",
@@ -27,7 +27,13 @@ impl<'a> Default for DockerContextConfig<'a> {
             only_with_files: true,
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec!["docker-compose.yml", "docker-compose.yaml", "Dockerfile"],
+            detect_files: vec![
+                "compose.yml",
+                "compose.yaml",
+                "docker-compose.yml",
+                "docker-compose.yaml",
+                "Dockerfile",
+            ],
             detect_folders: vec![],
         }
     }

@@ -35,7 +35,7 @@ impl StarshipPath {
         let current_exe = self
             .native_path
             .to_str()
-            .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?;
+            .ok_or_else(|| io::Error::other("can't convert to str"))?;
         Ok(current_exe)
     }
 

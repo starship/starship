@@ -18,12 +18,12 @@ pub struct OpaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for OpaConfig<'a> {
+impl Default for OpaConfig<'_> {
     fn default() -> Self {
         OpaConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🪖  ",
+            symbol: "🪖 ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["rego"],

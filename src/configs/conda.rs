@@ -13,10 +13,11 @@ pub struct CondaConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub ignore_base: bool,
+    pub detect_env_vars: Vec<&'a str>,
     pub disabled: bool,
 }
 
-impl<'a> Default for CondaConfig<'a> {
+impl Default for CondaConfig<'_> {
     fn default() -> Self {
         CondaConfig {
             truncation_length: 1,
@@ -24,6 +25,7 @@ impl<'a> Default for CondaConfig<'a> {
             symbol: "🅒 ",
             style: "green bold",
             ignore_base: true,
+            detect_env_vars: vec!["!PIXI_ENVIRONMENT_NAME"],
             disabled: false,
         }
     }

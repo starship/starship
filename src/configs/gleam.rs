@@ -18,7 +18,7 @@ pub struct GleamConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for GleamConfig<'a> {
+impl Default for GleamConfig<'_> {
     fn default() -> Self {
         GleamConfig {
             format: "via [$symbol($version )]($style)",

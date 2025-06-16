@@ -1,4 +1,4 @@
-use clap::{builder::PossibleValue, ValueEnum};
+use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
@@ -13,8 +13,8 @@ use unicode_width::UnicodeWidthChar;
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
 use crate::formatter::{StringFormatter, VariableHolder};
-use crate::module::Module;
 use crate::module::ALL_MODULES;
+use crate::module::Module;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
@@ -22,7 +22,7 @@ use crate::utils::wrap_colorseq_for_shell;
 
 pub struct Grapheme<'a>(pub &'a str);
 
-impl<'a> Grapheme<'a> {
+impl Grapheme<'_> {
     pub fn width(&self) -> usize {
         self.0
             .chars()
@@ -336,20 +336,28 @@ fn handle_module<'a>(
         }
 
         // Write out all custom modules, except for those that are explicitly set
-        for (child, config) in context
-            .config
-            .get_config(&[module])
-            .and_then(|config| config.as_table().map(toml::map::Map::iter))
-            .into_iter()
-            .flatten()
-        {
-            // Some env var keys may be part of a top-level module definition
-            if module == "env_var" && !config.is_table() {
-                continue;
-            } else if should_add_implicit_module(module, child, config, module_list) {
-                modules.extend(modules::handle(&format!("{module}.{child}"), context));
-            }
-        }
+        modules.extend(
+            context
+                .config
+                .get_config(&[module])
+                .and_then(|config| config.as_table().map(toml::map::Map::iter))
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .par_iter()
+                .filter_map(|(child, config)| {
+                    // Some env var keys may be part of a top-level module definition
+                    if module == "env_var" && !config.is_table() {
+                        None
+                    } else if should_add_implicit_module(module, child, config, module_list) {
+                        Some(modules::handle(&format!("{module}.{child}"), context))
+                    } else {
+                        None
+                    }
+                })
+                .flatten()
+                .collect::<Vec<Module>>(),
+        );
     } else {
         log::debug!(
             "Expected top level format to contain value from {:?}. Instead received {}",

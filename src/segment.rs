@@ -45,11 +45,7 @@ impl FillSegment {
                 .cycle()
                 .scan(0usize, |len, g| {
                     *len += Grapheme(g).width();
-                    if *len <= w {
-                        Some(g)
-                    } else {
-                        None
-                    }
+                    if *len <= w { Some(g) } else { None }
                 })
                 .collect::<String>(),
             None => String::from(&self.value),

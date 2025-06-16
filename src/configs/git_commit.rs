@@ -18,7 +18,7 @@ pub struct GitCommitConfig<'a> {
     pub tag_max_candidates: usize,
 }
 
-impl<'a> Default for GitCommitConfig<'a> {
+impl Default for GitCommitConfig<'_> {
     fn default() -> Self {
         GitCommitConfig {
             // be consistent with git by default, which has DEFAULT_ABBREV set to 7

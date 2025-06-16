@@ -26,7 +26,7 @@ pub struct ShellConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for ShellConfig<'a> {
+impl Default for ShellConfig<'_> {
     fn default() -> Self {
         ShellConfig {
             format: "[$indicator]($style) ",
