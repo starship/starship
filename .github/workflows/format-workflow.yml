@@ -14,7 +14,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v4
       - name: Docs | Format
-        uses: dprint/check@v2.2
+        uses: dprint/check@v2.3
 
   # Validate preset files
   taplo:
