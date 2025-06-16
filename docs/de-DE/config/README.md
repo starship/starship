@@ -679,6 +679,8 @@ format = 'via [$name $version]($style)'
 
 The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
 
+> [!TIP] This module is disabled by default. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+
 ### Optionen
 
 | Option              | Standardwert                                                                     | Beschreibung                                                              |
