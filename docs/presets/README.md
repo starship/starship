@@ -78,16 +78,14 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
-<<<<<<< master
-## [Power10](./power10.md)
-
-This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlevel10k) configuration variant.
-
-[![Screenshot of Power10 preset](/presets/img/power10.png "Click to view Power10 preset")](./power10.md)
-=======
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
->>>>>>> master
+
+## [Power10](./power10.md)
+
+This preset is inspired by a [powerlevel10k](https://github.com/romkatv/powerlevel10k) configuration variant.
+
+[![Screenshot of Power10 preset](/presets/img/power10.png "Click to view Power10 preset")](./power10.md)
