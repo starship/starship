@@ -1,5 +1,5 @@
 ---
-layout: home
+layout:
 hero:
   image: /logo.svg
   text:
