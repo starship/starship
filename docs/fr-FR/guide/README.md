@@ -180,7 +180,7 @@
 
 ### Pré-requis
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Une police d'écriture [Nerd Font](https://www.nerdfonts.com/) est installée et activée sur votre terminal (par exemple, essayez [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Étape 1. Installer Starship
 
@@ -229,7 +229,7 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 | Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                       | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                               | `apt install starship`                                                         |
+| Debian 13+         | [Debian principal](https://sources.debian.org/src/starship/1.22.1-1/)                          | `apt install starship`                                                         |
 | Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
@@ -262,7 +262,7 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Installez la dernière version pour votre système à partir de l'installeur MSI de la [section publication](https://github.com/starship/starship/releases/latest).
 
 Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
@@ -276,7 +276,7 @@ Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 </details>
 
-### Étape 2. Set up your shell to use Starship
+### Étape 2. Configurez votre Shell pour utiliser Starship
 
 Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous:
 
@@ -340,7 +340,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Ajoutez la ligne suivante à la fin de votre configuration Nushell (trouvable en exécutant `$nu.config-path` dans Nushell) :
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
