@@ -1,4 +1,6 @@
+#[cfg(target_os = "windows")]
 use path_slash::PathBufExt;
+#[cfg(target_os = "windows")]
 use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
@@ -27,14 +29,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    #[cfg(windows)]
+    #[cfg(target_os = "windows")]
     let conda_env = PathBuf::from_backslash(conda_env)
         .to_slash_lossy()
         .into_owned();
 
     let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
 
-    #[cfg(windows)]
+    #[cfg(target_os = "windows")]
     let conda_env = PathBuf::from_slash(conda_env)
         .to_string_lossy()
         .into_owned();
