@@ -1,3 +1,6 @@
+use path_slash::PathBufExt;
+use std::path::PathBuf;
+
 use super::{Context, Module, ModuleConfig};
 
 use super::utils::directory::truncate;
@@ -24,7 +27,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    #[cfg(windows)]
+    let conda_env = PathBuf::from_backslash(conda_env)
+        .to_slash_lossy()
+        .into_owned();
+
     let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
+
+    #[cfg(windows)]
+    let conda_env = PathBuf::from_slash(conda_env)
+        .to_string_lossy()
+        .into_owned();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
