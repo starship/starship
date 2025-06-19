@@ -207,6 +207,7 @@
         "show_milliseconds": false,
         "disabled": false,
         "show_notifications": false,
+        "notifications_transient": false,
         "min_time_to_notify": 45000
       }
     },
@@ -2185,6 +2186,10 @@
           "default": false
         },
         "show_notifications": {
+          "type": "boolean",
+          "default": false
+        },
+        "notifications_transient": {
           "type": "boolean",
           "default": false
         },
