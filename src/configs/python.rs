@@ -11,6 +11,8 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
+    pub venv_pyenvcfg_version: bool,
+    pub force_venv_pyenvcfg_version: bool,
     pub pyenv_prefix: &'a str,
     pub python_binary: VecOr<VecOr<&'a str>>,
     pub format: &'a str,
@@ -28,6 +30,8 @@ impl Default for PythonConfig<'_> {
     fn default() -> Self {
         PythonConfig {
             pyenv_version_name: false,
+            venv_pyenvcfg_version: false,
+            force_venv_pyenvcfg_version: false,
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec![
                 VecOr(vec!["python"]),
