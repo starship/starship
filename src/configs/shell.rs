@@ -28,7 +28,7 @@ pub struct ShellConfig<'a> {
 
 impl Default for ShellConfig<'_> {
     fn default() -> Self {
-        ShellConfig {
+        Self {
             format: "[$indicator]($style) ",
             bash_indicator: "bsh",
             fish_indicator: "fsh",

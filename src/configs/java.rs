@@ -20,7 +20,7 @@ pub struct JavaConfig<'a> {
 
 impl Default for JavaConfig<'_> {
     fn default() -> Self {
-        JavaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             disabled: false,

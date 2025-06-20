@@ -20,7 +20,7 @@ pub struct HaskellConfig<'a> {
 
 impl Default for HaskellConfig<'_> {
     fn default() -> Self {
-        HaskellConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "λ ",

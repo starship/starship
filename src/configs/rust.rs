@@ -20,7 +20,7 @@ pub struct RustConfig<'a> {
 
 impl Default for RustConfig<'_> {
     fn default() -> Self {
-        RustConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🦀 ",

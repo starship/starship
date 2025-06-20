@@ -17,7 +17,7 @@ pub struct SpackConfig<'a> {
 
 impl Default for SpackConfig<'_> {
     fn default() -> Self {
-        SpackConfig {
+        Self {
             truncation_length: 1,
             format: "via [$symbol$environment]($style) ",
             symbol: "🅢 ",

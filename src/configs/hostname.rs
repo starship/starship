@@ -21,7 +21,7 @@ pub struct HostnameConfig<'a> {
 
 impl Default for HostnameConfig<'_> {
     fn default() -> Self {
-        HostnameConfig {
+        Self {
             ssh_only: true,
             ssh_symbol: "🌐 ",
             trim_at: ".",

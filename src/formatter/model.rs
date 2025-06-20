@@ -34,13 +34,13 @@ pub enum StyleElement<'a> {
 impl<'a> VariableHolder<Cow<'a, str>> for FormatElement<'a> {
     fn get_variables(&self) -> BTreeSet<Cow<'a, str>> {
         match self {
-            FormatElement::Variable(var) => {
+            Self::Variable(var) => {
                 let mut variables = BTreeSet::new();
                 variables.insert(var.clone());
                 variables
             }
-            FormatElement::TextGroup(textgroup) => textgroup.format.get_variables(),
-            FormatElement::Conditional(format) => format.get_variables(),
+            Self::TextGroup(textgroup) => textgroup.format.get_variables(),
+            Self::Conditional(format) => format.get_variables(),
             _ => Default::default(),
         }
     }
@@ -67,7 +67,7 @@ impl<'a> VariableHolder<Cow<'a, str>> for &[FormatElement<'a>] {
 impl<'a> StyleVariableHolder<Cow<'a, str>> for StyleElement<'a> {
     fn get_style_variables(&self) -> BTreeSet<Cow<'a, str>> {
         match self {
-            StyleElement::Variable(var) => {
+            Self::Variable(var) => {
                 let mut variables = BTreeSet::new();
                 variables.insert(var.clone());
                 variables

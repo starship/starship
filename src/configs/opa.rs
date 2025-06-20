@@ -20,7 +20,7 @@ pub struct OpaConfig<'a> {
 
 impl Default for OpaConfig<'_> {
     fn default() -> Self {
-        OpaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🪖 ",

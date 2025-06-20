@@ -20,7 +20,7 @@ pub struct DartConfig<'a> {
 
 impl Default for DartConfig<'_> {
     fn default() -> Self {
-        DartConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🎯 ",

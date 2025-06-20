@@ -18,7 +18,7 @@ pub struct FossilBranchConfig<'a> {
 
 impl Default for FossilBranchConfig<'_> {
     fn default() -> Self {
-        FossilBranchConfig {
+        Self {
             format: "on [$symbol$branch]($style) ",
             symbol: " ",
             style: "bold purple",

@@ -21,20 +21,20 @@ pub enum ValueRef<'a> {
 impl<'de> From<&'de Value> for ValueRef<'de> {
     fn from(value: &'de Value) -> Self {
         match value {
-            Value::Boolean(b) => ValueRef::Boolean(*b),
-            Value::Integer(i) => ValueRef::Integer(*i),
-            Value::Float(f) => ValueRef::Float(*f),
-            Value::String(s) => ValueRef::String(s),
-            Value::Array(a) => ValueRef::Array(a),
-            Value::Table(t) => ValueRef::Table(t),
-            Value::Datetime(d) => ValueRef::Datetime(d),
+            Value::Boolean(b) => Self::Boolean(*b),
+            Value::Integer(i) => Self::Integer(*i),
+            Value::Float(f) => Self::Float(*f),
+            Value::String(s) => Self::String(s),
+            Value::Array(a) => Self::Array(a),
+            Value::Table(t) => Self::Table(t),
+            Value::Datetime(d) => Self::Datetime(d),
         }
     }
 }
 
 impl<'de> From<&'de toml::Table> for ValueRef<'de> {
     fn from(value: &'de toml::Table) -> Self {
-        ValueRef::Table(value)
+        Self::Table(value)
     }
 }
 
@@ -57,7 +57,7 @@ struct StructInfo {
 
 impl<'de> ValueDeserializer<'de> {
     pub fn new<T: Into<ValueRef<'de>>>(value: T) -> Self {
-        ValueDeserializer {
+        Self {
             value: value.into(),
             info: None,
             current_key: None,
@@ -71,7 +71,7 @@ impl<'de> ValueDeserializer<'de> {
         current_key: &'de str,
         ignored: bool,
     ) -> Self {
-        ValueDeserializer {
+        Self {
             value,
             info,
             current_key: Some(current_key),
@@ -80,7 +80,7 @@ impl<'de> ValueDeserializer<'de> {
     }
 
     pub fn with_allow_unknown_keys(self) -> Self {
-        ValueDeserializer {
+        Self {
             error_on_ignored: false,
             ..self
         }

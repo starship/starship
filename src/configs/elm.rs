@@ -20,7 +20,7 @@ pub struct ElmConfig<'a> {
 
 impl Default for ElmConfig<'_> {
     fn default() -> Self {
-        ElmConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🌳 ",

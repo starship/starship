@@ -20,7 +20,7 @@ pub struct SwiftConfig<'a> {
 
 impl Default for SwiftConfig<'_> {
     fn default() -> Self {
-        SwiftConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐦 ",

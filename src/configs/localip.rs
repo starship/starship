@@ -16,7 +16,7 @@ pub struct LocalipConfig<'a> {
 
 impl Default for LocalipConfig<'_> {
     fn default() -> Self {
-        LocalipConfig {
+        Self {
             ssh_only: true,
             format: "[$localipv4]($style) ",
             style: "yellow bold",

@@ -22,7 +22,7 @@ pub struct GitStateConfig<'a> {
 
 impl Default for GitStateConfig<'_> {
     fn default() -> Self {
-        GitStateConfig {
+        Self {
             rebase: "REBASING",
             merge: "MERGING",
             revert: "REVERTING",

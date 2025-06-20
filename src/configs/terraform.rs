@@ -20,7 +20,7 @@ pub struct TerraformConfig<'a> {
 
 impl Default for TerraformConfig<'_> {
     fn default() -> Self {
-        TerraformConfig {
+        Self {
             format: "via [$symbol$workspace]($style) ",
             version_format: "v${raw}",
             symbol: "💠 ",

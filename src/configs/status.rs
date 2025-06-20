@@ -32,7 +32,7 @@ pub struct StatusConfig<'a> {
 
 impl Default for StatusConfig<'_> {
     fn default() -> Self {
-        StatusConfig {
+        Self {
             format: "[$symbol$status]($style) ",
             symbol: "❌",
             success_symbol: "",

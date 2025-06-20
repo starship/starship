@@ -109,7 +109,7 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(
+        Self::new_with_shell_and_path(
             arguments,
             shell,
             target,
@@ -162,7 +162,7 @@ impl<'a> Context<'a> {
 
         let width = properties.terminal_width;
 
-        Context {
+        Self {
             config,
             properties,
             current_dir,
@@ -462,7 +462,7 @@ impl<'a> Context<'a> {
 
 impl Default for Context<'_> {
     fn default() -> Self {
-        Context::new(Default::default(), Target::Main)
+        Self::new(Default::default(), Target::Main)
     }
 }
 

@@ -15,7 +15,7 @@ pub struct FillConfig<'a> {
 
 impl Default for FillConfig<'_> {
     fn default() -> Self {
-        FillConfig {
+        Self {
             style: "bold black",
             symbol: ".",
             disabled: false,

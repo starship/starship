@@ -31,7 +31,7 @@ pub struct GitStatusConfig<'a> {
 
 impl Default for GitStatusConfig<'_> {
     fn default() -> Self {
-        GitStatusConfig {
+        Self {
             format: "([\\[$all_status$ahead_behind\\]]($style) )",
             style: "red bold",
             stashed: "\\$",

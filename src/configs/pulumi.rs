@@ -18,7 +18,7 @@ pub struct PulumiConfig<'a> {
 
 impl Default for PulumiConfig<'_> {
     fn default() -> Self {
-        PulumiConfig {
+        Self {
             format: "via [$symbol($username@)$stack]($style) ",
             version_format: "v${raw}",
             symbol: " ",
