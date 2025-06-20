@@ -65,7 +65,7 @@ impl StarshipPath {
             Ok(output) => output,
             Err(e) => {
                 if e.kind() != io::ErrorKind::NotFound {
-                    log::warn!("Failed to convert \"{}\" to unix path:\n{:?}", str_path, e);
+                    log::warn!("Failed to convert \"{str_path}\" to unix path:\n{e:?}");
                 }
                 // Failed to execute cygpath.exe means there're not inside cygwin environment,return directly.
                 return self.sprint();
@@ -83,7 +83,7 @@ impl StarshipPath {
                 str_path
             }
             Err(e) => {
-                log::warn!("Failed to convert \"{}\" to unix path:\n{}", str_path, e);
+                log::warn!("Failed to convert \"{str_path}\" to unix path:\n{e}");
                 str_path
             }
         };
@@ -95,7 +95,7 @@ impl StarshipPath {
 init code. The stub produces the main init script, then evaluates it with
 `source` and process substitution */
 pub fn init_stub(shell_name: &str) -> io::Result<()> {
-    log::debug!("Shell name: {}", shell_name);
+    log::debug!("Shell name: {shell_name}");
 
     let shell_basename = Path::new(shell_name)
         .file_stem()

@@ -61,7 +61,7 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `env_var`:\n{}", error);
+            log::warn!("Error in module `env_var`:\n{error}");
             return None;
         }
     });

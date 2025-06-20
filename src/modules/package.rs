@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `package`:\n{}", error);
+            log::warn!("Error in module `package`:\n{error}");
             return None;
         }
     });
@@ -198,7 +198,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
             Ok(_) => (),
 
             Err(err) => {
-                log::warn!("Error parsing pom.xml`:\n{}", err);
+                log::warn!("Error parsing pom.xml`:\n{err}");
                 break;
             }
         }

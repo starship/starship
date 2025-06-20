@@ -191,7 +191,7 @@ fn main() {
             std::process::exit(exit_code);
         }
     };
-    log::trace!("Parsed arguments: {:#?}", args);
+    log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
         Commands::Init {

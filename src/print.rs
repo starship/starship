@@ -360,9 +360,7 @@ fn handle_module<'a>(
         );
     } else {
         log::debug!(
-            "Expected top level format to contain value from {:?}. Instead received {}",
-            ALL_MODULES,
-            module,
+            "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {module}",
         );
     }
 

@@ -96,7 +96,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     match parsed {
         Ok(segments) => module.set_segments(segments),
         Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            log::warn!("Error in module `custom.{name}`:\n{error}");
         }
     };
     Some(module)
@@ -157,8 +157,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         // Don't attempt to use fallback shell if the user specified a shell
         Err(error) if !shell_args.is_empty() => {
             log::debug!(
-                "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {}",
-                error
+                "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {error}"
             );
 
             // Skip `handle_shell` and just set the shell and command
@@ -194,8 +193,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         Ok(child) => child,
         Err(error) => {
             log::debug!(
-                "Failed to run command with given shell or STARSHIP_SHELL env variable:: {}",
-                error
+                "Failed to run command with given shell or STARSHIP_SHELL env variable:: {error}"
             );
             return None;
         }
@@ -227,7 +225,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
 /// Execute the given command capturing all output, and return whether it return 0
 fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
-    log::trace!("Running '{}'", cmd);
+    log::trace!("Running '{cmd}'");
 
     if let Some(output) = shell_command(cmd, config, context) {
         if !output.status.success() {

@@ -165,7 +165,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `directory`:\n{}", error);
+            log::warn!("Error in module `directory`:\n{error}");
             return None;
         }
     });
@@ -195,11 +195,7 @@ fn is_readonly_dir(path: &Path) -> bool {
     match directory_utils::is_write_allowed(path) {
         Ok(res) => !res,
         Err(e) => {
-            log::debug!(
-                "Failed to determine read only status of directory '{:?}': {}",
-                path,
-                e
-            );
+            log::debug!("Failed to determine read only status of directory '{path:?}': {e}");
             false
         }
     }
