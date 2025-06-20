@@ -2,11 +2,7 @@
 
 正因為 Starship 是一個多才多藝的 shell，有時候你必須要做比修改 `starship.toml` 更多事情來讓它完成特定工作。 這個頁面說明了一些用於 Starship 的進階設定技巧。
 
-::: warning
-
-這個章節內的設定可能會隨著未來 Starship 的版本發行而變動。
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt in PowerShell
 

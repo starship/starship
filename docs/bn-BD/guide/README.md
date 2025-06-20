@@ -232,7 +232,7 @@ curl -sS https://starship.rs/install.sh | sh
 | Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                | `apt install starship`                                                         |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                           | `apt install starship`                                                         |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
@@ -407,7 +407,7 @@ eval "$(starship init zsh)"
 
 ## 🤝 নিজে অবদান রাখুন
 
-আমরা সবসময় **সকল দক্ষতা স্তরের** অবদানকারীদের খুঁজছি! আপনি যদি সহজ ভাবে এই প্রোজেক্টে অবদান রাখতে চান তাইলে ["good first issue"](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) গুলির সমাধান করার চেষ্টা করতে পারেন ।
+আমরা সবসময় **সকল দক্ষতা স্তরের** অবদানকারীদের খুঁজছি! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 আপনি যদি ইংরেজি ছাড়া অন্য কোন ভাষায় সাবলীল হন, তাহলে আপনি আমাদের ডকুমেন্টেশন অনুবাদে এবং আপ-টু-ডেট রাখতে সহায়তা করতে পারেন, আমরা খুবই কৃতজ্ঞ হব ।  যদি এক্ষেত্রে সাহায্য করতে চান, তাহলে [Starship Crowdin](https://translate.starship.rs/) পেইজ এ গিয়ে আপনার অনুবাদ গুলি যোগ করতে পারবেন ।
 

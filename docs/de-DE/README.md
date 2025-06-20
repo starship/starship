@@ -136,11 +136,7 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
-
-   Es wird nur elvish v0.18 oder höher unterstützt.
-
-   :::
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -164,11 +160,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   Das wird sich in Zukunft ändern. Nur Nushell v0.96+ wird unterstützt.
-
-   :::
+   > [!WARNING] This will change in the future. Nur Nushell v0.96+ wird unterstützt.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
