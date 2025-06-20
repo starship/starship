@@ -130,7 +130,3 @@ strip = true
 codegen-units = 16
 lto = "thin"
 strip = false
-
-[[bin]]
-name = "starship"
-path = "src/main.rs"
