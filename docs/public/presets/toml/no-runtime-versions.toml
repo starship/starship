@@ -2,13 +2,19 @@
 format = "via [$symbol]($style)"
 
 [buf]
-format = "via [$symbol]($style)"
+format = "with [$symbol]($style)"
+
+[c]
+format = "via [$symbol($name)]($style)"
 
 [cmake]
 format = "via [$symbol]($style)"
 
 [cobol]
 format = "via [$symbol]($style)"
+
+[cpp]
+format = "via [$symbol($name)]($style)"
 
 [crystal]
 format = "via [$symbol]($style)"
@@ -46,6 +52,9 @@ format = 'via [$symbol]($style)'
 [gradle]
 format = 'via [$symbol]($style)'
 
+[haskell]
+format = 'via [$symbol]($style)'
+
 [haxe]
 format = 'via [$symbol]($style)'
 
@@ -67,6 +76,9 @@ format = 'via [$symbol]($style)'
 [meson]
 format = 'via [$symbol]($style)'
 
+[mojo]
+format = 'with [$symbol]($style)'
+
 [nim]
 format = 'via [$symbol]($style)'
 
@@ -76,17 +88,20 @@ format = 'via [$symbol]($style)'
 [ocaml]
 format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
 
+[odin]
+format = 'via [$symbol]($style)'
+
 [opa]
 format = 'via [$symbol]($style)'
 
 [perl]
 format = 'via [$symbol]($style)'
 
-[pixi]
-format = 'via [$symbol($environment )]($style)'
-
 [php]
 format = 'via [$symbol]($style)'
+
+[pixi]
+format = 'via [$symbol($environment )]($style)'
 
 [pulumi]
 format = 'via [$symbol$stack]($style)'
@@ -115,13 +130,16 @@ format = 'via [$symbol]($style)'
 [rust]
 format = 'via [$symbol]($style)'
 
+[scala]
+format = 'via [$symbol]($style)'
+
 [solidity]
 format = 'via [$symbol]($style)'
 
-[typst]
+[swift]
 format = 'via [$symbol]($style)'
 
-[swift]
+[typst]
 format = 'via [$symbol]($style)'
 
 [vagrant]
