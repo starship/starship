@@ -1897,7 +1897,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `diverged`           | `'⇕'`                                           | The format of `diverged`                                                                                    |
 | `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
 | `untracked`          | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`            | `'$'`                                           | The format of `stashed`                                                                                     |
+| `stashed`            | `'\$'`                                         | The format of `stashed`                                                                                     |
 | `modified`           | `'!'`                                           | The format of `modified`                                                                                    |
 | `staged`             | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`            | `'»'`                                           | The format of `renamed`                                                                                     |
