@@ -32,7 +32,7 @@ where
         match Self::from_config(config) {
             Ok(config) => config,
             Err(e) => {
-                log::warn!("Failed to load config value: {}", e);
+                log::warn!("Failed to load config value: {e}");
                 Self::default()
             }
         }
@@ -54,7 +54,7 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
             // If the error is an unrecognized key, print a warning and run
             // deserialize ignoring that error. Otherwise, just return the error
             if err.to_string().contains("Unknown key") {
-                log::warn!("{}", err);
+                log::warn!("{err}");
                 let deserializer2 = ValueDeserializer::new(config).with_allow_unknown_keys();
                 T::deserialize(deserializer2)
             } else {
@@ -142,7 +142,7 @@ impl StarshipConfig {
                 Some(parsed)
             }
             Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
+                log::error!("Unable to parse the config file: {error}");
                 None
             }
         }
@@ -446,36 +446,29 @@ fn parse_color_string(
     palette: Option<&Palette>,
 ) -> Option<nu_ansi_term::Color> {
     // Parse RGB hex values
-    log::trace!("Parsing color_string: {}", color_string);
+    log::trace!("Parsing color_string: {color_string}");
     if color_string.starts_with('#') {
-        log::trace!(
-            "Attempting to read hexadecimal color string: {}",
-            color_string
-        );
+        log::trace!("Attempting to read hexadecimal color string: {color_string}");
         if color_string.len() != 7 {
-            log::debug!("Could not parse hexadecimal string: {}", color_string);
+            log::debug!("Could not parse hexadecimal string: {color_string}");
             return None;
         }
         let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
-        log::trace!("Read RGB color string: {},{},{}", r, g, b);
+        log::trace!("Read RGB color string: {r},{g},{b}");
         return Some(Color::Rgb(r, g, b));
     }
 
     // Parse a u8 (ansi color)
     if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
-        log::trace!("Read ANSI color string: {}", ansi_color_num);
+        log::trace!("Read ANSI color string: {ansi_color_num}");
         return Some(Color::Fixed(ansi_color_num));
     }
 
     // Check palette for a matching user-defined color
     if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
-        log::trace!(
-            "Read user-defined color string: {} defined as {}",
-            color_string,
-            palette_color
-        );
+        log::trace!("Read user-defined color string: {color_string} defined as {palette_color}");
         return parse_color_string(palette_color, None);
     }
 
@@ -502,9 +495,9 @@ fn parse_color_string(
     };
 
     if predefined_color.is_some() {
-        log::trace!("Read predefined color: {}", color_string);
+        log::trace!("Read predefined color: {color_string}");
     } else {
-        log::debug!("Could not parse color in string: {}", color_string);
+        log::debug!("Could not parse color in string: {color_string}");
     }
     predefined_color
 }
@@ -516,9 +509,9 @@ fn get_palette<'a>(
     if let Some(palette_name) = palette_name {
         let palette = palettes.get(palette_name);
         if palette.is_some() {
-            log::trace!("Found color palette: {}", palette_name);
+            log::trace!("Found color palette: {palette_name}");
         } else {
-            log::warn!("Could not find color palette: {}", palette_name);
+            log::warn!("Could not find color palette: {palette_name}");
         }
         palette
     } else {
