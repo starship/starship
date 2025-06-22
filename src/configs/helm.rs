@@ -20,7 +20,7 @@ pub struct HelmConfig<'a> {
 
 impl Default for HelmConfig<'_> {
     fn default() -> Self {
-        HelmConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⎈ ",

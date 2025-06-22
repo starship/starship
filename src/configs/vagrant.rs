@@ -20,7 +20,7 @@ pub struct VagrantConfig<'a> {
 
 impl Default for VagrantConfig<'_> {
     fn default() -> Self {
-        VagrantConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⍱ ",

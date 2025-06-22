@@ -20,7 +20,7 @@ pub struct PureScriptConfig<'a> {
 
 impl Default for PureScriptConfig<'_> {
     fn default() -> Self {
-        PureScriptConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "<=> ",
