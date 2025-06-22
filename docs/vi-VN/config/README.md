@@ -1897,7 +1897,7 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 | `diverged`           | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
 | `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
 | `untracked`          | `'?'`                                           | Định dạng của `untracked`                                                                                   |
-| `stashed`            | `'$'`                                           | Định dạng của `stashed`                                                                                     |
+| `stashed`            | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
 | `modified`           | `'!'`                                           | Định dạng của `modified`                                                                                    |
 | `staged`             | `'+'`                                           | Định dạng của `modified`                                                                                    |
 | `renamed`            | `'»'`                                           | Định dạng của `renamed`                                                                                     |
