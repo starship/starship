@@ -1897,7 +1897,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `diverged`           | `'⇕'`                                           | `diverged`のフォーマット                                                                     |
 | `up_to_date`         | `''`                                            | `up_to_date`のフォーマット                                                                   |
 | `untracked`          | `'?'`                                           | `untracked`のフォーマット                                                                    |
-| `stashed`            | `'$'`                                           | `stashed`のフォーマット                                                                      |
+| `stashed`            | `'\$'`                                         | `stashed`のフォーマット                                                                      |
 | `modified`           | `'!'`                                           | `modified`のフォーマット                                                                     |
 | `staged`             | `'+'`                                           | `staged`のフォーマット                                                                       |
 | `renamed`            | `'»'`                                           | `renamed`のフォーマット                                                                      |
