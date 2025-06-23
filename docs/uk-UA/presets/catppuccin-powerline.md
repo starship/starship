@@ -1,4 +1,4 @@
-[Return to Presets](./#catppuccin-powerline)
+[Повернутися до Шаблонів](./#catppuccin-powerline)
 
 # Catppuccin Powerline
 
