@@ -1,4 +1,4 @@
-[Return to Presets](./#catppuccin-powerline)
+[プリセット一覧に戻る](./#catppuccin-powerline)
 
 # Catppuccin Powerline プリセット
 
