@@ -527,6 +527,21 @@ Target: x86_64-apple-darwin19.4.0\n",
             stdout: String::from("V 0.2 30c0659"),
             stderr: String::default(),
         }),
+        "xmake --version" => Some(CommandOutput {
+            stdout: String::from(
+                r"xmake v2.9.5+HEAD.0db4fe6, A cross-platform build utility based on Lua
+Copyright (C) 2015-present Ruki Wang, tboox.org, xmake.io
+                         _
+    __  ___ __  __  __ _| | ______
+    \ \/ / |  \/  |/ _  | |/ / __ \
+     >  <  | \__/ | /_| |   <  ___/
+    /_/\_\_|_|  |_|\__ \|_|\_\____|
+                         by ruki, xmake.io
+    👉  Manual: https://xmake.io/#/getting_started
+    🙏  Donate: https://xmake.io/#/sponsor",
+            ),
+            stderr: String::default(),
+        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),
