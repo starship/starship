@@ -196,6 +196,9 @@ format = '\[[$symbol($version)]($style)\]'
 [vlang]
 format = '\[[$symbol($version)]($style)\]'
 
+[xmake]
+format = '\[[$symbol($version)]($style)\]'
+
 [zig]
 format = '\[[$symbol($version)]($style)\]'
 

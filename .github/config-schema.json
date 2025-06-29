@@ -1712,6 +1712,21 @@
         "detect_folders": []
       }
     },
+    "xmake": {
+      "$ref": "#/$defs/XMakeConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": "△ ",
+        "style": "bold green",
+        "disabled": false,
+        "detect_extensions": [],
+        "detect_files": [
+          "xmake.lua"
+        ],
+        "detect_folders": []
+      }
+    },
     "zig": {
       "$ref": "#/$defs/ZigConfig",
       "default": {
@@ -6474,6 +6489,55 @@
             "v.mod",
             "vpkg.json",
             ".vpkg-lock.json"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "XMakeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "△ "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold green"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "xmake.lua"
           ]
         },
         "detect_folders": {

@@ -256,5 +256,8 @@ symbol = "typst "
 [terraform]
 symbol = "terraform "
 
+[xmake]
+symbol = "xmake "
+
 [zig]
 symbol = "zig "

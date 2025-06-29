@@ -70,6 +70,7 @@ $swift\
 $terraform\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
 $conda\
