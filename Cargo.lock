@@ -1752,9 +1752,9 @@ dependencies = [
 
 [[package]]
 name = "guess_host_triple"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5dd62763349a2c83ed2ce9ce5429158085fa43e0cdd8c60011a7843765d04e18"
+checksum = "66ee077a175fc45cc3232e1654d43a2f696fbe5ea843bffe24adae90f9461ff4"
 dependencies = [
  "errno 0.2.8",
  "libc",
