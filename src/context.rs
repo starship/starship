@@ -547,7 +547,15 @@ impl DirContents {
         }
 
         loop {
-            match rx.recv_timeout(remaining_time) {
+            // TODO: use `recv_deadline` instead once stable
+            let msg = if cfg!(test) {
+                // recv() errors out only when the corresponding sender closes.
+                // See mpsc::RecvError.
+                rx.recv().map_err(|_| mpsc::RecvTimeoutError::Disconnected)
+            } else {
+                rx.recv_timeout(remaining_time)
+            };
+            match msg {
                 Ok(entry) => {
                     let path = PathBuf::from(entry.path().strip_prefix(base_path).unwrap());
 
