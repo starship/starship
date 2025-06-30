@@ -313,7 +313,7 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 
 #[cfg(test)]
 mod tests {
-    use std::{fs::create_dir, io};
+    use std::{fs::create_dir, io, path::PathBuf};
 
     use tempfile::TempDir;
     use toml_edit::Item;
@@ -382,7 +382,7 @@ mod tests {
 
     #[test]
     fn no_panic_when_editor_not_found() {
-        let outcome = edit_configuration(&Default::default(), Some("this_editor_does_not_exist"));
+        let outcome = edit_configuration(&Context::default(), Some("this_editor_does_not_exist"));
         assert!(outcome.is_err());
     }
 
@@ -464,7 +464,7 @@ mod tests {
             "\n"
         );
 
-        assert_eq!(doc.to_string(), new_config)
+        assert_eq!(doc.to_string(), new_config);
     }
 
     #[test]
@@ -529,7 +529,7 @@ mod tests {
             "\n"
         );
 
-        assert_eq!(doc.to_string(), new_config)
+        assert_eq!(doc.to_string(), new_config);
     }
 
     #[test]
@@ -687,7 +687,7 @@ mod tests {
             Shell::Unknown,
             Target::Main,
             Default::default(),
-            Default::default(),
+            PathBuf::default(),
             env,
         ))
     }

@@ -1153,12 +1153,12 @@ mod tests {
         // Mock navigation into the symlink path
         let test_path = path_symlink.join("yyy");
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -1178,7 +1178,7 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
@@ -1205,7 +1205,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = home_dir()

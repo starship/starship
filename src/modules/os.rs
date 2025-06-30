@@ -344,6 +344,7 @@ mod tests {
             Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
             Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
+            Type::Cygwin => "",
             Type::Debian => "🌀 ",
             Type::DragonFly => "🐉 ",
             Type::Emscripten => "🔗 ",
