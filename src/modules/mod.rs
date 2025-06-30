@@ -43,6 +43,7 @@ mod haskell;
 mod haxe;
 mod helm;
 mod hg_branch;
+mod hg_state;
 mod hostname;
 mod java;
 mod jobs;
@@ -159,6 +160,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "haxe" => haxe::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
+            "hg_state" => hg_state::module(context),
             "hostname" => hostname::module(context),
             "java" => java::module(context),
             "jobs" => jobs::module(context),
@@ -231,7 +233,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     };
 
     let elapsed = start.elapsed();
-    log::trace!("Took {:?} to compute module {:?}", elapsed, module);
+    log::trace!("Took {elapsed:?} to compute module {module:?}");
     if elapsed.as_millis() >= 1 {
         // If we take less than 1ms to compute a None, then we will not return a module at all
         // if we have a module: default duration is 0 so no need to change it
@@ -288,6 +290,7 @@ pub fn description(module: &str) -> &'static str {
         "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch and topic of the repo in your current directory",
+        "hg_state" => "The current hg operation",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",

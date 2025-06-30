@@ -20,7 +20,7 @@ pub struct DockerContextConfig<'a> {
 
 impl Default for DockerContextConfig<'_> {
     fn default() -> Self {
-        DockerContextConfig {
+        Self {
             symbol: "🐳 ",
             style: "blue bold",
             format: "via [$symbol$context]($style) ",

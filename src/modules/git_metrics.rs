@@ -264,7 +264,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `git_metrics`:\n{}", error);
+            log::warn!("Error in module `git_metrics`:\n{error}");
             return None;
         }
     });
@@ -373,8 +373,8 @@ impl GitDiff {
         let deleted_re = Regex::new(r"(\d+) \w+\(\-\)").unwrap();
 
         Self {
-            added: GitDiff::get_matched_str(diff, &added_re).to_owned(),
-            deleted: GitDiff::get_matched_str(diff, &deleted_re).to_owned(),
+            added: Self::get_matched_str(diff, &added_re).to_owned(),
+            deleted: Self::get_matched_str(diff, &deleted_re).to_owned(),
         }
     }
 

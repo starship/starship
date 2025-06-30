@@ -75,7 +75,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             Some(module)
         }
         Err(e) => {
-            log::warn!("Error in module `pulumi`:\n{}", e);
+            log::warn!("Error in module `pulumi`:\n{e}");
             None
         }
     }
@@ -108,7 +108,7 @@ fn parse_version(version: &str) -> &str {
 /// Find a file describing a Pulumi package in the current directory (or any parent directory).
 fn find_package_file(path: &Path) -> Option<PathBuf> {
     for path in path.ancestors() {
-        log::trace!("Looking for package file in {:?}", path);
+        log::trace!("Looking for package file in {path:?}");
         let dir = std::fs::read_dir(path).ok()?;
         let goal = dir.filter_map(Result::ok).find(|path| {
             path.file_name() == OsStr::new("Pulumi.yaml")
@@ -133,7 +133,7 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
     file.read_to_string(&mut contents).ok()?;
     let name = YamlLoader::load_from_str(&contents).ok().and_then(
         |yaml| -> Option<Option<String>> {
-            log::trace!("Parsed {:?} into yaml", project_file);
+            log::trace!("Parsed {project_file:?} into yaml");
             let yaml = yaml.into_iter().next()?;
             yaml.into_hash().map(|mut hash| -> Option<String> {
                 hash.remove(&Yaml::String("name".to_string()))?
@@ -141,20 +141,20 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
             })
         },
     )??;
-    log::trace!("Found project name: {:?}", name);
+    log::trace!("Found project name: {name:?}");
 
     let workspace_file = get_pulumi_workspace(context, &name, project_file)
         .map(File::open)?
         .ok()?;
-    log::trace!("Trying to read workspace_file: {:?}", workspace_file);
+    log::trace!("Trying to read workspace_file: {workspace_file:?}");
     let workspace: serde_json::Value = match serde_json::from_reader(workspace_file) {
         Ok(k) => k,
         Err(e) => {
-            log::debug!("Failed to parse workspace file: {}", e);
+            log::debug!("Failed to parse workspace file: {e}");
             return None;
         }
     };
-    log::trace!("Read workspace_file: {:?}", workspace);
+    log::trace!("Read workspace_file: {workspace:?}");
     workspace
         .as_object()?
         .get("stack")?
@@ -316,7 +316,7 @@ mod tests {
     /// stack name.
     fn render_valid_paths() -> io::Result<()> {
         use io::Write;
-        let dir = tempfile::tempdir()?;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("pulumi")?;
         let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
@@ -360,22 +360,20 @@ mod tests {
             ),
         )?;
         credential.sync_all()?;
-        let rendered = ModuleRenderer::new("pulumi")
+        let rendered = module_renderer
             .path(root.clone())
             .logical_path(root.clone())
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
             })
-            .env("HOME", root.to_str().unwrap())
             .collect();
         let expected = format!(
             "via {} ",
             Color::Fixed(5).bold().paint(" test-user@launch")
         );
         assert_eq!(expected, rendered.expect("a result"));
-        dir.close()?;
-        Ok(())
+        dir.close()
     }
 
     #[test]
@@ -383,7 +381,7 @@ mod tests {
     /// the current API.
     fn partial_login() -> io::Result<()> {
         use io::Write;
-        let dir = tempfile::tempdir()?;
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("pulumi")?;
         let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
@@ -422,19 +420,17 @@ mod tests {
             ),
         )?;
         credential.sync_all()?;
-        let rendered = ModuleRenderer::new("pulumi")
+        let rendered = module_renderer
             .path(root.clone())
             .logical_path(root.clone())
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
             })
-            .env("HOME", root.to_str().unwrap())
             .collect();
         let expected = format!("via {} ", Color::Fixed(5).bold().paint(" launch"));
         assert_eq!(expected, rendered.expect("a result"));
-        dir.close()?;
-        Ok(())
+        dir.close()
     }
 
     #[test]

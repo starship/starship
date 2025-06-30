@@ -20,7 +20,7 @@ pub struct TypstConfig<'a> {
 
 impl Default for TypstConfig<'_> {
     fn default() -> Self {
-        TypstConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "t ",

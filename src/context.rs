@@ -109,7 +109,7 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(
+        Self::new_with_shell_and_path(
             arguments,
             shell,
             target,
@@ -162,7 +162,7 @@ impl<'a> Context<'a> {
 
         let width = properties.terminal_width;
 
-        Context {
+        Self {
             config,
             properties,
             current_dir,
@@ -411,11 +411,7 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
-        log::trace!(
-            "Executing command {:?} with args {:?} from context",
-            cmd,
-            args
-        );
+        log::trace!("Executing command {cmd:?} with args {args:?} from context");
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
@@ -462,7 +458,7 @@ impl<'a> Context<'a> {
 
 impl Default for Context<'_> {
     fn default() -> Self {
-        Context::new(Default::default(), Target::Main)
+        Self::new(Default::default(), Target::Main)
     }
 }
 
@@ -698,7 +694,7 @@ impl Repo {
         }
 
         command.args(git_args);
-        log::trace!("Executing git command: {:?}", command);
+        log::trace!("Executing git command: {command:?}");
 
         exec_timeout(
             &mut command,

@@ -24,7 +24,7 @@ impl<'a> OSConfig<'a> {
 
 impl Default for OSConfig<'_> {
     fn default() -> Self {
-        OSConfig {
+        Self {
             format: "[$symbol]($style)",
             style: "bold white",
             symbols: indexmap! {
@@ -34,6 +34,7 @@ impl Default for OSConfig<'_> {
                 Type::Alpine => "🏔️ ",
                 Type::Amazon => "🙂 ",
                 Type::Android => "🤖 ",
+                Type::AOSC => "🐱 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
                 Type::Bluefin => "🐟 ",
@@ -77,7 +78,7 @@ impl Default for OSConfig<'_> {
                 Type::Ultramarine => "🔷 ",
                 Type::Unknown => "❓ ",
                 Type::Uos => "🐲 ",
-                Type::Void => "  ",
+                Type::Void => " ",
                 Type::Windows => "🪟 ",
                 // Future symbols.
                 //aosc =>       " ",

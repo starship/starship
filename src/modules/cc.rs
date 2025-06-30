@@ -100,7 +100,7 @@ fn create_module<'a, T>(
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `cc` for `lang: {}` :\n{}", lang, error);
+            log::warn!("Error in module `cc` for `lang: {lang}` :\n{error}");
             return None;
         }
     });

@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `os`:\n{}", error);
+            log::warn!("Error in module `os`:\n{error}");
             return None;
         }
     });
@@ -134,6 +134,7 @@ mod tests {
             (Type::Alpine, Some("🏔️ ")),
             (Type::Amazon, Some("🙂 ")),
             (Type::Android, Some("🤖 ")),
+            (Type::AOSC, Some("🐱 ")),
             (Type::Arch, Some("🎗️ ")),
             (Type::CentOS, Some("💠 ")),
             (Type::Debian, Some("🌀 ")),
@@ -181,6 +182,7 @@ mod tests {
             Alpine = " "
             Amazon = " "
             Android = " "
+            AOSC = " "
             Arch = " "
             CentOS = " "
             Debian = " "
@@ -222,6 +224,7 @@ mod tests {
             (Type::Alpine, Some(" ")),
             (Type::Amazon, Some(" ")),
             (Type::Android, Some(" ")),
+            (Type::AOSC, Some(" ")),
             (Type::Arch, Some(" ")),
             (Type::CentOS, Some(" ")),
             (Type::Debian, Some(" ")),
@@ -276,6 +279,7 @@ mod tests {
             (Type::Alpine, Some("🏔️ ")),
             (Type::Amazon, Some("🙂 ")),
             (Type::Android, Some("🤖 ")),
+            (Type::AOSC, Some("🐱 ")),
             (Type::Arch, Some("Arch is the best!")),
             (Type::CentOS, Some("💠 ")),
             (Type::Debian, Some("🌀 ")),
@@ -336,6 +340,7 @@ mod tests {
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
+            Type::AOSC => "🐱 ",
             Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
             Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
@@ -375,7 +380,7 @@ mod tests {
             Type::Ultramarine => "🔷 ",
             Type::Unknown => "❓ ",
             Type::Uos => "🐲 ",
-            Type::Void => "  ",
+            Type::Void => " ",
             Type::Windows => "🪟 ",
             _ => "",
         };
