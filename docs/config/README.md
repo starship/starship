@@ -4289,7 +4289,7 @@ status code and preceding characters are provided by `shlvl`.
 
 [shlvl]
 disabled = false
-format = '[$symbol$shlvl]($style)'
+format = '[$symbol]($style)'
 repeat = true
 symbol = '❯'
 repeat_offset = 1
