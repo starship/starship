@@ -13,6 +13,8 @@ use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
+use crate::print::Grapheme;
+use unicode_segmentation::UnicodeSegmentation;
 
 /// Default timeout for command execution in milliseconds
 pub const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 500;
@@ -698,17 +700,30 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     Some(out)
 }
 
+fn get_shell_wrappers(shell: Shell) -> Option<(&'static str, &'static str)> {
+    match shell {
+        Shell::Bash => Some(("\\[", "\\]")),
+        Shell::Tcsh | Shell::Zsh => Some(("%{", "%}")),
+        _ => None,
+    }
+}
+
+/// Wraps a string in shell-specific escape sequences.
+pub fn wrap_seq_for_shell(text: String, shell: Shell) -> String {
+    let Some((beg, end)) = get_shell_wrappers(shell) else {
+        return text;
+    };
+
+    format!("{beg}{text}{end}")
+}
+
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
 /// leading to strange visual bugs like duplicated/missing chars. This function wraps every
 /// control sequence, as a terminal parses it, in shell-specific escapes to avoid these problems.
 pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
-    let (beg, end) = match shell {
-        // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
-        // %{ and %}
-        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
-        _ => return ansi,
+    let Some((beg, end)) = get_shell_wrappers(shell) else {
+        return ansi;
     };
 
     let printables = anstream::adapter::strip_str(&ansi)
@@ -735,6 +750,76 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
         drawn = start + printable.len();
     }
     wrapped
+}
+
+/// Wraps wide Unicode graphemes in zsh-specific [glitch sequences] to explicitly tell the shell
+/// how wide to consider the character, avoiding positioning bugs. For zsh, wide graphemes (width
+/// > 1) are wrapped as `%{<char>%<width>G%}`.
+///
+/// The width is the terminal display width of the whole grapheme cluster, so sequences whose
+/// base character is narrow are still wrapped: emoji taking their two-cell presentation from
+/// variation selector 16 (such as ❄️, U+2744 U+FE0F), keycap sequences and flags.
+///
+/// Graphemes inside an existing `%{...%}` or `%<n>{...%}` region are left untouched: such a
+/// region is a width declaration made by whoever emitted it, and a `%G` glitch adds to the
+/// count even within nested braces, so declaring a width there would misplace the cursor.
+///
+/// [glitch sequences]: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Visual-effects
+pub fn wrap_widechar_for_zsh(text: String, shell: Shell) -> String {
+    if shell != Shell::Zsh {
+        return text;
+    }
+
+    let mut result = None;
+    let mut processed_len = 0;
+    let mut wrap_depth = 0usize;
+    let mut after_percent = false;
+
+    for grapheme in text.graphemes(true) {
+        // Track `%{`/`%}` pairs the way zsh parses them: a `%` consumes the following
+        // character, so `%%` produces a literal `%` and does not start a region, and a
+        // numeric argument can appear between the `%` and the brace, as in `%2{`.
+        let part_of_marker = if after_percent {
+            match grapheme {
+                "{" => {
+                    after_percent = false;
+                    wrap_depth += 1;
+                    true
+                }
+                "}" => {
+                    after_percent = false;
+                    wrap_depth = wrap_depth.saturating_sub(1);
+                    true
+                }
+                "-" => true,
+                _ if grapheme.len() == 1 && grapheme.as_bytes()[0].is_ascii_digit() => true,
+                _ => {
+                    after_percent = false;
+                    false
+                }
+            }
+        } else if grapheme == "%" {
+            after_percent = true;
+            true
+        } else {
+            false
+        };
+
+        let width = Grapheme(grapheme).width();
+
+        if !part_of_marker && wrap_depth == 0 && width > 1 {
+            let result = result.get_or_insert_with(|| text[..processed_len].to_string());
+
+            let glitch_seq = format!("{grapheme}%{width}G");
+            result.push_str(&wrap_seq_for_shell(glitch_seq, Shell::Zsh));
+        } else if let Some(ref mut result) = result {
+            result.push_str(grapheme);
+        }
+
+        processed_len += grapheme.len();
+    }
+
+    result.unwrap_or(text)
 }
 
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
@@ -1265,5 +1350,79 @@ mod tests {
         assert_eq!(read_file(&package_json)?, r#"{"version":"1.2.3"}"#);
 
         tmp_dir.close()
+    }
+
+    #[test]
+    fn test_wrap_seq_for_shell() {
+        let test_text = "example";
+
+        let zsh_result = wrap_seq_for_shell(test_text.to_string(), Shell::Zsh);
+        assert_eq!(zsh_result, "%{example%}");
+
+        let bash_result = wrap_seq_for_shell(test_text.to_string(), Shell::Bash);
+        assert_eq!(bash_result, "\\[example\\]");
+
+        let fish_result = wrap_seq_for_shell(test_text.to_string(), Shell::Fish);
+        assert_eq!(fish_result, "example");
+    }
+
+    #[test]
+    fn test_wrap_widechar_for_shell() {
+        let surrounding_wide_chars = "🥟 normal 🐚";
+
+        let zsh_result = wrap_widechar_for_zsh(surrounding_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(zsh_result, "%{🥟%2G%} normal %{🐚%2G%}");
+
+        let bash_result = wrap_widechar_for_zsh(surrounding_wide_chars.to_string(), Shell::Bash);
+        assert_eq!(bash_result, "🥟 normal 🐚");
+
+        let multiline = wrap_widechar_for_zsh("🥟\n🐚".to_owned(), Shell::Zsh);
+        assert_eq!(multiline, "%{🥟%2G%}\n%{🐚%2G%}");
+
+        let surrounded_wide_chars = "a🥟b";
+        let surrounded_wide_chars =
+            wrap_widechar_for_zsh(surrounded_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(surrounded_wide_chars, "a%{🥟%2G%}b");
+
+        let no_wide_chars = "normal text";
+        let no_wide_chars_result = wrap_widechar_for_zsh(no_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(no_wide_chars_result, "normal text");
+
+        // Graphemes whose base character is narrow but which display two cells wide:
+        // - ❄️: snowflake (U+2744) followed by variation selector 16 (U+FE0F), which requests
+        //   emoji presentation
+        // - 1️⃣: keycap sequence of digit one (U+0031), variation selector 16 and combining
+        //   enclosing keycap (U+20E3)
+        // - 🇬🇧: regional indicator symbols G (U+1F1EC) and B (U+1F1E7)
+        // - 👩‍👩‍👦‍👦: two women (U+1F469) and two boys (U+1F466) joined by zero-width joiners
+        //   (U+200D)
+        let composed_wide_chars = "❄️ 1️⃣ 🇬🇧 👩‍👩‍👦‍👦";
+        let composed_wide_chars_result =
+            wrap_widechar_for_zsh(composed_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(
+            composed_wide_chars_result,
+            "%{❄️%2G%} %{1️⃣%2G%} %{🇬🇧%2G%} %{👩‍👩‍👦‍👦%2G%}"
+        );
+
+        // ✔︎ is a check mark (U+2714) followed by variation selector 15 (U+FE0E), which
+        // requests text presentation: a single cell wide, so no glitch sequence.
+        let text_presentation = "✔︎ done";
+        let text_presentation_result =
+            wrap_widechar_for_zsh(text_presentation.to_string(), Shell::Zsh);
+        assert_eq!(text_presentation_result, "✔︎ done");
+    }
+
+    #[test]
+    fn test_wrap_widechar_for_zsh_skips_wrapped_regions() {
+        // An OSC window title renders no prompt columns. A glitch sequence
+        // inside its zero-width region would make zsh count the title text.
+        let osc_title = "%{\u{1b}]0;🐚 zoom%} after 🐚";
+        let result = wrap_widechar_for_zsh(osc_title.to_string(), Shell::Zsh);
+        assert_eq!(result, "%{\u{1b}]0;🐚 zoom%} after %{🐚%2G%}");
+
+        // zsh uses the width in the region prefix. The inner text adds no width.
+        let numeric_region = "%2{🥟%} and 🐚";
+        let numeric_region_result = wrap_widechar_for_zsh(numeric_region.to_string(), Shell::Zsh);
+        assert_eq!(numeric_region_result, "%2{🥟%} and %{🐚%2G%}");
     }
 }
