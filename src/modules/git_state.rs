@@ -60,12 +60,7 @@ fn get_state_description<'a>(
             current: None,
             total: None,
         }),
-        InProgress::Revert => Some(StateDescription {
-            label: config.revert,
-            current: None,
-            total: None,
-        }),
-        InProgress::RevertSequence => Some(StateDescription {
+        InProgress::Revert | InProgress::RevertSequence => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,

@@ -735,7 +735,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -752,12 +752,12 @@ version = "12"
         )?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -779,7 +779,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -798,12 +798,12 @@ version = "12"
         )?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -819,12 +819,12 @@ version = "12"
         fs::write(dir.path().join("rust-toolchain.toml"), "1.34.0")?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(find_rust_toolchain_file(&context), None);
@@ -860,7 +860,7 @@ version = "12"
         )?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             dir.path().into(),
@@ -884,7 +884,7 @@ version = "12"
         )?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             child_dir_path.clone(),

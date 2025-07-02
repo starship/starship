@@ -266,14 +266,14 @@ mod tests {
 
     #[test]
     fn get_home_dir() {
-        let mut context = Context::new(Default::default(), Target::Main);
+        let mut context = Context::new(Properties::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         assert_eq!(
             pulumi_home_dir(&context),
             Some(PathBuf::from("/home/sweet/home/.pulumi"))
         );
         context.env.insert("PULUMI_HOME", "/a/dir".to_string());
-        assert_eq!(pulumi_home_dir(&context), Some(PathBuf::from("/a/dir")))
+        assert_eq!(pulumi_home_dir(&context), Some(PathBuf::from("/a/dir")));
     }
 
     #[test]

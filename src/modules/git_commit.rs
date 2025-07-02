@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_detached = git_head.is_detached();
     if config.only_detached && !is_detached {
         return None;
-    };
+    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

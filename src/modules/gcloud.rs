@@ -23,7 +23,7 @@ impl<'a> GcloudContext {
         Self {
             config_name: config_name.to_string(),
             config_path: PathBuf::from(config_path),
-            config: Default::default(),
+            config: OnceLock::default(),
         }
     }
 

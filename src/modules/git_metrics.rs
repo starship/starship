@@ -58,7 +58,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         gix_repo.write_blob([]).ok()?; /* create empty blob */
         let tree_index_cache = prevent_external_diff(
             gix_repo
-                .diff_resource_cache(gix::diff::blob::pipeline::Mode::ToGit, Default::default())
+                .diff_resource_cache(
+                    gix::diff::blob::pipeline::Mode::ToGit,
+                    WorktreeRoots::default(),
+                )
                 .ok()?,
         );
         let index_worktree_cache = prevent_external_diff(

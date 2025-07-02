@@ -1542,7 +1542,7 @@ users: []
     }
 
     #[test]
-    fn test_json_kubeconfig_is_parsed_as_json() -> std::io::Result<()> {
+    fn test_json_kubeconfig_is_parsed_as_json() {
         let json_kubeconfig = r#"{
   "apiVersion": "v1",
   "clusters": [],
@@ -1569,11 +1569,10 @@ users: []
             Document::Json(..) => {}
             _ => panic!("Expected Document::Json, got {actual:?}"),
         }
-        Ok(())
     }
 
     #[test]
-    fn fallback_to_yaml_parsing() -> std::io::Result<()> {
+    fn fallback_to_yaml_parsing() {
         let json_kubeconfig = r#"{
   "apiVersion": v1,
   "clusters": [],
@@ -1598,9 +1597,8 @@ users: []
         let actual = results.first().unwrap();
         match actual {
             Document::Yaml(..) => {}
-            _ => panic!("Expected Document::Yaml, got {actual:?}"),
+            Document::Json(_) => panic!("Expected Document::Yaml, got {actual:?}"),
         }
-        Ok(())
     }
 
     #[test]

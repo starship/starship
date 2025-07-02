@@ -45,7 +45,7 @@ mod tests {
     fn truncate_slightly_larger_path_than_provided_length() {
         let path = "~/starship/engines/booster";
         let output = truncate(path, 3);
-        assert_eq!(output.as_deref(), Some("starship/engines/booster"))
+        assert_eq!(output.as_deref(), Some("starship/engines/booster"));
     }
 
     #[test]
