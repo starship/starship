@@ -13,6 +13,7 @@ use std::borrow::Cow;
 use std::ops::Deref;
 use std::sync::LazyLock;
 
+#[derive(Clone, Copy)]
 pub enum Lang {
     C,
     Cpp,

@@ -291,20 +291,18 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("topic-branch"),
             stderr: String::default(),
         }),
-        "fossil branch new topic-branch trunk" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::default(),
-        }),
+        "fossil branch new topic-branch trunk" | "fossil update topic-branch" => {
+            Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::default(),
+            })
+        }
         "fossil diff -i --numstat" => Some(CommandOutput {
             stdout: String::from(
                 "\
          3          2 README.md
          3          2 TOTAL over 1 changed files",
             ),
-            stderr: String::default(),
-        }),
-        "fossil update topic-branch" => Some(CommandOutput {
-            stdout: String::default(),
             stderr: String::default(),
         }),
         "gleam --version" => Some(CommandOutput {
@@ -775,31 +773,31 @@ mod tests {
 
     #[test]
     fn render_time_test_0ms() {
-        assert_eq!(render_time(0_u128, true), "0ms")
+        assert_eq!(render_time(0_u128, true), "0ms");
     }
     #[test]
     fn render_time_test_0s() {
-        assert_eq!(render_time(0_u128, false), "0s")
+        assert_eq!(render_time(0_u128, false), "0s");
     }
     #[test]
     fn render_time_test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true), "500ms");
     }
     #[test]
     fn render_time_test_500ms_no_millis() {
-        assert_eq!(render_time(500_u128, false), "0s")
+        assert_eq!(render_time(500_u128, false), "0s");
     }
     #[test]
     fn render_time_test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s0ms")
+        assert_eq!(render_time(10_000_u128, true), "10s0ms");
     }
     #[test]
     fn render_time_test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s0ms")
+        assert_eq!(render_time(90_000_u128, true), "1m30s0ms");
     }
     #[test]
     fn render_time_test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms")
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms");
     }
     #[test]
     fn render_time_test_1d() {

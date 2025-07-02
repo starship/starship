@@ -209,7 +209,7 @@ mod tests {
     use std::io;
 
     use super::*;
-    use crate::context::Target;
+    use crate::context::{Properties, Target};
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -278,7 +278,7 @@ mod tests {
 
     #[test]
     fn test_get_pulumi_workspace() {
-        let mut context = Context::new(Default::default(), Target::Main);
+        let mut context = Context::new(Properties::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         let name = "foobar";
         let project_file = PathBuf::from("/hello/Pulumi.yaml");

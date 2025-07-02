@@ -319,7 +319,7 @@ mod tests {
     use toml_edit::Item;
 
     use crate::{
-        context::{Shell, Target},
+        context::{Properties, Shell, Target},
         context_env::Env,
     };
 
@@ -376,7 +376,7 @@ mod tests {
 
     #[test]
     fn no_panic_when_editor_unparsable() {
-        let outcome = edit_configuration(&Default::default(), Some("\"vim"));
+        let outcome = edit_configuration(&Context::default(), Some("\"vim"));
         assert!(outcome.is_err());
     }
 
@@ -629,6 +629,7 @@ mod tests {
         Ok(())
     }
 
+    #[derive(Clone, Copy)]
     enum StarshipConfigEnvScenario {
         NotSpecified,
         NonExistingFile,
@@ -683,10 +684,10 @@ mod tests {
         );
 
         Ok(Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
-            Default::default(),
+            PathBuf::default(),
             PathBuf::default(),
             env,
         ))

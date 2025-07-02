@@ -95,7 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(exit_code, main_format, Some(pipestatus), &config, context);
+    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -110,7 +110,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn format_exit_code<'a>(
     exit_code: &'a str,
     format: &'a str,
-    pipestatus: Option<Vec<Segment>>,
+    pipestatus: Option<&Vec<Segment>>,
     config: &'a StatusConfig,
     context: &'a Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
@@ -189,7 +189,7 @@ fn format_exit_code<'a>(
                     log::warn!("pipestatus variable is only available in pipestatus_format");
                     None
                 }
-                "pipestatus" => pipestatus.clone().map(Ok),
+                "pipestatus" => pipestatus.cloned().map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -840,7 +840,7 @@ mod tests {
             .pipestatus(pipe_exit_code)
             .width(100);
         let context = crate::modules::Context::from(renderer);
-        let actual = crate::print::get_prompt(context);
+        let actual = crate::print::get_prompt(&context);
 
         let mut escaping = false;
         let mut width = 0;

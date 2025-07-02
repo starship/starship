@@ -1,4 +1,4 @@
-use crate::context::{Context, Shell, Target};
+use crate::context::{Context, Properties, Shell, Target};
 use crate::context_env::Env;
 use crate::logger::StarshipLogger;
 use crate::{
@@ -38,7 +38,7 @@ fn init_logger() {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        Default::default(),
+        Properties::default(),
         Shell::Unknown,
         Target::Main,
         PathBuf::new(),

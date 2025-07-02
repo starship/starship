@@ -44,52 +44,52 @@ mod tests {
 
     #[test]
     fn test_changed_truncation_symbol() {
-        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "%")
+        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "%");
     }
 
     #[test]
     fn test_no_truncation_symbol() {
-        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "")
+        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "");
     }
 
     #[test]
     fn test_ascii_boundary_below() {
-        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "…")
+        test_truncate_length("1337_hello_world", 15, "1337_hello_worl", "…");
     }
 
     #[test]
     fn test_ascii_boundary_on() {
-        test_truncate_length("1337_hello_world", 16, "1337_hello_world", "")
+        test_truncate_length("1337_hello_world", 16, "1337_hello_world", "");
     }
 
     #[test]
     fn test_ascii_boundary_above() {
-        test_truncate_length("1337_hello_world", 17, "1337_hello_world", "")
+        test_truncate_length("1337_hello_world", 17, "1337_hello_world", "");
     }
 
     #[test]
     fn test_one() {
-        test_truncate_length("1337_hello_world", 1, "1", "…")
+        test_truncate_length("1337_hello_world", 1, "1", "…");
     }
 
     #[test]
     fn test_negative() {
-        test_truncate_length("1337_hello_world", -1, "1337_hello_world", "")
+        test_truncate_length("1337_hello_world", -1, "1337_hello_world", "");
     }
 
     #[test]
     fn test_hindi_truncation() {
-        test_truncate_length("नमस्ते", 2, "नम", "…")
+        test_truncate_length("नमस्ते", 2, "नम", "…");
     }
 
     #[test]
     fn test_hindi_truncation2() {
-        test_truncate_length("नमस्त", 2, "नम", "…")
+        test_truncate_length("नमस्त", 2, "नम", "…");
     }
 
     #[test]
     fn test_japanese_truncation() {
-        test_truncate_length("がんばってね", 4, "がんばっ", "…")
+        test_truncate_length("がんばってね", 4, "がんばっ", "…");
     }
 
     fn test_truncate_length(

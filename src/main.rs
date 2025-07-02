@@ -173,10 +173,11 @@ fn main() {
             let exit_code = if is_info_only {
                 0
             } else {
+                use io::Write;
+
                 // print the arguments
                 // avoid panicking in case of stderr closing
                 let mut stderr = io::stderr();
-                use io::Write;
                 let _ = writeln!(
                     stderr,
                     "\nNOTE:\n    passed arguments: {:?}",

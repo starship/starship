@@ -159,7 +159,7 @@ fn get_credentials_duration(
         let cache_key = crate::utils::encode_to_hex(&Sha1::digest(start_url.as_bytes()));
         // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
         let mut sso_cred_path = context.get_home()?;
-        sso_cred_path.push(format!(".aws/sso/cache/{}.json", cache_key));
+        sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
         let sso_cred_json: json::Value =
             json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
         let expires_at = sso_cred_json.get("expiresAt")?.as_str();
@@ -752,11 +752,11 @@ credential_process = /opt/bin/awscreds-retriever
 
     #[test]
     fn expiration_date_set_from_file() -> io::Result<()> {
+        use chrono::{DateTime, Utc};
+
         let dir = tempfile::tempdir()?;
         let credentials_path = dir.path().join("credentials");
         let mut file = File::create(&credentials_path)?;
-
-        use chrono::{DateTime, Utc};
 
         let now_plus_half_hour: DateTime<Utc> =
             DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();

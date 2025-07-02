@@ -498,7 +498,8 @@ impl RustupSettings {
 
 #[cfg(test)]
 mod tests {
-    use crate::context::{Shell, Target};
+    use crate::context::{Properties, Shell, Target};
+    use crate::context_env::Env;
     use std::io;
     use std::process::{ExitStatus, Output};
     use std::sync::LazyLock;
@@ -837,12 +838,12 @@ version = "12"
         )?;
 
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -864,7 +865,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(
@@ -888,7 +889,7 @@ version = "12"
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
-            Default::default(),
+            Env::default(),
         );
 
         assert_eq!(

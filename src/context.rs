@@ -1183,7 +1183,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -1200,7 +1200,7 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
