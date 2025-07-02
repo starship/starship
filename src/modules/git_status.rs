@@ -571,37 +571,37 @@ impl RepoStatus {
 
     fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
         let re = Regex::new(r"^([^ ]+) (\[(.*)\])?$").unwrap();
-        if let Some(caps) = re.captures(s) {
-            let ahead_behind_match = caps.get(3);
-            if let Some(ahead_behind_match) = ahead_behind_match {
-                s = ahead_behind_match.as_str();
-
-                if s == "gone" {
-                    self.ahead = None;
-                    self.behind = None;
-                    return;
-                }
-
-                for pair in s.split(',') {
-                    let mut tokens = pair.trim().splitn(2, ' ');
-                    if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
-                        let storage = match name {
-                            "ahead" => &mut self.ahead,
-                            "behind" => &mut self.behind,
-                            _ => return,
-                        };
-                        *storage = number.parse().ok();
-                    }
-                }
-            }
-            for field in [&mut self.ahead, &mut self.behind] {
-                if field.is_none() {
-                    *field = Some(0);
-                }
-            }
-        } else {
+        let Some(caps) = re.captures(s) else {
             self.ahead = None;
             self.behind = None;
+            return;
+        };
+        let ahead_behind_match = caps.get(3);
+        if let Some(ahead_behind_match) = ahead_behind_match {
+            s = ahead_behind_match.as_str();
+
+            if s == "gone" {
+                self.ahead = None;
+                self.behind = None;
+                return;
+            }
+
+            for pair in s.split(',') {
+                let mut tokens = pair.trim().splitn(2, ' ');
+                if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
+                    let storage = match name {
+                        "ahead" => &mut self.ahead,
+                        "behind" => &mut self.behind,
+                        _ => return,
+                    };
+                    *storage = number.parse().ok();
+                }
+            }
+        }
+        for field in [&mut self.ahead, &mut self.behind] {
+            if field.is_none() {
+                *field = Some(0);
+            }
         }
     }
 }
