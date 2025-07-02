@@ -361,7 +361,7 @@ mod tests {
         credential.sync_all()?;
         let rendered = module_renderer
             .path(root.clone())
-            .logical_path(root.clone())
+            .logical_path(root)
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
@@ -421,7 +421,7 @@ mod tests {
         credential.sync_all()?;
         let rendered = module_renderer
             .path(root.clone())
-            .logical_path(root.clone())
+            .logical_path(root)
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
