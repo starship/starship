@@ -570,32 +570,27 @@ impl RepoStatus {
     }
 
     fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        let re = Regex::new(r"^([^ ]+) (\[(.*)\])?$").unwrap();
-        let Some(caps) = re.captures(s) else {
+        if s == " " || s.ends_with(" [gone]") {
             self.ahead = None;
             self.behind = None;
             return;
-        };
-        let ahead_behind_match = caps.get(3);
-        if let Some(ahead_behind_match) = ahead_behind_match {
-            s = ahead_behind_match.as_str();
+        }
 
-            if s == "gone" {
-                self.ahead = None;
-                self.behind = None;
-                return;
-            }
+        s = s
+            .split_once(' ')
+            .unwrap()
+            .1
+            .trim_matches(|c| c == '[' || c == ']');
 
-            for pair in s.split(',') {
-                let mut tokens = pair.trim().splitn(2, ' ');
-                if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
-                    let storage = match name {
-                        "ahead" => &mut self.ahead,
-                        "behind" => &mut self.behind,
-                        _ => return,
-                    };
-                    *storage = number.parse().ok();
-                }
+        for pair in s.split(',') {
+            let mut tokens = pair.trim().splitn(2, ' ');
+            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
+                let storage = match name {
+                    "ahead" => &mut self.ahead,
+                    "behind" => &mut self.behind,
+                    _ => return,
+                };
+                *storage = number.parse().ok();
             }
         }
         for field in [&mut self.ahead, &mut self.behind] {
