@@ -521,24 +521,10 @@ impl DirContents {
 
         {
             let worker = move || {
-                let timeout = &timeout;
                 let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
-                for entry in enumerated_dir
-                    .take_while(|(n, _)| {
-                        cfg!(test) // ignore timeout during tests
-                        || n & 0xFF != 0 // only check timeout once every 2^8 entries
-                        || start.elapsed() < *timeout
-                    })
+                let _ = enumerated_dir
                     .filter_map(|(_, entry)| entry.ok())
-                {
-                    match tx.send(entry) {
-                        Ok(_) => continue,
-                        Err(e) => {
-                            log::warn!("Error occurred while sending across mpsc: {e}");
-                            break;
-                        }
-                    }
-                }
+                    .try_for_each(|entry| tx.send(entry));
             };
 
             let _ = thread::Builder::new()
@@ -607,12 +593,8 @@ impl DirContents {
                     remaining_time =
                         timeout.saturating_sub(Instant::now().saturating_duration_since(start));
                 }
-                Err(mpsc::RecvTimeoutError::Timeout) => {
-                    log::warn!("from_path_with_timeout has timed-out!");
-                    break;
-                }
-                Err(mpsc::RecvTimeoutError::Disconnected) => {
-                    // Completed receiving
+                Err(_) => {
+                    // Timeout or Disconnected occurred
                     break;
                 }
             }
