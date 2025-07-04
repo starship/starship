@@ -96,9 +96,8 @@ fn parse_version(version: &str) -> &str {
         if *c == b'.' {
             if periods == 2 {
                 return &sanitized_version[0..i];
-            } else {
-                periods += 1;
             }
+            periods += 1;
         }
     }
     // We didn't hit 3 periods, so we just return the whole string.
@@ -210,7 +209,7 @@ mod tests {
     use std::io;
 
     use super::*;
-    use crate::context::Target;
+    use crate::context::{Properties, Target};
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -267,19 +266,19 @@ mod tests {
 
     #[test]
     fn get_home_dir() {
-        let mut context = Context::new(Default::default(), Target::Main);
+        let mut context = Context::new(Properties::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         assert_eq!(
             pulumi_home_dir(&context),
             Some(PathBuf::from("/home/sweet/home/.pulumi"))
         );
         context.env.insert("PULUMI_HOME", "/a/dir".to_string());
-        assert_eq!(pulumi_home_dir(&context), Some(PathBuf::from("/a/dir")))
+        assert_eq!(pulumi_home_dir(&context), Some(PathBuf::from("/a/dir")));
     }
 
     #[test]
     fn test_get_pulumi_workspace() {
-        let mut context = Context::new(Default::default(), Target::Main);
+        let mut context = Context::new(Properties::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         let name = "foobar";
         let project_file = PathBuf::from("/hello/Pulumi.yaml");
@@ -362,7 +361,7 @@ mod tests {
         credential.sync_all()?;
         let rendered = module_renderer
             .path(root.clone())
-            .logical_path(root.clone())
+            .logical_path(root)
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "
@@ -422,7 +421,7 @@ mod tests {
         credential.sync_all()?;
         let rendered = module_renderer
             .path(root.clone())
-            .logical_path(root.clone())
+            .logical_path(root)
             .config(toml::toml! {
                 [pulumi]
                 format = "via [$symbol($username@)$stack]($style) "

@@ -35,7 +35,7 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
     let mut module = Module::new(mod_name, config.description, None);
     if config.disabled {
         return None;
-    };
+    }
 
     let variable_name = config.variable.or(name)?;
 

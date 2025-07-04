@@ -128,7 +128,7 @@ impl<'a> Context<'a> {
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(&get_config_path_os(&env));
+        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -433,7 +433,7 @@ impl<'a> Context<'a> {
     }
 
     /// Attempt to execute several commands with `exec_cmd`, return the results of the first that works
-    pub fn exec_cmds_return_first(&self, commands: Vec<Vec<&str>>) -> Option<CommandOutput> {
+    pub fn exec_cmds_return_first(&self, commands: &[Vec<&str>]) -> Option<CommandOutput> {
         commands
             .iter()
             .find_map(|attempt| self.exec_cmd(attempt[0], &attempt[1..]))
@@ -1153,12 +1153,12 @@ mod tests {
         // Mock navigation into the symlink path
         let test_path = path_symlink.join("yyy");
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -1178,12 +1178,12 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -1200,12 +1200,12 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = home_dir()

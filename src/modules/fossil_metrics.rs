@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let checkout_db = if cfg!(windows) {
         "_FOSSIL_"

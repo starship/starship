@@ -118,9 +118,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok(segments) => {
             if segments.is_empty() {
                 return None;
-            } else {
-                segments
             }
+            segments
         }
         Err(error) => {
             log::warn!("Error in module `git_status`:\n{error}");
@@ -160,28 +159,22 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_repo_status(&self) -> Option<&RepoStatus> {
         self.repo_status
-            .get_or_init(
-                || match get_static_repo_status(self.context, self.repo, &self.config) {
-                    Some(repo_status) => Some(repo_status),
-                    None => {
-                        log::debug!("get_repo_status: git status execution failed");
-                        None
-                    }
-                },
-            )
-            .as_ref()
-            .map(|repo_status| repo_status.as_ref())
+            .get_or_init(|| {
+                get_static_repo_status(self.context, self.repo, &self.config).or_else(|| {
+                    log::debug!("get_repo_status: git status execution failed");
+                    None
+                })
+            })
+            .as_deref()
     }
 
     pub fn get_stashed(&self) -> &Option<usize> {
-        self.stashed_count
-            .get_or_init(|| match get_stashed_count(self.repo) {
-                Some(stashed_count) => Some(stashed_count),
-                None => {
-                    log::debug!("get_stashed_count: git stash execution failed");
-                    None
-                }
+        self.stashed_count.get_or_init(|| {
+            get_stashed_count(self.repo).or_else(|| {
+                log::debug!("get_stashed_count: git stash execution failed");
+                None
             })
+        })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -380,14 +373,11 @@ fn get_repo_status(
                 status::Item::TreeIndex(change) => {
                     use gix::diff::index::Change;
                     match change {
-                        Change::Addition { .. } => {
+                        Change::Addition { .. } | Change::Modification { .. } => {
                             repo_status.staged += 1;
                         }
                         Change::Deletion { .. } => {
                             repo_status.deleted += 1;
-                        }
-                        Change::Modification { .. } => {
-                            repo_status.staged += 1;
                         }
                         Change::Rewrite { .. } => {
                             repo_status.renamed += 1;
@@ -550,7 +540,7 @@ impl RepoStatus {
             Some('1') => self.parse_normal_status(&s[2..4]),
             Some('2') => {
                 self.renamed += 1;
-                self.parse_normal_status(&s[2..4])
+                self.parse_normal_status(&s[2..4]);
             }
             Some('u') => self.conflicted += 1,
             Some('?') => self.untracked += 1,
