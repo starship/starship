@@ -402,8 +402,8 @@ is read from the `AWS_SSO_PROFILE` env var.
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
-| `detect_folders`     | []                                                               | Which folders should trigger this module.                                                                 |
-| `detect_files`     | []                                                                 | Which filenames should trigger this modules.                                                                  |
+| `detect_folders`    | []                                                                | Which folders should trigger this module.                                                                   |
+| `detect_files`      | []                                                                | Which filenames should trigger this modules.                                                                |
 
 ### Variables
 
