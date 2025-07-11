@@ -21,11 +21,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OpenVZ".into());
         }
 
-        if context_path(context, "/run/host/container-manager").exists() {
-            // OCI
-            return Some("OCI".into());
-        }
-
         let container_env_path = context_path(context, "/run/.containerenv");
 
         if container_env_path.exists() {
@@ -67,6 +62,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if context_path(context, "/.dockerenv").exists() {
             // docker
             return Some("Docker".into());
+        }
+
+        if context_path(context, "/run/host/container-manager").exists() {
+            // OCI
+            return Some("OCI".into());
         }
 
         None
