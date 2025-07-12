@@ -227,6 +227,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "zsh" => Some(".zshrc"),
             "elvish" => Some(".elvish/rc.elv"),
             "tcsh" => Some(".tcshrc"),
+            "osh" => Some(".config/oils/oshrc"),
             "xonsh" => Some(".xonshrc"),
             "cmd" => Some("AppData/Local/clink/starship.lua"),
             _ => None,
