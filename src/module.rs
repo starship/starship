@@ -104,6 +104,7 @@ pub const ALL_MODULES: &[&str] = &[
     "vagrant",
     "vcsh",
     "vlang",
+    "xmake",
     "zig",
 ];
 
