@@ -685,8 +685,6 @@ file.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -735,8 +733,6 @@ the module will be shown if the current directory contains a `.cpp`, `.hpp`, or 
 | version  | 13.0.0  | The version of the compiler          |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
-
-NB that `version` is not in the default format.
 
 ### Commands
 
