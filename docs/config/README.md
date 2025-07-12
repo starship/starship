@@ -464,6 +464,10 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Variable               | Default                                  | Description                                                                           |
@@ -1263,6 +1267,10 @@ truncation_symbol = '…/'
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                                | Description                                             |
@@ -1673,6 +1681,10 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                          | Description                                                                              |
@@ -1708,6 +1720,10 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -2765,6 +2781,10 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option     | Default                   | Description                                            |
@@ -2925,6 +2945,10 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                                   | Description                                                                                  |
@@ -2964,6 +2988,10 @@ The `hg_state` module will show in directories which are part of a mercurial
 repository, and where there is an operation in progress, such as: _REBASING_,
 _BISECTING_, etc.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option       | Default                   | Description                                                   |
@@ -2994,6 +3022,10 @@ _BISECTING_, etc.
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -3673,6 +3705,10 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                           | Description                                                                          |
@@ -4246,6 +4282,10 @@ disabled = false
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is
 set to a number and meets or exceeds the specified threshold.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
