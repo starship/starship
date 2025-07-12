@@ -101,10 +101,10 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
     }
 
     let path = Path::new(opam_switch);
-    if !path.has_root() {
-        Some((SwitchType::Global, opam_switch.to_string()))
-    } else {
+    if path.has_root() {
         Some((SwitchType::Local, path.file_name()?.to_str()?.to_string()))
+    } else {
+        Some((SwitchType::Global, opam_switch.to_string()))
     }
 }
 

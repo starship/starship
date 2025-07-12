@@ -60,22 +60,12 @@ fn get_state_description<'a>(
             current: None,
             total: None,
         }),
-        InProgress::Revert => Some(StateDescription {
+        InProgress::Revert | InProgress::RevertSequence => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,
         }),
-        InProgress::RevertSequence => Some(StateDescription {
-            label: config.revert,
-            current: None,
-            total: None,
-        }),
-        InProgress::CherryPick => Some(StateDescription {
-            label: config.cherry_pick,
-            current: None,
-            total: None,
-        }),
-        InProgress::CherryPickSequence => Some(StateDescription {
+        InProgress::CherryPick | InProgress::CherryPickSequence => Some(StateDescription {
             label: config.cherry_pick,
             current: None,
             total: None,
@@ -95,8 +85,9 @@ fn get_state_description<'a>(
             current: None,
             total: None,
         }),
-        InProgress::Rebase => Some(describe_rebase(repo, config.rebase)),
-        InProgress::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
+        InProgress::Rebase | InProgress::RebaseInteractive => {
+            Some(describe_rebase(repo, config.rebase))
+        }
     }
 }
 
