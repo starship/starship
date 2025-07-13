@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Variable               | Default                                  | Description                                                                           |
@@ -655,8 +657,6 @@ The `c` module shows some information about your C compiler. By default the modu
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -702,8 +702,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | version  | 13.0.0  | The version of the compiler          |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
-
-NB that `version` is not in the default format.
 
 ### Commands
 
@@ -788,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-De `cmake` module laat de huidige geïnstalleerde versie van [CMake](https://cmake.org/) zien. By default the module will be activated if any of the following conditions are met:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
@@ -818,7 +816,7 @@ De `cmake` module laat de huidige geïnstalleerde versie van [CMake](https://cma
 
 ## COBOL / GNUCOBOL
 
-De `cobol` module laat de huidige geïnstalleerde versie van COBOL zien. By default, the module will be shown if any of the following conditions are met:
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains any files ending in `.cob` or `.COB`
 - The current directory contains any files ending in `.cbl` or `.CBL`
@@ -959,7 +957,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-De `crystal` module laat de huidige geïnstalleerde versie van [Crystal](https://crystal-lang.org/) zien. By default the module will be shown if any of the following conditions are met:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
@@ -1036,7 +1034,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-De `dart` module laat de huidige geïnstalleerde versie van [Dart](https://dart.dev/) zien. By default the module will be shown if any of the following conditions are met:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -1076,7 +1074,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-De `deno` module laat de huidige geïnstalleerde versie van [Deno](https://deno.land/) zien. By default the module will be shown if any of the following conditions are met:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -1194,6 +1192,8 @@ truncation_symbol = '…/'
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                          | Description                                                                              |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option     | Default                   | Description                                            |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                                   | Description                                                                                  |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option       | Default                     | Description                                                   |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                           | Description                                                                          |
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
