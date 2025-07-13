@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 El módulo `azure` muestra la suscripción Azure actual. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Variable               | Predeterminado                           | Descripción                                                                           |
@@ -655,8 +657,6 @@ El módulo `c` muestra información sobre su compilador de C. Por defecto el mó
 | symbol   |         | Refleja el valor de la opción `symbol` |
 | style    |         | Refleja el valor de la opción `style`  |
 
-NB que `versión` no está en el formato por defecto.
-
 ### Commands
 
 La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
@@ -703,8 +703,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol   |         | Refleja el valor de la opción `symbol` |
 | style    |         | Refleja el valor de la opción `style`  |
 
-NB que `versión` no está en el formato por defecto.
-
 ### Commands
 
 La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
@@ -725,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Carácter
 
-El módulo `character` muestra un carácter (normalmente una flecha) al lado del texto que introduces en la terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-El caracter te dirá si el último comando fue exitoso o no. Se puede hacer de dos maneras:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - Cambiando el color (`red`/`green`)
 - Cambiando la forma (`.`/`✖`)
 
-Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -788,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://cmake.org/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
@@ -818,7 +816,7 @@ El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://
 
 ## COBOL / GNUCOBOL
 
-El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
 - El directorio actual contiene cualquier archivo que termine en `.cob` o `.COB`
 - El directorio actual contiene cualquier archivo que termine en `.cbl` o `.CBL`
@@ -848,13 +846,13 @@ El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módu
 
 ## Tiempo de Ejecución
 
-El módulo `cmd_duration` muestra cuánto tiempo tomó ejecutarse el último comando. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time` si existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Los usuarios de Bash que necesiten la funcionalidad como preexec pueden usar el [framework bash_preexec de rcaloras](https://github.com/rcaloras/bash-preexec). Basta con definir los arreglos `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opciones
 
@@ -890,7 +888,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-El módulo `conda` muestra el entorno actual [Conda](https://docs.conda.io/en/latest/), si `$CONDA_DEFAULT_ENV` está configurado.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 > [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
@@ -927,7 +925,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Contenedor
 
-El módulo `container` muestra el símbolo y nombre del contenedor, si está dentro de un contenedor.
+The `container` module displays a symbol and container name, if inside a container.
 
 ### Opciones
 
@@ -959,7 +957,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-El módulo `cristal` muestra la versión instalada de [Crystal](https://crystal-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
@@ -1036,7 +1034,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-El módulo `dart` muestra la versión instalada de [Dart](https://dart.dev/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con la extensión `.dart`
 - El directorio actual contiene un directorio `.dart_tool`
@@ -1076,7 +1074,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-El módulo `deno` le muestra la versión instalada de [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -1112,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-El módulo `directory` muestra la ruta a tu directorio actual, truncado a tres carpetas padres. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Opciones
 
@@ -1137,7 +1135,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `use_os_path_sep`        | `true`                                                                                                                       | Utiliza el separador de ruta del sistema operativo específico en lugar de usar siempre `/` (por ejemplo, `\` en Windows) |
 
 <details>
-<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Opción avanzada             | Predeterminado | Descripción                                                                                                                                                                                                                  |
 | --------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1145,7 +1143,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `fish_style_pwd_dir_length` | `0`            | El número de caracteres a usar al aplicar la lógica de ruta pwd del intérprete de comandos de Fish.                                                                                                                          |
 | `use_logical_path`          | `true`         | Si `true` renderiza la ruta lógica originada desde el intérprete de comandos a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Ten en cuenta que esto desactivará el estilo PWD de fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1153,7 +1151,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interactúa con las opciones de truncamiento estándar de una manera que puede sorprenderse primero: si no es cero, los componentes de la ruta que normalmente se truncarían se muestran con esa cantidad de caracteres. Por ejemplo, la ruta `/built/this/city/on/rock/and/roll`, que normalmente se mostraría como `rock/and/roll`, se mostraría como `/b/t/c/o/rock/and/roll` con `fish_style_pwd_dir_length = 1`--los componentes de ruta que normalmente se eliminarían, se muestran con un solo carácter. Para `fish_style_pwd_dir_length = 2`, sería `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1167,9 +1165,9 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
 <details>
-<summary>Los repositorios de git tienen variables adicionales.</summary>
+<summary>The git repos have additional variables.</summary>
 
-Consideremos la ruta `/path/to/home/git_repo/src/lib`
+Let us consider the path `/path/to/home/git_repo/src/lib`
 
 | Variable           | Ejemplo               | Descripción                                         |
 | ------------------ | --------------------- | --------------------------------------------------- |
@@ -1194,6 +1192,8 @@ truncation_symbol = '…/'
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
 ### Opciones
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Opción              | Predeterminado                   | Descripción                                                                                       |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
 ### Opciones
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 El módulo `localip` muestra la dirección IPv4 de la interfaz de red principal.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Opción     | Predeterminado            | Descripción                                                             |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Opción              | Predeterminado                            | Descripción                                                                                         |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Opción       | Predeterminado              | Descripción                                                               |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
 ### Opciones
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
 ### Opciones
 
 | Opción              | Predeterminado                    | Descripción                                                                          |
@@ -3651,7 +3665,7 @@ El módulo `python` muestra la versión instalada de [Python](https://www.python
 
 Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
-Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+By default, the module will be shown if any of the following conditions are met:
 
 - El directorio actual contiene un archivo `.python-version`
 - El directorio actual contiene un archivo `Pipfile`
@@ -3724,7 +3738,7 @@ detect_extensions = []
 
 The `quarto` module shows the current installed version of Quarto used in a project.
 
-Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `_quarto.yml` file
 - The current directory contains any `*.qmd` file
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
 ### Opciones
 
@@ -4442,7 +4458,7 @@ time_range = '10:00:00-14:00:00'
 
 The `typst` module shows the current installed version of Typst used in a project.
 
-Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+By default, the module will be shown if any of the following conditions are met:
 
 - El directorio actual contiene un archivo `template.typ`
 - The current directory contains any `*.typ` file
