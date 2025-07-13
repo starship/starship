@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Các tuỳ chọn
 
 | Biến                   | Mặc định                                 | Mô tả                                                                                 |
@@ -655,8 +657,6 @@ The `c` module shows some information about your C compiler. By default the modu
 | symbol  |        | Giá trị ghi đè tuỳ chọn `symbol` |
 | style   |        | Giá trị ghi đè của `style`       |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -703,8 +703,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol  |         | Giá trị ghi đè tuỳ chọn `symbol` |
 | style   |         | Giá trị ghi đè của `style`       |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -725,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-Module `character` cho biết một kí tự (thường là một mũi tên) bên cạnh nơi văn bản được nhập trong terminal của bạn.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất bại. Nó có thể làm điều này bằng hai cách:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - thay đổi màu(`đỏ`/`xanh lá`)
 - thay đổi hình dạng (`❯`/`✖`)
 
-Mặc định, nó chỉ thay đổi màu. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -788,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). Mặc định module sẽ được kích hoạt nếu thoả mãn bất kì điều kiện nào dưới đây:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
@@ -848,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Command Duration
 
-Module `cmd_duration`. cho biết câu lệnh cuối cùng thực thi trong bao lâu. Module sẽ được hiện chỉ khi câu lệnh lấy nhiều hơn 2 giây, hoặc giá trị cấu hình `min_time`, nếu nó tồn tại.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Người dùng Bash, những người cần chức năng giống preexec có thể sử dụng [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Đơn giản là định nghĩa các mảng `preexec_functions` và `precmd_functions` trước khi chạy `eval $(starship init $0)`, và sau đó thực thi như bình thường.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
@@ -1112,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Đường dẫn
 
-`directory` module hiển thị đường dẫn thư mục hiện hành của bạn,, cắt ngắn ba thư mục cha. Đường dẫn của bạn cũng sẽ được cắt ngắn tới đường dẫn gốc của git repo hiện tại của bạn.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và tuỳ chọn thiết lập sang `1`. Bây giờ bạn sẽ thấy `~/D/N/nixpkgs/pkgs`, trong khi trước nó là `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Options
 
@@ -1137,7 +1135,7 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 | `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
 
 <details>
-<summary>Mô đun này có một vài tùy chọn nâng cao để điều khiển cách thư mục được hiển thị.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Tùy chọn nâng cao           | Mặc định | Mô tả                                                                                                                                                                  |
 | --------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1194,6 +1192,8 @@ truncation_symbol = '…/'
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 ### Options
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Options
 
 | Tuỳ chọn            | Mặc định                         | Mô tả                                                                                       |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 ### Options
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn   | Mặc định                  | Mô tả                                                  |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                                  | Mô tả                                                                                        |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn     | Mặc định                    | Mô tả                                                            |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 ### Các tuỳ chọn
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                          | Mô tả                                                                                |
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 ### Các tuỳ chọn
 
