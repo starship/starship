@@ -4640,6 +4640,35 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 format = '[🆅 $repo](bold blue) '
 ```
 
+## XMake
+
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+
+- The current directory contains a `xmake.lua` file
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                               | Simbol yang digunakan sebelum versi cmake.                                          |
+| `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini                                       |
+| `detect_files`      | `['xmake.lua']`                      | filenames mana yang sebaiknya memicu modul ini                                      |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini                                        |
+| `style`             | `'bold blue'`                        | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                              | Disables the `xmake` module.                                                        |
+
+### Variabel
+
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.9.5` | Versi dari cmake                  |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
 ## Zig
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
