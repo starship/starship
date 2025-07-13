@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Переменная             | По умолчанию                             | Описание                                                                              |
@@ -655,8 +657,6 @@ The `c` module shows some information about your C compiler. By default the modu
 | symbol     |        | Отражает значение параметра `symbol` |
 | style      |        | Отражает значение параметра `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -703,8 +703,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol     |         | Отражает значение параметра `symbol` |
 | style      |         | Отражает значение параметра `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -725,9 +723,9 @@ format = 'via [$name $version]($style)'
 
 ## Символ
 
-Модуль `character` показывает символ (обычно, стрелка) рядом с вводимым текстом в терминале.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Символ показывает, была ли последняя команда успешной или нет. It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -848,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Длительность команды
 
-Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Опции
 
@@ -1112,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Каталог
 
-Модуль `directory` показывает путь к вашей текущей директории, усеченной до трех родительских папок. Ваш каталог также будет отсечен до корня git репозитория, в котором вы находитесь.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Например, возьмем `~/Dev/Nix/nixpkgs/pkgs` где `nixpkgs` является корневым репозиторием, и в опции установлено `1`. Вы увидите `~/D/N/nixpkgs/pkgs`, а до этого было бы `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Опции
 
@@ -1137,7 +1135,7 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 | `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
 
 <details>
-<summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | По умолчанию | Описание                                                                                                                                                               |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1153,7 +1151,7 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` взаимодействует со стандартными параметрами усечения, которые могут сначала показаться странными: если он не равен нулю, элементы пути, который обычно усекается, вместо этого отображаются с указанным количеством символов. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1194,6 +1192,8 @@ truncation_symbol = '…/'
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Параметр            | По умолчанию                     | Описание                                                                                      |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Параметр   | По умолчанию              | Описание                                               |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Параметр            | По умолчанию                              | Описание                                                                                 |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Параметр     | По умолчанию                | Описание                                                      |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
 ### Опции
 
 | Параметр            | По умолчанию                      | Описание                                                                             |
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
 
 ### Опции
 
