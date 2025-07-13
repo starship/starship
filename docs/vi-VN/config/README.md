@@ -4640,6 +4640,35 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 format = '[🆅 $repo](bold blue) '
 ```
 
+## XMake
+
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+
+- The current directory contains a `xmake.lua` file
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                               | Kí hiệu sử dụng trước phiên bản của cmake.                                |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
+| `detect_files`      | `['xmake.lua']`                      | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
+| `detect_folders`    | `[]`                                 | Thư mục nào sẽ kích hoạt mô-đun này                                       |
+| `style`             | `'bold blue'`                        | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `xmake` module.                                              |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v2.9.5` | Phiên bản của cmake              |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
 ## Zig
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
