@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Variabel               | Bawaan                                   | Deskripsi                                                                             |
@@ -655,8 +657,6 @@ The `c` module shows some information about your C compiler. By default the modu
 | symbol   |        | Menyalin nilai dari opsi `symbol` |
 | style    |        | Menyalin nilai dari opsi `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -703,8 +703,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol   |         | Menyalin nilai dari opsi `symbol` |
 | style    |         | Menyalin nilai dari opsi `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
@@ -725,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Karakter
 
-Modul `character` menampilkan sebuah karakter (biasanya anak panah) di samping teks pada terminalmu.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Karakter dapat memberitahu kamu apakah perintah terakhir berhasil atau tidak. Karakter dapat memberitahumu dengan dua cara ini:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - mengganti warna (`red`/`green`)
 - mengganti bentuk (`❯`/`✖`)
 
-Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin mengganti bentuknya, perhatikan [contoh](#with-custom-error-shape) berikut.
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -788,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - Direktori terkini yang berisikan sebuah file `CMakeLists.txt`
 - Direktori terkini yang berisikan sebuah file `CMakeCache.txt`
@@ -848,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Durasi Perintah
 
-Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. Modulnya hanya akan ditampilkan jika perintahnya membutuhkan waktu lebih dari dua detik, atau ada nilai dari konfigurasi `min_time`.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Pengguna Bash yang membutuhkan fungsi seperti preexec dapat menggunakan [kerangka kerja bash_preexec dari rcaloras](https://github.com/rcaloras/bash-preexec). Cukup dengan membuat array `preexec_functions` dan `precmd_functions` sebelum menjalankan `eval $(starship init $0)`, lalu lanjutkan seperti biasa.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opsi
 
@@ -959,7 +957,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-Modul `crystal` menampilkan versi terkini dari [Crystal](https://crystal-lang.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - Direktori terkini yang berisikan sebuah file `shard.yml`
 - Direktori terkini yang berisikan sebuah file `.cr`
@@ -1036,7 +1034,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-Modul `dart` menampilkan versi terkini dari [Dart](https://dart.dev/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - Direktori terkini yang berisikan sebuah file berekstensi `.dart`
 - Direktori terkini yang berisikan sebuah direktori `dart_tool`
@@ -1076,7 +1074,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -1112,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Direktori
 
-Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Direkrotimu juga akan disingkat ke root dari git repo di tempatmu berada saat ini.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root repo-nya, dan lalu opsinya diset menjadi `1`. Kamu akan melihat `~/D/N/nixpkgs/pkgs`, sedangkan sebelumnya direktori tersebut harusnya `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Opsi
 
@@ -1137,7 +1135,7 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 | `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
 
 <details>
-<summary>Modul ini memilki beberapa opsi konfigurasi lanjutan yang mengontrol bagaimana direktori ditampilkan.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | Bawaan | Deskripsi                                                                                                                                                              |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1194,6 +1192,8 @@ truncation_symbol = '…/'
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Opsi
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Opsi                | Bawaan                           | Deskripsi                                                                                |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Opsi
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Opsi       | Bawaan                    | Deskripsi                                              |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Opsi                | Bawaan                                    | Deskripsi                                                                                    |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Opsi         | Bawaan                      | Deskripsi                                                     |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Opsi
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
 ### Opsi
 
 | Opsi                | Bawaan                            | Deskripsi                                                                            |
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 ### Opsi
 
