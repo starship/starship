@@ -439,6 +439,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 `azure` モジュールは、現在のAzureサブスクリプションを表示します。 これは、 `~/.azure/azureProfile.json` ファイルで定義されているデフォルトのサブスクリプション名またはユーザー名の表示に基づいています。
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | 変数                     | デフォルト                                    | 説明                                    |
@@ -655,8 +657,6 @@ format = 'via [🍔 $version](bold green) '
 | symbol  |        | オプション `symbol` の値をミラーする |
 | style   |        | オプション `style` の値をミラーする  |
 
-`version`はデフォルトのフォーマットではないことに注意してください。
-
 ### Commands
 
 `commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
@@ -703,8 +703,6 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol  |         | オプション `symbol` の値をミラーする |
 | style   |         | オプション `style` の値をミラーする  |
 
-`version`はデフォルトのフォーマットではないことに注意してください。
-
 ### Commands
 
 `commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
@@ -725,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-characterは、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 形も変えてみたい場合は[このサンプル](#with-custom-error-shape)も参考にしてください。
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -788,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-`cmake`モジュールは、現在インストールされている[Cmake](https://cmake.org/)のバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
@@ -818,7 +816,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## COBOL / GNUCOBOL
 
-`COBOL` モジュールは、現在インストールされているCOBOLのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに、`.cob`または`.COB`の拡張子のファイルが含まれている
 - カレントディレクトリに、`.cbl`または`.CBL`の拡張子のファイルが含まれている
@@ -848,13 +846,13 @@ vimcmd_symbol = '[V](bold green) '
 
 ## Command Duration
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### オプション
 
@@ -890,7 +888,7 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-`conda` モジュールは、`$CONDA_DEFAULT_ENV` が設定されている場合、現在の[Conda](https://docs.conda.io/en/latest/) 環境を表示します。
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 > [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
 
@@ -927,7 +925,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## コンテナ
 
-`container`モジュールは、コンテナ内の場合、シンボルとコンテナ名を表示します。
+The `container` module displays a symbol and container name, if inside a container.
 
 ### オプション
 
@@ -959,7 +957,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-`crystal`モジュールは、現在インストールされている[Crystal](https://crystal-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
@@ -998,7 +996,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-`daml`モジュールは、Damlプロジェクトのルートディレクトリにいるときに、使用している[Daml](https://www.digitalasset.com/developers) SDKバージョンを表示します。 環境変数`DAML_SDK_VERSION`を上書きしない限り、`daml.yaml`ファイルの`sdk-version`が使用されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`daml.yaml`ファイルが含まれている
 
@@ -1036,7 +1034,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-`dart`モジュールは、現在インストールされている[Dart](https://dart.dev/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.dart`の拡張子のファイルが含まれている
 - カレントディレクトリに`.dart_tool`ディレクトリが含まれている
@@ -1076,7 +1074,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-`deno`モジュールは、現在インストールされている[Deno](https://deno.land/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -1112,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-`directory` モジュールは現在のディレクトリへのパスを表示します。親フォルダは3つまでに切り捨てられます。 git リポジトリ内にいる場合は、リポジトリのルートで切り捨てられます。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-`fish_style_pwd_dir_length` を使用している場合、切り捨てられたパスを非表示にする代わりに、オプションで有効にした数値に基づいた各ディレクトリの短縮名が表示されます。
+When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-たとえば、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs` がリポジトリルートであり、オプションが `1` に設定されている場合を挙げます。 この場合、`nixpkgs/pkgs` の代わりに、`~/D/N/nixpkgs/pkgs` と表示されます。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### オプション
 
@@ -1137,7 +1135,7 @@ format = 'via [🦕 $version](green bold) '
 | `use_os_path_sep`        | `true`                                                                                                                       | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`)                 |
 
 <details>
-<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | 詳細設定                        | デフォルト  | 説明                                                                                                                          |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
@@ -1145,7 +1143,7 @@ format = 'via [🦕 $version](green bold) '
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1153,7 +1151,7 @@ format = 'via [🦕 $version](green bold) '
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` は標準の短縮設定と組み合わさって、一見して意外な結果をもたらすかもしれません。非ゼロの値の場合、通常省略されるディレクトリ名がその文字数だけ表示されます。 例えばパス `/built/this/city/on/rock/and/roll` は通常 `rock/and/roll` と表示されますが、 `fish_style_pwd_dir_length = 1` の時は `/b/t/c/o/rock/and/roll` と表示されます。つまり、通常削除されるパスコンポーネントが代わりに一文字で表示されます。 `fish_style_pwd_dir_length = 2`の場合、 `/bu/th/ci/on/rock/and/roll` になります。
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1167,9 +1165,9 @@ format = 'via [🦕 $version](green bold) '
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 <details>
-<summary>gitリポジトリは追加の変数があります。</summary>
+<summary>The git repos have additional variables.</summary>
 
-`/path/to/home/git_repo/src/lib`のパスについて考えます。
+Let us consider the path `/path/to/home/git_repo/src/lib`
 
 | 変数                 | 設定例                   | 説明                     |
 | ------------------ | --------------------- | ---------------------- |
@@ -1193,7 +1191,9 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-`direnv` モジュールは、もし存在すれば、現在の rc ファイルの状態を示します。 状態として rc ファイルへのパス、ロードされているかどうか、および `direnv` によって許可されているかどうかを含みます。
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 ### オプション
 
@@ -1580,6 +1580,8 @@ AA -------------------------------------------- BB -----------------------------
 
 `fossil_branch`モジュールは、現在のディレクトリにあるチェックアウトのアクティブなブランチ名を表示します。
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | オプション               | デフォルト                            | 説明                                                    |
@@ -1615,6 +1617,8 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 `fossil_branch` モジュールは、現在のディレクトリのチェックアウトにおける追加・削除された行数を表示します。 少なくとも Fossil バージョン 2.14 (2021-01-20) が必要です。
+
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 ### オプション
 
@@ -2622,6 +2626,8 @@ disabled = true
 
 `localip`モジュールは、プライマリネットワークインターフェイスのIPv4アドレスを表示します。
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | オプション      | デフォルト                     | 説明                                  |
@@ -2778,6 +2784,8 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | オプション               | デフォルト                                     | 説明                                                                                           |
@@ -2815,6 +2823,8 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | オプション        | デフォルト                       | 説明                                                            |
@@ -2845,6 +2855,8 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 ### オプション
 
@@ -3500,6 +3512,8 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+
 ### オプション
 
 | オプション               | デフォルト                             | 説明                                                                                   |
@@ -3651,7 +3665,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 `pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
 
-デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+By default, the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
@@ -3724,7 +3738,7 @@ detect_extensions = []
 
 The `quarto` module shows the current installed version of Quarto used in a project.
 
-デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `_quarto.yml` file
 - The current directory contains any `*.qmd` file
@@ -4047,6 +4061,8 @@ disabled = false
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+
+> [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 ### オプション
 
@@ -4442,7 +4458,7 @@ time_range = '10:00:00-14:00:00'
 
 `typst` モジュールは、現在インストールされてプロジェクトで使われている Typst のバージョンを表示します。
 
-デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+By default, the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`template.typ`ファイルが含まれている
 - カレントディレクトリに拡張子が `.typ` のファイルが含まれている
