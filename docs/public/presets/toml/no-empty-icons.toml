@@ -127,5 +127,8 @@ format = '(via [$symbol($version )]($style))'
 [vlang]
 format = '(via [$symbol($version )]($style))'
 
+[xmake]
+format = '(via [$symbol($version )]($style))'
+
 [zig]
 format = '(via [$symbol($version )]($style))'
