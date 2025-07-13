@@ -4640,6 +4640,35 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 format = '[🆅 $repo](bold blue) '
 ```
 
+## XMake
+
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+
+- The current directory contains a `xmake.lua` file
+
+### Opzioni
+
+| Opzione             | Default                              | Descrizione                                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                                                |
+| `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo                                          |
+| `detect_files`      | `['xmake.lua']`                      | Quali nomi di file dovrebbero attivare questo modulo                                        |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo                                            |
+| `style`             | `'bold blue'`                        | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                              | Disables the `xmake` module.                                                                |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.9.5` | The version of cmake                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
 ## Zig
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
