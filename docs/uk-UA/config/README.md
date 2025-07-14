@@ -707,9 +707,9 @@ format = 'via [$name $version]($style)'
 
 Параметр `commands` отримує список команд для визначення версії та назви компілятора.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
+Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Якщо компілятор C++ компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/).
 
 ### Приклад
 
@@ -723,16 +723,16 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Модуль `character` показує символ (зазвичай стрілку) поруч з текстом, який вводиться в терміналі.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Символ підкаже вам, чи була остання команда успішною, чи ні. Це можна зробити двома способами:
 
 - зміною кольору (`red`/`green`)
 - зміною символу (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Стандартно відбувається зміна кольору. Якщо ви також хочете змінювати й символ, подивитися на [цей приклад](#with-custom-error-shape).
 
-> [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+> [!WARNING] `vimcmd_symbol` підтримується лише у cmd, fish та zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol` та `vimcmd_visual_symbol` підтримуються лише у fish через [проблеми з визначенням режиму у zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 ### Параметри
 
@@ -786,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `CMakeLists.txt`
 - Поточна тека містить файл `CMakeCache.txt`
@@ -816,7 +816,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Модуль `cobol` показує встановлену версію COBOL. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `.cob` або `.COB`
 - Поточна тека містить файли  `.cbl` або `.CBL`
@@ -846,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Command Duration – час виконання
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Модуль `cmd_duration` показує, скільки часу виконувалась  остання команда. Модуль буде показаний лише в тому випадку, якщо на виконання команди пішло понад дві секунди або більше, ніж значення змінної `min_time`, якщо воно задане.
 
-> [!WARNING] Do not hook the DEBUG trap in Bash
+> [!WARNING] Не перехоплюйте trap DEBUG у Bash
 > 
-> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+> Якщо ви запускаєте Starship у `bash`, не вмикайте `DEBUG trap` після запуску `eval $(starship init $0)`, бо цей модуль **не працюватиме**.
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Просто визначте масиви `preexec_function` і `precmd_functions` перед запуском `eval $(starship init $0)`, а потім продовжуйте як зазвичай.
 
 ### Параметри
 
@@ -890,7 +890,7 @@ format = 'underwent [$duration](bold yellow)'
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-> [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
+> [!TIP] Це не пригнічує власний модифікатор підказки conda, ви можете виконати `conda config --set changeps1 False`. Якщо ви використовуєте [pixi](https://pixi.sh), ви можете відключити модифікатор запиту pixi, використовуючи `pixi config set shell.change-ps1 false`.
 
 ### Параметри
 
@@ -925,7 +925,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Container
 
-The `container` module displays a symbol and container name, if inside a container.
+Модуль `container` показує символ та назву контейнера, коли ви перебуваєте в ньому.
 
 ### Параметри
 
@@ -996,7 +996,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `daml` показує поточну версію SDK  [Daml](https://www.digitalasset.com/developers), коли ви перебуваєте в кореневій теці проєкту Daml. `sdk-version` у файлі `daml.yaml` буде використовуватись, якщо значення не буде перевизначене змінною оточення `DAML_SDK_VERSION`. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `daml.yaml`
 
@@ -1110,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показує шлях до поточної теки, урізаючи його до трьох останніх батьківських тек. Шлях до теки також буде скорочений до кореня git-репозиторію, в якому ви перебуваєте.
 
-When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Якщо використовується параметр `fish_style_pwd_dir_length`, замість того, щоб приховувати скорочений шлях, ви побачите скорочену назву кожної теки в залежності від числа, яке ви вказали для цього параметра.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Наприклад, маємо `~/Dev/Nix/nixpkgs/pkgs` де `nixpkgs` є коренем репозиторію, а параметр — `1`. Ви побачите `~/D/N/nixpkgs/pkgs`, тоді як до цього було `nixpkgs/pkgs`.
 
 ### Параметри
 
@@ -1135,7 +1135,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`        | `true`                                                                                                                       | Використовувати розділювач шляхів, що притаманній вашій OS, замість того, щоб завжди використовувати `/` (напр `\` у Windows) |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Цей модуль має декілька додаткових опцій, які контролюють показ шляхів до тек.</summary>
 
 | Додатковий параметр         | Стандартно | Опис                                                                                                                                                                                     |
 | --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1143,7 +1143,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD.
 
 ```toml
 [directory.substitutions]
@@ -1151,7 +1151,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` взаємодіє зі стандартними опціями скорочення, по-перше, що може бути дивним, якщо значення не нуль, замість цього будуть показуватись компоненти шляху, які звичайно скорочені, зі вказаною кількістю символів. Наприклад, шлях `/built/this/city/on/rock/and/roll`, який зазвичай показуватиметься як `rock/and/roll`, буде показаний як `/b/t/c/o/rock/and/roll` з `fish_style_pwd_dir_length = 1` — шлях компонентів, які зазвичай вилучаються, показуються одним символом. Для `fish_style_pwd_dir_length = 2` це буде `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1165,9 +1165,9 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 *: Ця змінна може бути використана лише як частина стилю рядка
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Git-репозиторії мають додаткові змінні.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Розгляньмо шлях `/path/to/home/git_repo/src/lib`
 
 | Змінна             | Приклад               | Опис                                    |
 | ------------------ | --------------------- | --------------------------------------- |
@@ -1191,7 +1191,7 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+Модуль `direnv` показує статус rc-файла якщо він існує. Статус включає: шлях до файлу rc, чи він завантажений та, чи `direnv` дозволяє його використання.
 
 > [!TIP] Типово цей модуль вимкнено. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
@@ -4458,7 +4458,7 @@ time_range = '10:00:00-14:00:00'
 
 Модуль `typst` показує поточну встановлену версію Typst, що використовується в проєкті.
 
-By default, the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `template.typ`
 - Поточна тека містить файл `.typ`
@@ -4642,9 +4642,9 @@ format = '[🆅 $repo](bold blue) '
 
 ## XMake
 
-The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `xmake.lua` file
+- Поточна тека містить файл `xmake.lua`
 
 ### Параметри
 
