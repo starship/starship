@@ -723,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+characterは、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
 
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+デフォルトでは、色だけが変更されます。 形も変えてみたい場合は[このサンプル](#with-custom-error-shape)も参考にしてください。
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -786,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
@@ -816,7 +816,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+`COBOL` モジュールは、現在インストールされているCOBOLのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに、`.cob`または`.COB`の拡張子のファイルが含まれている
 - カレントディレクトリに、`.cbl`または`.CBL`の拡張子のファイルが含まれている
@@ -846,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Command Duration
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
 
 ### オプション
 
@@ -925,7 +925,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## コンテナ
 
-The `container` module displays a symbol and container name, if inside a container.
+`container`モジュールは、コンテナ内の場合、シンボルとコンテナ名を表示します。
 
 ### オプション
 
@@ -996,7 +996,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. 環境変数`DAML_SDK_VERSION`を上書きしない限り、`daml.yaml`ファイルの`sdk-version`が使用されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`daml.yaml`ファイルが含まれている
 
@@ -1110,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` モジュールは現在のディレクトリへのパスを表示します。親フォルダは3つまでに切り捨てられます。 git リポジトリ内にいる場合は、リポジトリのルートで切り捨てられます。
 
-When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+`fish_style_pwd_dir_length` を使用している場合、切り捨てられたパスを非表示にする代わりに、オプションで有効にした数値に基づいた各ディレクトリの短縮名が表示されます。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+たとえば、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs` がリポジトリルートであり、オプションが `1` に設定されている場合を挙げます。 この場合、`nixpkgs/pkgs` の代わりに、`~/D/N/nixpkgs/pkgs` と表示されます。
 
 ### オプション
 
@@ -1135,7 +1135,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`        | `true`                                                                                                                       | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`)                 |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
 
 | 詳細設定                        | デフォルト  | 説明                                                                                                                          |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
@@ -1143,7 +1143,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
 
 ```toml
 [directory.substitutions]
@@ -1151,7 +1151,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` は標準の短縮設定と組み合わさって、一見して意外な結果をもたらすかもしれません。非ゼロの値の場合、通常省略されるディレクトリ名がその文字数だけ表示されます。 例えばパス `/built/this/city/on/rock/and/roll` は通常 `rock/and/roll` と表示されますが、 `fish_style_pwd_dir_length = 1` の時は `/b/t/c/o/rock/and/roll` と表示されます。つまり、通常削除されるパスコンポーネントが代わりに一文字で表示されます。 `fish_style_pwd_dir_length = 2`の場合、 `/bu/th/ci/on/rock/and/roll` になります。
 
 </details>
 
@@ -1165,9 +1165,9 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>gitリポジトリは追加の変数があります。</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+`/path/to/home/git_repo/src/lib`のパスについて考えます。
 
 | 変数                 | 設定例                   | 説明                     |
 | ------------------ | --------------------- | ---------------------- |
@@ -1191,7 +1191,7 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+`direnv` モジュールは、もし存在すれば、現在の rc ファイルの状態を示します。 状態として rc ファイルへのパス、ロードされているかどうか、および `direnv` によって許可されているかどうかを含みます。
 
 > [!TIP] This module is disabled by default. 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
@@ -3665,7 +3665,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 `pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
 
-By default, the module will be shown if any of the following conditions are met:
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
 - カレントディレクトリに`Pipfile`ファイルが含まれている
@@ -3738,7 +3738,7 @@ detect_extensions = []
 
 The `quarto` module shows the current installed version of Quarto used in a project.
 
-By default, the module will be shown if any of the following conditions are met:
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `_quarto.yml` file
 - The current directory contains any `*.qmd` file
@@ -4458,7 +4458,7 @@ time_range = '10:00:00-14:00:00'
 
 `typst` モジュールは、現在インストールされてプロジェクトで使われている Typst のバージョンを表示します。
 
-By default, the module will be shown if any of the following conditions are met:
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`template.typ`ファイルが含まれている
 - カレントディレクトリに拡張子が `.typ` のファイルが含まれている
@@ -4642,9 +4642,9 @@ format = '[🆅 $repo](bold blue) '
 
 ## XMake
 
-The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
 
-- The current directory contains a `xmake.lua` file
+- 現在のディレクトリに`xmake.lua`ファイルが含まれている
 
 ### オプション
 
