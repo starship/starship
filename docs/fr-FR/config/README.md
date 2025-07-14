@@ -723,14 +723,14 @@ format = 'via [$name $version]($style)'
 
 ## Caractère
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Le module `character` affiche un caractère (en général une flèche) à côté de là où vous entrez le texte dans votre terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Le caractère vous dira si la dernière commande a été réussie ou pas. Il peut faire ça de deux façons:
 
 - en changeant de couleur(`red`/`green`)
 - en changeant de forme (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Par défaut, il ne change que de couleur. Si vous désirez également changer sa forme, jetez un à [cet exemple](#with-custom-error-shape).
 
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -786,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). Par défaut, le module s’activera si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `CMakeLists.txt`
 - Le dossier courant contient un fichier `CMakeCache.txt`
@@ -816,7 +816,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Le module `cobol` affiche la version de COBOL installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier finissant par `.cob` ou `.COB`
 - Le dossier courant contiens un fichier finissant par `.cbl` ou `.CBL`
@@ -846,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Temps d'exécution
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Le module `cmd_duration` montre le temps qu'a pris la dernière commande pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou plus que la valeur `min_time`, si elle existe.
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les tableaux `preexec_functions` et `precmd_functions` avant d'exécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
 
 ### Options
 
@@ -925,7 +925,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Conteneur
 
-The `container` module displays a symbol and container name, if inside a container.
+Le module `container` affiche un symbole et le nom du conteneur, si vous êtes dans un conteneur.
 
 ### Options
 
@@ -1110,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Dossier
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Le module `directory` affiche le chemin du dossier courant, tronqué à 3 dossiers parents. Votre dossier sera également tronqué à la racine du repo git dans lequel vous vous trouvez actuellement.
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Par exemple, `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'option définie à `1`. Vous verrez maintenant `~/D/N/nixpkgs/pkgs`, alors que vous auriez vu `nixpkgs/pkgs` avant.
 
 ### Options
 
@@ -1135,7 +1135,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`        | `true`                                                                                                                       | Utiliser le séparateur de chemin du système d’exploitation au lieu de toujours utiliser `/` (par ex. `\` sous Windows) |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
 
 | Options avancées            | Défaut | Description                                                                                                                                                                              |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1143,7 +1143,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `fish_style_pwd_dir_length` | `0`    | Le nombre de caractères à utiliser lors de l'application de la logique de troncature du pwd de fish.                                                                                     |
 | `use_logical_path`          | `true` | Si `true` affiche le chemin logique issu du shell via `PWD` ou `--logical-path`. Si `false` renvoie plutôt le chemin du système de fichiers physique avec les liens symboliques résolus. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Notez que cela désactivera la PWD de style fish.
 
 ```toml
 [directory.substitutions]
@@ -1151,7 +1151,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_leng` interagit avec les options de troncature d'une manière qui peut être surprenante au début : si elle n'est pas nulle, les composantes du chemin qui seraient normalement tronquées sont affichées à la place avec autant de caractères. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. Pour `fish_style_pwd_dir_length = 2`, ce serait `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1165,9 +1165,9 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Les dépôts Git peuvent avoir des variables additionnelles.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Considérons le chemin `/path/to/home/git_repo/src/lib`
 
 | Variable           | Exemple               | Description                             |
 | ------------------ | --------------------- | --------------------------------------- |
@@ -3665,7 +3665,7 @@ Le module `python` affiche la version de [Python](https://www.python.org/) insta
 
 Si `pyenv_version_name` est défini à `true`, il affichera le nom de la version de pyenv. Sinon, il affichera le numéro de version que donne `python --version`.
 
-By default, the module will be shown if any of the following conditions are met:
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `.python-version`
 - Le dossier courant contient un fichier `Pipfile`
@@ -3738,7 +3738,7 @@ detect_extensions = []
 
 The `quarto` module shows the current installed version of Quarto used in a project.
 
-By default, the module will be shown if any of the following conditions are met:
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `_quarto.yml` file
 - The current directory contains any `*.qmd` file
@@ -4458,7 +4458,7 @@ time_range = '10:00:00-14:00:00'
 
 The `typst` module shows the current installed version of Typst used in a project.
 
-By default, the module will be shown if any of the following conditions are met:
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `template.typ`
 - The current directory contains any `*.typ` file
@@ -4642,9 +4642,9 @@ format = '[🆅 $repo](bold blue) '
 
 ## XMake
 
-The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). Par défaut, le module s’activera si l’une de ces conditions est remplie:
 
-- The current directory contains a `xmake.lua` file
+- Le dossier courant contient un fichier `xmake.lua`
 
 ### Options
 
