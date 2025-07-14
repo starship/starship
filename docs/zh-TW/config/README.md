@@ -723,9 +723,9 @@ format = 'via [$name $version]($style)'
 
 ## 字元
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+`character` 模組在你的文字輸入處旁顯示一個字元 (通常是箭頭)。
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+這個字元會告訴你最後的指令是成功還是失敗。 It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -846,13 +846,13 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## 指令持續時間
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+`cmd_duration` 模組顯示最後一個指令執行所花費的時間。 這個模組只會在指令花費超過兩秒或是有設定 `min_time` 時，超過設定值時出現。
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). 只要在 `eval $(starship init $0)` 之前簡單地定義 `preexec_functions` 與 `precmd_functions` 兩個陣列，然後就可以照常進行。
 
 ### 選項
 
@@ -1110,11 +1110,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## 資料夾
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
 
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
 
 ### 選項
 
@@ -1135,7 +1135,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
 | Advanced Option             | 預設     | 說明                                                                                                                                                                     |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -4644,7 +4644,7 @@ format = '[🆅 $repo](bold blue) '
 
 The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default the module will be activated if any of the following conditions are met:
 
-- The current directory contains a `xmake.lua` file
+- 目前資料夾中有一個 `xmake.lua` 檔案
 
 ### 選項
 
