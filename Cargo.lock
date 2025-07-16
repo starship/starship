@@ -3371,9 +3371,9 @@ dependencies = [
 
 [[package]]
 name = "systemstat"
-version = "0.2.4"
+version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "668a4db78b439df482c238f559e4ea869017f9e62ef0a059c8bfcd841a4df544"
+checksum = "5021f5184d44b26fb184acd689671bbe1e4bbd24bbdaa6bc7ec383fad32d2033"
 dependencies = [
  "bytesize",
  "lazy_static",
