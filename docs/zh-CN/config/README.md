@@ -3166,16 +3166,16 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                              |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | 此组件的样式。                                               |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | 触发此组件的扩展名                                             |
-| `detect_files`      | `[]`                                 | 触发此组件的文件名                                             |
-| `detect_folders`    | `[]`                                 | 触发此组件的文件夹                                             |
+| 选项                  | 默认值                                  | 描述                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                               |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `style`             | `'bold bright-blue'`                 | 此组件的样式。                                                |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | 触发此组件的扩展名                                              |
+| `detect_files`      | `[]`                                 | 触发此组件的文件名                                              |
+| `detect_folders`    | `[]`                                 | 触发此组件的文件夹                                              |
 
 ### 变量
 
