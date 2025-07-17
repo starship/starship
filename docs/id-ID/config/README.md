@@ -3166,16 +3166,16 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 
 ### Opsi
 
-| Opsi                | Bawaan                               | Deskripsi                                             |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                    |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | Gaya penataan untuk modul.                            |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | Ekstensi mana yang sebaiknya memicu modul ini.        |
-| `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.       |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.         |
+| Opsi                | Bawaan                               | Deskripsi                                              |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                     |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `style`             | `'bold bright-blue'`                 | Gaya penataan untuk modul.                             |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | Ekstensi mana yang sebaiknya memicu modul ini.         |
+| `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.        |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.          |
 
 ### Variabel
 
