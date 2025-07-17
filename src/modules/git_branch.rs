@@ -45,11 +45,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
     if let Some(remote) = repo.remote.as_ref() {
         if let Some(branch) = &remote.branch {
-            remote_branch_graphemes = branch.graphemes(true).collect()
-        };
+            remote_branch_graphemes = branch.graphemes(true).collect();
+        }
         if let Some(name) = &remote.name {
-            remote_name_graphemes = name.graphemes(true).collect()
-        };
+            remote_name_graphemes = name.graphemes(true).collect();
+        }
     }
 
     // Truncate fields if need be

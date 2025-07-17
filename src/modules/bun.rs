@@ -61,10 +61,10 @@ fn get_bun_version(context: &Context) -> Option<String> {
     context
         .exec_cmd("bun", &["--version"])
         .map(get_command_string_output)
-        .map(parse_bun_version)
+        .map(|s| parse_bun_version(&s))
 }
 
-fn parse_bun_version(bun_version: String) -> String {
+fn parse_bun_version(bun_version: &str) -> String {
     bun_version.trim_end().to_string()
 }
 
