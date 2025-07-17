@@ -3166,16 +3166,16 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 
 ### 選項
 
-| 選項                  | 預設                                   | 說明                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                            |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | 這個模組的風格。                                              |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| 選項                  | 預設                                   | 說明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                             |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `style`             | `'bold bright-blue'`                 | 這個模組的風格。                                               |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.           |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.            |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.              |
 
 ### 變數
 
