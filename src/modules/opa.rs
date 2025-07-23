@@ -62,10 +62,10 @@ fn get_opa_version(context: &Context) -> Option<String> {
     let version_output: String = context
         .exec_cmd("opa", &["version"])
         .map(get_command_string_output)?;
-    parse_opa_version(version_output)
+    parse_opa_version(&version_output)
 }
 
-fn parse_opa_version(version_output: String) -> Option<String> {
+fn parse_opa_version(version_output: &str) -> Option<String> {
     Some(version_output.split_whitespace().nth(1)?.to_string())
 }
 
