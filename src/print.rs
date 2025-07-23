@@ -568,6 +568,7 @@ mod test {
                 [character]
                 format=">"
         });
+        context.env.insert("HOME", "/dev/null".to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
@@ -585,6 +586,7 @@ mod test {
             [character]
             format=">"
         });
+        context.env.insert("HOME", "/dev/null".to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
