@@ -14,8 +14,11 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
 
     PROMPT_COMMAND: {||
         (
+            # The initial value of `$env.CMD_DURATION_MS` is always `0823`, which is an official setting.
+            # See https://github.com/nushell/nushell/discussions/6402#discussioncomment-3466687.
+            let cmd_duration = if $env.CMD_DURATION_MS == "0823" { 0 } else { $env.CMD_DURATION_MS };
             ^::STARSHIP:: prompt
-                --cmd-duration $env.CMD_DURATION_MS
+                --cmd-duration $cmd_duration
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
                 ...(
@@ -34,9 +37,12 @@ export-env { $env.STARSHIP_SHELL = "nu"; load-env {
 
     PROMPT_COMMAND_RIGHT: {||
         (
+            # The initial value of `$env.CMD_DURATION_MS` is always `0823`, which is an official setting.
+            # See https://github.com/nushell/nushell/discussions/6402#discussioncomment-3466687.
+            let cmd_duration = if $env.CMD_DURATION_MS == "0823" { 0 } else { $env.CMD_DURATION_MS };
             ^::STARSHIP:: prompt
                 --right
-                --cmd-duration $env.CMD_DURATION_MS
+                --cmd-duration $cmd_duration
                 $"--status=($env.LAST_EXIT_CODE)"
                 --terminal-width (term size).columns
                 ...(
