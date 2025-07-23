@@ -16,7 +16,7 @@ L'aide à la complétion ou autocomplétion est fournie par le shell que vous av
 
 ## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
-Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
+Oui, elles peuvent toutes deux être utilisées pour désactiver les modules dans l'invite de commande. Si tout ce que vous prévoyez de faire est de désactiver les modules, `<module>.disabled` est le meilleur moyen de le faire pour ces raisons :
 
 - Désactiver les modules est plus explicite que de les omettre du `format global`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-L' [implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
+L'[implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
 
 Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
 
@@ -72,7 +72,7 @@ Vous pouvez activer les journaux de débogage en utilisant la variable d’envir
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that is to blame.
+Si Starship est lent, vous pouvez utiliser la commande `timings` pour vérifier si un module ou une commande en particulier est à l'origine du ralentissement.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
@@ -121,10 +121,10 @@ Si Starship a été installé en utilisant le script d'installation, la commande
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
-## How do I install Starship without `sudo`?
+## Comment installer Starship sans `sudo` ?
 
-The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation directory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+Le script d'installation (`https://starship.rs/install.sh`) essaye d'utiliser `sudo` seulement si le répertoire d'installation ciblé n'est pas disponible en écriture pour l'utilisateur actuel. Le répertoire d'installation par défaut correspond à la variable d'environnement `$BIN_DIR`, ou `/usr/local/bin` si `$BIN_DIR` n'est pas définie. Si vous avez défini à la place un répertoire d'installation accessible en écriture par votre utilisateur, vous devriez pouvoir installer Starship sans `sudo`. Par exemple, la commande `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` utilise l'option `-b` du script d'installation pour définir le répertoire d'installation vers `~/.local/bin`.
 
-For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+Pour une installation non interactive de Starship, n'oubliez pas d'ajouter l'option `-y` pour passer l'étape de confirmation. Vérifiez le code source du script d'installation pour obtenir une liste de toutes les options d'installation supportées.
 
-When using a package manager, see the documentation for your package manager about installing with or without `sudo`.
+Lorsque vous utilisez un gestionnaire de paquet, référez-vous à la documentation dudit gestionnaire pour l'installation avec ou sans `sudo`.
