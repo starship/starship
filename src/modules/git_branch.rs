@@ -1,4 +1,6 @@
 use gix::bstr::ByteSlice;
+use indexmap::IndexMap;
+
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, ModuleConfig};
@@ -99,7 +101,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
+    // Apply branch name substitutions
+    let branch_string = substitute_path(branch_name, &config.substitutions);
+
+    let mut graphemes: Vec<&str> = branch_string.graphemes(true).collect();
 
     let remote_branch_string = remote_branch.unwrap_or_default();
     let mut remote_branch_graphemes: Vec<&str> = remote_branch_string.graphemes(true).collect();
@@ -225,6 +230,18 @@ fn get_first_grapheme(text: &str) -> &str {
         .unwrap_or("")
 }
 
+/// Perform a list of string substitutions on the branch name
+///
+/// Given a list of (from, to) pairs, this will perform the string
+/// substitutions, in order, on the branch name. Any non-pair of strings is ignored.
+fn substitute_path(branch_name: String, substitutions: &IndexMap<String, &str>) -> String {
+    let mut substituted_branch = branch_name;
+    for substitution_pair in substitutions {
+        substituted_branch = substituted_branch.replace(substitution_pair.0, substitution_pair.1);
+    }
+    substituted_branch
+}
+
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
@@ -282,6 +299,35 @@ mod tests {
             "a",
             "truncation_symbol = \"apple\"",
         )
+    }
+
+    #[test]
+    fn substituted_truncated_branch_name() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let branch_name = "branch/feature/some-super-long-branch-name";
+
+        create_command("git")?
+            .args(["checkout", "-b", branch_name])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                    [git_branch]
+                        truncation_length = 20
+                    [git_branch.substitutions]
+                        "branch/feature/" = "F:"
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint("\u{e0a0} F:some-super-long-br…"),
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 
     #[test]
