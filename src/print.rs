@@ -1,6 +1,7 @@
 use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
+use regex::Regex;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
@@ -41,7 +42,10 @@ where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        self.as_ref()
+        Regex::new(r"\x1B\[[0-9;]*m")
+            .unwrap()
+            .replace_all(self.as_ref(), "")
+            .into_owned()
             .graphemes(true)
             .map(Grapheme)
             .map(|g| g.width())
@@ -55,6 +59,8 @@ fn test_grapheme_aware_width() {
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
+    // Magenta string test
+    assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {
