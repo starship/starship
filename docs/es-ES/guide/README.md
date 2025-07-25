@@ -41,10 +41,10 @@
 
 <p align="center">
   <a href="https://starship.rs">Sitio web</a>
-
-<a href="#🚀-installation">Instalación</a>
-
-<a href="https://starship.rs/config/">Configuración</a>
+  ·
+  <a href="#🚀-installation">Instalación</a>
+  ·
+  <a href="https://starship.rs/config/">Configuración</a>
 </p>
 
 <p align="center">
