@@ -3290,7 +3290,7 @@ dependencies = [
  "systemstat",
  "tempfile",
  "terminal_size",
- "toml 0.9.2",
+ "toml 0.9.3",
  "toml_edit 0.23.2",
  "unicode-segmentation",
  "unicode-width",
@@ -3593,9 +3593,9 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.9.2"
+version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed0aee96c12fa71097902e0bb061a5e1ebd766a6636bb605ba401c45c1650eac"
+checksum = "e06723639aaded957e5a80be250c1f82f274b9d23ebb4d94163668470623461c"
 dependencies = [
  "indexmap",
  "serde",
