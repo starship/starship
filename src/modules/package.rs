@@ -3,6 +3,7 @@ use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
 use ini::Ini;
+use jsonc_parser::ParseOptions;
 use quick_xml::Reader as QXReader;
 use quick_xml::events::Event as QXEvent;
 use regex::Regex;
@@ -57,13 +58,13 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
         return None;
-    };
+    }
 
     let formatted_version = format_version(raw_version, config.version_format)?;
     if formatted_version == "v0.0.0-development" || formatted_version.starts_with("v0.0.0-semantic")
     {
         return Some("semantic".to_string());
-    };
+    }
 
     Some(formatted_version)
 }
@@ -78,7 +79,7 @@ fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<
         })?;
 
     let json_content: json::Value = if filename.ends_with(".jsonc") {
-        jsonc_parser::parse_to_serde_value(&contents, &Default::default()).ok()??
+        jsonc_parser::parse_to_serde_value(&contents, &ParseOptions::default()).ok()??
     } else {
         json::from_str(&contents).ok()?
     };
@@ -298,7 +299,7 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
         .is_match()
     {
         return None;
-    };
+    }
 
     let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
     let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
