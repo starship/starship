@@ -379,6 +379,46 @@ print_install() {
   printf "\n"
 }
 
+# Test if the wanted version is already installed
+is_installed() {
+  wanted="$1"
+  wants_latest="$([ "${wanted}" = "latest" ] && printf true || printf false)"
+
+  if has starship; then
+    # Use ERE syntax for better clarity
+    tag_pattern="v[[:digit:]]+(\.[[:digit:]]+){2}"
+    # The currently installed version
+    current="v$(starship -V | sed 's/^starship //')"
+    printf '%s' "${current}" | grep -E -q "^${tag_pattern}" || return 1
+    if "${wants_latest}"; then
+      # Extract the latest release tag from the `location` header in a 3xx response
+      # See: https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases#linking-to-the-latest-release
+      # This method is also compatible with other forges like Codeberg (🇪🇺) and Gitee (🇨🇳).
+      has curl || return 1
+      location_header="$(
+        # Header picking using `--write-out '%header{location}'` (introduced in curl 7.84.0) could
+        # prove to be more straightforward.
+        # See: https://daniel.haxx.se/blog/2022/03/24/easier-header-picking-with-curl/
+        # Consider switching when adoption becomes more widespread
+        curl -fsS -I "${BASE_URL}/latest" |
+        grep -E -i -m 1 "^location:.*/releases/tag/${tag_pattern}" |
+        # Remove trailing whitespace (needed because each HTTP header is terminated by a CRLF)
+        sed 's/[[:space:]]*$//'
+      )"
+      wanted="${location_header##*/tag/}"
+    fi
+    if [ "${current}" = "${wanted}" ]; then
+      if "${wants_latest}"; then
+        info "Starship is already up-to-date (${current})."
+      else
+        info "Starship ${current} is already installed."
+      fi
+      return 0
+    fi
+  fi
+  return 1
+}
+
 is_build_available() {
   arch="$1"
   platform="$2"
@@ -502,6 +542,9 @@ while [ "$#" -gt 0 ]; do
     ;;
   esac
 done
+
+## Terminate if the wanted version is already installed
+is_installed "${VERSION}" && exit 0
 
 TARGET="$(detect_target "${ARCH}" "${PLATFORM}")"
 
