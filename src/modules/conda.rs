@@ -1,3 +1,8 @@
+#[cfg(windows)]
+use path_slash::PathBufExt;
+#[cfg(windows)]
+use std::path::PathBuf;
+
 use super::{Context, Module, ModuleConfig};
 
 use super::utils::directory::truncate;
@@ -24,7 +29,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    #[cfg(windows)]
+    let conda_env = PathBuf::from_backslash(conda_env)
+        .to_slash_lossy()
+        .into_owned();
+
     let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
+
+    #[cfg(windows)]
+    let conda_env = PathBuf::from_slash(conda_env)
+        .to_string_lossy()
+        .into_owned();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -113,6 +128,21 @@ mod tests {
     fn truncate() {
         let actual = ModuleRenderer::new("conda")
             .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn truncate_windows_path() {
+        let actual = ModuleRenderer::new("conda")
+            .env(
+                "CONDA_DEFAULT_ENV",
+                "C:\\path\\to\\conda\\in\\windows\\my_env",
+            )
             .collect();
 
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
