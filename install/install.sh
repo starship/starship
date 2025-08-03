@@ -257,9 +257,13 @@ detect_target() {
   printf '%s' "${target}"
 }
 
+set_interrupt_handler() {
+  trap 'echo; error "Interrupted (please re-run with the '--yes' option)"; exit 130' INT
+}
+
 confirm() {
   if [ -z "${FORCE-}" ]; then
-    trap 'echo; error "Interrupted (please re-run with the '--yes' option)"; exit 130' INT
+    set_interrupt_handler
     printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
     set +e
     read -r yn </dev/tty
@@ -273,15 +277,15 @@ confirm() {
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
       if [ "$yn" = "n" ] || [ "$yn" = "no" ]; then
-        trap 'echo; error "Interrupted (please re-run with the '--yes' option)"; exit 130' INT
+        set_interrupt_handler
         set +e
         read -p "${MAGENTA}?${NO_COLOR} Install Starship ${GREEN}${VERSION}${NO_COLOR} to: " path
         trap - INT
         rc=$?
         set -e
         BIN_DIR=$path
-        if [ $rc != 0 ] || [ -z "$path"]; then
-          if [ -z "$path"]; then
+        if [ $rc != 0 ] || [ -z "$path" ]; then
+          if [ -z "$path" ]; then
             echo
           fi
           error "Error reading from prompt (please re-run with '--yes' or provide path)"
