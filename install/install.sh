@@ -279,6 +279,7 @@ confirm() {
       if [ "$yn" = "n" ] || [ "$yn" = "no" ]; then
         set_interrupt_handler
         set +e
+        printf "${MAGENTA}?${NO_COLOR} Where would you like to install Starship? ${GREY}(e.g., /usr/local/bin)${NO_COLOR}\n"
         read -p "${MAGENTA}?${NO_COLOR} Install Starship ${GREEN}${VERSION}${NO_COLOR} to: " path
         trap - INT
         rc=$?
