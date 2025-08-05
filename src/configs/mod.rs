@@ -51,6 +51,7 @@ pub mod hostname;
 pub mod java;
 pub mod jobs;
 pub mod julia;
+pub mod kerberos;
 pub mod kotlin;
 pub mod kubernetes;
 pub mod line_break;
@@ -217,6 +218,8 @@ pub struct FullConfig<'a> {
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]
     julia: julia::JuliaConfig<'a>,
+    #[serde(borrow)]
+    kerberos: kerberos::KerberosConfig<'a>,
     #[serde(borrow)]
     kotlin: kotlin::KotlinConfig<'a>,
     #[serde(borrow)]
