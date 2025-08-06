@@ -90,6 +90,7 @@ pub mod shlvl;
 pub mod singularity;
 pub mod solidity;
 pub mod spack;
+pub mod ssh_agent;
 mod starship_root;
 pub mod status;
 pub mod sudo;
@@ -294,6 +295,8 @@ pub struct FullConfig<'a> {
     solidity: solidity::SolidityConfig<'a>,
     #[serde(borrow)]
     spack: spack::SpackConfig<'a>,
+    #[serde(borrow)]
+    ssh_agent: ssh_agent::SshAgentConfig<'a>,
     #[serde(borrow)]
     status: status::StatusConfig<'a>,
     #[serde(borrow)]
