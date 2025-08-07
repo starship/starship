@@ -354,6 +354,17 @@ Note: Only Nushell v0.96+ is supported
 </details>
 
 <details>
+<summary>oils-for-unix (OSH)</summary>
+
+Add the following to the end of your OSH configuration (`~/.config/oils/oshrc`)
+
+```sh
+eval "$(starship init osh)"
+```
+
+</details>
+
+<details>
 <summary>PowerShell</summary>
 
 Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
