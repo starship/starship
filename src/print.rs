@@ -83,6 +83,13 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
+    // A workaround for a Nu shell bug (see #6560).
+    // Nu shell does not reset colors before printing the prompt,
+    // so we need to reset the colors manually.
+    if Shell::Nu == context.shell && context.target == Target::Main {
+        buf.push_str("\x1b[0m");
+    }
+
     let (formatter, modules) = load_formatter_and_modules(&context);
 
     let formatter = formatter.map_variables_to_segments(|module| {
