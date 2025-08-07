@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#catppuccin-powerline)
+[Return to Presets](./#catppuccin-powerline)
 
 # Catppuccin Powerline Preset
 
@@ -21,7 +21,7 @@ By default this preset uses the Mocha flavour of Catppucin, but you can specify 
 - `catppuccin_mocha`
 - `catppuccin_frappe`
 - `catppuccin_macchiato`
-- `catppucin_latte`
+- `catppuccin_latte`
 
 [Click to download TOML](/presets/toml/catppuccin-powerline.toml)
 

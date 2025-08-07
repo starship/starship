@@ -136,11 +136,7 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
-
-   elvish 버전 v0.18 이상에서만 지원됩니다.
-
-   :::
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
    `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
@@ -164,11 +160,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   추후에 변경될 예정입니다. Nushell v0.96 버전 이상에서만 지원됩니다.
-
-   :::
+   > [!WARNING] This will change in the future. Nushell v0.96 버전 이상에서만 지원됩니다.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
