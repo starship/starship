@@ -653,7 +653,7 @@ mod tests {
         dir: &TempDir,
         home_file_exists: bool,
         starship_config_env_scenario: StarshipConfigEnvScenario,
-    ) -> io::Result<Context> {
+    ) -> io::Result<Context<'_>> {
         let config_path = dir.path().to_path_buf().join(".config");
         create_dir(&config_path)?;
         let home_starship_toml = config_path.join("starship.toml");

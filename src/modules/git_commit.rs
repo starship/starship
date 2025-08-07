@@ -348,26 +348,26 @@ mod tests {
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
         create_command("git")?
-            .args(["tag", "v2", "-m", "Testing tags v2"])
+            .args(["tag", "--no-sign", "v2", "-m", "Testing tags v2"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
             .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
+            .args(["tag", "--no-sign", "v0", "-m", "Testing tags v0", "HEAD~1"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
             .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(["tag", "v1", "-m", "Testing tags v1"])
+            .args(["tag", "--no-sign", "v1", "-m", "Testing tags v1"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
             .current_dir(repo_dir.path())
             .output()?;
 
         // Annotated tags are preferred over lightweight tags
         create_command("git")?
-            .args(["tag", "l0"])
+            .args(["tag", "--no-sign", "l0"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:02 +0000")
             .current_dir(repo_dir.path())
             .output()?;
@@ -416,19 +416,19 @@ mod tests {
 
         // Lightweight tags are chosen lexicographically
         create_command("git")?
-            .args(["tag", "v1"])
+            .args(["tag", "--no-sign", "v1"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:00 +0000")
             .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(["tag", "v0", "HEAD~1"])
+            .args(["tag", "--no-sign", "v0", "HEAD~1"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
             .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(["tag", "v2"])
+            .args(["tag", "--no-sign", "v2"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
             .current_dir(repo_dir.path())
             .output()?;
