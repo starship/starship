@@ -36,7 +36,6 @@ jobs:
         run: |
           rustc -V
           cargo -V
-          rustfmt -V
 
       - name: Build | Format
         run: cargo fmt --all -- --check
@@ -56,13 +55,6 @@ jobs:
         uses: dtolnay/rust-toolchain@1.82.0
         with:
           components: clippy
-          override: true
-
-      - name: Debug | Show rust versions
-        run: |
-          rustc -V
-          cargo -V
-          rustfmt -V
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -80,15 +72,6 @@ jobs:
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@1.82.0
-        with:
-          components: cargo_check
-          override: true
-
-      - name: Debug | Show rust versions
-        run: |
-          rustc -V
-          cargo -V
-          rustfmt -V
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -107,15 +90,6 @@ jobs:
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@1.82.0
-        with:
-          components: cargo_check_no_features
-          override: true
-
-      - name: Debug | Show rust versions
-        run: |
-          rustc -V
-          cargo -V
-          rustfmt -V
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -134,15 +108,6 @@ jobs:
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@1.82.0
-        with:
-          components: cargo_check_all_features
-          override: true
-
-      - name: Debug | Show rust versions
-        run: |
-          rustc -V
-          cargo -V
-          rustfmt -V
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -165,16 +130,7 @@ jobs:
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@1.82.0
-        with:
-          components: check_if_config_schema_up_to_date
-          override: true
 
-      - name: Debug | Show rust versions
-        run: |
-          rustc -V
-          cargo -V
-          rustfmt -V
-          
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
 
