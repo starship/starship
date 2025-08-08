@@ -220,7 +220,7 @@ impl<'a> Context<'a> {
     }
 
     /// Create a new module
-    pub fn new_module(&self, name: &str) -> Module {
+    pub fn new_module(&self, name: &str) -> Module<'_> {
         let config = self.config.get_module_config(name);
         let desc = modules::description(name);
 
