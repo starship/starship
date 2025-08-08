@@ -2504,6 +2504,18 @@ The default functionality is:
 > more than the `threshold` config value, if it exists. If `threshold` is set to 0,
 > then the module will also show when there are 0 jobs running.
 
+> [!NOTE]
+> **Fish shell behavior:**  
+> In the Fish shell, Starship counts **job groups** by default instead of individual process IDs.  
+> This prevents overcounting when a pipeline has multiple processes but only one suspended group.  
+>  
+> To revert to the legacy PID-based counting, run:
+> ```fish
+> set -g __starship_fish_use_job_groups "false"
+> ```
+> This setting affects only Fish shell behavior and has no effect on other shells.
+
+
 ### Options
 
 | Option             | Default                       | Description                                                              |
