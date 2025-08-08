@@ -3,6 +3,20 @@
 ## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
 
 
+## [Unreleased]
+
+### Bug Fixes
+- **fish:** Improved job count accuracy by counting **job groups** (`jobs -g`) instead of individual processes (`jobs -p`).  
+  This prevents overcounting suspended pipelines where some processes have already exited.  
+  Example: A suspended pipeline like `generate-something-big | less` now correctly shows **1 job** instead of **3**.  
+  Added `jobs.fish_use_job_groups` configuration option to control this behavior (default: `true`).  
+
+### Configuration Changes
+- **jobs:** Added `fish_use_job_groups` option to control how job counts are determined in Fish shell.  
+  - **Default:** `true` (recommended for accurate pipeline counts).  
+  - Set to `false` to revert to legacy process-based counting (`jobs -p`).  
+  - This setting only affects Fish shell; other shells remain unchanged.
+
 ### Features
 
 * add network namespace module ([#6449](https://github.com/starship/starship/issues/6449)) ([eb42f5a](https://github.com/starship/starship/commit/eb42f5ac7003da1f9543f5258dd674cec96a7320))
