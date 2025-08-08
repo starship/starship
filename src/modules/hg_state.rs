@@ -85,7 +85,7 @@ fn get_state_description<'a>(
             label: config.merge,
         })
     } else {
-        return None;
+        None
     }
 }
 
