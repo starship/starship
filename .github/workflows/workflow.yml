@@ -154,7 +154,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        rust: ['1.82.0', nightly]
+        rust: ['nightly']
         include:
           - os: windows-latest
             rustflags: -C target-feature=+crt-static
@@ -168,7 +168,7 @@ jobs:
       - name: Setup | Rust (Nightly)
         uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: nightly
           components: llvm-tools-preview
 
       - name: Setup | Cache
@@ -181,7 +181,7 @@ jobs:
       # On stable rust & main repo pushes only
       - name: Install cargo-wix [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'nightly'
         run: cargo install --version 0.3.8 cargo-wix
         env:
           # cargo-wix does not require static crt
@@ -206,14 +206,14 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'nightly'
         run: >
           cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs
           --output target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Build | Chocolatey Package [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'nightly'
         run: |
           # Setup dummy release artifacts
           foreach ($arch in @("aarch64", "i686", "x86_64")) {
@@ -231,7 +231,7 @@ jobs:
         uses: actions/upload-artifact@v4
         continue-on-error: true
         id: unsigned-artifacts
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'nightly' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
           name: unsigned-artifacts-dbg
           path: |
@@ -241,7 +241,7 @@ jobs:
       - name: Sign | Sign [Windows]
         uses: signpath/github-action-submit-signing-request@v1
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'nightly' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
