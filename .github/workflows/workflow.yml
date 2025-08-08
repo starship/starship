@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
         with:
           components: rustfmt
 
@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
         with:
           components: clippy
 
@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -123,7 +123,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.76.0
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -148,7 +148,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        rust: [stable, nightly]
+        rust: ['1.76.0', nightly]
         include:
           - os: windows-latest
             rustflags: -C target-feature=+crt-static
