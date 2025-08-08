@@ -185,8 +185,15 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
     let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
 
+    // For Windows CMD, prefix command with UTF-8 codepage setting
+    let final_cmd = if cfg!(windows) && shell.as_ref() == "cmd" && !use_stdin {
+        format!("chcp 65001 >nul & {}", cmd)
+    } else {
+        cmd.to_string()
+    };
+
     if !use_stdin {
-        command.arg(cmd);
+        command.arg(&final_cmd);
     }
 
     let mut child = match command.spawn() {
@@ -200,7 +207,12 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     };
 
     if use_stdin {
-        child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
+        let stdin_cmd = if cfg!(windows) && shell.as_ref() == "cmd" {
+            format!("chcp 65001 >nul & {}", cmd)
+        } else {
+            cmd.to_string()
+        };
+        child.stdin.as_mut()?.write_all(stdin_cmd.as_bytes()).ok()?;
     }
 
     let mut output = child.controlled_with_output();
