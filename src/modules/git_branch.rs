@@ -1,6 +1,4 @@
 use gix::bstr::ByteSlice;
-use indexmap::IndexMap;
-
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, ModuleConfig};
@@ -9,6 +7,7 @@ use crate::configs::git_branch::GitBranchConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::modules::git_status::uses_reftables;
+use crate::modules::utils::substitute::substitute_text;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -102,7 +101,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Apply branch name substitutions
-    let branch_string = substitute_path(branch_name, &config.substitutions);
+    let branch_string = substitute_text(branch_name, &config.substitutions);
 
     let mut graphemes: Vec<&str> = branch_string.graphemes(true).collect();
 
@@ -228,18 +227,6 @@ fn get_first_grapheme(text: &str) -> &str {
     UnicodeSegmentation::graphemes(text, true)
         .next()
         .unwrap_or("")
-}
-
-/// Perform a list of string substitutions on the branch name
-///
-/// Given a list of (from, to) pairs, this will perform the string
-/// substitutions, in order, on the branch name. Any non-pair of strings is ignored.
-fn substitute_path(branch_name: String, substitutions: &IndexMap<String, &str>) -> String {
-    let mut substituted_branch = branch_name;
-    for substitution_pair in substitutions {
-        substituted_branch = substituted_branch.replace(substitution_pair.0, substitution_pair.1);
-    }
-    substituted_branch
 }
 
 #[cfg(test)]

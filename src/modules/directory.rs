@@ -3,7 +3,6 @@ use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
-use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
 use std::borrow::Cow;
 use std::iter::FromIterator;
@@ -16,6 +15,7 @@ use super::utils::directory::truncate;
 use crate::config::ModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
+use crate::modules::utils::substitute::substitute_text;
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -74,7 +74,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = remove_extended_path_prefix(dir_string);
 
     // Apply path substitutions
-    let dir_string = substitute_path(dir_string, &config.substitutions);
+    let dir_string = substitute_text(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
     let dir_string =
@@ -287,18 +287,6 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
     buf.canonicalize().unwrap_or_else(|_| path.into())
 }
 
-/// Perform a list of string substitutions on the path
-///
-/// Given a list of (from, to) pairs, this will perform the string
-/// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
-    let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions {
-        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
-    }
-    substituted_dir
-}
-
 /// Takes part before contracted path and replaces it with fish style path
 ///
 /// Will take the first letter of each directory before the contracted path and
@@ -438,17 +426,6 @@ mod tests {
 
         let output = contract_path(full_path, top_level_path, "~");
         assert_eq!(output, "C:/");
-    }
-
-    #[test]
-    fn substitute_prefix_and_middle() {
-        let full_path = "/absolute/path/foo/bar/baz";
-        let mut substitutions = IndexMap::new();
-        substitutions.insert("/absolute/path".to_string(), "");
-        substitutions.insert("/bar/".to_string(), "/");
-
-        let output = substitute_path(full_path.to_string(), &substitutions);
-        assert_eq!(output, "/foo/baz");
     }
 
     #[test]
