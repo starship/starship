@@ -25,7 +25,8 @@ use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
-use std::sync::OnceLock;
+use std::sync::{Arc, OnceLock, mpsc};
+use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
 
@@ -501,61 +502,100 @@ impl DirContents {
         timeout: Duration,
         follow_symlinks: bool,
     ) -> Result<Self, std::io::Error> {
+        let _ = fs::read_dir(base)?; // Early return if invalid base
+
         let start = Instant::now();
+        let mut remaining_time = timeout;
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
         let mut files: HashSet<PathBuf> = HashSet::new();
         let mut file_names: HashSet<String> = HashSet::new();
         let mut extensions: HashSet<String> = HashSet::new();
 
-        fs::read_dir(base)?
-            .enumerate()
-            .take_while(|(n, _)| {
-                cfg!(test) // ignore timeout during tests
-                || n & 0xFF != 0 // only check timeout once every 2^8 entries
-                || start.elapsed() < timeout
-            })
-            .filter_map(|(_, entry)| entry.ok())
-            .for_each(|entry| {
-                let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
+        let base_path = base;
+        let base = Arc::from(base);
+        let (tx, rx) = mpsc::channel();
 
-                let is_dir = match follow_symlinks {
-                    true => entry.path().is_dir(),
-                    false => fs::symlink_metadata(entry.path())
-                        .map(|m| m.is_dir())
-                        .unwrap_or(false),
-                };
+        {
+            let worker = move || {
+                let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
+                let _ = enumerated_dir
+                    .filter_map(|(_, entry)| entry.ok())
+                    .try_for_each(|entry| tx.send(entry));
+            };
 
-                if is_dir {
-                    folders.insert(path);
-                } else {
-                    if !path.to_string_lossy().starts_with('.') {
-                        // Extract the file extensions (yes, that's plural) from a filename.
-                        // Why plural? Consider the case of foo.tar.gz. It's a compressed
-                        // tarball (tar.gz), and it's a gzipped file (gz). We should be able
-                        // to match both.
+            let _ = thread::Builder::new()
+                .name("from_path_with_timeout worker".into())
+                .spawn(worker)?;
+        }
 
-                        // find the minimal extension on a file. ie, the gz in foo.tar.gz
-                        // NB the .to_string_lossy().to_string() here looks weird but is
-                        // required to convert it from a Cow.
-                        path.extension()
-                            .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+        loop {
+            // TODO: use `recv_deadline` instead once stable
+            let msg = if cfg!(test) {
+                // recv() errors out only when the corresponding sender closes.
+                // See mpsc::RecvError.
+                rx.recv().map_err(|_| mpsc::RecvTimeoutError::Disconnected)
+            } else {
+                rx.recv_timeout(remaining_time)
+            };
+            match msg {
+                Ok(entry) => {
+                    let path = PathBuf::from(entry.path().strip_prefix(base_path).unwrap());
 
-                        // find the full extension on a file. ie, the tar.gz in foo.tar.gz
-                        path.file_name().map(|file_name| {
-                            file_name
-                                .to_string_lossy()
-                                .split_once('.')
-                                .map(|(_, after)| extensions.insert(after.to_string()))
-                        });
+                    let is_dir = match follow_symlinks {
+                        true => entry.path().is_dir(),
+                        false => fs::symlink_metadata(entry.path())
+                            .map(|m| m.is_dir())
+                            .unwrap_or(false),
+                    };
+
+                    if is_dir {
+                        folders.insert(path);
+                    } else {
+                        if !path.to_string_lossy().starts_with('.') {
+                            // Extract the file extensions (yes, that's plural) from a filename.
+                            // Why plural? Consider the case of foo.tar.gz. It's a compressed
+                            // tarball (tar.gz), and it's a gzipped file (gz). We should be able
+                            // to match both.
+
+                            // find the minimal extension on a file. ie, the gz in foo.tar.gz
+                            // NB the .to_string_lossy().to_string() here looks weird but is
+                            // required to convert it from a Cow.
+                            path.extension()
+                                .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+
+                            // find the full extension on a file. ie, the tar.gz in foo.tar.gz
+                            path.file_name().map(|file_name| {
+                                file_name
+                                    .to_string_lossy()
+                                    .split_once('.')
+                                    .map(|(_, after)| extensions.insert(after.to_string()))
+                            });
+                        }
+                        if let Some(file_name) = path.file_name() {
+                            // this .to_string_lossy().to_string() is also required
+                            file_names.insert(file_name.to_string_lossy().to_string());
+                        }
+                        files.insert(path);
                     }
-                    if let Some(file_name) = path.file_name() {
-                        // this .to_string_lossy().to_string() is also required
-                        file_names.insert(file_name.to_string_lossy().to_string());
+
+                    if remaining_time <= Duration::from_millis(0) && rx.try_recv().is_err() {
+                        // Timed-out, and rx has been drained.
+                        log::warn!("from_path_with_timeout has timed-out!");
+                        break;
                     }
-                    files.insert(path);
+
+                    // recv_deadline is nightly: calculate the remaining time instead.
+                    // after loop break to give chance to drain rx
+                    remaining_time =
+                        timeout.saturating_sub(Instant::now().saturating_duration_since(start));
                 }
-            });
+                Err(_) => {
+                    // Timeout or Disconnected occurred
+                    break;
+                }
+            }
+        }
 
         log::trace!(
             "Building HashSets of directory files, folders and extensions took {:?}",
@@ -1130,6 +1170,40 @@ mod tests {
             .is_match()
         );
         dont_match_folder.close()?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_scan_dir_timeout() -> io::Result<()> {
+        let empty = testdir(&[])?;
+        let follow_symlinks = true;
+        let timeout = Duration::new(0, 0);
+        let empty_dc = DirContents::from_path_with_timeout(empty.path(), timeout, follow_symlinks)?;
+
+        assert!(
+            !ScanDir {
+                dir_contents: &empty_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
+        empty.close()?;
+
+        let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
+        let rust_dc = DirContents::from_path_with_timeout(rust.path(), timeout, follow_symlinks)?;
+        assert!(
+            !ScanDir {
+                dir_contents: &rust_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
+        rust.close()?;
 
         Ok(())
     }
