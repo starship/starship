@@ -158,25 +158,25 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?),
         "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
-            r#"source ({} init fish --print-full-init | psub)"#,
+            r"source ({} init fish --print-full-init | psub)",
             starship.sprint_posix()?
         ),
         "powershell" => print!(
-            r#"Invoke-Expression (& {} init powershell --print-full-init | Out-String)"#,
+            r"Invoke-Expression (& {} init powershell --print-full-init | Out-String)",
             starship.sprint_pwsh()?
         ),
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
-            r#"eval ({} init elvish --print-full-init | slurp)"#,
+            r"eval ({} init elvish --print-full-init | slurp)",
             starship.sprint()?
         ),
         "tcsh" => print!(
-            r#"eval `({} init tcsh --print-full-init)`"#,
+            r"eval `({} init tcsh --print-full-init)`",
             starship.sprint_posix()?
         ),
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
-            r#"execx($({} init xonsh --print-full-init))"#,
+            r"execx($({} init xonsh --print-full-init))",
             starship.sprint_posix()?
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
@@ -198,7 +198,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  Please open an issue in the starship repo if you would like to \
                  see support for {shell_basename}:\n\
                  https://github.com/starship/starship/issues/new\n"
-            )
+            );
         }
     };
     Ok(())
