@@ -51,7 +51,7 @@ mod normalize {
     }
 
     #[cfg(windows)]
-    pub fn normalize_path(path: &Path) -> (NormalizedPrefix, &Path) {
+    pub fn normalize_path(path: &Path) -> (NormalizedPrefix<'_>, &Path) {
         let mut components = path.components();
         if let Some(Component::Prefix(prefix)) = components.next() {
             return (normalize_prefix(prefix.kind()), components.as_path());

@@ -13,7 +13,6 @@ use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state,
 };
-#[cfg(test)]
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::env;
@@ -220,7 +219,7 @@ impl<'a> Context<'a> {
     }
 
     /// Create a new module
-    pub fn new_module(&self, name: &str) -> Module {
+    pub fn new_module(&self, name: &str) -> Module<'_> {
         let config = self.config.get_module_config(name);
         let desc = modules::description(name);
 
@@ -454,6 +453,11 @@ impl<'a> Context<'a> {
     pub fn get_config_path_os(&self) -> Option<OsString> {
         get_config_path_os(&self.env)
     }
+
+    /// Get the original config path for editing (not the merged file)
+    pub fn get_original_config_path_os(&self) -> Option<OsString> {
+        get_original_config_path_os(&self.env)
+    }
 }
 
 impl Default for Context<'_> {
@@ -462,20 +466,240 @@ impl Default for Context<'_> {
     }
 }
 
-fn home_dir(env: &Env) -> Option<PathBuf> {
-    if cfg!(test) {
-        if let Some(home) = env.get_env("HOME") {
-            return Some(PathBuf::from(home));
+fn clean_line(line: &str) -> String {
+    line.split('#').next().unwrap_or("").trim().to_string()
+}
+
+fn extract_key(line: &str) -> Option<String> {
+    clean_line(line)
+        .split('=')
+        .next()
+        .map(|s| s.trim().to_string())
+}
+
+/// Returns the platform-specific path separator
+/// Windows: ';' (semicolon)
+/// Unix/Linux/macOS: ':' (colon)
+fn detect_path_separator() -> char {
+    if cfg!(windows) { ';' } else { ':' }
+}
+
+/// Checks if a config string contains multiple files
+/// Uses platform-specific separator: ';' on Windows, ':' on Unix
+fn has_multiple_files(config_str: &str) -> bool {
+    let separator = detect_path_separator();
+    config_str.contains(separator)
+}
+
+/// Parses input line to extract and expand file paths
+fn parse_input_paths(line: &str) -> Vec<PathBuf> {
+    let separator = detect_path_separator();
+    line.split(separator)
+        .filter(|s| !s.is_empty())
+        .map(|s| Context::expand_tilde(PathBuf::from(s)))
+        .collect()
+}
+
+/// Processes a single TOML file and merges its content into the provided data structures
+fn process_toml_file(
+    path: &PathBuf,
+    merged: &mut HashMap<String, HashMap<String, String>>,
+    order: &mut Vec<String>,
+) {
+    let content = match fs::read_to_string(path) {
+        Ok(c) => c,
+        Err(e) => {
+            log::warn!("merge_toml_files: failed to read {path:?}: {e}");
+            return;
+        }
+    };
+
+    let mut current_block: Option<String> = None;
+    for raw_line in content.lines().map(str::trim) {
+        if raw_line.is_empty() || raw_line.starts_with('#') {
+            continue;
+        }
+        if raw_line.starts_with('[') && raw_line.contains(']') {
+            let block_name = raw_line.split('#').next().unwrap().trim().to_string();
+            current_block = Some(block_name.clone());
+            if !merged.contains_key(&block_name) {
+                merged.insert(block_name.clone(), HashMap::new());
+                order.push(block_name);
+            }
+        } else if let Some(block) = &current_block {
+            let cleaned = clean_line(raw_line);
+            if cleaned.is_empty() {
+                continue;
+            }
+            if let Some(key) = extract_key(&cleaned) {
+                merged
+                    .entry(block.clone())
+                    .or_default()
+                    .insert(key, cleaned);
+            }
         }
     }
-    utils::home_dir()
+}
+
+/// Builds the final TOML content from merged data
+fn build_merged_content(
+    merged: &HashMap<String, HashMap<String, String>>,
+    order: &[String],
+) -> String {
+    let mut result = String::new();
+    for block_name in order {
+        result.push_str(&format!("{block_name}\n"));
+        if let Some(entries) = merged.get(block_name) {
+            for line in entries.values() {
+                result.push_str(&format!("{line}\n"));
+            }
+            result.push('\n');
+        }
+    }
+    result
+}
+
+/// Writes content to output path, creating parent directories if needed
+fn write_output_file(output_path: &PathBuf, content: &str) -> Result<(), std::io::Error> {
+    // Create parent directory if it doesn't exist
+    if let Some(parent) = output_path.parent() {
+        if !parent.exists() {
+            fs::create_dir_all(parent)?;
+        }
+    }
+    fs::write(output_path, content)
+}
+
+/// Merges TOML files listed in `line` (`:` separated),
+/// writes directly to `output_path_str` (expands `~`).
+/// Returns `Some(filename)` or `None` if it fails.
+pub fn merge_toml_files(line: &str, output_path_str: &str) -> Option<OsString> {
+    let output_path = Context::expand_tilde(PathBuf::from(output_path_str));
+    let paths = parse_input_paths(line);
+
+    // Verify that at least one file exists
+    let existing_paths: Vec<_> = paths.iter().filter(|p| p.exists()).collect();
+    if existing_paths.is_empty() {
+        log::warn!("merge_toml_files: No input files exist");
+        return None;
+    }
+
+    // Merge blocks from all files
+    let mut merged: HashMap<String, HashMap<String, String>> = HashMap::new();
+    let mut order: Vec<String> = Vec::new();
+
+    for path in paths {
+        process_toml_file(&path, &mut merged, &mut order);
+    }
+
+    if merged.is_empty() {
+        log::warn!("merge_toml_files: No valid TOML blocks found");
+        return None;
+    }
+
+    // Build and write final content
+    let content = build_merged_content(&merged, &order);
+
+    if let Err(e) = write_output_file(&output_path, &content) {
+        log::error!("merge_toml_files: failed to write {output_path:?}: {e}");
+        return None;
+    }
+
+    // Return filename (without path)
+    output_path.file_name().map(|n| n.to_os_string())
+}
+
+/// Public function to handle STARSHIP_CONFIG merging for shell init scripts
+/// Returns the path that should be used as STARSHIP_CONFIG, performing merge if needed
+pub fn get_merged_config_path() -> Option<String> {
+    if let Ok(config_line) = std::env::var("STARSHIP_CONFIG") {
+        // Check if it contains ':' (multiple files)
+        if config_line.contains(':') {
+            // Create output path in user's .config directory
+            if let Ok(home) = std::env::var("HOME") {
+                let output_path = PathBuf::from(&home)
+                    .join(".config")
+                    .join("merged_starship.toml");
+                if let Some(output_path_str) = output_path.to_str() {
+                    if merge_toml_files(&config_line, output_path_str).is_some() {
+                        return Some(output_path_str.to_string());
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Get the original config path for editing purposes (not merged)
+/// This function is used by config editing commands to avoid writing to the merged file
+fn get_original_config_path_os(env: &Env) -> Option<OsString> {
+    if let Some(config_line) = env.get_env_os("STARSHIP_CONFIG") {
+        let config_str = config_line.to_str()?;
+
+        // If it contains the path separator (multiple files), return the first file for editing
+        if has_multiple_files(config_str) {
+            let separator = detect_path_separator();
+            let first_file = config_str.split(separator).next()?;
+
+            // Expand '~' in the first file path using existing function
+            let expanded_path = Context::expand_tilde(PathBuf::from(first_file));
+
+            return Some(expanded_path.into_os_string());
+        } else {
+            return Some(config_line);
+        }
+    }
+
+    let default_path = home_dir(env)?.join(".config").join("starship.toml");
+    Some(default_path.into_os_string())
+}
+
+fn home_dir(env: &Env) -> Option<PathBuf> {
+    // Try to get HOME from environment first (mocked or real)
+    if let Some(home) = env.get_env("HOME") {
+        return Some(PathBuf::from(home));
+    }
+    // If HOME is not set, fallback to system home directory
+    crate::utils::home_dir()
 }
 
 fn get_config_path_os(env: &Env) -> Option<OsString> {
-    if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
-        return Some(config_path);
+    if let Some(config_line) = env.get_env_os("STARSHIP_CONFIG") {
+        let config_str = config_line.to_str()?;
+
+        // Skip empty strings
+        if config_str.is_empty() {
+            // Fall through to default path
+        } else if has_multiple_files(config_str) {
+            // Check if it contains multiple files separated by ':'
+
+            // Create output path in user's .config directory
+            let home_dir = home_dir(env)?;
+
+            let output_path = home_dir.join(".config").join("merged_starship.toml");
+            let output_path_str = output_path.to_str()?;
+
+            if let Some(_filename) = merge_toml_files(config_str, output_path_str) {
+                return Some(output_path.into_os_string());
+            } else {
+                log::warn!("Failed to merge TOML files, falling back to default config");
+            }
+        } else {
+            // Check if the specified config file exists
+            use std::path::Path;
+            if Path::new(&config_str).exists() {
+                return Some(config_line);
+            } else {
+                // When STARSHIP_CONFIG is explicitly set but file doesn't exist,
+                // return None to indicate no valid config file, which will result in default behavior
+                return None;
+            }
+        }
     }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
+
+    let default_path = home_dir(env)?.join(".config").join("starship.toml");
+    Some(default_path.into_os_string())
 }
 
 #[derive(Debug)]

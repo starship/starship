@@ -1,3 +1,4 @@
+use crate::context::Context;
 use crate::shadow;
 use crate::utils::{self, exec_cmd};
 use nu_ansi_term::Style;
@@ -116,9 +117,7 @@ fn get_github_issue_body(environment: &Environment) -> String {
 
 #### Starship Configuration
 
-```toml
-{starship_config}
-```",
+{starship_config}",
         starship_version = shadow::PKG_VERSION,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
@@ -236,17 +235,80 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(|| {
-            utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
-                home_dir
-            })
+    let config_env = std::env::var("STARSHIP_CONFIG");
+    // Check if STARSHIP_CONFIG contains multiple files (with ':')
+    if let Ok(config_line) = &config_env {
+        if config_line.contains(':') {
+            // Show the actively used merged file first
+            let mut result = String::new();
+            // Show which file is actually being used by Starship
+            if let Ok(home) = std::env::var("HOME") {
+                let merged_path = PathBuf::from(&home)
+                    .join(".config")
+                    .join("merged_starship.toml");
+                if merged_path.exists() {
+                    result.push_str("Active Configuration: ~/.config/merged_starship.toml (merged from multiple files)\n\n");
+                    result.push_str("```toml\n");
+                    match fs::read_to_string(&merged_path) {
+                        Ok(content) => {
+                            result.push_str(content.trim());
+                        }
+                        Err(_) => result.push_str("Error reading merged configuration file"),
+                    }
+                    result.push_str("\n```");
+                }
+            }
+            result.push_str("Source Configuration Files:\n");
+            for (i, file_path) in config_line.split(':').enumerate() {
+                result.push_str(&format!("- File {} ({})\n", i + 1, file_path));
+                // Expand ~ only if the path starts with ~, otherwise use as-is
+                let expanded_path = if file_path.starts_with('~') {
+                    Context::expand_tilde(PathBuf::from(file_path))
+                } else {
+                    PathBuf::from(file_path)
+                };
+                result.push_str("\n```toml\n");
+                match fs::read_to_string(&expanded_path) {
+                    Ok(content) => result.push_str(content.trim()),
+                    Err(_) => result.push_str(&format!("Error reading file: {file_path}")), // Keep original path for privacy
+                }
+                result.push_str("\n```");
+                if i < config_line.split(':').count() - 1 {
+                    result.push('\n');
+                }
+            }
+            return result;
+        }
+    }
+
+    let config_path = config_env.map(PathBuf::from).ok().or_else(|| {
+        utils::home_dir().map(|mut home_dir| {
+            home_dir.push(".config/starship.toml");
+            home_dir
         })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+    });
+
+    if let Some(path) = &config_path {
+        if let Ok(content) = fs::read_to_string(path) {
+            // Use privacy-safe path display
+            let display_path = if let Ok(home) = std::env::var("HOME") {
+                let home_path = PathBuf::from(&home);
+                if let Ok(relative) = path.strip_prefix(&home_path) {
+                    format!("~/{}", relative.display())
+                } else {
+                    path.display().to_string()
+                }
+            } else {
+                path.display().to_string()
+            };
+            return format!(
+                "Configuration File: {}\n\n```toml\n{}\n```",
+                display_path,
+                content.trim()
+            );
+        }
+    }
+    UNKNOWN_CONFIG.to_string()
 }
 
 fn get_shell_version(shell: &str) -> String {
