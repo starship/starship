@@ -8,7 +8,7 @@ function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish jo
         # Default behavior: count job groups
         set -l __count (jobs -g 2>/dev/null | count)
     end
-    set -gx STARSHIP_JOBS $__count
+    set -g STARSHIP_JOBS $__count
 end
 
 function fish_prompt
