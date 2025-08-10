@@ -1,3 +1,16 @@
+function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish job groups (or legacy PIDs if toggled)'
+    # To force legacy behavior (process PIDs), set this variable to "false":
+    #   set -g __starship_fish_use_job_groups "false"
+    if test "$__starship_fish_use_job_groups" = "false"
+        # Legacy behavior: counts PIDs (may overcount pipelines with terminated producers)
+        set -l __count (jobs -p 2>/dev/null | count)
+    else
+        # Default behavior: count job groups
+        set -l __count (jobs -g 2>/dev/null | count)
+    end
+    set -gx STARSHIP_JOBS $__count
+end
+
 function fish_prompt
     switch "$fish_key_bindings"
         case fish_hybrid_key_bindings fish_vi_key_bindings
@@ -5,15 +18,15 @@ function fish_prompt
         case '*'
             set STARSHIP_KEYMAP insert
     end
+
+    __starship_set_job_count
+
     set STARSHIP_CMD_PIPESTATUS $pipestatus
     set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-    set STARSHIP_JOBS (count (jobs -p))
+
     if test "$TRANSIENT" = "1"
         set -g TRANSIENT 0
-        # Clear from cursor to end of screen as `commandline -f repaint` does not do this
-        # See https://github.com/fish-shell/fish-shell/issues/8418
         printf \e\[0J
         if type -q starship_transient_prompt_func
             starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
@@ -32,11 +45,13 @@ function fish_right_prompt
         case '*'
             set STARSHIP_KEYMAP insert
     end
+
+    __starship_set_job_count
+
     set STARSHIP_CMD_PIPESTATUS $pipestatus
     set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-    set STARSHIP_JOBS (count (jobs -p))
+
     if test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func

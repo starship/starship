@@ -2528,7 +2528,7 @@ The default functionality is:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### Examples
 
 ```toml
 # ~/.config/starship.toml
@@ -2538,7 +2538,16 @@ symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
+#### Fish shell behavior
 
+> [!NOTE]
+> **Fish shell behavior:** In the Fish shell, Starship counts **job groups** by default instead of individual process IDs. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, run:
+>
+> ```fish
+> set -g __starship_fish_use_job_groups "false"
+> ```
+>
+> This setting affects only Fish shell behavior and has no effect on other shells.
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/).
