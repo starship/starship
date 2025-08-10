@@ -2543,8 +2543,9 @@ symbol_threshold = 0
 
 When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
 
- ```fish
+```fish
 set -g __starship_fish_use_job_groups "false"
+```
 
 ## Julia
 
