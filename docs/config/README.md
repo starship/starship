@@ -2538,6 +2538,7 @@ symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
+
 #### Fish shell behavior
 
 > [!NOTE]
@@ -2548,6 +2549,7 @@ symbol_threshold = 0
 > ```
 >
 > This setting affects only Fish shell behavior and has no effect on other shells.
+
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/).
