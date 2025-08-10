@@ -477,26 +477,16 @@ fn extract_key(line: &str) -> Option<String> {
         .map(|s| s.trim().to_string())
 }
 
-/// Returns the platform-specific path separator
-/// Windows: ';' (semicolon)
-/// Unix/Linux/macOS: ':' (colon)
-fn detect_path_separator() -> char {
-    if cfg!(windows) { ';' } else { ':' }
-}
-
 /// Checks if a config string contains multiple files
-/// Uses platform-specific separator: ';' on Windows, ':' on Unix
+/// Uses std::env::split_paths to detect platform-specific separators
 fn has_multiple_files(config_str: &str) -> bool {
-    let separator = detect_path_separator();
-    config_str.contains(separator)
+    std::env::split_paths(config_str).count() > 1
 }
 
-/// Parses input line to extract and expand file paths
+/// Parses input line to extract and expand file paths using std::env::split_paths
 fn parse_input_paths(line: &str) -> Vec<PathBuf> {
-    let separator = detect_path_separator();
-    line.split(separator)
-        .filter(|s| !s.is_empty())
-        .map(|s| Context::expand_tilde(PathBuf::from(s)))
+    std::env::split_paths(line)
+        .map(Context::expand_tilde)
         .collect()
 }
 
@@ -613,8 +603,8 @@ pub fn merge_toml_files(line: &str, output_path_str: &str) -> Option<OsString> {
 /// Returns the path that should be used as STARSHIP_CONFIG, performing merge if needed
 pub fn get_merged_config_path() -> Option<String> {
     if let Ok(config_line) = std::env::var("STARSHIP_CONFIG") {
-        // Check if it contains ':' (multiple files)
-        if config_line.contains(':') {
+        // Check if it contains multiple files using std::env::split_paths
+        if has_multiple_files(&config_line) {
             // Create output path in user's .config directory
             if let Ok(home) = std::env::var("HOME") {
                 let output_path = PathBuf::from(&home)
@@ -637,13 +627,12 @@ fn get_original_config_path_os(env: &Env) -> Option<OsString> {
     if let Some(config_line) = env.get_env_os("STARSHIP_CONFIG") {
         let config_str = config_line.to_str()?;
 
-        // If it contains the path separator (multiple files), return the first file for editing
+        // If it contains multiple files, return the first file for editing
         if has_multiple_files(config_str) {
-            let separator = detect_path_separator();
-            let first_file = config_str.split(separator).next()?;
+            let first_file = std::env::split_paths(config_str).next()?;
 
             // Expand '~' in the first file path using existing function
-            let expanded_path = Context::expand_tilde(PathBuf::from(first_file));
+            let expanded_path = Context::expand_tilde(first_file);
 
             return Some(expanded_path.into_os_string());
         } else {
