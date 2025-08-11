@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
-# Get editor completions based on the config schema
+# Krijg editoraanvullingen gebaseerd op het configuratieschema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Voegt een witregel toe tussen shell commando's
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Vervang het '❯' symbool in de prompt met '➜'
+[character] # De naam van de module die we aan het configureren zijn is 'character'
+success_symbol = '[➜](bold green)' # Het 'success_symbol' segment wordt gezet naar '➜' met de kleur 'bold green'
 
-# Disable the package module, hiding it from the prompt completely
+# Zet de 'package' module uit. Dit verbergt het volledig van de prompt
 [package]
 disabled = true
 ```
