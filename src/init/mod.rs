@@ -179,6 +179,10 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
+        "eshell" => print!(
+            r#"(eval (shell-command-to-string "{} init eshell --print-full-init"))"#,
+            starship.sprint()?
+        ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
             eprintln!(
@@ -193,6 +197,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * zsh\n\
                  * nu\n\
                  * xonsh\n\
+                 * eshell\n\
                  * cmd\n\
                  \n\
                  Please open an issue in the starship repo if you would like to \
@@ -218,6 +223,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "eshell" => print_script(ESHELL_INIT, &starship_path.sprint()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -266,6 +272,8 @@ const TCSH_INIT: &str = include_str!("starship.tcsh");
 const NU_INIT: &str = include_str!("starship.nu");
 
 const XONSH_INIT: &str = include_str!("starship.xsh");
+
+const ESHELL_INIT: &str = include_str!("starship.el");
 
 const CMDEXE_INIT: &str = include_str!("starship.lua");
 
