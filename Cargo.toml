@@ -36,8 +36,8 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.41", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.42", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.55"
+clap = { version = "4.5.44", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.5.57"
 clap_complete_nushell = "4.5.8"
 dirs = "6.0.0"
 dunce = "1.0.5"
@@ -74,15 +74,15 @@ shadow-rs = { version = "1.2.1", default-features = false, features = ["build"] 
 starship-battery = { version = "0.10.2", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.5"
-terminal_size = "0.4.2"
-toml = { version = "0.9.4", features = ["preserve_order"] }
-toml_edit = "0.23.2"
+terminal_size = "0.4.3"
+toml = { version = "0.9.5", features = ["preserve_order"] }
+toml_edit = "0.23.3"
 unicode-segmentation = "1.12.0"
 unicode-width = "0.2.1"
 urlencoding = "2.1.3"
 versions = "7.0.0"
 which = "8.0.0"
-whoami = { version = "1.6.0", default-features = false }
+whoami = { version = "1.6.1", default-features = false }
 yaml-rust2 = "0.10.3"
 
 guess_host_triple = "0.1.5"
