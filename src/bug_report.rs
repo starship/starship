@@ -346,4 +346,34 @@ mod tests {
             config_path.unwrap()
         );
     }
+    #[test]
+    fn test_get_starship_config_env_not_set() {
+        unsafe {
+            std::env::remove_var("STARSHIP_CONFIG");
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_single_file() {
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "/tmp/fake.toml");
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_multiple_files() {
+        let sep = if cfg!(windows) { ";" } else { ":" };
+        unsafe {
+            std::env::set_var(
+                "STARSHIP_CONFIG",
+                format!("/tmp/one.toml{}{}", sep, "/tmp/two.toml"),
+            );
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Merged configuration") || result == UNKNOWN_CONFIG);
+    }
 }

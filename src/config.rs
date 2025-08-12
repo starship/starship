@@ -1318,4 +1318,23 @@ success_symbol = "[✓](bold green)"
             StarshipConfig::read_config_content_as_str_with_context(&Some(non_existent_path), None);
         assert!(result.is_none());
     }
+    #[test]
+    fn test_merge_toml_tables_with_invalid_and_missing_files() {
+        use std::fs::File;
+        use std::io::Write;
+        use std::path::PathBuf;
+
+        let missing = PathBuf::from("no_existe.toml");
+
+        let invalid = PathBuf::from("invalid.toml");
+        let mut file = File::create(&invalid).unwrap();
+        writeln!(file, "esto no es toml").unwrap();
+
+        let files = vec![&missing, &invalid];
+        let result = crate::config::StarshipConfig::merge_toml_tables(&files);
+
+        assert!(result.is_none());
+
+        std::fs::remove_file(&invalid).ok();
+    }
 }
