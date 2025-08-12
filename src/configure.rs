@@ -224,13 +224,14 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
 }
 
 pub fn get_configuration(context: &Context) -> toml::Table {
-    let starship_config = StarshipConfig::initialize(&context.get_config_path_os());
+    let starship_config =
+        StarshipConfig::initialize_with_context(&context.get_config_path_os(), context);
 
     starship_config.config.unwrap_or_default()
 }
 
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
-    let config_file_path = context.get_original_config_path_os();
+    let config_file_path = context.get_config_path_os();
     let toml_content = StarshipConfig::read_config_content_as_str(&config_file_path);
 
     toml_content
@@ -240,7 +241,7 @@ pub fn get_configuration_edit(context: &Context) -> DocumentMut {
 }
 
 pub fn write_configuration(context: &Context, doc: &DocumentMut) {
-    let config_path = context.get_original_config_path_os().unwrap_or_else(|| {
+    let config_path = context.get_config_path_os().unwrap_or_else(|| {
         eprintln!("config path required to write configuration");
         process::exit(1);
     });
@@ -258,7 +259,7 @@ pub fn edit_configuration(
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
-    let config_path = context.get_original_config_path_os().unwrap_or_else(|| {
+    let config_path = context.get_config_path_os().unwrap_or_else(|| {
         eprintln!("config path required to edit configuration");
         process::exit(1);
     });
@@ -610,55 +611,60 @@ mod tests {
             true,
             StarshipConfigEnvScenario::NotSpecified,
             PRINT_CONFIG_HOME,
-        )?;
+        )
+        .expect("Test should not fail");
         run_print_configuration_test(
             "no ~/.config/starship.toml, no STARSHIP_CONFIG uses default",
             false,
             StarshipConfigEnvScenario::NotSpecified,
             PRINT_CONFIG_DEFAULT,
-        )?;
+        )
+        .expect("Test should not fail");
         run_print_configuration_test(
             "~/.config/starship.toml exists, STARSHIP_CONFIG=nonexistent.toml uses default",
             true,
             StarshipConfigEnvScenario::NonExistingFile,
             PRINT_CONFIG_DEFAULT,
-        )?;
+        )
+        .expect("Test should not fail");
         run_print_configuration_test(
             "~/.config/starship.toml exists, STARSHIP_CONFIG=existing.toml uses STARSHIP_CONFIG file",
             true,
             StarshipConfigEnvScenario::ExistingFile,
             PRINT_CONFIG_ENV,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "STARSHIP_CONFIG=first.toml:second.toml (both exist) uses merged config",
             true,
             StarshipConfigEnvScenario::MultipleFiles,
             PRINT_CONFIG_MERGED,
-        )?;
+        )
+        .expect("Test should not fail");
         run_print_configuration_test(
             "STARSHIP_CONFIG=exists.toml:missing.toml (first exists, second missing) uses first file only",
             true,
             StarshipConfigEnvScenario::MultipleFilesFirstExists,
             PRINT_CONFIG_FIRST_ONLY,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "STARSHIP_CONFIG=missing.toml:exists.toml (first missing, second exists) uses second file only",
             true,
             StarshipConfigEnvScenario::MultipleFilesSecondExists,
             PRINT_CONFIG_SECOND_ONLY,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "STARSHIP_CONFIG=missing1.toml:missing2.toml (both missing) uses home (falls back when no files exist)",
             true,
             StarshipConfigEnvScenario::MultipleFilesNoneExist,
             PRINT_CONFIG_HOME,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "no home file, STARSHIP_CONFIG=missing1.toml:missing2.toml (both missing) uses default",
             false,
             StarshipConfigEnvScenario::MultipleFilesNoneExist,
             PRINT_CONFIG_DEFAULT,
-        )?;
+        )
+        .expect("Test should not fail");
         Ok(())
     }
 
@@ -670,19 +676,19 @@ mod tests {
             true,
             StarshipConfigEnvScenario::MultipleFilesWindows,
             PRINT_CONFIG_MERGED,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "Windows: STARSHIP_CONFIG=C:\\path\\single.toml (single file with drive letter) uses original file",
             true,
             StarshipConfigEnvScenario::SingleFileWindows,
             PRINT_CONFIG_ENV,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "Windows: STARSHIP_CONFIG=first.toml:second.toml (wrong separator - colon) should treat as single file and fall back to default",
             true,
             StarshipConfigEnvScenario::WrongSeparatorColonOnWindows,
             PRINT_CONFIG_DEFAULT,
-        )?;
+        ).expect("Test should not fail");
         Ok(())
     }
 
@@ -694,19 +700,20 @@ mod tests {
             true,
             StarshipConfigEnvScenario::MultipleFilesUnix,
             PRINT_CONFIG_MERGED,
-        )?;
+        )
+        .expect("Test should not fail");
         run_print_configuration_test(
             "Unix: STARSHIP_CONFIG=/path/single.toml (single file without drive letter) uses original file",
             true,
             StarshipConfigEnvScenario::SingleFileUnix,
             PRINT_CONFIG_ENV,
-        )?;
+        ).expect("Test should not fail");
         run_print_configuration_test(
             "Unix: STARSHIP_CONFIG=first.toml;second.toml (wrong separator - semicolon) should treat as single file and fall back to default",
             true,
             StarshipConfigEnvScenario::WrongSeparatorSemicolonOnUnix,
             PRINT_CONFIG_DEFAULT,
-        )?;
+        ).expect("Test should not fail");
         Ok(())
     }
 
@@ -771,86 +778,52 @@ mod tests {
                 Some(env_toml.to_string_lossy().to_string())
             }
             StarshipConfigEnvScenario::MultipleFiles => {
-                // Create multiple config files
                 let first_config = dir.path().join("first.toml");
                 let second_config = dir.path().join("second.toml");
-
-                // Create first file with the config we want to test (merged appears first)
                 let mut first_file = File::create(&first_config)?;
                 first_file.write_all(PRINT_CONFIG_MERGED.as_bytes())?;
-
-                // Create second file with additional config
                 let mut second_file = File::create(&second_config)?;
                 second_file.write_all("[custom.additional]".as_bytes())?;
-
-                // Create platform-specific separated config path
-                let separator = if cfg!(windows) { ';' } else { ':' };
-                let config_path = format!(
-                    "{}{}{}",
-                    first_config.to_string_lossy(),
-                    separator,
-                    second_config.to_string_lossy()
-                );
-
-                Some(config_path)
+                let paths = vec![first_config, second_config];
+                let joined = std::env::join_paths(paths)
+                    .map_err(std::io::Error::other)?
+                    .to_string_lossy()
+                    .to_string();
+                Some(joined)
             }
             StarshipConfigEnvScenario::MultipleFilesFirstExists => {
-                // Create multiple config files where only the first exists
                 let first_config = dir.path().join("first.toml");
-                let second_config = dir.path().join("nonexistent.toml"); // This file won't be created
-
-                // Create only the first file
+                let second_config = dir.path().join("nonexistent.toml");
                 let mut first_file = File::create(&first_config)?;
                 first_file.write_all(PRINT_CONFIG_FIRST_ONLY.as_bytes())?;
-
-                // Create platform-specific separated config path
-                let separator = if cfg!(windows) { ';' } else { ':' };
-                let config_path = format!(
-                    "{}{}{}",
-                    first_config.to_string_lossy(),
-                    separator,
-                    second_config.to_string_lossy()
-                );
-
-                Some(config_path)
+                let paths = vec![first_config, second_config];
+                let joined = std::env::join_paths(paths)
+                    .map_err(std::io::Error::other)?
+                    .to_string_lossy()
+                    .to_string();
+                Some(joined)
             }
             StarshipConfigEnvScenario::MultipleFilesSecondExists => {
-                // Create multiple config files where only the second exists
-                let first_config = dir.path().join("nonexistent.toml"); // This file won't be created
+                let first_config = dir.path().join("nonexistent.toml");
                 let second_config = dir.path().join("second.toml");
-
-                // Create only the second file
                 let mut second_file = File::create(&second_config)?;
                 second_file.write_all(PRINT_CONFIG_SECOND_ONLY.as_bytes())?;
-
-                // Create platform-specific separated config path
-                let separator = if cfg!(windows) { ';' } else { ':' };
-                let config_path = format!(
-                    "{}{}{}",
-                    first_config.to_string_lossy(),
-                    separator,
-                    second_config.to_string_lossy()
-                );
-
-                Some(config_path)
+                let paths = vec![first_config, second_config];
+                let joined = std::env::join_paths(paths)
+                    .map_err(std::io::Error::other)?
+                    .to_string_lossy()
+                    .to_string();
+                Some(joined)
             }
             StarshipConfigEnvScenario::MultipleFilesNoneExist => {
-                // Create multiple config files where neither exists
                 let first_config = dir.path().join("nonexistent1.toml");
                 let second_config = dir.path().join("nonexistent2.toml");
-
-                // Don't create any files - they should not exist
-
-                // Create platform-specific separated config path
-                let separator = if cfg!(windows) { ';' } else { ':' };
-                let config_path = format!(
-                    "{}{}{}",
-                    first_config.to_string_lossy(),
-                    separator,
-                    second_config.to_string_lossy()
-                );
-
-                Some(config_path)
+                let paths = vec![first_config, second_config];
+                let joined = std::env::join_paths(paths)
+                    .map_err(std::io::Error::other)?
+                    .to_string_lossy()
+                    .to_string();
+                Some(joined)
             }
             #[cfg(windows)]
             StarshipConfigEnvScenario::MultipleFilesWindows => {
@@ -866,7 +839,6 @@ mod tests {
                 let mut second_file = File::create(&second_config)?;
                 second_file.write_all("[custom.additional]".as_bytes())?;
 
-                // Create the semicolon-separated config path for Windows
                 let config_path = format!(
                     "{};{}",
                     first_config.to_string_lossy(),

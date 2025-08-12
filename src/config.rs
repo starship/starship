@@ -12,7 +12,7 @@ use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
 use std::ffi::OsString;
-use std::io::ErrorKind;
+use std::fs;
 
 use toml::Value;
 
@@ -135,12 +135,8 @@ impl StarshipConfig {
     /// Create a config from a starship configuration file
     fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
-
         match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
-                Some(parsed)
-            }
+            Ok(parsed) => Some(parsed),
             Err(error) => {
                 log::error!("Unable to parse the config file: {error}");
                 None
@@ -148,28 +144,119 @@ impl StarshipConfig {
         }
     }
 
+    /// Checks if a config string contains multiple files
+    pub fn has_multiple_files(config_str: &str) -> bool {
+        std::env::split_paths(config_str).count() > 1
+    }
+
+    /// Parses input line to extract and expand file paths using std::env::split_paths
+    pub fn parse_input_paths(line: &str) -> Vec<std::path::PathBuf> {
+        std::env::split_paths(line)
+            .map(crate::context::Context::expand_tilde)
+            .collect()
+    }
+
     pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
-        if config_file_path.is_none() {
-            log::debug!(
-                "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
-            );
+        Self::read_config_content_as_str_with_context(config_file_path, None)
+    }
+
+    pub fn read_config_content_as_str_with_context(
+        config_file_path: &Option<OsString>,
+        context: Option<&Context>,
+    ) -> Option<String> {
+        let config_file_path = config_file_path.as_ref()?;
+        let config_path_str = config_file_path.to_str()?;
+
+        if Self::has_multiple_files(config_path_str) {
+            Self::merge_config_files_runtime(config_path_str).or_else(|| {
+                let default_path = context
+                    .and_then(|ctx| ctx.get_home())
+                    .or_else(crate::utils::home_dir)
+                    .map(|mut home| {
+                        home.push(".config/starship.toml");
+                        home
+                    })?;
+                utils::read_file(&default_path).ok()
+            })
+        } else {
+            utils::read_file(config_file_path).ok().or_else(|| {
+                log::error!("Unable to read config file content");
+                None
+            })
+        }
+    }
+
+    /// Initialize the Config struct with context for proper home directory resolution  
+    pub fn initialize_with_context(config_file_path: &Option<OsString>, context: &Context) -> Self {
+        let config = Self::read_config_content_as_str_with_context(config_file_path, Some(context))
+            .and_then(|toml_content| match toml::from_str(&toml_content) {
+                Ok(parsed) => Some(parsed),
+                Err(error) => {
+                    log::error!("Unable to parse the config file: {error}");
+                    None
+                }
+            });
+        Self { config }
+    }
+
+    /// Merge multiple configuration files using proper TOML table merging
+    /// Supports complex TOML structures including arrays, nested tables, and matrices
+    pub fn merge_config_files_runtime(config_paths: &str) -> Option<String> {
+        let paths = Self::parse_input_paths(config_paths);
+        let existing_paths: Vec<_> = paths.iter().filter(|p| p.exists()).collect();
+        if existing_paths.is_empty() {
+            log::warn!("No configuration files found for merging");
             return None;
         }
-        let config_file_path = config_file_path.as_ref().unwrap();
-        match utils::read_file(config_file_path) {
-            Ok(content) => {
-                log::trace!("Config file content: \"\n{}\"", &content);
-                Some(content)
-            }
+        let merged_table = Self::merge_toml_tables(&existing_paths)?;
+        match toml::to_string(&merged_table) {
+            Ok(content) => Some(content),
             Err(e) => {
-                let level = if e.kind() == ErrorKind::NotFound {
-                    log::Level::Debug
-                } else {
-                    log::Level::Error
-                };
-
-                log::log!(level, "Unable to read config file content: {}", &e);
+                log::error!("Failed to serialize merged configuration: {}", e);
                 None
+            }
+        }
+    }
+
+    /// Merge multiple TOML files into a single table with proper type preservation
+    fn merge_toml_tables(file_paths: &[&std::path::PathBuf]) -> Option<toml::Table> {
+        let mut base_table = toml::Table::new();
+        for path in file_paths.iter() {
+            match fs::read_to_string(path) {
+                Ok(content) => match toml::from_str::<toml::Table>(&content) {
+                    Ok(table) => {
+                        Self::deep_merge_tables(&mut base_table, table);
+                    }
+                    Err(e) => {
+                        log::warn!("Failed to parse TOML file {}: {}", path.display(), e);
+                        continue;
+                    }
+                },
+                Err(e) => {
+                    log::warn!("Failed to read file {}: {}", path.display(), e);
+                    continue;
+                }
+            }
+        }
+        if base_table.is_empty() {
+            log::warn!("No valid TOML content found in any configuration file");
+            None
+        } else {
+            Some(base_table)
+        }
+    }
+
+    /// Recursively merge TOML tables, preserving all data types including arrays
+    fn deep_merge_tables(base: &mut toml::Table, overlay: toml::Table) {
+        for (key, value) in overlay {
+            match (base.get_mut(&key), &value) {
+                // Merge recursively if both values are tables
+                (Some(toml::Value::Table(base_table)), toml::Value::Table(overlay_table)) => {
+                    Self::deep_merge_tables(base_table, overlay_table.clone());
+                }
+                _ => {
+                    base.insert(key, value);
+                }
             }
         }
     }
@@ -1067,5 +1154,168 @@ mod tests {
             StarshipConfig::read_config_content_as_str(&None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
+    }
+
+    #[test]
+    fn test_merge_config_files_runtime() {
+        // Test the main merge functionality
+        let config1 = r#"
+[character]
+success_symbol = "[>](green)"
+
+[directory]
+truncation_length = 3
+"#;
+
+        let config2 = r#"
+[character]
+error_symbol = "[X](red)"
+
+[git_branch]
+symbol = " "
+"#;
+
+        let table1: toml::Table = toml::from_str(config1).unwrap();
+        let table2: toml::Table = toml::from_str(config2).unwrap();
+
+        let mut base = table1;
+        StarshipConfig::deep_merge_tables(&mut base, table2);
+
+        // Verify merge results
+        assert_eq!(base.len(), 3);
+        assert!(base.contains_key("character"));
+        assert!(base.contains_key("directory"));
+        assert!(base.contains_key("git_branch"));
+
+        let character = base.get("character").unwrap().as_table().unwrap();
+        assert_eq!(character.len(), 2);
+        assert!(character.contains_key("success_symbol"));
+        assert!(character.contains_key("error_symbol"));
+    }
+
+    #[test]
+    fn test_deep_merge_tables_arrays() {
+        // Test array replacement behavior
+        let config1 = r#"
+[python]
+detect_files = ["pyproject.toml", "requirements.txt"]
+symbol = "🐍"
+"#;
+
+        let config2 = r#"
+[python]
+detect_files = ["setup.py"]
+python_binary = ["python3"]
+"#;
+
+        let table1: toml::Table = toml::from_str(config1).unwrap();
+        let table2: toml::Table = toml::from_str(config2).unwrap();
+
+        let mut base = table1;
+        StarshipConfig::deep_merge_tables(&mut base, table2);
+
+        let python = base.get("python").unwrap().as_table().unwrap();
+        let files = python.get("detect_files").unwrap().as_array().unwrap();
+
+        // Arrays should be replaced, not merged
+        assert_eq!(files.len(), 1);
+        assert_eq!(files[0].as_str().unwrap(), "setup.py");
+
+        // Other properties should be preserved or added
+        assert_eq!(python.get("symbol").unwrap().as_str().unwrap(), "🐍");
+        assert!(python.contains_key("python_binary"));
+    }
+
+    #[test]
+    fn test_deep_merge_tables_nested() {
+        // Test nested table merging
+        let config1 = r#"
+[git_status]
+conflicted = "="
+ahead = "⇡"
+
+[git_status.count]
+enabled = true
+"#;
+
+        let config2 = r#"
+[git_status]
+behind = "⇣"
+
+[git_status.count]
+style = "red bold"
+"#;
+
+        let table1: toml::Table = toml::from_str(config1).unwrap();
+        let table2: toml::Table = toml::from_str(config2).unwrap();
+
+        let mut base = table1;
+        StarshipConfig::deep_merge_tables(&mut base, table2);
+
+        let git_status = base.get("git_status").unwrap().as_table().unwrap();
+        assert_eq!(git_status.len(), 4); // conflicted, ahead, behind, count
+
+        let count = git_status.get("count").unwrap().as_table().unwrap();
+        assert_eq!(count.len(), 2); // enabled, style
+        assert!(count.contains_key("enabled"));
+        assert!(count.contains_key("style"));
+    }
+
+    #[test]
+    fn test_deep_merge_tables_value_overwrite() {
+        // Test value overwriting behavior
+        let config1 = r#"
+format = "$all"
+add_newline = true
+
+[character]
+success_symbol = "[>](green)"
+"#;
+
+        let config2 = r#"
+format = "$directory$git_branch$character"
+add_newline = false
+
+[character]
+success_symbol = "[✓](bold green)"
+"#;
+
+        let table1: toml::Table = toml::from_str(config1).unwrap();
+        let table2: toml::Table = toml::from_str(config2).unwrap();
+
+        let mut base = table1;
+        StarshipConfig::deep_merge_tables(&mut base, table2);
+
+        // Values should be overwritten
+        assert_eq!(
+            base.get("format").unwrap().as_str().unwrap(),
+            "$directory$git_branch$character"
+        );
+        assert!(!base.get("add_newline").unwrap().as_bool().unwrap());
+
+        let character = base.get("character").unwrap().as_table().unwrap();
+        assert_eq!(
+            character.get("success_symbol").unwrap().as_str().unwrap(),
+            "[✓](bold green)"
+        );
+    }
+
+    #[test]
+    fn test_merge_toml_tables_empty_input() {
+        // Test edge case with empty input
+        let empty_paths: Vec<&std::path::PathBuf> = vec![];
+        let result = StarshipConfig::merge_toml_tables(&empty_paths);
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn test_read_config_content_as_str_with_context_single_file() {
+        // Test single file reading (existing functionality)
+        use std::ffi::OsString;
+
+        let non_existent_path = OsString::from("non_existent_config.toml");
+        let result =
+            StarshipConfig::read_config_content_as_str_with_context(&Some(non_existent_path), None);
+        assert!(result.is_none());
     }
 }
