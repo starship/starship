@@ -240,7 +240,7 @@ jobs:
       - name: Setup | Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.18.0
 
       - name: Notarize | Build docs
         run: |
@@ -249,7 +249,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -289,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -369,7 +369,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v4
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
