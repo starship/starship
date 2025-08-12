@@ -230,40 +230,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 }
 
 fn print_script(script: &str, path: &str) {
-    let mut script = script.replace("::STARSHIP::", path);
-
-    // Handle TOML config merging for shells that support it
-    if let Some(merged_path) = crate::context::get_merged_config_path() {
-        // Add environment variable setup for merged config
-        let config_setup = if script.contains("export STARSHIP_SHELL") {
-            format!("export STARSHIP_CONFIG=\"{merged_path}\"\n")
-        } else if script.contains("$ENV:STARSHIP_SHELL") {
-            format!("$ENV:STARSHIP_CONFIG = \"{merged_path}\"\n")
-        } else if script.contains("set -gx STARSHIP_SHELL") {
-            format!("set -gx STARSHIP_CONFIG \"{merged_path}\"\n")
-        } else {
-            String::new()
-        };
-
-        // Insert config setup after shell detection but before the main setup
-        if script.contains("export STARSHIP_SHELL") {
-            script = script.replace(
-                "export STARSHIP_SHELL=",
-                &format!("{config_setup}export STARSHIP_SHELL="),
-            );
-        } else if script.contains("$ENV:STARSHIP_SHELL") {
-            script = script.replace(
-                "$ENV:STARSHIP_SHELL =",
-                &format!("{config_setup}$ENV:STARSHIP_SHELL ="),
-            );
-        } else if script.contains("set -gx STARSHIP_SHELL") {
-            script = script.replace(
-                "set -gx STARSHIP_SHELL",
-                &format!("{config_setup}set -gx STARSHIP_SHELL"),
-            );
-        }
-    }
-
+    let script = script.replace("::STARSHIP::", path);
     print!("{script}");
 }
 
