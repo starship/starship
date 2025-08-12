@@ -1,6 +1,6 @@
 function fish_prompt
     switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
         case '*'
             set STARSHIP_KEYMAP insert
@@ -27,7 +27,7 @@ end
 
 function fish_right_prompt
     switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
         case '*'
             set STARSHIP_KEYMAP insert
