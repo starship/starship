@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Docs | Format
         uses: dprint/check@v2.3
 
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install | Taplo
         run: cargo install --debug --locked --version 0.10.0 taplo-cli
       - name: Presets | Validate with schema
@@ -35,7 +35,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'i18n_master' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Prevent File Change
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup | Node
         uses: actions/setup-node@v4
