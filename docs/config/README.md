@@ -26,23 +26,34 @@ disabled = true
 
 ### Config File Location
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+You can specify one or multiple configuration files using the `STARSHIP_CONFIG` environment variable. Use any path you want, and separate file paths with `:` on Unix or `;` on Windows. Only configuration files are affected:
 
 ```sh
+# One file
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
+# Multiple files
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml:~/another/path/extra.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+In PowerShell (Windows), use a semicolon to separate files and any custom path:
 
 ```powershell
+# One file
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
+# Multiple files
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\base.toml;$HOME\another\path\extra.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Or for Cmd (Windows), also use a semicolon and any custom path:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
+-- One file
+os.setenv('STARSHIP_CONFIG', 'C:\Users\user\example\non\default\path\starship.toml')
+-- Multiple files
+os.setenv('STARSHIP_CONFIG', 'C:\Users\user\example\non\default\path\base.toml;C:\Users\user\another\path\extra.toml')
 ```
+
+Starship will merge the files in the order specified, allowing modular and flexible configuration.
 
 ### Logging
 
