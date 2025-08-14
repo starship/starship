@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.24.0](https://github.com/starship/starship/compare/v1.23.0...v1.24.0) (2025-08-14)
+
+
+### Features
+
+* add mercurial state ([#6745](https://github.com/starship/starship/issues/6745)) ([5f0b31b](https://github.com/starship/starship/commit/5f0b31b4c8da64a3dbe27f5966dfbc4ab2b9f7bf))
+* **aws:** support duration for aws sso ([#6614](https://github.com/starship/starship/issues/6614)) ([44e9e56](https://github.com/starship/starship/commit/44e9e56480a748ccda1a64a9f623dc2b19ecfe98))
+* **install.sh:** handle installation directory prompt responses case-insensitively ([#6866](https://github.com/starship/starship/issues/6866)) ([bc48b5f](https://github.com/starship/starship/commit/bc48b5fcb07b3ea806127bc6ab13616028e92642))
+* new module `xmake` ([#6811](https://github.com/starship/starship/issues/6811)) ([ff0acb1](https://github.com/starship/starship/commit/ff0acb193eaa04ab63a8e56e1bd18019444b886f))
+* **nu:** Add job support for nushell ([#6684](https://github.com/starship/starship/issues/6684)) ([ac2359c](https://github.com/starship/starship/commit/ac2359ca8a020825b5c68b5e3b8da35d4917f46e))
+
+
+### Bug Fixes
+
+* **docker_context:** add `compose.yml` and `compose.yaml` to files ([#6625](https://github.com/starship/starship/issues/6625)) ([a98a05f](https://github.com/starship/starship/commit/a98a05f1ac4dfc215337a266c784cd62256f0c33))
+* **hg_branch:** Strip extraneous newlines from hg topic. ([#6766](https://github.com/starship/starship/issues/6766)) ([ccc32e7](https://github.com/starship/starship/commit/ccc32e73fc0a0f99d90cff3a0efb73efecce1d84))
+* **nushell:** Startup `cmd_duration` should be 0ms not 823ms ([#6854](https://github.com/starship/starship/issues/6854)) ([0ad1cf8](https://github.com/starship/starship/commit/0ad1cf831a9e7938ed5e3d3262d3647e828ee4de))
+* **pixi:** Don't trigger pixi module by `.pixi` directory ([#6709](https://github.com/starship/starship/issues/6709)) ([a477186](https://github.com/starship/starship/commit/a477186e52e156eeac780e9b79210a19715f4919))
+* **preset/pure:** only enable python module if venv is active ([#6689](https://github.com/starship/starship/issues/6689)) ([5e8851a](https://github.com/starship/starship/commit/5e8851a95364e9713d1c5ddc409248f0705a9410))
+* remove double spaces in default values ([#6649](https://github.com/starship/starship/issues/6649)) ([e406f55](https://github.com/starship/starship/commit/e406f552f84b37631152f34617712085d65c5e7b))
+* **test/git_commit:** avoid spawning an editor lead to timeout if tag signing is enabled ([#6887](https://github.com/starship/starship/issues/6887)) ([32c29cf](https://github.com/starship/starship/commit/32c29cfda784bdcc6a97c0e637f99100af1a0c2d))
+* **zsh:** check if vars are set before reading them ([#6742](https://github.com/starship/starship/issues/6742)) ([608ae37](https://github.com/starship/starship/commit/608ae37bcfd498b72020689b19debb79d236c411))
+
+
+### Performance Improvements
+
+* **git_status:** avoid gix index load when `core.fsmonitor` is used ([#6817](https://github.com/starship/starship/issues/6817)) ([1c2f4d4](https://github.com/starship/starship/commit/1c2f4d46594d38abd423752efa3b21903e5a1e3b))
+* Parallelize child modules for env_var|custom ([#6748](https://github.com/starship/starship/issues/6748)) ([7f4eb6f](https://github.com/starship/starship/commit/7f4eb6fdae5218413963f07f86df4e2b340bd05e))
+
 ## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
 
 
