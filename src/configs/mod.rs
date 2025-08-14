@@ -30,6 +30,7 @@ pub mod env_var;
 pub mod erlang;
 pub mod fennel;
 pub mod fill;
+pub mod fly;
 pub mod fossil_branch;
 pub mod fossil_metrics;
 pub mod gcloud;
@@ -155,6 +156,8 @@ pub struct FullConfig<'a> {
     dart: dart::DartConfig<'a>,
     #[serde(borrow)]
     deno: deno::DenoConfig<'a>,
+    #[serde(borrow)]
+    fly: fly::FlyConfig<'a>,
     #[serde(borrow)]
     directory: directory::DirectoryConfig<'a>,
     #[serde(borrow)]
