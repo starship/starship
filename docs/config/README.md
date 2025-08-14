@@ -48,9 +48,9 @@ Or for Cmd (Windows), also use a semicolon and any custom path:
 
 ```lua
 -- One file
-os.setenv('STARSHIP_CONFIG', 'C:\Users\user\example\non\default\path\starship.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 -- Multiple files
-os.setenv('STARSHIP_CONFIG', 'C:\Users\user\example\non\default\path\base.toml;C:\Users\user\another\path\extra.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\base.toml;C:\\Users\\user\\another\\path\\extra.toml')
 ```
 
 Starship will merge the files in the order specified, allowing modular and flexible configuration.

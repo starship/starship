@@ -186,7 +186,7 @@ impl StarshipConfig {
         }
     }
 
-    /// Initialize the Config struct with context for proper home directory resolution  
+    /// Initialize the Config struct with context for proper home directory resolution
     pub fn initialize_with_context(config_file_path: &Option<OsString>, context: &Context) -> Self {
         let config = Self::read_config_content_as_str_with_context(config_file_path, Some(context))
             .and_then(|toml_content| match toml::from_str(&toml_content) {
@@ -1324,11 +1324,11 @@ success_symbol = "[✓](bold green)"
         use std::io::Write;
         use std::path::PathBuf;
 
-        let missing = PathBuf::from("no_existe.toml");
+        let missing = PathBuf::from("non_exist.toml");
 
         let invalid = PathBuf::from("invalid.toml");
         let mut file = File::create(&invalid).unwrap();
-        writeln!(file, "esto no es toml").unwrap();
+        writeln!(file, "etoml").unwrap();
 
         let files = vec![&missing, &invalid];
         let result = crate::config::StarshipConfig::merge_toml_tables(&files);

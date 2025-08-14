@@ -463,7 +463,7 @@ impl Default for Context<'_> {
     }
 }
 
-/// Checks if a config string contains multiple files
+/// Get the home directory from environment or system
 fn home_dir(env: &Env) -> Option<PathBuf> {
     // Try to get HOME from environment first (mocked or real)
     if let Some(home) = env.get_env("HOME") {
@@ -480,7 +480,7 @@ fn get_config_path_os(env: &Env) -> Option<OsString> {
             let default_path = home_dir(env)?.join(".config").join("starship.toml");
             return Some(default_path.into_os_string());
         }
-        // Devuelve siempre el valor de STARSHIP_CONFIG, sea uno o varios paths
+        // Always return the value of STARSHIP_CONFIG, whether it is one or multiple paths
         return Some(config_line);
     }
 
