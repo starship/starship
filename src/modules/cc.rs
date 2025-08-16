@@ -13,6 +13,7 @@ use std::borrow::Cow;
 use std::ops::Deref;
 use std::sync::LazyLock;
 
+#[derive(Clone, Copy)]
 pub enum Lang {
     C,
     Cpp,
@@ -36,7 +37,7 @@ fn parse_module<T>(
     compilers: [(&str, &str); 2],
 ) -> Result<Vec<Segment>, crate::formatter::string_formatter::StringFormatterError> {
     StringFormatter::new(config.format).and_then(|formatter| {
-        let cc_compiler_info = LazyLock::new(|| context.exec_cmds_return_first(config.commands));
+        let cc_compiler_info = LazyLock::new(|| context.exec_cmds_return_first(&config.commands));
 
         formatter
             .map_meta(|var, _| match var {
