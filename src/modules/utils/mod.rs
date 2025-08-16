@@ -8,4 +8,6 @@ pub mod directory_nix;
 
 pub mod path;
 
+pub mod substitute;
+
 pub mod truncate;
