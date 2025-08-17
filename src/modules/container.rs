@@ -300,4 +300,36 @@ mod tests {
 
         Ok(())
     }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_incus_container() -> std::io::Result<()> {
+        let renderer = ModuleRenderer::new("container")
+            .config(toml::toml! {
+                [container]
+                disabled = false
+            });
+
+        let root_path = renderer.root_path();
+
+        // Create the Incus socket path
+        let incus_socket_path = root_path.join("dev/incus/sock");
+        fs::create_dir_all(incus_socket_path.parent().unwrap())?;
+        fs::File::create(&incus_socket_path)?;
+
+        // The output of the module
+        let actual = renderer.collect();
+
+        // The value that should be rendered by the module
+        let expected = Some(format!(
+            "{} ",
+            Color::Red
+                .bold()
+                .dimmed()
+                .paint("⬢ [Incus]")
+        ));
+
+        assert_eq!(actual, expected);
+        Ok(())
+    }
 }
