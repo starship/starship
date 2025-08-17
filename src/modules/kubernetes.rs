@@ -82,7 +82,7 @@ fn get_aliased_name<'a>(
     match replaced {
         Cow::Owned(replaced) => Some(replaced),
         // It didn't match...
-        _ => None,
+        Cow::Borrowed(_) => None,
     }
 }
 
@@ -140,7 +140,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let have_env_config = !config.detect_env_vars.is_empty();
     let have_env_vars = have_env_config.then(|| context.detect_env_vars(&config.detect_env_vars));
@@ -326,7 +326,7 @@ mod deprecated {
                 match replaced {
                     // We have a match if the replaced string is different from the original
                     Cow::Owned(replaced) => Some(replaced),
-                    _ => None,
+                    Cow::Borrowed(_) => None,
                 }
             })
         };
@@ -1542,7 +1542,7 @@ users: []
     }
 
     #[test]
-    fn test_json_kubeconfig_is_parsed_as_json() -> std::io::Result<()> {
+    fn test_json_kubeconfig_is_parsed_as_json() {
         let json_kubeconfig = r#"{
   "apiVersion": "v1",
   "clusters": [],
@@ -1569,11 +1569,10 @@ users: []
             Document::Json(..) => {}
             _ => panic!("Expected Document::Json, got {actual:?}"),
         }
-        Ok(())
     }
 
     #[test]
-    fn fallback_to_yaml_parsing() -> std::io::Result<()> {
+    fn fallback_to_yaml_parsing() {
         let json_kubeconfig = r#"{
   "apiVersion": v1,
   "clusters": [],
@@ -1598,9 +1597,8 @@ users: []
         let actual = results.first().unwrap();
         match actual {
             Document::Yaml(..) => {}
-            _ => panic!("Expected Document::Yaml, got {actual:?}"),
+            Document::Json(_) => panic!("Expected Document::Yaml, got {actual:?}"),
         }
-        Ok(())
     }
 
     #[test]

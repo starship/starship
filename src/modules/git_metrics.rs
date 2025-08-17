@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
@@ -58,7 +58,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         gix_repo.write_blob([]).ok()?; /* create empty blob */
         let tree_index_cache = prevent_external_diff(
             gix_repo
-                .diff_resource_cache(gix::diff::blob::pipeline::Mode::ToGit, Default::default())
+                .diff_resource_cache(
+                    gix::diff::blob::pipeline::Mode::ToGit,
+                    WorktreeRoots::default(),
+                )
                 .ok()?,
         );
         let index_worktree_cache = prevent_external_diff(
@@ -194,7 +197,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                     entry,
                                     status:
                                         EntryStatus::Change(Change::Modification {
-                                            content_change: Some(_),
+                                            content_change: Some(()),
                                             ..
                                         }),
                                     ..
@@ -231,7 +234,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 _ => {}
                             }
                         }
-                    };
+                    }
                     diff
                 },
             )
@@ -382,12 +385,13 @@ impl GitDiff {
         only_nonzero_diffs: bool,
         changed: &str,
     ) -> Option<Result<&str, StringFormatterError>> {
-        match only_nonzero_diffs {
-            true => match changed {
+        if only_nonzero_diffs {
+            match changed {
                 "0" => None,
                 _ => Some(Ok(changed)),
-            },
-            false => Some(Ok(changed)),
+            }
+        } else {
+            Some(Ok(changed))
         }
     }
 }

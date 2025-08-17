@@ -168,10 +168,10 @@ mod tests {
         // The value that should be rendered by the module.
         let expected = Some(format!(
             "{} ",
-            Color::Red
-                .bold()
-                .dimmed()
-                .paint(format!("⬢ [{}]", name.unwrap_or(image.unwrap_or("podman"))))
+            Color::Red.bold().dimmed().paint(format!(
+                "⬢ [{}]",
+                name.unwrap_or_else(|| image.unwrap_or("podman"))
+            ))
         ));
 
         Ok((actual, expected))

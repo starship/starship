@@ -224,14 +224,14 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
 }
 
 pub fn get_configuration(context: &Context) -> toml::Table {
-    let starship_config = StarshipConfig::initialize(&context.get_config_path_os());
+    let starship_config = StarshipConfig::initialize(context.get_config_path_os().as_deref());
 
     starship_config.config.unwrap_or_default()
 }
 
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
     let config_file_path = context.get_config_path_os();
-    let toml_content = StarshipConfig::read_config_content_as_str(&config_file_path);
+    let toml_content = StarshipConfig::read_config_content_as_str(config_file_path.as_deref());
 
     toml_content
         .unwrap_or_default()
@@ -313,13 +313,13 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 
 #[cfg(test)]
 mod tests {
-    use std::{fs::create_dir, io};
+    use std::{fs::create_dir, io, path::PathBuf};
 
     use tempfile::TempDir;
     use toml_edit::Item;
 
     use crate::{
-        context::{Shell, Target},
+        context::{Properties, Shell, Target},
         context_env::Env,
     };
 
@@ -376,13 +376,13 @@ mod tests {
 
     #[test]
     fn no_panic_when_editor_unparsable() {
-        let outcome = edit_configuration(&Default::default(), Some("\"vim"));
+        let outcome = edit_configuration(&Context::default(), Some("\"vim"));
         assert!(outcome.is_err());
     }
 
     #[test]
     fn no_panic_when_editor_not_found() {
-        let outcome = edit_configuration(&Default::default(), Some("this_editor_does_not_exist"));
+        let outcome = edit_configuration(&Context::default(), Some("this_editor_does_not_exist"));
         assert!(outcome.is_err());
     }
 
@@ -464,7 +464,7 @@ mod tests {
             "\n"
         );
 
-        assert_eq!(doc.to_string(), new_config)
+        assert_eq!(doc.to_string(), new_config);
     }
 
     #[test]
@@ -529,7 +529,7 @@ mod tests {
             "\n"
         );
 
-        assert_eq!(doc.to_string(), new_config)
+        assert_eq!(doc.to_string(), new_config);
     }
 
     #[test]
@@ -578,7 +578,7 @@ mod tests {
             doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
                 .as_bool()
                 .unwrap()
-        )
+        );
     }
 
     #[test]
@@ -629,6 +629,7 @@ mod tests {
         Ok(())
     }
 
+    #[derive(Clone, Copy)]
     enum StarshipConfigEnvScenario {
         NotSpecified,
         NonExistingFile,
@@ -683,11 +684,11 @@ mod tests {
         );
 
         Ok(Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
-            Default::default(),
-            Default::default(),
+            PathBuf::default(),
+            PathBuf::default(),
             env,
         ))
     }

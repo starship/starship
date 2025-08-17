@@ -20,7 +20,7 @@ impl NixShellType {
             Some("pure") => return Some(Pure),
             Some("impure") => return Some(Impure),
             _ => {}
-        };
+        }
 
         if use_heuristic {
             Self::in_new_nix_shell(context).map(|()| Unknown)

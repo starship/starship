@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
         return None;
-    };
+    }
 
     let channel_name = get_pijul_current_channel(context)?;
 

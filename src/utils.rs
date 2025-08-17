@@ -43,7 +43,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
         log::debug!("Error reading file: {result:?}");
     } else {
         log::trace!("File read successfully");
-    };
+    }
 
     result
 }
@@ -291,20 +291,18 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("topic-branch"),
             stderr: String::default(),
         }),
-        "fossil branch new topic-branch trunk" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::default(),
-        }),
+        "fossil branch new topic-branch trunk" | "fossil update topic-branch" => {
+            Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::default(),
+            })
+        }
         "fossil diff -i --numstat" => Some(CommandOutput {
             stdout: String::from(
                 "\
          3          2 README.md
          3          2 TOTAL over 1 changed files",
             ),
-            stderr: String::default(),
-        }),
-        "fossil update topic-branch" => Some(CommandOutput {
-            stdout: String::default(),
             stderr: String::default(),
         }),
         "gleam --version" => Some(CommandOutput {
@@ -774,19 +772,13 @@ impl PathExt for Path {
     #[cfg(target_os = "linux")]
     fn device_id(&self) -> Option<u64> {
         use std::os::linux::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.st_dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.st_dev())
     }
 
     #[cfg(all(unix, not(target_os = "linux")))]
     fn device_id(&self) -> Option<u64> {
         use std::os::unix::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.dev())
     }
 }
 
@@ -796,35 +788,35 @@ mod tests {
 
     #[test]
     fn render_time_test_0ms() {
-        assert_eq!(render_time(0_u128, true), "0ms")
+        assert_eq!(render_time(0_u128, true), "0ms");
     }
     #[test]
     fn render_time_test_0s() {
-        assert_eq!(render_time(0_u128, false), "0s")
+        assert_eq!(render_time(0_u128, false), "0s");
     }
     #[test]
     fn render_time_test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true), "500ms");
     }
     #[test]
     fn render_time_test_500ms_no_millis() {
-        assert_eq!(render_time(500_u128, false), "0s")
+        assert_eq!(render_time(500_u128, false), "0s");
     }
     #[test]
     fn render_time_test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s0ms")
+        assert_eq!(render_time(10_000_u128, true), "10s0ms");
     }
     #[test]
     fn render_time_test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s0ms")
+        assert_eq!(render_time(90_000_u128, true), "1m30s0ms");
     }
     #[test]
     fn render_time_test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms")
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms");
     }
     #[test]
     fn render_time_test_1d() {
-        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s")
+        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s");
     }
 
     #[test]
@@ -839,7 +831,7 @@ mod tests {
             stderr: String::from("stderr ok!\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     // While the exec_cmd should work on Windows some of these tests assume a Unix-like
@@ -854,7 +846,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -867,7 +859,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -883,7 +875,7 @@ mod tests {
             stderr: String::from("hello\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -899,7 +891,7 @@ mod tests {
             stderr: String::from("world\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -908,7 +900,7 @@ mod tests {
         let result = internal_exec_cmd("false", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -917,7 +909,7 @@ mod tests {
         let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]

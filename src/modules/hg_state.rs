@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
 
@@ -39,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `hg_state`:\n{}", error);
+            log::warn!("Error in module `hg_state`:\n{error}");
             return None;
         }
     });
@@ -85,7 +85,7 @@ fn get_state_description<'a>(
             label: config.merge,
         })
     } else {
-        return None;
+        None
     }
 }
 
