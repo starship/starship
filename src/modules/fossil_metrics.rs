@@ -72,7 +72,7 @@ impl<'a> FossilDiff<'a> {
     pub fn parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Self {
         // Fossil formats the last line of the output as "%10d %10d TOTAL over %d changed files\n"
         // where the 1st and 2nd placeholders are the number of added and deleted lines respectively
-        let re = Regex::new(r"^\s*(\d+)\s+(\d+) TOTAL over \d+ changed files$").unwrap();
+        let re = Regex::new(r"^\s*(\d+)\s+(\d+) TOTAL over \d+ changed files?$").unwrap();
 
         let (added, deleted) = diff_numstat
             .lines()
@@ -228,6 +228,25 @@ mod tests {
             added: "3",
             deleted: "2",
         };
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn parse_single_file() {
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed file\n",
+            true,
+        );
+        let expected = FossilDiff {
+            added: "3",
+            deleted: "2",
+        };
+        assert_eq!(expected, actual);
+
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed files\n",
+            true,
+        );
         assert_eq!(expected, actual);
     }
 
