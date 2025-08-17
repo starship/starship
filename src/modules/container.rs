@@ -26,8 +26,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        let container_env_path = context_path(context, "/run/.containerenv");
+        if context_path(context, "/dev/incus/sock").exists() {
+            // Incus
+            return Some("Incus".into());
+        }
 
+        let container_env_path = context_path(context, "/run/.containerenv");
         if container_env_path.exists() {
             // podman and others
 
