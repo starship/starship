@@ -356,7 +356,7 @@ fn get_repo_status(
             }) {
                 let output = repo.exec_git(
                     context,
-                    ["for-each-ref", "--format", "%(upstream:track)"]
+                    ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
                         .into_iter()
                         .map(ToOwned::to_owned)
                         .chain(Some(branch_name)),
@@ -560,7 +560,17 @@ impl RepoStatus {
     }
 
     fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        s = s.trim_matches(|c| c == '[' || c == ']');
+        if s == " " || s.ends_with(" [gone]") {
+            self.ahead = None;
+            self.behind = None;
+            return;
+        }
+
+        s = s
+            .split_once(' ')
+            .unwrap()
+            .1
+            .trim_matches(|c| c == '[' || c == ']');
 
         for pair in s.split(',') {
             let mut tokens = pair.trim().splitn(2, ' ');
@@ -740,7 +750,7 @@ pub(crate) mod tests {
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
-    use std::fs::{self, File};
+    use std::fs::{self, File, OpenOptions};
     use std::io::{self, prelude::*};
     use std::path::Path;
 
@@ -881,6 +891,44 @@ pub(crate) mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch_with_gone_upstream(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1713,6 +1761,31 @@ pub(crate) mod tests {
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_branch(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "new-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn create_branch_with_gone_upstream(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "gone-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        let config_path = repo_dir.join(".git").join("config");
+        let mut config_file = OpenOptions::new().append(true).open(&config_path)?;
+        writeln!(
+            config_file,
+            "\n[branch \"gone-branch\"]\n\tremote = origin\n\tmerge = refs/heads/gone-upstream\n"
+        )?;
 
         Ok(())
     }
