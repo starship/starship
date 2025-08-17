@@ -663,7 +663,7 @@ La opción de `commands` acepta una lista de comandos para determinar la versió
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship intentará ejecutar cada comando hasta que obtenga un resultado en STDOUT.
 
-Si un compilador C no es compatible con este módulo, puede solicitarlo [planteando un problema en GitHub](https://github.com/starship/starship/).
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Ejemplo
 
@@ -709,7 +709,7 @@ La opción de `commands` acepta una lista de comandos para determinar la versió
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship intentará ejecutar cada comando hasta que obtenga un resultado en STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Ejemplo
 
