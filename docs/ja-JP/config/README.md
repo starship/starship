@@ -663,7 +663,7 @@ format = 'via [🍔 $version](bold green) '
 
 各コマンドは、実行可能ファイル名 (とそれに続く引数) のリストで表現されます。通常は`['mycc', '--version']`のようになります。 StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
 
-もし、Cコンパイラがこのモジュールでサポートされていない場合は、[GitHubで問題を提起する](https://github.com/starship/starship/)ことでリクエストできます。
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### 設定例
 
@@ -709,7 +709,7 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### 設定例
 
