@@ -304,11 +304,10 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_incus_container() -> std::io::Result<()> {
-        let renderer = ModuleRenderer::new("container")
-            .config(toml::toml! {
-                [container]
-                disabled = false
-            });
+        let renderer = ModuleRenderer::new("container").config(toml::toml! {
+            [container]
+            disabled = false
+        });
 
         let root_path = renderer.root_path();
 
@@ -323,10 +322,7 @@ mod tests {
         // The value that should be rendered by the module
         let expected = Some(format!(
             "{} ",
-            Color::Red
-                .bold()
-                .dimmed()
-                .paint("⬢ [Incus]")
+            Color::Red.bold().dimmed().paint("⬢ [Incus]")
         ));
 
         assert_eq!(actual, expected);
