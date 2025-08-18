@@ -709,7 +709,7 @@ format = 'via [$name $version]($style)'
 
 Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['mycpp', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
+Якщо компілятор C++ компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Приклад
 
