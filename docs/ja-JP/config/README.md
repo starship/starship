@@ -786,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
+`cmake`モジュールは、現在インストールされている[Cmake](https://cmake.org/)のバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
