@@ -786,7 +786,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). Por padrão o módulo será ativo se qualquer das condições a seguir for atendida:
+O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por padrão o módulo será ativo se qualquer das condições a seguir for atendida:
 
 - O diretorio atual cotem um arquivo `CMakeLists.txt`
 - O diretorio atual tem um arquivo `CMakeCache.txt`
