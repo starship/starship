@@ -118,9 +118,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok(segments) => {
             if segments.is_empty() {
                 return None;
-            } else {
-                segments
             }
+            segments
         }
         Err(error) => {
             log::warn!("Error in module `git_status`:\n{error}");
@@ -160,28 +159,22 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_repo_status(&self) -> Option<&RepoStatus> {
         self.repo_status
-            .get_or_init(
-                || match get_static_repo_status(self.context, self.repo, &self.config) {
-                    Some(repo_status) => Some(repo_status),
-                    None => {
-                        log::debug!("get_repo_status: git status execution failed");
-                        None
-                    }
-                },
-            )
-            .as_ref()
-            .map(|repo_status| repo_status.as_ref())
+            .get_or_init(|| {
+                get_static_repo_status(self.context, self.repo, &self.config).or_else(|| {
+                    log::debug!("get_repo_status: git status execution failed");
+                    None
+                })
+            })
+            .as_deref()
     }
 
     pub fn get_stashed(&self) -> &Option<usize> {
-        self.stashed_count
-            .get_or_init(|| match get_stashed_count(self.repo) {
-                Some(stashed_count) => Some(stashed_count),
-                None => {
-                    log::debug!("get_stashed_count: git stash execution failed");
-                    None
-                }
+        self.stashed_count.get_or_init(|| {
+            get_stashed_count(self.repo).or_else(|| {
+                log::debug!("get_stashed_count: git stash execution failed");
+                None
             })
+        })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -363,7 +356,7 @@ fn get_repo_status(
             }) {
                 let output = repo.exec_git(
                     context,
-                    ["for-each-ref", "--format", "%(upstream:track)"]
+                    ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
                         .into_iter()
                         .map(ToOwned::to_owned)
                         .chain(Some(branch_name)),
@@ -380,14 +373,11 @@ fn get_repo_status(
                 status::Item::TreeIndex(change) => {
                     use gix::diff::index::Change;
                     match change {
-                        Change::Addition { .. } => {
+                        Change::Addition { .. } | Change::Modification { .. } => {
                             repo_status.staged += 1;
                         }
                         Change::Deletion { .. } => {
                             repo_status.deleted += 1;
-                        }
-                        Change::Modification { .. } => {
-                            repo_status.staged += 1;
                         }
                         Change::Rewrite { .. } => {
                             repo_status.renamed += 1;
@@ -550,7 +540,7 @@ impl RepoStatus {
             Some('1') => self.parse_normal_status(&s[2..4]),
             Some('2') => {
                 self.renamed += 1;
-                self.parse_normal_status(&s[2..4])
+                self.parse_normal_status(&s[2..4]);
             }
             Some('u') => self.conflicted += 1,
             Some('?') => self.untracked += 1,
@@ -570,7 +560,17 @@ impl RepoStatus {
     }
 
     fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
-        s = s.trim_matches(|c| c == '[' || c == ']');
+        if s == " " || s.ends_with(" [gone]") {
+            self.ahead = None;
+            self.behind = None;
+            return;
+        }
+
+        s = s
+            .split_once(' ')
+            .unwrap()
+            .1
+            .trim_matches(|c| c == '[' || c == ']');
 
         for pair in s.split(',') {
             let mut tokens = pair.trim().splitn(2, ' ');
@@ -750,7 +750,7 @@ pub(crate) mod tests {
     use crate::utils::create_command;
     use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
-    use std::fs::{self, File};
+    use std::fs::{self, File, OpenOptions};
     use std::io::{self, prelude::*};
     use std::path::Path;
 
@@ -891,6 +891,44 @@ pub(crate) mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch_with_gone_upstream(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1723,6 +1761,31 @@ pub(crate) mod tests {
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_branch(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "new-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn create_branch_with_gone_upstream(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "gone-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        let config_path = repo_dir.join(".git").join("config");
+        let mut config_file = OpenOptions::new().append(true).open(&config_path)?;
+        writeln!(
+            config_file,
+            "\n[branch \"gone-branch\"]\n\tremote = origin\n\tmerge = refs/heads/gone-upstream\n"
+        )?;
 
         Ok(())
     }

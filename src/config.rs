@@ -11,7 +11,7 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
-use std::ffi::OsString;
+use std::ffi::OsStr;
 use std::fs;
 
 use toml::Value;
@@ -38,7 +38,7 @@ where
         }
     }
 
-    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// Helper function that will call `ModuleConfig::from_config(config)` if config is Some,
     /// or `ModuleConfig::default()` if config is None.
     fn try_load<V: Into<ValueRef<'a>>>(config: Option<V>) -> Self {
         config.map(Into::into).map(Self::load).unwrap_or_default()
@@ -124,7 +124,7 @@ pub struct StarshipConfig {
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
+    pub fn initialize(config_file_path: Option<&OsStr>) -> Self {
         Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
@@ -133,7 +133,7 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+    fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
         match toml::from_str(&toml_content) {
             Ok(parsed) => Some(parsed),
@@ -156,15 +156,15 @@ impl StarshipConfig {
             .collect()
     }
 
-    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+    pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
         Self::read_config_content_as_str_with_context(config_file_path, None)
     }
 
     pub fn read_config_content_as_str_with_context(
-        config_file_path: &Option<OsString>,
+        config_file_path: Option<&OsStr>,
         context: Option<&Context>,
     ) -> Option<String> {
-        let config_file_path = config_file_path.as_ref()?;
+        let config_file_path = config_file_path?;
         let config_path_str = config_file_path.to_str()?;
 
         if Self::has_multiple_files(config_path_str) {
@@ -187,7 +187,7 @@ impl StarshipConfig {
     }
 
     /// Initialize the Config struct with context for proper home directory resolution
-    pub fn initialize_with_context(config_file_path: &Option<OsString>, context: &Context) -> Self {
+    pub fn initialize_with_context(config_file_path: Option<&OsStr>, context: &Context) -> Self {
         let config = Self::read_config_content_as_str_with_context(config_file_path, Some(context))
             .and_then(|toml_content| match toml::from_str(&toml_content) {
                 Ok(parsed) => Some(parsed),
@@ -288,28 +288,24 @@ impl StarshipConfig {
 
         // Assumes all keys except the last in path has a table
         for option in table_options {
-            match prev_table.get(*option) {
-                Some(value) => match value.as_table() {
-                    Some(value) => {
-                        prev_table = value;
-                    }
-                    None => {
-                        log::trace!(
-                            "No config found for \"{}\": \"{}\" is not a table",
-                            path.join("."),
-                            &option
-                        );
-                        return None;
-                    }
-                },
-                None => {
+            if let Some(value) = prev_table.get(*option) {
+                if let Some(value) = value.as_table() {
+                    prev_table = value;
+                } else {
                     log::trace!(
-                        "No config found for \"{}\": Option \"{}\" not found",
+                        "No config found for \"{}\": \"{}\" is not a table",
                         path.join("."),
                         &option
                     );
                     return None;
                 }
+            } else if prev_table.contains_key(*option) {
+                log::trace!(
+                    "No config found for \"{}\": \"{}\" is not a table",
+                    path.join("."),
+                    &option
+                );
+                return None;
             }
         }
 
@@ -321,7 +317,7 @@ impl StarshipConfig {
                 path.join("."),
                 &last_option
             );
-        };
+        }
         value
     }
 
@@ -1108,7 +1104,7 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
-        )
+        );
     }
 
     #[test]
@@ -1151,7 +1147,7 @@ mod tests {
     fn read_config_no_config_file_path_provided() {
         assert_eq!(
             None,
-            StarshipConfig::read_config_content_as_str(&None),
+            StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
     }
@@ -1311,11 +1307,11 @@ success_symbol = "[✓](bold green)"
     #[test]
     fn test_read_config_content_as_str_with_context_single_file() {
         // Test single file reading (existing functionality)
-        use std::ffi::OsString;
+        use std::ffi::OsStr;
 
-        let non_existent_path = OsString::from("non_existent_config.toml");
+        let non_existent_path = OsStr::new("non_existent_config.toml");
         let result =
-            StarshipConfig::read_config_content_as_str_with_context(&Some(non_existent_path), None);
+            StarshipConfig::read_config_content_as_str_with_context(Some(non_existent_path), None);
         assert!(result.is_none());
     }
     #[test]

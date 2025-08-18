@@ -70,15 +70,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_battery_status(context: &Context) -> Option<BatteryStatus> {
     let battery_info = context.battery_info_provider.get_battery_info()?;
-    if battery_info.energy_full != 0.0 {
+    if battery_info.energy_full == 0.0 {
+        None
+    } else {
         let battery = BatteryStatus {
             percentage: battery_info.energy / battery_info.energy_full * 100.0,
             state: battery_info.state,
         };
         log::debug!("Battery status: {battery:?}");
         Some(battery)
-    } else {
-        None
     }
 }
 

@@ -86,7 +86,7 @@ impl Default for StarshipLogger {
         let log_dir = get_log_dir();
 
         if let Err(err) = fs::create_dir_all(&log_dir) {
-            eprintln!("Unable to create log dir {log_dir:?}: {err:?}!")
+            eprintln!("Unable to create log dir {log_dir:?}: {err:?}!");
         };
         let session_log_file = log_dir.join(format!(
             "session_{}.log",
