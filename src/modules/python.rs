@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if !is_py_project && !has_env_vars {
         return None;
-    };
+    }
 
     let pyenv_prefix = if config.pyenv_version_name {
         config.pyenv_prefix
@@ -68,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `python`:\n{}", error);
+            log::warn!("Error in module `python`:\n{error}");
             return None;
         }
     });
@@ -86,7 +86,7 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
                 .stdout
                 .trim()
                 .to_string(),
-        )
+        );
     }
 
     version_name

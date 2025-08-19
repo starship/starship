@@ -18,7 +18,7 @@ pub struct HgBranchConfig<'a> {
 
 impl Default for HgBranchConfig<'_> {
     fn default() -> Self {
-        HgBranchConfig {
+        Self {
             symbol: " ",
             style: "bold purple",
             format: "on [$symbol$branch(:$topic)]($style) ",

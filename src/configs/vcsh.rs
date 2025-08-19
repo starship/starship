@@ -16,7 +16,7 @@ pub struct VcshConfig<'a> {
 
 impl Default for VcshConfig<'_> {
     fn default() -> Self {
-        VcshConfig {
+        Self {
             symbol: "",
             style: "bold yellow",
             format: "vcsh [$symbol$repo]($style) ",

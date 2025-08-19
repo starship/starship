@@ -45,16 +45,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .into_iter()
         .find_map(|env| context.get_env(env));
 
-    let ctx = match docker_context_env {
-        Some(data) => data,
-        _ => {
-            if !docker_config.exists() {
-                return None;
-            }
-            let json = utils::read_file(docker_config).ok()?;
-            let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
-            parsed_json.get("currentContext")?.as_str()?.to_owned()
+    let ctx = if let Some(data) = docker_context_env {
+        data
+    } else {
+        if !docker_config.exists() {
+            return None;
         }
+        let json = utils::read_file(docker_config).ok()?;
+        let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
+        parsed_json.get("currentContext")?.as_str()?.to_owned()
     };
 
     let default_contexts = ["default", "desktop-linux"];
@@ -82,7 +81,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `docker_context`:\n{}", error);
+            log::warn!("Error in module `docker_context`:\n{error}");
             return None;
         }
     });
@@ -106,6 +105,64 @@ mod tests {
 
         assert_eq!(expected, actual);
         cfg_dir.close()
+    }
+
+    #[test]
+    fn test_with_compose_yml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
+    }
+
+    #[test]
+    fn test_with_compose_yaml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yaml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
     }
 
     #[test]

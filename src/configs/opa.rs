@@ -20,10 +20,10 @@ pub struct OpaConfig<'a> {
 
 impl Default for OpaConfig<'_> {
     fn default() -> Self {
-        OpaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🪖  ",
+            symbol: "🪖 ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["rego"],

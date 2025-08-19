@@ -88,7 +88,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@master
@@ -201,7 +201,7 @@ jobs:
       STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # Required to include the recently merged Crowdin PR
           ref: master
@@ -240,7 +240,7 @@ jobs:
       - name: Setup | Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22.18.0
 
       - name: Notarize | Build docs
         run: |
@@ -249,7 +249,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -289,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -313,7 +313,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -327,7 +327,7 @@ jobs:
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v3.2
+      - uses: mislav/bump-homebrew-formula-action@v3.5
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
@@ -367,9 +367,9 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
@@ -383,7 +383,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
@@ -395,7 +395,7 @@ jobs:
     needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
         env:

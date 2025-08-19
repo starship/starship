@@ -71,6 +71,7 @@ $swift\
 $terraform\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
 $conda\
@@ -319,7 +320,7 @@ symbol = '✶'
 format = '[$symbol nix⎪$state⎪]($style) [$name](italic dimmed white)'
 impure_msg = '[⌽](bold dimmed red)'
 pure_msg = '[⌾](bold dimmed green)'
-unknown_msg = '[◌](bold dimmed ellow)'
+unknown_msg = '[◌](bold dimmed yellow)'
 
 [spack]
 symbol = "◇ "

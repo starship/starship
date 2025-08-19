@@ -24,7 +24,7 @@ pub struct PixiConfig<'a> {
 
 impl Default for PixiConfig<'_> {
     fn default() -> Self {
-        PixiConfig {
+        Self {
             pixi_binary: VecOr(vec!["pixi"]),
             show_default_environment: true,
             format: "via [$symbol($version )(\\($environment\\) )]($style)",
@@ -34,7 +34,7 @@ impl Default for PixiConfig<'_> {
             disabled: false,
             detect_extensions: vec![],
             detect_files: vec!["pixi.toml", "pixi.lock"],
-            detect_folders: vec![".pixi"],
+            detect_folders: vec![],
         }
     }
 }

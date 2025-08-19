@@ -21,7 +21,7 @@ pub struct BatteryConfig<'a> {
 
 impl Default for BatteryConfig<'_> {
     fn default() -> Self {
-        BatteryConfig {
+        Self {
             full_symbol: "󰁹 ",
             charging_symbol: "󰂄 ",
             discharging_symbol: "󰂃 ",
@@ -50,7 +50,7 @@ pub struct BatteryDisplayConfig<'a> {
 
 impl Default for BatteryDisplayConfig<'_> {
     fn default() -> Self {
-        BatteryDisplayConfig {
+        Self {
             threshold: 10,
             style: "red bold",
             charging_symbol: None,

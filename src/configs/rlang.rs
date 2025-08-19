@@ -20,7 +20,7 @@ pub struct RLangConfig<'a> {
 
 impl Default for RLangConfig<'_> {
     fn default() -> Self {
-        RLangConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             style: "blue bold",

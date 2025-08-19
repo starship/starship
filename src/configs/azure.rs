@@ -18,7 +18,7 @@ pub struct AzureConfig<'a> {
 
 impl Default for AzureConfig<'_> {
     fn default() -> Self {
-        AzureConfig {
+        Self {
             format: "on [$symbol($subscription)]($style) ",
             symbol: "󰠅 ",
             style: "blue bold",

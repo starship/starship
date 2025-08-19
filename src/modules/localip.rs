@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let ssh_connection = context.get_env("SSH_CONNECTION");
     if config.ssh_only && ssh_connection.is_none() {
@@ -70,7 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `localip`:\n{}", error);
+            log::warn!("Error in module `localip`:\n{error}");
             return None;
         }
     });

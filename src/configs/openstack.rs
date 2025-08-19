@@ -16,7 +16,7 @@ pub struct OspConfig<'a> {
 
 impl Default for OspConfig<'_> {
     fn default() -> Self {
-        OspConfig {
+        Self {
             format: "on [$symbol$cloud(\\($project\\))]($style) ",
             symbol: "☁️  ",
             style: "bold yellow",

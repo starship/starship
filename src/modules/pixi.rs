@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `pixi`:\n{}", error);
+            log::warn!("Error in module `pixi`:\n{error}");
             return None;
         }
     });
@@ -77,7 +77,7 @@ fn get_pixi_version(context: &Context, config: &PixiConfig) -> Option<String> {
         .find_map(|binary| context.exec_cmd(binary, &["--version"]))
         .map(get_command_string_output)?;
 
-    Some(version.split_once(" ")?.1.trim().to_string())
+    Some(version.split_once(' ')?.1.trim().to_string())
 }
 
 #[cfg(test)]

@@ -1,5 +1,5 @@
 [aws]
-symbol = "  "
+symbol = " "
 
 [buf]
 symbol = " "
@@ -112,6 +112,7 @@ Alpine = " "
 AlmaLinux = " "
 Amazon = " "
 Android = " "
+AOSC = " "
 Arch = " "
 Artix = " "
 CachyOS = " "
@@ -185,6 +186,9 @@ symbol = " "
 
 [swift]
 symbol = " "
+
+[xmake]
+symbol = " "
 
 [zig]
 symbol = " "

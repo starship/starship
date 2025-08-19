@@ -52,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `haxe`:\n{}", error);
+            log::warn!("Error in module `haxe`:\n{error}");
             return None;
         }
     });
@@ -120,7 +120,7 @@ mod tests {
         assert_eq!(
             Some("4.3.0-rc.1+".to_string()),
             parse_haxe_version(sample_haxe_output)
-        )
+        );
     }
 
     #[test]

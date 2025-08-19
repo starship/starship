@@ -109,7 +109,7 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(
+        Self::new_with_shell_and_path(
             arguments,
             shell,
             target,
@@ -128,7 +128,7 @@ impl<'a> Context<'a> {
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(&get_config_path_os(&env));
+        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -162,7 +162,7 @@ impl<'a> Context<'a> {
 
         let width = properties.terminal_width;
 
-        Context {
+        Self {
             config,
             properties,
             current_dir,
@@ -220,7 +220,7 @@ impl<'a> Context<'a> {
     }
 
     /// Create a new module
-    pub fn new_module(&self, name: &str) -> Module {
+    pub fn new_module(&self, name: &str) -> Module<'_> {
         let config = self.config.get_module_config(name);
         let desc = modules::description(name);
 
@@ -411,11 +411,7 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
-        log::trace!(
-            "Executing command {:?} with args {:?} from context",
-            cmd,
-            args
-        );
+        log::trace!("Executing command {cmd:?} with args {args:?} from context");
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
@@ -437,7 +433,7 @@ impl<'a> Context<'a> {
     }
 
     /// Attempt to execute several commands with `exec_cmd`, return the results of the first that works
-    pub fn exec_cmds_return_first(&self, commands: Vec<Vec<&str>>) -> Option<CommandOutput> {
+    pub fn exec_cmds_return_first(&self, commands: &[Vec<&str>]) -> Option<CommandOutput> {
         commands
             .iter()
             .find_map(|attempt| self.exec_cmd(attempt[0], &attempt[1..]))
@@ -462,7 +458,7 @@ impl<'a> Context<'a> {
 
 impl Default for Context<'_> {
     fn default() -> Self {
-        Context::new(Default::default(), Target::Main)
+        Self::new(Default::default(), Target::Main)
     }
 }
 
@@ -698,7 +694,7 @@ impl Repo {
         }
 
         command.args(git_args);
-        log::trace!("Executing git command: {:?}", command);
+        log::trace!("Executing git command: {command:?}");
 
         exec_timeout(
             &mut command,
@@ -1157,12 +1153,12 @@ mod tests {
         // Mock navigation into the symlink path
         let test_path = path_symlink.join("yyy");
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -1182,12 +1178,12 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -1204,12 +1200,12 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            Default::default(),
+            Properties::default(),
             Shell::Unknown,
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default(),
+            Env::default(),
         );
 
         let expected_current_dir = home_dir()
