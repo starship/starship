@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let compiler_info = LazyLock::new(|| context.exec_cmds_return_first(config.commands));
+        let compiler_info = LazyLock::new(|| context.exec_cmds_return_first(&config.commands));
 
         formatter
             .map_meta(|var, _| match var {

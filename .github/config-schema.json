@@ -531,21 +531,13 @@
       }
     },
     "fortran": {
+      "$ref": "#/$defs/FortranConfig",
       "default": {
-        "commands": [
-          [
-            "gfortran",
-            "--version"
-          ],
-          [
-            "flang",
-            "--version"
-          ],
-          [
-            "flang-new",
-            "--version"
-          ]
-        ],
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "version_format": "${raw}",
+        "symbol": "🅵  ",
+        "style": "bold purple",
+        "disabled": false,
         "detect_extensions": [
           "f",
           "F",
@@ -570,17 +562,21 @@
           "fpm.toml"
         ],
         "detect_folders": [],
-        "disabled": false,
-        "format": "via [$symbol($version(-$name) )]($style)",
-        "style": "bold purple",
-        "symbol": "󱈚 ",
-        "version_format": "${raw}"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/FortranConfig"
-        }
-      ]
+        "commands": [
+          [
+            "gfortran",
+            "--version"
+          ],
+          [
+            "flang",
+            "--version"
+          ],
+          [
+            "flang-new",
+            "--version"
+          ]
+        ]
+      }
     },
     "fossil_branch": {
       "$ref": "#/$defs/FossilBranchConfig",
@@ -3208,26 +3204,30 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($version(-$name) )]($style)",
-          "type": "string"
+          "type": "string",
+          "default": "via [$symbol($version(-$name) )]($style)"
         },
         "version_format": {
-          "default": "${raw}",
-          "type": "string"
+          "type": "string",
+          "default": "${raw}"
         },
         "symbol": {
-          "default": "󱈚 ",
-          "type": "string"
+          "type": "string",
+          "default": "🅵  "
         },
         "style": {
-          "default": "bold purple",
-          "type": "string"
+          "type": "string",
+          "default": "bold purple"
         },
         "disabled": {
-          "default": false,
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "default": [
             "f",
             "F",
@@ -3247,29 +3247,32 @@
             "F08",
             "f18",
             "F18"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          ]
         },
         "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "default": [
             "fpm.toml"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          ]
         },
         "detect_folders": {
-          "default": [],
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "default": []
         },
         "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "default": [
             [
               "gfortran",
@@ -3283,14 +3286,7 @@
               "flang-new",
               "--version"
             ]
-          ],
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          ]
         }
       },
       "additionalProperties": false
