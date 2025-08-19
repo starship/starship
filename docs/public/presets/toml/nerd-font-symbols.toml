@@ -44,7 +44,7 @@ symbol = " "
 symbol = " "
 
 [fortran]
-symbol = "󱈚 "
+symbol = " "
 
 [fossil_branch]
 symbol = " "
