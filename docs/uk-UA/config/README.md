@@ -663,7 +663,7 @@ format = 'via [🍔 $version](bold green) '
 
 Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['myc', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
+Якщо C-компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Приклад
 
@@ -3375,7 +3375,7 @@ Arch = "Arch is the best! "
 
 ## Package Version
 
-Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml` and `dart` packages.
+Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує такі пакунки: `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml` та `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
 - [**JSR**](https://jsr.io/) — версія пакунка `jsr` отримана з файлів `jsr.json`/`jsr.jsonc` чи `deno.json`/`deno.jsonc` у поточній теці
@@ -3391,7 +3391,7 @@ Arch = "Arch is the best! "
 - [**Maven**](https://maven.apache.org/) — версія пакунка `maven` отримується з `pom.xml` з поточної теки
 - [**Meson**](https://mesonbuild.com/) — версія пакунка `meson` отримується з `meson.build` з поточної теки
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) — версія пакунка `shards` отримується з `shard.yml` з поточної теки
-- [**Galaxy**](https://galaxy.ansible.com/) - The `galaxy` package version is extracted from the `galaxy.yml` present in the current directory
+- [**Galaxy**](https://galaxy.ansible.com/) — версія пакунка `galaxy` отримується з `galaxy.yml` з поточної теки
 - [**V**](https://vlang.io) — версія пакунка `vlang` отримується з `v.mod` з поточної теки
 - [**SBT**](https://scala-sbt.org) — версія пакунка `sbt` отримується з `build.sbt` з поточної теки
 - [**Daml**](https://www.digitalasset.com/developers) — версія пакунка `daml` отримується з `daml.yaml` з поточної теки
