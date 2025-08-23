@@ -16,11 +16,14 @@ use fuser::ReplyOpen;
 use fuser::Request;
 use libc::{ENOENT, ENOSYS};
 use std::ffi::OsStr;
+use std::path::PathBuf;
 use std::thread::sleep;
 use std::time::Duration;
 
 #[derive(Clone)]
 pub struct StallingFilesystem {
+    /// Where the folder is to be created in.
+    mnt_point: PathBuf,
     /// Duration before a reply is given.
     stall_dur: Duration,
 }
@@ -94,5 +97,34 @@ impl Filesystem for StallingFilesystem {
         reply: ReplyEmpty,
     ) {
         reply.ok();
+    }
+}
+
+impl StallingFilesystem {
+    /// Creates a folder that hangs the file system.
+    ///
+    /// The parent folder to this will also timeout. Folder is unmounted upon Drop.
+    ///
+    /// # Errors
+    /// Returns an error if the parent folder cannot be found.
+    pub fn new(path: PathBuf, stall_duration: Duration) -> Result<Self, std::io::Error> {
+        // The folder must first be made before mount2 can mount folder as FUSE.
+        if !path.exists() {
+            std::fs::create_dir_all(&path)?;
+        }
+
+        Ok(Self {
+            mnt_point: path,
+            stall_dur: stall_duration,
+        })
+    }
+
+    /// Mounts the filesystem to block itself and the parent folder.
+    ///
+    /// When [fuser::BackgroundSession] is dropped, the stalling filesystem is unmounted.
+    pub fn block(self) -> std::io::Result<fuser::BackgroundSession> {
+        let mount_point = self.mnt_point.clone();
+        // block as a separate function from new suffers from TOC/TOU bugs.
+        fuser::spawn_mount2(self, mount_point, &[ /*Not selecting Automount or RO.*/ ])
     }
 }
