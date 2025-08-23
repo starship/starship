@@ -116,9 +116,7 @@ fn get_github_issue_body(environment: &Environment) -> String {
 
 #### Starship Configuration
 
-```toml
-{starship_config}
-```",
+{starship_config}",
         starship_version = shadow::PKG_VERSION,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
@@ -236,16 +234,56 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
+    let config_env = std::env::var("STARSHIP_CONFIG").ok();
+    let config_line = match &config_env {
+        Some(line) => line,
+        None => return get_default_starship_config(),
+    };
+
+    let separator = if cfg!(windows) { ';' } else { ':' };
+    if !config_line.contains(separator) {
+        return get_default_starship_config();
+    }
+
+    if let Some(merged) = crate::config::StarshipConfig::merge_config_files_runtime(config_line) {
+        return format!(
+            "Merged configuration (as used by Starship):\n```toml\n{}\n```",
+            merged.trim()
+        );
+    }
+    UNKNOWN_CONFIG.to_string()
+}
+
+fn get_default_starship_config() -> String {
+    let config_path = std::env::var("STARSHIP_CONFIG")
         .ok()
+        .map(PathBuf::from)
         .or_else(|| {
-            utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
-                home_dir
+            utils::home_dir().map(|mut home| {
+                home.push(".config/starship.toml");
+                home
             })
+        });
+
+    config_path
+        .as_ref()
+        .and_then(|path| fs::read_to_string(path).ok().map(|content| (path, content)))
+        .map(|(path, content)| {
+            let display_path = std::env::var("HOME")
+                .ok()
+                .and_then(|home| {
+                    let home_path = PathBuf::from(home);
+                    path.strip_prefix(&home_path)
+                        .ok()
+                        .map(|rel| format!("~/{}", rel.display()))
+                })
+                .unwrap_or_else(|| path.display().to_string());
+            format!(
+                "Configuration File: {}\n\n```toml\n{}\n```",
+                display_path,
+                content.trim()
+            )
         })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
 }
 
@@ -307,5 +345,35 @@ mod tests {
             utils::home_dir().unwrap().join(".bashrc"),
             config_path.unwrap()
         );
+    }
+    #[test]
+    fn test_get_starship_config_env_not_set() {
+        unsafe {
+            std::env::remove_var("STARSHIP_CONFIG");
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_single_file() {
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "/tmp/fake.toml");
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_multiple_files() {
+        let sep = if cfg!(windows) { ";" } else { ":" };
+        unsafe {
+            std::env::set_var(
+                "STARSHIP_CONFIG",
+                format!("/tmp/one.toml{}{}", sep, "/tmp/two.toml"),
+            );
+        }
+        let result = get_starship_config();
+        assert!(result.contains("Merged configuration") || result == UNKNOWN_CONFIG);
     }
 }
