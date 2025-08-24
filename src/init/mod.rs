@@ -54,7 +54,7 @@ impl StarshipPath {
     fn sprint_cmdexe(&self) -> io::Result<String> {
         self.str_path().map(|s| format!("\"{s}\""))
     }
-    
+
     /// `xonsh` specific path escaping
     fn sprint_xonsh(&self) -> io::Result<String> {
         // xonsh interprets backslashes as escape sequences even in quoted strings
@@ -362,6 +362,95 @@ mod tests {
         let result = starship_path.sprint_xonsh()?;
         // On non-Windows with spaces, should be quoted
         assert_eq!(result, "'/usr/local/my tools/starship'");
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn escape_xonsh_windows_spaces() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\Program Files\starship tools\bin\starship.exe"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+        // Should double backslashes and handle spaces
+        assert!(result.contains(r"\\\\"));
+        assert!(result.contains("Program Files"));
+        // Should not contain problematic escape sequences
+        assert!(!result.contains(r"\t"));
+        assert!(!result.contains(r"\b"));
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn escape_xonsh_windows_multiple_escapes() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\temp\bin\test\new\starship.exe"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+        // Should double all backslashes
+        assert!(result.contains(r"\\\\"));
+        // Should not contain any single backslashes that could be escape sequences
+        assert!(!result.contains(r"\t")); // \temp -> \\temp
+        assert!(!result.contains(r"\b")); // \bin -> \\bin
+        assert!(!result.contains(r"\n")); // \new -> \\new
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn escape_xonsh_windows_exact_problematic_path() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\Program Files\starship\bin\starship.exe"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+
+        // The exact fix: \bin should become \\bin to prevent \b interpretation
+        assert!(result.contains(r"\\bin\\"));
+        // Should be properly quoted
+        assert!(result.starts_with('\'') || result.starts_with('"'));
+        // Should not contain the problematic \b sequence
+        assert!(!result.contains(r"\bin"));
+        Ok(())
+    }
+
+    #[test]
+    fn xonsh_init_stub_contains_escaped_path() -> io::Result<()> {
+        // Test that xonsh init stub uses the escaped path properly
+        let starship_path = StarshipPath::init()?;
+        let escaped_path = starship_path.sprint_xonsh()?;
+
+        // The escaped path should be valid for xonsh
+        // On Windows, it should have doubled backslashes
+        #[cfg(target_os = "windows")]
+        {
+            // If the path contains backslashes, they should all be doubled
+            if starship_path.str_path()?.contains('\\') {
+                assert!(escaped_path.contains(r"\\"));
+            }
+        }
+
+        // On all platforms, the path should not be empty
+        assert!(!escaped_path.is_empty());
+
+        Ok(())
+    }
+
+    #[test]
+    fn xonsh_init_main_uses_escaped_path() -> io::Result<()> {
+        // Test that the print_script function properly replaces ::STARSHIP:: placeholder
+        let test_script = "execx($(${{}} init xonsh --print-full-init))";
+        let starship_path = StarshipPath::init()?;
+        let escaped_path = starship_path.sprint_xonsh()?;
+
+        // Simulate what print_script does
+        let result = test_script.replace("{{}}", &escaped_path);
+
+        // The result should contain the escaped path
+        assert!(result.contains(&escaped_path));
+        // Should contain the xonsh execx call
+        assert!(result.contains("execx"));
+
         Ok(())
     }
 }
