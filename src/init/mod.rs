@@ -54,6 +54,22 @@ impl StarshipPath {
     fn sprint_cmdexe(&self) -> io::Result<String> {
         self.str_path().map(|s| format!("\"{s}\""))
     }
+    
+    /// `xonsh` specific path escaping
+    fn sprint_xonsh(&self) -> io::Result<String> {
+        // xonsh interprets backslashes as escape sequences even in quoted strings
+        // On Windows, we need to escape backslashes to prevent \b being interpreted as backspace
+        if cfg!(target_os = "windows") {
+            self.str_path().map(|s| {
+                // Double backslashes to escape them properly in xonsh
+                let escaped = s.replace('\\', "\\\\");
+                shell_words::quote(&escaped).into_owned()
+            })
+        } else {
+            // On non-Windows, use regular POSIX quoting
+            self.sprint()
+        }
+    }
     fn sprint_posix(&self) -> io::Result<String> {
         // On non-Windows platform, return directly.
         if cfg!(not(target_os = "windows")) {
@@ -177,7 +193,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
             r"execx($({} init xonsh --print-full-init))",
-            starship.sprint_posix()?
+            starship.sprint_xonsh()?
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
@@ -217,7 +233,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
-        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_xonsh()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -308,6 +324,44 @@ mod tests {
             starship_path.sprint_cmdexe()?,
             r#""C:\Cool Tools\starship.exe""#
         );
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "windows")]
+    fn escape_xonsh_windows() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\Program Files\starship\bin\starship.exe"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+        // Should double backslashes to prevent escape sequence interpretation
+        assert!(result.contains(r"\\\\"));
+        // Should not contain single backslashes that could be interpreted as escape sequences
+        assert!(!result.contains(r"\b"));
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn escape_xonsh_non_windows() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from("/usr/local/bin/starship"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+        // On non-Windows, should use standard quoting (shell_words::quote doesn't quote if not needed)
+        assert_eq!(result, "/usr/local/bin/starship");
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
+    fn escape_xonsh_non_windows_spaces() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from("/usr/local/my tools/starship"),
+        };
+        let result = starship_path.sprint_xonsh()?;
+        // On non-Windows with spaces, should be quoted
+        assert_eq!(result, "'/usr/local/my tools/starship'");
         Ok(())
     }
 }
