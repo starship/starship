@@ -1,10 +1,12 @@
 use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
+use regex::Regex;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
+use std::sync::OnceLock;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
@@ -36,12 +38,20 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
+static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
+
+fn ansi_strip() -> &'static Regex {
+    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+}
+
 impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        self.as_ref()
+        ansi_strip()
+            .replace_all(self.as_ref(), "")
+            .into_owned()
             .graphemes(true)
             .map(Grapheme)
             .map(|g| g.width())
@@ -55,6 +65,8 @@ fn test_grapheme_aware_width() {
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
+    // Magenta string test
+    assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {
