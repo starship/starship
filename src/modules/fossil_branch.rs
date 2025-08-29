@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let checkout_db = if cfg!(windows) {
         "_FOSSIL_"
@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `fossil_branch`:\n{}", error);
+            log::warn!("Error in module `fossil_branch`:\n{error}");
             return None;
         }
     });
@@ -78,7 +78,7 @@ mod tests {
 
     use nu_ansi_term::{Color, Style};
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
 
     enum Expect<'a> {
         BranchName(&'a str),
@@ -205,7 +205,7 @@ mod tests {
                 }
                 Expect::Symbol(symbol) => expect_symbol = symbol,
                 Expect::TruncationSymbol(truncation_symbol) => {
-                    expect_truncation_symbol = truncation_symbol
+                    expect_truncation_symbol = truncation_symbol;
                 }
                 Expect::NoTruncation => expect_truncation_symbol = "",
                 Expect::BranchName(branch_name) => expect_branch_name = branch_name,

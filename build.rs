@@ -5,7 +5,9 @@ use std::io::Write;
 use shadow_rs::SdResult;
 
 fn main() -> SdResult<()> {
-    shadow_rs::new_hook(gen_presets_hook)?;
+    shadow_rs::ShadowBuilder::builder()
+        .hook(gen_presets_hook)
+        .build()?;
 
     #[cfg(windows)]
     {
@@ -40,7 +42,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
 
     writeln!(
         file,
-        r#"
+        r"
 use crate::print;
 
 pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
@@ -55,7 +57,7 @@ pub fn get_preset_content(name: &str) -> &[u8] {{
     _ => unreachable!(),
     }}
 }}
-"#
+"
     )?;
     Ok(())
 }

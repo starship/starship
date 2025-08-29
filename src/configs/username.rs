@@ -18,9 +18,9 @@ pub struct UsernameConfig<'a> {
     pub aliases: IndexMap<String, &'a str>,
 }
 
-impl<'a> Default for UsernameConfig<'a> {
+impl Default for UsernameConfig<'_> {
     fn default() -> Self {
-        UsernameConfig {
+        Self {
             detect_env_vars: vec![],
             format: "[$user]($style) in ",
             style_root: "red bold",

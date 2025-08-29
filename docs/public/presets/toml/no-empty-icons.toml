@@ -1,10 +1,13 @@
 [buf]
-format = '(with [$symbol$version ]($style))'
+format = '(with [$symbol($version )]($style))'
 
 [bun]
 format = '(via [$symbol($version )]($style))'
 
 [c]
+format = '(via [$symbol($version(-$name) )]($style))'
+
+[cpp]
 format = '(via [$symbol($version(-$name) )]($style))'
 
 [cmake]
@@ -75,6 +78,7 @@ format = '(via [$symbol($version )(\($switch_indicator$switch_name\) )]($style))
 
 [opa]
 format = '(via [$symbol($version )]($style))'
+
 [package]
 format = '(is [$symbol$version]($style) )'
 
@@ -121,6 +125,9 @@ format = '(via [$symbol($version )]($style))'
 format = '(via [$symbol($version )]($style))'
 
 [vlang]
+format = '(via [$symbol($version )]($style))'
+
+[xmake]
 format = '(via [$symbol($version )]($style))'
 
 [zig]

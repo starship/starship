@@ -18,9 +18,9 @@ pub struct DartConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DartConfig<'a> {
+impl Default for DartConfig<'_> {
     fn default() -> Self {
-        DartConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🎯 ",

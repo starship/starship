@@ -1,22 +1,23 @@
-use crate::context::{Context, Shell, Target};
+use crate::context::{Context, Properties, Shell, Target};
+use crate::context_env::Env;
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
-    utils::{create_command, CommandOutput},
+    utils::{CommandOutput, create_command},
 };
 use log::{Level, LevelFilter};
-use once_cell::sync::Lazy;
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
 use std::sync::Once;
 use tempfile::TempDir;
 
-static FIXTURE_DIR: Lazy<PathBuf> =
-    Lazy::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
+static FIXTURE_DIR: LazyLock<PathBuf> =
+    LazyLock::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
 
-static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
-static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
+static GIT_FIXTURE: LazyLock<PathBuf> = LazyLock::new(|| FIXTURE_DIR.join("git-repo.bundle"));
+static HG_FIXTURE: LazyLock<PathBuf> = LazyLock::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
 static LOGGER: Once = Once::new();
 
@@ -37,12 +38,12 @@ fn init_logger() {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        Default::default(),
+        Properties::default(),
         Shell::Unknown,
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
-        Default::default(),
+        Env::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -63,6 +64,14 @@ impl<'a> ModuleRenderer<'a> {
         let context = default_context();
 
         Self { name, context }
+    }
+
+    /// Creates a new `ModuleRenderer` with `HOME` set to a `TempDir`
+    pub fn new_with_home(name: &'a str) -> io::Result<(Self, tempfile::TempDir)> {
+        let module_renderer = ModuleRenderer::new(name);
+        let homedir = tempfile::tempdir()?;
+        let home = dunce::canonicalize(homedir.path())?;
+        Ok((module_renderer.env("HOME", home.to_str().unwrap()), homedir))
     }
 
     pub fn path<T>(mut self, path: T) -> Self
@@ -160,7 +169,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
-        let ret = crate::print::get_module(self.name, self.context);
+        let ret = crate::print::get_module(self.name, &self.context);
         // all tests rely on the fact that an empty module produces None as output as the
         // convention was that there would be no module but None. This is nowadays not anymore
         // the case (to get durations for all modules). So here we make it so, that an empty
@@ -246,12 +255,13 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         }
         FixtureProvider::GitBare => {
             let path = tempfile::tempdir()?;
-            gix::ThreadSafeRepository::init(
-                &path,
-                gix::create::Kind::Bare,
-                gix::create::Options::default(),
-            )
-            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
+
+            create_command("git")?
+                .current_dir(path.path())
+                .args(["clone", "-b", "master", "--bare"])
+                .arg(GIT_FIXTURE.as_os_str())
+                .arg(path.path())
+                .output()?;
             Ok(path)
         }
         FixtureProvider::Hg => {

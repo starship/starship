@@ -229,10 +229,12 @@ curl -sS https://starship.rs/install.sh | sh
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                | `apt install starship`                                                         |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
+| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                           | `apt install starship`                                                         |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -338,20 +340,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-আপনার Nushell env ফাইলের (Nushell এ `$nu.env-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনগুলি যোগ করুন:
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-এরপর আপনার Nushell কনফিগের (Nushell এ `$nu.config-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনটি যোগ করুন:
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-বিঃদ্রঃ শুধুমাত্র Nushell v0.78+ কাজ করবে ।
+বিঃদ্রঃ শুধুমাত্র Nushell v0.96+ কাজ করবে ।
 
 </details>
 
@@ -431,7 +427,16 @@ eval "$(starship init zsh)"
 
 [একজন স্পনসর হয়ে](https://github.com/sponsors/starship) এই প্রোজেক্টটিকে আর্থিক ভাবে সহায়তা করুন । আপনার নাম অথবা লোগো নিম্নে দেখা যাবে আপনার ওয়েবসাইট এর লিঙ্ক সহ ।
 
-- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+## 🔒 Code Signing Policy
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

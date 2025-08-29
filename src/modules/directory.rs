@@ -165,7 +165,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `directory`:\n{}", error);
+            log::warn!("Error in module `directory`:\n{error}");
             return None;
         }
     });
@@ -195,11 +195,7 @@ fn is_readonly_dir(path: &Path) -> bool {
     match directory_utils::is_write_allowed(path) {
         Ok(res) => !res,
         Err(e) => {
-            log::debug!(
-                "Failed to determine read only status of directory '{:?}': {}",
-                path,
-                e
-            );
+            log::debug!("Failed to determine read only status of directory '{path:?}': {e}");
             false
         }
     }
@@ -340,7 +336,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: &str, truncated_dir_string: 
 
 /// Convert the path separators in `path` to the OS specific path separators.
 fn convert_path_sep(path: &str) -> String {
-    return PathBuf::from_slash(path).to_string_lossy().into_owned();
+    PathBuf::from_slash(path).to_string_lossy().into_owned()
 }
 
 /// Get the path before the git repo root by trim the most right repo name.

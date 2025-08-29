@@ -14,9 +14,9 @@ pub struct GuixShellConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for GuixShellConfig<'a> {
+impl Default for GuixShellConfig<'_> {
     fn default() -> Self {
-        GuixShellConfig {
+        Self {
             format: "via [$symbol]($style) ",
             symbol: "🐃 ",
             style: "yellow bold",

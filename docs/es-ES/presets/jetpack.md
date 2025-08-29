@@ -19,6 +19,6 @@ Este es un preajuste pseudominimalista inspirado en las indicaciones [geometría
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/jetpack.toml)
+[Click to download TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml

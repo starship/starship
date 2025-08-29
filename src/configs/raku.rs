@@ -18,7 +18,7 @@ pub struct RakuConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for RakuConfig<'a> {
+impl Default for RakuConfig<'_> {
     fn default() -> Self {
         RakuConfig {
             format: "via [$symbol($version-$vm_version )]($style)",

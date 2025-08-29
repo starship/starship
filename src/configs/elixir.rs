@@ -18,9 +18,9 @@ pub struct ElixirConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for ElixirConfig<'a> {
+impl Default for ElixirConfig<'_> {
     fn default() -> Self {
-        ElixirConfig {
+        Self {
             format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
             version_format: "v${raw}",
             symbol: "💧 ",

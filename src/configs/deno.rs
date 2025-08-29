@@ -18,9 +18,9 @@ pub struct DenoConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DenoConfig<'a> {
+impl Default for DenoConfig<'_> {
     fn default() -> Self {
-        DenoConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🦕 ",
@@ -30,6 +30,7 @@ impl<'a> Default for DenoConfig<'a> {
             detect_files: vec![
                 "deno.json",
                 "deno.jsonc",
+                "deno.lock",
                 "mod.ts",
                 "deps.ts",
                 "mod.js",

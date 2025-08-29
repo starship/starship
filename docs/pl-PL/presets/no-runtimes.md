@@ -12,6 +12,6 @@ Ten zestaw ustawień ukrywa wersję środowiska wykonawczego.  Jeśli pracujesz 
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Kliknij, aby pobrać TOML](/presets/toml/no-runtime-versions.toml)
+[Click to download TOML](/presets/toml/no-runtime-versions.toml){download}
 
 <<< @/public/presets/toml/no-runtime-versions.toml

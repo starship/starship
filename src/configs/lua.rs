@@ -19,9 +19,9 @@ pub struct LuaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for LuaConfig<'a> {
+impl Default for LuaConfig<'_> {
     fn default() -> Self {
-        LuaConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🌙 ",

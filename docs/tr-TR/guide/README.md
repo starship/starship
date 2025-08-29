@@ -229,10 +229,12 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 | Alpine Linux 3.13+         | [Alpine Linux Paketleri](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux                 | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                         | `pacman -S starship`                                                           |
 | CentOS 7+                  | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                    | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+                 | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                 | `apt install starship`                                                         |
 | Gentoo                     | [Gentoo Paketleri](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro                    |                                                                                                  | `pacman -S starship`                                                           |
 | NixOS                      | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)     | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE                   | [OSS](https://software.opensuse.org/package/starship)                                            | `zypper in starship`                                                           |
+| Ubuntu 25.04+              | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                            | `apt install starship`                                                         |
 | Void Linux                 | [Void Linux Paketleri](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -338,20 +340,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-path` komutunu çalıştırarak bulabilirsiniz):
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-Not: Nushell v0.78'tan sonraki sürümler desteklenmektedir
+Not: Nushell v0.96'tan sonraki sürümler desteklenmektedir
 
 </details>
 
@@ -431,7 +427,16 @@ Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz at
 
 [Bir sponsor olarak](https://github.com/sponsors/starship) bu projeye destek ver. İsminiz veya logonuz bağlantınız ile beraber burda görünecek.
 
-- Ücretsiz kod imzalama [SignPath.io](https://signpath.io) tarafından sağlanmıştır, sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanmıştır
+## 🔒 Code Signing Policy
+
+Ücretsiz kod imzalama [SignPath.io](https://signpath.io) tarafından sağlanmıştır, sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanmıştır.
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

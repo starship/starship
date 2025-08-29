@@ -19,9 +19,9 @@ pub struct KotlinConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for KotlinConfig<'a> {
+impl Default for KotlinConfig<'_> {
     fn default() -> Self {
-        KotlinConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🅺 ",

@@ -75,3 +75,9 @@ Este preajuste está muy inspirado en [Pastel Powerline](./pastel-powerline.md) 
 Este es un preajuste pseudominimalista inspirado en las indicaciones [geometría](https://github.com/geometry-zsh/geometry) y [nave espacial](https://github.com/spaceship-prompt/spaceship-prompt).
 
 [![Captura de pantalla del preajuste Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+
+## [Catppuccin Powerline](./catppuccin-powerline.md)
+
+This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+
+[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)

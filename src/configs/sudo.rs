@@ -15,9 +15,9 @@ pub struct SudoConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for SudoConfig<'a> {
+impl Default for SudoConfig<'_> {
     fn default() -> Self {
-        SudoConfig {
+        Self {
             format: "[as $symbol]($style)",
             symbol: "🧙 ",
             style: "bold blue",

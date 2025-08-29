@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     let checkout_db = if cfg!(windows) {
         "_FOSSIL_"
@@ -28,8 +28,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_files(&[checkout_db])
         .scan()?;
 
-    // Read the total number of added and deleted lines from "fossil diff --numstat"
-    let output = context.exec_cmd("fossil", &["diff", "--numstat"])?.stdout;
+    // Read the total number of added and deleted lines from "fossil diff -i --numstat"
+    let output = context
+        .exec_cmd("fossil", &["diff", "-i", "--numstat"])?
+        .stdout;
     let stats = FossilDiff::parse(&output, config.only_nonzero_diffs);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -50,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `fossil_metrics`:\n{}", error);
+            log::warn!("Error in module `fossil_metrics`:\n{error}");
             return None;
         }
     });
@@ -58,7 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-/// Represents the parsed output from a Fossil diff with the --numstat option enabled.
+/// Represents the parsed output from a Fossil diff with the -i --numstat option enabled.
 #[derive(Debug, PartialEq)]
 struct FossilDiff<'a> {
     added: &'a str,
@@ -66,11 +68,11 @@ struct FossilDiff<'a> {
 }
 
 impl<'a> FossilDiff<'a> {
-    /// Parses the output of `fossil diff --numstat` as a `FossilDiff` struct.
+    /// Parses the output of `fossil diff -i --numstat` as a `FossilDiff` struct.
     pub fn parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Self {
         // Fossil formats the last line of the output as "%10d %10d TOTAL over %d changed files\n"
         // where the 1st and 2nd placeholders are the number of added and deleted lines respectively
-        let re = Regex::new(r"^\s*(\d+)\s+(\d+) TOTAL over \d+ changed files$").unwrap();
+        let re = Regex::new(r"^\s*(\d+)\s+(\d+) TOTAL over \d+ changed files?$").unwrap();
 
         let (added, deleted) = diff_numstat
             .lines()
@@ -102,7 +104,7 @@ mod tests {
 
     use nu_ansi_term::{Color, Style};
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
 
     use super::FossilDiff;
 
@@ -226,6 +228,25 @@ mod tests {
             added: "3",
             deleted: "2",
         };
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn parse_single_file() {
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed file\n",
+            true,
+        );
+        let expected = FossilDiff {
+            added: "3",
+            deleted: "2",
+        };
+        assert_eq!(expected, actual);
+
+        let actual = FossilDiff::parse(
+            "         3          2 README.md\n         3          2 TOTAL over 1 changed files\n",
+            true,
+        );
         assert_eq!(expected, actual);
     }
 

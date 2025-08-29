@@ -39,7 +39,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Note: Forward config if `Module` ends up needing `config`
-    let mut module = Module::new(&format!("custom.{name}"), config.description, None);
+    let mut module = Module::new(format!("custom.{name}"), config.description, None);
 
     let mut is_match = context
         .try_begin_scan()?
@@ -96,7 +96,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     match parsed {
         Ok(segments) => module.set_segments(segments),
         Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            log::warn!("Error in module `custom.{name}`:\n{error}");
         }
     };
     Some(module)
@@ -118,8 +118,8 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         return config;
     } else if let Some(modules) = context.config.get_custom_modules() {
         log::debug!(
-                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                DebugCustomModules(modules),
+            "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+            DebugCustomModules(modules),
         );
     } else {
         log::debug!(
@@ -157,8 +157,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         // Don't attempt to use fallback shell if the user specified a shell
         Err(error) if !shell_args.is_empty() => {
             log::debug!(
-                "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {}",
-                error
+                "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {error}"
             );
 
             // Skip `handle_shell` and just set the shell and command
@@ -194,8 +193,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         Ok(child) => child,
         Err(error) => {
             log::debug!(
-                "Failed to run command with given shell or STARSHIP_SHELL env variable:: {}",
-                error
+                "Failed to run command with given shell or STARSHIP_SHELL env variable:: {error}"
             );
             return None;
         }
@@ -216,7 +214,9 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     match output.wait().ok()? {
         None => {
             log::warn!("Executing custom command {cmd:?} timed out.");
-            log::warn!("You can set command_timeout in your config to a higher value or set ignore_timeout to true for this module to allow longer-running commands to keep executing.");
+            log::warn!(
+                "You can set command_timeout in your config to a higher value or set ignore_timeout to true for this module to allow longer-running commands to keep executing."
+            );
             None
         }
         Some(status) => Some(status),
@@ -225,7 +225,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
 /// Execute the given command capturing all output, and return whether it return 0
 fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
-    log::trace!("Running '{}'", cmd);
+    log::trace!("Running '{cmd}'");
 
     if let Some(output) = shell_command(cmd, config, context) {
         if !output.status.success() {
@@ -312,7 +312,7 @@ mod tests {
     use super::*;
 
     use crate::context::Shell;
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;

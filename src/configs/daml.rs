@@ -18,9 +18,9 @@ pub struct DamlConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for DamlConfig<'a> {
+impl Default for DamlConfig<'_> {
     fn default() -> Self {
-        DamlConfig {
+        Self {
             symbol: "Λ ",
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",

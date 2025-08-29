@@ -9,7 +9,10 @@ use std::convert::TryInto;
 const SHLVL_ENV_VAR: &str = "SHLVL";
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let shlvl = context.get_env(SHLVL_ENV_VAR)?.parse::<i64>().ok()?;
+    let props = &context.properties;
+    let shlvl = props
+        .shlvl
+        .or_else(|| context.get_env(SHLVL_ENV_VAR)?.parse::<i64>().ok())?;
 
     let mut module = context.new_module("shlvl");
     let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
@@ -36,10 +39,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let symbol = if repeat_count != 1 {
-        Cow::Owned(config.symbol.repeat(repeat_count))
-    } else {
+    let symbol = if repeat_count == 1 {
         Cow::Borrowed(config.symbol)
+    } else {
+        Cow::Owned(config.symbol.repeat(repeat_count))
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -62,7 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `shlvl`:\n{}", error);
+            log::warn!("Error in module `shlvl`:\n{error}");
             return None;
         }
     });
@@ -254,7 +257,7 @@ mod tests {
         assert_eq!(get_actual(2, 2, 0), None); // offset same as shlvl; hide
         assert_eq!(get_actual(2, 3, 0), None); // offset larger than shlvl; hide
         assert_eq!(get_actual(2, 1, 3), None); // high threshold; hide
-                                               // threshold not high enough; hide
+        // threshold not high enough; hide
         assert_eq!(get_actual(2, 1, 2), Some(format!("{}", style().paint("~"))));
     }
 }

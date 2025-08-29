@@ -14,9 +14,9 @@ pub struct ContainerConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for ContainerConfig<'a> {
+impl Default for ContainerConfig<'_> {
     fn default() -> Self {
-        ContainerConfig {
+        Self {
             format: "[$symbol \\[$name\\]]($style) ",
             symbol: "⬢",
             style: "red bold dimmed",

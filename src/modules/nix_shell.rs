@@ -20,7 +20,7 @@ impl NixShellType {
             Some("pure") => return Some(Pure),
             Some("impure") => return Some(Impure),
             _ => {}
-        };
+        }
 
         if use_heuristic {
             Self::in_new_nix_shell(context).map(|()| Unknown)
@@ -90,7 +90,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `nix_shell`:\n{}", error);
+            log::warn!("Error in module `nix_shell`:\n{error}");
             return None;
         }
     });

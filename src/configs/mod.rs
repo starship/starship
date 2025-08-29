@@ -7,12 +7,14 @@ pub mod battery;
 pub mod buf;
 pub mod bun;
 pub mod c;
+pub mod cc;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
 pub mod conda;
 pub mod container;
+pub mod cpp;
 pub mod crystal;
 pub mod custom;
 pub mod daml;
@@ -44,6 +46,7 @@ pub mod haskell;
 pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
+pub mod hg_state;
 pub mod hostname;
 pub mod java;
 pub mod jobs;
@@ -55,7 +58,10 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod mise;
+pub mod mojo;
 pub mod nats;
+pub mod netns;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
@@ -68,6 +74,7 @@ pub mod package;
 pub mod perl;
 pub mod php;
 pub mod pijul_channel;
+pub mod pixi;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
@@ -94,6 +101,7 @@ pub mod username;
 pub mod v;
 pub mod vagrant;
 pub mod vcsh;
+pub mod xmake;
 pub mod zig;
 
 pub use starship_root::*;
@@ -137,6 +145,8 @@ pub struct FullConfig<'a> {
     conda: conda::CondaConfig<'a>,
     #[serde(borrow)]
     container: container::ContainerConfig<'a>,
+    #[serde(borrow)]
+    cpp: cpp::CppConfig<'a>,
     #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
     #[serde(borrow)]
@@ -198,6 +208,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     hg_branch: hg_branch::HgBranchConfig<'a>,
     #[serde(borrow)]
+    hg_state: hg_state::HgStateConfig<'a>,
+    #[serde(borrow)]
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
@@ -219,7 +231,13 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
     #[serde(borrow)]
+    mise: mise::MiseConfig<'a>,
+    #[serde(borrow)]
+    mojo: mojo::MojoConfig<'a>,
+    #[serde(borrow)]
     nats: nats::NatsConfig<'a>,
+    #[serde(borrow)]
+    netns: netns::NetnsConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
@@ -244,6 +262,8 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     #[serde(borrow)]
     pijul_channel: pijul_channel::PijulConfig<'a>,
+    #[serde(borrow)]
+    pixi: pixi::PixiConfig<'a>,
     #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
     #[serde(borrow)]
@@ -294,6 +314,8 @@ pub struct FullConfig<'a> {
     vcsh: vcsh::VcshConfig<'a>,
     #[serde(borrow)]
     vlang: v::VConfig<'a>,
+    #[serde(borrow)]
+    xmake: xmake::XMakeConfig<'a>,
     #[serde(borrow)]
     zig: zig::ZigConfig<'a>,
     #[serde(borrow)]

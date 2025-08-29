@@ -18,9 +18,9 @@ pub struct QuartoConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for QuartoConfig<'a> {
+impl Default for QuartoConfig<'_> {
     fn default() -> Self {
-        QuartoConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⨁ ",

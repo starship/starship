@@ -1,9 +1,10 @@
 use super::{Context, Module};
-use std::ffi::OsString;
 
 use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
+
+use whoami::fallible::hostname;
 
 /// Creates a module with the system hostname
 ///
@@ -23,27 +24,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let os_hostname: OsString = gethostname::gethostname();
-
-    let host = match os_hostname.into_string() {
-        Ok(host) => host,
-        Err(bad) => {
-            log::warn!("hostname is not valid UTF!\n{:?}", bad);
-            return None;
-        }
-    };
+    let host = hostname()
+        .inspect_err(|e| log::warn!("Failed to get hostname: {e}"))
+        .ok()?;
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
-    let host = if !config.trim_at.is_empty() {
-        if let Some(index) = host.find(config.trim_at) {
-            host.split_at(index).0
-        } else {
-            host.as_ref()
-        }
+    let mut host = if config.trim_at.is_empty() {
+        host.as_ref()
+    } else if let Some(index) = host.find(config.trim_at) {
+        host.split_at(index).0
     } else {
         host.as_ref()
     };
+
+    if let Some(&alias) = config.aliases.get(host) {
+        host = alias;
+    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -71,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `hostname`:\n{}", error);
+            log::warn!("Error in module `hostname`:\n{error}");
             return None;
         }
     });
@@ -81,13 +78,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use super::hostname;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = gethostname::gethostname().into_string() {
+            if let Ok(hostname) = hostname() {
                 hostname
             } else {
                 println!(
@@ -256,6 +254,58 @@ mod tests {
             .collect();
         let expected = Some(format!("{} in ", style().paint(remainder)));
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_alias() {
+        let hostname = get_hostname!();
+        let mut toml_config = toml::toml!(
+            [hostname]
+            ssh_only = false
+            trim_at = ""
+            aliases = {}
+        );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(hostname, toml::Value::String("homeworld".to_string()));
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml_config)
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint("homeworld")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_alias_with_trim_at() {
+        let hostname = get_hostname!();
+
+        let mut hostname_iter = hostname.graphemes(true);
+        let remainder = hostname_iter.next().unwrap_or_default();
+        let trim_at = hostname_iter.collect::<String>();
+
+        // Trimmed hostname needs to be non-empty
+        if remainder.is_empty() {
+            log::warn!("Skipping test_alias_with_trim_at because hostname is too short");
+            return;
+        }
+        let mut toml_config = toml::toml!(
+            [hostname]
+            ssh_only = false
+            trim_at = trim_at
+            aliases = {}
+        );
+        toml_config["hostname"]["aliases"]
+            .as_table_mut()
+            .unwrap()
+            .insert(remainder.to_string(), toml::Value::String("🌍".to_string()));
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml_config)
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint("🌍")));
         assert_eq!(expected, actual);
     }
 

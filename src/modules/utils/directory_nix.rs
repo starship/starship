@@ -5,6 +5,7 @@ use std::os::unix::fs::MetadataExt;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
+#[allow(clippy::doc_overindented_list_items)]
 /// Checks if the current user can write to the `folder_path`.
 ///
 /// It extracts Unix access rights from the directory and checks whether
@@ -37,10 +38,11 @@ pub fn is_write_allowed(folder_path: &Path) -> Result<bool, String> {
 
 #[cfg(all(unix, not(any(target_os = "macos", target_os = "ios"))))]
 fn get_supplementary_groups() -> Vec<u32> {
-    match nix::unistd::getgroups() {
-        Err(_) => Vec::new(),
-        Ok(v) => v.into_iter().map(nix::unistd::Gid::as_raw).collect(),
-    }
+    nix::unistd::getgroups()
+        .unwrap_or_default()
+        .into_iter()
+        .map(nix::unistd::Gid::as_raw)
+        .collect()
 }
 
 #[cfg(all(unix, any(target_os = "macos", target_os = "ios")))]

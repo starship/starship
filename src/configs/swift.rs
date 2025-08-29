@@ -18,9 +18,9 @@ pub struct SwiftConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for SwiftConfig<'a> {
+impl Default for SwiftConfig<'_> {
     fn default() -> Self {
-        SwiftConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐦 ",

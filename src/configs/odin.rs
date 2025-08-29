@@ -18,9 +18,9 @@ pub struct OdinConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for OdinConfig<'a> {
+impl Default for OdinConfig<'_> {
     fn default() -> Self {
-        OdinConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             show_commit: false,
             symbol: "Ø ",

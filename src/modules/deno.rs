@@ -48,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `deno`:\n{}", error);
+            log::warn!("Error in module `deno`:\n{error}");
             return None;
         }
     });
@@ -97,6 +97,16 @@ mod tests {
     fn folder_with_deno_jsonc() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deno.jsonc"))?.sync_all()?;
+        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_deno_lock() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("deno.lock"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
         assert_eq!(expected, actual);

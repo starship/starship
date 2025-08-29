@@ -17,9 +17,9 @@ pub struct JobsConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for JobsConfig<'a> {
+impl Default for JobsConfig<'_> {
     fn default() -> Self {
-        JobsConfig {
+        Self {
             threshold: 1,
             symbol_threshold: 1,
             number_threshold: 2,

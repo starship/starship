@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if !is_guix_shell {
         return None;
-    };
+    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `guix_shell`:\n{}", error);
+            log::warn!("Error in module `guix_shell`:\n{error}");
             return None;
         }
     });

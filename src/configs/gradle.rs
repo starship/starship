@@ -19,9 +19,9 @@ pub struct GradleConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for GradleConfig<'a> {
+impl Default for GradleConfig<'_> {
     fn default() -> Self {
-        GradleConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🅶 ",

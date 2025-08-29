@@ -12,6 +12,6 @@
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/plain-text-symbols.toml)
+[点这下载 TOML](/presets/toml/plain-text-symbols.toml){download}
 
 <<< @/public/presets/toml/plain-text-symbols.toml

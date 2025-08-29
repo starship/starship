@@ -229,10 +229,12 @@ curl -sS https://starship.rs/install.sh | sh
 | Alpine Linux 3.13+ | [Alpine Linux 패키지](https://pkgs.alpinelinux.org/packages?name=starship)                      | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                     | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                             | `apt install starship`                                                         |
 | Gentoo             | [Gentoo 패키지](https://packages.gentoo.org/packages/app-shells/starship)                       | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                              | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix) | `nix-env -iA nixpkgs.starship`                                                 |
 | openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                        | `zypper in starship`                                                           |
+| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                        | `apt install starship`                                                         |
 | Void Linux         | [Void Linux 패키지](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship)   | `xbps-install -S starship`                                                     |
 
 </details>
@@ -338,20 +340,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-다음 내용을 Nushell env 파일 (찾으려면 Nushell에서 `$nu.env-path` 실행) 마지막 부분에 추가하세요:
+Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
 ```sh
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+mkdir ($nu.data-dir | path join "vendor/autoload")
+starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-다음 내용을 Nushell 설정 파일 (찾으려면 Nushell에서 `$nu.config-path` 실행) 마지막 부분에 추가하세요:
-
-```sh
-use ~/.cache/starship/init.nu
-```
-
-알림: Nushell v0.78 버전 이상에서만 지원됩니다.
+알림: Nushell v0.96 버전 이상에서만 지원됩니다.
 
 </details>
 
@@ -431,7 +427,16 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 
 이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
-- Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+## 🔒 Code Signing Policy
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Code Signing Roles:
+
+- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
 
 <p align="center">
     <br>

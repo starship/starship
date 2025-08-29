@@ -19,11 +19,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&config.detect_folders)
         .is_match();
 
-    let is_venv = context.get_env("VIRTUAL_ENV").is_some();
+    let has_env_vars =
+        !config.detect_env_vars.is_empty() && context.detect_env_vars(&config.detect_env_vars);
 
-    if !is_py_project && !is_venv {
+    if !is_py_project && !has_env_vars {
         return None;
-    };
+    }
 
     let pyenv_prefix = if config.pyenv_version_name {
         config.pyenv_prefix
@@ -67,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `python`:\n{}", error);
+            log::warn!("Error in module `python`:\n{error}");
             return None;
         }
     });
@@ -85,21 +86,31 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
                 .stdout
                 .trim()
                 .to_string(),
-        )
+        );
     }
 
     version_name
 }
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
-    let version = config
+    config
         .python_binary
         .0
         .iter()
-        .find_map(|binary| context.exec_cmd(binary, &["--version"]))
-        .map(get_command_string_output)?;
+        .find_map(|binary| {
+            let command = binary.0.first()?;
+            let args: Vec<_> = binary
+                .0
+                .iter()
+                .skip(1)
+                .copied()
+                .chain(std::iter::once("--version"))
+                .collect();
 
-    parse_python_version(&version)
+            context.exec_cmd(command, &args)
+        })
+        .map(get_command_string_output)
+        .map(|output| parse_python_version(&output))?
 }
 
 fn parse_python_version(python_version_string: &str) -> Option<String> {
@@ -121,8 +132,9 @@ fn get_python_virtual_env(context: &Context) -> Option<String> {
         })
     })
 }
+
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
-    Ini::load_from_file(venv_path.join("pyvenv.cfg"))
+    Ini::load_from_file_noescape(venv_path.join("pyvenv.cfg"))
         .ok()?
         .general_section()
         .get("prompt")
@@ -134,7 +146,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
-    use std::fs::{create_dir_all, File};
+    use std::fs::{File, create_dir_all};
     use std::io;
     use std::io::Write;
 
@@ -278,6 +290,18 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     }
 
     #[test]
+    fn folder_with_ipynb_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("notebook.ipynb"))?.sync_all()?;
+
+        check_python2_renders(&dir, None);
+        check_python3_renders(&dir, None);
+        check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
+        dir.close()
+    }
+
+    #[test]
     fn disabled_scan_for_pyfiles_and_folder_with_ignored_py_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("foo.py"))?.sync_all()?;
@@ -371,6 +395,42 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     }
 
     #[test]
+    fn with_different_env_var() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("MY_ENV_VAR", "my_env_var")
+            .config(toml::toml! {
+                [python]
+                detect_env_vars = ["MY_ENV_VAR"]
+            })
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_no_env_var() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "env_var")
+            .config(toml::toml! {
+                [python]
+                detect_env_vars = []
+            })
+            .collect();
+
+        assert_eq!(actual, None);
+        dir.close()
+    }
+
+    #[test]
     fn with_active_venv_and_prompt() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         create_dir_all(dir.path().join("my_venv"))?;
@@ -418,6 +478,33 @@ prompt = '(foo)'
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_line_break_like_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = foo\nbar
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint(r"🐍 v3.8.0 (foo\nbar) ")
         ));
 
         assert_eq!(actual, expected);

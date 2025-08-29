@@ -301,6 +301,6 @@ continuation_prompt = '▶▶ '
 
 すべてのスタイル文字列がすべての端末で正しく表示できるわけではありません。 特に、端末の変な動作として以下のようなものが知られています。
 
-- 多くの端末はデフォルトで `bink` のサポートを無効にしています。
+- 多くの端末はデフォルトで `blink` のサポートを無効にしています。
 - `hidden` は [iTerm ではサポートされていません](https://gitlab.com/gnachman/iterm2/-/issues/4564)。
 - `strikethrough` は、macOS 既定の Terminal.app ではサポートされていません。

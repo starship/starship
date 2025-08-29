@@ -12,6 +12,6 @@ Este preajuste cambia el formato de todos los módulos incorporados para mostrar
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Clic para descargar TOML](/presets/toml/bracketed-segments.toml)
+[Click to download TOML](/presets/toml/bracketed-segments.toml){download}
 
 <<< @/public/presets/toml/bracketed-segments.toml

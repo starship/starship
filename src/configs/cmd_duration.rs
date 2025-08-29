@@ -20,9 +20,9 @@ pub struct CmdDurationConfig<'a> {
     pub notification_timeout: Option<u32>,
 }
 
-impl<'a> Default for CmdDurationConfig<'a> {
+impl Default for CmdDurationConfig<'_> {
     fn default() -> Self {
-        CmdDurationConfig {
+        Self {
             min_time: 2_000,
             format: "took [$duration]($style) ",
             show_milliseconds: false,

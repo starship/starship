@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module 'solidity'\n {}", error);
+            log::warn!("Error in module 'solidity'\n {error}");
             return None;
         }
     });
@@ -77,7 +77,6 @@ fn parse_solidity_version(version: &str) -> Option<String> {
 }
 
 #[cfg(test)]
-
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;

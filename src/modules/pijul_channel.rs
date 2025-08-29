@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
         return None;
-    };
+    }
 
     let channel_name = get_pijul_current_channel(context)?;
 
@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `pijul_channel`:\n{}", error);
+            log::warn!("Error in module `pijul_channel`:\n{error}");
             return None;
         }
     });
@@ -76,7 +76,7 @@ mod tests {
     use std::io;
     use std::path::Path;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
 
     enum Expect<'a> {
         ChannelName(&'a str),

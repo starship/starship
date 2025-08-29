@@ -1,5 +1,111 @@
 # Changelog
 
+## [1.23.0](https://github.com/starship/starship/compare/v1.22.1...v1.23.0) (2025-04-27)
+
+
+### Features
+
+* add network namespace module ([#6449](https://github.com/starship/starship/issues/6449)) ([eb42f5a](https://github.com/starship/starship/commit/eb42f5ac7003da1f9543f5258dd674cec96a7320))
+* Add support for pixi ([#6335](https://github.com/starship/starship/issues/6335)) ([7e88ba9](https://github.com/starship/starship/commit/7e88ba9561bead33cefaba1003637e0213199a15))
+* added mise module ([#5747](https://github.com/starship/starship/issues/5747)) ([d24e787](https://github.com/starship/starship/commit/d24e78754a0ce1d5ea77eae0a7d3b19aaa7bcfc8))
+* **c++:** adding c++ module ([#6570](https://github.com/starship/starship/issues/6570)) ([ed07646](https://github.com/starship/starship/commit/ed076460995cb5175e47442dc11b46ff0f039b4a))
+* **completions:** Offer Nushell completions ([#6366](https://github.com/starship/starship/issues/6366)) ([df454d5](https://github.com/starship/starship/commit/df454d5a64fa6de5d2e334c5aa9b07150bf09ae6))
+* **nodejs:** disable if bun project files detected ([#6346](https://github.com/starship/starship/issues/6346)) ([00ce705](https://github.com/starship/starship/commit/00ce7057efb7c431e7f9b526ca3ee941573e9f40))
+* **package:** support JSR package version ([#6502](https://github.com/starship/starship/issues/6502)) ([bd2321a](https://github.com/starship/starship/commit/bd2321a12fc47135f316e90f22ccab6a61b50730))
+* **preset:** Add gcloud symbol to nerd-fonts preset to match aws ([#6693](https://github.com/starship/starship/issues/6693)) ([348c23f](https://github.com/starship/starship/commit/348c23fd58d90352cb128d32c495c1107a98d930))
+* **python:** add support for `python_binary` arguments in config ([#6523](https://github.com/starship/starship/issues/6523)) ([7667555](https://github.com/starship/starship/commit/76675559c041fa2ae6a85cb946218e5e1f04bf75))
+
+
+### Bug Fixes
+
+* **battery:** prefer charge ratio over current capacity ([#6603](https://github.com/starship/starship/issues/6603)) ([d245939](https://github.com/starship/starship/commit/d2459391194cf5a142d98b1297fe5f630c3415f5))
+* Change to a non-yanked version of the log crate ([#6495](https://github.com/starship/starship/issues/6495)) ([ed20b1d](https://github.com/starship/starship/commit/ed20b1d23b1b7ed914fca30fb6788f3d609f4a52))
+* **fossil_metrics:** Add -i flag to the fossil_metrics module's command ([#6544](https://github.com/starship/starship/issues/6544)) ([eb7d80b](https://github.com/starship/starship/commit/eb7d80bafac8f6ae719ee357aeff129065ddd7e6))
+* **package:** fix cargo workspace version ([#6626](https://github.com/starship/starship/issues/6626)) ([834bbf5](https://github.com/starship/starship/commit/834bbf53e53fc7f46f168e6d13677b737af73dbf))
+* **preset:** add missing rlang to plain-text-symbols preset ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+* **preset:** add missing rlang to plain-text-symbols preset ([#6458](https://github.com/starship/starship/issues/6458)) ([ddafaa6](https://github.com/starship/starship/commit/ddafaa62fc85fddff2bc2cc3a1daaf919f8b8f0d))
+
+
+### Performance Improvements
+
+* **ancestor-scan:** preallocate and reuse a single `PathBuf` ([#6387](https://github.com/starship/starship/issues/6387)) ([b3cb92e](https://github.com/starship/starship/commit/b3cb92e6483a6cc054c6f7db14951c99bd7c9e9b))
+* use `gitoxide` for `git_status` and `git_metrics` modules ([#6476](https://github.com/starship/starship/issues/6476)) ([daf8d93](https://github.com/starship/starship/commit/daf8d93d27fdc70b110a4a56799d7dc3a10c3810))
+
+
+### Reverts
+
+* Remove specialized whoami hostname function choice for windows ([#6651](https://github.com/starship/starship/issues/6651)) ([8eefdb2](https://github.com/starship/starship/commit/8eefdb21a6099d86b831ff1d42ae7f2a1678185a))
+
+## [1.22.1](https://github.com/starship/starship/compare/v1.22.0...v1.22.1) (2025-01-11)
+
+
+### Bug Fixes
+
+* **windows:** downgrade libz-ng-sys ([#6489](https://github.com/starship/starship/issues/6489)) ([6f7c67b](https://github.com/starship/starship/commit/6f7c67b4858b755c19754a2ec1063502545a16b6))
+
+## [1.22.0](https://github.com/starship/starship/compare/v1.21.1...v1.22.0) (2025-01-11)
+
+
+### Features
+
+* **battery:** Use best match instead of first match for `battery.display` threshold ([#6442](https://github.com/starship/starship/issues/6442)) ([2690a32](https://github.com/starship/starship/commit/2690a329cf9a6b4a160d024674193007fb292e1a))
+* **bun:** Detect bun using new text-format lockfile ([#6441](https://github.com/starship/starship/issues/6441)) ([2df521c](https://github.com/starship/starship/commit/2df521c69b0b1400edee7b7b332b5e2a900c7775))
+* **direnv:** allow direnv to detect environment variables ([#6196](https://github.com/starship/starship/issues/6196)) ([4593716](https://github.com/starship/starship/commit/45937166c8b3cb53f09b29c65d0f547aa7f2f022))
+* **status:** add `{success,failure}_style` options ([#6269](https://github.com/starship/starship/issues/6269)) ([e21775c](https://github.com/starship/starship/commit/e21775c694a81cf092eafa3c9a7b169ae9c8ebf2))
+
+
+### Bug Fixes
+
+* **fish:** restore support for fish &lt;v3.4.0 ([#6337](https://github.com/starship/starship/issues/6337)) ([85d3fb2](https://github.com/starship/starship/commit/85d3fb2e2ab96e639fe6b67ba1afbb94b6c5b83e))
+* handle variable bash $SHLVL behavior with explicit option ([#4912](https://github.com/starship/starship/issues/4912)) ([7ead2b5](https://github.com/starship/starship/commit/7ead2b55eb58a878dc3ea8d87204f84862bd8148))
+* **hostname:** use DNS instead of NetBIOS name on Windows ([#6343](https://github.com/starship/starship/issues/6343)) ([43f097e](https://github.com/starship/starship/commit/43f097eae838c1fba52659113826669802081918))
+* **init/pwsh:** preserve ViModeChangeHandler ([#6225](https://github.com/starship/starship/issues/6225)) ([9b6d394](https://github.com/starship/starship/commit/9b6d394e01d50db4395cfe402531bfd96c540462))
+* **init:** do not use cygpath for elvish ([#6376](https://github.com/starship/starship/issues/6376)) ([576aa14](https://github.com/starship/starship/commit/576aa14d15f57abf7d1c28e3486f2682e45c2f62))
+* **status:** add trailing space to `pipestatus_format` ([#6404](https://github.com/starship/starship/issues/6404)) ([8a38b8f](https://github.com/starship/starship/commit/8a38b8f6f19fa6f17098e32f22183beac0498764))
+* **username:** avoid using `whoami` on android ([#6342](https://github.com/starship/starship/issues/6342)) ([af5d139](https://github.com/starship/starship/commit/af5d139060bbb60690196dc53e05424ac3c0fb5d)), closes [#6340](https://github.com/starship/starship/issues/6340)
+
+## [1.21.1](https://github.com/starship/starship/compare/v1.21.0...v1.21.1) (2024-10-18)
+
+
+### Reverts
+
+* "perf(fish): Skip unnecessary indirection in starship init fish" ([#6326](https://github.com/starship/starship/issues/6326)) ([00d927b](https://github.com/starship/starship/commit/00d927bb20e618b587635876d2e10047f98eff88))
+
+## [1.21.0](https://github.com/starship/starship/compare/v1.20.1...v1.21.0) (2024-10-17)
+
+
+### Features
+
+* **deno:** add `deno.lock` file to default `detect_files` list ([#6310](https://github.com/starship/starship/issues/6310)) ([22c6c52](https://github.com/starship/starship/commit/22c6c5201d8fa682ad43501cf46427263a530c71))
+* **hostname:** add option to replace hostnames with aliases ([#6097](https://github.com/starship/starship/issues/6097)) ([68a8fc9](https://github.com/starship/starship/commit/68a8fc9563a52c4119241375d181ff68bb3d3da3))
+* **mojo:** add module for Mojo language ([#6108](https://github.com/starship/starship/issues/6108)) ([171746a](https://github.com/starship/starship/commit/171746a58408cbc0d48dedc52e21327bd35fccd4))
+* **package:** support alternative gradle module version syntax ([#6079](https://github.com/starship/starship/issues/6079)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+* **python:** Add detect env vars option  ([#4486](https://github.com/starship/starship/issues/4486)) ([8a2d944](https://github.com/starship/starship/commit/8a2d944bc80a0a8358c30e639e8af51c1d45d973))
+* **python:** detect pixi and ipynb files ([#6228](https://github.com/starship/starship/issues/6228)) ([36134d8](https://github.com/starship/starship/commit/36134d896bda3c739ffd6555be62499716b0a9b0))
+* **release:** codesign windows release binaries ([#6273](https://github.com/starship/starship/issues/6273)) ([fcc697b](https://github.com/starship/starship/commit/fcc697b9b31aef44aefaf9a6660d51d44f707149))
+
+
+### Bug Fixes
+
+* **bash:** fix variable leak in Bash integration ([#6143](https://github.com/starship/starship/issues/6143)) ([e1189ed](https://github.com/starship/starship/commit/e1189ed7567de580d8f51c8baf870056a6060789))
+* **cmd_duration:** Make render_time format more consistent ([#5825](https://github.com/starship/starship/issues/5825)) ([4abea6b](https://github.com/starship/starship/commit/4abea6b601c53adfa5719a7aac11069dc054cdf8))
+* **docker_context:** Ignore Docker Desktop "desktop-linux" context. ([#6314](https://github.com/starship/starship/issues/6314)) ([14babde](https://github.com/starship/starship/commit/14babde435f6307a8a28f9d323f0d66a319e9eab))
+* **docs:** correct username options ([#6084](https://github.com/starship/starship/issues/6084)) ([d96fbc5](https://github.com/starship/starship/commit/d96fbc5bcb9c039f875c4a55cff31edda57d5e6e))
+* **fish:** add missing arguments for fish transient prompt functions ([#6181](https://github.com/starship/starship/issues/6181)) ([d6814be](https://github.com/starship/starship/commit/d6814be0ba35dd52f6f0d0e1a3f14d5f106efd63)), closes [#6180](https://github.com/starship/starship/issues/6180)
+* **fish:** improve fish transient prompt ([#6107](https://github.com/starship/starship/issues/6107)) ([274dff3](https://github.com/starship/starship/commit/274dff37dbb375821a90d6976a11cf57d9386e4f))
+* **fish:** use correct input function in transient execute ([#6265](https://github.com/starship/starship/issues/6265)) ([244c2c6](https://github.com/starship/starship/commit/244c2c629e1f358bf849923531d5cf0d69c2db2d))
+* Fixed "Click to download TOML" links ([#6234](https://github.com/starship/starship/issues/6234)) ([0200d75](https://github.com/starship/starship/commit/0200d75b3781977d5335e637858f4e0996ee0384))
+* **git_status:** read proper name for core.fsmonitor flag ([#6173](https://github.com/starship/starship/issues/6173)) ([33b3b8e](https://github.com/starship/starship/commit/33b3b8e3986f6180a8f7b461a5a07fea702ec628))
+* **package:** support alternative gradle module version syntax ([#6080](https://github.com/starship/starship/issues/6080)) ([a62012e](https://github.com/starship/starship/commit/a62012e3280238b4c794bbe484b296af3b8fb53a))
+* **python:** improve parsing of `pyvenv.cfg` files ([#6145](https://github.com/starship/starship/issues/6145)) ([7b65ad5](https://github.com/starship/starship/commit/7b65ad51635463003941ec0ecea1d4d315b2df53))
+* use `whoami` for user/hostname queries again ([#6311](https://github.com/starship/starship/issues/6311)) ([77f0883](https://github.com/starship/starship/commit/77f08832d5228dff6c0e01ba4d4ad206c9d2362f))
+
+
+### Performance Improvements
+
+* **fish:** Skip unnecessary indirection in starship init fish ([#6253](https://github.com/starship/starship/issues/6253)) ([798f640](https://github.com/starship/starship/commit/798f64033f5348793003ddd74fa0ce1c744c300b))
+* Skip unnecessary indirection in starship init fish ([798f640](https://github.com/starship/starship/commit/798f64033f5348793003ddd74fa0ce1c744c300b))
+
 ## [1.20.1](https://github.com/starship/starship/compare/v1.20.0...v1.20.1) (2024-07-26)
 
 

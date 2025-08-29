@@ -18,9 +18,9 @@ pub struct TimeConfig<'a> {
     pub time_range: &'a str,
 }
 
-impl<'a> Default for TimeConfig<'a> {
+impl Default for TimeConfig<'_> {
     fn default() -> Self {
-        TimeConfig {
+        Self {
             format: "at [$time]($style) ",
             style: "bold yellow",
             use_12hr: false,

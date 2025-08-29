@@ -18,9 +18,9 @@ pub struct HelmConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for HelmConfig<'a> {
+impl Default for HelmConfig<'_> {
     fn default() -> Self {
-        HelmConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⎈ ",

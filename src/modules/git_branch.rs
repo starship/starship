@@ -45,11 +45,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
     if let Some(remote) = repo.remote.as_ref() {
         if let Some(branch) = &remote.branch {
-            remote_branch_graphemes = branch.graphemes(true).collect()
-        };
+            remote_branch_graphemes = branch.graphemes(true).collect();
+        }
         if let Some(name) = &remote.name {
-            remote_name_graphemes = name.graphemes(true).collect()
-        };
+            remote_name_graphemes = name.graphemes(true).collect();
+        }
     }
 
     // Truncate fields if need be
@@ -104,7 +104,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `git_branch`: \n{}", error);
+            log::warn!("Error in module `git_branch`: \n{error}");
             return None;
         }
     });
@@ -123,7 +123,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::io;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
 
     #[test]
@@ -204,12 +204,12 @@ mod tests {
 
     #[test]
     fn test_hindi_truncation() -> io::Result<()> {
-        test_truncate_length("नमस्ते", 3, "नमस्", "…")
+        test_truncate_length("नमस्ते", 2, "नम", "…")
     }
 
     #[test]
     fn test_hindi_truncation2() -> io::Result<()> {
-        test_truncate_length("नमस्त", 3, "नमस्", "…")
+        test_truncate_length("नमस्त", 2, "नम", "…")
     }
 
     #[test]

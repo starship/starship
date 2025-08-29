@@ -18,9 +18,9 @@ pub struct CMakeConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for CMakeConfig<'a> {
+impl Default for CMakeConfig<'_> {
     fn default() -> Self {
-        CMakeConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "△ ",

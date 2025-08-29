@@ -257,12 +257,18 @@ detect_target() {
   printf '%s' "${target}"
 }
 
+set_interrupt_handler() {
+  trap 'echo; error "Interrupted (please re-run with the '--yes' option)"; exit 130' INT
+}
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
+    set_interrupt_handler
     printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
     set +e
     read -r yn </dev/tty
+    trap - INT
+    yn=$(echo "$yn" | tr '[:upper:]' '[:lower:]')
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
@@ -270,8 +276,29 @@ confirm() {
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
+      if [ "$yn" = "n" ] || [ "$yn" = "no" ]; then
+        set_interrupt_handler
+        set +e
+        printf "Where would you like to install Starship? ${GREY}(e.g., /usr/local/bin)${NO_COLOR}\n"
+        read -p "> Install Starship ${GREEN}${VERSION}${NO_COLOR} to: " path
+        trap - INT
+        rc=$?
+        set -e
+        BIN_DIR=$path
+        if [ $rc != 0 ] || [ -z "$path" ]; then
+          if [ -z "$path" ]; then
+            echo
+          fi
+          error "Error reading from prompt (please re-run with '--yes' or provide path)"
+          exit 1
+        fi
+      else
+        if [ -z "$yn" ]; then
+          echo
+        fi
+        error 'Aborting (please answer "yes" to continue)'
+        exit 1
+      fi
     fi
   fi
 }
@@ -351,13 +378,10 @@ print_install() {
       nushell )
         # shellcheck disable=SC2088
         config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
-        config_cmd="use ~/.cache/starship/init.nu"
+        config_cmd="mkdir (\$nu.data-dir | path join \"vendor/autoload\")
+        starship init nu | save -f (\$nu.data-dir | path join \"vendor/autoload/starship.nu\")"
         warning="${warning} This will change in the future.
-  Only Nushell v0.78 or higher is supported.
-  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell):
-
-	mkdir ~/.cache/starship
-	starship init nu | save -f ~/.cache/starship/init.nu"
+  Only Nushell v0.96 or higher is supported."
         ;;
     esac
     printf "  %s\n  %s\n  And add the following to the end of %s:\n\n\t%s\n\n" \

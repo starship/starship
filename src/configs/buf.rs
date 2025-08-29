@@ -18,9 +18,9 @@ pub struct BufConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for BufConfig<'a> {
+impl Default for BufConfig<'_> {
     fn default() -> Self {
-        BufConfig {
+        Self {
             format: "with [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🐃 ",

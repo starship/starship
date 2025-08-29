@@ -19,9 +19,9 @@ pub struct FennelConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for FennelConfig<'a> {
+impl Default for FennelConfig<'_> {
     fn default() -> Self {
-        FennelConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🧅 ",

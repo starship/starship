@@ -1,7 +1,7 @@
 // Can't rename internal Pest names
 #![allow(clippy::upper_case_acronyms)]
 
-use pest::{error::Error, iterators::Pair, Parser};
+use pest::{Parser, error::Error, iterators::Pair};
 use pest_derive::*;
 
 use super::model::*;
@@ -33,7 +33,7 @@ fn parse_textgroup(textgroup: Pair<Rule>) -> TextGroup {
     }
 }
 
-fn parse_variable(variable: Pair<Rule>) -> &str {
+fn parse_variable(variable: Pair<'_, Rule>) -> &str {
     variable.into_inner().next().unwrap().as_str()
 }
 
@@ -58,7 +58,7 @@ fn parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
         .collect()
 }
 
-pub fn parse(format: &str) -> Result<Vec<FormatElement>, Box<Error<Rule>>> {
+pub fn parse(format: &str) -> Result<Vec<FormatElement<'_>>, Box<Error<Rule>>> {
     IdentParser::parse(Rule::expression, format)
         .map(|pairs| {
             pairs

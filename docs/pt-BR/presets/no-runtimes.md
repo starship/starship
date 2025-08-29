@@ -12,6 +12,6 @@ Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha 
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Clique para baixar o TOML](/presets/toml/no-runtime-versions.toml)
+[Click to download TOML](/presets/toml/no-runtime-versions.toml){download}
 
 <<< @/public/presets/toml/no-runtime-versions.toml

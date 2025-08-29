@@ -16,9 +16,9 @@ pub struct MesonConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for MesonConfig<'a> {
+impl Default for MesonConfig<'_> {
     fn default() -> Self {
-        MesonConfig {
+        Self {
             truncation_length: u32::MAX,
             truncation_symbol: "…",
             format: "via [$symbol$project]($style) ",

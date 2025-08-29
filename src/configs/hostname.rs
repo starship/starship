@@ -1,3 +1,4 @@
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -15,11 +16,12 @@ pub struct HostnameConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub aliases: IndexMap<String, &'a str>,
 }
 
-impl<'a> Default for HostnameConfig<'a> {
+impl Default for HostnameConfig<'_> {
     fn default() -> Self {
-        HostnameConfig {
+        Self {
             ssh_only: true,
             ssh_symbol: "🌐 ",
             trim_at: ".",
@@ -27,6 +29,7 @@ impl<'a> Default for HostnameConfig<'a> {
             format: "[$ssh_symbol$hostname]($style) in ",
             style: "green dimmed bold",
             disabled: false,
+            aliases: IndexMap::new(),
         }
     }
 }

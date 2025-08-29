@@ -18,9 +18,9 @@ pub struct RustConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for RustConfig<'a> {
+impl Default for RustConfig<'_> {
     fn default() -> Self {
-        RustConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🦀 ",

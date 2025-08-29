@@ -28,9 +28,9 @@ pub struct DirectoryConfig<'a> {
     pub use_os_path_sep: bool,
 }
 
-impl<'a> Default for DirectoryConfig<'a> {
+impl Default for DirectoryConfig<'_> {
     fn default() -> Self {
-        DirectoryConfig {
+        Self {
             truncation_length: 3,
             truncate_to_repo: true,
             fish_style_pwd_dir_length: 0,

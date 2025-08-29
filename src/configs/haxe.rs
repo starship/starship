@@ -18,9 +18,9 @@ pub struct HaxeConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for HaxeConfig<'a> {
+impl Default for HaxeConfig<'_> {
     fn default() -> Self {
-        HaxeConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "⌘ ",

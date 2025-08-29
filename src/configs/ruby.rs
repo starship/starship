@@ -19,9 +19,9 @@ pub struct RubyConfig<'a> {
     pub detect_variables: Vec<&'a str>,
 }
 
-impl<'a> Default for RubyConfig<'a> {
+impl Default for RubyConfig<'_> {
     fn default() -> Self {
-        RubyConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "💎 ",

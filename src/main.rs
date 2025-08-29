@@ -3,16 +3,14 @@
 use clap::crate_authors;
 use std::io;
 use std::path::PathBuf;
-use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{CommandFactory, Parser, Subcommand};
-use clap_complete::{generate, Shell as CompletionShell};
-use rand::distributions::Alphanumeric;
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
+use clap_complete::generate;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::*;
+use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -26,6 +24,36 @@ use starship::*;
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
+}
+
+#[derive(clap::Parser, ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
+enum CompletionShell {
+    Bash,
+    Elvish,
+    Fish,
+    Nushell,
+    PowerShell,
+    Zsh,
+}
+
+fn generate_shell(shell: impl clap_complete::Generator) {
+    generate(
+        shell,
+        &mut Cli::command(),
+        "starship",
+        &mut io::stdout().lock(),
+    );
+}
+
+fn generate_completions(shell: CompletionShell) {
+    match shell {
+        CompletionShell::Bash => generate_shell(clap_complete::Shell::Bash),
+        CompletionShell::Elvish => generate_shell(clap_complete::Shell::Elvish),
+        CompletionShell::Fish => generate_shell(clap_complete::Shell::Fish),
+        CompletionShell::PowerShell => generate_shell(clap_complete::Shell::PowerShell),
+        CompletionShell::Zsh => generate_shell(clap_complete::Shell::Zsh),
+        CompletionShell::Nushell => generate_shell(clap_complete_nushell::Nushell),
+    }
 }
 
 #[derive(Subcommand, Debug)]
@@ -145,10 +173,11 @@ fn main() {
             let exit_code = if is_info_only {
                 0
             } else {
+                use io::Write;
+
                 // print the arguments
                 // avoid panicking in case of stderr closing
                 let mut stderr = io::stderr();
-                use io::Write;
                 let _ = writeln!(
                     stderr,
                     "\nNOTE:\n    passed arguments: {:?}",
@@ -163,7 +192,7 @@ fn main() {
             std::process::exit(exit_code);
         }
     };
-    log::trace!("Parsed arguments: {:#?}", args);
+    log::trace!("Parsed arguments: {args:#?}");
 
     match args.command {
         Commands::Init {
@@ -236,16 +265,11 @@ fn main() {
         }
         Commands::Explain(props) => print::explain(props),
         Commands::Timings(props) => print::timings(props),
-        Commands::Completions { shell } => generate(
-            shell,
-            &mut Cli::command(),
-            "starship",
-            &mut io::stdout().lock(),
-        ),
+        Commands::Completions { shell } => generate_completions(shell),
         Commands::Session => println!(
             "{}",
-            rand::thread_rng()
-                .sample_iter(&Alphanumeric)
+            rand::rng()
+                .sample_iter(rand::distr::Alphanumeric)
                 .take(16)
                 .map(char::from)
                 .collect::<String>()
@@ -257,16 +281,8 @@ fn main() {
 
 /// Initialize global `rayon` thread pool
 fn init_global_threadpool() {
-    // Allow overriding the number of threads
-    let num_threads = std::env::var("STARSHIP_NUM_THREADS")
-        .ok()
-        .and_then(|s| s.parse().ok())
-        // Default to the number of logical cores,
-        // but restrict the number of threads to 8
-        .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8));
-
     rayon::ThreadPoolBuilder::new()
-        .num_threads(num_threads)
+        .num_threads(num_rayon_threads())
         .build_global()
         .expect("Failed to initialize worker thread pool");
 }

@@ -12,6 +12,6 @@
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/no-runtime-versions.toml)
+[点这下载 TOML](/presets/toml/no-runtime-versions.toml){download}
 
 <<< @/public/presets/toml/no-runtime-versions.toml

@@ -15,9 +15,9 @@ pub struct SpackConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for SpackConfig<'a> {
+impl Default for SpackConfig<'_> {
     fn default() -> Self {
-        SpackConfig {
+        Self {
             truncation_length: 1,
             format: "via [$symbol$environment]($style) ",
             symbol: "🅢 ",

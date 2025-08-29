@@ -19,9 +19,9 @@ pub struct CharacterConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for CharacterConfig<'a> {
+impl Default for CharacterConfig<'_> {
     fn default() -> Self {
-        CharacterConfig {
+        Self {
             format: "$symbol ",
             success_symbol: "[❯](bold green)",
             error_symbol: "[❯](bold red)",

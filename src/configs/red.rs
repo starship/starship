@@ -18,9 +18,9 @@ pub struct RedConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for RedConfig<'a> {
+impl Default for RedConfig<'_> {
     fn default() -> Self {
-        RedConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "🔺 ",

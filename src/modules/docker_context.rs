@@ -14,7 +14,7 @@ use crate::utils;
 ///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
-///     - The value of `currentContext` is not `default`
+///     - The value of `currentContext` is not `default` or `desktop-linux`
 ///     - If multiple criteria are met, we use the following order to define the docker context:
 ///     - `DOCKER_HOST`, `DOCKER_CONTEXT`, $HOME/.docker/config.json, $`DOCKER_CONFIG/config.json`
 ///     - (This is the same order docker follows, as `DOCKER_HOST` and `DOCKER_CONTEXT` override the
@@ -45,19 +45,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .into_iter()
         .find_map(|env| context.get_env(env));
 
-    let ctx = match docker_context_env {
-        Some(data) => data,
-        _ => {
-            if !docker_config.exists() {
-                return None;
-            }
-            let json = utils::read_file(docker_config).ok()?;
-            let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
-            parsed_json.get("currentContext")?.as_str()?.to_owned()
+    let ctx = if let Some(data) = docker_context_env {
+        data
+    } else {
+        if !docker_config.exists() {
+            return None;
         }
+        let json = utils::read_file(docker_config).ok()?;
+        let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
+        parsed_json.get("currentContext")?.as_str()?.to_owned()
     };
 
-    if ctx == "default" || ctx.starts_with("unix://") {
+    let default_contexts = ["default", "desktop-linux"];
+    if default_contexts.contains(&ctx.as_str()) || ctx.starts_with("unix://") {
         return None;
     }
 
@@ -81,7 +81,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `docker_context`:\n{}", error);
+            log::warn!("Error in module `docker_context`:\n{error}");
             return None;
         }
     });
@@ -105,6 +105,64 @@ mod tests {
 
         assert_eq!(expected, actual);
         cfg_dir.close()
+    }
+
+    #[test]
+    fn test_with_compose_yml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
+    }
+
+    #[test]
+    fn test_with_compose_yaml() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let pwd = tempfile::tempdir()?;
+        File::create(pwd.path().join("compose.yaml"))?.sync_all()?;
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .path(pwd.path())
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()?;
+        pwd.close()
     }
 
     #[test]
@@ -335,6 +393,24 @@ mod tests {
 
         let actual = ModuleRenderer::new("docker_context")
             .env("DOCKER_CONTEXT", "default")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_context_default_after_3_5() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONTEXT", "desktop-linux")
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false

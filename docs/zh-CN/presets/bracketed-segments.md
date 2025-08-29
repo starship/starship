@@ -12,6 +12,6 @@
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[点击下载 TOML 文件](/presets/toml/bracketed-segments.toml)
+[点这下载 TOML](/presets/toml/bracketed-segments.toml){download}
 
 <<< @/public/presets/toml/bracketed-segments.toml

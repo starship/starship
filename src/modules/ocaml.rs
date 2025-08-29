@@ -1,7 +1,7 @@
 use super::{Context, Module, ModuleConfig};
-use once_cell::sync::Lazy;
 use std::ops::Deref;
 use std::path::Path;
+use std::sync::LazyLock;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let opam_switch: Lazy<Option<OpamSwitch>, _> = Lazy::new(|| get_opam_switch(context));
+    let opam_switch: LazyLock<Option<OpamSwitch>, _> = LazyLock::new(|| get_opam_switch(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -79,7 +79,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `ocaml`: \n{}", error);
+            log::warn!("Error in module `ocaml`: \n{error}");
             return None;
         }
     });
@@ -101,16 +101,16 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
     }
 
     let path = Path::new(opam_switch);
-    if !path.has_root() {
-        Some((SwitchType::Global, opam_switch.to_string()))
-    } else {
+    if path.has_root() {
         Some((SwitchType::Local, path.file_name()?.to_str()?.to_string()))
+    } else {
+        Some((SwitchType::Global, opam_switch.to_string()))
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_opam_switch, SwitchType};
+    use super::{SwitchType, parse_opam_switch};
     use crate::{test::ModuleRenderer, utils::CommandOutput};
     use nu_ansi_term::Color;
     use std::fs::{self, File};

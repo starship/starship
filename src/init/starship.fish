@@ -1,6 +1,6 @@
 function fish_prompt
     switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
         case '*'
             set STARSHIP_KEYMAP insert
@@ -16,7 +16,7 @@ function fish_prompt
         # See https://github.com/fish-shell/fish-shell/issues/8418
         printf \e\[0J
         if type -q starship_transient_prompt_func
-            starship_transient_prompt_func
+            starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
         else
             printf "\e[1;32m❯\e[0m "
         end
@@ -27,7 +27,7 @@ end
 
 function fish_right_prompt
     switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
         case '*'
             set STARSHIP_KEYMAP insert
@@ -40,7 +40,7 @@ function fish_right_prompt
     if test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
-            starship_transient_rprompt_func
+            starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
         else
             printf ""
         end
@@ -64,12 +64,7 @@ function reset-transient --on-event fish_postexec
 end
 
 function transient_execute
-    if commandline --paging-mode
-        commandline -f accept-autosuggestion
-        return
-    end
-    commandline --is-valid
-    if test $status != 2
+    if commandline --is-valid || test -z (commandline | string collect) && not commandline --paging-mode
         set -g TRANSIENT 1
         set -g RIGHT_TRANSIENT 1
         commandline -f repaint

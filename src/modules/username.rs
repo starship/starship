@@ -19,6 +19,13 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 /// Does not display the username:
 ///     - If the option `username.detect_env_vars` is set with a negated environment variable [A]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    #[cfg(not(any(test, target_os = "android")))]
+    let mut username = whoami::fallible::username()
+        .inspect_err(|e| log::debug!("Failed to get username {e:?}"))
+        .ok()
+        .or_else(|| context.get_env(USERNAME_ENV_VAR))?;
+
+    #[cfg(any(test, target_os = "android"))]
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
     let mut module = context.new_module("username");
@@ -66,7 +73,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `username`:\n{}", error);
+            log::warn!("Error in module `username`:\n{error}");
             return None;
         }
     });
@@ -77,7 +84,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn is_login_user(context: &Context, username: &str) -> bool {
     context
         .get_env("LOGNAME")
-        .map_or(true, |logname| logname == username)
+        .is_none_or(|logname| logname == username)
 }
 
 #[cfg(all(target_os = "windows", not(test)))]
@@ -102,12 +109,12 @@ fn is_root_user() -> bool {
     )
 }
 
-#[cfg(all(target_os = "windows", test))]
+#[cfg(test)]
 fn is_root_user() -> bool {
     false
 }
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(all(not(target_os = "windows"), not(test)))]
 fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
