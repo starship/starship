@@ -264,6 +264,10 @@ pub fn edit_configuration(
         process::exit(1);
     });
 
+    if StarshipConfig::has_multiple_files(&config_path.to_string_lossy()) {
+        eprintln!("Error: multiple configuration files detected");
+        process::exit(1);
+    }
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
         Ok(cmd) => cmd,
