@@ -223,6 +223,20 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
     Ok(())
 }
 
+/// Checks if only a single configuration file is being edited.
+/// If multiple files are detected, prints an error and exits.
+fn ensure_single_config_file(context: &Context) {
+    if let Some(config_path) = context.get_config_path_os() {
+        if StarshipConfig::has_multiple_files(&config_path.to_string_lossy()) {
+            eprintln!(
+                "Error: starship config does not support editing multiple configuration files"
+            );
+            eprintln!("Please edit the individual files directly");
+            process::exit(1);
+        }
+    }
+}
+
 pub fn get_configuration(context: &Context) -> toml::Table {
     let starship_config =
         StarshipConfig::initialize_with_context(context.get_config_path_os().as_deref(), context);
@@ -231,6 +245,7 @@ pub fn get_configuration(context: &Context) -> toml::Table {
 }
 
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
+    ensure_single_config_file(context);
     let config_file_path = context.get_config_path_os();
     let toml_content = StarshipConfig::read_config_content_as_str(config_file_path.as_deref());
 
@@ -257,17 +272,13 @@ pub fn edit_configuration(
     context: &Context,
     editor_override: Option<&str>,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    ensure_single_config_file(context);
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
     let config_path = context.get_config_path_os().unwrap_or_else(|| {
         eprintln!("config path required to edit configuration");
         process::exit(1);
     });
-
-    if StarshipConfig::has_multiple_files(&config_path.to_string_lossy()) {
-        eprintln!("Error: multiple configuration files detected");
-        process::exit(1);
-    }
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
         Ok(cmd) => cmd,
