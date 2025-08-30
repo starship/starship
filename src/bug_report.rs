@@ -258,12 +258,7 @@ fn get_default_starship_config() -> String {
     let config_path = std::env::var("STARSHIP_CONFIG")
         .ok()
         .map(PathBuf::from)
-        .or_else(|| {
-            utils::home_dir().map(|mut home| {
-                home.push(".config/starship.toml");
-                home
-            })
-        });
+        .or_else(|| utils::default_starship_config_path(None));
 
     config_path
         .as_ref()

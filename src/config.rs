@@ -170,12 +170,12 @@ impl StarshipConfig {
         if Self::has_multiple_files(config_path_str) {
             Self::merge_config_files_runtime(config_path_str).or_else(|| {
                 let default_path = context
-                    .and_then(|ctx| ctx.get_home())
-                    .or_else(crate::utils::home_dir)
-                    .map(|mut home| {
-                        home.push(".config/starship.toml");
-                        home
-                    })?;
+                    .and_then(|ctx| {
+                        ctx.get_home().and_then(|home| {
+                            utils::default_starship_config_path(Some(home.as_path()))
+                        })
+                    })
+                    .or_else(|| utils::default_starship_config_path(None))?;
                 utils::read_file(&default_path).ok()
             })
         } else {
