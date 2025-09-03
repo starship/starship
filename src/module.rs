@@ -97,6 +97,7 @@ pub const ALL_MODULES: &[&str] = &[
     "status",
     "sudo",
     "swift",
+    "talos",
     "terraform",
     "time",
     "typst",

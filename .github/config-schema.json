@@ -1610,6 +1610,20 @@
         "detect_folders": []
       }
     },
+    "talos": {
+      "$ref": "#/$defs/TalosConfig",
+      "default": {
+        "format": "[$symbol$context]($style bold)(\\([$cluster]($style)\\)) via [$endpoints]($style) (as [$roles]($style) )in ",
+        "symbol": "󰰥 ",
+        "style": "208",
+        "disabled": true,
+        "detect_extensions": [],
+        "detect_files": [],
+        "detect_folders": [],
+        "detect_env_vars": [],
+        "contexts": []
+      }
+    },
     "terraform": {
       "$ref": "#/$defs/TerraformConfig",
       "default": {
@@ -6193,6 +6207,94 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "TalosConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol$context]($style bold)(\\([$cluster]($style)\\)) via [$endpoints]($style) (as [$roles]($style) )in "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "󰰥 "
+        },
+        "style": {
+          "type": "string",
+          "default": "208"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_env_vars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TalosContextConfig"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "TalosContextConfig": {
+      "type": "object",
+      "properties": {
+        "context_pattern": {
+          "type": "string",
+          "default": ""
+        },
+        "context_alias": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "style": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
       },
       "additionalProperties": false
