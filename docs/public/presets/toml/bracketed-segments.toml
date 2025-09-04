@@ -121,7 +121,7 @@ format = '\[[$ssh_symbol($hostname)]($style)\] '
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
-[job]
+[jobs]
 format = '\[[$symbol$number]($style)\]'
 
 [julia]
