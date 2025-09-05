@@ -11,6 +11,7 @@ pub struct CharacterConfig<'a> {
     pub format: &'a str,
     pub success_symbol: &'a str,
     pub error_symbol: &'a str,
+    pub success_exit_codes: Vec<i32>,
     #[serde(alias = "vicmd_symbol")]
     pub vimcmd_symbol: &'a str,
     pub vimcmd_visual_symbol: &'a str,
@@ -25,6 +26,7 @@ impl Default for CharacterConfig<'_> {
             format: "$symbol ",
             success_symbol: "[❯](bold green)",
             error_symbol: "[❯](bold red)",
+            success_exit_codes: vec![],
             vimcmd_symbol: "[❮](bold green)",
             vimcmd_visual_symbol: "[❮](bold yellow)",
             vimcmd_replace_symbol: "[❮](bold purple)",
