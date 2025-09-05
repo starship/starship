@@ -4606,17 +4606,17 @@ If the `$TALOSCONFIG` env var is set the module will use that if not it will use
 
 ### Options
 
-| Option              | Default                                            | Description                                                           |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`            | `'󰰥 '`                                             | A format string representing the symbol displayed before the Cluster. |
+| Option              | Default                                                                                                         | Description                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `'󰰥 '`                                                                                                          | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context]($style bold)(\\([$cluster]($style)\\)) via [$endpoints]($style) (as [$roles]($style) )in '` | The format for the module.                                            |
-| `style`             | `'208'` (`'208 bold'`) for context                 | The style for the module.                                             |
-| `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
-| `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
-| `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
-| `detect_env_vars`   | `[]`                                               | Which environmental variables should trigger this module              |
-| `contexts`          | `[]`                                               | Customized styles and symbols for specific contexts.                  |
-| `disabled`          | `true`                                             | Disables the `talos` module.                                          |
+| `style`             | `'208'` (`'208 bold'`) for context                                                                              | The style for the module.                                             |
+| `detect_extensions` | `[]`                                                                                                            | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                                                                                            | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                                                                                            | Which folders should trigger this modules.                            |
+| `detect_env_vars`   | `[]`                                                                                                            | Which environmental variables should trigger this module              |
+| `contexts`          | `[]`                                                                                                            | Customized styles and symbols for specific contexts.                  |
+| `disabled`          | `true`                                                                                                          | Disables the `talos` module.                                          |
 
 To customize the style of the module for specific environments, use the following configuration as
 part of the `contexts` list:
