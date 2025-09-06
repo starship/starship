@@ -2396,7 +2396,7 @@ La funcionalidad por defecto es:
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
-### Ejemplo
+### Ejemplos
 
 ```toml
 # ~/.config/starship.toml
@@ -2405,6 +2405,14 @@ La funcionalidad por defecto es:
 symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
 ```
 
 ## Julia
@@ -4360,9 +4368,9 @@ format = 'vía [🏎  $version](red bold)'
 
 ## Terraform
 
-El módulo `Terraform` muestra el [espacio de trabajo de Terraform](https://www.terraform.io/docs/language/state/workspaces.html) y la versión seleccionados actualmente.
+El módulo `Terraform` muestra el [espacio de trabajo de Terraform](https://www.terraform.io/docs/language/state/workspaces.html) y la versión seleccionados actualmente. It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-terraform-version).
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
@@ -4371,16 +4379,17 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Opciones
 
-| Opción              | Predeterminado                       | Descripción                                                                             |
-| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | La cadena de formato para el módulo.                                                    |
-| `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                | Una cadena de formato que se muestra antes del espacio de trabajo terraform.            |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `['.terraform']`                     | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `'bold 105'`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Deshabilita el módulo `terraform`.                                                      |
+| Opción              | Predeterminado                                          | Descripción                                                                             |
+| ------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | La cadena de formato para el módulo.                                                    |
+| `version_format`    | `'v${raw}'`                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                   | Una cadena de formato que se muestra antes del espacio de trabajo terraform.            |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `[]`                                                    | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `['.terraform']`                                        | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `'bold 105'`                                            | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                                 | Deshabilita el módulo `terraform`.                                                      |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                            |
 
 ### Variables
 
@@ -4401,7 +4410,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Sin Terraform Version
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Time
