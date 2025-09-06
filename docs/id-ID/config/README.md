@@ -2407,6 +2407,14 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
+```
+
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
@@ -4360,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version. It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
@@ -4371,16 +4379,17 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 ### Opsi
 
-| Opsi                | Bawaan                               | Deskripsi                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                                                   |
-| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.                               |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `['.terraform']`                     | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `'bold 105'`                         | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                                    |
+| Opsi                | Bawaan                                                  | Deskripsi                                                                           |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                                   |
+| `version_format`    | `'v${raw}'`                                             | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                   | A format string shown before the terraform workspace.                               |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                                    | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `['.terraform']`                                        | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `'bold 105'`                                            | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                 | Disables the `terraform` module.                                                    |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                        |
 
 ### Variabel
 
@@ -4401,7 +4410,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Without Terraform version
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Waktu
