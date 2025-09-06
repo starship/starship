@@ -119,7 +119,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
             // unescape and decode the text event using the reader encoding
             Ok(Event::Text(e)) => {
                 if in_tfm {
-                    return e.unescape().ok().map(std::borrow::Cow::into_owned);
+                    return e.decode().ok().map(std::borrow::Cow::into_owned);
                 }
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
