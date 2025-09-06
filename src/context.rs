@@ -393,6 +393,7 @@ impl<'a> Context<'a> {
             "nu" => Shell::Nu,
             "xonsh" => Shell::Xonsh,
             "cmd" => Shell::Cmd,
+            "osh" => Shell::Osh,
             _ => Shell::Unknown,
         }
     }
@@ -898,6 +899,7 @@ pub enum Shell {
     PowerShell,
     Zsh,
     Elvish,
+    Osh,
     Tcsh,
     Nu,
     Xonsh,
