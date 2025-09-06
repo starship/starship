@@ -10,6 +10,9 @@ use regex::Regex;
 use serde_json as json;
 use std::fs;
 use std::io::Read;
+use std::str::FromStr;
+
+use pep440_rs;
 
 /// Creates a module with the current package version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -97,8 +100,9 @@ fn get_poetry_version(pyproject: &toml::Table) -> Option<String> {
         .map(|s| s.to_owned())
 }
 
-fn parse_file_version(context: &Context, path: &str) -> Option<String> {
+fn parse_file_version_for_hatchling(context: &Context, path: &str) -> Option<String> {
     let file_contents = read_file(context.current_dir.join(path)).ok()?;
+    // https://hatch.pypa.io/latest/version/
     let re = Regex::new(r#"(__version__|VERSION)\s*=\s*["']([^"']+)["']"#).ok()?;
     Some(
         re.captures(&file_contents)
@@ -115,12 +119,15 @@ fn parse_hatchling_dynamic_version(context: &Context, pyproject: &toml::Table) -
         .get("version")?
         .get("path")?
         .as_str()?;
-    // TODO: custom regex pattern
-    parse_file_version(context, version_path)
+
+    parse_file_version_for_hatchling(context, version_path)
+        .and_then(|s| pep440_rs::Version::from_str(s.as_str()).ok())
+        .map(|v| v.to_string())
 }
 
 fn parse_pep621_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
     // TODO: Flit, PDM, Setuptools
+    // https://packaging.python.org/en/latest/discussions/single-source-version#build-system-version-handling
     parse_hatchling_dynamic_version(context, pyproject)
 }
 
