@@ -2407,6 +2407,14 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
+```
+
 ## Julia
 
 `julia`モジュールは、現在インストールされている[Julia](https://julialang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -4360,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
+`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。 It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -4371,16 +4379,17 @@ format = 'via [🏎  $version](red bold)'
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `'via [$symbol$workspace]($style) '` | モジュールのフォーマット文字列。                                       |
-| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'💠'`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `['.terraform']`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'bold 105'`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `terraform` モジュールを無効にします。                              |
+| オプション               | デフォルト                                                   | 説明                                                     |
+| ------------------- | ------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | モジュールのフォーマット文字列。                                       |
+| `version_format`    | `'v${raw}'`                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'💠'`                                                   | ワークスペースの前に表示されるフォーマット文字列。                              |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                                    | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `['.terraform']`                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'bold 105'`                                            | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                 | `terraform` モジュールを無効にします。                              |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.           |
 
 ### 変数
 
@@ -4401,7 +4410,7 @@ format = 'via [🏎  $version](red bold)'
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Terraform バージョン表示なし
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## 時刻
