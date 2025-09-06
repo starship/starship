@@ -574,6 +574,7 @@
         "only_attached": false,
         "always_show_remote": false,
         "ignore_branches": [],
+        "ignore_bare_repo": false,
         "disabled": false
       }
     },
@@ -3300,6 +3301,10 @@
             "type": "string"
           },
           "default": []
+        },
+        "ignore_bare_repo": {
+          "type": "boolean",
+          "default": false
         },
         "disabled": {
           "type": "boolean",
