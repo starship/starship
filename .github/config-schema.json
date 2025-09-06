@@ -1618,6 +1618,16 @@
         "symbol": "💠 ",
         "style": "bold 105",
         "disabled": false,
+        "commands": [
+          [
+            "terraform",
+            "version"
+          ],
+          [
+            "tofu",
+            "version"
+          ]
+        ],
         "detect_extensions": [
           "tf",
           "tfplan",
