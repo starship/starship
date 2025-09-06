@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   Hal ini dapat berubah di kemudian hari. Only Nushell v0.96+ is supported.
+   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.96+ yang menerima dukungan.
 
    :::
 

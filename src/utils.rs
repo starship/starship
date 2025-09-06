@@ -35,15 +35,15 @@ pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathB
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
-    log::trace!("Trying to read from {:?}", file_name);
+    log::trace!("Trying to read from {file_name:?}");
 
     let result = read_to_string(file_name);
 
     if result.is_err() {
-        log::debug!("Error reading file: {:?}", result);
+        log::debug!("Error reading file: {result:?}");
     } else {
         log::trace!("File read successfully");
-    };
+    }
 
     result
 }
@@ -65,7 +65,7 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
     {
         Ok(file) => file,
         Err(err) => {
-            log::warn!("Error creating file: {:?}", err);
+            log::warn!("Error creating file: {err:?}");
             return Err(err);
         }
     };
@@ -96,15 +96,15 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
 /// This function also initializes std{err,out,in} to protect against processes changing the console mode
 pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
-    log::trace!("Creating Command for binary {:?}", binary_name);
+    log::trace!("Creating Command for binary {binary_name:?}");
 
     let full_path = match which::which(binary_name) {
         Ok(full_path) => {
-            log::trace!("Using {:?} as {:?}", full_path, binary_name);
+            log::trace!("Using {full_path:?} as {binary_name:?}");
             full_path
         }
         Err(error) => {
-            log::trace!("Unable to find {:?} in PATH, {:?}", binary_name, error);
+            log::trace!("Unable to find {binary_name:?} in PATH, {error:?}");
             return Err(Error::new(ErrorKind::NotFound, error));
         }
     };
@@ -148,7 +148,7 @@ pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
     time_limit: Duration,
 ) -> Option<CommandOutput> {
-    log::trace!("Executing command {:?} with args {:?}", cmd, args);
+    log::trace!("Executing command {cmd:?} with args {args:?}");
     #[cfg(test)]
     if let Some(o) = mock_cmd(&cmd, args) {
         return o;
@@ -196,6 +196,36 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 "\
 OpenBSD clang version 11.1.0
 Target: amd64-unknown-openbsd7.0
+Thread model: posix
+InstalledDir: /usr/bin",
+            ),
+            stderr: String::default(),
+        }),
+        "c++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+c++ (GCC) 14.2.1 20240910
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+            ),
+            stderr: String::default(),
+        }),
+        "g++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+g++ (GCC) 14.2.1 20240910
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+            ),
+            stderr: String::default(),
+        }),
+        "clang++ --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+clang version 19.1.7
+Target: x86_64-pc-linux-gnu
 Thread model: posix
 InstalledDir: /usr/bin",
             ),
@@ -261,20 +291,18 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("topic-branch"),
             stderr: String::default(),
         }),
-        "fossil branch new topic-branch trunk" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::default(),
-        }),
+        "fossil branch new topic-branch trunk" | "fossil update topic-branch" => {
+            Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::default(),
+            })
+        }
         "fossil diff -i --numstat" => Some(CommandOutput {
             stdout: String::from(
                 "\
          3          2 README.md
          3          2 TOTAL over 1 changed files",
             ),
-            stderr: String::default(),
-        }),
-        "fossil update topic-branch" => Some(CommandOutput {
-            stdout: String::default(),
             stderr: String::default(),
         }),
         "gleam --version" => Some(CommandOutput {
@@ -410,6 +438,10 @@ WebAssembly: unavailable
             stdout: String::from("Outputting repository ↖"),
             stderr: String::default(),
         }),
+        "pixi --version" => Some(CommandOutput {
+            stdout: String::from("pixi 0.33.0"),
+            stderr: String::default(),
+        }),
         "pulumi version" => Some(CommandOutput {
             stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
             stderr: String::default(),
@@ -491,6 +523,21 @@ Target: x86_64-apple-darwin19.4.0\n",
         }),
         "v version" => Some(CommandOutput {
             stdout: String::from("V 0.2 30c0659"),
+            stderr: String::default(),
+        }),
+        "xmake --version" => Some(CommandOutput {
+            stdout: String::from(
+                r"xmake v2.9.5+HEAD.0db4fe6, A cross-platform build utility based on Lua
+Copyright (C) 2015-present Ruki Wang, tboox.org, xmake.io
+                         _
+    __  ___ __  __  __ _| | ______
+    \ \/ / |  \/  |/ _  | |/ / __ \
+     >  <  | \__/ | /_| |   <  ___/
+    /_/\_\_|_|  |_|\__ \|_|\_\____|
+                         by ruki, xmake.io
+    👉  Manual: https://xmake.io/#/getting_started
+    🙏  Donate: https://xmake.io/#/sponsor",
+            ),
             stderr: String::default(),
         }),
         "zig version" => Some(CommandOutput {
@@ -600,14 +647,14 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,
                 Err(error) => {
-                    log::warn!("Unable to decode stdout: {:?}", error);
+                    log::warn!("Unable to decode stdout: {error:?}");
                     return None;
                 }
             };
             let stderr_string = match String::from_utf8(output.stderr) {
                 Ok(stderr) => stderr,
                 Err(error) => {
-                    log::warn!("Unable to decode stderr: {:?}", error);
+                    log::warn!("Unable to decode stderr: {error:?}");
                     return None;
                 }
             };
@@ -725,19 +772,13 @@ impl PathExt for Path {
     #[cfg(target_os = "linux")]
     fn device_id(&self) -> Option<u64> {
         use std::os::linux::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.st_dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.st_dev())
     }
 
     #[cfg(all(unix, not(target_os = "linux")))]
     fn device_id(&self) -> Option<u64> {
         use std::os::unix::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.dev()),
-            Err(_) => None,
-        }
+        Some(self.metadata().ok()?.dev())
     }
 }
 
@@ -747,35 +788,35 @@ mod tests {
 
     #[test]
     fn render_time_test_0ms() {
-        assert_eq!(render_time(0_u128, true), "0ms")
+        assert_eq!(render_time(0_u128, true), "0ms");
     }
     #[test]
     fn render_time_test_0s() {
-        assert_eq!(render_time(0_u128, false), "0s")
+        assert_eq!(render_time(0_u128, false), "0s");
     }
     #[test]
     fn render_time_test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true), "500ms");
     }
     #[test]
     fn render_time_test_500ms_no_millis() {
-        assert_eq!(render_time(500_u128, false), "0s")
+        assert_eq!(render_time(500_u128, false), "0s");
     }
     #[test]
     fn render_time_test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s0ms")
+        assert_eq!(render_time(10_000_u128, true), "10s0ms");
     }
     #[test]
     fn render_time_test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s0ms")
+        assert_eq!(render_time(90_000_u128, true), "1m30s0ms");
     }
     #[test]
     fn render_time_test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms")
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s0ms");
     }
     #[test]
     fn render_time_test_1d() {
-        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s")
+        assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s");
     }
 
     #[test]
@@ -790,7 +831,7 @@ mod tests {
             stderr: String::from("stderr ok!\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     // While the exec_cmd should work on Windows some of these tests assume a Unix-like
@@ -805,7 +846,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -818,7 +859,7 @@ mod tests {
             stderr: String::new(),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -834,7 +875,7 @@ mod tests {
             stderr: String::from("hello\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -850,7 +891,7 @@ mod tests {
             stderr: String::from("world\n"),
         });
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -859,7 +900,7 @@ mod tests {
         let result = internal_exec_cmd("false", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]
@@ -868,7 +909,7 @@ mod tests {
         let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
-        assert_eq!(result, expected)
+        assert_eq!(result, expected);
     }
 
     #[test]

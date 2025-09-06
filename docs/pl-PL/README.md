@@ -166,7 +166,7 @@ onMounted(() => {
 
    ::: warning
 
-   Ten sposób zmieni się w przyszłości. Only Nushell v0.96+ is supported.
+   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.96+.
 
    :::
 

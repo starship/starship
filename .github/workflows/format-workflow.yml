@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Docs | Format
-        uses: dprint/check@v2.2
+        uses: dprint/check@v2.3
 
   # Validate preset files
   taplo:
@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install | Taplo
-        run: cargo install --debug --locked --version 0.9.3 taplo-cli
+        run: cargo install --debug --locked --version 0.10.0 taplo-cli
       - name: Presets | Validate with schema
         run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/public/presets/toml/*.toml
 
@@ -35,11 +35,11 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'i18n_master' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Prevent File Change
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const { execSync } = require('child_process');
@@ -62,12 +62,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup | Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22.19.0
           cache: 'npm'
           cache-dependency-path: docs/package-lock.json
 

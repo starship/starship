@@ -19,7 +19,7 @@ pub struct ShLvlConfig<'a> {
 
 impl Default for ShLvlConfig<'_> {
     fn default() -> Self {
-        ShLvlConfig {
+        Self {
             threshold: 2,
             format: "[$symbol$shlvl]($style) ",
             symbol: "↕️  ", // extra space for emoji

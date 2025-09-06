@@ -23,7 +23,7 @@ multiwidth emoji support in some shells. Please do not file a PR to change this
 unless you can show that your changes do not affect this workaround.  */
 impl Default for NixShellConfig<'_> {
     fn default() -> Self {
-        NixShellConfig {
+        Self {
             format: "via [$symbol$state( \\($name\\))]($style) ",
             symbol: "❄️  ",
             style: "bold blue",

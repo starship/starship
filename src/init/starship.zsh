@@ -34,7 +34,14 @@ prompt_starship_precmd() {
 
     # Calculate duration if a command was executed
     if (( ${+STARSHIP_START_TIME} )); then
-        __starship_get_time && (( STARSHIP_DURATION = STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
+        # If an arithmetic expression evaluates to 0, its exit status is 1:
+        # "The return status is 0 if the arithmetic value of the expression is non-zero, 1 if it is zero, and 2 if an error occurred."
+        # In rare cases, the subtraction below can result in an int 0 result (yes, really),
+        # which would then kill the shell if 'set -e' is in effect.
+        # We therefore have to assign the result outside the expression (using 'STARSHIP_DURATION=$((...))'),
+        # because unlike '(())', '$(())' gets a return status of 0 even if the expression evaluates to int 0
+        # (but it still surfaces a potential error, normally status 2, as status 1).
+        __starship_get_time && STARSHIP_DURATION=$(( STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
         unset STARSHIP_START_TIME
     # Drop status and duration otherwise
     else
@@ -63,9 +70,12 @@ starship_zle-keymap-select() {
 }
 
 ## Check for existing keymap-select widget.
-# zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
-__starship_preserved_zle_keymap_select=${widgets[zle-keymap-select]#user:}
-if [[ -z $__starship_preserved_zle_keymap_select ]]; then
+if [[ -v widgets[zle-keymap-select] ]]; then
+    # zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
+    __starship_preserved_zle_keymap_select=${widgets[zle-keymap-select]#user:}
+fi
+
+if [[ -z ${__starship_preserved_zle_keymap_select:-} ]]; then
     zle -N zle-keymap-select starship_zle-keymap-select;
 else
     # Define a wrapper fn to call the original widget fn and then Starship's.
@@ -87,6 +97,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"

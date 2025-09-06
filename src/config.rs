@@ -11,7 +11,7 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
-use std::ffi::OsString;
+use std::ffi::OsStr;
 use std::io::ErrorKind;
 
 use toml::Value;
@@ -32,13 +32,13 @@ where
         match Self::from_config(config) {
             Ok(config) => config,
             Err(e) => {
-                log::warn!("Failed to load config value: {}", e);
+                log::warn!("Failed to load config value: {e}");
                 Self::default()
             }
         }
     }
 
-    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// Helper function that will call `ModuleConfig::from_config(config)` if config is Some,
     /// or `ModuleConfig::default()` if config is None.
     fn try_load<V: Into<ValueRef<'a>>>(config: Option<V>) -> Self {
         config.map(Into::into).map(Self::load).unwrap_or_default()
@@ -54,7 +54,7 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
             // If the error is an unrecognized key, print a warning and run
             // deserialize ignoring that error. Otherwise, just return the error
             if err.to_string().contains("Unknown key") {
-                log::warn!("{}", err);
+                log::warn!("{err}");
                 let deserializer2 = ValueDeserializer::new(config).with_allow_unknown_keys();
                 T::deserialize(deserializer2)
             } else {
@@ -102,16 +102,17 @@ impl<T> schemars::JsonSchema for VecOr<T>
 where
     T: schemars::JsonSchema + Sized,
 {
-    fn schema_name() -> String {
+    fn schema_name() -> Cow<'static, str> {
         Either::<T, Vec<T>>::schema_name()
     }
 
-    fn json_schema(generator: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
-        Either::<T, Vec<T>>::json_schema(generator)
+    fn schema_id() -> Cow<'static, str> {
+        let mod_path = module_path!();
+        Cow::Owned(format!("{mod_path}::{}", Self::schema_name()))
     }
 
-    fn is_referenceable() -> bool {
-        Either::<T, Vec<T>>::is_referenceable()
+    fn json_schema(generator: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
+        Either::<T, Vec<T>>::json_schema(generator)
     }
 }
 
@@ -123,7 +124,7 @@ pub struct StarshipConfig {
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
+    pub fn initialize(config_file_path: Option<&OsStr>) -> Self {
         Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
@@ -132,7 +133,7 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+    fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
 
         match toml::from_str(&toml_content) {
@@ -141,13 +142,13 @@ impl StarshipConfig {
                 Some(parsed)
             }
             Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
+                log::error!("Unable to parse the config file: {error}");
                 None
             }
         }
     }
 
-    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+    pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
         if config_file_path.is_none() {
             log::debug!(
                 "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
@@ -200,28 +201,24 @@ impl StarshipConfig {
 
         // Assumes all keys except the last in path has a table
         for option in table_options {
-            match prev_table.get(*option) {
-                Some(value) => match value.as_table() {
-                    Some(value) => {
-                        prev_table = value;
-                    }
-                    None => {
-                        log::trace!(
-                            "No config found for \"{}\": \"{}\" is not a table",
-                            path.join("."),
-                            &option
-                        );
-                        return None;
-                    }
-                },
-                None => {
+            if let Some(value) = prev_table.get(*option) {
+                if let Some(value) = value.as_table() {
+                    prev_table = value;
+                } else {
                     log::trace!(
-                        "No config found for \"{}\": Option \"{}\" not found",
+                        "No config found for \"{}\": \"{}\" is not a table",
                         path.join("."),
                         &option
                     );
                     return None;
                 }
+            } else if prev_table.contains_key(*option) {
+                log::trace!(
+                    "No config found for \"{}\": \"{}\" is not a table",
+                    path.join("."),
+                    &option
+                );
+                return None;
             }
         }
 
@@ -233,7 +230,7 @@ impl StarshipConfig {
                 path.join("."),
                 &last_option
             );
-        };
+        }
         value
     }
 
@@ -445,36 +442,29 @@ fn parse_color_string(
     palette: Option<&Palette>,
 ) -> Option<nu_ansi_term::Color> {
     // Parse RGB hex values
-    log::trace!("Parsing color_string: {}", color_string);
+    log::trace!("Parsing color_string: {color_string}");
     if color_string.starts_with('#') {
-        log::trace!(
-            "Attempting to read hexadecimal color string: {}",
-            color_string
-        );
+        log::trace!("Attempting to read hexadecimal color string: {color_string}");
         if color_string.len() != 7 {
-            log::debug!("Could not parse hexadecimal string: {}", color_string);
+            log::debug!("Could not parse hexadecimal string: {color_string}");
             return None;
         }
         let r: u8 = u8::from_str_radix(&color_string[1..3], 16).ok()?;
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
-        log::trace!("Read RGB color string: {},{},{}", r, g, b);
+        log::trace!("Read RGB color string: {r},{g},{b}");
         return Some(Color::Rgb(r, g, b));
     }
 
     // Parse a u8 (ansi color)
     if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
-        log::trace!("Read ANSI color string: {}", ansi_color_num);
+        log::trace!("Read ANSI color string: {ansi_color_num}");
         return Some(Color::Fixed(ansi_color_num));
     }
 
     // Check palette for a matching user-defined color
     if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
-        log::trace!(
-            "Read user-defined color string: {} defined as {}",
-            color_string,
-            palette_color
-        );
+        log::trace!("Read user-defined color string: {color_string} defined as {palette_color}");
         return parse_color_string(palette_color, None);
     }
 
@@ -501,9 +491,9 @@ fn parse_color_string(
     };
 
     if predefined_color.is_some() {
-        log::trace!("Read predefined color: {}", color_string);
+        log::trace!("Read predefined color: {color_string}");
     } else {
-        log::debug!("Could not parse color in string: {}", color_string);
+        log::debug!("Could not parse color in string: {color_string}");
     }
     predefined_color
 }
@@ -515,9 +505,9 @@ fn get_palette<'a>(
     if let Some(palette_name) = palette_name {
         let palette = palettes.get(palette_name);
         if palette.is_some() {
-            log::trace!("Found color palette: {}", palette_name);
+            log::trace!("Found color palette: {palette_name}");
         } else {
-            log::warn!("Could not find color palette: {}", palette_name);
+            log::warn!("Could not find color palette: {palette_name}");
         }
         palette
     } else {
@@ -1027,7 +1017,7 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
-        )
+        );
     }
 
     #[test]
@@ -1070,7 +1060,7 @@ mod tests {
     fn read_config_no_config_file_path_provided() {
         assert_eq!(
             None,
-            StarshipConfig::read_config_content_as_str(&None),
+            StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
     }

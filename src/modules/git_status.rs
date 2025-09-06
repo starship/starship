@@ -1,13 +1,14 @@
-use regex::Regex;
-use std::sync::OnceLock;
-
 use super::{Context, Module, ModuleConfig};
-
 use crate::configs::git_status::GitStatusConfig;
-use crate::context;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::sync::Arc;
+use crate::{context, num_configured_starship_threads, num_rayon_threads};
+use gix::bstr::ByteVec;
+use gix::status::Submodule;
+use regex::Regex;
+use std::path::PathBuf;
+use std::sync::atomic::AtomicBool;
+use std::sync::{Arc, OnceLock};
 
 const ALL_STATUS_FORMAT: &str =
     "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
@@ -47,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return Some(module);
     }
 
-    let info = Arc::new(GitStatusInfo::load(context, repo, config.clone()));
+    let info = GitStatusInfo::load(context, repo, config.clone());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -60,7 +61,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_variables_to_segments(|variable: &str| {
-                let info = Arc::clone(&info);
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
                         format_count(config.stashed, "git_status.stashed", context, count)
@@ -118,12 +118,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok(segments) => {
             if segments.is_empty() {
                 return None;
-            } else {
-                segments
             }
+            segments
         }
         Err(error) => {
-            log::warn!("Error in module `git_status`:\n{}", error);
+            log::warn!("Error in module `git_status`:\n{error}");
             return None;
         }
     });
@@ -135,7 +134,7 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     repo: &'a context::Repo,
     config: GitStatusConfig<'a>,
-    repo_status: OnceLock<Option<RepoStatus>>,
+    repo_status: OnceLock<Option<Arc<RepoStatus>>>,
     stashed_count: OnceLock<Option<usize>>,
 }
 
@@ -158,27 +157,24 @@ impl<'a> GitStatusInfo<'a> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
-    pub fn get_repo_status(&self) -> &Option<RepoStatus> {
-        self.repo_status.get_or_init(|| {
-            match get_repo_status(self.context, self.repo, &self.config) {
-                Some(repo_status) => Some(repo_status),
-                None => {
+    pub fn get_repo_status(&self) -> Option<&RepoStatus> {
+        self.repo_status
+            .get_or_init(|| {
+                get_static_repo_status(self.context, self.repo, &self.config).or_else(|| {
                     log::debug!("get_repo_status: git status execution failed");
                     None
-                }
-            }
-        })
+                })
+            })
+            .as_deref()
     }
 
     pub fn get_stashed(&self) -> &Option<usize> {
-        self.stashed_count
-            .get_or_init(|| match get_stashed_count(self.repo) {
-                Some(stashed_count) => Some(stashed_count),
-                None => {
-                    log::debug!("get_stashed_count: git stash execution failed");
-                    None
-                }
+        self.stashed_count.get_or_init(|| {
+            get_stashed_count(self.repo).or_else(|| {
+                log::debug!("get_stashed_count: git stash execution failed");
+                None
             })
+        })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -210,6 +206,29 @@ impl<'a> GitStatusInfo<'a> {
     }
 }
 
+/// Return a globally shared version the repository status so it can be reused.
+/// It's shared so those who received a copy can keep it, even if the next call uses a different
+/// path so the cache is trashed.
+///
+/// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
+pub(crate) fn get_static_repo_status(
+    context: &Context,
+    repo: &context::Repo,
+    config: &GitStatusConfig,
+) -> Option<Arc<RepoStatus>> {
+    static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
+        parking_lot::Mutex::new(None);
+    let mut status = REPO_STATUS.lock();
+    let needs_update = status
+        .as_ref()
+        .is_none_or(|(_status, status_path)| status_path != &context.current_dir);
+    if needs_update {
+        *status = get_repo_status(context, repo, config)
+            .map(|status| (Arc::new(status), context.current_dir.clone()));
+    }
+    status.as_ref().map(|(status, _)| Arc::clone(status))
+}
+
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
@@ -219,38 +238,221 @@ fn get_repo_status(
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-    let mut args = vec!["status", "--porcelain=2"];
-
-    // for performance reasons, only pass flags if necessary...
-    let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
-    let has_up_to_date_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
-    if has_ahead_behind || has_up_to_date_diverged {
-        args.push("--branch");
-    }
-
-    // ... and add flags that omit information the user doesn't want
+    let gix_repo = repo.open();
+    // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let has_untracked = !config.untracked.is_empty();
-    if !has_untracked {
-        args.push("--untracked-files=no");
-    }
-    if config.ignore_submodules {
-        args.push("--ignore-submodules=dirty");
-    } else if !has_untracked {
-        args.push("--ignore-submodules=untracked");
-    }
+    let git_config = gix_repo.config_snapshot();
+    if config.use_git_executable
+        || repo.fs_monitor_value_is_true
+        || gix_repo.index_or_empty().ok()?.is_sparse()
+    {
+        let mut args = vec!["status", "--porcelain=2"];
 
-    let status_output = repo.exec_git(context, &args)?;
-    let statuses = status_output.stdout.lines();
-
-    statuses.for_each(|status| {
-        if status.starts_with("# branch.ab ") {
-            repo_status.set_ahead_behind(status);
-        } else if !status.starts_with('#') {
-            repo_status.add(status);
+        // for performance reasons, only pass flags if necessary...
+        let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
+        let has_up_to_date_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
+        if has_ahead_behind || has_up_to_date_diverged {
+            args.push("--branch");
         }
-    });
+
+        // ... and add flags that omit information the user doesn't want
+        if !has_untracked {
+            args.push("--untracked-files=no");
+        }
+        if config.ignore_submodules {
+            args.push("--ignore-submodules=dirty");
+        } else if !has_untracked {
+            args.push("--ignore-submodules=untracked");
+        }
+
+        let status_output = repo.exec_git(context, &args)?;
+        let statuses = status_output.stdout.lines();
+
+        statuses.for_each(|status| {
+            if status.starts_with("# branch.ab ") {
+                repo_status.set_ahead_behind(status);
+            } else if !status.starts_with('#') {
+                repo_status.add(status);
+            }
+        });
+    } else {
+        let is_interrupted = Arc::new(AtomicBool::new(false));
+        std::thread::Builder::new()
+            .name("starship timer".into())
+            .stack_size(256 * 1024)
+            .spawn({
+                let is_interrupted = is_interrupted.clone();
+                let abort_after =
+                    std::time::Duration::from_millis(context.root_config.command_timeout);
+                move || {
+                    std::thread::sleep(abort_after);
+                    is_interrupted.store(true, std::sync::atomic::Ordering::SeqCst);
+                }
+            })
+            .expect("should be able to spawn timer thread");
+        // We don't show details in submodules.
+        let check_dirty = true;
+        let status = gix_repo
+            .status(gix::features::progress::Discard)
+            .ok()?
+            .index_worktree_submodules(if config.ignore_submodules {
+                Submodule::Given {
+                    ignore: gix::submodule::config::Ignore::Dirty,
+                    check_dirty,
+                }
+            } else if !has_untracked {
+                Submodule::Given {
+                    ignore: gix::submodule::config::Ignore::Untracked,
+                    check_dirty,
+                }
+            } else {
+                Submodule::AsConfigured { check_dirty }
+            })
+            .index_worktree_options_mut(|opts| {
+                opts.thread_limit = if cfg!(target_os = "macos") {
+                    Some(num_configured_starship_threads().unwrap_or(
+                        // TODO: figure out good defaults for other platforms, maybe make it configurable.
+                        //       Git uses everything (if repo-size permits), but that's not the best choice for MacOS.
+                        3,
+                    ))
+                } else {
+                    Some(num_rayon_threads())
+                };
+                if config.untracked.is_empty() {
+                    opts.dirwalk_options.take();
+                } else if let Some(opts) = opts.dirwalk_options.as_mut() {
+                    opts.set_emit_untracked(gix::dir::walk::EmissionMode::Matching)
+                        .set_emit_ignored(None)
+                        .set_emit_pruned(false)
+                        .set_emit_empty_directories(false);
+                }
+            })
+            .tree_index_track_renames(if config.renamed.is_empty() {
+                gix::status::tree_index::TrackRenames::Disabled
+            } else {
+                gix::status::tree_index::TrackRenames::Given(sanitize_rename_tracking(
+                    // Get configured diff-rename configuration, or use default settings.
+                    gix::diff::new_rewrites(&git_config, true)
+                        .unwrap_or_default()
+                        .0
+                        .unwrap_or_default(),
+                ))
+            })
+            .should_interrupt_owned(is_interrupted.clone());
+
+        // This will start the status machinery, collecting status items in the background.
+        // Thus, we can do some work in this thread without blocking, before starting to count status items.
+        let status = status.into_iter(None).ok()?;
+
+        // for performance reasons, only pass flags if necessary...
+        let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
+        let has_up_to_date_or_diverged =
+            !config.up_to_date.is_empty() || !config.diverged.is_empty();
+        if has_ahead_behind || has_up_to_date_or_diverged {
+            if let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
+                Vec::from(gix::bstr::BString::from(ref_name))
+                    .into_string()
+                    .ok()
+            }) {
+                let output = repo.exec_git(
+                    context,
+                    ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
+                        .into_iter()
+                        .map(ToOwned::to_owned)
+                        .chain(Some(branch_name)),
+                )?;
+                if let Some(line) = output.stdout.lines().next() {
+                    repo_status.set_ahead_behind_for_each_ref(line);
+                }
+            }
+        }
+
+        for change in status.filter_map(Result::ok) {
+            use gix::status;
+            match &change {
+                status::Item::TreeIndex(change) => {
+                    use gix::diff::index::Change;
+                    match change {
+                        Change::Addition { .. } | Change::Modification { .. } => {
+                            repo_status.staged += 1;
+                        }
+                        Change::Deletion { .. } => {
+                            repo_status.deleted += 1;
+                        }
+                        Change::Rewrite { .. } => {
+                            repo_status.renamed += 1;
+                        }
+                    }
+                }
+                status::Item::IndexWorktree(change) => {
+                    use gix::status::index_worktree::Item;
+                    use gix::status::plumbing::index_as_worktree::{Change, EntryStatus};
+                    match change {
+                        Item::Modification {
+                            status: EntryStatus::Conflict(_),
+                            ..
+                        } => {
+                            repo_status.conflicted += 1;
+                        }
+                        Item::Modification {
+                            status: EntryStatus::Change(Change::Removed),
+                            ..
+                        } => {
+                            repo_status.deleted += 1;
+                        }
+                        Item::Modification {
+                            status:
+                                EntryStatus::IntentToAdd
+                                | EntryStatus::Change(
+                                    Change::Modification { .. } | Change::SubmoduleModification(_),
+                                ),
+                            ..
+                        } => {
+                            repo_status.modified += 1;
+                        }
+                        Item::Modification {
+                            status: EntryStatus::Change(Change::Type { .. }),
+                            ..
+                        } => {
+                            repo_status.typechanged += 1;
+                        }
+                        Item::DirectoryContents {
+                            entry:
+                                gix::dir::Entry {
+                                    status: gix::dir::entry::Status::Untracked,
+                                    ..
+                                },
+                            ..
+                        } => {
+                            repo_status.untracked += 1;
+                        }
+                        Item::Rewrite { .. } => {
+                            unreachable!(
+                                "this kind of rename tracking isn't enabled by default and specific to gitoxide"
+                            )
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            // Keep it for potential reuse by `git_metrics`
+            repo_status.changes.push(change);
+        }
+        if is_interrupted.load(std::sync::atomic::Ordering::Relaxed) {
+            repo_status = RepoStatus {
+                ahead: repo_status.ahead,
+                behind: repo_status.behind,
+                ..Default::default()
+            };
+        }
+    }
 
     Some(repo_status)
+}
+
+fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewrites {
+    config.limit = 100;
+    config
 }
 
 fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
@@ -279,10 +481,11 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
     }
 }
 
-#[derive(Default, Debug, Copy, Clone)]
-struct RepoStatus {
+#[derive(Default, Debug, Clone)]
+pub(crate) struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
+    pub(crate) changes: Vec<gix::status::Item>,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
@@ -337,7 +540,7 @@ impl RepoStatus {
             Some('1') => self.parse_normal_status(&s[2..4]),
             Some('2') => {
                 self.renamed += 1;
-                self.parse_normal_status(&s[2..4])
+                self.parse_normal_status(&s[2..4]);
             }
             Some('u') => self.conflicted += 1,
             Some('?') => self.untracked += 1,
@@ -353,6 +556,37 @@ impl RepoStatus {
         if let Some(caps) = re.captures(s) {
             self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
             self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
+        }
+    }
+
+    fn set_ahead_behind_for_each_ref(&mut self, mut s: &str) {
+        if s == " " || s.ends_with(" [gone]") {
+            self.ahead = None;
+            self.behind = None;
+            return;
+        }
+
+        s = s
+            .split_once(' ')
+            .unwrap()
+            .1
+            .trim_matches(|c| c == '[' || c == ']');
+
+        for pair in s.split(',') {
+            let mut tokens = pair.trim().splitn(2, ' ');
+            if let (Some(name), Some(number)) = (tokens.next(), tokens.next()) {
+                let storage = match name {
+                    "ahead" => &mut self.ahead,
+                    "behind" => &mut self.behind,
+                    _ => return,
+                };
+                *storage = number.parse().ok();
+            }
+        }
+        for field in [&mut self.ahead, &mut self.behind] {
+            if field.is_none() {
+                *field = Some(0);
+            }
         }
     }
 }
@@ -442,7 +676,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
                 log::Level::Error
             };
 
-            log::log!(level, "Failed to get Windows path:\n{:?}", e);
+            log::log!(level, "Failed to get Windows path:\n{e:?}");
 
             return None;
         }
@@ -451,13 +685,13 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     let winpath = match std::str::from_utf8(&winpath.stdout) {
         Ok(r) => r.trim_end(),
         Err(e) => {
-            log::error!("Failed to parse Windows path:\n{:?}", e);
+            log::error!("Failed to parse Windows path:\n{e:?}");
 
             return None;
         }
     };
 
-    log::trace!("Windows path: {}", winpath);
+    log::trace!("Windows path: {winpath}");
 
     // In Windows or Linux dir?
     if winpath.starts_with(r"\\wsl") {
@@ -489,7 +723,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     let out = match exe {
         Ok(r) => r,
         Err(e) => {
-            log::error!("Failed to run Git Status module on Windows:\n{}", e);
+            log::error!("Failed to run Git Status module on Windows:\n{e}");
 
             return None;
         }
@@ -498,10 +732,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     match String::from_utf8(out.stdout) {
         Ok(r) => Some(r),
         Err(e) => {
-            log::error!(
-                "Failed to parse Windows Git Status module status output:\n{}",
-                e
-            );
+            log::error!("Failed to parse Windows Git Status module status output:\n{e}");
 
             None
         }
@@ -514,15 +745,14 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 }
 
 #[cfg(test)]
-mod tests {
-    use nu_ansi_term::{AnsiStrings, Color};
-    use std::ffi::OsStr;
-    use std::fs::{self, File};
-    use std::io::{self, prelude::*};
-    use std::path::Path;
-
+pub(crate) mod tests {
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
+    use nu_ansi_term::{AnsiStrings, Color};
+    use std::ffi::OsStr;
+    use std::fs::{self, File, OpenOptions};
+    use std::io::{self, prelude::*};
+    use std::path::Path;
 
     #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
@@ -661,6 +891,44 @@ mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_branch_with_gone_upstream(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -881,6 +1149,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_typechanged_in_index() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_typechanged_in_index(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("+");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_modified() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -905,6 +1188,27 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 modified = "!$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("!1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_modified_with_count_sparse() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        make_sparse(repo_dir.path())?;
+        create_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                modified = "!$count"
+                ahead = ""
             })
             .path(repo_dir.path())
             .collect();
@@ -1076,6 +1380,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_deleted_file_in_index() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_deleted_in_index(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("✘");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_deleted_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1139,7 +1458,6 @@ mod tests {
     // but as untracked instead. The following test checks if manually deleted and manually renamed
     // files are tracked by git_status module in the same way 'git status' does.
     #[test]
-    #[ignore]
     fn ignore_manually_renamed() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
         File::create(repo_dir.path().join("a"))?.sync_all()?;
@@ -1239,6 +1557,16 @@ mod tests {
         Ok(())
     }
 
+    fn create_typechanged_in_index(repo_dir: &Path) -> io::Result<()> {
+        create_typechanged(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "readme.md"])
+            .current_dir(repo_dir)
+            .output()?;
+        Ok(())
+    }
+
     fn create_staged_typechange(repo_dir: &Path) -> io::Result<()> {
         create_typechanged(repo_dir)?;
 
@@ -1320,6 +1648,33 @@ mod tests {
         Ok(())
     }
 
+    pub(crate) fn make_sparse(repo_dir: &Path) -> io::Result<()> {
+        let sparse_dirname = "sparse-dir";
+        let dir = repo_dir.join(sparse_dirname);
+        std::fs::create_dir(&dir)?;
+        File::create(dir.join("still-visible"))?.sync_all()?;
+        let subdir = dir.join("not-checked-out");
+        std::fs::create_dir(&subdir)?;
+        File::create(subdir.join("invisible"))?.sync_all()?;
+
+        create_command("git")?
+            .args(["add", "sparse-dir"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        create_command("git")?
+            .args(["commit", "-m", "add new directory", "--no-gpg-sign"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        create_command("git")?
+            .args(["sparse-checkout", "set", sparse_dirname, "--sparse-index"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
     fn create_staged(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
@@ -1384,6 +1739,15 @@ mod tests {
         Ok(())
     }
 
+    fn create_deleted_in_index(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["rm", "readme.md"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
     fn create_staged_and_ignored(repo_dir: &Path) -> io::Result<()> {
         let mut file = File::create(repo_dir.join(".gitignore"))?;
         writeln!(&mut file, "ignored.txt")?;
@@ -1397,6 +1761,31 @@ mod tests {
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_branch(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "new-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn create_branch_with_gone_upstream(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "-c", "gone-branch"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        let config_path = repo_dir.join(".git").join("config");
+        let mut config_file = OpenOptions::new().append(true).open(&config_path)?;
+        writeln!(
+            config_file,
+            "\n[branch \"gone-branch\"]\n\tremote = origin\n\tmerge = refs/heads/gone-upstream\n"
+        )?;
 
         Ok(())
     }

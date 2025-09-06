@@ -32,10 +32,10 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
 
     let config = EnvVarConfig::try_load(toml_config.as_deref());
     // Note: Forward config if `Module` ends up needing `config`
-    let mut module = Module::new(&mod_name, config.description, None);
+    let mut module = Module::new(mod_name, config.description, None);
     if config.disabled {
         return None;
-    };
+    }
 
     let variable_name = config.variable.or(name)?;
 
@@ -61,7 +61,7 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `env_var`:\n{}", error);
+            log::warn!("Error in module `env_var`:\n{error}");
             return None;
         }
     });

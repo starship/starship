@@ -17,7 +17,7 @@ pub struct TextSegment {
 
 impl TextSegment {
     // Returns the AnsiString of the segment value
-    fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString {
+    fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self.style {
             Some(style) => style.to_ansi_style(prev).paint(&self.value),
             None => AnsiString::from(&self.value),
@@ -37,7 +37,7 @@ pub struct FillSegment {
 
 impl FillSegment {
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>, prev: Option<&AnsiStyle>) -> AnsiString {
+    pub fn ansi_string(&self, width: Option<usize>, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
         let s = match width {
             Some(w) => self
                 .value
@@ -103,12 +103,12 @@ impl Segment {
         let mut segs: Vec<Self> = Vec::new();
         value.into().split(LINE_TERMINATOR).for_each(|s| {
             if !segs.is_empty() {
-                segs.push(Self::LineTerm)
+                segs.push(Self::LineTerm);
             }
             segs.push(Self::Text(TextSegment {
                 value: String::from(s),
                 style,
-            }))
+            }));
         });
         segs
     }
@@ -136,12 +136,12 @@ impl Segment {
         match self {
             Self::Fill(fs) => {
                 if fs.style.is_none() {
-                    fs.style = style
+                    fs.style = style;
                 }
             }
             Self::Text(ts) => {
                 if ts.style.is_none() {
-                    ts.style = style
+                    ts.style = style;
                 }
             }
             Self::LineTerm => {}
@@ -157,7 +157,7 @@ impl Segment {
     }
 
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString {
+    pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
             Self::Fill(fs) => fs.ansi_string(None, prev),
             Self::Text(ts) => ts.ansi_string(prev),

@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `netns`: \n{}", error);
+            log::warn!("Error in module `netns`: \n{error}");
             return None;
         }
     });
@@ -56,12 +56,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    #[cfg(target_os = "linux")]
     use crate::utils::CommandOutput;
+    #[cfg(target_os = "linux")]
     use nu_ansi_term::Color;
 
+    #[cfg(target_os = "linux")]
     fn mock_ip_netns_identify(netns_name: &str) -> Option<CommandOutput> {
         Some(CommandOutput {
-            stdout: format!("{}\n", netns_name),
+            stdout: format!("{netns_name}\n"),
             stderr: String::new(),
         })
     }

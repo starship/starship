@@ -230,6 +230,7 @@ Alternatively, install Starship using any of the following package managers:
 | Arch Linux         | [Arch Linux Extra]      | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Debian 13+         | [Debian Main]           | `apt install starship`                                        |
+| Fedora 40+         | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
@@ -409,7 +410,7 @@ If you're looking to further customize Starship:
 
 ## 🤝 Contributing
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
@@ -462,7 +463,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [linuxbrew]: https://formulae.brew.sh/formula/starship
 [homebrew]: https://formulae.brew.sh/formula/starship
 [macports]: https://ports.macports.org/port/starship
-[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
+[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix
 [OSS]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json

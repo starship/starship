@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 トレースログおよび、実行に 1 ミリ秒以上かかったか何か出力をした全てのモジュールの個別解析を出力します。
 
-バグを見つけた場合は、 `bug-report` コマンドを用いて GitHub の問題を作成できます。
+バグを見つけた場合は、 `bug-report` コマンドを用いて GitHub のissueを作成できます。
 
 ```sh
 starship bug-report

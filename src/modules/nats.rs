@@ -10,14 +10,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if config.disabled {
         return None;
-    };
+    }
 
     let ctx_str = context
         .exec_cmd("nats", &["context", "info", "--json"])?
         .stdout;
     let nats_context: json::Value = json::from_str(&ctx_str)
         .map_err(|e| {
-            log::warn!("Error parsing nats context JSON: {}\n", e);
+            log::warn!("Error parsing nats context JSON: {e}\n");
             drop(e);
         })
         .ok()?;
@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `nats`:\n{}", error);
+            log::warn!("Error in module `nats`:\n{error}");
             return None;
         }
     });
@@ -53,12 +53,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
-    use std::io;
 
     use crate::test::ModuleRenderer;
 
     #[test]
-    fn show_context() -> io::Result<()> {
+    fn show_context() {
         let actual = ModuleRenderer::new("nats")
             .config(toml::toml! {
                 [nats]
@@ -69,11 +68,10 @@ mod tests {
             .collect();
         let expected = Some(format!("{}", Color::Purple.bold().paint("localhost")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn test_with_symbol() -> io::Result<()> {
+    fn test_with_symbol() {
         let actual = ModuleRenderer::new("nats")
             .config(toml::toml! {
                 [nats]
@@ -84,6 +82,5 @@ mod tests {
             .collect();
         let expected = Some(format!("{}", Color::Red.bold().paint("✉️ localhost")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

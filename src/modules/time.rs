@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     // Hide prompt if current time is not inside time_range
     let (display_start, display_end) = parse_time_range(config.time_range);
@@ -25,24 +25,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let default_format = if config.use_12hr { "%r" } else { "%T" };
     let time_format = config.time_format.unwrap_or(default_format);
 
-    log::trace!(
-        "Timer module is enabled with format string: {}",
-        time_format
-    );
+    log::trace!("Timer module is enabled with format string: {time_format}");
 
-    let formatted_time_string = if config.utc_time_offset != "local" {
-        match create_offset_time_string(Utc::now(), config.utc_time_offset, time_format) {
-            Ok(formatted_string) => formatted_string,
-            Err(_) => {
-                log::warn!(
-                    "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
-                );
-                format_time(time_format, Local::now())
-            }
-        }
-    } else {
+    let formatted_time_string = create_offset_time_string(
+        Utc::now(),
+        config.utc_time_offset,
+        time_format,
+    )
+    .unwrap_or_else(|_| {
+        log::warn!("Invalid utc_time_offset configuration provided! Falling back to \"local\".");
         format_time(time_format, Local::now())
-    };
+    });
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -60,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `time`: \n{}", error);
+            log::warn!("Error in module `time`: \n{error}");
             return None;
         }
     });
@@ -83,10 +76,10 @@ fn create_offset_time_string(
         let Some(timezone_offset) = FixedOffset::east_opt(utc_offset_in_seconds) else {
             return Err("Invalid offset");
         };
-        log::trace!("Target timezone offset is {}", timezone_offset);
+        log::trace!("Target timezone offset is {timezone_offset}");
 
         let target_time = utc_time.with_timezone(&timezone_offset);
-        log::trace!("Time in target timezone now is {}", target_time);
+        log::trace!("Time in target timezone now is {target_time}");
 
         Ok(format_time_fixed_offset(time_format, target_time))
     } else {

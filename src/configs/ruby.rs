@@ -21,7 +21,7 @@ pub struct RubyConfig<'a> {
 
 impl Default for RubyConfig<'_> {
     fn default() -> Self {
-        RubyConfig {
+        Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: "💎 ",

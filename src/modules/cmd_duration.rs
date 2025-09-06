@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `cmd_duration`: \n{}", error);
+            log::warn!("Error in module `cmd_duration`: \n{error}");
             return None;
         }
     });
@@ -101,7 +101,7 @@ fn undistract_me<'a>(
             .timeout(timeout);
 
         if let Err(err) = notification.show() {
-            log::trace!("Cannot show notification: {}", err);
+            log::trace!("Cannot show notification: {err}");
         }
     }
 

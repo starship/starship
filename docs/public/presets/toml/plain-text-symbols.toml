@@ -28,6 +28,9 @@ symbol = "bun "
 [c]
 symbol = "C "
 
+[cpp]
+symbol = "C++ "
+
 [cobol]
 symbol = "cobol "
 
@@ -143,6 +146,7 @@ AlmaLinux = "alma "
 Alpine = "alp "
 Amazon = "amz "
 Android = "andr "
+AOSC = "aosc "
 Arch = "rch "
 Artix = "atx "
 Bluefin = "blfn "
@@ -201,6 +205,9 @@ symbol = "php "
 [pijul_channel]
 symbol = "pijul "
 
+[pixi]
+symbol = "pixi "
+
 [pulumi]
 symbol = "pulumi "
 
@@ -248,6 +255,9 @@ symbol = "typst "
 
 [terraform]
 symbol = "terraform "
+
+[xmake]
+symbol = "xmake "
 
 [zig]
 symbol = "zig "

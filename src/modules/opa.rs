@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `opa`:\n{}", error);
+            log::warn!("Error in module `opa`:\n{error}");
             return None;
         }
     });
@@ -62,10 +62,10 @@ fn get_opa_version(context: &Context) -> Option<String> {
     let version_output: String = context
         .exec_cmd("opa", &["version"])
         .map(get_command_string_output)?;
-    parse_opa_version(version_output)
+    parse_opa_version(&version_output)
 }
 
-fn parse_opa_version(version_output: String) -> Option<String> {
+fn parse_opa_version(version_output: &str) -> Option<String> {
     Some(version_output.split_whitespace().nth(1)?.to_string())
 }
 
@@ -90,7 +90,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("test.rego"))?.sync_all()?;
         let actual = ModuleRenderer::new("opa").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖  v0.44.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖 v0.44.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -103,7 +103,7 @@ mod tests {
             .path(dir.path())
             .cmd("opa version", None)
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖  ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

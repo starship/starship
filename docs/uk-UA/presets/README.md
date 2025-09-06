@@ -75,3 +75,9 @@
 Цей псевдомінімалістичний шаблон створений під враженням від [geometry](https://github.com/geometry-zsh/geometry) та [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
 [![Скріншот шаблона Jetpack](/presets/img/jetpack.png "Натисніть для перегляду шаблона  Jetpack")](./jetpack)
+
+## [Catppuccin Powerline](./catppuccin-powerline.md)
+
+Цей шаблон є трохи зміненою версією [Gruvbox Rainbow](./gruvbox-rainbow.md), що використовує палітру [Catppuccin](https://github.com/catppuccin/catppuccin).
+
+[![Скріншот шаблона Catppuccin Powerline](/presets/img/catppuccin-powerline.png "Натисніть, щоб переглянути шаблон Catppucin Powerline")](./catppuccin-powerline)

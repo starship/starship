@@ -26,7 +26,7 @@ pub struct PythonConfig<'a> {
 
 impl Default for PythonConfig<'_> {
     fn default() -> Self {
-        PythonConfig {
+        Self {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec![
@@ -48,7 +48,6 @@ impl Default for PythonConfig<'_> {
                 "tox.ini",
                 "setup.py",
                 "__init__.py",
-                "pixi.toml",
             ],
             detect_folders: vec![],
             detect_env_vars: vec!["VIRTUAL_ENV"],

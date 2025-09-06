@@ -7,6 +7,9 @@ format = '(via [$symbol($version )]($style))'
 [c]
 format = '(via [$symbol($version(-$name) )]($style))'
 
+[cpp]
+format = '(via [$symbol($version(-$name) )]($style))'
+
 [cmake]
 format = '(via [$symbol($version )]($style))'
 
@@ -122,6 +125,9 @@ format = '(via [$symbol($version )]($style))'
 format = '(via [$symbol($version )]($style))'
 
 [vlang]
+format = '(via [$symbol($version )]($style))'
+
+[xmake]
 format = '(via [$symbol($version )]($style))'
 
 [zig]

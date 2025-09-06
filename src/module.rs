@@ -20,6 +20,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cobol",
     "conda",
     "container",
+    "cpp",
     "crystal",
     "daml",
     "dart",
@@ -49,6 +50,7 @@ pub const ALL_MODULES: &[&str] = &[
     "haxe",
     "helm",
     "hg_branch",
+    "hg_state",
     "hostname",
     "java",
     "jobs",
@@ -60,6 +62,7 @@ pub const ALL_MODULES: &[&str] = &[
     "lua",
     "memory_usage",
     "meson",
+    "mise",
     "mojo",
     "nats",
     "netns",
@@ -75,6 +78,7 @@ pub const ALL_MODULES: &[&str] = &[
     "perl",
     "php",
     "pijul_channel",
+    "pixi",
     "pulumi",
     "purescript",
     "python",
@@ -100,6 +104,7 @@ pub const ALL_MODULES: &[&str] = &[
     "vagrant",
     "vcsh",
     "vlang",
+    "xmake",
     "zig",
 ];
 
@@ -124,11 +129,15 @@ pub struct Module<'a> {
 
 impl<'a> Module<'a> {
     /// Creates a module with no segments.
-    pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Self {
-        Module {
+    pub fn new(
+        name: impl Into<String>,
+        desc: impl Into<String>,
+        config: Option<&'a toml::Value>,
+    ) -> Self {
+        Self {
             config,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.into(),
+            description: desc.into(),
             segments: Vec::new(),
             duration: Duration::default(),
         }
@@ -164,11 +173,11 @@ impl<'a> Module<'a> {
 
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
-    pub fn ansi_strings(&self) -> Vec<AnsiString> {
+    pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
         self.ansi_strings_for_width(None)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString> {
+    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
