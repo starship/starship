@@ -2396,7 +2396,7 @@ A funcionalidade padrão é:
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-### Exemplo
+### Exemplos
 
 ```toml
 # ~/.config/starship.toml
@@ -2405,6 +2405,14 @@ A funcionalidade padrão é:
 symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
 ```
 
 ## Julia
@@ -4360,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão.
+O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão. It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
@@ -4371,16 +4379,17 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | A string de formato do módulo.                                                      |
-| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                | Uma string que é exibida antes do workspace terraform.                              |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Quais extensões devem ativar este módulo.                                           |
-| `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                   |
-| `detect_folders`    | `['.terraform']`                     | Quais pastas devem ativar este módulo.                                              |
-| `style`             | `'bold 105'`                         | O estilo do módulo.                                                                 |
-| `disabled`          | `false`                              | Desabilita o módulo `terraform`.                                                    |
+| Opções              | Padrão                                                  | Descrição                                                                           |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | A string de formato do módulo.                                                      |
+| `version_format`    | `'v${raw}'`                                             | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                   | Uma string que é exibida antes do workspace terraform.                              |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `[]`                                                    | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `['.terraform']`                                        | Quais pastas devem ativar este módulo.                                              |
+| `style`             | `'bold 105'`                                            | O estilo do módulo.                                                                 |
+| `disabled`          | `false`                                                 | Desabilita o módulo `terraform`.                                                    |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                        |
 
 ### Variáveis
 
@@ -4401,7 +4410,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Sem a versão do Terraform
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Horário
