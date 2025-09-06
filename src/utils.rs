@@ -739,6 +739,14 @@ pub fn home_dir() -> Option<PathBuf> {
     dirs::home_dir()
 }
 
+/// Return the default starship config path for a given home directory.
+pub fn default_starship_config_path(home: Option<&Path>) -> Option<PathBuf> {
+    match home {
+        Some(h) => Some(h.join(".config").join("starship.toml")),
+        None => home_dir().map(|h| h.join(".config").join("starship.toml")),
+    }
+}
+
 const HEXTABLE: &[char] = &[
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
 ];

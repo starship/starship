@@ -13,6 +13,7 @@ use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state,
 };
+
 #[cfg(test)]
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -463,20 +464,30 @@ impl Default for Context<'_> {
     }
 }
 
+/// Get the home directory from environment or system
 fn home_dir(env: &Env) -> Option<PathBuf> {
-    if cfg!(test) {
-        if let Some(home) = env.get_env("HOME") {
-            return Some(PathBuf::from(home));
-        }
+    // Try to get HOME from environment first (mocked or real)
+    if let Some(home) = env.get_env("HOME") {
+        return Some(PathBuf::from(home));
     }
-    utils::home_dir()
+    // If HOME is not set, fallback to system home directory
+    crate::utils::home_dir()
 }
 
 fn get_config_path_os(env: &Env) -> Option<OsString> {
-    if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
-        return Some(config_path);
+    if let Some(config_line) = env.get_env_os("STARSHIP_CONFIG") {
+        let config_str = config_line.to_str()?;
+        if config_str.is_empty() {
+            let default_path = home_dir(env)?.join(".config").join("starship.toml");
+            return Some(default_path.into_os_string());
+        }
+        // Always return the value of STARSHIP_CONFIG, whether it is one or multiple paths
+        return Some(config_line);
     }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
+
+    // No STARSHIP_CONFIG set, fall back to default path
+    let default_path = home_dir(env)?.join(".config").join("starship.toml");
+    Some(default_path.into_os_string())
 }
 
 #[derive(Debug)]
