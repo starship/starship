@@ -2407,6 +2407,14 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
+```
+
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). 默认情况下，此组件将在满足以下任意条件时显示：
@@ -4360,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version. It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 默认情况下，此组件将在满足以下任意条件时显示：
 
@@ -4371,16 +4379,17 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ### 配置项
 
-| 选项                  | 默认值                                  | 描述                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                     |
-| `version_format`    | `'v${raw}'`                          | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`         |
-| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace. |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | 触发此组件的扩展名                                             |
-| `detect_files`      | `[]`                                 | 触发此组件的文件名                                             |
-| `detect_folders`    | `['.terraform']`                     | 触发此组件的文件夹                                             |
-| `style`             | `'bold 105'`                         | 此组件的样式。                                               |
-| `disabled`          | `false`                              | 禁用 `terraform` 组件。                                    |
+| 选项                  | 默认值                                                     | 描述                                                    |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                     |
+| `version_format`    | `'v${raw}'`                                             | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`         |
+| `symbol`            | `'💠'`                                                   | A format string shown before the terraform workspace. |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | 触发此组件的扩展名                                             |
+| `detect_files`      | `[]`                                                    | 触发此组件的文件名                                             |
+| `detect_folders`    | `['.terraform']`                                        | 触发此组件的文件夹                                             |
+| `style`             | `'bold 105'`                                            | 此组件的样式。                                               |
+| `disabled`          | `false`                                                 | 禁用 `terraform` 组件。                                    |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.          |
 
 ### 变量
 
@@ -4401,7 +4410,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Without Terraform version
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## 时间
