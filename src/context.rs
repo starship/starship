@@ -266,6 +266,28 @@ impl<'a> Context<'a> {
         iter.peek().is_none() || iter.any(|env_var| self.get_env(env_var).is_some())
     }
 
+    /// Returns an enum indicating if `detect_env_vars` contains negated or non-negated variables
+    pub fn detect_env_vars2(&'a self, env_vars: &'a [&'a str]) -> Detected {
+        if env_vars.is_empty() {
+            return Detected::Empty;
+        }
+
+        if self.has_negated_env_var(env_vars) {
+            return Detected::Negated;
+        }
+
+        let mut iter = env_vars
+            .iter()
+            .filter(|env_var| !env_var.starts_with('!'))
+            .peekable();
+
+        if iter.any(|env_var| self.get_env(env_var).is_some()) {
+            Detected::Yes
+        } else {
+            Detected::No
+        }
+    }
+
     // returns a new ScanDir struct with reference to current dir_files of context
     // see ScanDir for methods
     pub fn try_begin_scan(&'a self) -> Option<ScanDir<'a>> {
@@ -461,6 +483,18 @@ impl Default for Context<'_> {
     fn default() -> Self {
         Self::new(Default::default(), Target::Main)
     }
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub enum Detected {
+    /// `detect_env_vars` was empty.
+    Empty,
+    /// A negated variable was found.
+    Negated,
+    /// A non-negated variable was found.
+    Yes,
+    /// No non-negated variables were found.
+    No,
 }
 
 fn home_dir(env: &Env) -> Option<PathBuf> {

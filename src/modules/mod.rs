@@ -108,7 +108,7 @@ mod typst;
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
 use crate::config::ModuleConfig;
-use crate::context::{Context, Shell};
+use crate::context::{Context, Detected, Shell};
 use crate::module::Module;
 use std::time::Instant;
 
