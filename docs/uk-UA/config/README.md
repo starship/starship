@@ -2396,7 +2396,7 @@ symbol = '🌟 '
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-### Приклад
+### Приклади
 
 ```toml
 # ~/.config/starship.toml
@@ -2405,6 +2405,14 @@ symbol = '🌟 '
 символ = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
 ```
 
 ## Julia
@@ -4360,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
+Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію. It supports both Hashicorp Terraform and OpenTofu for version detection.
 
-> [!TIP] Типово версія Terraform не показується, оскільки це повільно для поточних версій Terraform, коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
+> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -4371,16 +4379,17 @@ format = 'via [🏎  $version](red bold)'
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                              |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | Формат рядка модуля.                                              |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'💠'`                                | Формат рядка, що відображається перед робочою областю terraform.  |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Які розширення повинні запускати цей модуль.                      |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
-| `detect_folders`    | `['.terraform']`                     | В яких теках цей модуль має запускатись.                          |
-| `style`             | `'bold 105'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Вимикає модуль `terraform`.                                       |
+| Параметр            | Стандартно                                              | Опис                                                              |
+| ------------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'💠'`                                                   | Формат рядка, що відображається перед робочою областю terraform.  |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                                    | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.terraform']`                                        | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold 105'`                                            | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                 | Вимикає модуль `terraform`.                                       |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                      |
 
 ### Змінні
 
@@ -4401,7 +4410,7 @@ format = 'via [🏎  $version](red bold)'
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Без версії Terraform
@@ -4410,7 +4419,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Time
