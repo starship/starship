@@ -1618,6 +1618,15 @@
         "symbol": "💠 ",
         "style": "bold 105",
         "disabled": false,
+        "detect_extensions": [
+          "tf",
+          "tfplan",
+          "tfstate"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          ".terraform"
+        ],
         "commands": [
           [
             "terraform",
@@ -1627,15 +1636,6 @@
             "tofu",
             "version"
           ]
-        ],
-        "detect_extensions": [
-          "tf",
-          "tfplan",
-          "tfstate"
-        ],
-        "detect_files": [],
-        "detect_folders": [
-          ".terraform"
         ]
       }
     },
@@ -6255,6 +6255,25 @@
           },
           "default": [
             ".terraform"
+          ]
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": [
+            [
+              "terraform",
+              "version"
+            ],
+            [
+              "tofu",
+              "version"
+            ]
           ]
         }
       },
