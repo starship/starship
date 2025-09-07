@@ -87,7 +87,6 @@ yaml-rust2 = "0.10.3"
 
 guess_host_triple = "0.1.5"
 home = "0.5.11"
-pep440_rs = "0.7.3"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
