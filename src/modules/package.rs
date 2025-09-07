@@ -11,7 +11,7 @@ use regex::Regex;
 use serde_json as json;
 use std::fs;
 use std::io::Read;
-use versions::Versioning;
+use versions::Version;
 
 /// Creates a module with the current package version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -120,7 +120,7 @@ fn parse_hatchling_dynamic_version(context: &Context, pyproject: &toml::Table) -
         .as_str()?;
 
     parse_file_version_for_hatchling(context, version_path)
-        .and_then(|s| Versioning::new(s.as_str()))
+        .and_then(|s| Version::new(s.as_str()))
         .map(|v| v.to_string())
 }
 
