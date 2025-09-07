@@ -11,7 +11,6 @@ use regex::Regex;
 use serde_json as json;
 use std::fs;
 use std::io::Read;
-use std::str::FromStr;
 use versions::Versioning;
 
 /// Creates a module with the current package version
