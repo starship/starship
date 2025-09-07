@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let terraform_version = parse_terraform_version(
                         context
-                            .exec_cmds_return_first(config.commands.clone())?
+                            .exec_cmds_return_first(&config.commands)?
                             .stdout
                             .as_str(),
                     )?;
