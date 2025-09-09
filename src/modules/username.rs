@@ -1,5 +1,5 @@
-use gix::bstr::ByteSlice;
 use super::{Context, Detected, Module, ModuleConfig};
+use gix::bstr::ByteSlice;
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
@@ -151,7 +151,8 @@ fn get_git_user(context: &Context) -> Option<String> {
 #[cfg(test)]
 fn get_git_user(context: &Context) -> Option<String> {
     // Check environment variables first - including MOCK_GIT_USER_NAME for tests
-    context.get_env("GIT_AUTHOR_NAME")
+    context
+        .get_env("GIT_AUTHOR_NAME")
         .or_else(|| context.get_env("GIT_COMMITTER_NAME"))
         .or_else(|| context.get_env("MOCK_GIT_USER_NAME"))
 }
@@ -438,7 +439,6 @@ mod tests {
 
         assert_eq!(expected, actual.as_deref());
     }
-
 
     #[test]
     fn show_git_user_disabled_by_default() {
