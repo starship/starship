@@ -438,4 +438,206 @@ mod tests {
 
         assert_eq!(expected, actual.as_deref());
     }
+
+
+    #[test]
+    fn show_git_user_disabled_by_default() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "git_user")
+            .config(toml::toml! {
+                [username]
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_enabled_in_git_repo() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "git_user")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("git_user in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_enabled_not_in_git_repo() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_with_show_always() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "git_user")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("git_user in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_prefers_git_author_name() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("GIT_AUTHOR_NAME", "author_name")
+            .env("GIT_COMMITTER_NAME", "committer_name")
+            .env("MOCK_GIT_USER_NAME", "config_name")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("author_name in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_falls_back_to_committer_name() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("GIT_COMMITTER_NAME", "committer_name")
+            .env("MOCK_GIT_USER_NAME", "config_name")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("committer_name in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_falls_back_to_git_config() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "config_name")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("config_name in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_with_alias() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "git_user")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                aliases = { "git_user" = "👨‍💻" }
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("👨‍💻 in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_no_git_user_found() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("MOCK_IS_GIT_REPO", "true")
+            // No git user environment variables or mock config
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_overrides_system_username() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "system_user")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "git_developer")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("git_developer in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn show_git_user_with_ssh_connection() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
+            .env("MOCK_IS_GIT_REPO", "true")
+            .env("MOCK_GIT_USER_NAME", "remote_git_user")
+            .config(toml::toml! {
+                [username]
+                show_git_user = true
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+        let expected = Some("remote_git_user in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
 }
