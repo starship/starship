@@ -4754,7 +4754,7 @@ The module will be shown if any of the following conditions are met:
 ### Options
 
 | Option            | Default                 | Description                                               |
-|-------------------|-------------------------|-----------------------------------------------------------|
+| ----------------- | ----------------------- | --------------------------------------------------------- |
 | `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
 | `style_user`      | `'bold yellow'`         | The style used for non-root users.                        |
 | `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
