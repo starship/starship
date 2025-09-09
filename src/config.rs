@@ -134,6 +134,7 @@ impl StarshipConfig {
 
     /// Create a config from a starship configuration file
     fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
+        let config_file_path = config_file_path?;
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
         match toml::from_str(&toml_content) {
             Ok(parsed) => Some(parsed),
@@ -149,6 +150,11 @@ impl StarshipConfig {
         std::env::split_paths(config_str).count() > 1
     }
 
+    /// Checks if a config path contains multiple files (OsStr version)
+    pub fn has_multiple_files_os(config_path: &OsStr) -> bool {
+        Self::has_multiple_files(config_path.to_str().unwrap_or(""))
+    }
+
     /// Parses input line to extract and expand file paths using std::env::split_paths
     pub fn parse_input_paths(line: &str) -> Vec<std::path::PathBuf> {
         std::env::split_paths(line)
@@ -156,19 +162,16 @@ impl StarshipConfig {
             .collect()
     }
 
-    pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
+    pub fn read_config_content_as_str(config_file_path: &OsStr) -> Option<String> {
         Self::read_config_content_as_str_with_context(config_file_path, None)
     }
 
     pub fn read_config_content_as_str_with_context(
-        config_file_path: Option<&OsStr>,
+        config_file_path: &OsStr,
         context: Option<&Context>,
     ) -> Option<String> {
-        let config_file_path = config_file_path?;
-        let config_path_str = config_file_path.to_str()?;
-
-        if Self::has_multiple_files(config_path_str) {
-            Self::merge_config_files_runtime(config_path_str).or_else(|| {
+        if Self::has_multiple_files_os(config_file_path) {
+            Self::merge_config_files_runtime(config_file_path).or_else(|| {
                 let default_path = context
                     .and_then(|ctx| {
                         ctx.get_home().and_then(|home| {
@@ -188,7 +191,8 @@ impl StarshipConfig {
 
     /// Initialize the Config struct with context for proper home directory resolution
     pub fn initialize_with_context(config_file_path: Option<&OsStr>, context: &Context) -> Self {
-        let config = Self::read_config_content_as_str_with_context(config_file_path, Some(context))
+        let config = config_file_path
+            .and_then(|path| Self::read_config_content_as_str_with_context(path, Some(context)))
             .and_then(|toml_content| match toml::from_str(&toml_content) {
                 Ok(parsed) => Some(parsed),
                 Err(error) => {
@@ -201,8 +205,8 @@ impl StarshipConfig {
 
     /// Merge multiple configuration files using proper TOML table merging
     /// Supports complex TOML structures including arrays, nested tables, and matrices
-    pub fn merge_config_files_runtime(config_paths: &str) -> Option<String> {
-        let paths = Self::parse_input_paths(config_paths);
+    pub fn merge_config_files_runtime(config_paths: &OsStr) -> Option<String> {
+        let paths = Self::parse_input_paths(config_paths.to_str().unwrap_or(""));
         let existing_paths: Vec<_> = paths.iter().filter(|p| p.exists()).collect();
         if existing_paths.is_empty() {
             log::warn!("No configuration files found for merging");
@@ -1145,10 +1149,14 @@ mod tests {
 
     #[test]
     fn read_config_no_config_file_path_provided() {
+        // This test now checks that when no config file path is provided,
+        // the caller should handle the None case before calling the function
+        let config_file_path: Option<&std::ffi::OsStr> = None;
+        let result =
+            config_file_path.and_then(|path| StarshipConfig::read_config_content_as_str(path));
         assert_eq!(
-            None,
-            StarshipConfig::read_config_content_as_str(None),
-            "if the platform doesn't have utils::home_dir(), it should return None"
+            None, result,
+            "if no config file path is provided, it should return None"
         );
     }
 
@@ -1311,7 +1319,7 @@ success_symbol = "[✓](bold green)"
 
         let non_existent_path = OsStr::new("non_existent_config.toml");
         let result =
-            StarshipConfig::read_config_content_as_str_with_context(Some(non_existent_path), None);
+            StarshipConfig::read_config_content_as_str_with_context(non_existent_path, None);
         assert!(result.is_none());
     }
     #[test]

@@ -247,7 +247,9 @@ pub fn get_configuration(context: &Context) -> toml::Table {
 pub fn get_configuration_edit(context: &Context) -> DocumentMut {
     ensure_single_config_file(context);
     let config_file_path = context.get_config_path_os();
-    let toml_content = StarshipConfig::read_config_content_as_str(config_file_path.as_deref());
+    let toml_content = config_file_path
+        .as_deref()
+        .and_then(|path| StarshipConfig::read_config_content_as_str(path));
 
     toml_content
         .unwrap_or_default()
