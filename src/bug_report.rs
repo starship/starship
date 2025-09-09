@@ -235,51 +235,43 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 
 fn get_starship_config() -> String {
     let config_env = std::env::var("STARSHIP_CONFIG").ok();
-    let config_line = match &config_env {
-        Some(line) => line,
-        None => return get_default_starship_config(),
-    };
+    let config_path = config_env.as_deref().map(std::ffi::OsStr::new);
 
-    let separator = if cfg!(windows) { ';' } else { ':' };
-    if !config_line.contains(separator) {
-        return get_default_starship_config();
-    }
-
-    if let Some(merged) = crate::config::StarshipConfig::merge_config_files_runtime(config_line) {
-        return format!(
-            "Merged configuration (as used by Starship):\n```toml\n{}\n```",
-            merged.trim()
-        );
-    }
-    UNKNOWN_CONFIG.to_string()
-}
-
-fn get_default_starship_config() -> String {
-    let config_path = std::env::var("STARSHIP_CONFIG")
-        .ok()
-        .map(PathBuf::from)
-        .or_else(|| utils::default_starship_config_path(None));
-
-    config_path
-        .as_ref()
-        .and_then(|path| fs::read_to_string(path).ok().map(|content| (path, content)))
-        .map(|(path, content)| {
-            let display_path = std::env::var("HOME")
-                .ok()
-                .and_then(|home| {
-                    let home_path = PathBuf::from(home);
-                    path.strip_prefix(&home_path)
-                        .ok()
-                        .map(|rel| format!("~/{}", rel.display()))
+    if let Some(content) =
+        config_path.and_then(|path| crate::config::StarshipConfig::read_config_content_as_str(path))
+    {
+        if crate::config::StarshipConfig::has_multiple_files_os(config_path.unwrap()) {
+            format!(
+                "Merged configuration (as used by Starship):\n```toml\n{}\n```",
+                content.trim()
+            )
+        } else {
+            let display_path = config_env
+                .as_ref()
+                .and_then(|path| {
+                    std::env::var("HOME").ok().and_then(|home| {
+                        let home_path = PathBuf::from(home);
+                        PathBuf::from(path)
+                            .strip_prefix(&home_path)
+                            .ok()
+                            .map(|rel| format!("~/{}", rel.display()))
+                    })
                 })
-                .unwrap_or_else(|| path.display().to_string());
+                .unwrap_or_else(|| {
+                    config_env
+                        .as_ref()
+                        .map(|p| p.to_string())
+                        .unwrap_or_else(|| "default".to_string())
+                });
             format!(
                 "Configuration File: {}\n\n```toml\n{}\n```",
                 display_path,
                 content.trim()
             )
-        })
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+        }
+    } else {
+        UNKNOWN_CONFIG.to_string()
+    }
 }
 
 fn get_shell_version(shell: &str) -> String {
