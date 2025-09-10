@@ -463,7 +463,6 @@ impl Default for Context<'_> {
     }
 }
 
-/// Get the home directory from environment or system
 fn home_dir(env: &Env) -> Option<PathBuf> {
     // Try to get HOME from environment first (mocked or real)
     if let Some(home) = env.get_env("HOME") {
