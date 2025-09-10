@@ -240,35 +240,7 @@ fn get_starship_config() -> String {
     if let Some(content) =
         config_path.and_then(|path| crate::config::StarshipConfig::read_config_content_as_str(path))
     {
-        if crate::config::StarshipConfig::has_multiple_files_os(config_path.unwrap()) {
-            format!(
-                "Merged configuration (as used by Starship):\n```toml\n{}\n```",
-                content.trim()
-            )
-        } else {
-            let display_path = config_env
-                .as_ref()
-                .and_then(|path| {
-                    std::env::var("HOME").ok().and_then(|home| {
-                        let home_path = PathBuf::from(home);
-                        PathBuf::from(path)
-                            .strip_prefix(&home_path)
-                            .ok()
-                            .map(|rel| format!("~/{}", rel.display()))
-                    })
-                })
-                .unwrap_or_else(|| {
-                    config_env
-                        .as_ref()
-                        .map(|p| p.to_string())
-                        .unwrap_or_else(|| "default".to_string())
-                });
-            format!(
-                "Configuration File: {}\n\n```toml\n{}\n```",
-                display_path,
-                content.trim()
-            )
-        }
+        format!("Starship Configuration:\n```toml\n{}\n```", content.trim())
     } else {
         UNKNOWN_CONFIG.to_string()
     }
@@ -339,28 +311,49 @@ mod tests {
             std::env::remove_var("STARSHIP_CONFIG");
         }
         let result = get_starship_config();
-        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+        assert_eq!(result, UNKNOWN_CONFIG);
     }
 
     #[test]
-    fn test_get_starship_config_single_file() {
+    fn test_get_starship_config_file_not_exists() {
+        let original_config = std::env::var("STARSHIP_CONFIG").ok();
+
         unsafe {
-            std::env::set_var("STARSHIP_CONFIG", "/tmp/fake.toml");
+            std::env::set_var("STARSHIP_CONFIG", "/tmp/nonexistent.toml");
         }
         let result = get_starship_config();
-        assert!(result.contains("Configuration File:") || result == UNKNOWN_CONFIG);
+        restore_config_env(&original_config);
+
+        assert_eq!(result, UNKNOWN_CONFIG);
     }
 
     #[test]
-    fn test_get_starship_config_multiple_files() {
-        let sep = if cfg!(windows) { ";" } else { ":" };
+    fn test_get_starship_config_empty_path() {
+        let original_config = std::env::var("STARSHIP_CONFIG").ok();
+
         unsafe {
-            std::env::set_var(
-                "STARSHIP_CONFIG",
-                format!("/tmp/one.toml{}{}", sep, "/tmp/two.toml"),
-            );
+            std::env::set_var("STARSHIP_CONFIG", "");
         }
         let result = get_starship_config();
-        assert!(result.contains("Merged configuration") || result == UNKNOWN_CONFIG);
+        restore_config_env(&original_config);
+
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_default_fallback() {
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "");
+        }
+        let result = get_starship_config();
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    // Helper function for test cleanup
+    fn restore_config_env(original: &Option<String>) {
+        match original {
+            Some(val) => unsafe { std::env::set_var("STARSHIP_CONFIG", val) },
+            None => unsafe { std::env::remove_var("STARSHIP_CONFIG") },
+        }
     }
 }
