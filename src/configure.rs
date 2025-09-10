@@ -638,10 +638,10 @@ mod tests {
         )
         .expect("Test should not fail");
         run_print_configuration_test(
-            "~/.config/starship.toml exists, STARSHIP_CONFIG=nonexistent.toml uses default",
+            "~/.config/starship.toml exists, STARSHIP_CONFIG=nonexistent.toml uses home config",
             true,
             StarshipConfigEnvScenario::NonExistingFile,
-            PRINT_CONFIG_DEFAULT,
+            PRINT_CONFIG_HOME,
         )
         .expect("Test should not fail");
         run_print_configuration_test(
@@ -701,10 +701,10 @@ mod tests {
             PRINT_CONFIG_ENV,
         ).expect("Test should not fail");
         run_print_configuration_test(
-            "Windows: STARSHIP_CONFIG=first.toml:second.toml (wrong separator - colon) should treat as single file and fall back to default",
+            "Windows: STARSHIP_CONFIG=first.toml:second.toml (wrong separator - colon) should treat as single file and fall back to home",
             true,
             StarshipConfigEnvScenario::WrongSeparatorColonOnWindows,
-            PRINT_CONFIG_DEFAULT,
+            PRINT_CONFIG_HOME,
         ).expect("Test should not fail");
         Ok(())
     }
@@ -726,10 +726,10 @@ mod tests {
             PRINT_CONFIG_ENV,
         ).expect("Test should not fail");
         run_print_configuration_test(
-            "Unix: STARSHIP_CONFIG=first.toml;second.toml (wrong separator - semicolon) should treat as single file and fall back to default",
+            "Unix: STARSHIP_CONFIG=first.toml;second.toml (wrong separator - semicolon) should treat as single file and fall back to home",
             true,
             StarshipConfigEnvScenario::WrongSeparatorSemicolonOnUnix,
-            PRINT_CONFIG_DEFAULT,
+            PRINT_CONFIG_HOME,
         ).expect("Test should not fail");
         Ok(())
     }

@@ -170,23 +170,15 @@ impl StarshipConfig {
         config_file_path: &OsStr,
         context: Option<&Context>,
     ) -> Option<String> {
-        if Self::has_multiple_files_os(config_file_path) {
-            Self::merge_config_files_runtime(config_file_path).or_else(|| {
-                let default_path = context
-                    .and_then(|ctx| {
-                        ctx.get_home().and_then(|home| {
-                            utils::default_starship_config_path(Some(home.as_path()))
-                        })
-                    })
-                    .or_else(|| utils::default_starship_config_path(None))?;
-                utils::read_file(&default_path).ok()
-            })
-        } else {
-            utils::read_file(config_file_path).ok().or_else(|| {
-                log::error!("Unable to read config file content");
-                None
-            })
-        }
+        Self::merge_config_files_runtime(config_file_path).or_else(|| {
+            let default_path = context
+                .and_then(|ctx| {
+                    ctx.get_home()
+                        .and_then(|home| utils::default_starship_config_path(Some(home.as_path())))
+                })
+                .or_else(|| utils::default_starship_config_path(None))?;
+            utils::read_file(&default_path).ok()
+        })
     }
 
     /// Initialize the Config struct with context for proper home directory resolution
