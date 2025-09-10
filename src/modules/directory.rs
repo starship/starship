@@ -105,7 +105,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            // Handle the home directory by doing symbol substitution in both
+            // the display directory and the repo root.
+            let full_path = contract_path(display_dir, &home_dir, config.home_symbol);
+            let top_level_path = contract_path(repo_root, &home_dir, config.home_symbol);
+            let contracted_path = contract_repo_path(
+                Path::new(full_path.as_ref()),
+                Path::new(top_level_path.as_ref()),
+            )?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
