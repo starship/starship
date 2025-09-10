@@ -601,6 +601,20 @@
         "ignore_submodules": false
       }
     },
+    "git_mob": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol $initials \\($count\\)]($style)",
+        "separator": ",",
+        "style": "green bold",
+        "symbol": "👥"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitMobConfig"
+        }
+      ]
+    },
     "git_state": {
       "$ref": "#/$defs/GitStateConfig",
       "default": {
@@ -3376,6 +3390,32 @@
         "ignore_submodules": {
           "type": "boolean",
           "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitMobConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol $initials \\($count\\)]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "👥",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "separator": {
+          "default": ",",
+          "type": "string"
         }
       },
       "additionalProperties": false
