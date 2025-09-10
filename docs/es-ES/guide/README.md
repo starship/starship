@@ -346,6 +346,7 @@ Agregue lo siguiente al final de su configuración de Nushell (encuéntrelo ejec
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
+
 ```
 
 Nota: Sólo se admite Nushell v0.96+
@@ -408,7 +409,7 @@ Si estás buscando personalizar Starship:
 
 ## 🤝 Contribuir
 
-¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si buscas avanzar gradualmente en el proyecto, prueba con un [buen primer número](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Si habla con fluidez en un idioma que no es inglés, agradecemos mucho cualquier ayuda para mantener nuestros documentos traducidos y actualizados en otros idiomas. Si quieres ayudar, puedes contribuir con las traducciones en el [Crowdin de Starship](https://translate.starship.rs/).
 
@@ -428,16 +429,16 @@ Por favor, revisa estas obras anteriores que ayudaron a inspirar la creación de
 
 Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
 
-## 🔒 Code Signing Policy
+## Política de Firmado de Código
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Firma de código gratuita proporcionada por [SignPath.io](https://signpath.io), certificado por [SignPath Foundation](https://signpath.org).
 
-Code Signing Roles:
+Roles de Firmado de Código:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Revisores:  [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Aprobadores y Autores: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Este programa no transferirá ninguna información a otros sistemas en red a menos que lo solicite específicamente el usuario o la persona que lo instale u opere.
 
 <p align="center">
     <br>
