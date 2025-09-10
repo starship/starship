@@ -74,16 +74,16 @@ Por convención, la mayoría de los módulos tienen un prefijo del color por def
 
 ### Cadenas de Texto
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+En la sintaxis TOML, los [valores de texto](https://toml.io/en/v1.0.0#string) se declaran con `'`, `"`, `'''` o `"""`.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+Los siguientes símbolos de sintaxis de Starship tienen un uso especial en una cadena de formato y deben escaparse para mostrarse como ese carácter: `$ [ ] ( )`.
 
-| Simbol | Tipo                      | Notas                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| Simbol | Tipo                       | Notas                                                  |
+| ------ | -------------------------- | ------------------------------------------------------ |
+| `'`    | cadena literal             | menos escapes                                          |
+| `"`    | cadena                     | mas escapes                                            |
+| `'''`  | cadena literal multilineas | menos escapes                                          |
+| `"""`  | multi-line string          | more escaping, newlines in declarations can be ignored |
 
 Por ejemplo:
 
@@ -495,10 +495,10 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 | Opción               | Predeterminado                    | Descripción                                                              |
 | -------------------- | --------------------------------- | ------------------------------------------------------------------------ |
 | `full_symbol`        | `'󰁹 '`                            | Se muestra cuando la batería está cargada.                               |
-| `charging_symbol`    | `'󰂄 '`                            | Se muestra cuando la batería se está cargando.                           |
-| `discharging_symbol` | `'󰂃 '`                            | Se muestra cuando la batería se está descargando.                        |
-| `unknown_symbol`     | `'󰁽 '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
-| `empty_symbol`       | `'󰂎 '`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
+| `charging_symbol`    | `'󰁹 '`                            | Se muestra cuando la batería se está cargando.                           |
+| `discharging_symbol` | `'󰁹 '`                            | Se muestra cuando la batería se está descargando.                        |
+| `unknown_symbol`     | `'󰁹 '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `empty_symbol`       | `'󰁹 '`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 | `format`             | `'[$symbol$percentage]($style) '` | El formato del módulo.                                                   |
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
