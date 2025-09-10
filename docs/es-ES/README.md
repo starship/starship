@@ -162,7 +162,7 @@ onMounted(() => {
 
    > [!WARNING] This will change in the future. Sólo se admite Nushell v0.96+.
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Agregue lo siguiente al final de su configuración de Nushell (encuéntrelo ejecutando `$nu.config-path` en Nushell):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
