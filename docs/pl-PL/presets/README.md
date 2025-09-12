@@ -14,11 +14,7 @@ Ten zestaw ustawień zmienia symbole dla każdego modułu tak, by wykorzystywał
 
 To ustawienie zmienia symbole dla kilku modułów, tak aby żadne symbole Nerd Font nie były używane w wierszu poleceń.
 
-::: porada
-
-To ustawienie stanie się domyślnym ustawieniem [w przyszłej wersji starship](https://github.com/starship/starship/pull/3544).
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [Kliknij, aby wyświetlić ustawienia No Nerd Font](./no-nerd-font)
 

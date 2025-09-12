@@ -2,11 +2,7 @@
 
 A pesar de que Starship es una prompt versátil, a veces necesitas hacer más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
 
-::: warning
-
-Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
-
-:::
+> [!ADVERTENCIA] Las configuraciones de esta sección están sujetas a cambios en futuras versiones de Starship.
 
 ## Prompt Transitoria en PowerShell
 
@@ -80,21 +76,21 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## TransientPrompt y TransientRightPrompt en Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. Esto es útil en los casos en que la información del prompt no es siempre necesaria. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+El marco estructura [Ble.sh](https://github.com/akinomyoga/ble.sh) en v0.4 o superior le permite reemplazar el mensaje impreso previamente con cadenas personalizadas. Esto es útil en los casos en que la información del prompt no es siempre necesaria. Para habilitar esto, coloque esto en `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+El \<value\> aquí es una lista separada por dos puntos de `siempre`, `mismo-dir` y `recortar`. Cuando `prompt_ps1_final` está vacío y la opción `prompt_ps1_transient` tiene un \<value\> no vacío, el mensaje especificado por `PS1` se borra al salir de la línea de comando actual. Si \<value\> contiene un campo `trim`, solo se conserva la última línea de la multilínea `PS1` y las demás líneas se borran. De lo contrario, la línea de comando se volverá a dibujar como si se hubiera especificado `PS1=`. Cuando un campo `same-dir` está contenido en \<value\> y el directorio de trabajo actual es diferente del directorio final de la línea de comando anterior, esta opción `prompt_ps1_transient` se ignora.
 
-Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
+Realice los siguientes cambios en su `~/.blerc` (o en `~/.config/blesh/init.sh`) para personalizar lo que se muestra a la izquierda y a la derecha:
 
-- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+- Para personalizar con qué se reemplaza el lado izquierdo de la entrada, configure la opción `prompt_ps1_final` de Ble.sh. Por ejemplo, para mostrar el módulo de `personaje` de Starship aquí, harías
 
 ```bash
 bleopt prompt_ps1_final='$(starship module character)'
 ```
 
-- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
+- Para personalizar con qué se reemplaza el lado derecho de la entrada, configure la opción `prompt_rps1_final` de Ble.sh. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
 
 ```bash
 bleopt prompt_rps1_final='$(starship module time)'
@@ -225,9 +221,9 @@ Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en 
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo de `relleno`](../config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+`right_format` actualmente es compatible con los siguientes shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
+Nota: Se debe instalar el framework [Ble.sh](https://github.com/akinomyoga/ble.sh) v0.4 o superior para poder utilizar el indicador correcto en bash.
 
 ### Ejemplo
 
@@ -266,7 +262,7 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled-in arrows
+# Un mensaje de continuación que muestra dos flechas rellenas
 continuation_prompt = '▶▶ '
 ```
 
@@ -287,7 +283,7 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `<color>`
 - `ninguno`
 
-donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
+donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `<color>` también se puede configurar como `prev_fg` o `prev_bg`, que evalúa el color de primer plano o de fondo del elemento anterior respectivamente si está disponible o `none` en caso contrario. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
 El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
 
