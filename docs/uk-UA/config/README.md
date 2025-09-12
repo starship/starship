@@ -2407,9 +2407,9 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
-#### Changing process grouping behavior in fish
+#### Зміна процесу групування поведінки у fish
 
-When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+При використанні оболонки Fish, Starship стандартно підраховує **групи завдань** замість окремих ідентифікаторів процесів. Це запобігає надмірному підрахунку, коли конвеєр має кілька процесів, але тільки одну призупинену групу. Щоб повернутися до старого підрахунку на основі PID, додайте наступне до конфігурації оболонки:
 
 ```fish
 set -g __starship_fish_use_job_groups "false"
@@ -4368,9 +4368,9 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію. It supports both Hashicorp Terraform and OpenTofu for version detection.
+Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію. Він підтримує як Hashicorp Terraform, так і OpenTofu для виявлення версій.
 
-> [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
+> [!TIP] Типово версія Terraform/OpenTofu не показується, оскільки це повільно для поточних версій Terraform, коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -4389,7 +4389,7 @@ format = 'via [🏎  $version](red bold)'
 | `detect_folders`    | `['.terraform']`                                        | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 105'`                                            | Стиль модуля.                                                     |
 | `disabled`          | `false`                                                 | Вимикає модуль `terraform`.                                       |
-| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                      |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | Як визначити версію Terraform.                                    |
 
 ### Змінні
 
