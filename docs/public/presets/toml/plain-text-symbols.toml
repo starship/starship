@@ -13,6 +13,13 @@ diverged = "<>"
 renamed = "r"
 deleted = "x"
 
+[jj_status]
+ahead = ">"
+behind = "<"
+diverged = "<>"
+renamed = "r"
+deleted = "x"
+
 [aws]
 symbol = "aws "
 
