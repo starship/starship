@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if config.only_attached && repo.open().head().ok()?.is_detached() {
+    if config.only_attached && gix_repo.head().ok()?.is_detached() {
         return None;
     }
 
