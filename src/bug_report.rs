@@ -116,9 +116,7 @@ fn get_github_issue_body(environment: &Environment) -> String {
 
 #### Starship Configuration
 
-```toml
-{starship_config}
-```",
+{starship_config}",
         starship_version = shadow::PKG_VERSION,
         shell_name = environment.shell_info.name,
         shell_version = environment.shell_info.version,
@@ -236,17 +234,16 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(|| {
-            utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
-                home_dir
-            })
-        })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+    let config_env = std::env::var("STARSHIP_CONFIG").ok();
+    let config_path = config_env.as_deref().map(std::ffi::OsStr::new);
+
+    if let Some(content) =
+        config_path.and_then(|path| crate::config::StarshipConfig::read_config_content_as_str(path))
+    {
+        format!("Starship Configuration:\n```toml\n{}\n```", content.trim())
+    } else {
+        UNKNOWN_CONFIG.to_string()
+    }
 }
 
 fn get_shell_version(shell: &str) -> String {
@@ -307,5 +304,56 @@ mod tests {
             utils::home_dir().unwrap().join(".bashrc"),
             config_path.unwrap()
         );
+    }
+    #[test]
+    fn test_get_starship_config_env_not_set() {
+        unsafe {
+            std::env::remove_var("STARSHIP_CONFIG");
+        }
+        let result = get_starship_config();
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_file_not_exists() {
+        let original_config = std::env::var("STARSHIP_CONFIG").ok();
+
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "/tmp/nonexistent.toml");
+        }
+        let result = get_starship_config();
+        restore_config_env(&original_config);
+
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_empty_path() {
+        let original_config = std::env::var("STARSHIP_CONFIG").ok();
+
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "");
+        }
+        let result = get_starship_config();
+        restore_config_env(&original_config);
+
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    #[test]
+    fn test_get_starship_config_default_fallback() {
+        unsafe {
+            std::env::set_var("STARSHIP_CONFIG", "");
+        }
+        let result = get_starship_config();
+        assert_eq!(result, UNKNOWN_CONFIG);
+    }
+
+    // Helper function for test cleanup
+    fn restore_config_env(original: &Option<String>) {
+        match original {
+            Some(val) => unsafe { std::env::set_var("STARSHIP_CONFIG", val) },
+            None => unsafe { std::env::remove_var("STARSHIP_CONFIG") },
+        }
     }
 }
