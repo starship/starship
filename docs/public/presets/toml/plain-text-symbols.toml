@@ -250,6 +250,9 @@ symbol = "sudo "
 [swift]
 symbol = "swift "
 
+[talos]
+symbol = "talos "
+
 [typst]
 symbol = "typst "
 

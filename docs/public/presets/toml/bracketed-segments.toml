@@ -181,6 +181,9 @@ format = '\[[as $symbol]($style)\]'
 [swift]
 format = '\[[$symbol($version)]($style)\]'
 
+[talos]
+format = '\[[$symbol$context( \($endpoints\))]($style)\]'
+
 [terraform]
 format = '\[[$symbol$workspace]($style)\]'
 
