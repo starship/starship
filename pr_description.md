@@ -77,32 +77,6 @@ Test the module:
 ```bash
 starship module jj_status
 ```
-
-## Checklist
-
-- [x] Add section to `docs/config/README.md` describing the module
-- [x] Add variable to "Default Prompt Format" section  
-- [x] Add options to presets in `docs/public/presets/toml`
-- [x] Update config schema with `cargo run --features config-schema`
-- [x] Create config structs in `src/configs/jj_status.rs`
-- [x] Add entry in `PROMPT_ORDER` (`src/configs/starship_root.rs`)
-- [x] Add entry in `FullConfig` (`src/configs/mod.rs`) 
-- [x] Add entry in `ALL_MODULES` (`src/module.rs`)
-- [x] Add `mod` declaration (`src/modules/mod.rs`)
-- [x] Add entry in `handle()` (`src/modules/mod.rs`)
-- [x] Add comprehensive unit tests
-- [x] Test module functionality
-- [x] Follow existing code patterns and conventions
-
-## Related Issues
-
-Closes #[GitHub issue number] - "Add JJ Status Module for Jujutsu VCS Support"
-
-## Screenshots
-
-In a JJ repository with changes:
-```
-[master] [⎪+!??✘⎥] ~/projects/my-jj-repo
 ```
 
 This provides JJ users with the same status information they're used to seeing in their prompts, making Starship a complete solution for all major VCS systems.
