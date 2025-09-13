@@ -229,9 +229,6 @@ format = '\[[$symbol($version)]($style)\]'
 [shell]
 format = '\[[$indicator]($style)\]'
 
-[shlvl]
-format = '\[[$symbol$shlvl]($style)\]'
-
 [singularity]
 format = '\[[$symbol\[$env\]]($style)\]'
 
