@@ -86,7 +86,7 @@ format = '\[[\($hash$tag\)]($style)\]'
 format = '\[[+$added]($added_style)\]\[[-$deleted]($deleted_style)\]'
 
 [git_state]
-format = '\[[$state($progress_current/$progress_total)]($style)\]'
+format = '\[[$state ($progress_current/$progress_total)]($style)\]'
 
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style))'
