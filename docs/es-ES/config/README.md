@@ -4666,14 +4666,14 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | `detect_extensions` | `[]`                                 | Qué extensiones deben activar este módulo                                               |
 | `detect_files`      | `['xmake.lua']`                      | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`    | `[]`                                 | Qué carpetas deben activar este módulo                                                  |
-| `style`             | `'bold blue'`                        | El estilo del módulo.                                                                   |
+| `style`             | `'bold green'`                       | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Disables the `xmake` module.                                                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.9.5` | La versión de cmake                    |
+| version   | `v2.9.5` | The version of xmake                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
