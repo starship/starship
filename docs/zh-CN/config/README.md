@@ -4666,16 +4666,16 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module   |
 | `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module    |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module      |
-| `style`             | `'bold blue'`                        | 此组件的样式。                                       |
+| `style`             | `'bold green'`                       | 此组件的样式。                                       |
 | `disabled`          | `false`                              | Disables the `xmake` module.                  |
 
 ### 变量
 
-| 字段        | 示例       | 描述          |
-| --------- | -------- | ----------- |
-| version   | `v2.9.5` | cmake 版本    |
-| symbol    |          | `symbol`对应值 |
-| style\* |          | `style`对应值  |
+| 字段        | 示例       | 描述                   |
+| --------- | -------- | -------------------- |
+| version   | `v2.9.5` | The version of xmake |
+| symbol    |          | `symbol`对应值          |
+| style\* |          | `style`对应值           |
 
 *: 此变量只能作为样式字符串的一部分使用
 
