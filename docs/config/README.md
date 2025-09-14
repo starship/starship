@@ -4912,14 +4912,14 @@ the module will be activated if any of the following conditions are met:
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
 | `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
-| `style`             | `'bold blue'`                        | The style for the module.                                                 |
+| `style`             | `'bold green'`                       | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `xmake` module.                                              |
 
 ### Variables
 
 | Variable | Example  | Description                          |
 | -------- | -------- | ------------------------------------ |
-| version  | `v2.9.5` | The version of cmake                 |
+| version  | `v2.9.5` | The version of xmake                 |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
