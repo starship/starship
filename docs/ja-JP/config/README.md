@@ -4666,14 +4666,14 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['xmake.lua']`                      | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'bold blue'`                        | モジュールのスタイルです。                                          |
+| `style`             | `'bold green'`                       | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                              | Disables the `xmake` module.                           |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                      |
 | --------- | -------- | ----------------------- |
-| version   | `v2.9.5` | cmake のバージョン            |
+| version   | `v2.9.5` | The version of xmake    |
 | symbol    |          | オプション `symbol` の値をミラーする |
 | style\* |          | オプション `style` の値をミラーする  |
 
