@@ -4666,14 +4666,14 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
 | `detect_files`      | `['xmake.lua']`                      | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
 | `detect_folders`    | `[]`                                 | Thư mục nào sẽ kích hoạt mô-đun này                                       |
-| `style`             | `'bold blue'`                        | Kiểu cho module.                                                          |
+| `style`             | `'bold green'`                       | Kiểu cho module.                                                          |
 | `disabled`          | `false`                              | Disables the `xmake` module.                                              |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v2.9.5` | Phiên bản của cmake              |
+| version   | `v2.9.5` | The version of xmake             |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
