@@ -464,12 +464,12 @@ impl Default for Context<'_> {
 }
 
 fn home_dir(env: &Env) -> Option<PathBuf> {
-    // Try to get HOME from environment first (mocked or real)
-    if let Some(home) = env.get_env("HOME") {
-        return Some(PathBuf::from(home));
+    if cfg!(test) {
+        if let Some(home) = env.get_env("HOME") {
+            return Some(PathBuf::from(home));
+        }
     }
-    // If HOME is not set, fallback to system home directory
-    crate::utils::home_dir()
+    utils::home_dir()
 }
 
 fn get_config_path_os(env: &Env) -> Option<OsString> {
