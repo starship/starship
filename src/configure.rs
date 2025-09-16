@@ -239,7 +239,7 @@ fn ensure_single_config_file(context: &Context) {
 
 pub fn get_configuration(context: &Context) -> toml::Table {
     let starship_config =
-        StarshipConfig::initialize_with_context(context.get_config_path_os().as_deref(), context);
+        StarshipConfig::initialize_with_context(context.get_config_path_os().as_deref(), true);
 
     starship_config.config.unwrap_or_default()
 }
@@ -249,7 +249,7 @@ pub fn get_configuration_edit(context: &Context) -> DocumentMut {
     let config_file_path = context.get_config_path_os();
     let toml_content = config_file_path
         .as_deref()
-        .and_then(|path| StarshipConfig::read_config_content_as_str(path));
+        .and_then(|path| StarshipConfig::read_config_content_as_str(path, true));
 
     toml_content
         .unwrap_or_default()
@@ -638,13 +638,6 @@ mod tests {
         )
         .expect("Test should not fail");
         run_print_configuration_test(
-            "~/.config/starship.toml exists, STARSHIP_CONFIG=nonexistent.toml uses home config",
-            true,
-            StarshipConfigEnvScenario::NonExistingFile,
-            PRINT_CONFIG_HOME,
-        )
-        .expect("Test should not fail");
-        run_print_configuration_test(
             "~/.config/starship.toml exists, STARSHIP_CONFIG=existing.toml uses STARSHIP_CONFIG file",
             true,
             StarshipConfigEnvScenario::ExistingFile,
@@ -668,12 +661,6 @@ mod tests {
             true,
             StarshipConfigEnvScenario::MultipleFilesSecondExists,
             PRINT_CONFIG_SECOND_ONLY,
-        ).expect("Test should not fail");
-        run_print_configuration_test(
-            "STARSHIP_CONFIG=missing1.toml:missing2.toml (both missing) uses home (falls back when no files exist)",
-            true,
-            StarshipConfigEnvScenario::MultipleFilesNoneExist,
-            PRINT_CONFIG_HOME,
         ).expect("Test should not fail");
         run_print_configuration_test(
             "no home file, STARSHIP_CONFIG=missing1.toml:missing2.toml (both missing) uses default",
@@ -700,12 +687,6 @@ mod tests {
             StarshipConfigEnvScenario::SingleFileWindows,
             PRINT_CONFIG_ENV,
         ).expect("Test should not fail");
-        run_print_configuration_test(
-            "Windows: STARSHIP_CONFIG=first.toml:second.toml (wrong separator - colon) should treat as single file and fall back to home",
-            true,
-            StarshipConfigEnvScenario::WrongSeparatorColonOnWindows,
-            PRINT_CONFIG_HOME,
-        ).expect("Test should not fail");
         Ok(())
     }
 
@@ -725,19 +706,12 @@ mod tests {
             StarshipConfigEnvScenario::SingleFileUnix,
             PRINT_CONFIG_ENV,
         ).expect("Test should not fail");
-        run_print_configuration_test(
-            "Unix: STARSHIP_CONFIG=first.toml;second.toml (wrong separator - semicolon) should treat as single file and fall back to home",
-            true,
-            StarshipConfigEnvScenario::WrongSeparatorSemicolonOnUnix,
-            PRINT_CONFIG_HOME,
-        ).expect("Test should not fail");
         Ok(())
     }
 
     #[derive(Clone, Copy)]
     enum StarshipConfigEnvScenario {
         NotSpecified,
-        NonExistingFile,
         ExistingFile,
         MultipleFiles,
         MultipleFilesFirstExists,
@@ -747,14 +721,10 @@ mod tests {
         MultipleFilesWindows,
         #[cfg(windows)]
         SingleFileWindows,
-        #[cfg(windows)]
-        WrongSeparatorColonOnWindows, // Test using ':' on Windows (should treat as single file)
         #[cfg(not(windows))]
         MultipleFilesUnix,
         #[cfg(not(windows))]
         SingleFileUnix,
-        #[cfg(not(windows))]
-        WrongSeparatorSemicolonOnUnix, // Test using ';' on Unix (should treat as single file)
     }
 
     fn run_print_configuration_test(
@@ -787,9 +757,6 @@ mod tests {
 
         let env_starship_config = match starship_config_env_scenario {
             StarshipConfigEnvScenario::NotSpecified => None,
-            StarshipConfigEnvScenario::NonExistingFile => {
-                Some(env_toml.to_string_lossy().to_string())
-            }
             StarshipConfigEnvScenario::ExistingFile => {
                 let mut env_toml_file = File::create(&env_toml)?;
                 env_toml_file.write_all(PRINT_CONFIG_ENV.as_bytes())?;
@@ -901,25 +868,6 @@ mod tests {
                 let mut env_toml_file = File::create(&env_toml)?;
                 env_toml_file.write_all(PRINT_CONFIG_ENV.as_bytes())?;
                 Some(env_toml.to_string_lossy().to_string())
-            }
-            #[cfg(windows)]
-            StarshipConfigEnvScenario::WrongSeparatorColonOnWindows => {
-                // Test using ':' separator on Windows (should be treated as single file name)
-                // Create a file that contains the colon in its name (this would be invalid but we test the parsing)
-                let config_name = "first.toml:second.toml"; // This should be treated as a single filename
-                let config_path = dir.path().join(config_name);
-
-                // Don't create the file - it doesn't exist, so should fall back to home config
-                Some(config_path.to_string_lossy().to_string())
-            }
-            #[cfg(not(windows))]
-            StarshipConfigEnvScenario::WrongSeparatorSemicolonOnUnix => {
-                // Test using ';' separator on Unix (should be treated as single file name)
-                let config_name = "first.toml;second.toml"; // This should be treated as a single filename
-                let config_path = dir.path().join(config_name);
-
-                // Don't create the file - it doesn't exist, so should fall back to home config
-                Some(config_path.to_string_lossy().to_string())
             }
         };
 
