@@ -124,7 +124,7 @@ pub struct StarshipConfig {
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize(config_file_path: Option<&OsStr>) -> Self {
+    pub fn initialize(config_file_path: &OsStr) -> Self {
         Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
@@ -133,9 +133,8 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
-        let config_file_path = config_file_path?;
-        let toml_content = Self::read_config_content_as_str(config_file_path)?;
+    fn config_from_file(config_file_path: &OsStr) -> Option<toml::Table> {
+        let toml_content = Self::read_config_content_as_str(config_file_path, true)?;
         match toml::from_str(&toml_content) {
             Ok(parsed) => Some(parsed),
             Err(error) => {
@@ -156,35 +155,38 @@ impl StarshipConfig {
     }
 
     /// Parses input line to extract and expand file paths using std::env::split_paths
-    pub fn parse_input_paths(line: &str) -> Vec<std::path::PathBuf> {
+    pub fn parse_input_paths(line: &OsStr) -> Vec<std::path::PathBuf> {
         std::env::split_paths(line)
             .map(crate::context::Context::expand_tilde)
             .collect()
     }
 
-    pub fn read_config_content_as_str(config_file_path: &OsStr) -> Option<String> {
-        Self::read_config_content_as_str_with_context(config_file_path, None)
-    }
-
-    pub fn read_config_content_as_str_with_context(
+    pub fn read_config_content_as_str(
         config_file_path: &OsStr,
-        context: Option<&Context>,
+        is_explicit_config: bool,
     ) -> Option<String> {
-        Self::merge_config_files_runtime(config_file_path).or_else(|| {
-            let default_path = context
-                .and_then(|ctx| {
-                    ctx.get_home()
-                        .and_then(|home| utils::default_starship_config_path(Some(home.as_path())))
-                })
-                .or_else(|| utils::default_starship_config_path(None))?;
+        Self::merge_config_files_runtime(config_file_path, is_explicit_config).or_else(|| {
+            let default_path = utils::default_starship_config_path(None)?;
             utils::read_file(&default_path).ok()
         })
     }
 
+    pub fn read_config_content_as_str_with_context(
+        config_file_path: &OsStr,
+        is_explicit_config: bool,
+    ) -> Option<String> {
+        Self::merge_config_files_runtime(config_file_path, is_explicit_config)
+    }
+
     /// Initialize the Config struct with context for proper home directory resolution
-    pub fn initialize_with_context(config_file_path: Option<&OsStr>, context: &Context) -> Self {
+    pub fn initialize_with_context(
+        config_file_path: Option<&OsStr>,
+        is_explicit_config: bool,
+    ) -> Self {
         let config = config_file_path
-            .and_then(|path| Self::read_config_content_as_str_with_context(path, Some(context)))
+            .and_then(|path| {
+                Self::read_config_content_as_str_with_context(path, is_explicit_config)
+            })
             .and_then(|toml_content| match toml::from_str(&toml_content) {
                 Ok(parsed) => Some(parsed),
                 Err(error) => {
@@ -195,47 +197,40 @@ impl StarshipConfig {
         Self { config }
     }
 
-    /// Merge multiple configuration files using proper TOML table merging
-    /// Supports complex TOML structures including arrays, nested tables, and matrices
-    pub fn merge_config_files_runtime(config_paths: &OsStr) -> Option<String> {
-        let paths = Self::parse_input_paths(config_paths.to_str().unwrap_or(""));
-        let existing_paths: Vec<_> = paths.iter().filter(|p| p.exists()).collect();
-        if existing_paths.is_empty() {
-            log::warn!("No configuration files found for merging");
+    pub fn merge_config_files_runtime(
+        config_paths: &OsStr,
+        is_explicit_config: bool,
+    ) -> Option<String> {
+        if config_paths.is_empty() {
             return None;
         }
-        let merged_table = Self::merge_toml_tables(&existing_paths)?;
-        match toml::to_string(&merged_table) {
-            Ok(content) => Some(content),
-            Err(e) => {
-                log::error!("Failed to serialize merged configuration: {}", e);
-                None
+        let paths = Self::parse_input_paths(config_paths);
+        let existing_paths: Vec<_> = paths.iter().filter(|p| p.exists()).collect();
+        if existing_paths.is_empty() {
+            if is_explicit_config {
+                log::warn!("No configuration files found for merging");
             }
+            return None;
         }
+
+        let merged_table = Self::merge_toml_tables(&existing_paths)?;
+        toml::to_string(&merged_table).ok()
     }
 
-    /// Merge multiple TOML files into a single table with proper type preservation
-    fn merge_toml_tables(file_paths: &[&std::path::PathBuf]) -> Option<toml::Table> {
+    pub fn merge_toml_tables(file_paths: &[&std::path::PathBuf]) -> Option<toml::Table> {
         let mut base_table = toml::Table::new();
         for path in file_paths.iter() {
-            match fs::read_to_string(path) {
-                Ok(content) => match toml::from_str::<toml::Table>(&content) {
-                    Ok(table) => {
-                        Self::deep_merge_tables(&mut base_table, table);
-                    }
-                    Err(e) => {
-                        log::warn!("Failed to parse TOML file {}: {}", path.display(), e);
-                        continue;
-                    }
-                },
-                Err(e) => {
-                    log::warn!("Failed to read file {}: {}", path.display(), e);
-                    continue;
+            if path.exists() {
+                match fs::read_to_string(path) {
+                    Ok(content) => match toml::from_str::<toml::Table>(&content) {
+                        Ok(table) => Self::deep_merge_tables(&mut base_table, table),
+                        Err(e) => log::warn!("Failed to parse TOML file {}: {}", path.display(), e),
+                    },
+                    Err(e) => log::warn!("Failed to read file {}: {}", path.display(), e),
                 }
             }
         }
         if base_table.is_empty() {
-            log::warn!("No valid TOML content found in any configuration file");
             None
         } else {
             Some(base_table)
@@ -1144,8 +1139,8 @@ mod tests {
         // This test now checks that when no config file path is provided,
         // the caller should handle the None case before calling the function
         let config_file_path: Option<&std::ffi::OsStr> = None;
-        let result =
-            config_file_path.and_then(|path| StarshipConfig::read_config_content_as_str(path));
+        let result = config_file_path
+            .and_then(|path| StarshipConfig::read_config_content_as_str(path, false));
         assert_eq!(
             None, result,
             "if no config file path is provided, it should return None"
@@ -1311,7 +1306,7 @@ success_symbol = "[✓](bold green)"
 
         let non_existent_path = OsStr::new("non_existent_config.toml");
         let result =
-            StarshipConfig::read_config_content_as_str_with_context(non_existent_path, None);
+            StarshipConfig::read_config_content_as_str_with_context(non_existent_path, false);
         assert!(result.is_none());
     }
     #[test]
