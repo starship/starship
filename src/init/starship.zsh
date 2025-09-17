@@ -34,7 +34,14 @@ prompt_starship_precmd() {
 
     # Calculate duration if a command was executed
     if (( ${+STARSHIP_START_TIME} )); then
-        __starship_get_time && (( STARSHIP_DURATION = STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
+        # If an arithmetic expression evaluates to 0, its exit status is 1:
+        # "The return status is 0 if the arithmetic value of the expression is non-zero, 1 if it is zero, and 2 if an error occurred."
+        # In rare cases, the subtraction below can result in an int 0 result (yes, really),
+        # which would then kill the shell if 'set -e' is in effect.
+        # We therefore have to assign the result outside the expression (using 'STARSHIP_DURATION=$((...))'),
+        # because unlike '(())', '$(())' gets a return status of 0 even if the expression evaluates to int 0
+        # (but it still surfaces a potential error, normally status 2, as status 1).
+        __starship_get_time && STARSHIP_DURATION=$(( STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
         unset STARSHIP_START_TIME
     # Drop status and duration otherwise
     else
