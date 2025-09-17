@@ -122,7 +122,7 @@ mockall = "0.13.1"
 tempfile = "3.21.0"
 
 [target.'cfg(unix)'.dev-dependencies]
-fuser = "0.15.1"
+fuser = "0.16.0"
 libc = "0.2.172"
 
 [profile.release]
