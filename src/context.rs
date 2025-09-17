@@ -1174,6 +1174,51 @@ mod tests {
         Ok(())
     }
 
+    /// Timing out within the expected time was not respected (#5740, #6694).
+    /// Targeting linux (for now) because of [crate::test::fuse_fs::StallingFilesystem].
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_scan_dir_timeout_stall() -> Result<(), Box<dyn std::error::Error>> {
+        let stalling_rust = testdir(&[
+            "stalling/README.md",
+            "stalling/Cargo.toml",
+            "stalling/src/main.rs",
+        ])?; // The parent might hang too.
+        let follow_symlinks = true;
+        let timeout = Duration::from_millis(30);
+
+        use crate::test::fuse_fs::StallingFilesystem;
+        let stall_duration = Duration::from_secs(3);
+        let hanging_folder = StallingFilesystem::new(
+            stalling_rust.path().to_path_buf().join("stalling"),
+            stall_duration,
+        )?;
+        let _hanging_mount = hanging_folder.block()?;
+        let start_time = Instant::now();
+        // Testing that the function from_path_with_timeout actually does timeout within expected timing.
+        let rust_dc =
+            DirContents::from_path_with_timeout(stalling_rust.path(), timeout, follow_symlinks)?;
+        let elapsed_time = Instant::now().duration_since(start_time);
+
+        assert!(
+            !ScanDir {
+                dir_contents: &rust_dc,
+                files: &["package.json"],
+                extensions: &["js"],
+                folders: &["node_modules"],
+            }
+            .is_match()
+        );
+
+        let tol = 5;
+        assert!(elapsed_time < tol * timeout);
+
+        // let _ = hanging_mount; // Drop the mount.
+        stalling_rust.close()?;
+
+        Ok(())
+    }
+
     #[test]
     fn test_scan_dir_timeout() -> io::Result<()> {
         let empty = testdir(&[])?;
