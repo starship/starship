@@ -592,7 +592,7 @@ pub fn wrap_seq_for_shell(
 ) -> String {
     let (beg, end) = match shell {
         // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        Shell::Bash | Shell::Osh => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
         // %{ and %}
         Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
         _ => return ansi,
