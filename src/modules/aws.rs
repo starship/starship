@@ -256,6 +256,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
+    let is_aws_wanted = if config.detect_files.is_empty() && config.detect_folders.is_empty() {
+        true
+    } else {
+        context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .set_folders(&config.detect_folders)
+            .is_match()
+    };
+
+    if !is_aws_wanted {
+        return None;
+    }
+
     let aws_config = OnceCell::new();
     let aws_creds = OnceCell::new();
 
