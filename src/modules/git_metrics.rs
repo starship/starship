@@ -93,90 +93,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     use gix::status;
                     let mut diff = Diff::default();
                     match change {
-                        status::Item::TreeIndex(change) => {
-                            use gix::diff::index::Change;
-                            match change {
-                                Change::Addition {
-                                    entry_mode,
-                                    location,
-                                    id,
-                                    ..
-                                } => {
-                                    diff.added += count_lines(
-                                        location,
-                                        id.as_ref().into(),
-                                        *entry_mode,
-                                        tree_index_cache,
-                                        repo,
-                                    );
-                                }
-                                Change::Deletion {
-                                    entry_mode,
-                                    location,
-                                    id,
-                                    ..
-                                } => {
-                                    diff.deleted += count_lines(
-                                        location,
-                                        id.as_ref().into(),
-                                        *entry_mode,
-                                        tree_index_cache,
-                                        repo,
-                                    );
-                                }
-                                Change::Modification {
-                                    location,
-                                    previous_entry_mode,
-                                    previous_id,
-                                    entry_mode,
-                                    id,
-                                    ..
-                                } => {
-                                    let location = location.as_ref();
-                                    diff.add(diff_two_opt(
-                                        location,
-                                        previous_id.as_ref().to_owned(),
-                                        *previous_entry_mode,
-                                        location,
-                                        id.as_ref().to_owned(),
-                                        *entry_mode,
-                                        tree_index_cache,
-                                        repo,
-                                    ));
-                                }
-                                Change::Rewrite {
-                                    source_location,
-                                    source_entry_mode,
-                                    source_id,
-                                    location,
-                                    entry_mode,
-                                    id,
-                                    copy,
-                                    ..
-                                } => {
-                                    if *copy {
-                                        diff.added += count_lines(
-                                            location,
-                                            id.as_ref().into(),
-                                            *entry_mode,
-                                            tree_index_cache,
-                                            repo,
-                                        );
-                                    } else {
-                                        diff.add(diff_two_opt(
-                                            source_location.as_ref(),
-                                            source_id.as_ref().to_owned(),
-                                            *source_entry_mode,
-                                            location,
-                                            id.as_ref().to_owned(),
-                                            *entry_mode,
-                                            tree_index_cache,
-                                            repo,
-                                        ));
-                                    }
-                                }
-                            }
-                        }
+                        status::Item::TreeIndex(_) => {} // ignore staged diffs
                         status::Item::IndexWorktree(change) => {
                             use gix::status::index_worktree::Item;
                             use gix::status::plumbing::index_as_worktree::{Change, EntryStatus};
@@ -418,10 +335,12 @@ mod tests {
         let path = repo_dir.path();
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -436,15 +355,17 @@ mod tests {
         the_file.sync_all()?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_addition() -> io::Result<()> {
+    fn dont_show_staged_addition() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -452,15 +373,17 @@ mod tests {
         run_git_cmd(["add", "new-file"], Some(path), true)?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = None;
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_rename_modification() -> io::Result<()> {
+    fn dont_show_staged_rename_modification() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -472,15 +395,17 @@ mod tests {
         run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = None;
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_addition_intended() -> io::Result<()> {
+    fn dont_show_staged_addition_intended() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -488,15 +413,17 @@ mod tests {
         run_git_cmd(["add", "-N", "new-file"], Some(path), true)?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_modification() -> io::Result<()> {
+    fn dont_show_staged_modification() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -504,14 +431,12 @@ mod tests {
         run_git_cmd(["add", "the_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-3")
-        ));
+        let expected = None;
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -524,10 +449,12 @@ mod tests {
         write_file(file_path, "First Line\nSecond Line\n")?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -539,25 +466,29 @@ mod tests {
         std::fs::remove_file(path.join("the_file"))?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_deletion() -> io::Result<()> {
+    fn dont_show_staged_deletion() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
         run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
-        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
+        let expected = None;
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -570,6 +501,7 @@ mod tests {
         write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -578,6 +510,7 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -587,9 +520,11 @@ mod tests {
         let path = repo_dir.path();
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -600,9 +535,11 @@ mod tests {
         std::fs::write(path.join("untracked"), "a line")?;
 
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -613,9 +550,11 @@ mod tests {
 
         make_sparse(path)?;
         let actual = render_metrics(path);
+        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -637,10 +576,21 @@ mod tests {
             })
             .path(path)
             .collect();
+        let actual_with_git_executable = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                only_nonzero_diffs = true
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect();
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -649,7 +599,9 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
 
         let actual = render_metrics(repo_dir.path());
+        let actual_with_git_executable = render_metrics_with_git_executable(repo_dir.path());
         assert_eq!(None, actual);
+        assert_eq!(None, actual_with_git_executable);
 
         repo_dir.close()
     }
@@ -681,37 +633,21 @@ mod tests {
         repo_dir.close()
     }
 
-    #[test]
-    fn works_if_git_executable_is_used() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
-
-        let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
-
-        let actual = ModuleRenderer::new("git_metrics")
+    fn render_metrics(path: &Path) -> Option<String> {
+        ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
-                [git_status]
-                use_git_executable = true
                 [git_metrics]
                 disabled = false
             })
             .path(path)
-            .collect();
-
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
-        ));
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            .collect()
     }
 
-    fn render_metrics(path: &Path) -> Option<String> {
+    fn render_metrics_with_git_executable(path: &Path) -> Option<String> {
         ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
+                [git_status]
+                use_git_executable = true
                 [git_metrics]
                 disabled = false
             })
