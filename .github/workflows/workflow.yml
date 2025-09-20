@@ -181,10 +181,16 @@ jobs:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
 
-      # Install Mercurial (pre-installed on Linux and windows)
+      # Install Mercurial (pre-installed on Linux)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         run: brew install mercurial
+
+      - name: Setup | Mercurial (windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
