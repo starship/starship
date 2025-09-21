@@ -622,6 +622,16 @@ mod tests {
             })
             .path(path)
             .collect();
+        let actual_with_git_executable = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    ignore_submodules = true
+                    [git_status]
+                    use_git_executable = true
+            })
+            .path(path)
+            .collect();
 
         let expected = Some(format!(
             "{} {} ",
@@ -630,6 +640,7 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -646,10 +657,10 @@ mod tests {
     fn render_metrics_with_git_executable(path: &Path) -> Option<String> {
         ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
-                [git_status]
-                use_git_executable = true
                 [git_metrics]
                 disabled = false
+                [git_status]
+                use_git_executable = true
             })
             .path(path)
             .collect()
