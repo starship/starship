@@ -368,6 +368,22 @@ impl<'a> Context<'a> {
                     get_remote_repository_info(&repository, branch.as_ref().map(AsRef::as_ref));
                 let path = repository.path().to_path_buf();
 
+                let main_workdir = {
+                    let git_dir = repository.git_dir();
+                    if let Some(parent) = git_dir.parent() {
+                        if parent.file_name().and_then(|s| s.to_str()) == Some("worktrees") {
+                            parent
+                                .parent()
+                                .and_then(|grandparent| grandparent.parent())
+                                .map(PathBuf::from)
+                        } else {
+                            repository.workdir().map(PathBuf::from)
+                        }
+                    } else {
+                        repository.workdir().map(PathBuf::from)
+                    }
+                };
+
                 let fs_monitor_value_is_true = repository
                     .config_snapshot()
                     .boolean("core.fsmonitor")
@@ -377,6 +393,7 @@ impl<'a> Context<'a> {
                     repo: shared_repo,
                     branch: branch.map(|b| b.shorten().to_string()),
                     workdir: repository.workdir().map(PathBuf::from),
+                    main_workdir,
                     path,
                     state: repository.state(),
                     remote,
@@ -711,6 +728,8 @@ pub struct Repo {
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
     pub workdir: Option<PathBuf>,
+    /// The path to the main repository workdir (for worktrees, this is the main repo's workdir).
+    pub main_workdir: Option<PathBuf>,
 
     /// The path of the repository's `.git` directory.
     pub path: PathBuf,
