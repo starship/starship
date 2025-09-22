@@ -1440,7 +1440,10 @@ mod tests {
         assert!(repo.main_workdir.is_some());
         assert_ne!(repo.main_workdir, repo.workdir); // Detects main
         let main_path = main_dir.path().to_path_buf();
-        assert_eq!(repo.main_workdir.as_ref().unwrap(), &main_path); // Matches main dir
+        assert_eq!(
+            dunce::canonicalize(repo.main_workdir.as_ref().unwrap()).unwrap(),
+            dunce::canonicalize(&main_path).unwrap()
+        ); // Matches main dir
 
         main_dir.close()?;
         worktree_parent_dir.close()
