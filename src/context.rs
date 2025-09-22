@@ -1371,4 +1371,137 @@ mod tests {
 
         assert_eq!(&context.current_dir, expected_path);
     }
+    #[test]
+    fn test_non_worktree_fallback() -> io::Result<()> {
+        let temp = tempfile::TempDir::new()?;
+        // Init normal repo (no worktree)
+        create_command("git")?
+            .args(["init", "--quiet"])
+            .current_dir(temp.path())
+            .output()?;
+        std::fs::write(temp.path().join("file.txt"), "test")?;
+        create_command("git")?
+            .args(["add", "."])
+            .current_dir(temp.path())
+            .output()?;
+        create_command("git")?
+            .args(["commit", "-m", "init"])
+            .current_dir(temp.path())
+            .output()?;
+
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Bash,
+            Target::Main,
+            temp.path().to_path_buf(),
+            temp.path().to_path_buf(),
+            Env::default(),
+        );
+        let repo = context.get_repo().unwrap();
+        assert_eq!(repo.main_workdir, repo.workdir); // Fallback works
+        temp.close()
+    }
+
+    #[test]
+    fn test_worktree_detection() -> io::Result<()> {
+        let main_dir = tempfile::TempDir::new()?;
+        let worktree_dir = tempfile::TempDir::new()?;
+        // Init main repo
+        create_command("git")?
+            .args(["init", "--quiet"])
+            .current_dir(main_dir.path())
+            .output()?;
+        std::fs::write(main_dir.path().join("file.txt"), "test")?;
+        create_command("git")?
+            .args(["add", "."])
+            .current_dir(main_dir.path())
+            .output()?;
+        create_command("git")?
+            .args(["commit", "-m", "init"])
+            .current_dir(main_dir.path())
+            .output()?;
+        // Create worktree
+        create_command("git")?
+            .args(["worktree", "add", "../worktree-test"])
+            .current_dir(main_dir.path())
+            .output()?;
+
+        let worktree_path = main_dir.path().parent().unwrap().join("worktree-test");
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Bash,
+            Target::Main,
+            worktree_path.clone(),
+            worktree_path,
+            Env::default(),
+        );
+        let repo = context.get_repo().unwrap();
+        assert!(repo.main_workdir.is_some());
+        assert_ne!(repo.main_workdir, repo.workdir); // Detects main
+        let main_path = main_dir.path().to_path_buf();
+        assert_eq!(repo.main_workdir.as_ref().unwrap(), &main_path); // Matches main dir
+
+        main_dir.close()?;
+        worktree_dir.close()
+    }
+
+    #[test]
+    fn test_bare_repo_no_workdir() -> io::Result<()> {
+        let temp = tempfile::TempDir::new()?;
+        // Create bare repo (git init --bare)
+        create_command("git")?
+            .args(["init", "--bare", "--quiet"])
+            .current_dir(temp.path())
+            .output()?;
+        std::fs::write(temp.path().join("file.txt"), "test")?;
+        create_command("git")?
+            .args(["add", "file.txt"])
+            .current_dir(temp.path())
+            .output()?;
+        create_command("git")?
+            .args(["commit", "-m", "init"])
+            .current_dir(temp.path())
+            .output()?;
+
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Bash,
+            Target::Main,
+            temp.path().to_path_buf(),
+            temp.path().to_path_buf(),
+            Env::default(),
+        );
+        let repo = context.get_repo().unwrap();
+        assert!(repo.main_workdir.is_none()); // No workdir for bare, fallback None
+        temp.close()
+    }
+
+    #[test]
+    fn test_invalid_git_dir() -> io::Result<()> {
+        let temp = tempfile::TempDir::new()?;
+        // Temp dir with no .git
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Bash,
+            Target::Main,
+            temp.path().to_path_buf(),
+            temp.path().to_path_buf(),
+            Env::default(),
+        );
+        assert!(context.get_repo().is_err()); // Handles gracefully, no repo
+
+        // Malformed path (no parent)
+        let invalid_path = Path::new("/invalid/no/parent").to_path_buf();
+        let context_invalid = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Bash,
+            Target::Main,
+            invalid_path.clone(),
+            invalid_path,
+            Env::default(),
+        );
+        assert!(context_invalid.get_repo().is_err()); // Error on discovery
+
+        temp.close()
+    }
 }
