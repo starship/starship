@@ -1405,7 +1405,8 @@ mod tests {
     #[test]
     fn test_worktree_detection() -> io::Result<()> {
         let main_dir = tempfile::TempDir::new()?;
-        let worktree_dir = tempfile::TempDir::new()?;
+        let worktree_parent_dir = tempfile::TempDir::new()?;
+        let worktree_path = worktree_parent_dir.path().join("worktree");
         // Init main repo
         create_command("git")?
             .args(["init", "--quiet"])
@@ -1421,12 +1422,12 @@ mod tests {
             .current_dir(main_dir.path())
             .output()?;
         // Create worktree
-        create_command("git")?
-            .args(["worktree", "add", "../worktree-test"])
+        let output = create_command("git")?
+            .args(["worktree", "add", worktree_path.to_str().unwrap()])
             .current_dir(main_dir.path())
             .output()?;
+        assert!(output.status.success());
 
-        let worktree_path = main_dir.path().parent().unwrap().join("worktree-test");
         let context = Context::new_with_shell_and_path(
             Properties::default(),
             Shell::Bash,
@@ -1442,7 +1443,7 @@ mod tests {
         assert_eq!(repo.main_workdir.as_ref().unwrap(), &main_path); // Matches main dir
 
         main_dir.close()?;
-        worktree_dir.close()
+        worktree_parent_dir.close()
     }
 
     #[test]
