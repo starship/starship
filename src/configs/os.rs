@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 pub struct OSConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
+    #[cfg_attr(feature = "config-schema", schemars(with = "IndexMap<String, String>"))]
     pub symbols: IndexMap<Type, &'a str>,
     pub disabled: bool,
 }

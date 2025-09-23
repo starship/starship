@@ -58,6 +58,9 @@ tag_symbol = '  '
 [golang]
 symbol = " "
 
+[gradle]
+symbol = " "
+
 [guix_shell]
 symbol = " "
 
@@ -181,6 +184,9 @@ symbol = "󱘗 "
 [scala]
 symbol = " "
 
+[status]
+symbol = " "
+
 [swift]
 symbol = " "
 
@@ -189,6 +195,3 @@ symbol = " "
 
 [zig]
 symbol = " "
-
-[gradle]
-symbol = " "

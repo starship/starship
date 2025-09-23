@@ -188,7 +188,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.unescape().ok().map(std::borrow::Cow::into_owned);
+                let ver = t.decode().ok().map(std::borrow::Cow::into_owned);
                 return match ver {
                     // Ignore version which is just a property reference
                     Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
