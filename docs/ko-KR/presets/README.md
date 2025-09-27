@@ -12,7 +12,7 @@
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+이 프리셋은 여러 모듈의 기호를 변경하여 프롬프트의 어느 곳에서도 Nerd Font 기호가 사용되지 않도록 합니다.
 
 ::: tip
 
@@ -24,19 +24,19 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+이 프리셋은 모든 내장 모듈의 형식을 변경하여 기본 Starship 문구("via", "on" 등)를 사용하는 대신 세그먼트를 괄호 안에 표시합니다.
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
 ## [Plain Text Symbols](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+이 프리셋은 각 모듈의 기호를 일반 텍스트로 변경합니다. 유니코드에 액세스할 수 없는 경우에 좋습니다.
 
 [![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+이 프리셋은 언어 런타임 버전을 숨깁니다. 컨테이너 또는 가상화된 환경에서 작업하는 경우 이 프리셋이 적합합니다!
 
 [![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
@@ -54,7 +54,7 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+이 프리셋은 [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)에서 영감을 받았습니다. 또한 starship에서 경로 대체가 어떻게 작동하는지 보여줍니다.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
@@ -72,12 +72,12 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ## [Jetpack](./jetpack.md)
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+이것은 [geometry](https://github.com/geometry-zsh/geometry) 및 [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) 프롬프트에서 영감을 받은 의사 미니멀리스트 프리셋입니다.
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+이 프리셋은 [Catppuccin](https://github.com/catppuccin/catppuccin) 테마 팔레트를 사용하여 [Gruvbox Rainbow](./gruvbox-rainbow.md)를 최소한으로 수정한 버전입니다.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)

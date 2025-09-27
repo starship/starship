@@ -1,12 +1,12 @@
 [프리셋으로 돌아가기](./#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# Nerd Font 없음 프리셋
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+이 프리셋은 기호 사용을 이모지 및 파워라인 세트의 기호로 제한합니다.
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+이는 Nerd Font가 설치되어 있지 않아도 모든 모듈 기호를 볼 수 있어야 함을 의미합니다.
 
-This preset will become the default preset in a future release of starship.
+이 프리셋은 starship의 향후 릴리스에서 기본 프리셋이 될 것입니다.
 
 ### 설정
 

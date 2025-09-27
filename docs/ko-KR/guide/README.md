@@ -163,8 +163,8 @@
 
 **아무 셸에나 적용할 수 있는 간결하고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!**
 
-- ** 빠름:** 빠릅니다. – _정말_ 빠릅니다.  🚀
-- ** 커스텀 가능:** 프롬프트의 모든 부분을 커스텀 할 수 있습니다.
+- **빠름**: 빠릅니다. – _정말_ 빠릅니다.  🚀
+- **커스텀 가능**: 프롬프트의 모든 부분을 커스텀 할 수 있습니다.
 - **범용적:** 어떤 셸 위에서도, 어떤 운영체제 위에서도 동작합니다.
 - **지능적:** 관련 정보를 한눈에 보여줍니다.
 - **다기능:** 원하는 모든 도구를 지원합니다.
@@ -340,7 +340,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Nushell 설정 파일의 끝에 다음을 추가하세요 (Nushell에서 `$nu.config-path`를 실행하여 찾을 수 있습니다):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
@@ -427,16 +427,16 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 
 이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
-## 🔒 Code Signing Policy
+## 🔒 코드 서명 정책
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+[SignPath.io](https://signpath.io)에서 제공하는 무료 코드 서명, [SignPath Foundation](https://signpath.org)의 인증서.
 
-Code Signing Roles:
+코드 서명 역할:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- 검토자: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- 승인자 및 작성자: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+이 프로그램은 사용자가 특별히 요청하거나 설치 또는 운영하는 사람이 요청하지 않는 한 다른 네트워크 시스템으로 정보를 전송하지 않습니다.
 
 <p align="center">
     <br>

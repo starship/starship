@@ -26,64 +26,64 @@ disabled = true
 
 ### 설정 파일 경로
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+`STARSHIP_CONFIG` 환경 변수를 사용하여 기본 설정 파일 위치를 변경할 수 있습니다:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+PowerShell (Windows)에서는 `$PROFILE`에 다음 줄을 추가하는 것과 동일합니다:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Cmd (Windows)에서는 `starship.lua`에 다음 줄을 추가하는 것과 동일합니다:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\Users\user\example\non\default\path\starship.toml')
 ```
 
 ### 로그
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+기본적으로 starship은 `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`라는 파일에 경고 및 오류를 기록합니다. 여기서 세션 키는 터미널 인스턴스에 해당합니다. 그러나 `STARSHIP_CACHE` 환경 변수를 사용하여 이를 변경할 수 있습니다:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+PowerShell (Windows)에서는 `$PROFILE`에 다음 줄을 추가하는 것과 동일합니다:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Cmd (Windows)에서는 `starship.lua`에 다음 줄을 추가하는 것과 동일합니다:
 
 ```lua
-os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+os.setenv('STARSHIP_CACHE', 'C:\Users\user\AppData\Local\Temp')
 ```
 
 ### 용어
 
 **모듈**: OS의 배경 정보를 기반으로 정보를 제공하는 프롬프트의 구성 요소입니다. 예를 들어, "nodejs" 모듈은 현재 디렉토리가 Node.js 프로젝트 디렉토리라면 컴퓨터에 현재 설치되어 있는 Node.js 버전을 보여줍니다.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**변수**: 모듈에서 제공하는 정보를 포함하는 더 작은 하위 구성 요소입니다. 예를 들어, "nodejs" 모듈의 "version" 변수에는 현재 Node.js 버전이 포함됩니다.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+관례적으로 대부분의 모듈은 기본 터미널 색상 접두사 (예: "nodejs"의 `via`)와 빈 공간을 접미사로 가집니다.
 
 ### 문자열
 
-TOML 문법에서는 [텍스트 값](https://toml.io/en/v1.0.0#string)을 `'`, `"`, `'''`, 그리고 `"""`으로 지정합니다.
+TOML 문법에서는 [텍스트 값](https://toml.io/en/v1.0.0#string)을 '`, `"`, `'''`, 그리고 `"""`으로 지정합니다.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+다음 Starship 구문 기호는 형식 문자열에서 특별한 용도로 사용되며 해당 문자로 표시하려면 이스케이프해야 합니다: `$ [ ] ( )`.
 
 | 기호    | 종류                        | 비고                                                     |
 | ----- | ------------------------- | ------------------------------------------------------ |
-| `'`   | 리터럴 문자열                   | less escaping                                          |
-| `"`   | string                    | more escaping                                          |
-| `'''` | multi-line literal string | less escaping                                          |
-| `"""` | multi-line string         | more escaping, newlines in declarations can be ignored |
+| `'`   | 리터럴 문자열                   | 적은 이스케이프                                          |
+| `"`   | 문자열                    | 더 많은 이스케이프                                          |
+| `'''` | 여러 줄 리터럴 문자열           | 적은 이스케이프                                          |
+| `"""` | 여러 줄 문자열              | 더 많은 이스케이프, 선언의 새 줄은 무시될 수 있습니다 |
 
 예를 들어:
 
@@ -95,27 +95,27 @@ format = '☺\☻ '
 format = "☺\\☻ "
 
 # escaping Starship symbols
-format = '\[\$\] '
+format = '\\\[\\$\\\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+줄 바꿈을 사용할 때 여러 줄 선언을 사용할 수 있습니다. 예를 들어, 새 줄에 `$` 기호를 인쇄하려면 `format`에 대한 다음 값이 동일합니다:
 
 ```toml
 # with literal string
 format = '''
 
-\$'''
+\$"''
 
 # with multiline basic string
 format = """
 
-\\$"""
+\\\$"""
 
 # with basic string
-format = "\n\\$"
+format = "\n\\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+여러 줄 기본 문자열에서 새 줄은 이스케이프하여 값에 존재하지 않고도 서식 지정에 사용할 수 있습니다.
 
 ```toml
 format = """
@@ -128,89 +128,89 @@ line2
 """
 ```
 
-### Format Strings
+### 형식 문자열
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+형식 문자열은 모듈이 모든 변수를 인쇄하는 형식입니다. 대부분의 모듈에는 모듈의 표시 형식을 구성하는 `format`이라는 항목이 있습니다. 형식 문자열에서 텍스트, 변수 및 텍스트 그룹을 사용할 수 있습니다.
 
-#### Variable
+#### 변수
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
-
-예를 들어:
-
-- `'$version'` is a format string with a variable named `version`.
-- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
-
-#### Text Group
-
-A text group is made up of two different parts.
-
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
-
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
+변수에는 `$` 기호와 변수 이름이 포함됩니다. 변수 이름은 문자, 숫자 및 `_`만 포함할 수 있습니다.
 
 예를 들어:
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'$version'`은 `version`이라는 변수가 있는 형식 문자열입니다.
+- `'$git_branch$git_commit'`은 `git_branch` 및 `git_commit`이라는 두 변수가 있는 형식 문자열입니다.
+- `'$git_branch $git_commit'`은 두 변수가 공백으로 구분됩니다.
+
+#### 텍스트 그룹
+
+텍스트 그룹은 두 가지 다른 부분으로 구성됩니다.
+
+`[]`로 묶인 첫 번째 부분은 [형식 문자열](#format-strings)입니다. 텍스트, 변수 또는 중첩된 텍스트 그룹을 추가할 수 있습니다.
+
+`()`로 묶인 두 번째 부분은 [스타일 문자열](#style-strings)입니다. 이는 첫 번째 부분의 스타일을 지정하는 데 사용할 수 있습니다.
+
+예를 들어:
+
+- `'[on](red bold)'`는 빨간색 굵은 글씨로 `on` 문자열을 인쇄합니다.
+- `'[⌘ $version](bold green)'`은 `⌘` 기호 뒤에 `version` 변수의 내용이 녹색 굵은 글씨로 인쇄됩니다.
+- `'[a [b](red) c](green)'`은 `b`는 빨간색, `a`와 `c`는 녹색으로 `a b c`를 인쇄합니다.
 
 #### 스타일 문자열
 
-Starship의 대부분의 모듈에 표시 스타일을 설정할 수 있습니다. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+Starship의 대부분의 모듈에 표시 스타일을 설정할 수 있습니다. 이는 설정을 지정하는 문자열인 항목(일반적으로 `style`이라고 함)으로 수행됩니다. 다음은 스타일 문자열과 그 기능의 몇 가지 예입니다. 전체 구문에 대한 자세한 내용은 [고급 설정 가이드](../advanced-config/)를 참조하세요.
 
-- `'fg:green bg:blue'` sets green text on a blue background
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `'underline bg:#bf5700'` sets underlined text on a burnt orange background
-- `'bold italic fg:purple'` sets bold italic purple text
-- `''` explicitly disables all styling
+- `'fg:green bg:blue'`는 파란색 배경에 녹색 텍스트를 설정합니다.
+- `'bg:blue fg:bright-green'`은 파란색 배경에 밝은 녹색 텍스트를 설정합니다.
+- `'bold fg:27'`은 [ANSI 색상](https://i.stack.imgur.com/KTSQa.png) 27로 굵은 텍스트를 설정합니다.
+- `'underline bg:#bf5700'`은 불타는 주황색 배경에 밑줄이 있는 텍스트를 설정합니다.
+- `'bold italic fg:purple'`은 굵은 이탤릭체 보라색 텍스트를 설정합니다.
+- `''`는 모든 스타일을 명시적으로 비활성화합니다.
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+스타일이 어떻게 보이는지는 터미널 에뮬레이터에 따라 달라집니다. 예를 들어, 일부 터미널 에뮬레이터는 텍스트를 굵게 표시하는 대신 색상을 밝게 하고, 일부 색상 테마는 일반 색상과 밝은 색상에 동일한 값을 사용합니다. 또한 이탤릭체 텍스트를 얻으려면 터미널이 이탤릭체를 지원해야 합니다.
 
-#### Conditional Format Strings
+#### 조건부 형식 문자열
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+`()`로 묶인 조건부 형식 문자열은 내부의 모든 변수가 비어 있으면 렌더링되지 않습니다.
 
 예를 들어:
 
-- `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
-- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
+- `'(@$region)'`은 `region` 변수가 `None`이거나 빈 문자열이면 아무것도 표시하지 않고, 그렇지 않으면 `@` 뒤에 region 값이 표시됩니다.
+- `'(some text)'`는 괄호 안에 변수가 없으므로 항상 아무것도 표시하지 않습니다.
+- `$combined`가 `\[$a$b\]`의 약어일 때, `'($combined)'`는 `$a`와 `$b`가 모두 `None`인 경우에만 아무것도 표시하지 않습니다. 이는 `'(\[$a$b\] )'`와 동일하게 작동합니다.
 
-### Negative matching
+### 부정 일치
 
-Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+많은 모듈에는 `detect_extensions`, `detect_files` 및 `detect_folders` 변수가 있습니다. 이들은 일치시키거나 일치시키지 않을 문자열 목록을 사용합니다. 일치시키지 않아야 하는 "부정" 옵션은 선행 '!' 문자로 표시됩니다. 디렉토리에 _어떤_ 부정 표시기가 존재하면 모듈이 일치하지 않습니다.
 
-Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+확장자는 파일 이름의 마지막 점 뒤 문자열과 파일 이름의 첫 번째 점 뒤 문자열 모두에 대해 일치됩니다. 예를 들어, `foo.bar.tar.gz`는 `detect_extensions` 변수에서 `bar.tar.gz` 및 `gz`와 일치됩니다. 이름이 점으로 시작하는 파일은 확장자가 없는 것으로 간주됩니다.
 
-To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+이것이 실제로 어떻게 작동하는지 보려면 TypeScript는 일치시키지만 MPEG 전송 스트림 파일은 일치시키지 않을 수 있습니다:
 
 ```toml
 detect_extensions = ['ts', '!video.ts', '!audio.ts']
 ```
 
-## Prompt
+## 프롬프트
 
-This is the list of prompt-wide configuration options.
+다음은 프롬프트 전체 설정 옵션 목록입니다.
 
-### Options
+### 옵션
 
-| Option            | Default                        | Description                                                                                                                                                                        |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| 옵션            | 기본값                        | 설명                                                                                                                                                                        |
+| --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [링크](#default-prompt-format) | 프롬프트의 형식을 구성합니다.                                                                                                                                                |
+| `right_format`    | `''`                           | [오른쪽 프롬프트 활성화](../advanced-config/#enable-right-prompt) 참조                                                                                                                 |
+| `scan_timeout`    | `30`                           | starship이 파일을 스캔하는 시간 초과 (밀리초).                                                                                                                              |
+| `command_timeout` | `500`                          | starship이 실행하는 명령의 시간 초과 (밀리초).                                                                                                                       |
+| `add_newline`     | `true`                         | 셸 프롬프트 사이에 빈 줄을 삽입합니다.                                                                                                                                          |
+| `palette`         | `''`                           | `palettes`에서 사용할 색상 팔레트를 설정합니다.                                                                                                                                   |
+| `palettes`        | `{}`                           | 사용자 정의 이름에 [색상](../advanced-config/#style-strings)을 할당하는 색상 팔레트 모음입니다. 색상 팔레트는 자체 색상 정의를 참조할 수 없습니다. |
+| `follow_symlinks` | `true`                         | 심볼릭 링크를 따라가 디렉토리인지 확인합니다. git과 같은 모듈에서 사용됩니다.                                                                                                     |
 
 ::: tip
 
-If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+네트워크 파일 시스템에 대한 심볼릭 링크가 있는 경우 `follow_symlinks`를 `false`로 설정하는 것을 고려하세요.
 
 :::
 
@@ -219,37 +219,37 @@ If you have symlinks to networked filesystems, consider setting `follow_symlinks
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# 사용자 지정 형식 사용
 format = '''
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) '''
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# starship이 현재 디렉토리 아래의 파일을 확인하는 데 10밀리초를 기다립니다.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# 프롬프트 시작 부분의 빈 줄 비활성화
 add_newline = false
 
-# Set 'foo' as custom color palette
+# 'foo'를 사용자 지정 색상 팔레트로 설정
 palette = 'foo'
 
-# Define custom colors
+# 사용자 지정 색상 정의
 [palettes.foo]
-# Overwrite existing color
+# 기존 색상 덮어쓰기
 blue = '21'
-# Define new color
+# 새 색상 정의
 mustard = '#af8700'
 ```
 
-### Default Prompt Format
+### 기본 프롬프트 형식
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+기본 `format`은 `format`이 비어 있거나 제공되지 않은 경우 프롬프트의 형식을 정의하는 데 사용됩니다. 기본값은 다음과 같습니다:
 
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# 다음은 다음과 동일합니다.
 format = """
 $username\
 $hostname\
@@ -345,63 +345,63 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+기본 형식을 확장하려면 `$all`을 사용할 수 있습니다. 형식에 명시적으로 추가하는 모듈은 중복되지 않습니다. 예:
 
 ```toml
-# Move the directory to the second line
+# 디렉토리를 두 번째 줄로 이동
 format = '$all$directory$character'
 ```
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+`aws` 모듈은 임시 자격 증명을 사용할 때 현재 AWS 리전 및 프로필과 만료 타이머를 표시합니다. 모듈의 출력은 `AWS_REGION`, `AWS_DEFAULT_REGION` 및 `AWS_PROFILE` 환경 변수와 `~/.aws/config` 및 `~/.aws/credentials` 파일을 필요에 따라 사용합니다.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+모듈은 자격 증명이 `~/.aws/credentials`에 있거나 `~/.aws/config`에 `credential_process`, `sso_start_url` 또는 `sso_session`이 정의된 경우에만 프로필을 표시합니다. 또는 `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` 또는 `AWS_SESSION_TOKEN` 환경 변수 중 하나가 정의된 경우에도 충분합니다. `force_display` 옵션이 `true`로 설정되면 위 조건에 따라 자격 증명이 감지되지 않아도 사용 가능한 모든 정보가 표시됩니다.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+[aws-vault](https://github.com/99designs/aws-vault)를 사용할 때 프로필은 `AWS_VAULT` 환경 변수에서 읽고 자격 증명 만료 날짜는 `AWS_SESSION_EXPIRATION` 환경 변수에서 읽습니다.
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+[awsu](https://github.com/kreuzwerker/awsu)를 사용할 때 프로필은 `AWSU_PROFILE` 환경 변수에서 읽습니다.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+[AWSume](https://awsu.me)를 사용할 때 프로필은 `AWSUME_PROFILE` 환경 변수에서 읽고 자격 증명 만료 날짜는 `AWSUME_EXPIRATION` 환경 변수에서 읽습니다.
 
-When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+[saml2aws](https://github.com/Versent/saml2aws)를 사용할 때 `~/.aws/credentials`에서 얻은 만료 정보는 `x_security_token_expires` 키로 대체됩니다.
 
-When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
+[aws-sso-cli](https://github.com/synfinatic/aws-sso-cli)를 사용할 때 프로필은 `AWS_SSO_PROFILE` 환경 변수에서 읽습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                               | Description                                                                                                 |
+| 옵션              | 기본값                                                               | 설명                                                                                                 |
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
-| `기호`                | `'☁️ '`                                                               | The symbol used before displaying the current AWS profile.                                                  |
-| `region_aliases`    | `{}`                                                                  | Table of region aliases to display in addition to the AWS name.                                             |
-| `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `'bold yellow'`                                                       | The style for the module.                                                                                   |
-| `expiration_symbol` | `'X'`                                                                 | The symbol displayed when the temporary credentials have expired.                                           |
-| `disabled`          | `false`                                                               | Disables the `AWS` module.                                                                                  |
-| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| `format`            | `'on [$symbol($profile )(\'($region\) )(\[$duration\] )]($style)'` | 모듈의 형식입니다.                                                                                  |
+| `기호`                | `'☁️ '`                                                               | 현재 AWS 프로필을 표시하기 전에 사용되는 기호입니다.                                                  |
+| `region_aliases`    | `{}`                                                                  | AWS 이름 외에 표시할 리전 별칭 테이블입니다.                                             |
+| `profile_aliases`   | `{}`                                                                  | AWS 이름 외에 표시할 프로필 별칭 테이블입니다.                                            |
+| `style`             | `'bold yellow'`                                                       | 모듈의 스타일입니다.                                                                                   |
+| `expiration_symbol` | `'X'`                                                                 | 임시 자격 증명이 만료되었을 때 표시되는 기호입니다.                                           |
+| `disabled`          | `false`                                                               | `AWS` 모듈을 비활성화합니다.                                                                                  |
+| `force_display`     | `false`                                                               | `true`인 경우 `credentials`, `credential_process` 또는 `sso_start_url`이 설정되지 않아도 정보를 표시합니다. |
 
-### Variables
+### 변수
 
-| Variable  | 예시               | Description                                 |
+| 변수      | 예시               | 설명                                 |
 | --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | The current AWS region                      |
-| profile   | `astronauts`     | The current AWS profile                     |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| 기호        |                  | Mirrors the value of option `symbol`        |
-| style\* |                  | Mirrors the value of option `style`         |
+| region    | `ap-northeast-1` | 현재 AWS 리전                      |
+| profile   | `astronauts`     | 현재 AWS 프로필                     |
+| duration  | `2h27m20s`       | 임시 자격 증명 유효 기간 |
+| 기호        |                  | `symbol` 옵션의 값을 반영합니다.        |
+| style* |                  | `style` 옵션의 값을 반영합니다.         |
 
-*: This variable can only be used as a part of a style string
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
-#### Display everything
+#### 모든 항목 표시
 
 ```toml
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol($profile )(\($region\) )]($style)'
+format = 'on [$symbol($profile )(\'($region\) )]($style)'
 style = 'bold blue'
 symbol = '🅰 '
 [aws.region_aliases]
@@ -411,7 +411,7 @@ us-east-1 = 'va'
 CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
-#### Display region
+#### 리전 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -425,7 +425,7 @@ ap-southeast-2 = 'au'
 us-east-1 = 'va'
 ```
 
-#### Display profile
+#### 프로필 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -440,21 +440,21 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+`azure` 모듈은 현재 Azure 구독을 표시합니다. 이는 `~/.azure/azureProfile.json` 파일에 정의된 기본 구독 이름 또는 사용자 이름을 표시하는 것을 기반으로 합니다.
 
-### Options
+### 옵션
 
-| Variable               | Default                                  | Description                                                                           |
+| 변수               | 기본값                                  | 설명                                                                           |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
-| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `기호`                   | `'󰠅 '`                                   | The symbol used in the format.                                                        |
-| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
-| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
-| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Azure 모듈을 렌더링하기 위한 형식입니다.                                            |
+| `기호`                   | `'󰠅 '`                                   | 형식에 사용되는 기호입니다.                                                        |
+| `style`                | `'blue bold'`                            | 형식에 사용되는 스타일입니다.                                                         |
+| `disabled`             | `true`                                   | `azure` 모듈을 비활성화합니다.                                                          |
+| `subscription_aliases` | `{}`                                     | Azure 구독 이름 외에 표시할 구독 이름 별칭 테이블입니다. |
 
 ### 예시
 
-#### Display Subscription Name
+#### 구독 이름 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -466,7 +466,7 @@ symbol = '󰠅 '
 style = 'blue bold'
 ```
 
-#### Display Username
+#### 사용자 이름 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -478,7 +478,7 @@ symbol = "󰠅 "
 style = "blue bold"
 ```
 
-#### Display Subscription Name Alias
+#### 구독 이름 별칭 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -487,22 +487,22 @@ style = "blue bold"
 very-long-subscription-name = 'vlsn'
 ```
 
-## Battery
+## 배터리
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+`battery` 모듈은 장치의 배터리 충전량과 현재 충전 상태를 표시합니다. 이 모듈은 장치의 배터리가 10% 미만일 때만 표시됩니다.
 
-### Options
+### 옵션
 
-| Option               | Default                           | Description                                         |
-| -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰁽 '`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
-| `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
-| `disabled`           | `false`                           | Disables the `battery` module.                      |
+| 옵션               | 기본값                           | 설명                                         |
+| -------------------- | --------------------------------- | -------------------------------------------------- |
+| `full_symbol`        | `'󰁹 '`                            | 배터리가 가득 찼을 때 표시되는 기호입니다.          |
+| `charging_symbol`    | `'󰂄 '`                            | 배터리가 충전 중일 때 표시되는 기호입니다.      |
+| `discharging_symbol` | `'󰂃 '`                            | 배터리가 방전 중일 때 표시되는 기호입니다.   |
+| `unknown_symbol`     | `'󰁽 '`                            | 배터리 상태를 알 수 없을 때 표시되는 기호입니다. |
+| `empty_symbol`       | `'󰂎 '`                            | 배터리 상태가 비어 있을 때 표시되는 기호입니다.   |
+| `format`             | `'[$symbol$percentage]($style) '` | 모듈의 형식입니다.                          |
+| `display`            | [링크](#battery-display)          | 모듈의 표시 임계값 및 스타일입니다.         |
+| `disabled`           | `false`                           | `battery` 모듈을 비활성화합니다.                      |
 
 ### 예시
 
@@ -515,9 +515,9 @@ charging_symbol = '⚡️ '
 discharging_symbol = '💀 '
 ```
 
-### Battery Display
+### 배터리 표시
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. The default is as shown:
+`display` 설정 옵션은 배터리 표시기를 언제 표시할지 (임계값), 어떤 기호를 사용할지 (기호), 그리고 어떻게 보일지 (스타일)를 정의하는 데 사용됩니다. `display`가 제공되지 않으면 기본값은 다음과 같습니다:
 
 ```toml
 [[battery.display]]
@@ -525,60 +525,61 @@ threshold = 10
 style = 'bold red'
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+`charging_symbol` 및 `discharging_symbol` 옵션의 기본값은 각각 `battery`의 `charging_symbol` 및 `discharging_symbol` 옵션의 값입니다.
 
-#### Options
+#### 옵션
 
-The `display` option is an array of the following table.
+`display` 옵션은 다음 테이블의 배열입니다.
 
-| Option               | Default      | Description                                                                                               |
+| 옵션               | 기본값      | 설명                                                                                               |
 | -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`         | The upper bound for the display option.                                                                   |
-| `style`              | `'red bold'` | The style used if the display option is in use.                                                           |
-| `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| `threshold`          | `10`         | 표시 옵션의 상한입니다.                                                                   |
+| `style`              | `'red bold'` | 표시 옵션이 사용 중일 때 사용되는 스타일입니다.                                                           |
+| `charging_symbol`    |              | 표시 옵션이 사용 중일 때 표시되는 선택적 기호이며, 기본값은 배터리의 `charging_symbol` 옵션입니다.    |
+| `discharging_symbol` |              | 표시 옵션이 사용 중일 때 표시되는 선택적 기호이며, 기본값은 배터리의 `discharging_symbol` 옵션입니다. |
 
 #### 예시
 
 ```toml
-[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # 용량이 0%에서 10% 사이일 때 'bold red' 스타일 및 discharging_symbol
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # 용량이 10%에서 30% 사이일 때 'bold yellow' 스타일 및 💦 기호
 threshold = 30
 style = 'bold yellow'
 discharging_symbol = '💦 '
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# 용량이 30%를 초과하면 배터리 표시기가 표시되지 않습니다.
 ```
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+`buf` 모듈은 현재 설치된 [Buf](https://buf.build) 버전을 표시합니다. 기본적으로 현재 디렉토리에 [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml) 또는 [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) 설정 파일이 포함되어 있으면 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                         | Description                                           |
+| 옵션              | 기본값                                         | 설명                                           |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
-| `version_format`    | `'v${raw}'`                                     | The version format.                                   |
-| `기호`                | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
-| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
-| `style`             | `'bold blue'`                                   | The style for the module.                             |
-| `disabled`          | `false`                                         | Disables the `elixir` module.                         |
+| `format`            | `'with [$symbol($version )]($style)'`           | `buf` 모듈의 형식입니다.                      |
+| `version_format`    | `'v${raw}'`                                     | 버전 형식입니다.                                   |
+| `기호`                | `'🐃 '`                                          | Buf 버전을 표시하기 전에 사용되는 기호입니다. |
+| `detect_extensions` | `[]`                                            | 이 모듈을 트리거해야 하는 확장자입니다.          |
+| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | 이 모듈을 트리거해야 하는 파일 이름입니다.           |
+| `detect_folders`    | `[]`                                            | 이 모듈을 트리거해야 하는 폴더입니다.            |
+| `style`             | `'bold blue'`                                   | 모듈의 스타일입니다.                             |
+| `disabled`          | `false`                                         | `elixir` 모듈을 비활성화합니다.                         |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| `version` | `v1.0.0` | The version of `buf`                 |
-| `기호`      |          | Mirrors the value of option `symbol` |
-| `style`*  |          | Mirrors the value of option `style`  |
+| `version` | `v1.0.0` | `buf`의 버전                 |
+| `기호`      |          | `symbol` 옵션의 값을 반영합니다. |
+| `style`*  |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -591,38 +592,39 @@ symbol = '🦬 '
 
 ## Bun
 
-The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+`bun` 모듈은 현재 설치된 [bun](https://bun.sh) JavaScript 런타임 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `bun.lock` file
-- The current directory contains a `bun.lockb` file
-- The current directory contains a `bunfig.toml` file
+- 현재 디렉토리에 `bun.lock` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `bun.lockb` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `bunfig.toml` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                    | Description                                                               |
-| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🥟 '`                                     | A format string representing the symbol of Bun.                           |
-| `detect_extensions` | `[]`                                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                       | Which folders should trigger this module.                                 |
-| `style`             | `'bold red'`                               | The style for the module.                                                 |
-| `disabled`          | `false`                                    | Disables the `bun` module.                                                |
+| 옵션              | 기본값                                    | 설명                                                               |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`       | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🥟 '`                                     | Bun의 기호를 나타내는 형식 문자열입니다.                           |
+| `detect_extensions` | `[]`                                       | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                       | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'bold red'`                               | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                    | `bun` 모듈을 비활성화합니다.                                                |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v0.1.4` | The version of `bun`                 |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v0.1.4` | `bun`의 버전                 |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
-#### Customize the format
+#### 형식 사용자 지정
 
 ```toml
 # ~/.config/starship.toml
@@ -633,40 +635,40 @@ format = 'via [🍔 $version](bold green) '
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+`c` 모듈은 C 컴파일러에 대한 일부 정보를 표시합니다. 기본적으로 현재 디렉토리에 `.c` 또는 `.h` 파일이 포함되어 있으면 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                       | Description                                                               |
-| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'C '`                                                                        | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `['c', 'h']`                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                          | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                          | Which folders should trigger this module.                                 |
-| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                        |
-| `style`             | `'bold 149'`                                                                  | The style for the module.                                                 |
-| `disabled`          | `false`                                                                       | Disables the `c` module.                                                  |
+| 옵션              | 기본값                                                                       | 설명                                                               |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | 모듈의 형식 문자열입니다.                                         |
+| `version_format`    | `'v${raw}'`                                                                   | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'C '`                                                                        | 컴파일러 세부 정보를 표시하기 전에 사용되는 기호입니다.                    |
+| `detect_extensions` | `['c', 'h']`                                                                  | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                                                          | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                                          | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | 컴파일러가 무엇인지 감지하는 방법입니다.                                        |
+| `style`             | `'bold 149'`                                                                  | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                                       | `c` 모듈을 비활성화합니다.                                                  |
 
-### Variables
+### 변수
 
-| Variable | 예시     | Description                          |
-| -------- | ------ | ------------------------------------ |
-| name     | clang  | The name of the compiler             |
-| version  | 13.0.0 | The version of the compiler          |
-| 기호       |        | Mirrors the value of option `symbol` |
-| style    |        | Mirrors the value of option `style`  |
+| 변수   | 예시     | 설명                                 |
+| -------- | -------- | ------------------------------------ |
+| name     | clang  | 컴파일러의 이름             |
+| version  | 13.0.0 | 컴파일러의 버전          |
+| 기호       |        | `symbol` 옵션의 값을 반영합니다. |
+| style    |        | `style` 옵션의 값을 반영합니다.  |
 
-NB that `version` is not in the default format.
+참고: `version`은 기본 형식에 없습니다.
 
-### Commands
+### 명령어
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+`commands` 옵션은 컴파일러 버전과 이름을 결정하는 명령 목록을 허용합니다.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+각 명령은 실행 파일 이름과 그 뒤에 인수가 오는 목록으로 표현되며, 일반적으로 `['mycc', '--version']`과 같습니다. Starship은 STDOUT에서 결과를 얻을 때까지 각 명령을 실행하려고 시도합니다.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+이 모듈에서 C 컴파일러가 지원되지 않는 경우 [GitHub에 이슈를 제기](https://github.com/starship/starship/)하여 요청할 수 있습니다.
 
 ### 예시
 
@@ -679,40 +681,40 @@ format = 'via [$name $version]($style)'
 
 ## CPP
 
-The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+`cpp` 모듈은 C++ 컴파일러에 대한 일부 정보를 표시합니다. 기본적으로 현재 디렉토리에 `.cpp`, `.hpp` 또는 기타 C++ 관련 파일이 포함되어 있으면 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                          | Description                                                               |
-| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'C++ '`                                                                         | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                             | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                             | Which folders should trigger this module.                                 |
-| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                        |
-| `style`             | `'bold 149'`                                                                     | The style for the module.                                                 |
-| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
+| 옵션              | 기본값                                                                          | 설명                                                               |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | 모듈의 형식 문자열입니다.                                         |
+| `version_format`    | `'v${raw}'`                                                                      | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'C++ '`                                                                         | 컴파일러 세부 정보를 표시하기 전에 사용되는 기호입니다.                    |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                                                             | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                                             | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | 컴파일러가 무엇인지 감지하는 방법입니다.                                        |
+| `style`             | `'bold 149'`                                                                     | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `true`                                                                           | `cpp` 모듈을 비활성화합니다.                                                |
 
-### Variables
+### 변수
 
-| Variable | 예시      | Description                          |
+| 변수   | 예시      | 설명                                 |
 | -------- | ------- | ------------------------------------ |
-| name     | clang++ | The name of the compiler             |
-| version  | 13.0.0  | The version of the compiler          |
-| 기호       |         | Mirrors the value of option `symbol` |
-| style    |         | Mirrors the value of option `style`  |
+| name     | clang++ | 컴파일러의 이름             |
+| version  | 13.0.0  | 컴파일러의 버전          |
+| 기호       |         | `symbol` 옵션의 값을 반영합니다. |
+| style    |         | `style` 옵션의 값을 반영합니다.  |
 
-NB that `version` is not in the default format.
+참고: `version`은 기본 형식에 없습니다.
 
-### Commands
+### 명령어
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+`commands` 옵션은 컴파일러 버전과 이름을 결정하는 명령 목록을 허용합니다.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+각 명령은 실행 파일 이름과 그 뒤에 인수가 오는 목록으로 표현되며, 일반적으로 `['mycpp', '--version']`과 같습니다. Starship은 STDOUT에서 결과를 얻을 때까지 각 명령을 실행하려고 시도합니다.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+이 모듈에서 C++ 컴파일러가 지원되지 않는 경우 [GitHub에 이슈를 제기](https://github.com/starship/starship/)하여 요청할 수 있습니다.
 
 ### 예시
 
@@ -724,45 +726,45 @@ disabled = false
 format = 'via [$name $version]($style)'
 ```
 
-## Character
+## 문자
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+`character` 모듈은 터미널에 텍스트가 입력되는 위치 옆에 문자(일반적으로 화살표)를 표시합니다.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+이 문자는 마지막 명령이 성공했는지 여부를 알려줍니다. 이는 두 가지 방법으로 수행할 수 있습니다:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- 색상 변경 (`red`/`green`)
+- 모양 변경 (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+기본적으로 색상만 변경됩니다. 모양도 변경하려면 [이 예시](#with-custom-error-shape)를 참조하세요.
 
 ::: warning
 
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol`은 cmd, fish 및 zsh에서만 지원됩니다. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol` 및 `vimcmd_visual_symbol`은 zsh의 모드 감지 관련 [상위 문제](https://github.com/starship/starship/issues/625#issuecomment-732454148)로 인해 fish에서만 지원됩니다.
 
 :::
 
-### Options
+### 옵션
 
-| Option                      | Default              | Description                                                                             |
+| 옵션                      | 기본값              | 설명                                                                             |
 | --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                    | `'$symbol '`         | The format string used before the text input.                                           |
-| `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.         |
-| `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.            |
-| `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.        |
-| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
-| `disabled`                  | `false`              | Disables the `character` module.                                                        |
+| `format`                    | `'$symbol '`         | 텍스트 입력 전에 사용되는 형식 문자열입니다.                                           |
+| `success_symbol`            | `'[❯](bold green)'`  | 이전 명령이 성공했을 때 텍스트 입력 전에 사용되는 형식 문자열입니다.         |
+| `error_symbol`              | `'[❯](bold red)'`    | 이전 명령이 실패했을 때 텍스트 입력 전에 사용되는 형식 문자열입니다.            |
+| `vimcmd_symbol`             | `'[❮](bold green)'`  | 셸이 vim 일반 모드일 때 텍스트 입력 전에 사용되는 형식 문자열입니다.        |
+| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | 셸이 vim `replace_one` 모드일 때 텍스트 입력 전에 사용되는 형식 문자열입니다. |
+| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | 셸이 vim replace 모드일 때 텍스트 입력 전에 사용되는 형식 문자열입니다.       |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | 셸이 vim visual 모드일 때 텍스트 입력 전에 사용되는 형식 문자열입니다.        |
+| `disabled`                  | `false`              | `character` 모듈을 비활성화합니다.                                                        |
 
-### Variables
+### 변수
 
-| Variable | 예시 | Description                                                                                              |
-| -------- | -- | -------------------------------------------------------------------------------------------------------- |
-| 기호       |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+| 변수   | 예시 | 설명                                                                                              |
+| -------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `기호`       |    | `success_symbol`, `error_symbol`, `vimcmd_symbol` 또는 `vimcmd_replace_one_symbol` 등의 값을 반영합니다. |
 
 ### 예시
 
-#### With custom error shape
+#### 사용자 지정 오류 모양 사용
 
 ```toml
 # ~/.config/starship.toml
@@ -772,7 +774,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### 사용자 지정 오류 모양 미사용
 
 ```toml
 # ~/.config/starship.toml
@@ -782,7 +784,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### 사용자 지정 vim 모양 사용
 
 ```toml
 # ~/.config/starship.toml
@@ -793,97 +795,102 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+`cmake` 모듈은 현재 설치된 [CMake](https://cmake.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 활성화됩니다:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- 현재 디렉토리에 `CMakeLists.txt` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `CMakeCache.txt` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                | Description                                                               |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`   | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'△ '`                                 | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
-| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
-| `style`             | `'bold blue'`                          | The style for the module.                                                 |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+| 옵션              | 기본값                                | 설명                                                               |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`   | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                            | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'△ '`                                 | cmake 버전을 표시하기 전에 사용되는 기호입니다.                              |
+| `detect_extensions` | `[]`                                   | 이 모듈을 트리거해야 하는 확장자입니다.                               |
+| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                   | 이 모듈을 트리거해야 하는 폴더입니다.                                  |
+| `style`             | `'bold blue'`                          | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                | `cmake` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| version   | `v3.17.3` | The version of cmake                 |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| version   | `v3.17.3` | cmake의 버전                 |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+`cobol` 모듈은 현재 설치된 COBOL 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- 현재 디렉토리에 `.cob` 또는 `.COB`로 끝나는 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.cbl` 또는 `.CBL`로 끝나는 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `기호`                | `'⚙️ '`                              | The symbol used before displaying the version of COBOL.                   |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `'bold blue'`                        | The style for the module.                                                 |
-| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                              |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `기호`                | `'⚙️ '`                              | COBOL 버전을 표시하기 전에 사용되는 기호입니다.                   |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `style`             | `'bold blue'`                        | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `disabled`          | `false`                              | `cobol` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시         | Description                          |
+| 변수      | 예시         | 설명                                 |
 | --------- | ---------- | ------------------------------------ |
-| version   | `v3.1.2.0` | The version of `cobol`               |
-| 기호        |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| version   | `v3.1.2.0` | `cobol`의 버전               |
+| 기호        |            | `symbol` 옵션의 값을 반영합니다. |
+| style* |            | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
 
-## Command Duration
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+## 명령 지속 시간
 
-::: warning Do not hook the DEBUG trap in Bash
+`cmd_duration` 모듈은 마지막 명령이 실행되는 데 걸린 시간을 표시합니다. 이 모듈은 명령이 2초보다 오래 걸렸거나 `min_time` 설정 값이 존재하는 경우에만 표시됩니다.
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+::: warning
+
+Bash에서 DEBUG 트랩을 후킹하지 마세요
+
+`bash`에서 Starship을 실행하는 경우 `eval $(starship init $0)`을 실행한 후 `DEBUG` 트랩을 후킹하지 마세요. 그렇지 않으면 이 모듈이 **작동하지 않습니다**.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+preexec와 유사한 기능이 필요한 Bash 사용자는 [rcaloras의 bash_preexec 프레임워크](https://github.com/rcaloras/bash-preexec)를 사용할 수 있습니다. `eval $(starship init $0)`을 실행하기 전에 `preexec_functions` 및 `precmd_functions` 배열을 정의한 다음 정상적으로 진행하면 됩니다.
 
-### Options
+### 옵션
 
-| Option                 | Default                       | Description                                                                                                                                                       |
+| 옵션                 | 기본값                       | 설명                                                                                                                                                       |
 | ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
-| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
-| `format`               | `'took [$duration]($style) '` | The format for the module.                                                                                                                                        |
-| `style`                | `'bold yellow'`               | The style for the module.                                                                                                                                         |
-| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
-| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
-| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| `min_time`             | `2_000`                       | 시간을 표시할 최소 지속 시간 (밀리초).                                                                                                             |
+| `show_milliseconds`    | `false`                       | 지속 시간에 초 외에 밀리초를 표시합니다.                                                                                                        |
+| `format`               | `'took [$duration]($style) '` | 모듈의 형식입니다.                                                                                                                                        |
+| `style`                | `'bold yellow'`               | 모듈의 스타일입니다.                                                                                                                                         |
+| `disabled`             | `false`                       | `cmd_duration` 모듈을 비활성화합니다.                                                                                                                               |
+| `show_notifications`   | `false`                       | 명령이 완료될 때 데스크톱 알림을 표시합니다.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | 알림을 표시할 최소 지속 시간 (밀리초).                                                                                                             |
+| `notification_timeout` |                               | 알림을 표시할 지속 시간 (밀리초). 설정되지 않은 경우 알림 시간 초과는 데몬에 의해 결정됩니다. 모든 알림 데몬이 이 옵션을 따르는 것은 아닙니다. |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                             |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+| duration  | `16m40s` | 명령 실행에 걸린 시간 |
+| style* |          | `style` 옵션의 값을 반영합니다.     |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -897,35 +904,36 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+`conda` 모듈은 `$CONDA_DEFAULT_ENV`가 설정된 경우 현재 [Conda](https://docs.conda.io/en/latest/) 환경을 표시합니다.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set change-ps1 false`.
+이것은 conda 자체의 프롬프트 수정자를 억제하지 않습니다. `conda config --set changeps1 False`를 실행할 수 있습니다. [pixi](https://pixi.sh)를 사용하는 경우 `pixi config set change-ps1 false`를 실행하여 pixi의 프롬프트 수정자를 비활성화할 수 있습니다.
 
 :::
 
-### Options
+### 옵션
 
-| Option              | Default                                | Description                                                                                                                                                                                                 |
+| 옵션              | 기본값                                | 설명                                                                                                                                                                                                 |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `기호`                | `'🅒 '`                                 | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `'bold green'`                         | The style for the module.                                                                                                                                                                                   |
-| `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                                                                                  |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default.                                                                        |
-| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+| `truncation_length` | `1`                                    | 환경이 `conda create -p [path]`를 통해 생성된 경우 환경 경로가 잘릴 디렉토리 수입니다. `0`은 자르지 않음을 의미합니다. [`directory`](#directory) 모듈도 참조하세요. |
+| `기호`                | `'🅒 '`                                 | 환경 이름 앞에 사용되는 기호입니다.                                                                                                                                                                |
+| `style`             | `'bold green'`                         | 모듈의 스타일입니다.                                                                                                                                                                                   |
+| `format`            | `'via [$symbol$environment]($style) '` | 모듈의 형식입니다.                                                                                                                                                                                  |
+| `ignore_base`       | `true`                                 | 활성화될 때 `base` 환경을 무시합니다.                                                                                                                                                                  |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | 이 모듈을 트리거해야 하는 환경 변수입니다. pixi 환경인 경우 이 모듈은 기본적으로 트리거되지 않습니다.                                                                        |
+| `disabled`          | `false`                                | `conda` 모듈을 비활성화합니다.                                                                                                                                                                                |
 
-### Variables
+### 변수
 
-| Variable    | 예시           | Description                          |
+| 변수        | 예시           | 설명                                 |
 | ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
-| 기호          |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| environment | `astronauts` | 현재 conda 환경        |
+| 기호          |              | `symbol` 옵션의 값을 반영합니다. |
+| style*   |              | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -936,28 +944,29 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 format = '[$symbol$environment](dimmed green) '
 ```
 
-## Container
+## 컨테이너
 
-The `container` module displays a symbol and container name, if inside a container.
+`container` 모듈은 컨테이너 내부에 있을 경우 기호와 컨테이너 이름을 표시합니다.
 
-### Options
+### 옵션
 
-| Option     | Default                            | Description                               |
+| 옵션     | 기본값                            | 설명                               |
 | ---------- | ---------------------------------- | ----------------------------------------- |
-| `기호`       | `'⬢'`                              | The symbol shown, when inside a container |
-| `style`    | `'bold red dimmed'`                | The style for the module.                 |
-| `format`   | `'[$symbol \[$name\]]($style) '` | The format for the module.                |
-| `disabled` | `false`                            | Disables the `container` module.          |
+| `기호`       | `'⬢'`                              | 컨테이너 내부에 있을 때 표시되는 기호입니다. |
+| `style`    | `'bold red dimmed'`                | 모듈의 스타일입니다.                 |
+| `format`   | `'[$symbol \[$name\]]($style) '` | 모듈의 형식입니다.                |
+| `disabled` | `false`                            | `container` 모듈을 비활성화합니다.          |
 
-### Variables
+### 변수
 
-| Variable  | 예시                  | Description                          |
+| 변수      | 예시                  | 설명                                 |
 | --------- | ------------------- | ------------------------------------ |
-| name      | `fedora-toolbox:35` | The name of the container            |
-| 기호        |                     | Mirrors the value of option `symbol` |
-| style\* |                     | Mirrors the value of option `style`  |
+| name      | `fedora-toolbox:35` | 컨테이너의 이름            |
+| 기호        |                     | `symbol` 옵션의 값을 반영합니다. |
+| style* |                     | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -970,33 +979,34 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
+`crystal` 모듈은 현재 설치된 [Crystal](https://crystal-lang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `shard.yml` file
-- The current directory contains a `.cr` file
+- 현재 디렉토리에 `shard.yml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.cr` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `기호`                | `'🔮 '`                               | The symbol used before displaying the version of crystal.                 |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `'bold red'`                         | The style for the module.                                                 |
-| `detect_extensions` | `['cr']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['shard.yml']`                      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `기호`                | `'🔮 '`                               | crystal 버전을 표시하기 전에 사용되는 기호입니다.                 |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `style`             | `'bold red'`                         | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `['cr']`                             | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['shard.yml']`                      | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `disabled`          | `false`                              | `crystal` 모듈을 비활성화합니다.                                            |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| version   | `v0.32.1` | The version of `crystal`             |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| version   | `v0.32.1` | `crystal`의 버전             |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1009,32 +1019,33 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
+`daml` 모듈은 Daml 프로젝트의 루트 디렉토리에 있을 때 현재 사용 중인 [Daml](https://www.digitalasset.com/developers) SDK 버전을 표시합니다. `daml.yaml` 파일의 `sdk-version`은 `DAML_SDK_VERSION` 환경 변수에 의해 재정의되지 않는 한 사용됩니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `daml.yaml` file
+- 현재 디렉토리에 `daml.yaml` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'Λ '`                               | A format string representing the symbol of Daml                           |
-| `style`             | `'bold cyan'`                        | The style for the module.                                                 |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['daml.yaml']`                      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'Λ '`                               | Daml의 기호를 나타내는 형식 문자열입니다.                           |
+| `style`             | `'bold cyan'`                        | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `[]`                                 | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['daml.yaml']`                      | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `disabled`          | `false`                              | `daml` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v2.2.0` | The version of `daml`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v2.2.0` | `daml`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1047,34 +1058,35 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
+`dart` 모듈은 현재 설치된 [Dart](https://dart.dev/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- 현재 디렉토리에 `.dart` 확장자를 가진 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.dart_tool` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `pubspec.yaml`, `pubspec.yml` 또는 `pubspec.lock` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                           | Description                                                               |
-| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`              | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🎯 '`                                            | A format string representing the symbol of Dart                           |
-| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.dart_tool']`                                  | Which folders should trigger this module.                                 |
-| `style`             | `'bold blue'`                                     | The style for the module.                                                 |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
+| 옵션              | 기본값                                           | 설명                                                               |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`              | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                       | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🎯 '`                                            | Dart의 기호를 나타내는 형식 문자열입니다.                           |
+| `detect_extensions` | `['dart']`                                        | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `['.dart_tool']`                                  | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'bold blue'`                                     | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                           | `dart` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v2.8.4` | The version of `dart`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v2.8.4` | `dart`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1087,30 +1099,33 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+`deno` 모듈은 현재 설치된 [Deno](https://deno.land/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- 현재 디렉토리에 `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` 또는 `deps.js` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                              | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                 | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🦕 '`                                                                               | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                                                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                 | Which folders should trigger this module.                                 |
-| `style`             | `'green bold'`                                                                       | The style for the module.                                                 |
-| `disabled`          | `false`                                                                              | Disables the `deno` module.                                               |
+| 옵션              | 기본값                                                                              | 설명                                                               |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                                                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🦕 '`                                                                               | Deno의 기호를 나타내는 형식 문자열입니다.                           |
+| `detect_extensions` | `[]`                                                                                 | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'green bold'`                                                                       | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                                              | `deno` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v1.8.3` | The version of `deno`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v1.8.3` | `deno`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
+
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1121,42 +1136,42 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 format = 'via [🦕 $version](green bold) '
 ```
 
-## Directory
+## 디렉토리
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` 모듈은 현재 디렉토리의 경로를 세 개의 상위 폴더로 잘라 표시합니다. 또한 현재 있는 git 리포지토리의 루트로 디렉토리가 잘립니다.
 
-When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+`fish_style_pwd_dir_length` 옵션을 사용하면 잘린 경로를 숨기는 대신, 옵션에 대해 활성화한 숫자를 기반으로 각 디렉토리의 단축된 이름을 볼 수 있습니다.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+예를 들어, `~/Dev/Nix/nixpkgs/pkgs`에서 `nixpkgs`가 리포지토리 루트이고 옵션이 `1`로 설정된 경우, 이전에는 `nixpkgs/pkgs`였던 것이 이제 `~/D/N/nixpkgs/pkgs`로 표시됩니다. 즉, 일반적으로 제거되는 경로 구성 요소가 단일 문자로 표시됩니다. `fish_style_pwd_dir_length = 2`일 때는 `/bu/th/ci/on/rock/and/roll`이 됩니다.
 
-### Options
+### 옵션
 
-| Option                   | Default                                                                                                                      | Description                                                                                                |
+| 옵션                   | 기본값                                                                                                                      | 설명                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                                                                                                          | The number of parent folders that the current directory should be truncated to.                            |
-| `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                           |
-| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | The format for the module.                                                                                 |
-| `style`                  | `'bold cyan'`                                                                                                                | The style for the module.                                                                                  |
-| `disabled`               | `false`                                                                                                                      | Disables the `directory` module.                                                                           |
-| `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
-| `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
-| `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
-| `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
-| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                   |
-| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                      |
-| `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
+| `truncation_length`      | `3`                                                                                                                          | 현재 디렉토리가 잘릴 상위 폴더 수입니다.                            |
+| `truncate_to_repo`       | `true`                                                                                                                       | 현재 있는 git 리포지토리의 루트로 자를지 여부입니다.                           |
+| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | 모듈의 형식입니다.                                                                                 |
+| `style`                  | `'bold cyan'`                                                                                                                | 모듈의 스타일입니다.                                                                                  |
+| `disabled`               | `false`                                                                                                                      | `directory` 모듈을 비활성화합니다.                                                                           |
+| `read_only`              | `'🔒'`                                                                                                                        | 현재 디렉토리가 읽기 전용임을 나타내는 기호입니다.                                                      |
+| `read_only_style`        | `'red'`                                                                                                                      | 읽기 전용 기호의 스타일입니다.                                                                        |
+| `truncation_symbol`      | `''`                                                                                                                         | 잘린 경로 앞에 붙일 기호입니다. 예: '…/'                                                          |
+| `before_repo_root_style` |                                                                                                                              | git 리포지토리 루트 위의 경로 세그먼트 스타일입니다. 기본값은 `style`과 동일합니다. |
+| `repo_root_style`        |                                                                                                                              | git 리포지토리 루트의 스타일입니다. 기본값은 `style`과 동일합니다.                        |
+| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | `before_repo_root_style` 및 `repo_root_style`이 정의된 경우 git 리포지토리의 형식입니다.                   |
+| `home_symbol`            | `'~'`                                                                                                                        | 홈 디렉토리를 나타내는 기호입니다.                                                                      |
+| `use_os_path_sep`        | `true`                                                                                                                       | 항상 `/` 대신 OS별 경로 구분 기호를 사용합니다 (예: Windows의 `").                    |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>이 모듈에는 디렉토리가 표시되는 방식을 제어하는 몇 가지 고급 설정 옵션이 있습니다.</summary>
 
-| Advanced Option             | Default | Description                                                                                                                                                            |
+| 고급 옵션             | 기본값 | 설명                                                                                                                                                            |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| `substitutions`             |         | 경로에서 발생하는 리터럴 문자열에 대한 대체 테이블입니다.                                                                                                                       |
+| `fish_style_pwd_dir_length` | `0`     | fish 셸 pwd 경로 논리를 적용할 때 사용할 문자 수입니다.                                                                                               |
+| `use_logical_path`          | `true`  | `true`인 경우 셸을 통해 `PWD` 또는 `--logical-path`에서 가져온 논리 경로를 렌더링합니다. `false`인 경우 심볼릭 링크가 해결된 물리적 파일 시스템 경로를 렌더링합니다. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions`를 사용하면 경로에 나타나는 리터럴 문자열(예: 긴 네트워크 접두사 또는 Java 개발 디렉토리)에 대한 임의의 대체를 정의할 수 있습니다. 이 경우 fish 스타일 PWD가 비활성화됩니다.
 
 ```toml
 [directory.substitutions]
@@ -1164,31 +1179,32 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length`는 표준 자르기 옵션과 상호 작용하여 처음에는 놀라울 수 있습니다. 0이 아닌 경우 일반적으로 잘리는 경로 구성 요소는 해당 문자 수만큼 표시됩니다. 예를 들어, 일반적으로 `rock/and/roll`로 표시되는 `/built/this/city/on/rock/and/roll` 경로는 `fish_style_pwd_dir_length = 1`일 때 `/b/t/c/o/rock/and/roll`로 표시됩니다. 즉, 일반적으로 제거되는 경로 구성 요소가 단일 문자로 표시됩니다. `fish_style_pwd_dir_length = 2`일 때는 `/bu/th/ci/on/rock/and/roll`이 됩니다.
 
 </details>
 
-### Variables
+### 변수
 
-| Variable  | 예시                    | Description                         |
+| 변수      | 예시                    | 설명                                 |
 | --------- | --------------------- | ----------------------------------- |
-| path      | `'D:/Projects'`       | The current directory path          |
-| style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
+| path      | `'D:/Projects'`       | 현재 디렉토리 경로          |
+| style* | `'black bold dimmed'` | `style` 옵션의 값을 반영합니다. |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>git 리포지토리에는 추가 변수가 있습니다.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+`/path/to/home/git_repo/src/lib` 경로를 고려해 봅시다.
 
-| Variable           | 예시                    | Description                             |
+| 변수               | 예시                    | 설명                                 |
 | ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `'/path/to/home/'`    | The path before git root directory path |
-| repo_root          | `'git_repo'`          | The git root directory name             |
-| path               | `'/src/lib'`          | The remaining path                      |
-| style              | `'black bold dimmed'` | Mirrors the value of option `style`     |
-| repo_root_style  | `'underline white'`   | Style for git root directory name       |
+| before_root_path | `'/path/to/home/'`    | git 루트 디렉토리 경로 이전 경로 |
+| repo_root          | `'git_repo'`          | git 루트 디렉토리 이름             |
+| path               | `'/src/lib'`          | 나머지 경로                      |
+| style              | `'black bold dimmed'` | `style` 옵션의 값을 반영합니다.     |
+| repo_root_style  | `'underline white'`   | git 루트 디렉토리 이름의 스타일       |
 
 </details>
 
@@ -1204,37 +1220,38 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+`direnv` 모듈은 현재 rc 파일이 존재할 경우 해당 파일의 상태를 표시합니다. 상태에는 rc 파일의 경로, 로드 여부, `direnv`에 의해 허용되었는지 여부가 포함됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                | Description                                             |
+| 옵션              | 기본값                                | 설명                                             |
 | ------------------- | -------------------------------------- | ------------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | The format for the module.                              |
-| `기호`                | `'direnv '`                            | The symbol used before displaying the direnv context.   |
-| `style`             | `'bold orange'`                        | The style for the module.                               |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.            |
-| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.             |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module.               |
-| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.        |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.        |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.    |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | 모듈의 형식입니다.                              |
+| `기호`                | `'direnv '`                            | direnv 컨텍스트를 표시하기 전에 사용되는 기호입니다.   |
+| `style`             | `'bold orange'`                        | 모듈의 스타일입니다.                               |
+| `disabled`          | `true`                                 | `direnv` 모듈을 비활성화합니다.                           |
+| `detect_extensions` | `[]`                                   | 이 모듈을 트리거해야 하는 확장자입니다.            |
+| `detect_files`      | `['.envrc']`                           | 이 모듈을 트리거해야 하는 파일 이름입니다.             |
+| `detect_folders`    | `[]`                                   | 이 모듈을 트리거해야 하는 폴더입니다.               |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | 이 모듈을 트리거해야 하는 환경 변수입니다. |
+| `allowed_msg`       | `'allowed'`                            | rc 파일이 허용되었을 때 표시되는 메시지입니다.       |
+| `not_allowed_msg`   | `'not allowed'`                        | rc 파일이 허용되지 않았을 때 표시되는 메시지입니다.   |
+| `denied_msg`        | `'denied'`                             | rc 파일이 거부되었을 때 표시되는 메시지입니다.        |
+| `loaded_msg`        | `'loaded'`                             | rc 파일이 로드되었을 때 표시되는 메시지입니다.        |
+| `unloaded_msg`      | `'not loaded'`                         | rc 파일이 로드되지 않았을 때 표시되는 메시지입니다.    |
 
-### Variables
+### 변수
 
-| Variable  | 예시                  | Description                             |
+| 변수      | 예시                  | 설명                                 |
 | --------- | ------------------- | --------------------------------------- |
-| loaded    | `loaded`            | Whether the current rc file is loaded.  |
-| allowed   | `denied`            | Whether the current rc file is allowed. |
-| rc_path   | `/home/test/.envrc` | The current rc file path.               |
-| 기호        |                     | Mirrors the value of option `symbol`.   |
-| style\* | `red bold`          | Mirrors the value of option `style`.    |
+| loaded    | `loaded`            | 현재 rc 파일이 로드되었는지 여부입니다.  |
+| allowed   | `denied`            | 현재 rc 파일이 허용되었는지 여부입니다. |
+| rc_path   | `'/home/test/.envrc'` | 현재 rc 파일 경로입니다.               |
+| 기호        |                     | `symbol` 옵션의 값을 반영합니다.   |
+| style* | `red bold`          | `style` 옵션의 값을 반영합니다.    |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1245,32 +1262,33 @@ The `direnv` module shows the status of the current rc file if one is present. T
 disabled = false
 ```
 
-## Docker Context
+## Docker 컨텍스트
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+`docker_context` 모듈은 현재 활성 [Docker 컨텍스트](https://docs.docker.com/engine/context/working-with-contexts/)를 표시합니다. `default` 또는 `desktop-linux`로 설정되지 않았거나 `DOCKER_MACHINE_NAME`, `DOCKER_HOST` 또는 `DOCKER_CONTEXT` 환경 변수가 설정된 경우 (사용 중인 컨텍스트를 재정의하기 위한 것임) 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                       | Description                                                                       |
+| 옵션              | 기본값                                                       | 설명                                                                       |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | The format for the module.                                                        |
-| `기호`                | `'🐳 '`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `'blue bold'`                                                 | The style for the module.                                                         |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| `format`            | `'via [$symbol$context]($style) '`                            | 모듈의 형식입니다.                                                        |
+| `기호`                | `'🐳 '`                                                        | Docker 컨텍스트를 표시하기 전에 사용되는 기호입니다.                             |
+| `only_with_files`   | `true`                                                        | 일치하는 항목이 있을 때만 표시합니다.                                                    |
+| `detect_extensions` | `[]`                                                          | 이 모듈을 트리거해야 하는 확장자입니다 (`only_with_files`가 true여야 함). |
+| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | 이 모듈을 트리거해야 하는 파일 이름입니다 (`only_with_files`가 true여야 함).  |
+| `detect_folders`    | `[]`                                                          | 이 모듈을 트리거해야 하는 폴더입니다 (`only_with_files`가 true여야 함).    |
+| `style`             | `'blue bold'`                                                 | 모듈의 스타일입니다.                                                         |
+| `disabled`          | `false`                                                       | `docker_context` 모듈을 비활성화합니다.                                             |
 
-### Variables
+### 변수
 
-| Variable  | 예시             | Description                          |
+| 변수      | 예시             | 설명                                 |
 | --------- | -------------- | ------------------------------------ |
-| context   | `test_context` | The current docker context           |
-| 기호        |                | Mirrors the value of option `symbol` |
-| style\* |                | Mirrors the value of option `style`  |
+| context   | `test_context` | 현재 docker 컨텍스트           |
+| 기호        |                | `symbol` 옵션의 값을 반영합니다. |
+| style* |                | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1283,9 +1301,9 @@ format = 'via [🐋 $context](blue bold)'
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` 모듈은 현재 디렉토리에 대한 관련 [.NET Core SDK](https://dotnet.microsoft.com/) 버전을 표시합니다. SDK가 현재 디렉토리에 고정되어 있으면 고정된 버전이 표시됩니다. 그렇지 않으면 모듈은 SDK의 최신 설치 버전을 표시합니다.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+기본적으로 이 모듈은 다음 파일 중 하나 이상이 현재 디렉토리에 있을 때만 프롬프트에 표시됩니다:
 
 - `global.json`
 - `project.json`
@@ -1296,36 +1314,37 @@ By default this module will only be shown in your prompt when one or more of the
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+또한 올바르게 사용하려면 .NET Core SDK가 설치되어 있어야 합니다.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+내부적으로 이 모듈은 자체 버전 감지 메커니즘을 사용합니다. 일반적으로 `dotnet --version`을 실행하는 것보다 두 배 빠르지만, .NET 프로젝트의 디렉토리 구조가 특이한 경우 잘못된 버전이 표시될 수 있습니다. 정확성이 속도보다 중요한 경우 모듈 옵션에서 `heuristic = false`로 설정하여 메커니즘을 비활성화할 수 있습니다.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+이 모듈은 현재 디렉토리에 `.csproj` 파일이 있을 때 대상 프레임워크 모니커(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>)도 표시합니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                                                 | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.                  |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
-| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
-| `style`             | `'bold blue'`                                                                                           | The style for the module.                                                 |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
+| 옵션              | 기본값                                                                                                 | 설명                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                                                                             | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'.NET '`                                                                                               | dotnet 버전을 표시하기 전에 사용되는 기호입니다.                  |
+| `heuristic`         | `true`                                                                                                  | starship을 빠르게 유지하기 위해 더 빠른 버전 감지를 사용합니다.                     |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                                                                    | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `style`             | `'bold blue'`                                                                                           | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                                                                 | `dotnet` 모듈을 비활성화합니다.                                             |
 
-### Variables
+### 변수
 
-| Variable  | 예시               | Description                                                        |
+| 변수      | 예시               | 설명                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| 기호        |                  | Mirrors the value of option `symbol`                               |
-| style\* |                  | Mirrors the value of option `style`                                |
+| version   | `v3.1.201`       | `dotnet` sdk의 버전                                        |
+| tfm       | `netstandard2.0` | 현재 프로젝트가 대상으로 하는 대상 프레임워크 모니커 |
+| 기호        |                  | `symbol` 옵션의 값을 반영합니다.                               |
+| style* |                  | `style` 옵션의 값을 반영합니다.                                |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1340,33 +1359,34 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+`elixir` 모듈은 현재 설치된 [Elixir](https://elixir-lang.org/) 및 [Erlang/OTP](https://erlang.org/doc/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `mix.exs` file.
+- 현재 디렉토리에 `mix.exs` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                     | Description                                                               |
-| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
-| `version_format`    | `'v${raw}'`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
-| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `['mix.exs']`                                               | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
-| `style`             | `'bold purple'`                                             | The style for the module.                                                 |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
+| 옵션              | 기본값                                                     | 설명                                                               |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | 모듈 elixir의 형식입니다.                                         |
+| `version_format`    | `'v${raw}'`                                                 | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'💧 '`                                                      | Elixir/Erlang 버전을 표시하기 전에 사용되는 기호입니다.           |
+| `detect_extensions` | `[]`                                                        | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['mix.exs']`                                               | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                        | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `style`             | `'bold purple'`                                             | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                     | `elixir` 모듈을 비활성화합니다.                                             |
 
-### Variables
+### 변수
 
-| Variable    | 예시      | Description                          |
+| 변수        | 예시      | 설명                                 |
 | ----------- | ------- | ------------------------------------ |
-| version     | `v1.10` | The version of `elixir`              |
-| otp_version |         | The otp version of `elixir`          |
-| 기호          |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| version     | `v1.10` | `elixir`의 버전              |
+| otp_version |         | `elixir`의 otp 버전          |
+| 기호          |         | `symbol` 옵션의 값을 반영합니다. |
+| style*   |         | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1379,36 +1399,37 @@ symbol = '🔮 '
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
+`elm` 모듈은 현재 설치된 [Elm](https://elm-lang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains `*.elm` files
+- 현재 디렉토리에 `elm.json` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `elm-package.json` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.elm-version` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `elm-stuff` 폴더가 포함되어 있습니다.
+- 현재 디렉토리에 `*.elm` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                            | Description                                                               |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`               | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🌳 '`                                             | A format string representing the symbol of Elm.                           |
-| `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
-| `style`             | `'cyan bold'`                                      | The style for the module.                                                 |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
+| 옵션              | 기본값                                            | 설명                                                               |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`               | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                        | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🌳 '`                                             | Elm의 기호를 나타내는 형식 문자열입니다.                           |
+| `detect_extensions` | `['elm']`                                          | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `['elm-stuff']`                                    | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `style`             | `'cyan bold'`                                      | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                            | `elm` 모듈을 비활성화합니다.                                                |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| version   | `v0.19.1` | The version of `elm`                 |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| version   | `v0.19.1` | `elm`의 버전                |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1419,24 +1440,24 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = 'via [ $version](cyan bold) '
 ```
 
-## Environment Variable
+## 환경 변수
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+`env_var` 모듈은 선택한 환경 변수의 현재 값을 표시합니다. 이 모듈은 다음 조건 중 하나라도 충족될 때만 표시됩니다:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- `variable` 설정 옵션이 기존 환경 변수와 일치합니다.
+- `variable` 설정 옵션이 정의되지 않았지만 `default` 설정 옵션이 정의되어 있습니다.
 
 ::: tip
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+`env_var` 모듈이 표시되는 순서는 최상위 `format`에 `${env_var.foo}`를 포함하여 개별적으로 설정할 수 있습니다 (점(.)이 포함되어 있으므로 `${...}`를 사용해야 합니다). 기본적으로 `env_var` 모듈은 정의된 순서대로 모든 `env_var` 모듈을 표시합니다.
 
 :::
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+`.`을 사용하여 여러 환경 변수를 표시할 수 있습니다 (예시 참조). `variable` 설정 옵션이 설정되지 않은 경우, 모듈은 `.` 문자 뒤의 텍스트 이름 아래에 변수 값을 표시합니다.
 
-Example: following configuration will display value of USER environment variable
+예시: 다음 설정은 USER 환경 변수의 값을 표시합니다.
 
 ```toml
 # ~/.config/starship.toml
@@ -1447,26 +1468,27 @@ default = 'unknown user'
 
 :::
 
-### Options
+### 옵션
 
-| Option        | Default                        | Description                                                                  |
+| 옵션        | 기본값                        | 설명                                                                  |
 | ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `기호`          | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable`    |                                | The environment variable to be displayed.                                    |
-| `default`     |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| `기호`          | `""`                           | 변수 값을 표시하기 전에 사용되는 기호입니다.                        |
+| `variable`    |                                | 표시할 환경 변수입니다.                                    |
+| `default`     |                                | 선택한 변수가 정의되지 않았을 때 표시할 기본값입니다. |
+| `format`      | `"with [$env_value]($style) "` | 모듈의 형식입니다.                                                   |
+| `description` | `'<custom module>'`       | `starship explain`을 실행할 때 표시되는 모듈 설명입니다. |
+| `disabled`    | `false`                        | `env_var` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시                                          | Description                                |
+| 변수      | 예시                                          | 설명                                 |
 | --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| 기호        |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | `variable` 옵션의 환경 값 |
+| 기호        |                                             | `symbol` 옵션의 값을 반영합니다.       |
+| style* | `black bold dimmed`                         | `style` 옵션의 값을 반영합니다.        |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1478,7 +1500,7 @@ variable = 'SHELL'
 default = 'unknown shell'
 ```
 
-Displaying multiple environmental variables:
+여러 환경 변수 표시:
 
 ```toml
 # ~/.config/starship.toml
@@ -1492,33 +1514,34 @@ default = 'unknown user'
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+`erlang` 모듈은 현재 설치된 [Erlang/OTP](https://erlang.org/doc/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- 현재 디렉토리에 `rebar.config` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `erlang.mk` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `' '`                               | The symbol used before displaying the version of erlang.                  |
-| `style`             | `'bold red'`                         | The style for the module.                                                 |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `' '`                               | erlang 버전을 표시하기 전에 사용되는 기호입니다.                  |
+| `style`             | `'bold red'`                         | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `[]`                                 | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['rebar.config', 'elang.mk']`       | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `disabled`          | `false`                              | `erlang` 모듈을 비활성화합니다.                                             |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| version   | `v22.1.3` | The version of `erlang`              |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| version   | `v22.1.3` | `erlang`의 버전              |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1531,32 +1554,33 @@ format = 'via [e $version](bold red) '
 
 ## Fennel
 
-The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). By default the module will be shown if any of the following conditions are met:
+`fennel` 모듈은 현재 설치된 [Fennel](https://fennel-lang.org) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a file with the `.fnl` extension
+- 현재 디렉토리에 `.fnl` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🧅 '`                               | The symbol used before displaying the version of fennel.                  |
-| `style`             | `'bold green'`                       | The style for the module.                                                 |
-| `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `disabled`          | `false`                              | Disables the `fennel` module.                                             |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🧅 '`                               | fennel 버전을 표시하기 전에 사용되는 기호입니다.                  |
+| `style`             | `'bold green'`                       | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `['fnl']`                            | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `disabled`          | `false`                              | `fennel` 모듈을 비활성화합니다.                                             |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v1.2.1` | The version of `fennel`              |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v1.2.1` | `fennel`의 버전              |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1567,17 +1591,17 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 symbol = '⫰ '
 ```
 
-## Fill
+## 채우기
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+`fill` 모듈은 줄의 추가 공간을 기호로 채웁니다. 한 줄에 여러 `fill` 모듈이 있는 경우 공간을 균등하게 나눕니다. 이는 다른 모듈을 정렬하는 데 유용합니다.
 
-### Options
+### 옵션
 
-| Option     | Default        | Description                       |
+| 옵션     | 기본값        | 설명                               |
 | ---------- | -------------- | --------------------------------- |
-| `기호`       | `'.'`          | The symbol used to fill the line. |
-| `style`    | `'bold black'` | The style for the module.         |
-| `disabled` | `false`        | Disables the `fill` module        |
+| `기호`       | `'.'`          | 줄을 채우는 데 사용되는 기호입니다. |
+| `style`    | `'bold black'` | 모듈의 스타일입니다.         |
+| `disabled` | `false`        | `fill` 모듈을 비활성화합니다.        |
 
 ### 예시
 
@@ -1590,36 +1614,37 @@ symbol = '-'
 style = 'bold green'
 ```
 
-Produces a prompt that looks like:
+다음과 같은 프롬프트를 생성합니다:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
-## Fossil Branch
+## Fossil 브랜치
 
-The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+`fossil_branch` 모듈은 현재 디렉토리의 체크아웃에 있는 활성 브랜치 이름을 표시합니다.
 
-### Options
+### 옵션
 
-| Option              | Default                          | Description                                                                              |
+| 옵션               | 기본값                          | 설명                                                                              |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol$branch]($style) '` | The format for the module. Use `'$branch'` to refer to the current branch name.          |
-| `기호`                | `' '`                           | The symbol used before the branch name of the check-out in your current directory.       |
-| `style`             | `'bold purple'`                  | The style for the module.                                                                |
-| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                          |
-| `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
-| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                     |
+| `format`            | `'on [$symbol$branch]($style) '` | 모듈의 형식입니다. 현재 브랜치 이름을 참조하려면 `'$branch'`를 사용하세요.          |
+| `기호`                | `' '`                           | 현재 디렉토리의 체크아웃에 있는 브랜치 이름 앞에 사용되는 기호입니다.       |
+| `style`             | `'bold purple'`                  | 모듈의 스타일입니다.                                                                |
+| `truncation_length` | `2^63 - 1`                       | Fossil 브랜치 이름을 `N` 그래프로 자릅니다.                                          |
+| `truncation_symbol` | `'…'`                            | 브랜치 이름이 잘렸음을 나타내는 데 사용되는 기호입니다. 기호가 없는 경우 `''`를 사용할 수 있습니다. |
+| `disabled`          | `true`                           | `fossil_branch` 모듈을 비활성화합니다.                                                     |
 
-### Variables
+### 변수
 
-| Variable  | 예시      | Description                          |
+| 변수      | 예시      | 설명                                 |
 | --------- | ------- | ------------------------------------ |
-| branch    | `trunk` | The active Fossil branch             |
-| 기호        |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| branch    | `trunk` | 활성 Fossil 브랜치             |
+| 기호        |         | `symbol` 옵션의 값을 반영합니다. |
+| style* |         | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1632,30 +1657,31 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
-## Fossil Metrics
+## Fossil 메트릭
 
-The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+`fossil_metrics` 모듈은 현재 디렉토리의 체크아웃에 추가 및 삭제된 줄 수를 표시합니다. Fossil v2.14 (2021-01-20) 이상이 필요합니다.
 
-### Options
+### 옵션
 
-| Option               | Default                                                      | Description                           |
+| 옵션               | 기본값                                                      | 설명                                 |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | 모듈의 형식입니다.            |
+| `added_style`        | `'bold green'`                                               | 추가된 수의 스타일입니다.        |
+| `deleted_style`      | `'bold red'`                                                 | 삭제된 수의 스타일입니다.      |
+| `only_nonzero_diffs` | `true`                                                       | 변경된 항목에 대해서만 상태를 렌더링합니다. |
+| `disabled`           | `true`                                                       | `fossil_metrics` 모듈을 비활성화합니다. |
 
-### Variables
+### 변수
 
-| Variable          | 예시  | Description                                 |
+| 변수          | 예시  | 설명                                 |
 | ----------------- | --- | ------------------------------------------- |
-| added             | `1` | The current number of added lines           |
-| deleted           | `2` | The current number of deleted lines         |
-| added_style\*   |     | Mirrors the value of option `added_style`   |
-| deleted_style\* |     | Mirrors the value of option `deleted_style` |
+| added             | `1` | 현재 추가된 줄 수           |
+| deleted           | `2` | 현재 삭제된 줄 수         |
+| added_style*   |     | `added_style` 옵션의 값을 반영합니다.   |
+| deleted_style* |     | `deleted_style` 옵션의 값을 반영합니다. |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1669,48 +1695,49 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+`gcloud` 모듈은 `gcloud` CLI의 현재 구성을 표시합니다. 이는 `~/.config/gcloud/active_config` 파일과 `~/.config/gcloud/configurations/config_{CONFIG NAME}` 파일 및 `CLOUDSDK_CONFIG` 환경 변수를 기반으로 합니다.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
+모듈이 활성화되면 항상 활성화됩니다. 단, `detect_env_vars`가 설정된 경우에는 환경 변수 중 하나가 설정되었을 때만 모듈이 활성화됩니다.
 
-### Options
+### 옵션
 
-| Option            | Default                                                    | Description                                                      |
+| 옵션            | 기본값                                                    | 설명                                                      |
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
-| `기호`              | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
-| `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
-| `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
-| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module         |
-| `style`           | `'bold blue'`                                              | The style for the module.                                        |
-| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
+| `format`          | `'on [$symbol$account(@$domain)(\'($region\)))]($style) '` | 모듈의 형식입니다.                                       |
+| `기호`              | `'☁️  '`                                                   | 현재 GCP 프로필을 표시하기 전에 사용되는 기호입니다.       |
+| `region_aliases`  | `{}`                                                       | GCP 이름 외에 표시할 리전 별칭 테이블입니다.  |
+| `project_aliases` | `{}`                                                       | GCP 이름 외에 표시할 프로젝트 별칭 테이블입니다. |
+| `detect_env_vars` | `[]`                                                       | 이 모듈을 트리거해야 하는 환경 변수입니다.         |
+| `style`           | `'bold blue'`                                              | 모듈의 스타일입니다.                                       |
+| `disabled`        | `false`                                                    | `gcloud` 모듈을 비활성화합니다.                                    |
 
-### Variables
+### 변수
 
-| Variable  | 예시            | Description                                                        |
+| 변수      | 예시            | 설명                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
-| region    | `us-central1` | The current GCP region                                             |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| 기호        |               | Mirrors the value of option `symbol`                               |
-| style\* |               | Mirrors the value of option `style`                                |
+| region    | `us-central1` | 현재 GCP 리전                                             |
+| account   | `foo`         | 현재 GCP 프로필                                            |
+| domain    | `example.com` | 현재 GCP 프로필 도메인                                     |
+| project   |               | 현재 GCP 프로젝트                                            |
+| active    | `default`     | `~/.config/gcloud/active_config`에 기록된 활성 구성 이름 |
+| 기호        |               | `symbol` 옵션의 값을 반영합니다.                               |
+| style* |               | `style` 옵션의 값을 반영합니다.                                |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
-#### Display account and project
+#### 계정 및 프로젝트 표시
 
 ```toml
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\'($project\)))]($style) '
 ```
 
-#### Display active config name only
+#### 활성 구성 이름만 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -1720,7 +1747,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### 계정 및 별칭 리전 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -1732,46 +1759,47 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Display account and aliased project
+#### 계정 및 별칭 프로젝트 표시
 
 ```toml
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\'($project\)))]($style) '
 [gcloud.project_aliases]
 very-long-project-name = 'vlpn'
 ```
 
-## Git Branch
+## Git 브랜치
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 모듈은 현재 디렉토리의 리포지토리에 있는 활성 브랜치를 표시합니다.
 
-### Options
+### 옵션
 
-| Option               | Default                                           | Description                                                                              |
+| 옵션               | 기본값                                           | 설명                                                                              |
 | -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | The format for the module. Use `'$branch'` to refer to the current branch name.          |
-| `기호`                 | `' '`                                            | A format string representing the symbol of git branch.                                   |
-| `style`              | `'bold purple'`                                   | The style for the module.                                                                |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
-| `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
-| `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
+| `always_show_remote` | `false`                                           | 로컬 브랜치 이름과 같더라도 원격 추적 브랜치 이름을 표시합니다.     |
+| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | 모듈의 형식입니다. 현재 브랜치 이름을 참조하려면 `'$branch'`를 사용하세요.          |
+| `기호`                 | `' '`                                            | git 브랜치의 기호를 나타내는 형식 문자열입니다.                                   |
+| `style`              | `'bold purple'`                                   | 모듈의 스타일입니다.                                                                |
+| `truncation_length`  | `2^63 - 1`                                        | git 브랜치를 `N` 그래프로 자릅니다.                                          |
+| `truncation_symbol`  | `'…'`                                             | 브랜치 이름이 잘렸음을 나타내는 데 사용되는 기호입니다. 기호가 없는 경우 `''`를 사용할 수 있습니다. |
+| `only_attached`      | `false`                                           | 분리된 `HEAD` 상태가 아닐 때만 브랜치 이름을 표시합니다.                           |
+| `ignore_branches`    | `[]`                                              | 표시하지 않을 이름 목록입니다. 'master' 또는 'main'에 유용합니다.                      |
+| `disabled`           | `false`                                           | `git_branch` 모듈을 비활성화합니다.                                                        |
 
-### Variables
+### 변수
 
-| Variable      | 예시       | Description                                                                                            |
+| 변수          | 예시       | 설명                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| 기호            |          | Mirrors the value of option `symbol`                                                                   |
-| style\*     |          | Mirrors the value of option `style`                                                                    |
+| branch        | `master` | 현재 브랜치 이름이며, 현재 브랜치가 없는 경우 (`git detached HEAD` 등) `HEAD`로 대체됩니다. |
+| remote_name   | `origin` | 원격 이름입니다.                                                                                       |
+| remote_branch | `master` | `remote_name`에서 추적되는 브랜치 이름입니다.                                                       |
+| 기호            |          | `symbol` 옵션의 값을 반영합니다.                                                                   |
+| style*     |          | `style` 옵션의 값을 반영합니다.                                                                    |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1785,32 +1813,33 @@ truncation_symbol = ''
 ignore_branches = ['master', 'main']
 ```
 
-## Git Commit
+## Git 커밋
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+`git_commit` 모듈은 현재 디렉토리의 리포지토리에 있는 현재 커밋 해시와 태그(있는 경우)를 표시합니다.
 
-### Options
+### 옵션
 
-| Option               | Default                        | Description                                                                          |
+| 옵션               | 기본값                        | 설명                                                                          |
 | -------------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
-| `commit_hash_length` | `7`                            | The length of the displayed git commit hash.                                         |
-| `format`             | `'[\($hash$tag\)]($style) '` | The format for the module.                                                           |
-| `style`              | `'bold green'`                 | The style for the module.                                                            |
-| `only_detached`      | `true`                         | Only show git commit hash when in detached `HEAD` state                              |
-| `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
-| `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷  '`                       | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
+| `commit_hash_length` | `7`                            | 표시되는 git 커밋 해시의 길이입니다.                                         |
+| `format`             | `'[\]($hash$tag\]($style) '` | 모듈의 형식입니다.                                                           |
+| `style`              | `'bold green'`                 | 모듈의 스타일입니다.                                                            |
+| `only_detached`      | `true`                         | 분리된 `HEAD` 상태일 때만 git 커밋 해시를 표시합니다.                              |
+| `tag_disabled`       | `true`                         | `git_commit` 모듈에서 태그 정보 표시를 비활성화합니다.                                    |
+| `tag_max_candidates` | `0`                            | 태그 표시에 고려할 커밋 수입니다. 기본값은 정확히 일치하는 항목만 허용합니다. |
+| `tag_symbol`         | `' 🏷  '`                       | 표시되는 정보 앞에 붙는 태그 기호입니다.                                                  |
+| `disabled`           | `false`                        | `git_commit` 모듈을 비활성화합니다.                                                    |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                                  |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | -------------------------------------------- |
-| hash      | `b703eb3` | The current git commit hash                  |
-| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
-| style\* |           | Mirrors the value of option `style`          |
+| hash      | `b703eb3` | 현재 git 커밋 해시                  |
+| tag       | `v1.0.0`  | 태그 정보 표시가 활성화된 경우 태그 이름입니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.          |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1822,35 +1851,36 @@ commit_hash_length = 4
 tag_symbol = '🔖 '
 ```
 
-## Git State
+## Git 상태
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 모듈은 git 리포지토리의 일부인 디렉토리에서 _REBASING_, _BISECTING_ 등과 같은 작업이 진행 중일 때 표시됩니다. 진행 정보(예: REBASING 3/10)가 있으면 해당 정보도 표시됩니다.
 
-### Options
+### 옵션
 
-| Option         | Default                                                         | Description                                                                             |
+| 옵션         | 기본값                                                         | 설명                                                                             |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `'REBASING'`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `'MERGING'`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `'REVERTING'`                                                   | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `'CHERRY-PICKING'`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `'BISECTING'`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `'AM'`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `'AM/REBASE'`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `'bold yellow'`                                                 | The style for the module.                                                               |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| `rebase`       | `'REBASING'`                                                    | `rebase`가 진행 중일 때 표시되는 형식 문자열입니다.                               |
+| `merge`        | `'MERGING'`                                                     | `merge`가 진행 중일 때 표시되는 형식 문자열입니다.                                |
+| `revert`       | `'REVERTING'`                                                   | `revert`가 진행 중일 때 표시되는 형식 문자열입니다.                               |
+| `cherry_pick`  | `'CHERRY-PICKING'`                                              | `cherry-pick`이 진행 중일 때 표시되는 형식 문자열입니다.                          |
+| `bisect`       | `'BISECTING'`                                                   | `bisect`가 진행 중일 때 표시되는 형식 문자열입니다.                               |
+| `am`           | `'AM'`                                                          | `apply-mailbox` (`git am`)가 진행 중일 때 표시되는 형식 문자열입니다.            |
+| `am_or_rebase` | `'AM/REBASE'`                                                   | 모호한 `apply-mailbox` 또는 `rebase`가 진행 중일 때 표시되는 형식 문자열입니다. |
+| `style`        | `'bold yellow'`                                                 | 모듈의 스타일입니다.                                                               |
+| `format`       | `'\[$state( $progress_current/$progress_total)]($style)\) '` | 모듈의 형식입니다.                                                              |
+| `disabled`     | `false`                                                         | `git_state` 모듈을 비활성화합니다.                                                        |
 
-### Variables
+### 변수
 
-| Variable         | 예시         | Description                         |
+| 변수             | 예시         | 설명                                 |
 | ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| state            | `REBASING` | 리포지토리의 현재 상태       |
+| progress_current | `1`        | 현재 작업 진행 상황      |
+| progress_total   | `2`        | 총 작업 진행 상황        |
+| style*        |            | `style` 옵션의 값을 반영합니다. |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1858,41 +1888,42 @@ The `git_state` module will show in directories which are part of a git reposito
 # ~/.config/starship.toml
 
 [git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
+format = '[\]($state( $progress_current of $progress_total)]($style)\) '
 cherry_pick = '[🍒 PICKING](bold red)'
 ```
 
-## Git Metrics
+## Git 메트릭
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+`git_metrics` 모듈은 현재 git 리포지토리에 추가 및 삭제된 줄 수를 표시합니다.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+이 모듈은 기본적으로 비활성화되어 있습니다. 활성화하려면 설정 파일에서 `disabled`를 `false`로 설정하세요.
 
 :::
 
-### Options
+### 옵션
 
-| Option               | Default                                                      | Description                           |
+| 옵션               | 기본값                                                      | 설명                                 |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| `added_style`        | `'bold green'`                                               | 추가된 수의 스타일입니다.        |
+| `deleted_style`      | `'bold red'`                                                 | 삭제된 수의 스타일입니다.      |
+| `only_nonzero_diffs` | `true`                                                       | 변경된 항목에 대해서만 상태를 렌더링합니다. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | 모듈의 형식입니다.            |
+| `disabled`           | `true`                                                       | `git_metrics` 모듈을 비활성화합니다.    |
+| `ignore_submodules`  | `false`                                                      | 서브모듈 변경 사항을 무시합니다.          |
 
-### Variables
+### 변수
 
-| Variable          | 예시  | Description                                 |
-| ----------------- | --- | ------------------------------------------- |
-| added             | `1` | The current number of added lines           |
-| deleted           | `2` | The current number of deleted lines         |
-| added_style\*   |     | Mirrors the value of option `added_style`   |
-| deleted_style\* |     | Mirrors the value of option `deleted_style` |
+| 변수          | 예시  | 설명                                 |
+| ---------------- | --- | ------------------------------------------- |
+| added             | `1` | 현재 추가된 줄 수           |
+| deleted           | `2` | 현재 삭제된 줄 수         |
+| added_style*   |     | `added_style` 옵션의 값을 반영합니다.   |
+| deleted_style* |     | `deleted_style` 옵션의 값을 반영합니다. |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -1904,71 +1935,72 @@ added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
-## Git Status
+## Git 상태
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status` 모듈은 현재 디렉토리의 리포지토리 상태를 나타내는 기호를 표시합니다.
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+WSL 환경에서 Windows 디렉토리(예: `/mnt/c/` 아래)에서는 Git Status 모듈이 매우 느립니다. 모듈을 비활성화하거나 `windows_starship` 옵션을 사용하여 Windows 네이티브 Starship 실행 파일을 사용하여 해당 경로에 대한 `git_status`를 계산할 수 있습니다.
 
 :::
 
-### Options
+### 옵션
 
-| Option               | Default                                         | Description                                                                                                 |
+| 옵션               | 기본값                                         | 설명                                                                                                 |
 | -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | This branch has merge conflicts.                                                                            |
-| `ahead`              | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`            | `'$'`                                           | The format of `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`             | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`            | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | The style for the module.                                                                                   |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | Disables the `git_status` module.                                                                           |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status`의 기본 형식입니다.                                                                         |
+| `conflicted`         | `'='`                                           | 이 브랜치에 병합 충돌이 있습니다.                                                                            |
+| `ahead`              | `'⇡'`                                           | `ahead`의 형식입니다.                                                                                       |
+| `behind`             | `'⇣'`                                           | `behind`의 형식입니다.                                                                                      |
+| `diverged`           | `'⇕'`                                           | `diverged`의 형식입니다.                                                                                    |
+| `up_to_date`         | `''`                                            | `up_to_date`의 형식입니다.                                                                                  |
+| `untracked`          | `'?'`                                           | `untracked`의 형식입니다.                                                                                   |
+| `stashed`            | `'$'`                                           | `stashed`의 형식입니다.                                                                                     |
+| `modified`           | `'!'`                                           | `modified`의 형식입니다.                                                                                    |
+| `staged`             | `'+'`                                           | `staged`의 형식입니다.                                                                                      |
+| `renamed`            | `'»'`                                           | `renamed`의 형식입니다.                                                                                     |
+| `deleted`            | `'✘'`                                           | `deleted`의 형식입니다.                                                                                     |
+| `typechanged`        | `""`                                            | `typechanged`의 형식입니다.                                                                                 |
+| `style`              | `'bold red'`                                    | 모듈의 스타일입니다.                                                                                   |
+| `ignore_submodules`  | `false`                                         | 서브모듈 변경 사항을 무시합니다.                                                                               |
+| `disabled`           | `false`                                         | `git_status` 모듈을 비활성화합니다.                                                                           |
+| `windows_starship`   |                                                 | WSL의 Windows 경로에서 `git_status`를 렌더링할 때 Windows Starship 실행 파일의 (Linux) 경로를 사용합니다. |
+| `use_git_executable` | `false`                                         | 상태 계산에 `gitoxide`를 사용하지 않고 `git` 실행 파일을 사용합니다.                       |
 
-### Variables
+### 변수
 
-The following variables can be used in `format`:
+`format`에서 다음 변수를 사용할 수 있습니다:
 
-| Variable       | Description                                                                                                   |
+| 변수           | 설명                                                                                                   |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Mirrors the value of option `style`                                                                           |
+| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`의 약어                       |
+| `ahead_behind` | 리포지토리의 현재 상태에 따라 `diverged`, `ahead`, `behind` 또는 `up_to_date` 형식 문자열을 표시합니다. |
+| `conflicted`   | 이 브랜치에 병합 충돌이 있을 때 `conflicted`를 표시합니다.                                                   |
+| `untracked`    | 작업 디렉토리에 추적되지 않은 파일이 있을 때 `untracked`를 표시합니다.                                 |
+| `stashed`      | 로컬 리포지토리에 스태시가 존재할 때 `stashed`를 표시합니다.                                              |
+| `modified`     | 작업 디렉토리에 파일 수정 사항이 있을 때 `modified`를 표시합니다.                               |
+| `staged`       | 새 파일이 스테이징 영역에 추가되었을 때 `staged`를 표시합니다.                                         |
+| `renamed`      | 이름이 변경된 파일이 스테이징 영역에 추가되었을 때 `renamed`를 표시합니다.                                    |
+| `deleted`      | 파일 삭제가 스테이징 영역에 추가되었을 때 `deleted`를 표시합니다.                                 |
+| `typechanged`  | 파일 유형이 스테이징 영역에서 변경되었을 때 `typechanged`를 표시합니다.                               |
+| style*      | `style` 옵션의 값을 반영합니다.                                                                           |
 
-*: This variable can only be used as a part of a style string
 
-The following variables can be used in `diverged`:
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
-| Variable       | Description                                    |
+`diverged`에서 다음 변수를 사용할 수 있습니다:
+
+| 변수       | 설명                                    |
 | -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| `ahead_count`  | 추적 브랜치보다 앞선 커밋 수 |
+| `behind_count` | 추적 브랜치보다 뒤처진 커밋 수   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+`conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` 및 `deleted`에서 다음 변수를 사용할 수 있습니다:
 
-| Variable | Description              |
+| 변수   | 설명              |
 | -------- | ------------------------ |
-| `count`  | Show the number of files |
+| `count`  | 파일 수를 표시합니다. |
 
 ### 예시
 
@@ -1989,7 +2021,7 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
-Show ahead/behind count of the branch being tracked
+추적 중인 브랜치의 앞/뒤 커밋 수 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -2000,7 +2032,7 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+WSL의 Windows 경로에서 `git_status`를 렌더링할 때 Windows Starship 실행 파일을 사용합니다.
 
 ```toml
 # ~/.config/starship.toml
@@ -2011,32 +2043,33 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Gleam
 
-The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). By default the module will be shown if any of the following conditions are met:
+`gleam` 모듈은 현재 설치된 [Gleam](https://gleam.run/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `gleam.toml` file
-- The current directory contains a file with the `.gleam` extension
+- 현재 디렉토리에 `gleam.toml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.gleam` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
-| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
-| `style`             | `'bold #FFAFF3'`                     | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `gleam` module.                                              |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'⭐ '`                               | Gleam의 기호를 나타내는 형식 문자열입니다.                         |
+| `detect_extensions` | `['gleam']`                          | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['gleam.toml']`                     | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `style`             | `'bold #FFAFF3'`                     | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `gleam` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of `gleam`               |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v1.0.0` | `gleam`의 버전               |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2049,82 +2082,75 @@ format = 'via [⭐ $version](bold red) '
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
+`golang` 모듈은 현재 설치된 [Go](https://golang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- 현재 디렉토리에 `go.mod` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `go.sum` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `go.work` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `glide.yaml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `Gopkg.yml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `Gopkg.lock` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.go-version` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `Godeps` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `.go` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                                   | Description                                                                                                |
+| 옵션              | 기본값                                                                                   | 설명                                                                                                |
 | ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | The format for the module.                                                                                 |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
-| `기호`                | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
-| `style`             | `'bold cyan'`                                                                             | The style for the module.                                                                                  |
-| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | 모듈의 형식입니다.                                                                                 |
+| `version_format`    | `'v${raw}'`                                                                               | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다.                                  |
+| `기호`                | `'🐹 '`                                                                                    | Go의 기호를 나타내는 형식 문자열입니다.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | 이 모듈을 트리거해야 하는 확장자입니다.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | 이 모듈을 트리거해야 하는 폴더입니다.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | 모듈의 스타일입니다.                                                                                  |
+| `not_capable_style` | `'bold red'`                                                                              | go.mod 파일의 go 지시문이 설치된 Go 버전과 일치하지 않을 때 모듈의 스타일입니다. |
+| `disabled`          | `false`                                                                                   | `golang` 모듈을 비활성화합니다.                                                                              |
 
-### Variables
+### 변수
 
-| Variable    | 예시        | Description                                                                                                                                 |
-| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| version     | `v1.12.1` | The version of `go`                                                                                                                         |
-| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
-| 기호          |           | Mirrors the value of option `symbol`                                                                                                        |
-| style\*   |           | Mirrors the value of option `style`                                                                                                         |
+| 변수    | 예시        | 설명                                                                                                                                                        |
+| --------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | `go`의 버전                                                                                                                         |
+| mod_version | `1.16`    | `go.mod`의 go 지시문에 설정된 `go` 버전 요구 사항입니다. `go` 버전과 일치하지 않는 경우에만 표시됩니다. |
+| 기호          |           | `symbol` 옵션의 값을 반영합니다.                                                                                                        |
+| style*   |           | `style` 옵션의 값을 반영합니다.                                                                                                         |
 
-*: This variable can only be used as a part of a style string
 
-### 예시
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
-```toml
-# ~/.config/starship.toml
-
-[golang]
-format = 'via [🏎💨 $version](bold cyan) '
-```
-
-### Using `mod_version`
+### `mod_version` 사용
 
 ```toml
 # ~/.config/starship.toml
 
 [golang]
-format = 'via [$symbol($version )($mod_version )]($style)'
+format = 'via [$symbol($version )]($mod_version )]($style)'
 ```
 
 ## Guix-shell
 
-The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+`guix_shell` 모듈은 [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) 환경을 표시합니다. guix-shell 환경 내부에 있을 때 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option     | Default                    | Description                                            |
+| 옵션     | 기본값                    | 설명                                            |
 | ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `'via [$symbol]($style) '` | The format for the module.                             |
-| `기호`       | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `'yellow bold'`            | The style for the module.                              |
-| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+| `format`   | `'via [$symbol]($style) '` | 모듈의 형식입니다.                             |
+| `기호`       | `'🐃 '`                     | guix-shell의 기호를 나타내는 형식 문자열입니다. |
+| `style`    | `'yellow bold'`            | 모듈의 스타일입니다.                              |
+| `disabled` | `false`                    | `guix_shell` 모듈을 비활성화합니다.                      |
 
-### Variables
+### 변수
 
-| Variable  | 예시 | Description                          |
+| 변수      | 예시 | 설명                                 |
 | --------- | -- | ------------------------------------ |
-| 기호        |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
+| 기호        |    | `symbol` 옵션의 값을 반영합니다. |
+| style* |    | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2138,102 +2164,105 @@ format = 'via [🐂](yellow bold) '
 
 ## Gradle
 
-The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+`gradle` 모듈은 프로젝트 디렉토리에서 현재 사용 중인 [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) 버전을 표시합니다.
 
-By default the module will be shown if any of the following conditions are met:
+기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
-- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+- 현재 디렉토리에 `gradle/wrapper/gradle-wrapper.properties` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `.gradle` 또는 `.gradle.kts`로 끝나는 파일이 포함되어 있습니다.
 
-The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+`gradle` 모듈은 보안상의 이유로 Wrapper를 실행하지 않고 설정 파일에서 Gradle Wrapper 버전을 읽을 수만 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🅶 '`                               | A format string representing the symbol of Gradle.                        |
-| `detect_extensions` | `['gradle', 'gradle.kts']`           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['gradle']`                         | Which folders should trigger this module.                                 |
-| `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `gradle` module.                                             |
-| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🅶 '`                               | Gradle의 기호를 나타내는 형식 문자열입니다.                        |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `['gradle']`                         | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'bold bright-cyan'`                 | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `gradle` 모듈을 비활성화합니다.                                             |
+| `recursive`         | `false`                              | `gradle` 디렉토리에 대한 재귀적 검색을 활성화합니다.                     |
 
-### Variables
+### 변수
 
-| Variable | 예시       | Description                          |
-| -------- | -------- | ------------------------------------ |
-| version  | `v7.5.1` | The version of `gradle`              |
-| 기호       |          | Mirrors the value of option `symbol` |
-| style*   |          | Mirrors the value of option `style`  |
+| 변수      | 예시       | 설명                                 |
+| --------- | -------- | ------------------------------------ |
+| version   | `v7.5.1` | `gradle`의 버전              |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+`haskell` 모듈은 현재 선택된 GHC 버전 및/또는 선택된 Stack 스냅샷을 찾습니다.
 
-By default the module will be shown if any of the following conditions are met:
+기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `stack.yaml` file
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- 현재 디렉토리에 `stack.yaml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.hs`, `.cabal` 또는 `.hs-boot` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                        |
+| 옵션              | 기본값                               | 설명                                         |
 | ------------------- | ------------------------------------ | -------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                         |
-| `기호`                | `'λ '`                               | A format string representing the symbol of Haskell |
-| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Which extensions should trigger this module.       |
-| `detect_files`      | `['stack.yaml', 'cabal.project']`    | Which filenames should trigger this module.        |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
-| `style`             | `'bold purple'`                      | The style for the module.                          |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                         |
+| `기호`                | `'λ '`                               | Haskell의 기호를 나타내는 형식 문자열입니다. |
+| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | 이 모듈을 트리거해야 하는 확장자입니다.       |
+| `detect_files`      | `['stack.yaml', 'cabal.project']`    | 이 모듈을 트리거해야 하는 파일 이름입니다.        |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.          |
+| `style`             | `'bold purple'`                      | 모듈의 스타일입니다.                          |
+| `disabled`          | `false`                              | `haskell` 모듈을 비활성화합니다.                     |
 
-### Variables
+### 변수
 
-| Variable       | 예시          | Description                                                                             |
-| -------------- | ----------- | --------------------------------------------------------------------------------------- |
-| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
-| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
-| 기호             |             | Mirrors the value of option `symbol`                                                    |
-| style\*      |             | Mirrors the value of option `style`                                                     |
+| 변수       | 예시          | 설명                                                                             |
+| ---------- | ----------- | --------------------------------------------------------------------------------------- |
+| version        |             | 현재 프로젝트가 Stack 프로젝트인지 여부에 따라 `ghc_version` 또는 `snapshot`입니다. |
+| snapshot       | `lts-18.12` | 현재 선택된 Stack 스냅샷                                                       |
+| ghc_version | `9.2.1`     | 현재 설치된 GHC 버전                                                         |
+| 기호             |             | `symbol` 옵션의 값을 반영합니다.                                                    |
+| style*      |             | `style` 옵션의 값을 반영합니다.                                                     |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ## Haxe
 
-The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). By default the module will be shown if any of the following conditions are met:
+`haxe` 모듈은 현재 설치된 [Haxe](https://haxe.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `project.xml`, `Project.xml`, `application.xml`, `haxelib.json`, `hxformat.json` or `.haxerc` file
-- The current directory contains a `.haxelib` or a `haxe_libraries` directory
-- The current directory contains a file with the `.hx` or `.hxml` extension
+- 현재 디렉토리에 `project.xml`, `Project.xml`, `application.xml`, `haxelib.json`, `hxformat.json` 또는 `.haxerc` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.haxelib` 또는 `haxe_libraries` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `.hx` 또는 `.hxml` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                                         | Description                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                            | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
-| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
-| `기호`                | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
-| `style`             | `'bold fg:202'`                                                                                 | The style for the module.                                                 |
-| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
+| 옵션              | 기본값                                                                                         | 설명                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                                            | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                                                                    | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `기호`                | `'⌘ '`                                                                                          | Haxe의 기호를 나타내는 형식 문자열입니다.                          |
+| `style`             | `'bold fg:202'`                                                                                 | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                                                         | `haxe` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v4.2.5` | The version of `haxe`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v4.2.5` | `haxe`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2246,33 +2275,34 @@ format = "via [⌘ $version](bold fg:202) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
+`helm` 모듈은 현재 설치된 [Helm](https://helm.sh/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `helmfile.yaml` file
-- The current directory contains a `Chart.yaml` file
+- 현재 디렉토리에 `helmfile.yaml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `Chart.yaml` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `기호`                | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
-| `style`             | `'bold white'`                       | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `helm` module.                                               |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `detect_extensions` | `[]`                                 | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `기호`                | `'⎈ '`                               | Helm의 기호를 나타내는 형식 문자열입니다.                          |
+| `style`             | `'bold white'`                       | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `helm` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v3.1.1` | The version of `helm`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v3.1.1` | `helm`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2283,36 +2313,37 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 format = 'via [⎈ $version](bold white) '
 ```
 
-## Hostname
+## 호스트 이름
 
-The `hostname` module shows the system hostname.
+`hostname` 모듈은 시스템 호스트 이름을 표시합니다.
 
-### Options
+### 옵션
 
-| Option            | Default                                | Description                                                                                                                           |
+| 옵션            | 기본값                                | 설명                                                                                                                           |
 | ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
-| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                                |
-| `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                            |
-| `style`           | `'bold dimmed green'`                  | The style for the module.                                                                                                             |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
-| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
+| `ssh_only`        | `true`                                 | SSH 세션에 연결된 경우에만 호스트 이름을 표시합니다.                                                                                  |
+| `ssh_symbol`      | `'🌐 '`                                 | SSH 세션에 연결되었을 때를 나타내는 형식 문자열입니다.                                                                |
+| `trim_at`         | `'.'`                                  | 호스트 이름이 잘리는 문자열입니다. 첫 번째 일치 후 잘립니다. `'.'`는 첫 번째 점 이후를 중지합니다. `''`는 모든 자르기를 비활성화합니다. |
+| `detect_env_vars` | `[]`                                   | 이 모듈을 트리거해야 하는 환경 변수입니다.                                                                             |
+| `format`          | `'on [$ssh_symbol$hostname]($style) in '` | 모듈의 형식입니다.                                                                                                            |
+| `style`           | `'bold dimmed green'`                  | 모듈의 스타일입니다.                                                                                                             |
+| `disabled`        | `false`                                | `hostname` 모듈을 비활성화합니다.                                                                        |
+| `aliases`         | `{}`                                   | 시스템 호스트 이름을 다른 이름으로 변환합니다. `trim_at`이 지정된 경우 첫 번째 부분만 일치하고 대체됩니다.            |
 
-### Variables
+### 변수
 
-| Variable   | 예시         | Description                                           |
-| ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | The hostname of the computer                          |
-| style\*  |            | Mirrors the value of option `style`                   |
-| ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
+| 변수   | 예시         | 설명                                           |
+| -------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | 컴퓨터의 호스트 이름                          |
+| style*  |            | `style` 옵션의 값을 반영합니다.                   |
+| ssh_symbol | `'🌏 '`     | SSH 세션에 연결되었을 때를 나타내는 기호 |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
-#### Always show the hostname
+#### 항상 호스트 이름 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -2324,7 +2355,7 @@ trim_at = '.companyname.com'
 disabled = false
 ```
 
-#### Hide the hostname in remote tmux sessions
+#### 원격 tmux 세션에서 호스트 이름 숨기기
 
 ```toml
 # ~/.config/starship.toml
@@ -2335,43 +2366,44 @@ detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
-#### Replace the hostname with a nickname
+#### 호스트 이름을 별명으로 바꾸기
 
 ```toml
 # ~/.config/starship.toml
 [hostname]
-aliases = { "Max's MacBook Pro" = "home" }
+alias = { "Max's MacBook Pro" = "home" }
 ```
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
+`java` 모듈은 현재 설치된 [Java](https://www.oracle.com/java/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- 현재 디렉토리에 `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot` 또는 `.sdkmanrc` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.java`, `.class`, `.gradle`, `.jar`, `.clj` 또는 `.cljc` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                                                                                               | Description                                                               |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                |
-| `기호`                | `'☕ '`                                                                                                                | A format string representing the symbol of Java                           |
-| `style`             | `'red dimmed'`                                                                                                        | The style for the module.                                                 |
-| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                               |
+| 옵션              | 기본값                                                                                                               | 설명                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                                                                                           | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                                                                                                  | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `기호`                | `'☕ '`                                                                                                                | Java의 기호를 나타내는 형식 문자열입니다.                           |
+| `style`             | `'red dimmed'`                                                                                                        | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                                                                                               | `java` 모듈을 비활성화합니다.                                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시    | Description                          |
+| 변수      | 예시    | 설명                                 |
 | --------- | ----- | ------------------------------------ |
-| version   | `v14` | The version of `java`                |
-| 기호        |       | Mirrors the value of option `symbol` |
-| style\* |       | Mirrors the value of option `style`  |
+| version   | `v14` | `java`의 버전                |
+| 기호        |       | `symbol` 옵션의 값을 반영합니다. |
+| style* |       | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2382,51 +2414,52 @@ The `java` module shows the currently installed version of [Java](https://www.or
 symbol = '🌟 '
 ```
 
-## Jobs
+## 작업
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs` 모듈은 현재 실행 중인 작업 수를 표시합니다. 이 모듈은 백그라운드 작업이 실행 중인 경우에만 표시됩니다. 모듈은 작업이 2개 이상이거나 `number_threshold` 설정 값보다 많으면 작업 수를 표시합니다. 모듈은 작업이 1개 이상이거나 `symbol_threshold` 설정 값보다 많으면 기호를 표시합니다. 두 값 모두 0으로 설정하면 작업 수가 0개라도 기호와 작업 수를 항상 표시할 수 있습니다.
 
-The default functionality is:
+기본 기능은 다음과 같습니다:
 
-- 0 jobs -> Nothing is shown.
-- 1 job -> `symbol` is shown.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 작업 0개 -> 아무것도 표시되지 않습니다.
+- 작업 1개 -> `symbol`이 표시됩니다.
+- 작업 2개 이상 -> `symbol` + `number`가 표시됩니다.
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+이 모듈은 tcsh 및 nu에서는 지원되지 않습니다.
 
 :::
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+`threshold` 옵션은 더 이상 사용되지 않지만 사용하려면 모듈이 작업 수가 1개보다 많거나 `threshold` 설정 값이 존재하는 경우보다 많으면 작업 수를 표시합니다. `threshold`가 0으로 설정되면 모듈은 작업 수가 0개일 때도 표시됩니다.
 
 :::
 
-### Options
+### 옵션
 
-| Option             | Default                       | Description                                                              |
+| 옵션             | 기본값                       | 설명                                                              |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `'[$symbol$number]($style) '` | The format for the module.                                               |
-| `기호`               | `'✦'`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `'bold blue'`                 | The style for the module.                                                |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `threshold`*       | `1`                           | 표시할 작업 수의 임계값입니다.                                         |
+| `symbol_threshold` | `1`                           | 작업 수가 `symbol_threshold` 이상이면 `symbol`을 표시합니다.           |
+| `number_threshold` | `2`                           | 작업 수가 `number_threshold` 이상이면 작업 수를 표시합니다.             |
+| `format`           | `'[$symbol$number]($style) '` | 모듈의 형식입니다.                                               |
+| `기호`               | `'✦'`                         | `symbol` 변수를 나타내는 데 사용되는 문자열입니다.                      |
+| `style`            | `'bold blue'`                 | 모듈의 스타일입니다.                                                |
+| `disabled`         | `false`                       | `jobs` 모듈을 비활성화합니다.                                              |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: 이 옵션은 더 이상 사용되지 않습니다. 대신 `number_threshold` 및 `symbol_threshold` 옵션을 사용하세요.
 
-### Variables
+### 변수
 
-| Variable  | 예시  | Description                          |
+| 변수      | 예시  | 설명                                 |
 | --------- | --- | ------------------------------------ |
-| number    | `1` | The number of jobs                   |
-| 기호        |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| number    | `1` | 작업 수                   |
+| 기호        |     | `symbol` 옵션의 값을 반영합니다. |
+| style* |     | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2436,39 +2469,40 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 [jobs]
 symbol = '+ '
 number_threshold = 4
-symbol_threshold = 0
+ symbol_threshold = 0
 ```
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
+`julia` 모듈은 현재 설치된 [Julia](https://julialang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- 현재 디렉토리에 `Project.toml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `Manifest.toml` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.jl` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `기호`                | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
-| `style`             | `'bold purple'`                      | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `julia` module.                                              |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'ஃ '`                               | Julia의 기호를 나타내는 형식 문자열입니다.                         |
+| `style`             | `'bold purple'`                      | 모듈의 스타일입니다.                                                 |
+| `detect_extensions` | `['jl']`                             | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `disabled`          | `false`                              | `julia` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v1.4.0` | The version of `julia`               |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v1.4.0` | `julia`의 버전               |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2481,33 +2515,34 @@ symbol = '∴ '
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
+`kotlin` 모듈은 현재 설치된 [Kotlin](https://kotlinlang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `.kt` or a `.kts` file
+- 현재 디렉토리에 `.kt` 또는 `.kts` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                                   |
+| 옵션              | 기본값                               | 설명                                                                   |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                    |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
-| `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
-| `기호`                | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `'bold blue'`                        | The style for the module.                                                     |
-| `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                    |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다.     |
+| `기호`                | `'🅺 '`                               | Kotlin의 기호를 나타내는 형식 문자열입니다.                            |
+| `detect_extensions` | `['kt', 'kts']`                      | 이 모듈을 트리거해야 하는 확장자입니다.                                  |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                                   |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                    |
+| `style`             | `'bold blue'`                        | 모듈의 스타일입니다.                                                     |
+| `kotlin_binary`     | `'kotlin'`                           | 버전을 가져올 때 Starship이 실행하는 kotlin 바이너리를 구성합니다. |
+| `disabled`          | `false`                              | `kotlin` 모듈을 비활성화합니다.                                                 |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| version   | `v1.4.21` | The version of `kotlin`              |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| version   | `v1.4.21` | `kotlin`의 버전              |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2522,71 +2557,72 @@ symbol = '🅺 '
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# 설치된 버전 정보를 얻기 위해 Kotlin 컴파일러 바이너리 사용
 kotlin_binary = 'kotlinc'
 ```
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+현재 [Kubernetes 컨텍스트](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) 이름과, 설정된 경우 네임스페이스, 사용자 및 클러스터를 kubeconfig 파일에서 표시합니다. 네임스페이스는 kubeconfig 파일에 설정해야 하며, `kubectl config set-context starship-context --namespace astronaut`를 통해 설정할 수 있습니다. 마찬가지로 사용자 및 클러스터는 `kubectl config set-context starship-context --user starship-user` 및 `kubectl config set-context starship-context --cluster starship-cluster`를 통해 설정할 수 있습니다. `$KUBECONFIG` 환경 변수가 설정된 경우 모듈은 해당 변수를 사용하고, 그렇지 않으면 `~/.kube/config`를 사용합니다.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+이 모듈은 기본적으로 비활성화되어 있습니다. 활성화하려면 설정 파일에서 `disabled`를 `false`로 설정하세요.
 
-When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
+모듈이 활성화되면 항상 활성화됩니다. 단, `detect_env_vars`, `detect_extensions`, `detect_files` 또는 `detect_folders`가 설정된 경우에는 해당 조건과 일치하는 디렉토리에서만 모듈이 활성화됩니다.
 
 :::
 
-### Options
+### 옵션
 
 ::: warning
 
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
+`context_aliases` 및 `user_aliases` 옵션은 더 이상 사용되지 않습니다. 대신 `contexts` 및 해당 `context_alias`, `user_alias` 옵션을 사용하세요.
 
 :::
 
-| Option              | Default                                              | Description                                                           |
-| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `기호`                | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`             | `'cyan bold'`                                        | The style for the module.                                             |
-| `context_aliases`*  | `{}`                                                 | Table of context aliases to display.                                  |
-| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                     |
-| `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
-| `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
-| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
-| `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
-| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
+| 옵션              | 기본값                                              | 설명                                                           |
+| ------------------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| `기호`                | `'☸ '`                                               | 클러스터 앞에 표시되는 기호를 나타내는 형식 문자열입니다.                         |
+| `format`            | `'[$symbol$context( \'($namespace\))]($style) in '` | 모듈의 형식입니다.                                            |
+| `style`             | `'cyan bold'`                                       | 모듈의 스타일입니다.                                             |
+| `context_aliases`*  | `{}`                                                 | 표시할 컨텍스트 별칭 테이블입니다.                                  |
+| `user_aliases`*     | `{}`                                                 | 표시할 사용자 별칭 테이블입니다.                                     |
+| `detect_extensions` | `[]`                                                 | 이 모듈을 트리거해야 하는 확장자입니다.                          |
+| `detect_files`      | `[]`                                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                           |
+| `detect_folders`    | `[]`                                                 | 이 모듈을 트리거해야 하는 폴더입니다.                            |
+| `detect_env_vars`   | `[]`                                                 | 이 모듈을 트리거해야 하는 환경 변수입니다.              |
+| `contexts`          | `[]`                                                 | 특정 컨텍스트에 대한 사용자 지정 스타일 및 기호입니다.                  |
+| `disabled`          | `true`                                               | `kubernetes` 모듈을 비활성화합니다.                                      |
 
-*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+*: 이 옵션은 더 이상 사용되지 않습니다. 대신 해당 `context_alias` 및 `user_alias` 옵션과 함께 `contexts`를 추가하세요.
 
-To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
+특정 환경에 대한 모듈 스타일을 사용자 지정하려면 다음 구성을 `contexts` 목록의 일부로 사용하세요:
 
-| Variable          | Description                                                                              |
-| ----------------- | ---------------------------------------------------------------------------------------- |
-| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
-| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
-| `context_alias`   | Context alias to display instead of the full context name.                               |
-| `user_alias`      | User alias to display instead of the full user name.                                     |
-| `style`           | The style for the module when using this context. If not set, will use module's style.   |
-| `기호`              | The symbol for the module when using this context. If not set, will use module's symbol. |
+| 변수          | 설명                                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
+| `context_pattern` | **필수** 현재 Kubernetes 컨텍스트 이름을 일치시키는 정규식입니다.                |
+| `user_pattern`    | 현재 Kubernetes 사용자 이름을 일치시키는 정규식입니다.                               |
+| `context_alias`   | 전체 컨텍스트 이름 대신 표시할 컨텍스트 별칭입니다.                               |
+| `user_alias`      | 전체 사용자 이름 대신 표시할 사용자 별칭입니다.                                     |
+| `style`           | 이 컨텍스트를 사용할 때 모듈의 스타일입니다. 설정되지 않은 경우 모듈의 스타일을 사용합니다.   |
+| `기호`              | 이 컨텍스트를 사용할 때 모듈의 기호입니다. 설정되지 않은 경우 모듈의 기호를 사용합니다. |
 
-Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern` regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N` (see example below and the [rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
+모든 `*_pattern` 정규식은 `^<pattern>$`으로 고정되므로 전체 문자열과 일치해야 합니다. `*_pattern` 정규식에는 캡처 그룹이 포함될 수 있으며, 이는 해당 별칭에서 `$name` 및 `$N`을 통해 참조될 수 있습니다 (아래 예시 및 [rust Regex::replace() 문서](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace) 참조).
 
-### Variables
+### 변수
 
-| Variable  | 예시                   | Description                              |
+| 변수      | 예시                   | 설명                                     |
 | --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name      |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| user      | `starship-user`      | If set, the current kubernetes user      |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
-| 기호        |                      | Mirrors the value of option `symbol`     |
-| style\* |                      | Mirrors the value of option `style`      |
+| context   | `starship-context`   | 현재 kubernetes 컨텍스트 이름      |
+| namespace | `starship-namespace` | 설정된 경우 현재 kubernetes 네임스페이스 |
+| user      | `starship-user`      | 설정된 경우 현재 kubernetes 사용자      |
+| cluster   | `starship-cluster`   | 설정된 경우 현재 kubernetes 클러스터   |
+| 기호        |                      | `symbol` 옵션의 값을 반영합니다.     |
+| style* |                      | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2594,14 +2630,14 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+format = 'on [$symbol$context( \'($namespace\)))]($style) in '
 disabled = false
 contexts = [
   { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
 ]
 ```
 
-Only show the module in directories that contain a `k8s` file.
+`k8s` 파일을 포함하는 디렉토리에서만 모듈 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -2611,16 +2647,16 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Kubernetes Context specific config
+#### Kubernetes 컨텍스트별 구성
 
-The `contexts` configuration option is used to customise what the current Kubernetes context name looks like (style and symbol) if the name matches the defined regular expression.
+`contexts` 구성 옵션은 이름이 정의된 정규식과 일치하는 경우 현재 Kubernetes 컨텍스트 이름(스타일 및 기호)을 사용자 지정하는 데 사용됩니다.
 
 ```toml
 # ~/.config/starship.toml
 
 [[kubernetes.contexts]]
-# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
-# equals "admin_user"
+# "bold red" 스타일 + 기본 기호, Kubernetes 현재 컨텍스트 이름이 "production" *이고* 현재 사용자
+# "admin_user"와 같을 때
 context_pattern = "production"
 user_pattern = "admin_user"
 style = "bold red"
@@ -2628,30 +2664,30 @@ context_alias = "prod"
 user_alias = "admin"
 
 [[kubernetes.contexts]]
-# "green" style + a different symbol when Kubernetes current context name contains openshift
+# "green" 스타일 + 다른 기호, Kubernetes 현재 컨텍스트 이름에 openshift가 포함될 때
 context_pattern = ".*openshift.*"
 style = "green"
 symbol = "💔 "
 context_alias = "openshift"
 
 [[kubernetes.contexts]]
-# Using capture groups
-# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
-# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
-# and renames every matching kube context into a more readable format (`gke-cluster-name`):
-context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+# 캡처 그룹 사용
+# GKE, AWS 및 기타 클라우드 공급자의 컨텍스트에는 일반적으로 리전/영역과 같은 추가 정보가 포함됩니다.
+# 다음 항목은 GKE 형식 (`gke_projectname_zone_cluster-name`)과 일치합니다.
+# 그리고 모든 일치하는 kube 컨텍스트를 더 읽기 쉬운 형식 (`gke-cluster-name`)으로 이름을 바꿉니다:
+context_pattern = "gke_.*_(?P<cluster>[\w-]+)"
 context_alias = "gke-$cluster"
 ```
 
-## Line Break
+## 줄 바꿈
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 모듈은 프롬프트를 두 줄로 분리합니다.
 
-### Options
+### 옵션
 
-| Option     | Default | Description                                                        |
+| 옵션     | 기본값 | 설명                                                         |
 | ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| `disabled` | `false` | `line_break` 모듈을 비활성화하여 프롬프트를 한 줄로 만듭니다. |
 
 ### 예시
 
@@ -2662,27 +2698,28 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Local IP
+## 로컬 IP
 
-The `localip` module shows the IPv4 address of the primary network interface.
+`localip` 모듈은 기본 네트워크 인터페이스의 IPv4 주소를 표시합니다.
 
-### Options
+### 옵션
 
-| Option     | Default                   | Description                                            |
+| 옵션     | 기본값                   | 설명                                         |
 | ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `'[$localipv4]($style) '` | The format for the module.                             |
-| `style`    | `'bold yellow'`           | The style for the module.                              |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| `ssh_only` | `true`                    | SSH 세션에 연결된 경우에만 IP 주소를 표시합니다. |
+| `format`   | `'[$localipv4]($style) '` | 모듈의 형식입니다.                             |
+| `style`    | `'bold yellow'`           | 모듈의 스타일입니다.                              |
+| `disabled` | `true`                    | `localip` 모듈을 비활성화합니다.                         |
 
-### Variables
+### 변수
 
-| Variable  | 예시           | Description                         |
+| 변수      | 예시           | 설명                         |
 | --------- | ------------ | ----------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
-| style\* |              | Mirrors the value of option `style` |
+| localipv4 | 192.168.1.13 | 기본 IPv4 주소를 포함합니다.   |
+| style* |              | `style` 옵션의 값을 반영합니다. |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2697,79 +2734,81 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
+`lua` 모듈은 현재 설치된 [Lua](http://www.lua.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `.lua-version` file
-- The current directory contains a `lua` directory
-- The current directory contains a file with the `.lua` extension
+- 현재 디렉토리에 `.lua-version` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `lua` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `.lua` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                                |
+| 옵션              | 기본값                               | 설명                                                                |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                 |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
-| `기호`                | `'🌙 '`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `['lua']`                            | Which extensions should trigger this module.                               |
-| `detect_files`      | `['.lua-version']`                   | Which filenames should trigger this module.                                |
-| `detect_folders`    | `['lua']`                            | Which folders should trigger this module.                                  |
-| `style`             | `'bold blue'`                        | The style for the module.                                                  |
-| `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                 |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다.  |
+| `기호`                | `'🌙 '`                               | Lua의 기호를 나타내는 형식 문자열입니다.                            |
+| `detect_extensions` | `['lua']`                            | 이 모듈을 트리거해야 하는 확장자입니다.                               |
+| `detect_files`      | `['.lua-version']`                   | 이 모듈을 트리거해야 하는 파일 이름입니다.                                |
+| `detect_folders`    | `['lua']`                            | 이 모듈을 트리거해야 하는 폴더입니다.                                  |
+| `style`             | `'bold blue'`                        | 모듈의 스타일입니다.                                                  |
+| `lua_binary`        | `'lua'`                              | 버전을 가져올 때 Starship이 실행하는 lua 바이너리를 구성합니다. |
+| `disabled`          | `false`                              | `lua` 모듈을 비활성화합니다.                                                 |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v5.4.0` | The version of `lua`                 |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v5.4.0` | `lua`의 버전                 |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
 ```toml
 # ~/.config/starship.toml
 
-[lua]
+lua]
 format = 'via [🌕 $version](bold blue) '
 ```
 
-## Memory Usage
+## 메모리 사용량
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 모듈은 현재 시스템 메모리 및 스왑 사용량을 표시합니다.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+기본적으로 총 시스템 스왑이 0이 아닌 경우 스왑 사용량이 표시됩니다.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+이 모듈은 기본적으로 비활성화되어 있습니다. 활성화하려면 설정 파일에서 `disabled`를 `false`로 설정하세요.
 
 :::
 
-### Options
+### 옵션
 
-| Option      | Default                                         | Description                                              |
-| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
-| `기호`        | `'🐏'`                                           | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                           | The style for the module.                                |
-| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
+| 옵션      | 기본값                                         | 설명                                              |
+| --------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | 이 백분율을 초과하지 않는 한 메모리 사용량을 숨깁니다. |
+| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | 모듈의 형식입니다.                               |
+| `기호`        | `'🐏'`                                           | 메모리 사용량을 표시하기 전에 사용되는 기호입니다.      |
+| `style`     | `'bold dimmed white'`                           | 모듈의 스타일입니다.                                |
+| `disabled`  | `true`                                          | `memory_usage` 모듈을 비활성화합니다.                      |
 
-### Variables
+### 변수
 
-| Variable         | 예시            | Description                                                        |
-| ---------------- | ------------- | ------------------------------------------------------------------ |
-| ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct          | `48%`         | The percentage of the current system memory.                       |
-| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| 기호               | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*        |               | Mirrors the value of option `style`                                |
+| 변수         | 예시            | 설명                                                        |
+| -------------- | ------------- | ------------------------------------------------------------------ |
+| ram              | `31GiB/65GiB` | 현재 시스템 메모리의 사용량/총량입니다.                  |
+| ram_pct          | `48%`         | 현재 시스템 메모리의 백분율입니다.                       |
+| swap	*     | `1GiB/4GiB`   | 현재 시스템 스왑 메모리 파일의 스왑 메모리 크기입니다.       |
+| swap_pct	* | `77%`         | 현재 시스템 스왑 메모리 파일의 스왑 메모리 백분율입니다. |
+| 기호               | `🐏`           | `symbol` 옵션의 값을 반영합니다.                               |
+| style*        |               | `style` 옵션의 값을 반영합니다.                                |
 
-*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다. *	: SWAP 파일 정보는 현재 시스템에서 감지된 경우에만 표시됩니다.
 
 ### 예시
 
@@ -2785,30 +2824,31 @@ style = 'bold dimmed green'
 
 ## Meson
 
-The `meson` module shows the current Meson developer environment status.
+`meson` 모듈은 현재 Meson 개발자 환경 상태를 표시합니다.
 
-By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
+기본적으로 `$MESON_DEVENV`가 설정된 경우 Meson 프로젝트 이름이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                            | Description                                                                               |
+| 옵션              | 기본값                         | 설명                                                                               |
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                                |
-| `truncation_symbol` | `'…'`                              | The symbol used to indicate a project name was truncated. You can use `''` for no symbol. |
-| `format`            | `'via [$symbol$project]($style) '` | The format for the module.                                                                |
-| `기호`                | `'⬢ '`                             | The symbol used before displaying the project name.                                       |
-| `style`             | `'blue bold'`                      | The style for the module.                                                                 |
-| `disabled`          | `false`                            | Disables the `meson` module.                                                              |
+| `truncation_length` | `2^32 - 1`                         | 프로젝트 이름을 `N` 그래프로 자릅니다.                                                |
+| `truncation_symbol` | `'…'`                              | 프로젝트 이름이 잘렸음을 나타내는 데 사용되는 기호입니다. 기호가 없는 경우 `''`를 사용할 수 있습니다. |
+| `format`            | `'via [$symbol$project]($style) '` | 모듈의 형식입니다.                                                                |
+| `기호`                | `'⬢ '`                             | 프로젝트 이름을 표시하기 전에 사용되는 기호입니다.                                       |
+| `style`             | `'blue bold'`                      | 모듈의 스타일입니다.                                                                 |
+| `disabled`          | `false`                            | `meson` 모듈을 비활성화합니다.                                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시         | Description                          |
+| 변수      | 예시         | 설명                                 |
 | --------- | ---------- | ------------------------------------ |
-| project   | `starship` | The current Meson project name       |
-| 기호        | `🐏`        | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| project   | `starship` | 현재 Meson 프로젝트 이름       |
+| 기호        | `🐏`        | `symbol` 옵션의 값을 반영합니다. |
+| style* |            | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2822,31 +2862,32 @@ symbol = ' '
 style = 'bold dimmed green'
 ```
 
-## Mercurial Branch
+## Mercurial 브랜치
 
-The `hg_branch` module shows the active branch and topic of the repo in your current directory.
+`hg_branch` 모듈은 현재 디렉토리의 리포지토리에 있는 활성 브랜치 및 토픽을 표시합니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                   | Description                                                                                  |
+| 옵션              | 기본값                                   | 설명                                                                                  |
 | ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `기호`                | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `'bold purple'`                           | The style for the module.                                                                    |
-| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
-| `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
+| `기호`                | `' '`                                    | 현재 디렉토리의 리포지토리에 있는 hg 북마크 또는 브랜치 이름 앞에 사용되는 기호입니다. |
+| `style`             | `'bold purple'`                           | 모듈의 스타일입니다.                                                                    |
+| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | 모듈의 형식입니다.                                                                   |
+| `truncation_length` | `2^63 - 1`                                | hg 브랜치 / 토픽 이름을 `N` 그래프로 자릅니다.                                        |
+| `truncation_symbol` | `'…'`                                     | 브랜치 이름이 잘렸음을 나타내는 데 사용되는 기호입니다.                             |
+| `disabled`          | `true`                                    | `hg_branch` 모듈을 비활성화합니다.                                                             |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| branch    | `master`  | The active mercurial branch          |
-| topic     | `feature` | The active mercurial topic           |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| branch    | `master`  | 활성 mercurial 브랜치          |
+| topic     | `feature` | 활성 mercurial 토픽           |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2861,28 +2902,29 @@ truncation_symbol = ''
 
 ## Mise
 
-The `mise` module shows the current mise health as reported by running `mise doctor`.
+`mise` 모듈은 `mise doctor`를 실행하여 보고된 현재 mise 상태를 표시합니다.
 
-### Options
+### 옵션
 
-| Option             | Default                          | Description                                      |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `기호`               | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | The style for the module.                        |
-| `format`           | `'on [$symbol$health]($style) '` | The format for the module.                       |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| 옵션             | 기본값                          | 설명                                      |
+| ------------------ | -------------------------------- | ------------------------------------------------ | |
+| `기호`               | `'mise '`                        | _mise_ 상태를 표시하기 전에 사용되는 기호입니다. | |
+| `style`            | `'bold purple'`                  | 모듈의 스타일입니다.                        |
+| `format`           | `'on [$symbol$health]($style) '` | 모듈의 형식입니다.                       |
+| `healthy_symbol`   | `healthy`                        | _mise_가 건강할 때 표시되는 메시지입니다.    |
+| `unhealthy_symbol` | `unhealthy`                      | _mise_가 건강하지 않을 때 표시되는 메시지입니다.  |
+| `disabled`         | `true`                           | `mise` 모듈을 비활성화합니다.                      |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
+| 변수      | 예시        | 설명                                 |
 | --------- | --------- | ------------------------------------ |
-| health    | `healthy` | The health of _mise_                 |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| health    | `healthy` | _mise_의 상태                 |
+| 기호        |           | `symbol` 옵션의 값을 반영합니다. |
+| style* |           | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2895,29 +2937,30 @@ health = 'ready'
 
 ## Mojo
 
-The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+`mojo` 모듈은 현재 설치된 Mojo 프로그래밍 언어 버전을 표시합니다.
 
-### Options
+### 옵션
 
-| Option              | Default                               | Description                                            |
-| ------------------- | ------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'with [$symbol($version )]($style)'` | The format for the module.                             |
-| `기호`                | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
-| `style`             | `'bold 208'`                          | The style for the module.                              |
-| `disabled`          | `false`                               | Disables the `mojo` module.                            |
-| `detect_extensions` | `['mojo', '🔥']`                       | Which extensions should trigger this module.           |
-| `detect_files`      | `[]`                                  | Which filenames should trigger this module.            |
-| `detect_folders`    | `[]`                                  | Which folders should trigger this module.              |
+| 옵션              | 기본값                               | 설명                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | 모듈의 형식입니다.                             |
+| `기호`                | `'🔥 '`                                | Mojo 버전을 표시하기 전에 사용되는 기호입니다. |
+| `style`             | `'bold 208'`                         | 모듈의 스타일입니다.                              |
+| `disabled`          | `false`                              | `mojo` 모듈을 비활성화합니다.                            |
+| `detect_extensions` | `['mojo', '🔥']`                       | 이 모듈을 트리거해야 하는 확장자입니다.           |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.            |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.             |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `24.4.0` | The version of `mojo`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `24.4.0` | `mojo`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2925,29 +2968,32 @@ The `mojo` module shows the current version of [Mojo programming language](https
 # ~/.config/starship.toml
 
 [mojo]
-format = 'via [mojo ($version )($hash )]($style)'
+format = 'via [mojo ($version )]($style)'
 ```
 
 ## NATS
 
-The `nats` module shows the name of the current [NATS](https://nats.io) context.
+`nats` 모듈은 현재 [NATS](https://nats.io) 컨텍스트의 이름을 표시합니다.
 
-### Options
+### 옵션
 
-| Option     | Default                    | Description                                                  |
+| 옵션     | 기본값                    | 설명                                                  |
 | ---------- | -------------------------- | ------------------------------------------------------------ |
-| `기호`       | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
-| `style`    | `'bold purple'`            | The style for the module.                                    |
-| `format`   | `'[$symbol$name]($style)'` | The format for the module.                                   |
-| `disabled` | `false`                    | Disables the `nats` module.                                  |
+| `기호`       | `'✉️ '`                    | NATS 컨텍스트 앞에 사용되는 기호입니다 (기본값은 비어 있음).
+| `style`    | `'bold purple'`            | 모듈의 스타일입니다.                                     |
+| `format`   | `'[$symbol$name]($style)'` | 모듈의 형식입니다.                                   |
+| `disabled` | `false`                    | `nats` 모듈을 비활성화합니다.                                  |
 
-### Variables
+### 변수
 
-| Variable  | 예시          | Description                          |
+| 변수      | 예시          | 설명                                 |
 | --------- | ----------- | ------------------------------------ |
-| name      | `localhost` | The name of the NATS context         |
-| 기호        |             | Mirrors the value of option `symbol` |
-| style\* |             | Mirrors the value of option `style`  |
+| name      | `localhost` | 현재 NATS 컨텍스트의 이름         |
+| 기호        |             | `symbol` 옵션의 값을 반영합니다. |
+| style* |             | `style` 옵션의 값을 반영합니다.  |
+
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2957,26 +3003,29 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
-## Network Namespace
+## 네트워크 네임스페이스
 
-The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+`netns` 모듈은 현재 네트워크 네임스페이스를 표시합니다. 이는 `ip netns identify`를 사용하여 네트워크 네임스페이스를 가져오므로 `/var/run/netns`에 마운트된 네트워크 네임스페이스만 감지됩니다.
 
-### Options
+### 옵션
 
-| Option     | Default                           | Description                                                       |
-| ---------- | --------------------------------- | ----------------------------------------------------------------- |
-| `format`   | `'[$symbol \[$name\]]($style)'` | The format for the module.                                        |
-| `기호`       | `'🛜 '`                            | The symbol used before the network namespace (defaults to empty). |
-| `style`    | `'blue bold dimmed'`              | The style for the module.                                         |
-| `disabled` | `false`                           | Disables the `netns` module.                                      |
+| 옵션     | 기본값                           | 설명                                                       |
+| ---------- | --------------------------------- | ------------------------------------------------------------------ |
+| `format`   | `'[$symbol \[$name\]]($style)'` | 모듈의 형식입니다.                                        |
+| `기호`       | `'🛜 '`                            | 네트워크 네임스페이스 앞에 사용되는 기호입니다 (기본값은 비어 있음).
+| `style`    | `'blue bold dimmed'`              | 모듈의 스타일입니다.                                         |
+| `disabled` | `false`                           | `netns` 모듈을 비활성화합니다.                                      |
 
-### Variables
+### 변수
 
-| Variable  | 예시         | Description                               |
+| 변수      | 예시         | 설명                               | |
 | --------- | ---------- | ----------------------------------------- |
-| name      | `my-netns` | The name of the current network namespace |
-| 기호        |            | Mirrors the value of option `symbol`      |
-| style\* |            | Mirrors the value of option `style`       |
+| name      | `my-netns` | 현재 네트워크 네임스페이스의 이름 |
+| 기호        |            | `symbol` 옵션의 값을 반영합니다.      |
+| style* |            | `style` 옵션의 값을 반영합니다.       |
+
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -2990,73 +3039,75 @@ symbol = '🌐 '
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
+`nim` 모듈은 현재 설치된 [Nim](https://nim-lang.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `nim.cfg` file
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- 현재 디렉토리에 `nim.cfg` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.nim` 확장자를 가진 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.nims` 확장자를 가진 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.nimble` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                 |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'👑 '`                               | The symbol used before displaying the version of Nim.                     |
-| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['nim.cfg']`                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold yellow'`                      | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `nim` module.                                                |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식                                                 |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'👑 '`                               | Nim 버전을 표시하기 전에 사용되는 기호입니다.                     |
+| `detect_extensions` | `['nim', 'nims', 'nimble']`          | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['nim.cfg']`                        | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'bold yellow'`                      | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `nim` 모듈을 비활성화합니다.                                                |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v1.2.0` | The version of `nimc`                |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v1.2.0` | `nimc`의 버전                |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
 ```toml
 # ~/.config/starship.toml
 
-[nim]
+nim]
 style = 'yellow'
 symbol = '🎣 '
 ```
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+`nix_shell` 모듈은 [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) 환경을 표시합니다. nix-shell 환경 내부에 있을 때 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option        | Default                                        | Description                                                           |
-| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| `format`      | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                                            |
-| `기호`          | `'❄️ '`                                        | A format string representing the symbol of nix-shell.                 |
-| `style`       | `'bold blue'`                                  | The style for the module.                                             |
-| `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
-| `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
-| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
-| `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
-| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
+| 옵션        | 기본값                                        | 설명                                                           |
+| ------------- | --------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \'($name\))]($style) '` | 모듈의 형식입니다.                                            |
+| `기호`          | `'❄️ '`                                        | nix-shell의 기호를 나타내는 형식 문자열입니다.                 |
+| `style`       | `'bold blue'`                                  | 모듈의 스타일입니다.                                             |
+| `impure_msg`  | `'impure'`                                     | 셸이 불순할 때 표시되는 형식 문자열입니다.                       |
+| `pure_msg`    | `'pure'`                                       | 셸이 순수할 때 표시되는 형식 문자열입니다.                         |
+| `unknown_msg` | `''`                                           | 셸이 순수/불순한지 알 수 없을 때 표시되는 형식 문자열입니다. |
+| `disabled`    | `false`                                        | `nix_shell` 모듈을 비활성화합니다.                                      |
+| `heuristic`   | `false`                                        | 새로운 `nix shell`-스타일 셸을 휴리스틱으로 감지하려고 시도합니다. |
 
-### Variables
+### 변수
 
-| Variable  | 예시      | Description                          |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| 기호        |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| 변수      | 예시      | 설명                                 |
+| ----------- | ------- | ------------------------------------ |
+| state     | `pure`  | nix-shell의 상태           |
+| name      | `lorri` | nix-shell의 이름            |
+| 기호        |         | `symbol` 옵션의 값을 반영합니다. |
+| style* |         | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3068,46 +3119,47 @@ disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
 unknown_msg = '[unknown shell](bold yellow)'
-format = 'via [☃️ $state( \($name\))](bold blue) '
+format = 'via [☃️ $state( \'($name\))]($style) '
 ```
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
+`nodejs` 모듈은 현재 설치된 [Node.js](https://nodejs.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `package.json` file
-- The current directory contains a `.node-version` file
-- The current directory contains a `.nvmrc` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- 현재 디렉토리에 `package.json` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.node-version` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.nvmrc` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `node_modules` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `.js`, `.mjs` 또는 `.cjs` 확장자를 가진 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.ts`, `.mts` 또는 `.cts` 확장자를 가진 파일이 포함되어 있습니다.
 
-Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+추가로, 디렉토리에 `bunfig.toml`, `bun.lock` 또는 `bun.lockb` 파일이 포함되어 있으면 기본적으로 모듈이 숨겨져 위의 조건을 재정의합니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                       | Description                                                                                           |
-| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                            |
-| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `기호`                | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Which extensions should trigger this module.                                                          |
-| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `['node_modules']`                            | Which folders should trigger this module.                                                             |
-| `style`             | `'bold green'`                                | The style for the module.                                                                             |
-| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
+| 옵션              | 기본값                                       | 설명                                                                                           |
+| ------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | 모듈의 형식입니다.                                                                            |
+| `version_format`    | `'v${raw}'`                                   | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다.                             |
+| `기호`                | `' '`                                        | Node.js의 기호를 나타내는 형식 문자열입니다.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | 이 모듈을 트리거해야 하는 확장자입니다.                                                          |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | 이 모듈을 트리거해야 하는 파일 이름입니다.                                                           |
+| `detect_folders`    | `['node_modules']`                            | 이 모듈을 트리거해야 하는 폴더입니다.                                                             |
+| `style`             | `'bold green'`                                | 모듈의 스타일입니다.                                                                             |
+| `disabled`          | `false`                                       | `nodejs` 모듈을 비활성화합니다.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | package.json의 engines 속성이 Node.js 버전과 일치하지 않을 때 모듈의 스타일입니다. |
 
-### Variables
+### 변수
 
-| Variable        | 예시            | Description                                                                                                                                               |
-| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
-| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
-| 기호              |               | Mirrors the value of option `symbol`                                                                                                                      |
-| style\*       |               | Mirrors the value of option `style`                                                                                                                       |
+| 변수        | 예시            | 설명                                                                                                                                               |
+| ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | `node`의 버전                                                                                                                                     |
+| engines_version | `>=12.0.0` | `package.json`의 engines 속성에 설정된 `node` 버전 요구 사항입니다. `node` 버전과 일치하지 않는 경우에만 표시됩니다. |
+| 기호              |               | `symbol` 옵션의 값을 반영합니다.                                                                                       |
+| style*       |               | `style` 옵션의 값을 반영합니다.                                                                                                                       |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3120,41 +3172,42 @@ format = 'via [🤖 $version](bold green) '
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
+`ocaml` 모듈은 현재 설치된 [OCaml](https://ocaml.org/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- 현재 디렉토리에 `.opam` 확장자를 가진 파일 또는 `_opam` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `esy.lock` 디렉토리가 포함되어 있습니다.
+- 현재 디렉토리에 `dune` 또는 `dune-project` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `jbuild` 또는 `jbuild-ignore` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.merlin` 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `.ml`, `.mli`, `.re` 또는 `.rei` 확장자를 가진 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option                    | Default                                                                    | Description                                                               |
-| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                         |
-| `version_format`          | `'v${raw}'`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                      | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.                   |
-| `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.                   |
-| `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.                    |
-| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Which extensions should trigger this module.                              |
-| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Which filenames should trigger this module.                               |
-| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | Which folders should trigger this module.                                 |
-| `style`                   | `'bold yellow'`                                                            | The style for the module.                                                 |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
+| 옵션                    | 기본값                                                                     | 설명                                                               |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`                  | `'via [$symbol($version )(\'($switch_indicator$switch_name\) )]($style)'` | 모듈의 형식 문자열입니다.                                         |
+| `version_format`          | `'v${raw}'`                                                                | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                      | `'🐫 '`                                                                     | OCaml 버전을 표시하기 전에 사용되는 기호입니다.                   |
+| `global_switch_indicator` | `''`                                                                       | 전역 OPAM 스위치를 나타내는 데 사용되는 형식 문자열입니다.                   |
+| `local_switch_indicator`  | `'*'`                                                                      | 로컬 OPAM 스위치를 나타내는 데 사용되는 형식 문자열입니다.                    |
+| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`                   | `'bold yellow'`                                                            | 모듈의 스타일입니다.                                                 |
+| `disabled`                | `false`                                                                    | `ocaml` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable         | 예시           | Description                                                       |
+| 변수         | 예시           | 설명                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
-| switch_name      | `my-project` | The active OPAM switch                                            |
-| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| 기호               |              | Mirrors the value of option `symbol`                              |
-| style\*        |              | Mirrors the value of option `style`                               |
+| version          | `v4.10.0`    | `ocaml`의 버전                                            |
+| switch_name      | `my-project` | 활성 OPAM 스위치                                            |
+| switch_indicator |              | 현재 활성 OPAM 스위치의 `indicator` 값을 반영합니다. |
+| 기호               |              | `symbol` 옵션의 값을 반영합니다.                              |
+| style*        |              | `style` 옵션의 값을 반영합니다.                               |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3167,30 +3220,31 @@ format = 'via [🐪 $version]($style) '
 
 ## Odin
 
-The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+`odin` 모듈은 현재 설치된 [Odin](https://odin-lang.org/) 버전을 표시합니다. 기본적으로 현재 디렉토리에 `.odin` 파일이 포함되어 있으면 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                           |
+| 옵션              | 기본값                               | 설명                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                            |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `기호`                | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | The style for the module.                             |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                            |
+| `show_commit`       | `false`                              | 커밋을 버전의 일부로 표시합니다.              |
+| `기호`                | `'Ø '`                               | Zig의 버전을 표시하기 전에 사용되는 기호입니다. |
+| `style`             | `'bold bright-blue'`                 | 모듈의 스타일입니다.                             |
+| `disabled`          | `false`                              | `odin` 모듈을 비활성화합니다.                           |
+| `detect_extensions` | `['odin']`                           | 이 모듈을 트리거해야 하는 확장자입니다.          |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.           |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.             |
 
-### Variables
+### 변수
 
-| Variable  | 예시            | Description                          |
+| 변수      | 예시            | 설명                                 |
 | --------- | ------------- | ------------------------------------ |
-| version   | `dev-2024-03` | The version of `odin`                |
-| 기호        |               | Mirrors the value of option `symbol` |
-| style\* |               | Mirrors the value of option `style`  |
+| version   | `dev-2024-03` | `odin`의 버전                |
+| 기호        |               | `symbol` 옵션의 값을 반영합니다. |
+| style* |               | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3204,30 +3258,31 @@ show_commit = true
 
 ## Open Policy Agent
 
-The `opa` module shows the currently installed version of the OPA tool. By default the module will be shown if the current directory contains a `.rego` file.
+`opa` 모듈은 현재 설치된 OPA 도구 버전을 표시합니다. 기본적으로 현재 디렉토리에 `.rego` 파일이 포함되어 있으면 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🪖  '`                              | A format string representing the symbol of OPA.                           |
-| `detect_extensions` | `['rego']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold blue'`                        | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `opa` module.                                                |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'🪖  '`                              | OPA의 기호를 나타내는 형식 문자열입니다.                           |
+| `detect_extensions` | `['rego']`                           | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `style`             | `'bold blue'`                        | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | 이 모듈을 비활성화합니다.                                                     |
 
-### Variables
+### 변수
 
-| Variable  | 예시        | Description                          |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.44.0` | The version of `opa`                 |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 변수      | 예시       | 설명                                 |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.44.0` | `opa`의 버전                 |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3240,27 +3295,28 @@ format = 'via [⛑️  $version](bold red) '
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+`openstack` 모듈은 현재 OpenStack 클라우드 및 프로젝트를 표시합니다. 이 모듈은 `OS_CLOUD` 환경 변수가 설정된 경우에만 활성화되며, 이 경우 [기본 위치](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files) 중 하나에서 `clouds.yaml` 파일을 읽어 현재 사용 중인 프로젝트를 가져옵니다.
 
-### Options
+### 옵션
 
-| Option     | Default                                         | Description                                                    |
+| 옵션     | 기본값                                         | 설명                                                     |
 | ---------- | ----------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | The format for the module.                                     |
-| `기호`       | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `'bold yellow'`                                 | The style for the module.                                      |
-| `disabled` | `false`                                         | Disables the `openstack` module.                               |
+| `format`   | `'on [$symbol$cloud(\'($project\))]($style) '` | 모듈의 형식입니다.                                     |
+| `기호`       | `'☁️ '`                                         | 현재 OpenStack 클라우드를 표시하기 전에 사용되는 기호입니다. |
+| `style`    | `'bold yellow'`                                 | 모듈의 스타일입니다.                                      |
+| `disabled` | `false`                                         | `openstack` 모듈을 비활성화합니다.                               |
 
-### Variables
+### 변수
 
-| Variable  | 예시     | Description                          |
-| --------- | ------ | ------------------------------------ |
-| cloud     | `corp` | The current OpenStack cloud          |
-| project   | `dev`  | The current OpenStack project        |
-| 기호        |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| 변수      | 예시     | 설명                                 |
+| --------- | ------ | -------------------------------------------------------------- |
+| cloud     | `corp` | 현재 OpenStack 클라우드          |
+| project   | `dev`  | 현재 OpenStack 프로젝트        |
+| 기호        |        | `symbol` 옵션의 값을 반영합니다. |
+| style* |        | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3268,40 +3324,40 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 # ~/.config/starship.toml
 
 [openstack]
-format = 'on [$symbol$cloud(\($project\))]($style) '
+format = 'on [$symbol$cloud(\'($project\))]($style) '
 style = 'bold yellow'
 symbol = '☁️ '
 ```
 
 ## OS
 
-The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
+`os` 모듈은 현재 운영 체제를 표시합니다. OS 정보는 [os_info](https://lib.rs/crates/os_info) 크레이트를 통해 감지됩니다.
 
 ::: warning
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
+이 모듈에 사용되는 [os_info](https://lib.rs/crates/os_info) 크레이트는 일부 시스템에서 부정확할 수 있습니다.
 
 :::
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+이 모듈은 기본적으로 비활성화되어 있습니다. 활성화하려면 설정 파일에서 `disabled`를 `false`로 설정하세요.
 
 :::
 
-### Options
+### 옵션
 
-| Option     | Default               | Description                                            |
-| ---------- | --------------------- | ------------------------------------------------------ |
-| `format`   | `'[$symbol]($style)'` | The format for the module.                             |
-| `style`    | `'bold white'`        | The style for the module.                              |
-| `disabled` | `true`                | Disables the `os` module.                              |
-| `symbols`  |                       | A table that maps each operating system to its symbol. |
+| 옵션     | 기본값               | 설명                                                                                            |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------ |
+| `format`   | `'[$symbol]($style)'` | 모듈의 형식입니다.                                                            |
+| `style`    | `'bold white'`        | 모듈의 스타일입니다.                                                             |
+| `disabled` | `true`                | `os` 모듈을 비활성화합니다.                                                             |
+| `symbols`  |                       | 각 운영 체제에 해당 기호를 매핑하는 테이블입니다.
 
-`symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
+`symbols`를 사용하면 각 운영 체제 유형에 대한 임의의 기호를 정의할 수 있습니다. 구성에서 정의되지 않은 운영 체제 유형은 아래 기본 기호 테이블을 사용합니다. 현재 모듈에서 지원되는 모든 운영 체제는 아래에 나열되어 있습니다. 운영 체제를 추가하려면 [기능 요청](https://github.com/starship/starship/issues/new/choose)을 자유롭게 열어주세요.
 
 ```toml
-# This is the default symbols table.
+# 이것은 기본 기호 테이블입니다.
 [os.symbols]
 AIX = "➿ "
 Alpaquita = "🔔 "
@@ -3356,19 +3412,20 @@ Void = "  "
 Windows = "🪟 "
 ```
 
-### Variables
+### 변수
 
-| Variable  | 예시           | Description                                                        |
+| 변수      | 예시           | 설명                                                        |
 | --------- | ------------ | ------------------------------------------------------------------ |
-| 기호        | `🎗️`         | The current operating system symbol from advanced option `symbols` |
-| name      | `Arch Linux` | The current operating system name                                  |
-| 종류        | `Arch`       | The current operating system type                                  |
-| codename  |              | The current operating system codename, if applicable               |
-| edition   |              | The current operating system edition, if applicable                |
-| version   |              | The current operating system version, if applicable                |
-| style\* |              | Mirrors the value of option `style`                                |
+| `기호`        | `🎗️`         | `symbols` 고급 옵션에서 현재 운영 체제 기호 |
+| name      | `Arch Linux` | 현재 운영 체제 이름                                  |
+| 종류        | `Arch`       | 현재 운영 체제 유형                                  |
+| codename  |              | 해당되는 경우 현재 운영 체제 코드 이름               |
+| edition   |              | 해당되는 경우 현재 운영 체제 버전                   |
+| version   |              | 해당되는 경우 현재 운영 체제 버전                   |
+| style* |              | `style` 옵션의 값을 반영합니다.                                |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -3385,1186 +3442,44 @@ Windows = " "
 Arch = "Arch is the best! "
 ```
 
-## Package Version
+## 사용자 이름
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+`username` 모듈은 활성 사용자의 사용자 이름을 표시합니다. 이 모듈은 다음 조건 중 하나라도 충족되면 표시됩니다:
 
-- [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
-- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
-- [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
-- [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
-- [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present in the current directory
-- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
-- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
-- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
-- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
-- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
-- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
-- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
-- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
-- [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
-
-> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
-
-### Options
-
-| Option            | Default                           | Description                                                               |
-| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
-| `format`          | `'is [$symbol$version]($style) '` | The format for the module.                                                |
-| `기호`              | `'📦 '`                            | The symbol used before displaying the version the package.                |
-| `version_format`  | `'v${raw}'`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`           | `'bold 208'`                      | The style for the module.                                                 |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
-| `disabled`        | `false`                           | Disables the `package` module.                                            |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[package]
-format = 'via [🎁 $version](208 bold) '
-```
-
-## Perl
-
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
-- The current directory contains a `.perl-version` file
-- The current directory contains a `.pl`, `.pm` or `.pod`
-
-### Options
-
-| Option              | Default                                                                                                  | Description                                                               |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                     |
-| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |
-| `style`             | `'bold 149'`                                                                                             | The style for the module.                                                 |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
-
-### Variables
-
-| Variable  | 예시        | Description                          |
-| --------- | --------- | ------------------------------------ |
-| version   | `v5.26.1` | The version of `perl`                |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[perl]
-format = 'via [🦪 $version]($style) '
-```
-
-## PHP
-
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php-version` file
-- The current directory contains a `.php` extension
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🐘 '`                               | The symbol used before displaying the version of PHP.                     |
-| `detect_extensions` | `['php']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `['composer.json', '.php-version']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'147 bold'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `php` module.                                                |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `v7.3.8` | The version of `php`                 |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[php]
-format = 'via [🔹 $version](147 bold) '
-```
-
-## Pijul Channel
-
-The `pijul_channel` module shows the active channel of the repo in your current directory.
-
-### Options
-
-| Option              | Default                           | Description                                                                          |
-| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
-| `기호`                | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
-| `style`             | `'bold purple'`                   | The style for the module.                                                            |
-| `format`            | `'on [$symbol$channel]($style) '` | The format for the module.                                                           |
-| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
-| `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
-| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
-
-## Pixi
-
-The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+- 현재 사용자가 루트/관리자입니다.
+- 현재 사용자가 로그인한 사용자와 동일하지 않습니다.
+- 사용자가 현재 SSH 세션으로 연결되어 있습니다.
+- `show_always` 변수가 true로 설정되었습니다.
+- `detect_env_vars` 배열에 설정된 환경 변수 이름이 하나 이상 포함되어 있습니다.
 
 ::: tip
 
-This does not suppress pixi's own prompt modifier, you may want to run `pixi config set change-ps1 false`.
+SSH 연결은 `SSH_CONNECTION`, `SSH_CLIENT`, `SSH_TTY` 환경 변수를 확인하여 감지됩니다. SSH 호스트가 이러한 변수를 설정하지 않는 경우, 변수 중 하나를 더미 값으로 설정하는 것이 한 가지 해결 방법입니다.
 
 :::
 
-### Options
+### 옵션
 
-| Option                     | Default                                                   | Description                                                                       |
-| -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | The format for the module.                                                        |
-| `version_format`           | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
-| `기호`                       | `'🧚 '`                                                    | The symbol used before the environment name.                                      |
-| `style`                    | `'yellow bold'                                           | The style for the module.                                                         |
-| `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
-| `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
-| `detect_extensions`        | `[]`                                                      | Which extensions should trigger this module.                                      |
-| `detect_files`             | `['pixi.toml']`                                           | Which filenames should trigger this module.                                       |
-| `detect_folders`           | `['.pixi']`                                               | Which folders should trigger this module.                                         |
-| `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
-
-### Variables
-
-| Variable    | 예시        | Description                          |
-| ----------- | --------- | ------------------------------------ |
-| version     | `v0.33.0` | The version of `pixi`                |
-| environment | `py311`   | The current pixi environment         |
-| 기호          |           | Mirrors the value of option `symbol` |
-| style       |           | Mirrors the value of option `style`  |
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[pixi]
-format = '[$symbol$environment](yellow) '
-```
-
-## Pulumi
-
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
-
-::: tip
-
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-pulumi-version).
-
-:::
-
-By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
-
-### Options
-
-| Option           | Default                                      | Description                                                               |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                         |
-| `version_format` | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`             | `' '`                                       | A format string shown before the Pulumi stack.                            |
-| `style`          | `'bold 5'`                                   | The style for the module.                                                 |
-| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
-
-### Variables
-
-| Variable  | 예시         | Description                          |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `pulumi`              |
-| stack     | `dev`      | The current Pulumi stack             |
-| username  | `alice`    | The current Pulumi username          |
-| 기호        |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-#### With Pulumi Version
-
-```toml
-# ~/.config/starship.toml
-
-[pulumi]
-format = '[🛥 ($version )$stack]($style) '
-```
-
-#### Without Pulumi version
-
-```toml
-# ~/.config/starship.toml
-[pulumi]
-symbol = '🛥 '
-format = '[$symbol$stack]($style) '
-```
-
-## PureScript
-
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `spago.dhall` file
-- The current directory contains a `spago.yaml` file
-- The current directory contains a `spago.lock` file
-- The current directory contains a file with the `.purs` extension
-
-### Options
-
-| Option              | Default                                       | Description                                                               |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'<=> '`                                | The symbol used before displaying the version of PureScript.              |
-| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                              |
-| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                          | Which folders should trigger this module.                                 |
-| `style`             | `'bold white'`                                | The style for the module.                                                 |
-| `disabled`          | `false`                                       | Disables the `purescript` module.                                         |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[purescript]
-format = 'via [$symbol$version](bold white)'
-```
-
-## Python
-
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
-
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
-
-By default, the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- The current directory contains a file with the `.ipynb` extension.
-- A virtual environment is currently activated
-
-### Options
-
-| Option               | Default                                                                                                      | Description                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | The format for the module.                                                            |
-| `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
-| `기호`                 | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                     |
-| `style`              | `'yellow bold'`                                                                                              | The style for the module.                                                             |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
-
-::: tip
-
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
-
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
-
-:::
-
-### Variables
-
-| Variable     | 예시              | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| 기호           | `'🐍 '`          | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-symbol = '👾 '
-pyenv_version_name = true
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Only use the `python3` binary to get the version.
-python_binary = 'python3'
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Don't trigger for files with the py extension
-detect_extensions = []
-```
-
-## Quarto
-
-The `quarto` module shows the current installed version of Quarto used in a project.
-
-By default, the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `_quarto.yml` file
-- The current directory contains any `*.qmd` file
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'⨁ '`                               | A format string representing the symbol of Quarto                         |
-| `style`             | `'bold #75AADB'`                     | The style for the module.                                                 |
-| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `['_quarto.yml']`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `quarto` module.                                             |
-
-### Variables
-
-| Variable  | 예시        | Description                          |
-| --------- | --------- | ------------------------------------ |
-| version   | `1.4.549` | The version of `quarto`              |
-| 기호        |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-## R
-
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
-
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'📐'`                                | A format string representing the symbol of R.                             |
-| `style`             | `'blue bold'`                        | The style for the module.                                                 |
-| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Which extensions should trigger this module                               |
-| `detect_files`      | `['.Rprofile']`                      | Which filenames should trigger this module                                |
-| `detect_folders`    | `['.Rproj.user']`                    | Which folders should trigger this module                                  |
-| `disabled`          | `false`                              | Disables the `r` module.                                                  |
-
-### Variables
-
-| Variable | 예시            | Description                          |
-| -------- | ------------- | ------------------------------------ |
-| version  | `v4.0.5`      | The version of `R`                   |
-| 기호       |               | Mirrors the value of option `symbol` |
-| style    | `'blue bold'` | Mirrors the value of option `style`  |
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[rlang]
-format = 'with [📐 $version](blue bold) '
-```
-
-## Raku
-
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `META6.json` file
-- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
-
-### Options
-
-| Option              | Default                                          | Description                                                               |
-| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🦋 '`                                           | The symbol used before displaying the version of Raku                     |
-| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['META6.json']`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
-| `style`             | `'bold 149'`                                     | The style for the module.                                                 |
-| `disabled`          | `false`                                          | Disables the `raku` module.                                               |
-
-### Variables
-
-| Variable   | 예시     | Description                          |
-| ---------- | ------ | ------------------------------------ |
-| version    | `v6.d` | The version of `raku`                |
-| vm_version | `moar` | The version of VM `raku` is built on |
-| 기호         |        | Mirrors the value of option `symbol` |
-| style\*  |        | Mirrors the value of option `style`  |
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[raku]
-format = 'via [🦪 $version]($style) '
-```
-
-## Red
-
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
-
-- The current directory contains a file with `.red` or `.reds` extension
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🔺 '`                               | A format string representing the symbol of Red.                           |
-| `detect_extensions` | `['red']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'red bold'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `red` module.                                                |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `red`                 |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[red]
-symbol = '🔴 '
-```
-
-## Ruby
-
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
-
-Starship gets the current Ruby version by running `ruby -v`.
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'💎 '`                               | A format string representing the symbol of Ruby.                          |
-| `detect_extensions` | `['rb']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Gemfile', '.ruby-version']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.                   |
-| `style`             | `'bold red'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
-
-### Variables
-
-| Variable  | 예시       | Description                                 |
-| --------- | -------- | ------------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                       |
-| 기호        |          | Mirrors the value of option `symbol`        |
-| style\* |          | Mirrors the value of option `style`         |
-| gemset    | `test`   | Optional, gets the current RVM gemset name. |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[ruby]
-symbol = '🔺 '
-```
-
-## Rust
-
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🦀 '`                               | A format string representing the symbol of Rust                           |
-| `detect_extensions` | `['rs']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Cargo.toml']`                     | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold red'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `rust` module.                                               |
-
-### Variables
-
-| Variable  | 예시                | Description                                  |
-| --------- | ----------------- | -------------------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`                       |
-| numver    | `1.51.0`          | The numeric component of the `rustc` version |
-| toolchain | `beta`            | The toolchain version                        |
-| 기호        |                   | Mirrors the value of option `symbol`         |
-| style\* |                   | Mirrors the value of option `style`          |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[rust]
-format = 'via [⚙️ $version](red bold)'
-```
-
-## Scala
-
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
-
-### Options
-
-| Option              | Default                                  | Description                                                               |
-| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.metals']`                            | Which folders should trigger this modules.                                |
-| `기호`                | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
-| `style`             | `'red dimmed'`                           | The style for the module.                                                 |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `2.13.5` | The version of `scala`               |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[scala]
-symbol = '🌟 '
-```
-
-## Shell
-
-The `shell` module shows an indicator for currently used shell.
-
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
-### Options
-
-| Option                 | Default                   | Description                                                                                            |
-| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                                                                |
-| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                                                                |
-| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                                                                 |
-| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                                                          |
-| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
-| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                                                                 |
-| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                                                              |
-| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                                                |
-| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                                                               |
-| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                                                 |
-| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                                                  |
-| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                                           |
-| `format`               | `'[$indicator]($style) '` | The format for the module.                                                                             |
-| `style`                | `'white bold'`            | The style for the module.                                                                              |
-| `disabled`             | `true`                    | Disables the `shell` module.                                                                           |
-
-### Variables
-
-| Variable  | Default | Description                                                |
-| --------- | ------- | ---------------------------------------------------------- |
-| indicator |         | Mirrors the value of `indicator` for currently used shell. |
-| style\* |         | Mirrors the value of option `style`.                       |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[shell]
-fish_indicator = '󰈺 '
-powershell_indicator = '_'
-unknown_indicator = 'mystery shell'
-style = 'cyan bold'
-disabled = false
-```
-
-## SHLVL
-
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
-
-### Options
-
-| Option          | Default                      | Description                                                         |
-| --------------- | ---------------------------- | ------------------------------------------------------------------- |
-| `threshold`     | `2`                          | Display threshold.                                                  |
-| `format`        | `'[$symbol$shlvl]($style) '` | The format for the module.                                          |
-| `기호`            | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                           |
-| `repeat`        | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount.       |
-| `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
-| `style`         | `'bold yellow'`              | The style for the module.                                           |
-| `disabled`      | `true`                       | Disables the `shlvl` module.                                        |
-
-### Variables
-
-| Variable  | 예시  | Description                          |
-| --------- | --- | ------------------------------------ |
-| shlvl     | `3` | The current value of `SHLVL`         |
-| 기호        |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[shlvl]
-disabled = false
-format = '$shlvl level(s) down'
-threshold = 3
-```
-
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
-
-```toml
-# ~/.config/starship.toml
-
-[shlvl]
-disabled = false
-format = '[$symbol$shlvl]($style)'
-repeat = true
-symbol = '❯'
-repeat_offset = 1
-threshold = 0
-```
-
-## Singularity
-
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
-
-### Options
-
-| Option     | Default                          | Description                                      |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
-| `기호`       | `''`                             | A format string displayed before the image name. |
-| `style`    | `'bold dimmed blue'`             | The style for the module.                        |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
-
-### Variables
-
-| Variable  | 예시           | Description                          |
-| --------- | ------------ | ------------------------------------ |
-| env       | `centos.img` | The current Singularity image        |
-| 기호        |              | Mirrors the value of option `symbol` |
-| style\* |              | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[singularity]
-format = '[📦 \[$env\]]($style) '
-```
-
-## Solidity
-
-The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
-
-- The current directory contains a file with the `.sol` extension
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${major}.${minor}.${patch}'`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'S '`                               | A format string representing the symbol of Solidity                       |
-| `compiler          | ['solc']                             | The default compiler for Solidity.                                        |
-| `detect_extensions` | `['sol']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold blue'`                        | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables this module.                                                     |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.8.1` | The version of `solidity`            |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-[solidity]
-format = "via [S $version](blue bold)"
-```
-
-## Spack
-
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
-
-### Options
-
-| Option              | Default                                | Description                                                                                                                                    |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `기호`                | `'🅢  '`                                | The symbol used before the environment name.                                                                                                   |
-| `style`             | `'bold blue'`                          | The style for the module.                                                                                                                      |
-| `format`            | `'via [$symbol$environment]($style) '` | The format for the module.                                                                                                                     |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
-
-### Variables
-
-| Variable    | 예시           | Description                          |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current spack environment        |
-| 기호          |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[spack]
-format = '[$symbol$environment](dimmed blue) '
-```
-
-## Status
-
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
-
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
-### Options
-
-| Option                      | Default                                                                             | Description                                                           |
-| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                       | The format of the module                                              |
-| `기호`                        | `'❌'`                                                                               | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                                | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                               | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                               | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                               | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                               | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                        | The style for the module.                                             |
-| `success_style`             |                                                                                     | The style used on program success (defaults to `style` if unset).     |
-| `failure_style`             |                                                                                     | The style used on program failure (defaults to `style` if unset).     |
-| `recognize_signal_code`     | `true`                                                                              | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                             | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                             | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                     | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                              | Disables the `status` module.                                         |
-
-### Variables
-
-| Variable       | 예시      | Description                                                                                  |
-| -------------- | ------- | -------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                            |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                     |
-| int            | `127`   | The exit code of the last command                                                            |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                          |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
-| 기호             |         | Mirrors the value of option `symbol`                                                         |
-| style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[status]
-style = 'bg:blue'
-symbol = '🔴 '
-success_symbol = '🟢 SUCCESS'
-format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
-map_symbol = true
-disabled = false
-```
-
-## Sudo
-
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
-
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
-### Options
-
-| Option          | Default                  | Description                                             |
-| --------------- | ------------------------ | ------------------------------------------------------- |
-| `format`        | `'[as $symbol]($style)'` | The format of the module                                |
-| `기호`            | `'🧙 '`                   | The symbol displayed when credentials are cached        |
-| `style`         | `'bold blue'`            | The style for the module.                               |
-| `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                   | Disables the `sudo` module.                             |
-
-### Variables
-
-| Variable  | 예시 | Description                          |
-| --------- | -- | ------------------------------------ |
-| 기호        |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[sudo]
-style = 'bold green'
-symbol = '👩‍💻 '
-disabled = false
-```
-
-```toml
-# On windows
-# $HOME\.starship\config.toml
-
-[sudo]
-allow_windows = true
-disabled = false
-```
-
-## Swift
-
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
-
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'🐦 '`                               | A format string representing the symbol of Swift                          |
-| `detect_extensions` | `['swift']`                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Package.swift']`                  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'bold 202'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `swift` module.                                              |
-
-### Variables
-
-| Variable  | 예시       | Description                          |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[swift]
-format = 'via [🏎  $version](red bold)'
-```
-
-## Terraform
-
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
-
-::: tip
-
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-terraform-version).
-
-:::
-
-By default the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'💠'`                                | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
-| `style`             | `'bold 105'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
-
-### Variables
-
-| Variable  | 예시         | Description                          |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| 기호        |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-#### With Terraform Version
-
-```toml
-# ~/.config/starship.toml
-
-[terraform]
-format = '[🏎💨 $version$workspace]($style) '
-```
-
-#### Without Terraform version
-
-```toml
-# ~/.config/starship.toml
-
-[terraform]
-format = '[🏎💨 $workspace]($style) '
-```
-
-## Time
-
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
-
-::: tip
-
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
-
-:::
-
-### Options
-
-| Option            | Default                 | Description                                                                                                                        |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
-
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
-
-### Variables
-
-| Variable  | 예시         | Description                         |
-| --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
-| style\* |            | Mirrors the value of option `style` |
-
-*: This variable can only be used as a part of a style string
-
-### 예시
-
-```toml
-# ~/.config/starship.toml
-
-[time]
-disabled = false
-format = '🕙[\[ $time \]]($style) '
-time_format = '%T'
-utc_time_offset = '-5'
-time_range = '10:00:00-14:00:00'
-```
-
-## Typst
-
-The `typst` module shows the current installed version of Typst used in a project.
-
-By default, the module will be shown if any of the following conditions are met:
-
-- The current directory contains a `template.typ` file
-- The current directory contains any `*.typ` file
-
-### Options
-
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'t '`                               | A format string representing the symbol of Typst                          |
-| `style`             | `'bold #0093A7'`                     | The style for the module.                                                 |
-| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `typst` module.                                              |
-
-### Variables
-
-| Variable      | 예시        | Description                                     |
-| ------------- | --------- | ----------------------------------------------- |
-| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                       |
-| 기호            |           | Mirrors the value of option `symbol`            |
-| style\*     |           | Mirrors the value of option `style`             |
-
-*: This variable can only be used as a part of a style string
-
-## Username
-
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
-
-- The current user is root/admin
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
-- The array `detect_env_vars` contains at least the name of one environment variable, that is set
-
-::: tip
-
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
-
-:::
-
-### Options
-
-| Option            | Default                 | Description                                               |
+| 옵션            | 기본값                 | 설명                                               |
 | ----------------- | ----------------------- | --------------------------------------------------------- |
-| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
-| `style_user`      | `'bold yellow'`         | The style used for non-root users.                        |
-| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
-| `format`          | `'[$user]($style) in '` | The format for the module.                                |
-| `show_always`     | `false`                 | Always shows the `username` module.                       |
-| `disabled`        | `false`                 | Disables the `username` module.                           |
-| `aliases`         | `{}`                    | Translate system usernames to something else.             |
+| `style_root`      | `'bold red'`            | 사용자가 루트/관리자일 때 사용되는 스타일입니다.               |
+| `style_user`      | `'bold yellow'`         | 루트가 아닌 사용자에 대해 사용되는 스타일입니다.                        |
+| `detect_env_vars` | `[]`                    | 이 모듈을 트리거해야 하는 환경 변수입니다. |
+| `format`          | `'[$user]($style) in '` | 모듈의 형식입니다.                                | |
+| `show_always`     | `false`                 | `username` 모듈을 항상 표시합니다. |
+| `disabled`        | `false`                 | `username` 모듈을 비활성화합니다.                           |
+| `aliases`         | `{}`                    | 시스템 사용자 이름을 다른 이름으로 변환합니다.             |
 
-### Variables
+### 변수
 
-| Variable | 예시           | Description                                                                                 |
+| 변수 | 예시           | 설명                                                                                 |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
+| `style`  | `'red bold'` | 루트가 로그인된 경우 `style_root`의 값을, 그렇지 않으면 `style_user`의 값을 반영합니다. |
+| `user`   | `'matchai'`  | 현재 로그인된 사용자 ID입니다.                                                            |
 
 ### 예시
 
-#### Always show the username
+#### 항상 사용자 이름 표시
 
 ```toml
 # ~/.config/starship.toml
@@ -4575,37 +3490,38 @@ style_root = 'black bold'
 format = 'user: [$user]($style) '
 disabled = false
 show_always = true
-aliases = { "corpuser034g" = "matchai" }
+alias = { "corpuser034g" = "matchai" }
 ```
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
+`vagrant` 모듈은 현재 설치된 [Vagrant](https://www.vagrantup.com/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `Vagrantfile` file
+- 현재 디렉토리에 `Vagrantfile` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'⍱ '`                               | A format string representing the symbol of Vagrant.                       |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Vagrantfile']`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `'cyan bold'`                        | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'⍱ '`                               | Vagrant의 기호를 나타내는 형식 문자열입니다.                       |
+| `detect_extensions` | `[]`                                 | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['Vagrantfile']`                    | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                |
+| `style`             | `'cyan bold'`                        | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `vagrant` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시               | Description                          |
+| 변수      | 예시               | 설명                                 |
 | --------- | ---------------- | ------------------------------------ |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
-| 기호        |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| version   | `Vagrant 2.2.10` | `Vagrant`의 버전             |
+| 기호        |                  | `symbol` 옵션의 값을 반영합니다. |
+| style* |                  | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -4618,31 +3534,34 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
+`vlang` 모듈은 현재 설치된 [V](https://vlang.io/) 버전을 표시합니다. 기본적으로 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- 현재 디렉토리에 `.v` 확장자를 가진 파일이 포함되어 있습니다.
+- 현재 디렉토리에 `v.mod`, `vpkg.json` 또는 `.vpkg-lock.json` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                                      | Description                                                               |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'V '`                                       | A format string representing the symbol of V                              |
-| `detect_extensions` | `['v']`                                      | Which extensions should trigger this module.                              |
-| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `'blue bold'`                                | The style for the module.                                                 |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
+| 옵션              | 기본값                                      | 설명                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`         | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                                  | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'V '`                                       | V의 기호를 나타내는 형식 문자열입니다.                              |
+| `detect_extensions` | `['v']`                                      | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                         | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
+| `style`             | `'blue bold'`                                | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                                      | `vlang` 모듈을 비활성화합니다.                                              |
 
-### Variables
+### 변수
 
-| Variable  | 예시     | Description                          |
+| 변수      | 예시     | 설명                                 |
 | --------- | ------ | ------------------------------------ |
-| version   | `v0.2` | The version of `v`                   |
-| 기호        |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| version   | `v0.2` | `v`의 버전                   |
+| 기호        |        | `symbol` 옵션의 값을 반영합니다. |
+| style* |        | `style` 옵션의 값을 반영합니다.  |
+
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -4654,26 +3573,27 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+`vcsh` 모듈은 현재 활성 [VCSH](https://github.com/RichiH/vcsh) 리포지토리를 표시합니다. 리포지토리가 현재 사용 중인 경우에만 모듈이 표시됩니다.
 
-### Options
+### 옵션
 
-| Option     | Default                          | Description                                            |
+| 옵션     | 기본값                          | 설명                                             |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `기호`       | `''`                             | The symbol used before displaying the repository name. |
-| `style`    | `'bold yellow'`                  | The style for the module.                              |
-| `format`   | `'vcsh [$symbol$repo]($style) '` | The format for the module.                             |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| `기호`       | `''`                             | 리포지토리 이름을 표시하기 전에 사용되는 기호입니다. |
+| `style`    | `'bold yellow'`                  | 모듈의 스타일입니다.                              |
+| `format`   | `'vcsh [$symbol$repo]($style) '` | 모듈의 형식입니다.                             |
+| `disabled` | `false`                          | `vcsh` 모듈을 비활성화합니다.                            |
 
-### Variables
+### 변수
 
-| Variable  | 예시                                          | Description                          |
+| 변수      | 예시                                          | 설명                                 |
 | --------- | ------------------------------------------- | ------------------------------------ |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
-| 기호        |                                             | Mirrors the value of option `symbol` |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
+| repo      | `dotfiles` (VCSH 리포 이름이 dotfiles인 경우) | 활성 리포지토리 이름           |
+| 기호        |                                             | `symbol` 옵션의 값을 반영합니다. |
+| style* | `black bold dimmed`                         | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -4686,32 +3606,33 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+기본적으로 `zig` 모듈은 현재 설치된 [Zig](https://ziglang.org/) 버전을 표시합니다. 다음 조건 중 하나라도 충족되면 모듈이 표시됩니다:
 
-- The current directory contains a `.zig` file
+- 현재 디렉토리에 `.zig` 파일이 포함되어 있습니다.
 
-### Options
+### 옵션
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `기호`                | `'↯ '`                               | The symbol used before displaying the version of Zig.                     |
-| `style`             | `'bold yellow'`                      | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `zig` module.                                                |
-| `detect_extensions` | `['zig']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| 옵션              | 기본값                               | 설명                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | 모듈의 형식입니다.                                                |
+| `version_format`    | `'v${raw}'`                          | 버전 형식입니다. 사용 가능한 변수는 `raw`, `major`, `minor`, `patch`입니다. |
+| `기호`                | `'↯ '`                               | Zig 버전을 표시하기 전에 사용되는 기호입니다.                     |
+| `style`             | `'bold yellow'`                      | 모듈의 스타일입니다.                                                 |
+| `disabled`          | `false`                              | `zig` 모듈을 비활성화합니다.                                                |
+| `detect_extensions` | `['zig']`                            | 이 모듈을 트리거해야 하는 확장자입니다.                              |
+| `detect_files`      | `[]`                                 | 이 모듈을 트리거해야 하는 파일 이름입니다.                               |
+| `detect_folders`    | `[]`                                 | 이 모듈을 트리거해야 하는 폴더입니다.                                 |
 
-### Variables
+### 변수
 
-| Variable  | 예시       | Description                          |
+| 변수      | 예시       | 설명                                 |
 | --------- | -------- | ------------------------------------ |
-| version   | `v0.6.0` | The version of `zig`                 |
-| 기호        |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| version   | `v0.6.0` | `zig`의 버전                 |
+| 기호        |          | `symbol` 옵션의 값을 반영합니다. |
+| style* |          | `style` 옵션의 값을 반영합니다.  |
 
-*: This variable can only be used as a part of a style string
+
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
 ### 예시
 
@@ -4722,101 +3643,104 @@ By default the `zig` module shows the currently installed version of [Zig](https
 symbol = '⚡️ '
 ```
 
-## Custom commands
+## 사용자 지정 명령
 
-The `custom` modules show the output of some arbitrary commands.
+`custom` 모듈은 임의의 명령 출력을 표시합니다.
 
-These modules will be shown if any of the following conditions are met:
+다음 조건 중 하나라도 충족되면 이러한 모듈이 표시됩니다:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
-- The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
-
-::: tip
-
-Multiple custom modules can be defined by using a `.`.
-
-:::
+- 현재 디렉토리에 `detect_files`에 있는 파일 이름이 포함되어 있습니다.
+- 현재 디렉토리에 `detect_folders`에 있는 디렉토리 이름이 포함되어 있습니다.
+- 현재 디렉토리에 `detect_extensions`에 있는 확장자를 가진 파일이 포함되어 있습니다.
+- `when` 명령이 0을 반환합니다.
+- 현재 운영 체제 (`std::env::consts::OS`)가 `os` 필드와 일치하는 경우 (정의된 경우).
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+여러 사용자 지정 모듈을 `.`을 사용하여 정의할 수 있습니다.
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+사용자 지정 모듈이 표시되는 순서는 최상위 `format`에 `${custom.foo}`를 포함하여 개별적으로 설정할 수 있습니다 (점(.)이 포함되어 있으므로 `${...}`를 사용해야 합니다). 기본적으로 `custom` 모듈은 정의된 순서대로 모든 사용자 지정 모듈을 표시합니다.
 
 :::
 
-::: warning If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+::: tip
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
-
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+[Issue #1252](https://github.com/starship/starship/discussions/1252)에는 사용자 지정 모듈의 예가 포함되어 있습니다. 흥미로운 예가 있다면 거기에 공유해 주세요!
 
 :::
 
-### Options
+::: warning `unsafe_no_escape`가 활성화되었거나 starship v1.20 이전 버전에서는 명령 출력이 이스케이프되지 않고 프롬프트에 표시됩니다.
 
-| Option              | Default                         | Description                                                                                                                                                                                                                                                                                   |
-| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                        |
-| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
-| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
-| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
-| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
-| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
-| `기호`                | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
-| `style`             | `'bold green'`                  | The style for the module.                                                                                                                                                                                                                                                                     |
-| `format`            | `'[$symbol($output )]($style)'` | The format for the module.                                                                                                                                                                                                                                                                    |
-| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
-| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
-| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
-| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
+명령이 생성하는 모든 출력은 수정되지 않고 프롬프트에 표시됩니다. 즉, 출력에 셸별 해석 가능한 시퀀스가 포함된 경우 해석될 수 있습니다. 셸에 따라 예를 들어 백틱으로 묶인 문자열이 셸에서 실행될 수 있습니다. 이러한 시퀀스는 일반적으로 셸별입니다. 예를 들어, bash 시퀀스(`
+`)를 작성하는 명령 모듈을 작성할 수 있지만 이 모듈은 fish 또는 zsh 셸에서는 작동하지 않습니다.
 
-### Variables
+형식 문자열에는 셸별 프롬프트 시퀀스도 포함될 수 있습니다. 예를 들어 [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html)입니다.
 
-| Variable  | Description                            |
+:::
+
+### 옵션
+
+| 옵션              | 기본값                         | 설명                                                                                                                                                                                                 |
+| ------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | 출력해야 하는 명령입니다. 명령은 셸의 표준 입력으로 전달됩니다.                                                                                                                                   |
+| `when`              | `false`                         | 부울 값 (`true` 또는 `false`, 따옴표 없음) 또는 조건으로 사용되는 문자열 셸 명령입니다. 문자열인 경우 `shell`이 실행 시 `0` 상태 코드를 반환하면 모듈이 표시됩니다.                                                        |
+| `require_repo`      | `false`                         | `true`인 경우 모듈은 (git) 리포지토리가 포함된 경로에서만 표시됩니다. 이 옵션만으로는 표시 조건으로 충분하지 않습니다.
+                                                                                                                           |
+| `shell`             |                                 | [아래 참조](#custom-command-shell)                                                                                                                                                               |
+| `description`       | `'<custom module>'`       | `starship explain`을 실행할 때 표시되는 모듈 설명입니다.                                                                                                                                                    |
+| `unsafe_no_escape`  | `false`                         | 설정된 경우 명령 출력은 셸에서 해석될 수 있는 문자에 대해 이스케이프되지 않습니다.                                                                                                                                   |
+| `detect_files`      | `[]`                            | 일치하는 파일을 검색할 작업 디렉토리의 파일입니다.                                                                                                                                                           |
+| `detect_folders`    | `[]`                            | 일치하는 디렉토리를 검색할 작업 디렉토리의 디렉토리입니다.                                                                                                                                                     |
+| `detect_extensions` | `[]`                            | 일치하는 확장자를 검색할 작업 디렉토리의 확장자입니다.                                                                                                                                                      |
+| `기호`                | `''`                            | 명령 출력을 표시하기 전에 사용되는 기호입니다.                                                                                                                                                                |
+| `style`             | `'bold green'`                  | 모듈의 스타일입니다.                                                                                                                                                                        |
+| `format`            | `'[$symbol($output )]($style)'` | 모듈의 형식입니다.                                                                                                                                                                                                 |
+| `disabled`          | `false`                         | 이 `custom` 모듈을 비활성화합니다.                                                                                                                                                                   |
+| `os`                |                                 | 모듈이 표시될 운영 체제 이름 (unix, linux, macos, windows, ... ) [가능한 값 참조](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                  |
+| `use_stdin`         |                                 | 명령에 표준 입력을 통해 전달할지 또는 인수로 전달할지 여부를 재정의하는 선택적 부울 값입니다. 설정되지 않은 경우 표준 입력이 기본적으로 사용되지만 셸이 지원하지 않는 경우 (cmd, nushell)에는 그렇지 않습니다. 이를 설정하면 셸별 인수 처리가 비활성화됩니다. |
+| `ignore_timeout`    | `false`                         | 전역 `command_timeout` 설정을 무시하고 외부 명령이 아무리 오래 걸리더라도 계속 실행합니다.                                                                                                                                                      |
+
+### 변수
+
+| 변수      | 설명                                     |
 | --------- | -------------------------------------- |
-| output    | The output of `command` run in `shell` |
-| 기호        | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| output    | `shell`에서 실행된 `command`의 출력 |
+| 기호        | `symbol` 옵션의 값을 반영합니다.   |
+| style* | `style` 옵션의 값을 반영합니다.    |
 
-*: This variable can only be used as a part of a style string
 
-#### Custom command shell
+*: 이 변수는 스타일 문자열의 일부로만 사용할 수 있습니다.
 
-`shell` accepts a non-empty list of strings, where:
+#### 사용자 지정 명령 셸
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+`shell`은 문자열 목록을 허용하며, 여기서:
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+- 첫 번째 문자열은 명령을 실행하는 데 사용할 셸의 경로입니다.
+- 후속 인수는 셸에 전달됩니다.
 
-The `command` (and `when`, if applicable) will be passed in on stdin.
+설정되지 않은 경우 STARSHIP_SHELL을 거쳐 Linux에서는 'sh', Windows에서는 'cmd /C'로 대체됩니다.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+`command` (및 해당되는 경우 `when`)는 표준 입력으로 전달됩니다.
+
+`shell`이 제공되지 않거나 하나의 요소만 포함하고 Starship이 PowerShell을 사용할 것으로 감지하면 다음 인수가 자동으로 추가됩니다: `-NoProfile -Command -`. `shell`이 제공되지 않거나 하나의 요소만 포함하고 Starship이 Cmd를 사용할 것으로 감지하면 다음 인수가 자동으로 추가됩니다: `/C` 및 `stdin`은 `false`로 설정됩니다. `shell`이 제공되지 않거나 하나의 요소만 포함하고 Starship이 Nushell을 사용할 것으로 감지하면 다음 인수가 자동으로 추가됩니다: `-c` 및 `stdin`은 `false`로 설정됩니다. 이 동작은 셸에 인수를 명시적으로 전달하여 피할 수 있습니다. 예:
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning 사용자 지정 셸 구성을 올바르게 종료하도록 하세요
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+사용자 지정 명령을 설정하는 경우 starship에서 사용하는 기본 셸이 명령을 `shell` 옵션을 통해 올바르게 실행하고 정상적으로 종료하는지 확인하세요.
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+예를 들어 PowerShell은 한 줄 명령을 실행하기 위해 `-Command` 매개변수가 필요합니다. 이 매개변수를 생략하면 starship이 재귀 루프에 빠질 수 있으며, 이 경우 셸은 starship 자체를 다시 실행하여 사용자 지정 명령을 다시 실행하려고 할 수 있으며, 이는 끝없는 루프에 빠질 수 있습니다.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+PowerShell의 `-NoProfile`과 유사한 매개변수는 다른 셸에서도 추가 로딩 시간을 피하기 위해 권장됩니다. starship 호출마다 사용자 지정 프로필을 로드하는 것을 방지합니다.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+셸 자동 감지 및 올바른 매개변수 추가는 현재 구현되어 있지만 모든 셸이 포함되지는 않을 수 있습니다. 이러한 시나리오에 해당하는 경우 셸 세부 정보와 starship 구성을 포함하여 [이슈를 열어주세요](https://github.com/starship/starship/issues/new/choose).
 
 :::
 
@@ -4826,19 +3750,19 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # 명령의 출력을 표시합니다.
+detect_files = ['foo'] # 필터를 지정할 수 있지만 와일드카드는 지원되지 않습니다.
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # *.pst 파일을 필터링합니다.
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # *.pst 파일을 필터링합니다.
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
