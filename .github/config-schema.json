@@ -598,7 +598,8 @@
         "only_nonzero_diffs": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "disabled": true,
-        "ignore_submodules": false
+        "ignore_submodules": false,
+        "mode": "unstaged"
       }
     },
     "git_state": {
@@ -3296,9 +3297,20 @@
         "ignore_submodules": {
           "type": "boolean",
           "default": false
+        },
+        "mode": {
+          "$ref": "#/$defs/GitMetricsMode",
+          "default": "unstaged"
         }
       },
       "additionalProperties": false
+    },
+    "GitMetricsMode": {
+      "type": "string",
+      "enum": [
+        "unstaged",
+        "all"
+      ]
     },
     "GitStateConfig": {
       "type": "object",
