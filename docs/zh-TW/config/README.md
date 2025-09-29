@@ -2508,7 +2508,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 > [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 > 
-> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmental variables has been set.
 
 ### 選項
 
