@@ -2508,7 +2508,7 @@ Exibe o nome atual do [Kubernetes context](https://kubernetes.io/docs/concepts/c
 
 > [!TIP] This module is disabled by default. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 > 
-> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmatal variable has been set.
+> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmental variables has been set.
 
 ### Opções
 
