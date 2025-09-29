@@ -205,7 +205,7 @@ install() {
 #   - linux_musl (Alpine)
 #   - freebsd
 detect_platform() {
-  platform="$(uname -s | dd conv=lcase 2>/dev/null)"
+  platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   case "${platform}" in
     msys_nt*) platform="pc-windows-msvc" ;;
@@ -227,7 +227,7 @@ detect_platform() {
 #   - arm
 #   - arm64
 detect_arch() {
-arch="$(uname -m | dd conv=lcase 2>/dev/null)"
+arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
   case "${arch}" in
     amd64) arch="x86_64" ;;
@@ -268,7 +268,7 @@ confirm() {
     set +e
     read -r yn </dev/tty
     trap - INT
-    yn=$(echo "$yn" | dd conv=lcase 2>/dev/null)
+    yn=$(echo "$yn" | tr '[:upper:]' '[:lower:]')
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
