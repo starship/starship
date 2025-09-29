@@ -7,8 +7,11 @@ use regex::Regex;
 use super::Context;
 use crate::configs::git_status::GitStatusConfig;
 use crate::{
-    config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
-    formatter::string_formatter::StringFormatterError, module::Module,
+    config::ModuleConfig,
+    configs::git_metrics::{GitMetricsConfig, GitMetricsMode},
+    formatter::StringFormatter,
+    formatter::string_formatter::StringFormatterError,
+    module::Module,
 };
 
 /// Creates a module with the current added/deleted lines in the git repository at the
@@ -38,6 +41,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
+        }
+        if matches!(config.mode, GitMetricsMode::All) {
+            git_args.push("HEAD");
         }
 
         let diff = repo.exec_git(context, &git_args)?.stdout;
@@ -93,7 +99,91 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     use gix::status;
                     let mut diff = Diff::default();
                     match change {
-                        status::Item::TreeIndex(_) => {} // ignore staged diffs
+                        status::Item::TreeIndex(_) if config.mode == GitMetricsMode::Unstaged => {}
+                        status::Item::TreeIndex(change) => {
+                            use gix::diff::index::Change;
+                            match change {
+                                Change::Addition {
+                                    entry_mode,
+                                    location,
+                                    id,
+                                    ..
+                                } => {
+                                    diff.added += count_lines(
+                                        location,
+                                        id.as_ref().into(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    );
+                                }
+                                Change::Deletion {
+                                    entry_mode,
+                                    location,
+                                    id,
+                                    ..
+                                } => {
+                                    diff.deleted += count_lines(
+                                        location,
+                                        id.as_ref().into(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    );
+                                }
+                                Change::Modification {
+                                    location,
+                                    previous_entry_mode,
+                                    previous_id,
+                                    entry_mode,
+                                    id,
+                                    ..
+                                } => {
+                                    let location = location.as_ref();
+                                    diff.add(diff_two_opt(
+                                        location,
+                                        previous_id.as_ref().to_owned(),
+                                        *previous_entry_mode,
+                                        location,
+                                        id.as_ref().to_owned(),
+                                        *entry_mode,
+                                        tree_index_cache,
+                                        repo,
+                                    ));
+                                }
+                                Change::Rewrite {
+                                    source_location,
+                                    source_entry_mode,
+                                    source_id,
+                                    location,
+                                    entry_mode,
+                                    id,
+                                    copy,
+                                    ..
+                                } => {
+                                    if *copy {
+                                        diff.added += count_lines(
+                                            location,
+                                            id.as_ref().into(),
+                                            *entry_mode,
+                                            tree_index_cache,
+                                            repo,
+                                        );
+                                    } else {
+                                        diff.add(diff_two_opt(
+                                            source_location.as_ref(),
+                                            source_id.as_ref().to_owned(),
+                                            *source_entry_mode,
+                                            location,
+                                            id.as_ref().to_owned(),
+                                            *entry_mode,
+                                            tree_index_cache,
+                                            repo,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
                         status::Item::IndexWorktree(change) => {
                             use gix::status::index_worktree::Item;
                             use gix::status::plumbing::index_as_worktree::{Change, EntryStatus};
@@ -423,6 +513,28 @@ mod tests {
     }
 
     #[test]
+    fn shows_staged_modification() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("the_file"), "modify all")?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics_with_staged(path);
+        let actual_with_git_executable = render_metrics_with_git_executable_staged(path);
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+1"),
+            Color::Red.bold().paint("-3")
+        ));
+
+        assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
+        repo_dir.close()
+    }
+
+    #[test]
     fn dont_show_staged_modification() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
@@ -470,6 +582,22 @@ mod tests {
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
+        assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_deletion() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        run_git_cmd(["rm", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics_with_staged(path);
+        let actual_with_git_executable = render_metrics_with_git_executable_staged(path);
+
+        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
         assert_eq!(expected, actual);
         assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
@@ -654,11 +782,35 @@ mod tests {
             .collect()
     }
 
+    fn render_metrics_with_staged(path: &Path) -> Option<String> {
+        ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                mode = "all"
+            })
+            .path(path)
+            .collect()
+    }
+
     fn render_metrics_with_git_executable(path: &Path) -> Option<String> {
         ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect()
+    }
+
+    fn render_metrics_with_git_executable_staged(path: &Path) -> Option<String> {
+        ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                mode = "all"
                 [git_status]
                 use_git_executable = true
             })

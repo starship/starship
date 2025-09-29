@@ -1964,14 +1964,15 @@ the current git repository.
 
 ### Options
 
-| Option               | Default                                                      | Description                           |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| Option               | Default                                                      | Description                                                                                                                   |
+| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `added_style`        | `'bold green'`                                               | The style for the added count.                                                                                                |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.                                                                                              |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items.                                                                                         |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.                                                                                                    |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.                                                                                            |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules                                                                                                  |
+| `mode`               | `"unstaged"`                                                 | Controls how changes are counted: `"unstaged"` counts only unstaged changes; `"all"` counts both staged and unstaged changes. |
 
 ### Variables
 
@@ -1992,6 +1993,7 @@ the current git repository.
 [git_metrics]
 added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+mode = "all"
 ```
 
 ## Git Status
