@@ -2508,7 +2508,7 @@ kotlin_binary = 'kotlinc'
 
 > [!TIP] Типово цей модуль вимкнено. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 > 
-> When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmental variables has been set.
+> Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_env_vars`, `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам або якщо одна зі змінних середовища була встановлена.
 
 ### Параметри
 
