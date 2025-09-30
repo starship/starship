@@ -425,12 +425,10 @@ mod tests {
         let path = repo_dir.path();
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -445,12 +443,10 @@ mod tests {
         the_file.sync_all()?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -463,12 +459,10 @@ mod tests {
         run_git_cmd(["add", "new-file"], Some(path), true)?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -485,12 +479,10 @@ mod tests {
         run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -503,12 +495,10 @@ mod tests {
         run_git_cmd(["add", "-N", "new-file"], Some(path), true)?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -521,7 +511,6 @@ mod tests {
         run_git_cmd(["add", "the_file"], Some(path), true)?;
 
         let actual = render_metrics_with_staged(path);
-        let actual_with_git_executable = render_metrics_with_git_executable_staged(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -530,7 +519,6 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -543,12 +531,10 @@ mod tests {
         run_git_cmd(["add", "the_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -561,12 +547,10 @@ mod tests {
         write_file(file_path, "First Line\nSecond Line\n")?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -578,12 +562,10 @@ mod tests {
         std::fs::remove_file(path.join("the_file"))?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -595,11 +577,9 @@ mod tests {
         run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
         let actual = render_metrics_with_staged(path);
-        let actual_with_git_executable = render_metrics_with_git_executable_staged(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -611,12 +591,10 @@ mod tests {
         run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -629,7 +607,6 @@ mod tests {
         write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -638,7 +615,6 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -648,11 +624,9 @@ mod tests {
         let path = repo_dir.path();
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -663,11 +637,9 @@ mod tests {
         std::fs::write(path.join("untracked"), "a line")?;
 
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -678,11 +650,9 @@ mod tests {
 
         make_sparse(path)?;
         let actual = render_metrics(path);
-        let actual_with_git_executable = render_metrics_with_git_executable(path);
 
         let expected = None;
         assert_eq!(expected, actual);
-        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -727,9 +697,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
 
         let actual = render_metrics(repo_dir.path());
-        let actual_with_git_executable = render_metrics_with_git_executable(repo_dir.path());
         assert_eq!(None, actual);
-        assert_eq!(None, actual_with_git_executable);
 
         repo_dir.close()
     }
@@ -773,40 +741,39 @@ mod tests {
     }
 
     fn render_metrics(path: &Path) -> Option<String> {
-        ModuleRenderer::new("git_metrics")
+        let gix_output = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
             })
             .path(path)
-            .collect()
+            .collect();
+        let exe_output = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect();
+
+        assert_eq!(gix_output, exe_output);
+
+        gix_output
     }
 
     fn render_metrics_with_staged(path: &Path) -> Option<String> {
-        ModuleRenderer::new("git_metrics")
+        let gix_output = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
                 mode = "all"
             })
             .path(path)
-            .collect()
-    }
+            .collect();
 
-    fn render_metrics_with_git_executable(path: &Path) -> Option<String> {
-        ModuleRenderer::new("git_metrics")
-            .config(toml::toml! {
-                [git_metrics]
-                disabled = false
-                [git_status]
-                use_git_executable = true
-            })
-            .path(path)
-            .collect()
-    }
-
-    fn render_metrics_with_git_executable_staged(path: &Path) -> Option<String> {
-        ModuleRenderer::new("git_metrics")
+        let exe_output = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
@@ -815,7 +782,10 @@ mod tests {
                 use_git_executable = true
             })
             .path(path)
-            .collect()
+            .collect();
+
+        assert_eq!(gix_output, exe_output);
+        gix_output
     }
 
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
