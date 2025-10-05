@@ -24,7 +24,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
+    // Normalize Windows backslashes to forward slashes for truncation
+    let conda_env_normalized = conda_env.replace('\\', "/");
+    let conda_env = truncate(&conda_env_normalized, config.truncation_length)
+        .unwrap_or(conda_env_normalized);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -116,6 +119,17 @@ mod tests {
             .collect();
 
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn truncate_windows_style_path() {
+        let actual = ModuleRenderer::new("conda")
+            .env("CONDA_DEFAULT_ENV", "C:\\Users\\user\\long\\path\\to\\envs\\.venv")
+            .collect();
+
+        let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 .venv")));
 
         assert_eq!(expected, actual);
     }
