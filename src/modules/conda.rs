@@ -26,8 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Normalize Windows backslashes to forward slashes for truncation
     let conda_env_normalized = conda_env.replace('\\', "/");
-    let conda_env = truncate(&conda_env_normalized, config.truncation_length)
-        .unwrap_or(conda_env_normalized);
+    let conda_env =
+        truncate(&conda_env_normalized, config.truncation_length).unwrap_or(conda_env_normalized);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -126,7 +126,10 @@ mod tests {
     #[test]
     fn truncate_windows_style_path() {
         let actual = ModuleRenderer::new("conda")
-            .env("CONDA_DEFAULT_ENV", "C:\\Users\\user\\long\\path\\to\\envs\\.venv")
+            .env(
+                "CONDA_DEFAULT_ENV",
+                "C:\\Users\\user\\long\\path\\to\\envs\\.venv",
+            )
             .collect();
 
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 .venv")));
