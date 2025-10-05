@@ -25,12 +25,17 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
+          config-file: release-please-config.json
+
+
+
 
   # Build sources for every OS
   github_build:
     name: Build release binaries
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: github.repository == 'starship/starship' && needs.release_please.outputs.release_created == 'true'
+
     strategy:
       fail-fast: false
       matrix:
@@ -181,7 +186,9 @@ jobs:
     runs-on: macos-latest
     continue-on-error: true
     needs: [github_build, merge_crowdin_pr]
+    if: github.repository == 'starship/starship'
     strategy:
+    
       fail-fast: false
       matrix:
         include:
@@ -287,6 +294,8 @@ jobs:
     name: Add Build Artifacts to Release
     needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
+    if: github.repository == 'starship/starship'
+
     steps:
       - name: Setup | Artifacts
         uses: actions/download-artifact@v5
@@ -310,7 +319,8 @@ jobs:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
     needs: [release_please, upload_artifacts]
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: needs.release_please.outputs.release_created == 'true' && github.repository == 'starship/starship'
+
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v5
@@ -325,7 +335,8 @@ jobs:
     name: Update Brew Formula
     runs-on: ubuntu-latest
     needs: [release_please, upload_artifacts]
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: needs.release_please.outputs.release_created == 'true' && github.repository == 'starship/starship'
+
     steps:
       - uses: mislav/bump-homebrew-formula-action@v3.6
         with:
@@ -341,7 +352,8 @@ jobs:
     name: Update Winget Manifest
     runs-on: windows-latest
     needs: [release_please, github_build, upload_artifacts]
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: needs.release_please.outputs.release_created == 'true' && github.repository == 'starship/starship'
+
     env:
       URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc
       URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc
@@ -364,7 +376,8 @@ jobs:
     name: Update Chocolatey Package
     runs-on: windows-latest
     needs: [release_please, github_build, upload_artifacts]
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: needs.release_please.outputs.release_created == 'true' && github.repository == 'starship/starship'
+
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v5
@@ -379,7 +392,8 @@ jobs:
     name: Merge Crowdin PR
     runs-on: ubuntu-latest
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    if: needs.release_please.outputs.release_created == 'true' && github.repository == 'starship/starship'
+
     continue-on-error: true
     steps:
       - name: Setup | Checkout
@@ -393,6 +407,8 @@ jobs:
     name: Trigger docs deployment
     runs-on: ubuntu-latest
     needs: merge_crowdin_pr
+    wif: github.repository == 'starship/starship'
+
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v5
