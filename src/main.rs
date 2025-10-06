@@ -5,7 +5,7 @@ use std::io;
 use std::path::PathBuf;
 use std::time::SystemTime;
 
-use clap::{CommandFactory, Parser, Subcommand, ValueEnum, builder::PossibleValue};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
 use rand::Rng;
 use starship::context::{Context, Properties, Target};
@@ -26,40 +26,15 @@ struct Cli {
     command: Commands,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
 enum CompletionShell {
     Bash,
     Elvish,
     Fish,
     Nushell,
+    #[clap(name = "powershell", alias = "pwsh", alias = "power-shell")]
     PowerShell,
     Zsh,
-}
-
-impl ValueEnum for CompletionShell {
-    fn value_variants<'a>() -> &'a [Self] {
-        &[
-            Self::Bash,
-            Self::Elvish,
-            Self::Fish,
-            Self::Nushell,
-            Self::PowerShell,
-            Self::Zsh,
-        ]
-    }
-
-    fn to_possible_value(&self) -> Option<PossibleValue> {
-        Some(match self {
-            Self::Bash => PossibleValue::new("bash"),
-            Self::Elvish => PossibleValue::new("elvish"),
-            Self::Fish => PossibleValue::new("fish"),
-            Self::Nushell => PossibleValue::new("nushell"),
-            Self::PowerShell => PossibleValue::new("powershell")
-                .alias("power-shell")
-                .alias("pwsh"),
-            Self::Zsh => PossibleValue::new("zsh"),
-        })
-    }
 }
 
 fn generate_shell(shell: impl clap_complete::Generator) {
