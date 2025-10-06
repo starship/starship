@@ -32,6 +32,7 @@ enum CompletionShell {
     Elvish,
     Fish,
     Nushell,
+    Osh,
     PowerShell,
     Zsh,
 }
@@ -53,6 +54,7 @@ fn generate_completions(shell: CompletionShell) {
         CompletionShell::PowerShell => generate_shell(clap_complete::Shell::PowerShell),
         CompletionShell::Zsh => generate_shell(clap_complete::Shell::Zsh),
         CompletionShell::Nushell => generate_shell(clap_complete_nushell::Nushell),
+        CompletionShell::Osh => generate_shell(clap_complete::Shell::Bash),
     }
 }
 
