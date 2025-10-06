@@ -32,6 +32,7 @@ enum CompletionShell {
     Elvish,
     Fish,
     Nushell,
+    #[clap(name = "powershell", alias = "pwsh", alias = "power-shell")]
     PowerShell,
     Zsh,
 }
