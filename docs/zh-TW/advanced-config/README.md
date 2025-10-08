@@ -2,7 +2,7 @@
 
 正因為 Starship 是一個多才多藝的 shell，有時候你必須要做比修改 `starship.toml` 更多事情來讓它完成特定工作。 這個頁面說明了一些用於 Starship 的進階設定技巧。
 
-> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
+> [!WARNING] 本章節中的設定檔在未來的 Starship 版本發行時可能會有所變動。
 
 ## TransientPrompt in PowerShell
 
@@ -52,7 +52,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+It is possible to replace the previous-printed prompt with a custom string. 這在並非所有提示訊息都需要的情況下會很有用。 如果要啟用這項功能，請在 Shell 工作階段中執行 `enable_transience` 指令。 若要使其永久啟用 ，請將上述指令加入到 `~/.config/fish/config.fish` 中。 你也可以隨時用 `disable_transience` 來臨時關閉這個功能。
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
