@@ -44,7 +44,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
-### Logging
+### 日誌
 
 在預設值下 starship 會記錄警告以及錯誤至`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`，其中 session key 對應至您的終端機實例 不過，可以使用 `STARSHIP_CACHE` 環境變數來變更此設定:
 
@@ -72,18 +72,18 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
-### Strings
+### 字串
 
 In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| 符號    | 型別                        | 備註                                                     |
+| ----- | ------------------------- | ------------------------------------------------------ |
+| `'`   | literal string            | less escaping                                          |
+| `"`   | 字串                        | more escaping                                          |
+| `'''` | multi-line literal string | less escaping                                          |
+| `"""` | multi-line string         | more escaping, newlines in declarations can be ignored |
 
 範例：
 
@@ -140,7 +140,7 @@ A variable contains a `$` symbol followed by the name of the variable. The name 
 
 - `'$version'` is a format string with a variable named `version`.
 - `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
+-
 
 #### Text Group
 
@@ -197,16 +197,16 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 ### 選項
 
-| 選項                | 預設                           | 說明                                                                                                                                                                                 |
-| ----------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [連結](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                         | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                         | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                        | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                       | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                         | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                         | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                       | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| 選項                | 預設                           | 說明                                                                             |
+| ----------------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| `format`          | [連結](#default-prompt-format) | Configure the format of the prompt.                                            |
+| `right_format`    | `''`                         | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)             |
+| `scan_timeout`    | `30`                         | starship 掃描檔案時的超時（以毫秒為單位）。                                                     |
+| `command_timeout` | `500`                        | starship 執行指令時的超時（以毫秒為單位）。                                                     |
+| `add_newline`     | `true`                       | 在 shell 提示字元之間插入空行。                                                            |
+| `palette`         | `''`                         | 指定要從 `palettes` 中使用的 palette。                                                  |
+| `palettes`        | `{}`                         | palettes 的集合，用來將 <0>colors</0> 指派給使用者自訂的名稱。 請注意 palettes 不能引用自己定義的顏色。          |
+| `follow_symlinks` | `true`                       | Follows symlinks to check if they're directories; used in modules such as git. |
 
 > [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
 
@@ -4341,21 +4341,21 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift                          |
-| `detect_extensions` | `['swift']`                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Package.swift']`                  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['swift']`                          | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Package.swift']`                  | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold 202'`                         | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                              | Disables the `swift` module.                                              |
+| `disabled`          | `false`                              | 停用 `swift` 模組。                                                            |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v5.2.4` | `swift` 的版本            |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4446,7 +4446,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | 變數        | 範例         | 說明                                  |
 | --------- | ---------- | ----------------------------------- |
-| 時間        | `13:08:10` | The current time.                   |
+| 時間        | `13:08:10` | 目前時間。                               |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
