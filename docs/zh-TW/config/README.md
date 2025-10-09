@@ -385,10 +385,10 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
 | duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | Mirrors the value of option `symbol`        |
-| style\* |                  | Mirrors the value of option `style`         |
+| symbol    |                  | 對應 `symbol` 選項的設定值                          |
+| style\* |                  | 對應 <0>style</0> 選項的設定值                      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -563,21 +563,21 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
 | `version_format`    | `'v${raw}'`                                     | The version format.                                   |
 | `symbol`            | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
-| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
+| `detect_extensions` | `[]`                                            | 應觸發此模組的副檔名。                                           |
+| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | 應觸發此模組的檔案名稱。                                          |
 | `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
 | `style`             | `'bold blue'`                                   | 這個模組的風格。                                              |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| `version` | `v1.0.0` | The version of `buf`                 |
-| `symbol`  |          | Mirrors the value of option `symbol` |
-| `style`*  |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| `version` | `v1.0.0` | The version of `buf`   |
+| `symbol`  |          | 對應 `symbol` 選項的設定值     |
+| `style`*  |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -603,21 +603,21 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | `format`            | `'via [$symbol($version )]($style)'`       | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🥟 '`                                     | A format string representing the symbol of Bun.                           |
-| `detect_extensions` | `[]`                                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                       | Which folders should trigger this module.                                 |
+| `detect_extensions` | `[]`                                       | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                       | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold red'`                               | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                    | Disables the `bun` module.                                                |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.1.4` | The version of `bun`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v0.1.4` | The version of `bun`   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -641,21 +641,21 @@ The `c` module shows some information about your C compiler. By default the modu
 | `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `['c', 'h']`                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                          | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                          | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['c', 'h']`                                                                  | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                                                          | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                                                          | 應觸發此模組的資料夾名稱。                                                             |
 | `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                        |
 | `style`             | `'bold 149'`                                                                  | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                                       | Disables the `c` module.                                                  |
 
 ### 變數
 
-| 變數      | 範例     | 說明                                   |
-| ------- | ------ | ------------------------------------ |
-| name    | clang  | The name of the compiler             |
-| version | 13.0.0 | The version of the compiler          |
-| symbol  |        | Mirrors the value of option `symbol` |
-| style   |        | Mirrors the value of option `style`  |
+| 變數      | 範例     | 說明                          |
+| ------- | ------ | --------------------------- |
+| name    | clang  | The name of the compiler    |
+| version | 13.0.0 | The version of the compiler |
+| symbol  |        | 對應 `symbol` 選項的設定值          |
+| style   |        | 對應 <0>style</0> 選項的設定值      |
 
 ### Commands
 
@@ -687,21 +687,21 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                             | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                             | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                                                             | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                                                             | 應觸發此模組的資料夾名稱。                                                             |
 | `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                        |
 | `style`             | `'bold 149'`                                                                     | 這個模組的風格。                                                                  |
 | `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
 
 ### 變數
 
-| 變數      | 範例      | 說明                                   |
-| ------- | ------- | ------------------------------------ |
-| name    | clang++ | The name of the compiler             |
-| version | 13.0.0  | The version of the compiler          |
-| symbol  |         | Mirrors the value of option `symbol` |
-| style   |         | Mirrors the value of option `style`  |
+| 變數      | 範例      | 說明                          |
+| ------- | ------- | --------------------------- |
+| name    | clang++ | The name of the compiler    |
+| version | 13.0.0  | The version of the compiler |
+| symbol  |         | 對應 `symbol` 選項的設定值          |
+| style   |         | 對應 <0>style</0> 選項的設定值      |
 
 ### Commands
 
@@ -806,13 +806,13 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v3.17.3` | The version of cmake                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v3.17.3` | The version of cmake   |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## COBOL / GNUCOBOL
 
@@ -829,20 +829,20 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `cobol` module.                                              |
 
 ### 變數
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v3.1.2.0` | The version of `cobol`               |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| 變數        | 範例         | 說明                     |
+| --------- | ---------- | ---------------------- |
+| version   | `v3.1.2.0` | The version of `cobol` |
+| symbol    |            | 對應 `symbol` 選項的設定值     |
+| style\* |            | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## 指令持續時間
 
@@ -872,9 +872,9 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | 變數        | 範例       | 說明                                      |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+| style\* |          | 對應 <0>style</0> 選項的設定值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -906,13 +906,13 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ### 變數
 
-| 變數          | 範例           | 說明                                   |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| 變數          | 範例           | 說明                            |
+| ----------- | ------------ | ----------------------------- |
+| environment | `astronauts` | The current conda environment |
+| symbol      |              | 對應 `symbol` 選項的設定值            |
+| style\*   |              | 對應 <0>style</0> 選項的設定值        |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -938,13 +938,13 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### 變數
 
-| 變數        | 範例                  | 說明                                   |
-| --------- | ------------------- | ------------------------------------ |
-| name      | `fedora-toolbox:35` | The name of the container            |
-| symbol    |                     | Mirrors the value of option `symbol` |
-| style\* |                     | Mirrors the value of option `style`  |
+| 變數        | 範例                  | 說明                        |
+| --------- | ------------------- | ------------------------- |
+| name      | `fedora-toolbox:35` | The name of the container |
+| symbol    |                     | 對應 `symbol` 選項的設定值        |
+| style\* |                     | 對應 <0>style</0> 選項的設定值    |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -970,20 +970,20 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['cr']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['shard.yml']`                      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['cr']`                             | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['shard.yml']`                      | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.32.1` | The version of `crystal`             |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                       |
+| --------- | --------- | ------------------------ |
+| version   | `v0.32.1` | The version of `crystal` |
+| symbol    |           | 對應 `symbol` 選項的設定值       |
+| style\* |           | 對應 <0>style</0> 選項的設定值   |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1008,20 +1008,20 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                           |
 | `style`             | `'bold cyan'`                        | 這個模組的風格。                                                                  |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['daml.yaml']`                      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['daml.yaml']`                      | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `daml` module.                                               |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.2.0` | The version of `daml`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.2.0` | The version of `daml`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1047,21 +1047,21 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `format`            | `'via [$symbol($version )]($style)'`              | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🎯 '`                                            | A format string representing the symbol of Dart                           |
-| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.dart_tool']`                                  | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['dart']`                                        | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `['.dart_tool']`                                  | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold blue'`                                     | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.8.4` | The version of `dart`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.8.4` | The version of `dart`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1085,19 +1085,19 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `format`            | `'via [$symbol($version )]($style)'`                                                 | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦕 '`                                                                               | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                                                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `[]`                                                                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                                                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'green bold'`                                                                       | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                                              | Disables the `deno` module.                                               |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.8.3` | The version of `deno`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.8.3` | The version of `deno`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
 ### 範例
 
@@ -1157,12 +1157,12 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 
 ### 變數
 
-| 變數        | 範例                    | 說明                                  |
-| --------- | --------------------- | ----------------------------------- |
-| path      | `'D:/Projects'`       | The current directory path          |
-| style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
+| 變數        | 範例                    | 說明                         |
+| --------- | --------------------- | -------------------------- |
+| path      | `'D:/Projects'`       | The current directory path |
+| style\* | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值     |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 <details>
 <summary>The git repos have additional variables.</summary>
@@ -1174,7 +1174,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
 | path               | `'/src/lib'`          | The remaining path                      |
-| style              | `'black bold dimmed'` | Mirrors the value of option `style`     |
+| style              | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值                  |
 | repo_root_style  | `'underline white'`   | Style for git root directory name       |
 
 </details>
@@ -1203,9 +1203,9 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
 | `style`             | `'bold orange'`                        | 這個模組的風格。                                                |
 | `disabled`          | `true`                                 | Disables the `direnv` module.                           |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.            |
-| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.             |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module.               |
+| `detect_extensions` | `[]`                                   | 應觸發此模組的副檔名。                                             |
+| `detect_files`      | `['.envrc']`                           | 應觸發此模組的檔案名稱。                                            |
+| `detect_folders`    | `[]`                                   | 應觸發此模組的資料夾名稱。                                           |
 | `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
 | `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
@@ -1221,9 +1221,9 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | allowed   | `denied`            | Whether the current rc file is allowed. |
 | rc_path   | `/home/test/.envrc` | The current rc file path.               |
 | symbol    |                     | Mirrors the value of option `symbol`.   |
-| style\* | `red bold`          | Mirrors the value of option `style`.    |
+| style\* | `red bold`          | 對應 <0>style</0> 選項的設定值.                 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1253,13 +1253,13 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 變數
 
-| 變數        | 範例             | 說明                                   |
-| --------- | -------------- | ------------------------------------ |
-| context   | `test_context` | The current docker context           |
-| symbol    |                | Mirrors the value of option `symbol` |
-| style\* |                | Mirrors the value of option `style`  |
+| 變數        | 範例             | 說明                         |
+| --------- | -------------- | -------------------------- |
+| context   | `test_context` | The current docker context |
+| symbol    |                | 對應 `symbol` 選項的設定值         |
+| style\* |                | 對應 <0>style</0> 選項的設定值     |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1299,8 +1299,8 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `version_format`    | `'v${raw}'`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'.NET '`                                                                                               | 在顯示 dotnet 版本之前用的符號。                                                      |
 | `heuristic`         | `true`                                                                                                  | 使用更快速的版本偵測法來保持 starship 的速度。                                              |
-| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
 | `style`             | `'bold blue'`                                                                                           | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                                                                 | 停用 `dotnet` 模組。                                                           |
@@ -1311,10 +1311,10 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Mirrors the value of option `symbol`                               |
-| style\* |                  | Mirrors the value of option `style`                                |
+| symbol    |                  | 對應 `symbol` 選項的設定值                                                 |
+| style\* |                  | 對應 <0>style</0> 選項的設定值                                             |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1340,22 +1340,22 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `'v${raw}'`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
-| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `['mix.exs']`                                               | Which filenames should trigger this module.                               |
+| `detect_extensions` | `[]`                                                        | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['mix.exs']`                                               | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
 | `style`             | `'bold purple'`                                             | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
 ### 變數
 
-| 變數          | 範例      | 說明                                   |
-| ----------- | ------- | ------------------------------------ |
-| version     | `v1.10` | The version of `elixir`              |
-| otp_version |         | The otp version of `elixir`          |
-| symbol      |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| 變數          | 範例      | 說明                          |
+| ----------- | ------- | --------------------------- |
+| version     | `v1.10` | The version of `elixir`     |
+| otp_version |         | The otp version of `elixir` |
+| symbol      |         | 對應 `symbol` 選項的設定值          |
+| style\*   |         | 對應 <0>style</0> 選項的設定值      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1383,21 +1383,21 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `format`            | `'via [$symbol($version )]($style)'`               | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                           |
-| `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['elm']`                                          | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
 | `style`             | `'cyan bold'`                                      | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.19.1` | The version of `elm`                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v0.19.1` | The version of `elm`   |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1443,10 +1443,10 @@ The `env_var` module displays the current value of a selected environment variab
 | 變數        | 範例                                          | 說明                                         |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| symbol    |                                             | 對應 `symbol` 選項的設定值                         |
+| style\* | `black bold dimmed`                         | 對應 <0>style</0> 選項的設定值                     |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1485,20 +1485,20 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                  |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['rebar.config', 'elang.mk']`       | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v22.1.3` | The version of `erlang`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                      |
+| --------- | --------- | ----------------------- |
+| version   | `v22.1.3` | The version of `erlang` |
+| symbol    |           | 對應 `symbol` 選項的設定值      |
+| style\* |           | 對應 <0>style</0> 選項的設定值  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1523,20 +1523,20 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                  |
 | `style`             | `'bold green'`                       | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['fnl']`                            | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.2.1` | The version of `fennel`              |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                      |
+| --------- | -------- | ----------------------- |
+| version   | `v1.2.1` | The version of `fennel` |
+| symbol    |          | 對應 `symbol` 選項的設定值      |
+| style\* |          | 對應 <0>style</0> 選項的設定值  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1595,13 +1595,13 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 ### 變數
 
-| 變數        | 範例      | 說明                                   |
-| --------- | ------- | ------------------------------------ |
-| branch    | `trunk` | The active Fossil branch             |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| 變數        | 範例      | 說明                       |
+| --------- | ------- | ------------------------ |
+| branch    | `trunk` | The active Fossil branch |
+| symbol    |         | 對應 `symbol` 選項的設定值       |
+| style\* |         | 對應 <0>style</0> 選項的設定值   |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1639,7 +1639,7 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 | added_style\*   |     | Mirrors the value of option `added_style`   |
 | deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1678,10 +1678,10 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
 | active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |               | Mirrors the value of option `symbol`                               |
-| style\* |               | Mirrors the value of option `style`                                |
+| symbol    |               | 對應 `symbol` 選項的設定值                                                 |
+| style\* |               | 對應 <0>style</0> 選項的設定值                                             |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1752,10 +1752,10 @@ very-long-project-name = 'vlpn'
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Mirrors the value of option `symbol`                                                                   |
-| style\*     |          | Mirrors the value of option `style`                                                                    |
+| symbol        |          | 對應 `symbol` 選項的設定值                                                                                     |
+| style\*     |          | 對應 <0>style</0> 選項的設定值                                                                                 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1792,9 +1792,9 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
-| style\* |           | Mirrors the value of option `style`          |
+| style\* |           | 對應 <0>style</0> 選項的設定值                       |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1827,14 +1827,14 @@ tag_symbol = '🔖 '
 
 ### 變數
 
-| 變數               | 範例         | 說明                                  |
-| ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| 變數               | 範例         | 說明                             |
+| ---------------- | ---------- | ------------------------------ |
+| state            | `REBASING` | The current state of the repo  |
+| progress_current | `1`        | The current operation progress |
+| progress_total   | `2`        | The total operation progress   |
+| style\*        |            | 對應 <0>style</0> 選項的設定值         |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1872,7 +1872,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | added_style\*   |     | Mirrors the value of option `added_style`   |
 | deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -1929,9 +1929,9 @@ The following variables can be used in `format`:
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Mirrors the value of option `style`                                                                           |
+| style\*      | 對應 <0>style</0> 選項的設定值                                                                                        |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 The following variables can be used in `diverged`:
 
@@ -1999,20 +1999,20 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
-| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['gleam']`                          | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['gleam.toml']`                     | 應觸發此模組的檔案名稱。                                                              |
 | `style`             | `'bold #FFAFF3'`                     | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `gleam` module.                                              |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of `gleam`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.0.0` | The version of `gleam` |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2044,9 +2044,9 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `format`            | `'via [$symbol($version )]($style)'`                                                      | The format for the module.                                                                                 |
 | `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
 | `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `detect_extensions` | `['go']`                                                                                  | 應觸發此模組的副檔名。                                                                                                |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | 應觸發此模組的檔案名稱。                                                                                               |
+| `detect_folders`    | `['Godeps']`                                                                              | 應觸發此模組的資料夾名稱。                                                                                              |
 | `style`             | `'bold cyan'`                                                                             | 這個模組的風格。                                                                                                   |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
 | `disabled`          | `false`                                                                                   | 停用 `golang` 模組。                                                                                            |
@@ -2057,10 +2057,10 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | version     | `v1.12.1` | The version of `go`                                                                                                                         |
 | mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
-| symbol      |           | Mirrors the value of option `symbol`                                                                                                        |
-| style\*   |           | Mirrors the value of option `style`                                                                                                         |
+| symbol      |           | 對應 `symbol` 選項的設定值                                                                                                                          |
+| style\*   |           | 對應 <0>style</0> 選項的設定值                                                                                                                      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2095,12 +2095,12 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 ### 變數
 
-| 變數        | 範例 | 說明                                   |
-| --------- | -- | ------------------------------------ |
-| symbol    |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
+| 變數        | 範例 | 說明                     |
+| --------- | -- | ---------------------- |
+| symbol    |    | 對應 `symbol` 選項的設定值     |
+| style\* |    | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2130,22 +2130,22 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                        |
-| `detect_extensions` | `['gradle', 'gradle.kts']`           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['gradle']`                         | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `['gradle']`                         | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold bright-cyan'`                 | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `gradle` module.                                             |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
 
 ### 變數
 
-| 變數      | 範例       | 說明                                   |
-| ------- | -------- | ------------------------------------ |
-| version | `v7.5.1` | The version of `gradle`              |
-| symbol  |          | Mirrors the value of option `symbol` |
-| style*  |          | Mirrors the value of option `style`  |
+| 變數      | 範例       | 說明                      |
+| ------- | -------- | ----------------------- |
+| version | `v7.5.1` | The version of `gradle` |
+| symbol  |          | 對應 `symbol` 選項的設定值      |
+| style*  |          | 對應 <0>style</0> 選項的設定值  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## Haskell
 
@@ -2162,9 +2162,9 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | -------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                         |
 | `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell |
-| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Which extensions should trigger this module.       |
-| `detect_files`      | `['stack.yaml', 'cabal.project']`    | Which filenames should trigger this module.        |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | 應觸發此模組的副檔名。                                        |
+| `detect_files`      | `['stack.yaml', 'cabal.project']`    | 應觸發此模組的檔案名稱。                                       |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                      |
 | `style`             | `'bold purple'`                      | 這個模組的風格。                                           |
 | `disabled`          | `false`                              | Disables the `haskell` module.                     |
 
@@ -2175,10 +2175,10 @@ By default the module will be shown if any of the following conditions are met:
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
 | ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
-| symbol         |             | Mirrors the value of option `symbol`                                                    |
-| style\*      |             | Mirrors the value of option `style`                                                     |
+| symbol         |             | 對應 `symbol` 選項的設定值                                                                      |
+| style\*      |             | 對應 <0>style</0> 選項的設定值                                                                  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## Haxe
 
@@ -2194,8 +2194,8 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                                            | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
-| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
 | `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | 這個模組的風格。                                                                  |
@@ -2203,13 +2203,13 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v4.2.5` | The version of `haxe`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v4.2.5` | The version of `haxe`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2233,8 +2233,8 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `'bold white'`                       | 這個模組的風格。                                                                  |
@@ -2242,13 +2242,13 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v3.1.1` | The version of `helm`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v3.1.1` | The version of `helm`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2281,10 +2281,10 @@ format = 'via [⎈ $version](bold white) '
 | 變數         | 範例         | 說明                                                    |
 | ---------- | ---------- | ----------------------------------------------------- |
 | 主機名稱       | `computer` | The hostname of the computer                          |
-| style\*  |            | Mirrors the value of option `style`                   |
+| style\*  |            | 對應 <0>style</0> 選項的設定值                                |
 | ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2332,8 +2332,8 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                |
 | `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                           |
 | `style`             | `'red dimmed'`                                                                                                        | 這個模組的風格。                                                                  |
@@ -2341,13 +2341,13 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### 變數
 
-| 變數        | 範例    | 說明                                   |
-| --------- | ----- | ------------------------------------ |
-| version   | `v14` | The version of `java`                |
-| symbol    |       | Mirrors the value of option `symbol` |
-| style\* |       | Mirrors the value of option `style`  |
+| 變數        | 範例    | 說明                     |
+| --------- | ----- | ---------------------- |
+| version   | `v14` | The version of `java`  |
+| symbol    |       | 對應 `symbol` 選項的設定值     |
+| style\* |       | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2388,13 +2388,13 @@ The default functionality is:
 
 ### 變數
 
-| 變數        | 範例  | 說明                                   |
-| --------- | --- | ------------------------------------ |
-| number    | `1` | The number of jobs                   |
-| symbol    |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| 變數        | 範例  | 說明                     |
+| --------- | --- | ---------------------- |
+| number    | `1` | The number of jobs     |
+| symbol    |     | 對應 `symbol` 選項的設定值     |
+| style\* |     | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2429,8 +2429,8 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['jl']`                             | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `'bold purple'`                      | 這個模組的風格。                                                                  |
@@ -2438,13 +2438,13 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.4.0` | The version of `julia`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.4.0` | The version of `julia` |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2467,8 +2467,8 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                    |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
-| `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_extensions` | `['kt', 'kts']`                      | 應觸發此模組的副檔名。                                                                   |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                  |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
 | `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                      |
@@ -2477,13 +2477,13 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.4.21` | The version of `kotlin`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                      |
+| --------- | --------- | ----------------------- |
+| version   | `v1.4.21` | The version of `kotlin` |
+| symbol    |           | 對應 `symbol` 選項的設定值      |
+| style\* |           | 對應 <0>style</0> 選項的設定值  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2521,8 +2521,8 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 | `style`             | `'cyan bold'`                                        | 這個模組的風格。                                                              |
 | `context_aliases`*  | `{}`                                                 | Table of context aliases to display.                                  |
 | `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                     |
-| `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
-| `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
+| `detect_extensions` | `[]`                                                 | 應觸發此模組的副檔名。                                                           |
+| `detect_files`      | `[]`                                                 | 應觸發此模組的檔案名稱。                                                          |
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
 | `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
@@ -2551,10 +2551,10 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
 | user      | `starship-user`      | If set, the current kubernetes user      |
 | cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
-| symbol    |                      | Mirrors the value of option `symbol`     |
-| style\* |                      | Mirrors the value of option `style`      |
+| symbol    |                      | 對應 `symbol` 選項的設定值                       |
+| style\* |                      | 對應 <0>style</0> 選項的設定值                   |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2647,12 +2647,12 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### 變數
 
-| 變數        | 範例           | 說明                                  |
-| --------- | ------------ | ----------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
-| style\* |              | Mirrors the value of option `style` |
+| 變數        | 範例           | 說明                                |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | 對應 <0>style</0> 選項的設定值            |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2680,22 +2680,22 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                 |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
 | `symbol`            | `'🌙 '`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `['lua']`                            | Which extensions should trigger this module.                               |
-| `detect_files`      | `['.lua-version']`                   | Which filenames should trigger this module.                                |
-| `detect_folders`    | `['lua']`                            | Which folders should trigger this module.                                  |
+| `detect_extensions` | `['lua']`                            | 應觸發此模組的副檔名。                                                                |
+| `detect_files`      | `['.lua-version']`                   | 應觸發此模組的檔案名稱。                                                               |
+| `detect_folders`    | `['lua']`                            | 應觸發此模組的資料夾名稱。                                                              |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                   |
 | `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.4.0` | The version of `lua`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v5.4.0` | The version of `lua`   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2732,8 +2732,8 @@ format = 'via [🌕 $version](bold blue) '
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*        |               | Mirrors the value of option `style`                                |
+| symbol           | `🐏`           | 對應 `symbol` 選項的設定值                                                 |
+| style\*        |               | 對應 <0>style</0> 選項的設定值                                             |
 
 *: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
@@ -2768,13 +2768,13 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### 變數
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| project   | `starship` | The current Meson project name       |
-| symbol    | `🐏`        | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| 變數        | 範例         | 說明                             |
+| --------- | ---------- | ------------------------------ |
+| project   | `starship` | The current Meson project name |
+| symbol    | `🐏`        | 對應 `symbol` 選項的設定值             |
+| style\* |            | 對應 <0>style</0> 選項的設定值         |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2807,14 +2807,14 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| branch    | `master`  | The active mercurial branch          |
-| topic     | `feature` | The active mercurial topic           |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                          |
+| --------- | --------- | --------------------------- |
+| branch    | `master`  | The active mercurial branch |
+| topic     | `feature` | The active mercurial topic  |
+| symbol    |           | 對應 `symbol` 選項的設定值          |
+| style\* |           | 對應 <0>style</0> 選項的設定值      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2851,14 +2851,14 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 
 ### 變數
 
-| 變數               | 範例         | 說明                                  |
-| ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| 變數               | 範例         | 說明                             |
+| ---------------- | ---------- | ------------------------------ |
+| state            | `REBASING` | The current state of the repo  |
+| progress_current | `1`        | The current operation progress |
+| progress_total   | `2`        | The total operation progress   |
+| style\*        |            | 對應 <0>style</0> 選項的設定值         |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## Mise
 
@@ -2879,13 +2879,13 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| health    | `healthy` | The health of _mise_                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| health    | `healthy` | The health of _mise_   |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2908,19 +2908,19 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | `symbol`            | `'🔥 '`                                | The symbol used before displaying the version of Mojo. |
 | `style`             | `'bold 208'`                          | 這個模組的風格。                                               |
 | `disabled`          | `false`                               | Disables the `mojo` module.                            |
-| `detect_extensions` | `['mojo', '🔥']`                       | Which extensions should trigger this module.           |
-| `detect_files`      | `[]`                                  | Which filenames should trigger this module.            |
-| `detect_folders`    | `[]`                                  | Which folders should trigger this module.              |
+| `detect_extensions` | `['mojo', '🔥']`                       | 應觸發此模組的副檔名。                                            |
+| `detect_files`      | `[]`                                  | 應觸發此模組的檔案名稱。                                           |
+| `detect_folders`    | `[]`                                  | 應觸發此模組的資料夾名稱。                                          |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `24.4.0` | The version of `mojo`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `24.4.0` | The version of `mojo`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -2946,11 +2946,11 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 
 ### 變數
 
-| 變數        | 範例          | 說明                                   |
-| --------- | ----------- | ------------------------------------ |
-| name      | `localhost` | The name of the NATS context         |
-| symbol    |             | Mirrors the value of option `symbol` |
-| style\* |             | Mirrors the value of option `style`  |
+| 變數        | 範例          | 說明                           |
+| --------- | ----------- | ---------------------------- |
+| name      | `localhost` | The name of the NATS context |
+| symbol    |             | 對應 `symbol` 選項的設定值           |
+| style\* |             | 對應 <0>style</0> 選項的設定值       |
 
 ### 範例
 
@@ -2978,8 +2978,8 @@ The `netns` module shows the current network namespace. This uses `ip netns iden
 | 變數        | 範例         | 說明                                        |
 | --------- | ---------- | ----------------------------------------- |
 | name      | `my-netns` | The name of the current network namespace |
-| symbol    |            | Mirrors the value of option `symbol`      |
-| style\* |            | Mirrors the value of option `style`       |
+| symbol    |            | 對應 `symbol` 選項的設定值                        |
+| style\* |            | 對應 <0>style</0> 選項的設定值                    |
 
 ### 範例
 
@@ -3007,21 +3007,21 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                 |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                     |
-| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['nim.cfg']`                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['nim', 'nims', 'nimble']`          | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['nim.cfg']`                        | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold yellow'`                      | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.2.0` | The version of `nimc`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.2.0` | The version of `nimc`  |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3052,14 +3052,14 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### 變數
 
-| 變數        | 範例      | 說明                                   |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| 變數        | 範例      | 說明                         |
+| --------- | ------- | -------------------------- |
+| state     | `pure`  | The state of the nix-shell |
+| name      | `lorri` | The name of the nix-shell  |
+| symbol    |         | 對應 `symbol` 選項的設定值         |
+| style\* |         | 對應 <0>style</0> 選項的設定值     |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3094,9 +3094,9 @@ Additionally, the module will be hidden by default if the directory contains a `
 | `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                            |
 | `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
 | `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Which extensions should trigger this module.                                                          |
-| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `['node_modules']`                            | Which folders should trigger this module.                                                             |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | 應觸發此模組的副檔名。                                                                                           |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | 應觸發此模組的檔案名稱。                                                                                          |
+| `detect_folders`    | `['node_modules']`                            | 應觸發此模組的資料夾名稱。                                                                                         |
 | `style`             | `'bold green'`                                | 這個模組的風格。                                                                                              |
 | `disabled`          | `false`                                       | 停用 `nodejs` 模組。                                                                                       |
 | `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
@@ -3107,10 +3107,10 @@ Additionally, the module will be hidden by default if the directory contains a `
 | --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
 | engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
-| symbol          |               | Mirrors the value of option `symbol`                                                                                                                      |
-| style\*       |               | Mirrors the value of option `style`                                                                                                                       |
+| symbol          |               | 對應 `symbol` 選項的設定值                                                                                                                                        |
+| style\*       |               | 對應 <0>style</0> 選項的設定值                                                                                                                                    |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3141,9 +3141,9 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.                   |
 | `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.                   |
 | `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.                    |
-| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Which extensions should trigger this module.                              |
-| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Which filenames should trigger this module.                               |
-| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | Which folders should trigger this module.                                 |
+| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | 應觸發此模組的副檔名。                                                               |
+| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | 應觸發此模組的資料夾名稱。                                                             |
 | `style`                   | `'bold yellow'`                                                            | 這個模組的風格。                                                                  |
 | `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
@@ -3154,10 +3154,10 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| symbol           |              | Mirrors the value of option `symbol`                              |
-| style\*        |              | Mirrors the value of option `style`                               |
+| symbol           |              | 對應 `symbol` 選項的設定值                                                |
+| style\*        |              | 對應 <0>style</0> 選項的設定值                                            |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3181,19 +3181,19 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 | `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
 | `style`             | `'bold bright-blue'`                 | 這個模組的風格。                                               |
 | `disabled`          | `false`                              | Disables the `odin` module.                            |
-| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.           |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.            |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.              |
+| `detect_extensions` | `['odin']`                           | 應觸發此模組的副檔名。                                            |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                           |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                          |
 
 ### 變數
 
-| 變數        | 範例            | 說明                                   |
-| --------- | ------------- | ------------------------------------ |
-| version   | `dev-2024-03` | The version of `odin`                |
-| symbol    |               | Mirrors the value of option `symbol` |
-| style\* |               | Mirrors the value of option `style`  |
+| 變數        | 範例            | 說明                     |
+| --------- | ------------- | ---------------------- |
+| version   | `dev-2024-03` | The version of `odin`  |
+| symbol    |               | 對應 `symbol` 選項的設定值     |
+| style\* |               | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3216,21 +3216,21 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🪖  '`                              | A format string representing the symbol of OPA.                           |
-| `detect_extensions` | `['rego']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['rego']`                           | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `opa` module.                                                |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.44.0` | The version of `opa`                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v0.44.0` | The version of `opa`   |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3256,14 +3256,14 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### 變數
 
-| 變數        | 範例     | 說明                                   |
-| --------- | ------ | ------------------------------------ |
-| cloud     | `corp` | The current OpenStack cloud          |
-| project   | `dev`  | The current OpenStack project        |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| 變數        | 範例     | 說明                            |
+| --------- | ------ | ----------------------------- |
+| cloud     | `corp` | The current OpenStack cloud   |
+| project   | `dev`  | The current OpenStack project |
+| symbol    |        | 對應 `symbol` 選項的設定值            |
+| style\* |        | 對應 <0>style</0> 選項的設定值        |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3358,13 +3358,13 @@ Windows = "🪟 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| 型別        | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
-| style\* |              | Mirrors the value of option `style`                                |
+| style\* |              | 對應 <0>style</0> 選項的設定值                                             |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3420,13 +3420,13 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                          |
+| --------- | -------- | --------------------------- |
+| version   | `v1.0.0` | The version of your package |
+| symbol    |          | 對應 `symbol` 選項的設定值          |
+| style\* |          | 對應 <0>style</0> 選項的設定值      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3454,19 +3454,19 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                     |
-| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                                                                                     | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold 149'`                                                                                             | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v5.26.1` | The version of `perl`                |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v5.26.1` | The version of `perl`  |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
 ### 範例
 
@@ -3492,21 +3492,21 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.                     |
-| `detect_extensions` | `['php']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `['composer.json', '.php-version']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['php']`                            | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['composer.json', '.php-version']`  | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'147 bold'`                         | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `php` module.                                                |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v7.3.8` | The version of `php`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v7.3.8` | The version of `php`   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3550,19 +3550,19 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 | `style`                    | `'yellow bold'`                                           | 這個模組的風格。                                                                          |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.  |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version. |
-| `detect_extensions`        | `[]`                                                      | Which extensions should trigger this module.                                      |
-| `detect_files`             | `['pixi.toml']`                                           | Which filenames should trigger this module.                                       |
-| `detect_folders`           | `[]`                                                      | Which folders should trigger this module.                                         |
+| `detect_extensions`        | `[]`                                                      | 應觸發此模組的副檔名。                                                                       |
+| `detect_files`             | `['pixi.toml']`                                           | 應觸發此模組的檔案名稱。                                                                      |
+| `detect_folders`           | `[]`                                                      | 應觸發此模組的資料夾名稱。                                                                     |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
 ### 變數
 
-| 變數          | 範例        | 說明                                   |
-| ----------- | --------- | ------------------------------------ |
-| version     | `v0.33.0` | The version of `pixi`                |
-| environment | `py311`   | The current pixi environment         |
-| symbol      |           | Mirrors the value of option `symbol` |
-| style       |           | Mirrors the value of option `style`  |
+| 變數          | 範例        | 說明                           |
+| ----------- | --------- | ---------------------------- |
+| version     | `v0.33.0` | The version of `pixi`        |
+| environment | `py311`   | The current pixi environment |
+| symbol      |           | 對應 `symbol` 選項的設定值           |
+| style       |           | 對應 <0>style</0> 選項的設定值       |
 
 ### 範例
 
@@ -3597,15 +3597,15 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 變數
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `pulumi`              |
-| stack     | `dev`      | The current Pulumi stack             |
-| 使用者名稱     | `alice`    | The current Pulumi username          |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| 變數        | 範例         | 說明                          |
+| --------- | ---------- | --------------------------- |
+| version   | `v0.12.24` | The version of `pulumi`     |
+| stack     | `dev`      | The current Pulumi stack    |
+| 使用者名稱     | `alice`    | The current Pulumi username |
+| symbol    |            | 對應 `symbol` 選項的設定值          |
+| style\* |            | 對應 <0>style</0> 選項的設定值      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3643,21 +3643,21 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'<=> '`                                | The symbol used before displaying the version of PureScript.              |
-| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                              |
-| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                          | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['purs']`                                    | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                          | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold white'`                                | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                       | Disables the `purescript` module.                                         |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                          |
+| --------- | -------- | --------------------------- |
+| version   | `0.13.5` | The version of `purescript` |
+| symbol    |          | 對應 `symbol` 選項的設定值          |
+| style\* |          | 對應 <0>style</0> 選項的設定值      |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3712,8 +3712,8 @@ By default, the module will be shown if any of the following conditions are met:
 | 變數           | 範例              | 說明                                         |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
+| symbol       | `'🐍 '`          | 對應 `symbol` 選項的設定值                         |
+| style        | `'yellow bold'` | 對應 <0>style</0> 選項的設定值                     |
 | pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `'venv'`        | The current `virtualenv` name              |
 
@@ -3760,20 +3760,20 @@ By default, the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                         |
 | `style`             | `'bold #75AADB'`                     | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `['_quarto.yml']`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['.qmd']`                           | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['_quarto.yml']`                    | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `quarto` module.                                             |
 
 ### 變數
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `1.4.549` | The version of `quarto`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| 變數        | 範例        | 說明                      |
+| --------- | --------- | ----------------------- |
+| version   | `1.4.549` | The version of `quarto` |
+| symbol    |           | 對應 `symbol` 選項的設定值      |
+| style\* |           | 對應 <0>style</0> 選項的設定值  |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## R
 
@@ -3802,11 +3802,11 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### 變數
 
-| 變數      | 範例            | 說明                                   |
-| ------- | ------------- | ------------------------------------ |
-| version | `v4.0.5`      | The version of `R`                   |
-| symbol  |               | Mirrors the value of option `symbol` |
-| style   | `'blue bold'` | Mirrors the value of option `style`  |
+| 變數      | 範例            | 說明                     |
+| ------- | ------------- | ---------------------- |
+| version | `v4.0.5`      | The version of `R`     |
+| symbol  |               | 對應 `symbol` 選項的設定值     |
+| style   | `'blue bold'` | 對應 <0>style</0> 選項的設定值 |
 
 ### 範例
 
@@ -3831,9 +3831,9 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | `format`            | `'via [$symbol($version-$vm_version )]($style)'` | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦋 '`                                           | The symbol used before displaying the version of Raku                     |
-| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['META6.json']`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['META6.json']`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                             | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold 149'`                                     | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                          | Disables the `raku` module.                                               |
 
@@ -3843,8 +3843,8 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | ---------- | ------ | ------------------------------------ |
 | version    | `v6.d` | The version of `raku`                |
 | vm_version | `moar` | The version of VM `raku` is built on |
-| symbol     |        | Mirrors the value of option `symbol` |
-| style\*  |        | Mirrors the value of option `style`  |
+| symbol     |        | 對應 `symbol` 選項的設定值                   |
+| style\*  |        | 對應 <0>style</0> 選項的設定值               |
 
 ### 範例
 
@@ -3868,21 +3868,21 @@ By default the `red` module shows the currently installed version of [Red](https
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🔺 '`                               | A format string representing the symbol of Red.                           |
-| `detect_extensions` | `['red']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['red']`                            | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'red bold'`                         | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `red` module.                                                |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `red`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.5.1` | The version of `red`   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3911,9 +3911,9 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'💎 '`                               | A format string representing the symbol of Ruby.                          |
-| `detect_extensions` | `['rb']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Gemfile', '.ruby-version']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['rb']`                             | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Gemfile', '.ruby-version']`       | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.                   |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | 停用 `ruby` 模組。                                                             |
@@ -3923,11 +3923,11 @@ Starship gets the current Ruby version by running `ruby -v`.
 | 變數        | 範例       | 說明                                          |
 | --------- | -------- | ------------------------------------------- |
 | version   | `v2.5.1` | The version of `ruby`                       |
-| symbol    |          | Mirrors the value of option `symbol`        |
-| style\* |          | Mirrors the value of option `style`         |
+| symbol    |          | 對應 `symbol` 選項的設定值                          |
+| style\* |          | 對應 <0>style</0> 選項的設定值                      |
 | gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3952,9 +3952,9 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦀 '`                               | A format string representing the symbol of Rust                           |
-| `detect_extensions` | `['rs']`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Cargo.toml']`                     | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['rs']`                             | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Cargo.toml']`                     | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | 停用 `rust` 模組。                                                             |
 
@@ -3965,10 +3965,10 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | version   | `v1.43.0-nightly` | The version of `rustc`                       |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
 | toolchain | `beta`            | The toolchain version                        |
-| symbol    |                   | Mirrors the value of option `symbol`         |
-| style\* |                   | Mirrors the value of option `style`          |
+| symbol    |                   | 對應 `symbol` 選項的設定值                           |
+| style\* |                   | 對應 <0>style</0> 選項的設定值                       |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -3993,8 +3993,8 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [${symbol}(${version} )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
+| `detect_extensions` | `['sbt', 'scala']`                       | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `['.metals']`                            | Which folders should trigger this modules.                                |
 | `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `'red dimmed'`                           | 這個模組的風格。                                                                  |
@@ -4002,13 +4002,13 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `2.13.5` | The version of `scala`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `2.13.5` | The version of `scala` |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4050,9 +4050,9 @@ The `shell` module shows an indicator for currently used shell.
 | 變數        | 預設 | 說明                                                         |
 | --------- | -- | ---------------------------------------------------------- |
 | indicator |    | Mirrors the value of `indicator` for currently used shell. |
-| style\* |    | Mirrors the value of option `style`.                       |
+| style\* |    | 對應 <0>style</0> 選項的設定值.                                    |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4087,13 +4087,13 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### 變數
 
-| 變數        | 範例  | 說明                                   |
-| --------- | --- | ------------------------------------ |
-| shlvl     | `3` | The current value of `SHLVL`         |
-| symbol    |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| 變數        | 範例  | 說明                           |
+| --------- | --- | ---------------------------- |
+| shlvl     | `3` | The current value of `SHLVL` |
+| symbol    |     | 對應 `symbol` 選項的設定值           |
+| style\* |     | 對應 <0>style</0> 選項的設定值       |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4135,13 +4135,13 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### 變數
 
-| 變數        | 範例           | 說明                                   |
-| --------- | ------------ | ------------------------------------ |
-| env       | `centos.img` | The current Singularity image        |
-| symbol    |              | Mirrors the value of option `symbol` |
-| style\* |              | Mirrors the value of option `style`  |
+| 變數        | 範例           | 說明                            |
+| --------- | ------------ | ----------------------------- |
+| env       | `centos.img` | The current Singularity image |
+| symbol    |              | 對應 `symbol` 選項的設定值            |
+| style\* |              | 對應 <0>style</0> 選項的設定值        |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4166,21 +4166,21 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | `version_format`    | `'v${major}.${minor}.${patch}'`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                       |
 | `compiler          | ['solc']                             | The default compiler for Solidity.                                        |
-| `detect_extensions` | `['sol']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['sol']`                            | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables this module.                                                     |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.8.1` | The version of `solidity`            |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                        |
+| --------- | -------- | ------------------------- |
+| version   | `v0.8.1` | The version of `solidity` |
+| symbol    |          | 對應 `symbol` 選項的設定值        |
+| style\* |          | 對應 <0>style</0> 選項的設定值    |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4206,13 +4206,13 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### 變數
 
-| 變數          | 範例           | 說明                                   |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current spack environment        |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| 變數          | 範例           | 說明                            |
+| ----------- | ------------ | ----------------------------- |
+| environment | `astronauts` | The current spack environment |
+| symbol      |              | 對應 `symbol` 選項的設定值            |
+| style\*   |              | 對應 <0>style</0> 選項的設定值        |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4263,10 +4263,10 @@ The `status` module displays the exit code of the previous command. If $success_
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
 | pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
-| symbol         |         | Mirrors the value of option `symbol`                                                         |
+| symbol         |         | 對應 `symbol` 選項的設定值                                                                           |
 | style\*      |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4300,12 +4300,12 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ### 變數
 
-| 變數        | 範例 | 說明                                   |
-| --------- | -- | ------------------------------------ |
-| symbol    |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
+| 變數        | 範例 | 說明                     |
+| --------- | -- | ---------------------- |
+| symbol    |    | 對應 `symbol` 選項的設定值     |
+| style\* |    | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4384,23 +4384,23 @@ By default the module will be shown if any of the following conditions are met:
 | `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'💠'`                                                   | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                                    | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `['.terraform']`                                        | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold 105'`                                            | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                                 | Disables the `terraform` module.                                          |
 | `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                              |
 
 ### 變數
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| 變數        | 範例         | 說明                              |
+| --------- | ---------- | ------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`      |
+| workspace | `default`  | The current Terraform workspace |
+| symbol    |            | 對應 `symbol` 選項的設定值              |
+| style\* |            | 對應 <0>style</0> 選項的設定值          |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4444,12 +4444,12 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### 變數
 
-| 變數        | 範例         | 說明                                  |
-| --------- | ---------- | ----------------------------------- |
-| 時間        | `13:08:10` | 目前時間。                               |
-| style\* |            | Mirrors the value of option `style` |
+| 變數        | 範例         | 說明                     |
+| --------- | ---------- | ---------------------- |
+| 時間        | `13:08:10` | 目前時間。                  |
+| style\* |            | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4481,9 +4481,9 @@ By default, the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'t '`                               | A format string representing the symbol of Typst                          |
 | `style`             | `'bold #0093A7'`                     | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
-| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['.typ']`                           | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['template.typ']`                   | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `typst` module.                                              |
 
 ### 變數
@@ -4492,10 +4492,10 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------- | --------- | ----------------------------------------------- |
 | version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
 | typst_version | `default` | The current Typst version                       |
-| symbol        |           | Mirrors the value of option `symbol`            |
-| style\*     |           | Mirrors the value of option `style`             |
+| symbol        |           | 對應 `symbol` 選項的設定值                              |
+| style\*     |           | 對應 <0>style</0> 選項的設定值                          |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## 使用者名稱
 
@@ -4557,21 +4557,21 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.                       |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['Vagrantfile']`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['Vagrantfile']`                    | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'cyan bold'`                        | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
 ### 變數
 
-| 變數        | 範例               | 說明                                   |
-| --------- | ---------------- | ------------------------------------ |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
-| symbol    |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| 變數        | 範例               | 說明                       |
+| --------- | ---------------- | ------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant` |
+| symbol    |                  | 對應 `symbol` 選項的設定值       |
+| style\* |                  | 對應 <0>style</0> 選項的設定值   |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4596,19 +4596,19 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'V '`                                       | A format string representing the symbol of V                              |
-| `detect_extensions` | `['v']`                                      | Which extensions should trigger this module.                              |
-| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['v']`                                      | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                         | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'blue bold'`                                | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### 變數
 
-| 變數        | 範例     | 說明                                   |
-| --------- | ------ | ------------------------------------ |
-| version   | `v0.2` | The version of `v`                   |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| 變數        | 範例     | 說明                     |
+| --------- | ------ | ---------------------- |
+| version   | `v0.2` | The version of `v`     |
+| symbol    |        | 對應 `symbol` 選項的設定值     |
+| style\* |        | 對應 <0>style</0> 選項的設定值 |
 
 ### 範例
 
@@ -4633,13 +4633,13 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### 變數
 
-| 變數        | 範例                                          | 說明                                   |
-| --------- | ------------------------------------------- | ------------------------------------ |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
-| symbol    |                                             | Mirrors the value of option `symbol` |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
+| 變數        | 範例                                          | 說明                         |
+| --------- | ------------------------------------------- | -------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name |
+| symbol    |                                             | 對應 `symbol` 選項的設定值         |
+| style\* | `black bold dimmed`                         | 對應 <0>style</0> 選項的設定值     |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4671,13 +4671,13 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.9.5` | The version of xmake                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.9.5` | The version of xmake   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ## Zig
 
@@ -4694,19 +4694,19 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.                     |
 | `style`             | `'bold yellow'`                      | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `zig` module.                                                |
-| `detect_extensions` | `['zig']`                            | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_extensions` | `['zig']`                            | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 
 ### 變數
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.6.0` | The version of `zig`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v0.6.0` | The version of `zig`   |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 ### 範例
 
@@ -4767,10 +4767,10 @@ These modules will be shown if any of the following conditions are met:
 | 變數        | 說明                                     |
 | --------- | -------------------------------------- |
 | output    | The output of `command` run in `shell` |
-| symbol    | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| symbol    | 對應 `symbol` 選項的設定值                     |
+| style\* | 對應 <0>style</0> 選項的設定值                 |
 
-*: This variable can only be used as a part of a style string
+*: 此變數僅能用於 style 字串的一部分
 
 #### Custom command shell
 
