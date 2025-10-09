@@ -8,7 +8,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+-
 
 ### 設定
 
