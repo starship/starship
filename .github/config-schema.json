@@ -362,6 +362,20 @@
         "detect_folders": []
       }
     },
+    "fly": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol($version )($app )($primary_region )]($style)",
+        "style": "purple bold",
+        "symbol": "🎈 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FlyConfig"
+        }
+      ]
+    },
     "directory": {
       "$ref": "#/$defs/DirectoryConfig",
       "default": {
@@ -2550,6 +2564,32 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "FlyConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )($app )($primary_region )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🎈 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "purple bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

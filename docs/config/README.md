@@ -288,6 +288,7 @@ $cobol\
 $daml\
 $dart\
 $deno\
+$fly\
 $dotnet\
 $elixir\
 $elm\
@@ -1671,6 +1672,39 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Fly
+
+The `fly` module shows the currently installed version of [Fly CLI](https://fly.io/docs/flyctl/).
+By default the module will be shown if the current directory contains `fly.toml` configuration file
+
+### Options
+
+| Option           | Default                                            | Description                                                               |
+| ---------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `'via [$symbol($app )($primary_region )]($style)'` | The format for the module.                                                |
+| `version_format` | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `'🎈 '`                                            | A format string representing the symbol of Fly                            |
+| `style`          | `'purple bold'`                                    | The style for the module.                                                 |
+
+### Variables
+
+| Variable       | Example  | Description                                                                   |
+| -------------- | -------- | ----------------------------------------------------------------------------- |
+| version        | `v1.8.3` | The version of `fly`                                                          |
+| app            |          | The name of your app at fly.io (read from the fly.toml config file)           |
+| primary_region |          | The primary region of your app at fly.io (read from the fly.toml config file) |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[fly]
+format = 'via [$symbol($app )($primary_region )]($style)'
+symbol = '🎈 '
+style = 'purple bold'
 ```
 
 ## Fossil Branch
