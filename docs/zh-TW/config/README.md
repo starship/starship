@@ -690,18 +690,18 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `[]`                                                                             | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                                             | 應觸發此模組的資料夾名稱。                                                             |
-| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                        |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | 辨識編譯器的方法 (指令)。                                                            |
 | `style`             | `'bold 149'`                                                                     | 這個模組的風格。                                                                  |
 | `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
 
 ### 變數
 
-| 變數      | 範例      | 說明                          |
-| ------- | ------- | --------------------------- |
-| name    | clang++ | The name of the compiler    |
-| version | 13.0.0  | The version of the compiler |
-| symbol  |         | 對應 `symbol` 選項的設定值          |
-| style   |         | 對應 <0>style</0> 選項的設定值      |
+| 變數      | 範例      | 說明                     |
+| ------- | ------- | ---------------------- |
+| name    | clang++ | 編譯器的名稱                 |
+| version | 13.0.0  | 編譯器的版本                 |
+| symbol  |         | 對應 `symbol` 選項的設定值     |
+| style   |         | 對應 <0>style</0> 選項的設定值 |
 
 ### Commands
 
@@ -838,7 +838,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 | 變數        | 範例         | 說明                     |
 | --------- | ---------- | ---------------------- |
-| version   | `v3.1.2.0` | The version of `cobol` |
+| version   | `v3.1.2.0` | `cobol` 的版本            |
 | symbol    |            | 對應 `symbol` 選項的設定值     |
 | style\* |            | 對應 <0>style</0> 選項的設定值 |
 
@@ -906,11 +906,11 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ### 變數
 
-| 變數          | 範例           | 說明                            |
-| ----------- | ------------ | ----------------------------- |
-| environment | `astronauts` | The current conda environment |
-| symbol      |              | 對應 `symbol` 選項的設定值            |
-| style\*   |              | 對應 <0>style</0> 選項的設定值        |
+| 變數          | 範例           | 說明                     |
+| ----------- | ------------ | ---------------------- |
+| environment | `astronauts` | 目前的 conda 環境           |
+| symbol      |              | 對應 `symbol` 選項的設定值     |
+| style\*   |              | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -923,26 +923,26 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 format = '[$symbol$environment](dimmed green) '
 ```
 
-## Container
+## 容器
 
 The `container` module displays a symbol and container name, if inside a container.
 
 ### 選項
 
-| 選項         | 預設                                 | 說明                                        |
-| ---------- | ---------------------------------- | ----------------------------------------- |
-| `symbol`   | `'⬢'`                              | The symbol shown, when inside a container |
-| `style`    | `'bold red dimmed'`                | 這個模組的風格。                                  |
-| `format`   | `'[$symbol \[$name\]]($style) '` | The format for the module.                |
-| `disabled` | `false`                            | Disables the `container` module.          |
+| 選項         | 預設                                 | 說明                               |
+| ---------- | ---------------------------------- | -------------------------------- |
+| `symbol`   | `'⬢'`                              | 在容器內所顯示的符號                       |
+| `style`    | `'bold red dimmed'`                | 這個模組的風格。                         |
+| `format`   | `'[$symbol \[$name\]]($style) '` | The format for the module.       |
+| `disabled` | `false`                            | Disables the `container` module. |
 
 ### 變數
 
-| 變數        | 範例                  | 說明                        |
-| --------- | ------------------- | ------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container |
-| symbol    |                     | 對應 `symbol` 選項的設定值        |
-| style\* |                     | 對應 <0>style</0> 選項的設定值    |
+| 變數        | 範例                  | 說明                     |
+| --------- | ------------------- | ---------------------- |
+| name      | `fedora-toolbox:35` | 容器的名稱                  |
+| symbol    |                     | 對應 `symbol` 選項的設定值     |
+| style\* |                     | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -966,22 +966,22 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 | 選項                  | 預設                                   | 說明                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `'🔮 '`                               | The symbol used before displaying the version of crystal.                 |
+| `symbol`            | `'🔮 '`                               | 顯示在 Crystal 版本之前的符號。                                                      |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
 | `detect_extensions` | `['cr']`                             | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['shard.yml']`                      | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
-| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
+| `disabled`          | `false`                              | 停用 `crystal` 模組。                                                          |
 
 ### 變數
 
-| 變數        | 範例        | 說明                       |
-| --------- | --------- | ------------------------ |
-| version   | `v0.32.1` | The version of `crystal` |
-| symbol    |           | 對應 `symbol` 選項的設定值       |
-| style\* |           | 對應 <0>style</0> 選項的設定值   |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v0.32.1` | <0>crystal</0> 的版本     |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1011,13 +1011,13 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['daml.yaml']`                      | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
-| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+| `disabled`          | `false`                              | 停用 <0>daml</0> 模組。                                                        |
 
 ### 變數
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v2.2.0` | The version of `daml`  |
+| version   | `v2.2.0` | `daml` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -1057,7 +1057,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v2.8.4` | The version of `dart`  |
+| version   | `v2.8.4` | `dart` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -1089,13 +1089,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'green bold'`                                                                       | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                              | Disables the `deno` module.                                               |
+| `disabled`          | `false`                                                                              | 停用 `deno` 模組。                                                             |
 
 ### 變數
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v1.8.3` | The version of `deno`  |
+| version   | `v1.8.3` | `deno` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -1125,8 +1125,8 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 | `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | The format for the module.                                                                                 |
 | `style`                  | `'bold cyan'`                                                                                                                | 這個模組的風格。                                                                                                   |
 | `disabled`               | `false`                                                                                                                      | 停用 `directory` 模組。                                                                                         |
-| `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
+| `read_only`              | `'🔒'`                                                                                                                        | 代表目前目錄為唯讀的符號。                                                                                              |
+| `read_only_style`        | `'red'`                                                                                                                      | 唯讀符號的風格。                                                                                                   |
 | `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
 | `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
 | `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
@@ -1137,7 +1137,7 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
-| Advanced Option             | 預設     | 說明                                                                                                                                                                     |
+| 進階選項                        | 預設     | 說明                                                                                                                                                                     |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。                                                                                                                                     |
@@ -1157,10 +1157,10 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 
 ### 變數
 
-| 變數        | 範例                    | 說明                         |
-| --------- | --------------------- | -------------------------- |
-| path      | `'D:/Projects'`       | The current directory path |
-| style\* | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值     |
+| 變數        | 範例                    | 說明                     |
+| --------- | --------------------- | ---------------------- |
+| path      | `'D:/Projects'`       | 目前目錄的路徑                |
+| style\* | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1339,21 +1339,21 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `'v${raw}'`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
+| `symbol`            | `'💧 '`                                                      | 顯示在 Elixir/Erlang 版本之前的符號。                                                |
 | `detect_extensions` | `[]`                                                        | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['mix.exs']`                                               | 應觸發此模組的檔案名稱。                                                              |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                        | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold purple'`                                             | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
+| `disabled`          | `false`                                                     | 停用 `elixir` 模組。                                                           |
 
 ### 變數
 
-| 變數          | 範例      | 說明                          |
-| ----------- | ------- | --------------------------- |
-| version     | `v1.10` | The version of `elixir`     |
-| otp_version |         | The otp version of `elixir` |
-| symbol      |         | 對應 `symbol` 選項的設定值          |
-| style\*   |         | 對應 <0>style</0> 選項的設定值      |
+| 變數          | 範例      | 說明                     |
+| ----------- | ------- | ---------------------- |
+| version     | `v1.10` | `elixir` 的版本           |
+| otp_version |         | `elixir` 的 otp 版本      |
+| symbol      |         | 對應 `symbol` 選項的設定值     |
+| style\*   |         | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1385,15 +1385,15 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `['elm']`                                          | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | 應觸發此模組的檔案名稱。                                                              |
-| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['elm-stuff']`                                    | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'cyan bold'`                                      | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
+| `disabled`          | `false`                                            | 停用 `elm` 模組。                                                              |
 
 ### 變數
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v0.19.1` | The version of `elm`   |
+| version   | `v0.19.1` | `elm` 的版本              |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
 | style\* |           | 對應 <0>style</0> 選項的設定值 |
 
@@ -1434,7 +1434,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `symbol`   | `""`                           | 顯示在變數數值之前的符號。                                                                |
 | `variable` |                                | 要顯示的環境變數。                                                                    |
 | `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。                                                         |
-| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `format`   | `"with [$env_value]($style) "` | 此模組的格式。                                                                      |
 | `說明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | 停用 `env_var` 模組。                                                             |
 
@@ -1481,22 +1481,22 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | 選項                  | 預設                                   | 說明                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                  |
+| `symbol`            | `' '`                               | 顯示在 Erlang 版本之前的符號。                                                       |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                  |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | 應觸發此模組的檔案名稱。                                                              |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
+| `disabled`          | `false`                              | 停用 `erlang` 模組。                                                           |
 
 ### 變數
 
-| 變數        | 範例        | 說明                      |
-| --------- | --------- | ----------------------- |
-| version   | `v22.1.3` | The version of `erlang` |
-| symbol    |           | 對應 `symbol` 選項的設定值      |
-| style\* |           | 對應 <0>style</0> 選項的設定值  |
+| 變數        | 範例        | 說明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v22.1.3` | <0>erlang</0> 的版本      |
+| symbol    |           | 對應 `symbol` 選項的設定值     |
+| style\* |           | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1525,16 +1525,16 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `style`             | `'bold green'`                       | 這個模組的風格。                                                                  |
 | `detect_extensions` | `['fnl']`                            | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `disabled`          | `false`                              | Disables the `fennel` module.                                             |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
+| `disabled`          | `false`                              | 停用 `fennel` 模組。                                                           |
 
 ### 變數
 
-| 變數        | 範例       | 說明                      |
-| --------- | -------- | ----------------------- |
-| version   | `v1.2.1` | The version of `fennel` |
-| symbol    |          | 對應 `symbol` 選項的設定值      |
-| style\* |          | 對應 <0>style</0> 選項的設定值  |
+| 變數        | 範例       | 說明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v1.2.1` | `fennel` 的版本           |
+| symbol    |          | 對應 `symbol` 選項的設定值     |
+| style\* |          | 對應 <0>style</0> 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1557,7 +1557,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `'.'`          | The symbol used to fill the line. |
 | `style`    | `'bold black'` | 這個模組的風格。                          |
-| `disabled` | `false`        | Disables the `fill` module        |
+| `disabled` | `false`        | 停用 <0>fill</0> 模組。                |
 
 ### 範例
 
@@ -1591,7 +1591,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | `style`             | `'bold purple'`                  | 這個模組的風格。                                                                           |
 | `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                    |
 | `truncation_symbol` | `'…'`                            | 用來指示分支名稱被縮減的符號。 You can use `''` for no symbol.                                    |
-| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                               |
+| `disabled`          | `true`                           | 停用 `fossil_branch` 模組。                                                             |
 
 ### 變數
 
@@ -1896,16 +1896,16 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
 | `conflicted`         | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
-| `ahead`              | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`            | `'\$'`                                         | The format of `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`             | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`            | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `ahead`              | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
+| `behind`             | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
+| `diverged`           | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
+| `up_to_date`         | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
+| `untracked`          | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
+| `stashed`            | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
+| `modified`           | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
+| `staged`             | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
+| `renamed`            | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
+| `deleted`            | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
 | `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
 | `style`              | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
 | `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
