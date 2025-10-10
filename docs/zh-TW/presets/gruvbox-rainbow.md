@@ -16,6 +16,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
+[點擊此處下載 TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml
