@@ -447,7 +447,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
 | `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
-| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `style`                | `'blue bold'`                            | format 內所使用的風格。                                                                       |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
