@@ -573,7 +573,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| `version` | `v1.0.0` | The version of `buf`   |
+| `version` | `v1.0.0` | `buf` 的版本              |
 | `symbol`  |          | 對應 `symbol` 選項的設定值     |
 | `style`*  |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -602,18 +602,18 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`       | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                                     | A format string representing the symbol of Bun.                           |
+| `symbol`            | `'🥟 '`                                     | 用來表示 Bun 符號的格式化字串                                                         |
 | `detect_extensions` | `[]`                                       | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                       | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold red'`                               | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                    | Disables the `bun` module.                                                |
+| `disabled`          | `false`                                    | 停用 `bun` 模組。                                                              |
 
 ### 變數
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v0.1.4` | The version of `bun`   |
+| version   | `v0.1.4` | `bun` 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -621,7 +621,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 ### 範例
 
-#### Customize the format
+#### 自定義格式
 
 ```toml
 # ~/.config/starship.toml
@@ -632,13 +632,13 @@ format = 'via [🍔 $version](bold green) '
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+這個 `c` 模組會顯示您的 C 編譯器相關資訊。 此模組預設會在目前所在的目錄有 `.c` 或 `.h` 檔案時顯示。
 
 ### 選項
 
 | 選項                  | 預設                                                                            | 說明                                                                        |
 | ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                         |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                    |
 | `detect_extensions` | `['c', 'h']`                                                                  | 應觸發此模組的副檔名。                                                               |
@@ -646,7 +646,7 @@ The `c` module shows some information about your C compiler. By default the modu
 | `detect_folders`    | `[]`                                                                          | 應觸發此模組的資料夾名稱。                                                             |
 | `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | 辨識編譯器的方法 (指令)。                                                            |
 | `style`             | `'bold 149'`                                                                  | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                       | Disables the `c` module.                                                  |
+| `disabled`          | `false`                                                                       | 停用 `c` 模組。                                                                |
 
 ### 變數
 
@@ -663,7 +663,7 @@ The `commands` option accepts a list of commands to determine the compiler versi
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
+若此模組不支援某個 C 編譯器，您可以透過在 [在 GitHub 提出 Issue](https://github.com/starship/starship/issues/new/choose) 來申請支援。
 
 ### 範例
 
@@ -676,15 +676,15 @@ format = 'via [$name $version]($style)'
 
 ## CPP
 
-The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+這個 `cpp` 模組會顯示您的 C 編譯器相關資訊。 此模組預設會在目前所在的目錄有 `.cpp` 、 `.hpp`  或其他 `C++` 相關檔案時顯示。
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
 | 選項                  | 預設                                                                               | 說明                                                                        |
 | ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                         |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                    |
 | `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 應觸發此模組的副檔名。                                                               |
@@ -692,7 +692,7 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `detect_folders`    | `[]`                                                                             | 應觸發此模組的資料夾名稱。                                                             |
 | `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | 辨識編譯器的方法 (指令)。                                                            |
 | `style`             | `'bold 149'`                                                                     | 這個模組的風格。                                                                  |
-| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
+| `disabled`          | `true`                                                                           | 停用`cpp` 模組。                                                               |
 
 ### 變數
 
@@ -797,18 +797,18 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`   | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                                 | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
-| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
+| `symbol`            | `'△ '`                                 | 顯示在 Cmake 版本之前的符號。                                                        |
+| `detect_extensions` | `[]`                                   | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                   | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold blue'`                          | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+| `disabled`          | `false`                                | 停用 `cmake` 模組。                                                            |
 
 ### 變數
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v3.17.3` | The version of cmake   |
+| version   | `v3.17.3` | cmake 的版本              |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
 | style\* |           | 對應 <0>style</0> 選項的設定值 |
 
@@ -825,14 +825,14 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 | 選項                  | 預設                                   | 說明                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `'⚙️ '`                              | The symbol used before displaying the version of COBOL.                   |
+| `symbol`            | `'⚙️ '`                              | 顯示在 COBOL 版本之前的符號。                                                        |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                  |
 | `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                              |
+| `disabled`          | `false`                              | 停用 `cobol` 模組。                                                            |
 
 ### 變數
 
@@ -1084,7 +1084,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                                 | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦕 '`                                                                               | A format string representing the symbol of Deno                           |
+| `symbol`            | `'🦕 '`                                                                               | 用來表示 Deno 符號的格式化字串                                                        |
 | `detect_extensions` | `[]`                                                                                 | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                                                                 | 應觸發此模組的資料夾名稱。                                                             |
@@ -1202,7 +1202,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `format`            | `'[$symbol$loaded/$allowed]($style) '` | 此模組的格式。                                                 |
 | `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
 | `style`             | `'bold orange'`                        | 這個模組的風格。                                                |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
+| `disabled`          | `true`                                 | 停用 `direnv` 模組。                                         |
 | `detect_extensions` | `[]`                                   | 應觸發此模組的副檔名。                                             |
 | `detect_files`      | `['.envrc']`                           | 應觸發此模組的檔案名稱。                                            |
 | `detect_folders`    | `[]`                                   | 應觸發此模組的資料夾名稱。                                           |
@@ -1309,7 +1309,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | 變數        | 範例               | 說明                                                                 |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| version   | `v3.1.201`       | `dotnet` sdk 的版本                                                   |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | 對應 `symbol` 選項的設定值                                                 |
 | style\* |                  | 對應 <0>style</0> 選項的設定值                                             |
@@ -1784,7 +1784,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
 | `tag_symbol`         | `' 🏷  '`                       | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
+| `disabled`           | `false`                        | 停用 `git_commit` 模組。                                                                  |
 
 ### 變數
 
@@ -1919,7 +1919,7 @@ The following variables can be used in `format`:
 
 | 變數             | 說明                                                                                                            |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -1998,17 +1998,17 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | A format string representing the symbol of Gleam.                         |
+| `symbol`            | `'⭐ '`                               | 用來表示 Gleam 符號的格式化字串                                                       |
 | `detect_extensions` | `['gleam']`                          | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['gleam.toml']`                     | 應觸發此模組的檔案名稱。                                                              |
 | `style`             | `'bold #FFAFF3'`                     | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                              | Disables the `gleam` module.                                              |
+| `disabled`          | `false`                              | 停用 `gleam` 模組。                                                            |
 
 ### 變數
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v1.0.0` | The version of `gleam` |
+| version   | `v1.0.0` | `gleam` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -2055,7 +2055,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 | 變數          | 範例        | 說明                                                                                                                                          |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| version     | `v1.12.1` | `go` 的版本                                                                                                                                    |
 | mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
 | symbol      |           | 對應 `symbol` 選項的設定值                                                                                                                          |
 | style\*   |           | 對應 <0>style</0> 選項的設定值                                                                                                                      |
@@ -3136,7 +3136,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | 選項                        | 預設                                                                         | 說明                                                                        |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                         |
+| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`          | `'v${raw}'`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.                   |
 | `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.                   |
@@ -3451,7 +3451,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | 選項                  | 預設                                                                                                       | 說明                                                                        |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                         |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                     | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                     |
 | `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | 應觸發此模組的副檔名。                                                               |
@@ -3588,7 +3588,7 @@ By default the module will be shown if any of the following conditions are met:
 
 | 選項               | 預設                                           | 說明                                                                        |
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                         |
+| `format`         | `'via [$symbol($username@)$stack]($style) '` | 此模組的格式。                                                                   |
 | `version_format` | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `'bold 5'`                                   | 這個模組的風格。                                                                  |
@@ -3698,9 +3698,9 @@ By default, the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 取得 Python 的版本。                                                               |
 | `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
-| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | 應觸發此模組的副檔名。                                                                           |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | 應觸發此模組的檔案名稱。                                                                          |
+| `detect_folders`     | `[]`                                                                                                         | 應觸發此模組的資料夾名稱。                                                                         |
 | `disabled`           | `false`                                                                                                      | 停用 `python` 模組。                                                                       |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3795,9 +3795,9 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'📐'`                                | A format string representing the symbol of R.                             |
 | `style`             | `'blue bold'`                        | 這個模組的風格。                                                                  |
-| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Which extensions should trigger this module                               |
-| `detect_files`      | `['.Rprofile']`                      | Which filenames should trigger this module                                |
-| `detect_folders`    | `['.Rproj.user']`                    | Which folders should trigger this module                                  |
+| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['.Rprofile']`                      | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `['.Rproj.user']`                    | 應觸發此模組的資料夾名稱。                                                             |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
 ### 變數
@@ -3828,7 +3828,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 | 選項                  | 預設                                               | 說明                                                                        |
 | ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | The format string for the module.                                         |
+| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🦋 '`                                           | The symbol used before displaying the version of Raku                     |
 | `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | 應觸發此模組的副檔名。                                                               |
@@ -4381,7 +4381,7 @@ By default the module will be shown if any of the following conditions are met:
 
 | 選項                  | 預設                                                      | 說明                                                                        |
 | ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'💠'`                                                   | A format string shown before the terraform workspace.                     |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | 應觸發此模組的副檔名。                                                               |
@@ -4432,7 +4432,7 @@ format = 'via [$symbol$workspace]($style) '
 
 | 選項                | 預設                      | 說明                                                                                                    |
 | ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                     |
+| `format`          | `'at [$time]($style) '` | 此模組的格式。                                                                                               |
 | `use_12hr`        | `false`                 | 啟用 12 小時格式。                                                                                           |
 | `time_format`     | 請看下列                    | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
 | `style`           | `'bold yellow'`         | 這個模組的時間的風格。                                                                                           |
@@ -4662,10 +4662,10 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
-| `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
+| `symbol`            | `'△ '`                               | 顯示在 Cmake 版本之前的符號。                                                        |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['xmake.lua']`                      | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold green'`                       | 這個模組的風格。                                                                  |
 | `disabled`          | `false`                              | Disables the `xmake` module.                                              |
 
