@@ -439,7 +439,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -1193,7 +1193,7 @@ truncation_symbol = '…/'
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -1580,7 +1580,7 @@ AA -------------------------------------------- BB -----------------------------
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -1618,7 +1618,7 @@ truncation_symbol = ''
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -1850,7 +1850,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2506,7 +2506,7 @@ kotlin_binary = 'kotlinc'
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 > 
 > When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmental variables has been set.
 
@@ -2634,7 +2634,7 @@ disabled = true
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2712,7 +2712,7 @@ format = 'via [🌕 $version](bold blue) '
 
 預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2792,7 +2792,7 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2831,7 +2831,7 @@ truncation_symbol = ''
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -2864,7 +2864,7 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -3282,7 +3282,7 @@ The `os` module shows the current operating system. OS information is detected v
 
 > [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -3521,7 +3521,7 @@ format = 'via [🔹 $version](147 bold) '
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4023,7 +4023,7 @@ symbol = '🌟 '
 
 The `shell` module shows an indicator for currently used shell.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4071,7 +4071,7 @@ disabled = false
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4227,7 +4227,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4286,7 +4286,7 @@ disabled = false
 
 The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
@@ -4426,7 +4426,7 @@ format = 'via [$symbol$workspace]($style) '
 
 `time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
-> [!TIP] This module is disabled by default. 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+> [!TIP] 此模組預設為停用。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 ### 選項
 
