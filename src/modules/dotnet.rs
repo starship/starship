@@ -306,8 +306,7 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
             .stdout
             .lines()
             .map(str::trim)
-            .filter(|l| !l.is_empty())
-            .next_back()
+            .rfind(|l| !l.is_empty())
             .or_else(parse_failed)?;
         let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
         if take_until > 1 {
