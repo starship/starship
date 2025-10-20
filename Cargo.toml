@@ -98,7 +98,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.62.0"
+version = "0.62.2"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
