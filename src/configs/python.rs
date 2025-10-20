@@ -22,6 +22,7 @@ pub struct PythonConfig<'a> {
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
     pub detect_env_vars: Vec<&'a str>,
+    pub generic_venv_names: Vec<&'a str>,
 }
 
 impl Default for PythonConfig<'_> {
@@ -51,6 +52,7 @@ impl Default for PythonConfig<'_> {
             ],
             detect_folders: vec![],
             detect_env_vars: vec!["VIRTUAL_ENV"],
+            generic_venv_names: vec![],
         }
     }
 }
