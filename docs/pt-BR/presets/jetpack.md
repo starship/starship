@@ -6,7 +6,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 > Jetpack uses the terminal's color theme.
 
-![Screenshot of Jetpack preset](/presets/img/jetpack.png)
+![Captura de tela do Jetpack preset](/presets/img/jetpack.png)
 
 ### Prerequisite
 
