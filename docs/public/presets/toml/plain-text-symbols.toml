@@ -89,6 +89,9 @@ symbol = "erl "
 [fennel]
 symbol = "fnl "
 
+[fortran]
+symbol = "fortran "
+
 [fossil_branch]
 symbol = "fossil "
 truncation_symbol = "..."
