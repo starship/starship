@@ -307,7 +307,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv`:
+Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
 ```sh
 eval (starship init elvish)
