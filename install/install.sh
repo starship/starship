@@ -371,7 +371,7 @@ print_install() {
     case ${s} in
       elvish )
         # shellcheck disable=SC2088
-        config_file="~/.elvish/rc.elv"
+        config_file="~/.config/elvish/rc.elv"
         config_cmd="eval (starship init elvish)"
         warning="${warning} Only elvish v0.17 or higher is supported."
         ;;
