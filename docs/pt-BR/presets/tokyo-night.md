@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./#pastel-powerline)
+[Retornar para Personalizações](./#tokyo-night)
 
 # Predifinição Tokyo Night
 
