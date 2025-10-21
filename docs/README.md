@@ -127,7 +127,7 @@ onMounted(() => {
    > [!WARNING]
    > Only elvish v0.18 or higher is supported.
 
-   Add the following to the end of `~/.config/elvish/rc.elv`:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
