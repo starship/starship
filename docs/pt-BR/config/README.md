@@ -278,6 +278,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -1576,6 +1577,43 @@ Produz um prompt parecido com:
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### Opções
+
+| Opções              | Padrão                                                                                                                      | Descrição                                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | O simbolo usado antes de exibir a versão do COBOL.                                  |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | O formato do módulo.                                                                |
+| `version_format`    | `'${raw}'`                                                                                                                  | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold purple'`                                                                                                             | O estilo do módulo.                                                                 |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `[]`                                                                                                                        | Quais pastas devem ativar este módulo.                                              |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | Como detectar qual é o compilador                                                   |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                                      |
+
+### Variáveis
+
+| Variável  | Exemplo  | Descrição                           |
+| --------- | -------- | ----------------------------------- |
+| name      | gfortran | O nome do compilador                |
+| version   | `14.2.0` | The version of the Fortran compiler |
+| symbol    |          | Espelha o valor da opção `symbol`   |
+| style\* |          | Espelha o valor da opção `style`    |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
+### Comandos
+
+A opção `commands` aceita uma lista de comandos para determinar a versão e o nome do compilador.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. Starship tentará executar cada comando até que obtenha um resultado no STDOUT.
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
 ## Fossil Branch
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
@@ -1743,6 +1781,7 @@ O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
 | `truncation_symbol`  | `'…'`                                             | O simbolo usado para indicar que o nome braço foi truncado. You can use `''` for no symbol. |
 | `only_attached`      | `false`                                           | Apenas exibe o nome do braço quando o estado não for detached `HEAD`.                       |
 | `ignore_branches`    | `[]`                                              | Uma lista de nomes para evitar a exibição. Useful for 'master' or 'main'.                   |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                            |
 | `disabled`           | `false`                                           | Desabilita o módulo `git_branch`.                                                           |
 
 ### Variáveis
