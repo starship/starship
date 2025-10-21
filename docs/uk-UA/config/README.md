@@ -245,7 +245,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом до
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -278,6 +278,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -1576,6 +1577,43 @@ style = 'bold green'
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### Параметри
+
+| Параметр            | Стандартно                                                                                                                  | Опис                                                              |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | Символ, який знаходиться перед версією COBOL.                     |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | Формат модуля.                                                    |
+| `version_format`    | `'${raw}'`                                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `style`             | `'bold purple'`                                                                                                             | Стиль модуля.                                                     |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                                                                        | В яких теках цей модуль має запускатись.                          |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | Як виявити компілятор                                             |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                    |
+
+### Змінні
+
+| Змінна    | Приклад  | Опис                                     |
+| --------- | -------- | ---------------------------------------- |
+| name      | gfortran | Назва компілятора                        |
+| version   | `14.2.0` | The version of the Fortran compiler      |
+| symbol    |          | Віддзеркалює значення параметра `symbol` |
+| style\* |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Команди
+
+Параметр `commands` отримує список команд для визначення версії та назви компілятора.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
 ## Fossil Branch
 
 Модуль `fossil_branch` показує назву активної гілки у вашій поточній теці.
@@ -1743,6 +1781,7 @@ very-long-project-name = 'vlpn'
 | `truncation_symbol`  | `'…'`                                             | Символ, що використовується для позначення назви гілки, яка була скорочена. Ви можете використовувати `''`, щоб нічого не показувати. |
 | `only_attached`      | `false`                                           | Показувати назву гілки тільки коли вона не у відʼєднаному від `HEAD` стані.                                                           |
 | `ignore_branches`    | `[]`                                              | Перелік назв, які не треба показувати. Корисно для 'master' або 'main'.                                                               |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                                                                      |
 | `disabled`           | `false`                                           | Вимикає модуль `git_branch`.                                                                                                          |
 
 ### Змінні
