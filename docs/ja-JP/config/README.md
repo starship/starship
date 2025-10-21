@@ -278,6 +278,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -1576,6 +1577,43 @@ style = 'bold green'
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### オプション
+
+| オプション               | デフォルト                                                                                                                       | 説明                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `symbol`            | `' '`                                                                                                                      | COBOLのバージョンを表示する前に使用される記号です。                           |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | module のフォーマットです。                                      |
+| `version_format`    | `'${raw}'`                                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `style`             | `'bold purple'`                                                                                                             | モジュールのスタイルです。                                          |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | コンパイラを検出する方法                                           |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                         |
+
+### 変数
+
+| 変数        | 設定例      | 説明                                  |
+| --------- | -------- | ----------------------------------- |
+| name      | gfortran | コンパイラ名                              |
+| version   | `14.2.0` | The version of the Fortran compiler |
+| symbol    |          | オプション `symbol` の値をミラーする             |
+| style\* |          | オプション `style` の値をミラーする              |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### Commands
+
+`commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
 ## Fossil Branch
 
 `fossil_branch`モジュールは、現在のディレクトリにあるチェックアウトのアクティブなブランチ名を表示します。
@@ -1743,6 +1781,7 @@ very-long-project-name = 'vlpn'
 | `truncation_symbol`  | `'…'`                                             | ブランチ名が切り捨てられていることを示すための記号です。 `''` で記号なしにできます。         |
 | `only_attached`      | `false`                                           | デタッチ `HEAD` 状態にない時はブランチ名のみ表示します。                      |
 | `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 'master' や 'main' に対して有用です。              |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                      |
 | `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                             |
 
 ### 変数
@@ -2095,10 +2134,10 @@ format = 'via [$symbol($version )($mod_version )]($style)'
 
 ### 変数
 
-| 変数        | 設定例 | 説明                      |
-| --------- | --- | ----------------------- |
-| symbol    |     | オプション `symbol` の値をミラーする |
-| style\* |     | オプション `style` の値をミラーする  |
+| 変数        | 設定例 | 説明                        |
+| --------- | --- | ------------------------- |
+| symbol    |     | オプション `symbol` の値をミラーします。 |
+| style\* |     | オプション `style` の値をミラーします。  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2139,11 +2178,11 @@ format = 'via [🐂](yellow bold) '
 
 ### 変数
 
-| 変数      | 設定例      | 説明                        |
-| ------- | -------- | ------------------------- |
-| version | `v7.5.1` | `gradle`のバージョン            |
-| symbol  |          | オプション `symbol` の値をミラーします。 |
-| style*  |          | オプション `style` の値をミラーします。  |
+| 変数      | 設定例      | 説明                      |
+| ------- | -------- | ----------------------- |
+| version | `v7.5.1` | `gradle`のバージョン          |
+| symbol  |          | オプション `symbol` の値をミラーする |
+| style*  |          | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2203,11 +2242,11 @@ format = 'via [🐂](yellow bold) '
 
 ### 変数
 
-| 変数        | 設定例      | 説明                      |
-| --------- | -------- | ----------------------- |
-| version   | `v4.2.5` | `haxe` のバージョン           |
-| symbol    |          | オプション `symbol` の値をミラーする |
-| style\* |          | オプション `style` の値をミラーする  |
+| 変数        | 設定例      | 説明                       |
+| --------- | -------- | ------------------------ |
+| version   | `v4.2.5` | `haxe` のバージョン            |
+| symbol    |          | オプション `symbol` の値をミラーする  |
+| style\* |          | オプション `style` の値をミラーします。 |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2242,11 +2281,11 @@ format = "via [⌘ $version](bold fg:202) "
 
 ### 変数
 
-| 変数        | 設定例      | 説明                       |
-| --------- | -------- | ------------------------ |
-| version   | `v3.1.1` | `helm` のバージョン            |
-| symbol    |          | オプション `symbol` の値をミラーする  |
-| style\* |          | オプション `style` の値をミラーします。 |
+| 変数        | 設定例      | 説明                      |
+| --------- | -------- | ----------------------- |
+| version   | `v3.1.1` | `helm` のバージョン           |
+| symbol    |          | オプション `symbol` の値をミラーする |
+| style\* |          | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2465,7 +2504,7 @@ symbol = '∴ '
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `format`            | `'via [$symbol($version )]($style)'` | モジュールのフォーマットです。                                        |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `detect_extensions` | `['kt', 'kts']`                      | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
@@ -2517,7 +2556,7 @@ kotlin_binary = 'kotlinc'
 | オプション               | デフォルト                                                | 説明                              |
 | ------------------- | ---------------------------------------------------- | ------------------------------- |
 | `symbol`            | `'☸ '`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。 |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | モジュールのフォーマットです。                 |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。               |
 | `style`             | `'cyan bold'`                                        | モジュールのスタイルです。                   |
 | `context_aliases`*  | `{}`                                                 | 表示するコンテキストエイリアスを定義するテーブル。       |
 | `user_aliases`*     | `{}`                                                 | 表示するユーザーエイリアスを定義するテーブル。         |
@@ -4138,8 +4177,8 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | 変数        | 設定例          | 説明                            |
 | --------- | ------------ | ----------------------------- |
 | env       | `centos.img` | The current Singularity image |
-| symbol    |              | オプション `symbol` の値をミラーする       |
-| style\* |              | オプション `style` の値をミラーする        |
+| symbol    |              | オプション `symbol` の値をミラーします      |
+| style\* |              | オプション `style` の値をミラーします       |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4177,8 +4216,8 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | 変数        | 設定例      | 説明                        |
 | --------- | -------- | ------------------------- |
 | version   | `v0.8.1` | The version of `solidity` |
-| symbol    |          | オプション `symbol` の値をミラーします  |
-| style\* |          | オプション `style` の値をミラーします   |
+| symbol    |          | オプション `symbol` の値をミラーする   |
+| style\* |          | オプション `style` の値をミラーする    |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
