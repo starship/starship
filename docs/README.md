@@ -134,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-
    For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+
 
    #### Tcsh
 
