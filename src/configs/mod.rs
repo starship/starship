@@ -30,6 +30,7 @@ pub mod env_var;
 pub mod erlang;
 pub mod fennel;
 pub mod fill;
+pub mod fortran;
 pub mod fossil_branch;
 pub mod fossil_metrics;
 pub mod gcloud;
@@ -101,6 +102,7 @@ pub mod username;
 pub mod v;
 pub mod vagrant;
 pub mod vcsh;
+pub mod xmake;
 pub mod zig;
 
 pub use starship_root::*;
@@ -174,6 +176,8 @@ pub struct FullConfig<'a> {
     fennel: fennel::FennelConfig<'a>,
     #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    fortran: fortran::FortranConfig<'a>,
     #[serde(borrow)]
     fossil_branch: fossil_branch::FossilBranchConfig<'a>,
     #[serde(borrow)]
@@ -313,6 +317,8 @@ pub struct FullConfig<'a> {
     vcsh: vcsh::VcshConfig<'a>,
     #[serde(borrow)]
     vlang: v::VConfig<'a>,
+    #[serde(borrow)]
+    xmake: xmake::XMakeConfig<'a>,
     #[serde(borrow)]
     zig: zig::ZigConfig<'a>,
     #[serde(borrow)]

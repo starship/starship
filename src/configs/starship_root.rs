@@ -67,6 +67,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "elm",
     "erlang",
     "fennel",
+    "fortran",
     "gleam",
     "golang",
     "gradle",
@@ -101,6 +102,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "typst",
     "vlang",
     "vagrant",
+    "xmake",
     "zig",
     // ↑ Toolchain version modules ↑
     "buf",

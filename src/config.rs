@@ -11,7 +11,7 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
-use std::ffi::OsString;
+use std::ffi::OsStr;
 use std::io::ErrorKind;
 
 use toml::Value;
@@ -38,7 +38,7 @@ where
         }
     }
 
-    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// Helper function that will call `ModuleConfig::from_config(config)` if config is Some,
     /// or `ModuleConfig::default()` if config is None.
     fn try_load<V: Into<ValueRef<'a>>>(config: Option<V>) -> Self {
         config.map(Into::into).map(Self::load).unwrap_or_default()
@@ -124,7 +124,7 @@ pub struct StarshipConfig {
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
+    pub fn initialize(config_file_path: Option<&OsStr>) -> Self {
         Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
@@ -133,7 +133,7 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+    fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
         let toml_content = Self::read_config_content_as_str(config_file_path)?;
 
         match toml::from_str(&toml_content) {
@@ -148,7 +148,7 @@ impl StarshipConfig {
         }
     }
 
-    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+    pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
         if config_file_path.is_none() {
             log::debug!(
                 "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
@@ -201,28 +201,24 @@ impl StarshipConfig {
 
         // Assumes all keys except the last in path has a table
         for option in table_options {
-            match prev_table.get(*option) {
-                Some(value) => match value.as_table() {
-                    Some(value) => {
-                        prev_table = value;
-                    }
-                    None => {
-                        log::trace!(
-                            "No config found for \"{}\": \"{}\" is not a table",
-                            path.join("."),
-                            &option
-                        );
-                        return None;
-                    }
-                },
-                None => {
+            if let Some(value) = prev_table.get(*option) {
+                if let Some(value) = value.as_table() {
+                    prev_table = value;
+                } else {
                     log::trace!(
-                        "No config found for \"{}\": Option \"{}\" not found",
+                        "No config found for \"{}\": \"{}\" is not a table",
                         path.join("."),
                         &option
                     );
                     return None;
                 }
+            } else if prev_table.contains_key(*option) {
+                log::trace!(
+                    "No config found for \"{}\": \"{}\" is not a table",
+                    path.join("."),
+                    &option
+                );
+                return None;
             }
         }
 
@@ -234,7 +230,7 @@ impl StarshipConfig {
                 path.join("."),
                 &last_option
             );
-        };
+        }
         value
     }
 
@@ -1021,7 +1017,7 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
-        )
+        );
     }
 
     #[test]
@@ -1064,7 +1060,7 @@ mod tests {
     fn read_config_no_config_file_path_provided() {
         assert_eq!(
             None,
-            StarshipConfig::read_config_content_as_str(&None),
+            StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
     }

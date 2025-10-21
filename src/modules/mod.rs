@@ -27,6 +27,7 @@ mod env_var;
 mod erlang;
 mod fennel;
 mod fill;
+mod fortran;
 mod fossil_branch;
 mod fossil_metrics;
 mod gcloud;
@@ -97,6 +98,7 @@ mod utils;
 mod vagrant;
 mod vcsh;
 mod vlang;
+mod xmake;
 mod zig;
 
 #[cfg(feature = "battery")]
@@ -107,7 +109,7 @@ mod typst;
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
 use crate::config::ModuleConfig;
-use crate::context::{Context, Shell};
+use crate::context::{Context, Detected, Shell};
 use crate::module::Module;
 use std::time::Instant;
 
@@ -144,6 +146,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "env_var" => env_var::module(None, context),
             "fennel" => fennel::module(context),
             "fill" => fill::module(context),
+            "fortran" => fortran::module(context),
             "fossil_branch" => fossil_branch::module(context),
             "fossil_metrics" => fossil_metrics::module(context),
             "gcloud" => gcloud::module(context),
@@ -215,6 +218,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
             "vcsh" => vcsh::module(context),
+            "xmake" => xmake::module(context),
             "zig" => zig::module(context),
             env if env.starts_with("env_var.") => {
                 env_var::module(env.strip_prefix("env_var."), context)
@@ -274,6 +278,7 @@ pub fn description(module: &str) -> &'static str {
         "erlang" => "Current OTP version",
         "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
+        "fortran" => "The currently used version of Fortran",
         "fossil_branch" => "The active branch of the check-out in your current directory",
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
@@ -348,6 +353,7 @@ pub fn description(module: &str) -> &'static str {
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",
         "vlang" => "The currently installed version of V",
+        "xmake" => "The currently installed version of XMake",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }

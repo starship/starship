@@ -293,6 +293,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -463,6 +464,10 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 ## Azure
 
 The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -685,15 +690,13 @@ file.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Example
 
@@ -736,15 +739,13 @@ the module will be shown if the current directory contains a `.cpp`, `.hpp`, or 
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
-NB that `version` is not in the default format.
-
 ### Commands
 
 The `commands` option accepts a list of commands to determine the compiler version and name.
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
 
-If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
 ### Example
 
@@ -1263,6 +1264,10 @@ truncation_symbol = '…/'
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                                | Description                                             |
@@ -1669,9 +1674,50 @@ Produces a prompt that looks like:
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### Options
+
+| Option              | Default                                                                                                                     | Description                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of COBOL.                   |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | The format for the module.                                                |
+| `version_format`    | `'${raw}'`                                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold purple'`                                                                                                             | The style for the module.                                                 |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Which extensions should trigger this module.                              |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                                        | Which folders should trigger this module.                                 |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | How to detect what the compiler is                                        |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| name     | gfortran | The name of the compiler             |
+| version  | `14.2.0` | The version of the Fortran compiler  |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
 ## Fossil Branch
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -1708,6 +1754,10 @@ truncation_symbol = ''
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -1835,6 +1885,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                         |
 | `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
 ### Variables
@@ -2516,7 +2567,7 @@ The default functionality is:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### Examples
 
 ```toml
 # ~/.config/starship.toml
@@ -2525,6 +2576,14 @@ The default functionality is:
 symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
 ```
 
 ## Julia
@@ -2632,7 +2691,7 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 > When the module is enabled it will always be active, unless any of
 > `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have
 > been set in which case the module will only be active in directories that match
-> those conditions or one of the environmatal variable has been set.
+> those conditions or one of the environmental variables has been set.
 
 ### Options
 
@@ -2764,6 +2823,10 @@ disabled = true
 ## Local IP
 
 The `localip` module shows the IPv4 address of the primary network interface.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -2925,6 +2988,10 @@ style = 'bold dimmed green'
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option              | Default                                   | Description                                                                                  |
@@ -2964,6 +3031,10 @@ The `hg_state` module will show in directories which are part of a mercurial
 repository, and where there is an operation in progress, such as: _REBASING_,
 _BISECTING_, etc.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option       | Default                   | Description                                                   |
@@ -2994,6 +3065,10 @@ _BISECTING_, etc.
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -3308,16 +3383,16 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 
 ### Options
 
-| Option              | Default                              | Description                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                            |
-| `show_commit`       | `false`                              | Shows the commit as part of the version.              |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `'bold bright-blue'`                 | The style for the module.                             |
-| `disabled`          | `false`                              | Disables the `odin` module.                           |
-| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| Option              | Default                              | Description                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                             |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `style`             | `'bold bright-blue'`                 | The style for the module.                              |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.           |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.            |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.              |
 
 ### Variables
 
@@ -3530,7 +3605,7 @@ Arch = "Arch is the best! "
 
 The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`,
-`poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+`poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
@@ -3549,6 +3624,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
+- [**Galaxy**](https://galaxy.ansible.com/) - The `galaxy` package version is extracted from the `galaxy.yml` present in the current directory
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
@@ -3672,6 +3748,10 @@ format = 'via [🔹 $version](147 bold) '
 ## Pijul Channel
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
@@ -4247,6 +4327,10 @@ disabled = false
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is
 set to a number and meets or exceeds the specified threshold.
 
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
 ### Options
 
 | Option          | Default                      | Description                                                         |
@@ -4554,9 +4638,10 @@ format = 'via [🏎  $version](red bold)'
 ## Terraform
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+It supports both Hashicorp Terraform and OpenTofu for version detection.
 
 > [!TIP]
-> By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use.
+> By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use.
 > If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 By default the module will be shown if any of the following conditions are met:
@@ -4566,16 +4651,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                               | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
-| `style`             | `'bold 105'`                         | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
+| Option              | Default                                                 | Description                                                               |
+| ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
+| `style`             | `'bold 105'`                                            | The style for the module.                                                 |
+| `disabled`          | `false`                                                 | Disables the `terraform` module.                                          |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                              |
 
 ### Variables
 
@@ -4596,7 +4682,7 @@ By default the module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $version$workspace]($style) '
+format = 'via [$symbol$version $workspace]($style) '
 ```
 
 #### Without Terraform version
@@ -4605,7 +4691,7 @@ format = '[🏎💨 $version$workspace]($style) '
 # ~/.config/starship.toml
 
 [terraform]
-format = '[🏎💨 $workspace]($style) '
+format = 'via [$symbol$workspace]($style) '
 ```
 
 ## Time
@@ -4846,6 +4932,36 @@ The module will be shown only if a repository is currently in use.
 [vcsh]
 format = '[🆅 $repo](bold blue) '
 ```
+
+## XMake
+
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default
+the module will be activated if any of the following conditions are met:
+
+- The current directory contains a `xmake.lua` file
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
+| `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
+| `style`             | `'bold green'`                       | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `xmake` module.                                              |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.9.5` | The version of xmake                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
 
 ## Zig
 

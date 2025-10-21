@@ -43,6 +43,9 @@ format = '(via [$symbol($version )]($style))'
 [fennel]
 format = '(via [$symbol($version )]($style))'
 
+[fortran]
+format = "(via [$symbol($version )]($style))"
+
 [gleam]
 format = '(via [$symbol($version )]($style))'
 
@@ -125,6 +128,9 @@ format = '(via [$symbol($version )]($style))'
 format = '(via [$symbol($version )]($style))'
 
 [vlang]
+format = '(via [$symbol($version )]($style))'
+
+[xmake]
 format = '(via [$symbol($version )]($style))'
 
 [zig]

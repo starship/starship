@@ -23,7 +23,7 @@ impl<'a> GcloudContext {
         Self {
             config_name: config_name.to_string(),
             config_path: PathBuf::from(config_path),
-            config: Default::default(),
+            config: OnceLock::default(),
         }
     }
 
@@ -73,10 +73,11 @@ fn get_config_dir(context: &Context) -> Option<PathBuf> {
 fn get_active_config(context: &Context, config_dir: &Path) -> Option<String> {
     context.get_env("CLOUDSDK_ACTIVE_CONFIG_NAME").or_else(|| {
         let path = config_dir.join("active_config");
-        match utils::read_file(path) {
-            Ok(data) => data.lines().next().map(String::from),
-            Err(_) => None,
-        }
+        utils::read_file(path)
+            .ok()?
+            .lines()
+            .next()
+            .map(String::from)
     })
 }
 

@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "erlang",
     "fennel",
     "fill",
+    "fortran",
     "fossil_branch",
     "fossil_metrics",
     "gcloud",
@@ -104,6 +105,7 @@ pub const ALL_MODULES: &[&str] = &[
     "vagrant",
     "vcsh",
     "vlang",
+    "xmake",
     "zig",
 ];
 
@@ -172,11 +174,11 @@ impl<'a> Module<'a> {
 
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
-    pub fn ansi_strings(&self) -> Vec<AnsiString> {
+    pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
         self.ansi_strings_for_width(None)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString> {
+    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {

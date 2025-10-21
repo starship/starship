@@ -40,6 +40,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $golang\
 $guix_shell\
 $haskell\
@@ -70,6 +71,7 @@ $swift\
 $terraform\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
 $conda\

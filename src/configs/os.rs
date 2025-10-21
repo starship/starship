@@ -12,13 +12,14 @@ use serde::{Deserialize, Serialize};
 pub struct OSConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
+    #[cfg_attr(feature = "config-schema", schemars(with = "IndexMap<String, String>"))]
     pub symbols: IndexMap<Type, &'a str>,
     pub disabled: bool,
 }
 
 impl<'a> OSConfig<'a> {
-    pub fn get_symbol(&self, key: &Type) -> Option<&'a str> {
-        self.symbols.get(key).copied()
+    pub fn get_symbol(&self, key: Type) -> Option<&'a str> {
+        self.symbols.get(&key).copied()
     }
 }
 

@@ -26,7 +26,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
 
-    if config.only_attached && repo.open().head().ok()?.is_detached() {
+    let gix_repo = repo.open();
+    if config.ignore_bare_repo && gix_repo.is_bare() {
+        return None;
+    }
+
+    if config.only_attached && gix_repo.head().ok()?.is_detached() {
         return None;
     }
 
@@ -45,11 +50,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
     if let Some(remote) = repo.remote.as_ref() {
         if let Some(branch) = &remote.branch {
-            remote_branch_graphemes = branch.graphemes(true).collect()
-        };
+            remote_branch_graphemes = branch.graphemes(true).collect();
+        }
         if let Some(name) = &remote.name {
-            remote_name_graphemes = name.graphemes(true).collect()
-        };
+            remote_name_graphemes = name.graphemes(true).collect();
+        }
     }
 
     // Truncate fields if need be
@@ -382,6 +387,25 @@ mod tests {
             .config(toml::toml! {
                 [git_branch]
                     ignore_branches = ["dummy", "test_branch"]
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_ignore_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                    ignore_bare_repo = true
+
             })
             .path(repo_dir.path())
             .collect();
