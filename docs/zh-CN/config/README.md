@@ -278,6 +278,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$fortran\
 $gleam\
 $golang\
 $guix_shell\
@@ -1576,6 +1577,43 @@ Produces a prompt that looks like:
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### 配置项
+
+| 选项                  | 默认值                                                                                                                         | 描述                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of COBOL. |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | 组件格式化模板。                                                |
+| `version_format`    | `'${raw}'`                                                                                                                  | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`           |
+| `style`             | `'bold purple'`                                                                                                             | 此组件的样式。                                                 |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | 触发此组件的扩展名                                               |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | 触发此组件的文件名                                               |
+| `detect_folders`    | `[]`                                                                                                                        | 触发此组件的文件夹                                               |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | How to detect what the compiler is                      |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                          |
+
+### 变量
+
+| 字段        | 示例       | 描述                                  |
+| --------- | -------- | ----------------------------------- |
+| name      | gfortran | 编译器的名称                              |
+| version   | `14.2.0` | The version of the Fortran compiler |
+| symbol    |          | `symbol`对应值                         |
+| style\* |          | `style`对应值                          |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
 ## Fossil Branch
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
@@ -1743,6 +1781,7 @@ very-long-project-name = 'vlpn'
 | `truncation_symbol`  | `'…'`                                             | 此字段的内容用来表示分支名称被截断。 You can use `''` for no symbol.                                   |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                       |
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                  |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                     |
 | `disabled`           | `false`                                           | 禁用 `git_branch` 组件。                                                                  |
 
 ### 变量
