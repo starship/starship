@@ -86,7 +86,7 @@ whoami = { version = "1.6.1", default-features = false }
 yaml-rust2 = "0.10.4"
 
 guess_host_triple = "0.1.5"
-home = "0.5.11"
+home = "0.5.12"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
