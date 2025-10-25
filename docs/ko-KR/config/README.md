@@ -722,7 +722,7 @@ disabled = false
 format = 'via [$name $version]($style)'
 ```
 
-## Character
+## 문자
 
 The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
@@ -845,7 +845,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 *: This variable can only be used as a part of a style string
 
-## Command Duration
+## 명령 지속 시간
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -1109,7 +1109,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 format = 'via [🦕 $version](green bold) '
 ```
 
-## Directory
+## 디렉토리
 
 The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
@@ -1409,7 +1409,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = 'via [ $version](cyan bold) '
 ```
 
-## Environment Variable
+## 환경 변수
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
@@ -1808,7 +1808,7 @@ truncation_symbol = ''
 ignore_branches = ['master', 'main']
 ```
 
-## Git Commit
+## Git 커밋
 
 The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
@@ -1923,7 +1923,7 @@ added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
-## Git Status
+## Git 상태
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -2298,7 +2298,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 format = 'via [⎈ $version](bold white) '
 ```
 
-## Hostname
+## 호스트 이름
 
 The `hostname` module shows the system hostname.
 
@@ -4461,7 +4461,7 @@ format = 'via [$symbol$version $workspace]($style) '
 format = 'via [$symbol$workspace]($style) '
 ```
 
-## Time
+## 시간
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
