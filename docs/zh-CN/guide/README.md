@@ -312,7 +312,7 @@ Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+注意：仅支持 v0.18 及以上版本的 Elvish. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 </details>
 
