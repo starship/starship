@@ -1,10 +1,10 @@
 [프리셋으로 돌아가기](./#no-runtime-versions)
 
-# No Runtime Versions Preset
+# 런타임 버전 없음 프리셋
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+이 프리셋은 언어 런타임 버전을 숨깁니다. 컨테이너 또는 가상화된 환경에서 작업하는 경우 이 프리셋이 적합합니다!
 
-![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png)
+![런타임 버전 숨기기 프리셋 스크린샷](/presets/img/no-runtime-versions.png)
 
 ### 설정
 
