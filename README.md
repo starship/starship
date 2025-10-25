@@ -12,16 +12,19 @@
       src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
   /></a>
-  <a href="https://crates.io/crates/starship"
-    ><img
+  <a href="https://crates.io/crates/starship">
+    <img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
       alt="Crates.io version"
-  /></a>
-  <a href="https://repology.org/project/starship/versions"
-    ><img
+    />
+  </a>
+  <a href="https://repology.org/project/starship/versions">
+    <img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Packaging status"/></a
-  ><br />
+    />
+  </a>
+  <br />
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
@@ -37,6 +40,14 @@
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
       alt="Stand With Ukraine"
   /></a>
+    <a href="https://hacktoberfest.com/">
+     <img
+      src="https://img.shields.io/badge/Hacktoberfest-2025-blueviolet?style=flat-square"
+      alt="Hacktoberfest 2025 Badge"
+      title="Hacktoberfest 2025"
+    />
+  </a>
+
 </p>
 
 <p align="center">
