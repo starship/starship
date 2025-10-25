@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./#pure)
+[Retornar para Personalizações](./#pure-prompt)
 
 # Personalização do prompt do terminal com Pure
 
