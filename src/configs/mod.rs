@@ -101,6 +101,7 @@ pub mod typst;
 pub mod username;
 pub mod v;
 pub mod vagrant;
+pub mod vcs;
 pub mod vcsh;
 pub mod xmake;
 pub mod zig;
@@ -313,6 +314,8 @@ pub struct FullConfig<'a> {
     username: username::UsernameConfig<'a>,
     #[serde(borrow)]
     vagrant: vagrant::VagrantConfig<'a>,
+    #[serde(borrow)]
+    vcs: vcs::VcsConfig<'a>,
     #[serde(borrow)]
     vcsh: vcsh::VcshConfig<'a>,
     #[serde(borrow)]
