@@ -391,9 +391,10 @@ impl<'a> StringFormatter<'a> {
                                 match format_element {
                                     // Should not usually happen, but if it does, check if the variable
                                     // is set using `should_show_elements`.
-                                    FormatElement::Variable(_) => {
-                                        should_show_elements(&[format_element.clone()], variables)
-                                    }
+                                    FormatElement::Variable(_) => should_show_elements(
+                                        std::slice::from_ref(format_element),
+                                        variables,
+                                    ),
                                     FormatElement::Conditional(format) => {
                                         should_show_elements(format, variables)
                                     }

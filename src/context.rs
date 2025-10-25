@@ -552,9 +552,9 @@ impl DirContents {
 
         {
             let worker = move || {
-                let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
-                let _ = enumerated_dir
-                    .filter_map(|(_, entry)| entry.ok())
+                let dir_iter = fs::read_dir(base).unwrap();
+                let _ = dir_iter
+                    .filter_map(|entry| entry.ok())
                     .try_for_each(|entry| tx.send(entry));
             };
 
