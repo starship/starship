@@ -2319,7 +2319,7 @@ The `hostname` module shows the system hostname.
 
 | Variable   | 예시         | Description                                           |
 | ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | The hostname of the computer                          |
+| 호스트 이름     | `computer` | The hostname of the computer                          |
 | style\*  |            | Mirrors the value of option `style`                   |
 | ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
 
@@ -4484,7 +4484,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | 예시         | Description                         |
 | --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
+| 시간        | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
