@@ -105,6 +105,12 @@
         "format": "[$symbol$percentage]($style) "
       }
     },
+    "blank_fill": {
+      "$ref": "#/$defs/BlankFillConfig",
+      "default": {
+        "disabled": false
+      }
+    },
     "buf": {
       "$ref": "#/$defs/BufConfig",
       "default": {
@@ -1967,6 +1973,16 @@
             "null"
           ],
           "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "BlankFillConfig": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
