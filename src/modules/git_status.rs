@@ -398,7 +398,7 @@ fn get_repo_status(
                             status: EntryStatus::Change(Change::Removed),
                             ..
                         } => {
-                            repo_status.deleted += 1;
+                            repo_status.modified += 1;
                         }
                         Item::Modification {
                             status:
@@ -1365,7 +1365,7 @@ pub(crate) mod tests {
     }
 
     #[test]
-    fn shows_deleted_file() -> io::Result<()> {
+    fn shows_deleted_file_as_modified() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_deleted(repo_dir.path())?;
@@ -1373,7 +1373,27 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘");
+        let expected = format_output("!");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_deleted_as_modified_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_deleted(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                modified = "!$count"
+                ahead = ""
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("!1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1398,7 +1418,7 @@ pub(crate) mod tests {
     fn shows_deleted_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_deleted(repo_dir.path())?;
+        create_deleted_in_index(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -1447,7 +1467,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘?");
+        let expected = format_output("!?");
 
         assert_eq!(expected, actual);
         worktree_dir.close()?;
@@ -1480,11 +1500,12 @@ pub(crate) mod tests {
                 [git_status]
                 ahead = "A"
                 deleted = "D"
+                modified = "M"
                 untracked = "U"
                 renamed = "R"
             })
             .collect();
-        let expected = format_output("DUA");
+        let expected = format_output("MUA");
 
         assert_eq!(actual, expected);
 
