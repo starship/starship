@@ -58,7 +58,7 @@ onMounted(() => {
    Con Shell:
 
    ```sh
-   curl -sS https://starship.rs/install.sh | sh
+   curl -sS https://starship.rs/install.sh <unk> sh
    ```
 
    Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
