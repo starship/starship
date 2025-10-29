@@ -818,7 +818,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                format = r"rendered"
+                format = "rendered"
             })
             .path(repo_dir.path())
             .collect();
