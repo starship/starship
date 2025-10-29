@@ -50,6 +50,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let info = GitStatusInfo::load(context, repo, config.clone());
 
+    // When git info is empty, we should return empty
+    // but for config.up_to_date is configured, we should not return empty
+    if info.is_empty() && config.up_to_date.is_empty() {
+        return None;
+    }
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -203,6 +209,36 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.typechanged)
+    }
+
+    pub fn is_empty(&self) -> bool {
+        let repo_status = match self.get_repo_status() {
+            Some(s) => s,
+            None => return true,
+        };
+
+        let no_changes = repo_status.conflicted == 0
+            && repo_status.deleted == 0
+            && repo_status.renamed == 0
+            && repo_status.modified == 0
+            && repo_status.staged == 0
+            && repo_status.typechanged == 0
+            && repo_status.untracked == 0;
+
+        let no_ahead_behind = match (repo_status.ahead, repo_status.behind) {
+            (None, None) => true,
+            (Some(a), Some(b)) => a == 0 && b == 0,
+            (Some(a), None) => a == 0,
+            (None, Some(b)) => b == 0,
+        };
+
+        let stashed = *self.get_stashed();
+        let no_stash = match stashed {
+            Some(0) | None => true,
+            Some(_) => false,
+        };
+
+        no_changes && no_ahead_behind && no_stash
     }
 }
 
@@ -771,6 +807,22 @@ pub(crate) mod tests {
             .collect();
         let expected = None;
 
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn show_nothing_on_empty_git_status() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = r"rendered"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
         assert_eq!(expected, actual);
         repo_dir.close()
     }
