@@ -128,7 +128,7 @@ jobs:
         continue-on-error: true
         if: matrix.os == 'windows-latest'
         id: unsigned-artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: unsigned-${{ matrix.name }}
           path: |
@@ -138,7 +138,7 @@ jobs:
       - name: Sign | Sign [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
@@ -163,7 +163,7 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -171,7 +171,7 @@ jobs:
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: starship-${{ matrix.target }}.msi
           path: target/${{ matrix.target }}/release/starship-${{ matrix.target }}.msi
@@ -238,9 +238,9 @@ jobs:
           xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
       - name: Setup | Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
-          node-version: 22.19.0
+          node-version: 22.21.1
 
       - name: Notarize | Build docs
         run: |
@@ -249,7 +249,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -261,7 +261,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -270,7 +270,7 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -289,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -369,7 +369,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v5
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}

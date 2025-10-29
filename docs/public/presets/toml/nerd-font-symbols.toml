@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 [aws]
 symbol = " "
 
@@ -43,11 +45,14 @@ symbol = " "
 [fennel]
 symbol = " "
 
+[fortran]
+symbol = " "
+
 [fossil_branch]
 symbol = " "
 
 [gcloud]
-symbol = "  "
+symbol = " "
 
 [git_branch]
 symbol = " "

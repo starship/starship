@@ -391,9 +391,10 @@ impl<'a> StringFormatter<'a> {
                                 match format_element {
                                     // Should not usually happen, but if it does, check if the variable
                                     // is set using `should_show_elements`.
-                                    FormatElement::Variable(_) => {
-                                        should_show_elements(&[format_element.clone()], variables)
-                                    }
+                                    FormatElement::Variable(_) => should_show_elements(
+                                        std::slice::from_ref(format_element),
+                                        variables,
+                                    ),
                                     FormatElement::Conditional(format) => {
                                         should_show_elements(format, variables)
                                     }
@@ -651,7 +652,7 @@ mod tests {
         let styled_no_modifier_style = Some(Color::Green.normal());
 
         let mut segments: Vec<Segment> = Vec::new();
-        segments.extend(Segment::from_text(None, "styless"));
+        segments.extend(Segment::from_text(None, "styleless"));
         segments.extend(Segment::from_text(styled_style.map(Into::into), "styled"));
         segments.extend(Segment::from_text(
             styled_no_modifier_style.map(Into::into),
@@ -666,7 +667,7 @@ mod tests {
             });
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
-        match_next!(result_iter, "styless", var_style);
+        match_next!(result_iter, "styleless", var_style);
         match_next!(result_iter, "styled", styled_style);
         match_next!(result_iter, "styled_no_modifier", styled_no_modifier_style);
     }

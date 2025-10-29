@@ -14,11 +14,7 @@
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip
-
-이 프리셋은 [starship의 추후 배포](https://github.com/starship/starship/pull/3544)에서 기본 프리셋이 될 예정입니다.
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [클릭하여 No Nerd Font 프리셋 보기](./no-nerd-font)
 

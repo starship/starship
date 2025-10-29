@@ -542,6 +542,8 @@ mod test {
     use crate::test::default_context;
     use crate::utils;
 
+    const NULL_DEVICE: &str = if cfg!(windows) { "NUL" } else { "/dev/null" };
+
     #[test]
     fn main_prompt() {
         let mut context = default_context().set_config(toml::toml! {
@@ -580,6 +582,7 @@ mod test {
                 [character]
                 format=">"
         });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
@@ -597,6 +600,7 @@ mod test {
             [character]
             format=">"
         });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 

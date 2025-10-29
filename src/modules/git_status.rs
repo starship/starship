@@ -389,7 +389,7 @@ fn get_repo_status(
                     use gix::status::plumbing::index_as_worktree::{Change, EntryStatus};
                     match change {
                         Item::Modification {
-                            status: EntryStatus::Conflict(_),
+                            status: EntryStatus::Conflict { .. },
                             ..
                         } => {
                             repo_status.conflicted += 1;

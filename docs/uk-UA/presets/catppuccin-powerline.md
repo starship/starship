@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#catppuccin-powerline)
+[Повернутися до Шаблонів](./#catppuccin-powerline)
 
 # Catppuccin Powerline
 
@@ -21,7 +21,7 @@ starship preset catppuccin-powerline -o ~/.config/starship.toml
 - `catppuccin_mocha`
 - `catppuccin_frappe`
 - `catppuccin_macchiato`
-- `catppucin_latte`
+- `catppuccin_latte`
 
 [Натисніть, щоб завантажити TOML](/presets/toml/catppuccin-powerline.toml)
 

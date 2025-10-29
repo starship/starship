@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.23.0"
+version = "1.24.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -36,49 +36,49 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.42", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.47", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.58"
-clap_complete_nushell = "4.5.8"
+clap = { version = "4.5.50", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.5.59"
+clap_complete_nushell = "4.5.9"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.73.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
-indexmap = { version = "2.11.4", features = ["serde"] }
-jsonc-parser = { version = "0.26.3", features = ["serde"] }
+gix = { version = "0.74.1", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
+indexmap = { version = "2.12.0", features = ["serde"] }
+jsonc-parser = { version = "0.27.0", features = ["serde"] }
 log = { version = "0.4.28", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.11.7", optional = true }
-nu-ansi-term = "0.50.1"
+nu-ansi-term = "0.50.3"
 open = "5.3.2"
 # update os module config and tests when upgrading os_info
 os_info = "3.12.0"
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
-parking_lot = "0.12.4"
+parking_lot = "0.12.5"
 path-slash = "0.2.1"
-pest = "2.8.2"
-pest_derive = "2.8.2"
+pest = "2.8.3"
+pest_derive = "2.8.3"
 process_control = "5.2.0"
 quick-xml = "0.38.3"
 rand = "0.9.2"
 rayon = "1.11.0"
-regex = { version = "1.11.2", default-features = false, features = ["perf", "std", "unicode-perl"] }
+regex = { version = "1.12.2", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.3"
 semver = "1.0.27"
-serde = { version = "1.0.225", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 sha1 = "0.10.6"
-shadow-rs = { version = "1.3.0", default-features = false, features = ["build"] }
+shadow-rs = { version = "1.4.0", default-features = false, features = ["build"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.10.2", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.5"
 terminal_size = "0.4.3"
-toml = { version = "0.9.6", features = ["preserve_order"] }
-toml_edit = "0.23.5"
+toml = { version = "0.9.8", features = ["preserve_order"] }
+toml_edit = "0.23.7"
 unicode-segmentation = "1.12.0"
-unicode-width = "0.2.1"
+unicode-width = "0.2.2"
 urlencoding = "2.1.3"
 versions = "7.0.0"
 which = "8.0.0"
@@ -86,7 +86,7 @@ whoami = { version = "1.6.1", default-features = false }
 yaml-rust2 = "0.10.4"
 
 guess_host_triple = "0.1.5"
-home = "0.5.11"
+home = "0.5.12"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
@@ -98,7 +98,7 @@ features = ["preserve_order", "indexmap2"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.62.0"
+version = "0.62.2"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -111,7 +111,7 @@ features = [
 nix = { version = "0.30.1", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "1.3.0", default-features = false, features = ["build"] }
+shadow-rs = { version = "1.4.0", default-features = false, features = ["build"] }
 dunce = "1.0.5"
 
 [target.'cfg(windows)'.build-dependencies]
@@ -119,7 +119,7 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.13.1"
-tempfile = "3.22.0"
+tempfile = "3.23.0"
 
 [profile.release]
 codegen-units = 1

@@ -65,9 +65,9 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup | Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
-          node-version: 22.19.0
+          node-version: 22.21.1
           cache: 'npm'
           cache-dependency-path: docs/package-lock.json
 
