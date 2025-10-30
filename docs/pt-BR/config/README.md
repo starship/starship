@@ -4152,11 +4152,10 @@ Using `repeat` and `repeat_offset` along with `character` module, one can get pr
 
 [shlvl]
 disabled = false
-format = '[$symbol$shlvl]($style)'
+format = '[$symbol]($style)'
 repeat = true
 symbol = '❯'
 repeat_offset = 1
-threshold = 0
 ```
 
 ## Singularidade

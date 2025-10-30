@@ -138,14 +138,14 @@ onMounted(() => {
 
    > [!WARNING] Підтримується лише elvish v0.18 або новішої версії.
 
-   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+   Додайте наступне до кінця `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` у Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+   Для версії elvish до v0.21.0 файл конфігурації може бути `~/.elvish/rc.elv` натомість
 
 
    #### Tcsh
