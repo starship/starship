@@ -1,15 +1,21 @@
+use std::collections::HashMap;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::mise::MiseConfig;
 use crate::formatter::StringFormatter;
 use serde::Deserialize;
 
+type MiseTools = HashMap<String, Vec<MiseToolInfo>>;
+
 #[derive(Deserialize, Debug)]
-struct MiseTool {
-    #[serde(default)]
-    install_path: Option<String>,
-    #[serde(default)]
-    installed: Option<bool>,
+struct MiseToolInfo {
+    // version: String,
+    // requested_version: String,
+    // install_path: PathBuf,
+    // source: MiseSource, (type: String, path: PathBuf)
+    installed: bool,
+    // active: bool,
 }
 
 /// Creates a module with the current mise config
@@ -37,16 +43,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Execute mise ls command and parse the output
     let output = context.exec_cmd("mise", &args)?;
-    let tools: Vec<MiseTool> = serde_json::from_str(&output.stdout).ok()?;
+    let tools: MiseTools = serde_json::from_str(&output.stdout).ok()?;
 
-    let required_count = tools.len();
-    let installed_count = tools
-        .iter()
-        .filter(|tool| {
-            tool.installed.unwrap_or(false)
-                || tool.install_path.as_ref().is_some_and(|p| !p.is_empty())
-        })
-        .count();
+    let (required_count, installed_count) = tools
+        .values()
+        .flatten()
+        .fold((0, 0), |(required, installed), tool_info| {
+            (required + 1, installed + tool_info.installed as usize)
+        });
 
     // Don't show the module if there are no tools configured
     if required_count == 0 {
@@ -63,7 +67,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else if installed_count < required_count {
         config.style_missing_some
     } else {
-        config.style_complete
+        config.style
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -85,7 +89,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Ok(segments) => segments,
         Err(e) => {
             log::warn!("{e}");
-
             return None;
         }
     });
@@ -125,29 +128,46 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
                     stdout: String::from(
-                        r#"[
-                            {
-                                "name": "node",
-                                "version": "20.0.0",
-                                "install_path": "/home/user/.mise/installs/node/20.0.0",
-                                "installed": true
-                            },
-                            {
-                                "name": "python",
-                                "version": "3.11.0",
-                                "install_path": "/home/user/.mise/installs/python/3.11.0",
-                                "installed": true
-                            }
-                        ]"#,
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ],
+                            "python": [
+                                {
+                                    "version": "3.11.0",
+                                    "requested_version": "latest",
+                                    "install_path": "/home/user/.local/share/mise/installs/python/3.11.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
                     ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{}", Color::Green.bold().paint("mise 2/2 ")));
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise 2/2")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -167,29 +187,46 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
                     stdout: String::from(
-                        r#"[
-                            {
-                                "name": "node",
-                                "version": "20.0.0",
-                                "install_path": "/home/user/.mise/installs/node/20.0.0",
-                                "installed": true
-                            },
-                            {
-                                "name": "python",
-                                "version": "3.11.0",
-                                "install_path": "",
-                                "installed": false
-                            }
-                        ]"#,
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ],
+                            "python": [
+                                {
+                                    "version": "3.11.0",
+                                    "requested_version": "latest",
+                                    "install_path": "/home/user/.local/share/mise/installs/python/3.11.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": false,
+                                    "active": false
+                                }
+                            ]
+                        }"#,
                     ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{}", Color::Yellow.bold().paint("mise 1/2 ")));
+        let expected = Some(format!(
+            "with {} ",
+            Color::Yellow.bold().paint("💾 mise 1/2")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -209,29 +246,43 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
                     stdout: String::from(
-                        r#"[
-                            {
-                                "name": "node",
-                                "version": "20.0.0",
-                                "install_path": "",
-                                "installed": false
-                            },
-                            {
-                                "name": "python",
-                                "version": "3.11.0",
-                                "install_path": "",
-                                "installed": false
-                            }
-                        ]"#,
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": false,
+                                    "active": false
+                                }
+                            ],
+                            "python": [
+                                {
+                                    "version": "3.11.0",
+                                    "requested_version": "latest",
+                                    "install_path": "/home/user/.local/share/mise/installs/python/3.11.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": false,
+                                    "active": false
+                                }
+                            ]
+                        }"#,
                     ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{}", Color::Red.bold().paint("mise 0/2 ")));
+        let expected = Some(format!("with {} ", Color::Red.bold().paint("💾 mise 0/2")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -251,9 +302,9 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
-                    stdout: String::from("[]"),
+                    stdout: String::from("{}"),
                     stderr: String::default(),
                 }),
             );
@@ -278,30 +329,40 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
                     stdout: String::from(
-                        r#"[
-                            {
-                                "name": "ruby",
-                                "version": "3.2.0",
-                                "install_path": "/home/user/.mise/installs/ruby/3.2.0",
-                                "installed": true
-                            }
-                        ]"#,
+                        r#"{
+                            "ruby": [
+                                {
+                                    "version": "3.2.0",
+                                    "requested_version": "latest",
+                                    "install_path": "/home/user/.local/share/mise/installs/ruby/3.2.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
                     ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{}", Color::Green.bold().paint("mise 1/1 ")));
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise 1/1")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
     }
 
     #[test]
-    fn folder_with_mise_config_local_only_false() -> io::Result<()> {
+    fn folder_with_mise_config_local_only_true() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -312,26 +373,36 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
-                local_only = false
+                local_only = true
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
-                        r#"[
-                            {
-                                "name": "node",
-                                "version": "20.0.0",
-                                "install_path": "/home/user/.mise/installs/node/20.0.0",
-                                "installed": true
-                            }
-                        ]"#,
+                        r#"{
+                            "ruby": [
+                                {
+                                    "version": "3.2.0",
+                                    "requested_version": "latest",
+                                    "install_path": "/home/user/.local/share/mise/installs/ruby/3.2.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
                     ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{}", Color::Green.bold().paint("mise 1/1 ")));
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise 1/1")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()

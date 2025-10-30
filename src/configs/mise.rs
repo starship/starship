@@ -13,7 +13,6 @@ pub struct MiseConfig<'a> {
     pub style: &'a str,
     pub style_missing_all: &'a str,
     pub style_missing_some: &'a str,
-    pub style_complete: &'a str,
     pub disabled: bool,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
@@ -24,12 +23,11 @@ pub struct MiseConfig<'a> {
 impl Default for MiseConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "with [$symbol$installed/$required ]($style)",
-            symbol: "mise ",
+            format: "with [$symbol$installed/$required]($style) ",
+            symbol: "💾 mise ",
             style: "bold purple",
-            style_missing_all: "bold red",
             style_missing_some: "bold yellow",
-            style_complete: "bold green",
+            style_missing_all: "bold red",
             disabled: true,
             detect_extensions: vec![],
             detect_files: vec![
@@ -39,7 +37,7 @@ impl Default for MiseConfig<'_> {
                 ".mise.local.toml",
             ],
             detect_folders: vec![".mise"],
-            local_only: true,
+            local_only: false,
         }
     }
 }
