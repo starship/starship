@@ -1025,7 +1025,9 @@
           ".mise"
         ],
         "local_only": true,
-        "healthy_enabled": false
+        "healthy_enabled": false,
+        "healthy_symbol": "healthy ",
+        "unhealthy_symbol": "unhealthy "
       }
     },
     "mojo": {
@@ -4582,6 +4584,14 @@
         "healthy_enabled": {
           "type": "boolean",
           "default": false
+        },
+        "healthy_symbol": {
+          "type": "string",
+          "default": "healthy "
+        },
+        "unhealthy_symbol": {
+          "type": "string",
+          "default": "unhealthy "
         }
       },
       "additionalProperties": false

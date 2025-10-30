@@ -3085,6 +3085,8 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
 | `detect_extensions`  | `[]`                                                                 | Which extensions should trigger this module.                         |
 | `detect_files`       | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Which filenames should trigger this module.                          |
 | `detect_folders`     | `['.mise']`                                                          | Which folders should trigger this module.                            |
+| `healthy_symbol`     | `'healthy '`                                                         | The symbol displayed when mise is healthy.                           |
+| `unhealthy_symbol`   | `'unhealthy '`                                                       | The symbol displayed when mise is unhealthy.                         |
 
 ### Variables
 
@@ -3101,8 +3103,8 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
 The module will not be displayed if no tools are configured (required count is 0).
 
 When `healthy_enabled` is `true`, the `$healthy` variable will be set to:
-- `"healthy "` if `mise doctor` returns successfully
-- `"unhealthy "` if `mise doctor` fails
+- The value of `healthy_symbol` if `mise doctor` returns successfully
+- The value of `unhealthy_symbol` if `mise doctor` fails
 - Empty string (`""`) if `healthy_enabled` is `false`
 
 The `style` is dynamically selected based on installation status:
@@ -3127,10 +3129,9 @@ Display with health check enabled:
 [mise]
 disabled = false
 healthy_enabled = true
+healthy_symbol = '✓ '
+unhealthy_symbol = '✗ '
 format = 'with [$symbol$healthy$installed/$required]($style) '
-style_complete = 'bold blue'
-style_missing_some = 'bold yellow'
-style_missing_all = 'bold red'
 ```
 
 Include global tools (not just local):

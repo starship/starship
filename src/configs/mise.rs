@@ -19,6 +19,8 @@ pub struct MiseConfig<'a> {
     pub detect_folders: Vec<&'a str>,
     pub local_only: bool,
     pub healthy_enabled: bool,
+    pub healthy_symbol: &'a str,
+    pub unhealthy_symbol: &'a str,
 }
 
 impl Default for MiseConfig<'_> {
@@ -40,6 +42,8 @@ impl Default for MiseConfig<'_> {
             detect_folders: vec![".mise"],
             local_only: true,
             healthy_enabled: false,
+            healthy_symbol: "healthy ",
+            unhealthy_symbol: "unhealthy ",
         }
     }
 }

@@ -61,9 +61,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let healthy_str = if config.healthy_enabled {
         let doctor_output = context.exec_cmd("mise", &["doctor"]);
         if doctor_output.is_some() {
-            "healthy "
+            config.healthy_symbol
         } else {
-            "unhealthy "
+            config.unhealthy_symbol
         }
     } else {
         ""
@@ -517,6 +517,63 @@ mod tests {
         let expected = Some(format!(
             "with {} ",
             Color::Purple.bold().paint("💾 mise unhealthy 1/1")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_custom_healthy_symbols() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+                healthy_enabled = true
+                healthy_symbol = "✓ "
+                unhealthy_symbol = "✗ "
+                format = "with [$symbol$healthy$installed/$required]($style) "
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "mise doctor",
+                Some(CommandOutput {
+                    stdout: String::from("All checks passed"),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise ✓ 1/1")
         ));
         assert_eq!(expected, renderer.collect());
 
