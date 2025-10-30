@@ -86,6 +86,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             format_symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
+                    "dirty" => info.get_dirty().and_then(|count| {
+                        format_count(config.dirty, "git_status.dirty", context, count)
+                    }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(config.conflicted, "git_status.conflicted", context, count)
                     }),
@@ -174,6 +177,18 @@ impl<'a> GitStatusInfo<'a> {
                 log::debug!("get_stashed_count: git stash execution failed");
                 None
             })
+        })
+    }
+
+    pub fn get_dirty(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| {
+            data.conflicted
+                + data.staged
+                + data.modified
+                + data.untracked
+                + data.deleted
+                + data.renamed
+                + data.typechanged
         })
     }
 
