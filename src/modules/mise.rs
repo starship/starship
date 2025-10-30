@@ -2,6 +2,15 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::mise::MiseConfig;
 use crate::formatter::StringFormatter;
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
+struct MiseTool {
+    #[serde(default)]
+    install_path: Option<String>,
+    #[serde(default)]
+    installed: Option<bool>,
+}
 
 /// Creates a module with the current mise config
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -20,18 +29,53 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    // Build the mise ls command with appropriate flags
+    let mut args = vec!["ls", "--current", "--json"];
+    if config.local_only {
+        args.push("--local");
+    }
+
+    // Execute mise ls command and parse the output
+    let output = context.exec_cmd("mise", &args)?;
+    let tools: Vec<MiseTool> = serde_json::from_str(&output.stdout).ok()?;
+
+    let required_count = tools.len();
+    let installed_count = tools
+        .iter()
+        .filter(|tool| {
+            tool.installed.unwrap_or(false)
+                || tool.install_path.as_ref().is_some_and(|p| !p.is_empty())
+        })
+        .count();
+
+    // Don't show the module if there are no tools configured
+    if required_count == 0 {
+        return None;
+    }
+
+    // Convert counts to strings for the formatter
+    let installed_str = installed_count.to_string();
+    let required_str = required_count.to_string();
+
+    // Determine the appropriate style based on installation status
+    let selected_style = if installed_count == 0 {
+        config.style_missing_all
+    } else if installed_count < required_count {
+        config.style_missing_some
+    } else {
+        config.style_complete
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(selected_style)),
                 _ => None,
             })
             .map(|variable| match variable {
                 "symbol" => Some(Ok(config.symbol)),
-                "health" => match context.exec_cmd("mise", &["doctor"]) {
-                    Some(_) => Some(Ok(config.healthy_symbol)),
-                    None => Some(Ok(config.unhealthy_symbol)),
-                },
+                "installed" => Some(Ok(installed_str.as_str())),
+                "required" => Some(Ok(required_str.as_str())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -68,7 +112,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_mise_config_file_healthy() -> io::Result<()> {
+    fn folder_with_mise_config_all_installed() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -81,21 +125,147 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise doctor",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
-                    stdout: String::default(),
+                    stdout: String::from(
+                        r#"[
+                            {
+                                "name": "node",
+                                "version": "20.0.0",
+                                "install_path": "/home/user/.mise/installs/node/20.0.0",
+                                "installed": true
+                            },
+                            {
+                                "name": "python",
+                                "version": "3.11.0",
+                                "install_path": "/home/user/.mise/installs/python/3.11.0",
+                                "installed": true
+                            }
+                        ]"#,
+                    ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise healthy")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("mise 2/2 ")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
     }
 
     #[test]
-    fn folder_with_mise_config_folder_healthy() -> io::Result<()> {
+    fn folder_with_mise_config_some_installed() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"[
+                            {
+                                "name": "node",
+                                "version": "20.0.0",
+                                "install_path": "/home/user/.mise/installs/node/20.0.0",
+                                "installed": true
+                            },
+                            {
+                                "name": "python",
+                                "version": "3.11.0",
+                                "install_path": "",
+                                "installed": false
+                            }
+                        ]"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("mise 1/2 ")));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_none_installed() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"[
+                            {
+                                "name": "node",
+                                "version": "20.0.0",
+                                "install_path": "",
+                                "installed": false
+                            },
+                            {
+                                "name": "python",
+                                "version": "3.11.0",
+                                "install_path": "",
+                                "installed": false
+                            }
+                        ]"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!("{}", Color::Red.bold().paint("mise 0/2 ")));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_no_tools() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from("[]"),
+                    stderr: String::default(),
+                }),
+            );
+
+        // Should return None when no tools are configured
+        assert_eq!(None, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_dir = dir.path().join(".mise");
 
@@ -108,21 +278,30 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise doctor",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
-                    stdout: String::default(),
+                    stdout: String::from(
+                        r#"[
+                            {
+                                "name": "ruby",
+                                "version": "3.2.0",
+                                "install_path": "/home/user/.mise/installs/ruby/3.2.0",
+                                "installed": true
+                            }
+                        ]"#,
+                    ),
                     stderr: String::default(),
                 }),
             );
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise healthy")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("mise 1/1 ")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
     }
 
     #[test]
-    fn folder_with_mise_config_file_unhealthy() -> io::Result<()> {
+    fn folder_with_mise_config_local_only_false() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -133,10 +312,26 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
+                local_only = false
             })
-            .cmd("mise doctor", None);
+            .cmd(
+                "mise ls --current --json",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"[
+                            {
+                                "name": "node",
+                                "version": "20.0.0",
+                                "install_path": "/home/user/.mise/installs/node/20.0.0",
+                                "installed": true
+                            }
+                        ]"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            );
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise unhealthy")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("mise 1/1 ")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
