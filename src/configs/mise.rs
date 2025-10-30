@@ -18,12 +18,13 @@ pub struct MiseConfig<'a> {
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
     pub local_only: bool,
+    pub healthy_enabled: bool,
 }
 
 impl Default for MiseConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "with [$symbol$installed/$required]($style) ",
+            format: "with [$symbol$healthy$installed/$required]($style) ",
             symbol: "💾 mise ",
             style: "bold purple",
             style_missing_some: "bold yellow",
@@ -38,6 +39,7 @@ impl Default for MiseConfig<'_> {
             ],
             detect_folders: vec![".mise"],
             local_only: true,
+            healthy_enabled: false,
         }
     }
 }

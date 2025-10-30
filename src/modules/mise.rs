@@ -57,6 +57,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    // Check health status if enabled
+    let healthy_str = if config.healthy_enabled {
+        let doctor_output = context.exec_cmd("mise", &["doctor"]);
+        if doctor_output.is_some() {
+            "healthy "
+        } else {
+            "unhealthy "
+        }
+    } else {
+        ""
+    };
+
     // Convert counts to strings for the formatter
     let installed_str = installed_count.to_string();
     let required_str = required_count.to_string();
@@ -80,6 +92,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "symbol" => Some(Ok(config.symbol)),
                 "installed" => Some(Ok(installed_str.as_str())),
                 "required" => Some(Ok(required_str.as_str())),
+                "healthy" => Some(Ok(healthy_str)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -402,6 +415,108 @@ mod tests {
         let expected = Some(format!(
             "with {} ",
             Color::Purple.bold().paint("💾 mise 1/1")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_healthy_enabled_healthy() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+                healthy_enabled = true
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "mise doctor",
+                Some(CommandOutput {
+                    stdout: String::from("All checks passed"),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise healthy 1/1")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_healthy_enabled_unhealthy() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+                healthy_enabled = true
+            })
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        r#"{
+                            "node": [
+                                {
+                                    "version": "20.0.0",
+                                    "requested_version": "lts",
+                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
+                                    "source": {
+                                        "type": "mise.toml",
+                                        "url": "/home/user/.config/mise/mise.toml"
+                                    },
+                                    "installed": true,
+                                    "active": true
+                                }
+                            ]
+                        }"#,
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd("mise doctor", None);
+
+        let expected = Some(format!(
+            "with {} ",
+            Color::Purple.bold().paint("💾 mise unhealthy 1/1")
         ));
         assert_eq!(expected, renderer.collect());
 

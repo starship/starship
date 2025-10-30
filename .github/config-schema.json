@@ -1008,12 +1008,11 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "with [$symbol$installed/$required ]($style)",
-        "symbol": "mise ",
+        "format": "with [$symbol$healthy$installed/$required]($style) ",
+        "symbol": "💾 mise ",
         "style": "bold purple",
         "style_missing_all": "bold red",
         "style_missing_some": "bold yellow",
-        "style_complete": "bold green",
         "disabled": true,
         "detect_extensions": [],
         "detect_files": [
@@ -1025,7 +1024,8 @@
         "detect_folders": [
           ".mise"
         ],
-        "local_only": true
+        "local_only": true,
+        "healthy_enabled": false
       }
     },
     "mojo": {
@@ -4525,11 +4525,11 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "with [$symbol$installed/$required ]($style)"
+          "default": "with [$symbol$healthy$installed/$required]($style) "
         },
         "symbol": {
           "type": "string",
-          "default": "mise "
+          "default": "💾 mise "
         },
         "style": {
           "type": "string",
@@ -4542,10 +4542,6 @@
         "style_missing_some": {
           "type": "string",
           "default": "bold yellow"
-        },
-        "style_complete": {
-          "type": "string",
-          "default": "bold green"
         },
         "disabled": {
           "type": "boolean",
@@ -4582,6 +4578,10 @@
         "local_only": {
           "type": "boolean",
           "default": true
+        },
+        "healthy_enabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
