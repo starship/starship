@@ -37,6 +37,14 @@
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
       alt="Stand With Ukraine"
   /></a>
+    <a href="https://hacktoberfest.com/">
+     <img
+      src="https://img.shields.io/badge/Hacktoberfest-2025-blueviolet?style=flat-square"
+      alt="Hacktoberfest 2025 Badge"
+      title="Hacktoberfest 2025"
+    />
+  </a>
+
 </p>
 
 <p align="center">
