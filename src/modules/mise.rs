@@ -128,7 +128,7 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
                         r#"{
@@ -187,7 +187,7 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
                         r#"{
@@ -246,7 +246,7 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
                         r#"{
@@ -329,7 +329,7 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
                         r#"{
@@ -362,7 +362,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_mise_config_local_only_true() -> io::Result<()> {
+    fn folder_with_mise_config_local_only_false() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -373,10 +373,10 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
-                local_only = true
+                local_only = false
             })
             .cmd(
-                "mise ls --current --json --local",
+                "mise ls --current --json",
                 Some(CommandOutput {
                     stdout: String::from(
                         r#"{

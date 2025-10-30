@@ -37,7 +37,7 @@ impl Default for MiseConfig<'_> {
                 ".mise.local.toml",
             ],
             detect_folders: vec![".mise"],
-            local_only: false,
+            local_only: true,
         }
     }
 }
