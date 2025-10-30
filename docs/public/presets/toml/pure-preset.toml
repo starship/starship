@@ -1,50 +1,55 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-$username\
-$hostname\
+($username$hostname )\
 $directory\
-$git_branch\
+$git_branch$git_status\
 $git_state\
-$git_status\
 $cmd_duration\
 $line_break\
 $python\
 $character"""
 
+continuation_prompt = "[…](242) [❯](purple) "
+
+[username]
+format = "[$user]($style)"
+style_root = "none"
+style_user = "242"
+
+[hostname]
+format = "[@$hostname](242)"
+
 [directory]
 style = "blue"
+
+[git_branch]
+format = "[$branch](242)"
+
+[git_status]
+format = "[$dirty](218)[( $ahead_behind)( $stashed)](cyan) "
+diverged = "⇣⇡"
+stashed = "≡"
+
+[git_state]
+format = "[$state](yellow) "
+rebase = "rebase-i"
+merge = "merge"
+revert = "revert"
+cherry_pick = "cherry"
+bisect = "bisect"
+am = "am"
+am_or_rebase = "am|rebase"
+
+[cmd_duration]
+format = "[$duration](yellow) "
+
+[python]
+format = "[$virtualenv](242) "
+detect_extensions = []
+detect_files = []
 
 [character]
 success_symbol = "[❯](purple)"
 error_symbol = "[❯](red)"
-vimcmd_symbol = "[❮](green)"
-
-[git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
-
-[git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
-style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
-stashed = "≡"
-
-[git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "bright-black"
-
-[cmd_duration]
-format = "[$duration]($style) "
-style = "yellow"
-
-[python]
-format = "[$virtualenv]($style) "
-style = "bright-black"
-detect_extensions = []
-detect_files = []
+vimcmd_symbol = "[❮](purple)"
