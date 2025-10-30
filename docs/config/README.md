@@ -3090,24 +3090,26 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
 
 ### Variables
 
-| Variable  | Example    | Description                                                  |
-| --------- | ---------- | ------------------------------------------------------------ |
-| installed | `2`        | The number of tools that are currently installed             |
-| required  | `3`        | The total number of tools required by the mise configuration |
-| healthy   | `healthy ` | Health status (only when `healthy_enabled` is true)          |
-| symbol    |            | Mirrors the value of option `symbol`                         |
-| style\*   |            | Mirrors the value of option `style` (dynamically selected)   |
+| Variable  | Example   | Description                                                  |
+| --------- | --------- | ------------------------------------------------------------ |
+| installed | `2`       | The number of tools that are currently installed             |
+| required  | `3`       | The total number of tools required by the mise configuration |
+| healthy   | `healthy` | Health status (only when `healthy_enabled` is true)          |
+| symbol    |           | Mirrors the value of option `symbol`                         |
+| style\*   |           | Mirrors the value of option `style` (dynamically selected)   |
 
 *: This variable can only be used as a part of a style string
 
 The module will not be displayed if no tools are configured (required count is 0).
 
 When `healthy_enabled` is `true`, the `$healthy` variable will be set to:
+
 - The value of `healthy_symbol` if `mise doctor` returns successfully
 - The value of `unhealthy_symbol` if `mise doctor` fails
 - Empty string (`""`) if `healthy_enabled` is `false`
 
 The `style` is dynamically selected based on installation status:
+
 - Uses `style` when all tools are installed
 - Uses `style_missing_some` when some tools are missing
 - Uses `style_missing_all` when no tools are installed
