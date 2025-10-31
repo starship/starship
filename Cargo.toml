@@ -38,7 +38,7 @@ notify = ["notify-rust"]
 chrono = { version = "0.4.42", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.5.51", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.60"
-clap_complete_nushell = "4.5.9"
+clap_complete_nushell = "4.5.10"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
