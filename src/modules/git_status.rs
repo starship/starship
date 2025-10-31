@@ -950,6 +950,45 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn shows_dirty() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$dirty"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some("*".into());
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_dirty_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$dirty"
+                dirty = "*$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some("*2".into());
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_conflicted() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
