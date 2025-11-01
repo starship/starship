@@ -395,7 +395,7 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "mise ls --current --json",
+                "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from("{}"),
                     stderr: String::default(),
