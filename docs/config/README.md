@@ -3072,47 +3072,64 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
 
 ### Options
 
-| Option               | Default                                                              | Description                                                          |
-| -------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `symbol`             | `'💾 mise '`                                                         | The symbol used before displaying the tool count.                    |
-| `style`              | `'bold purple'`                                                      | The style used when all tools are installed.                         |
-| `style_missing_all`  | `'bold red'`                                                         | The style used when no tools are installed.                          |
-| `style_missing_some` | `'bold yellow'`                                                      | The style used when some tools are missing.                          |
-| `format`             | `'with [$symbol$healthy$installed/$required]($style) '`              | The format for the module.                                           |
-| `healthy_enabled`    | `false`                                                              | Enable health check (runs `mise doctor`).                            |
-| `local_only`         | `true`                                                               | Only show tools from local mise configuration (adds `--local` flag). |
-| `disabled`           | `true`                                                               | Disables the `mise` module.                                          |
-| `detect_extensions`  | `[]`                                                                 | Which extensions should trigger this module.                         |
-| `detect_files`       | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Which filenames should trigger this module.                          |
-| `detect_folders`     | `['.mise']`                                                          | Which folders should trigger this module.                            |
-| `healthy_symbol`     | `'healthy '`                                                         | The symbol displayed when mise is healthy.                           |
-| `unhealthy_symbol`   | `'unhealthy '`                                                       | The symbol displayed when mise is unhealthy.                         |
+    <!--local_only: true,
+    healthy_enabled: false,
+    format: "with [$symbol$health_status$tool_status]($style)",
+    symbol: "💾 mise ",
+    healthy_symbol: "healthy ",
+    unhealthy_symbol: "unhealthy ",
+    untrusted_symbol: "untrusted ",
+    error_symbol: "error ",
+    tool_seperator_symbol: "/",
+    style: "bold purple",
+    style_missing_some: "bold yellow",
+    style_missing_all: "bold red",
+    style_unhealthy: "bold red",
+    style_untrusted: "bold red",
+    style_error: "bold red",
+    disabled: true,
+    detect_extensions: vec![],
+    detect_files: vec![
+        "mise.toml",
+        "mise.local.toml",
+        ".mise.toml",
+        ".mise.local.toml",
+    ],
+    detect_folders: vec![".mise"],-->
+
+| Option                  | Default                                                              | Description                                                          |
+| ----------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `local_only`            | `true`                                                               | Only show tools from local mise configuration (adds `--local` flag). |
+| `healthy_enabled`       | `false`                                                              | Enable health check (runs `mise doctor`).                            |
+| `format`                | `'with [$symbol$health_status$tool_status]($style)'`                 | The format for the module.                                           |
+| `symbol`                | `'💾 mise '`                                                         | The symbol used before displaying the tool count.                    |
+| `healthy_symbol`        | `'healthy '`                                                         | The symbol displayed when mise is healthy.                           |
+| `unhealthy_symbol`      | `'unhealthy '`                                                       | The symbol displayed when mise is unhealthy.                         |
+| `error_symbol`          | `'error '`                                                           | The symbol displayed when mise encounters an error.                  |
+| `tool_seperator_symbol` | `'/'`                                                                | The symbol used to separate tools.                                   |
+| `style`                 | `'bold purple'`                                                      | The style used when all tools are installed.                         |
+| `style_missing_some`    | `'bold yellow'`                                                      | The style used when some tools are missing.                          |
+| `style_missing_all`     | `'bold red'`                                                         | The style used when no tools are installed.                          |
+| `style_unhealthy`       | `'bold red'`                                                         | The style used when mise is unhealthy.                               |
+| `style_untrusted`       | `'bold red'`                                                         | The style used when mise has a trust error.                          |
+| `style_error`           | `'bold red'`                                                         | The style used when mise errors.                                     |
+| `disabled`              | `true`                                                               | Disables the `mise` module.                                          |
+| `detect_extensions`     | `[]`                                                                 | Which extensions should trigger this module.                         |
+| `detect_files`          | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Which filenames should trigger this module.                          |
+| `detect_folders`        | `['.mise']`                                                          | Which folders should trigger this module.                            |
 
 ### Variables
 
-| Variable  | Example   | Description                                                  |
-| --------- | --------- | ------------------------------------------------------------ |
-| installed | `2`       | The number of tools that are currently installed             |
-| required  | `3`       | The total number of tools required by the mise configuration |
-| healthy   | `healthy` | Health status (only when `healthy_enabled` is true)          |
-| symbol    |           | Mirrors the value of option `symbol`                         |
-| style\*   |           | Mirrors the value of option `style` (dynamically selected)   |
+| Variable      | Example            | Description                                                                                             |
+| ------------- | ------------------ | ------------------------------------------------------------------------------------------------------- |
+| health_status | `healthy`, `error` | The health status of the mise configuration. Also displays if there was an error while running `mise`.  |
+| tool_status   | `2/3`              | The number of tools that are currently installed vs the total amount required by the mise configuration |
+| symbol        |                    | Mirrors the value of option `symbol`                                                                    |
+| style\*       |                    | Mirrors the value of option `style` (dynamically selected)                                              |
 
 *: This variable can only be used as a part of a style string
 
 The module will not be displayed if no tools are configured (required count is 0).
-
-When `healthy_enabled` is `true`, the `$healthy` variable will be set to:
-
-- The value of `healthy_symbol` if `mise doctor` returns successfully
-- The value of `unhealthy_symbol` if `mise doctor` fails
-- Empty string (`""`) if `healthy_enabled` is `false`
-
-The `style` is dynamically selected based on installation status:
-
-- Uses `style` when all tools are installed
-- Uses `style_missing_some` when some tools are missing
-- Uses `style_missing_all` when no tools are installed
 
 ### Example
 
@@ -3133,7 +3150,7 @@ disabled = false
 healthy_enabled = true
 healthy_symbol = '✓ '
 unhealthy_symbol = '✗ '
-format = 'with [$symbol$healthy$installed/$required]($style) '
+format = 'with [$symbol$health_status$tool_status]($style)'
 ```
 
 Include global tools (not just local):
