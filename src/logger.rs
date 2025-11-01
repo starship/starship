@@ -19,13 +19,20 @@ pub struct StarshipLogger {
     log_level: Level,
 }
 
+fn cache_home_dir() -> Option<PathBuf> {
+    if let Some(xdg_cache_home) = env::var_os("XDG_CACHE_HOME") {
+        Some(PathBuf::from(xdg_cache_home))
+    } else {
+        Some(utils::home_dir()?.join(".cache"))
+    }
+}
+
 /// Returns the path to the log directory.
 pub fn get_log_dir() -> PathBuf {
     env::var_os("STARSHIP_CACHE")
         .map(PathBuf::from)
         .unwrap_or_else(|| {
-            utils::home_dir()
-                .map(|home| home.join(".cache"))
+            cache_home_dir()
                 .or_else(dirs::cache_dir)
                 .unwrap_or_else(std::env::temp_dir)
                 .join("starship")
