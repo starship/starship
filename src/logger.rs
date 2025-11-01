@@ -19,13 +19,20 @@ pub struct StarshipLogger {
     log_level: Level,
 }
 
+fn cache_home_dir() -> Option<PathBuf> {
+    if let Some(xdg_cache_home) = env::var_os("XDG_CACHE_HOME") {
+        Some(PathBuf::from(xdg_cache_home))
+    } else {
+        Some(utils::home_dir()?.join(".cache"))
+    }
+}
+
 /// Returns the path to the log directory.
 pub fn get_log_dir() -> PathBuf {
     env::var_os("STARSHIP_CACHE")
         .map(PathBuf::from)
         .unwrap_or_else(|| {
-            utils::home_dir()
-                .map(|home| home.join(".cache"))
+            cache_home_dir()
                 .or_else(dirs::cache_dir)
                 .unwrap_or_else(std::env::temp_dir)
                 .join("starship")
@@ -249,6 +256,24 @@ mod test {
     use std::fs::{File, FileTimes};
     use std::io;
     use std::time::SystemTime;
+
+    #[test]
+    fn test_log_file_path() -> () {
+        let cache_home = if let Some(path) = utils::home_dir() {
+            path.join(".cache")
+        } else {
+            dirs::cache_dir().unwrap_or(std::env::temp_dir())
+        };
+        let log_dir = get_log_dir();
+        assert_eq!(log_dir, cache_home.join("starship"));
+
+        let xdg_cache_home = std::env::temp_dir().join(".starship/cache");
+        unsafe {
+            env::set_var("XDG_CACHE_HOME", xdg_cache_home.to_str().unwrap());
+        }
+        let log_dir = get_log_dir();
+        assert_eq!(log_dir, xdg_cache_home.join("starship"));
+    }
 
     #[test]
     fn test_log_to_file() -> io::Result<()> {
