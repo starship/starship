@@ -258,6 +258,24 @@ mod test {
     use std::time::SystemTime;
 
     #[test]
+    fn test_log_file_path() -> () {
+        let cache_home = if let Some(path) = utils::home_dir() {
+            path.join(".cache")
+        } else {
+            dirs::cache_dir().unwrap_or(std::env::temp_dir())
+        };
+        let log_dir = get_log_dir();
+        assert_eq!(log_dir, cache_home.join("starship"));
+
+        let xdg_cache_home = std::env::temp_dir().join(".starship/cache");
+        unsafe {
+            env::set_var("XDG_CACHE_HOME", xdg_cache_home.to_str().unwrap());
+        }
+        let log_dir = get_log_dir();
+        assert_eq!(log_dir, xdg_cache_home.join("starship"));
+    }
+
+    #[test]
     fn test_log_to_file() -> io::Result<()> {
         let log_dir = tempfile::tempdir()?;
         let log_file = log_dir.path().join("test.log");
