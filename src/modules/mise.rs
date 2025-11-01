@@ -18,6 +18,89 @@ struct MiseToolInfo {
     // active: bool,
 }
 
+/// Represents the state of mise that will be displayed
+enum MiseState {
+    /// Tools installed / required
+    Ok { installed: usize, required: usize },
+    /// Mise configuration is untrusted
+    Untrusted,
+    /// General error with mise
+    Error,
+    /// Mise doctor reports unhealthy
+    Unhealthy,
+}
+
+/// Check if mise is healthy using `mise doctor`
+/// Returns true if healthy, false if unhealthy or command fails
+fn check_mise_health(context: &Context) -> bool {
+    context.exec_cmd("mise", &["doctor"]).is_some()
+}
+
+/// Check if the current directory's mise config is trusted
+/// Returns Some(true) if trusted, Some(false) if untrusted, None if unable to determine
+fn check_mise_trust(context: &Context) -> Option<bool> {
+    let output = context.exec_cmd("mise", &["trust", "--show"])?;
+
+    // Expected format: "<path>: <status>"
+    // where status is "trusted" or "untrusted"
+    let stdout = output.stdout.trim();
+
+    // Parse the trust status
+    if let Some((_, status)) = stdout.rsplit_once(':') {
+        let status = status.trim();
+        return Some(status == "trusted");
+    }
+
+    None
+}
+
+/// Get the count of installed vs required tools from mise
+/// Returns (required_count, installed_count) or None if unable to parse
+fn get_tool_counts(context: &Context, local_only: bool) -> Option<(usize, usize)> {
+    // Build the mise ls command with appropriate flags
+    let mut args = vec!["ls", "--current", "--json"];
+    if local_only {
+        args.push("--local");
+    }
+
+    // Execute mise ls command and parse the output
+    let output = context.exec_cmd("mise", &args)?;
+    let tools: MiseTools = serde_json::from_str(&output.stdout).ok()?;
+
+    let (required_count, installed_count) = tools
+        .values()
+        .flatten()
+        .fold((0, 0), |(required, installed), tool_info| {
+            (required + 1, installed + tool_info.installed as usize)
+        });
+
+    Some((required_count, installed_count))
+}
+
+/// Determine the current state of mise
+/// This function orchestrates the health check, trust check, and tool counting
+fn determine_mise_state(context: &Context, config: &MiseConfig) -> Option<MiseState> {
+    // If health check is enabled, check health first
+    // If unhealthy, don't proceed with tool counting
+    if config.healthy_enabled && !check_mise_health(context) {
+        return Some(MiseState::Unhealthy);
+    }
+
+    // Try to get tool counts. If this fails, it might be due to trust issues or other errors
+    match get_tool_counts(context, config.local_only) {
+        Some((required, installed)) => Some(MiseState::Ok {
+            installed: installed,
+            required: required,
+        }),
+        // Check if it's a trust issue
+        None => match check_mise_trust(context) {
+            Some(false) => return Some(MiseState::Untrusted),
+            Some(true) => return Some(MiseState::Error), // Trusted but still failed
+            None => return Some(MiseState::Error),       // Can't determine trust status
+        },
+    }
+}
+
 /// Creates a module with the current mise config
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("mise");
@@ -35,51 +118,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    // Build the mise ls command with appropriate flags
-    let mut args = vec!["ls", "--current", "--json"];
-    if config.local_only {
-        args.push("--local");
-    }
+    let state = determine_mise_state(context, &config)?;
 
-    // Execute mise ls command and parse the output
-    let output = context.exec_cmd("mise", &args)?;
-    let tools: MiseTools = serde_json::from_str(&output.stdout).ok()?;
-
-    let (required_count, installed_count) = tools
-        .values()
-        .flatten()
-        .fold((0, 0), |(required, installed), tool_info| {
-            (required + 1, installed + tool_info.installed as usize)
-        });
-
-    // Don't show the module if there are no tools configured
-    if required_count == 0 {
+    if let MiseState::Ok { required: 0, .. } = state
+        && !config.healthy_enabled
+    {
+        // When healthy is disabled and there are no required versions, we don't want to show the module
         return None;
     }
 
-    // Check health status if enabled
-    let healthy_str = if config.healthy_enabled {
-        let doctor_output = context.exec_cmd("mise", &["doctor"]);
-        if doctor_output.is_some() {
-            config.healthy_symbol
-        } else {
-            config.unhealthy_symbol
-        }
-    } else {
-        ""
+    let selected_style = match &state {
+        MiseState::Ok {
+            installed,
+            required,
+        } if installed >= required => config.style,
+        MiseState::Ok { installed: 0, .. } => config.style_missing_all,
+        MiseState::Ok { .. } => config.style_missing_some,
+        MiseState::Unhealthy => config.style_unhealthy,
+        MiseState::Untrusted => config.style_untrusted,
+        MiseState::Error => config.style_error,
     };
 
-    // Convert counts to strings for the formatter
-    let installed_str = installed_count.to_string();
-    let required_str = required_count.to_string();
+    let health_status: String = match &state {
+        MiseState::Ok { .. } if config.healthy_enabled => config.healthy_symbol.into(),
+        MiseState::Ok { .. } => "".into(),
+        MiseState::Unhealthy => config.unhealthy_symbol.into(),
+        MiseState::Untrusted => config.untrusted_symbol.into(),
+        MiseState::Error => config.error_symbol.into(),
+    };
 
-    // Determine the appropriate style based on installation status
-    let selected_style = if installed_count == 0 {
-        config.style_missing_all
-    } else if installed_count < required_count {
-        config.style_missing_some
-    } else {
-        config.style
+    let tool_status: String = match &state {
+        MiseState::Ok {
+            installed,
+            required,
+        } => format!("{}{}{} ", installed, config.tool_seperator_symbol, required),
+        MiseState::Unhealthy | MiseState::Untrusted | MiseState::Error => "".into(),
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -89,10 +162,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "symbol" => Some(Ok(config.symbol)),
-                "installed" => Some(Ok(installed_str.as_str())),
-                "required" => Some(Ok(required_str.as_str())),
-                "healthy" => Some(Ok(healthy_str)),
+                "symbol" => Some(Ok(config.symbol.to_string())),
+                "health_status" => Some(Ok(health_status.clone())),
+                "tool_status" => Some(Ok(tool_status.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -101,7 +173,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(e) => {
-            log::warn!("{e}");
+            log::warn!("Error in module `mise`: {e}");
             return None;
         }
     });
@@ -178,8 +250,8 @@ mod tests {
             );
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise 2/2")
+            "with {}",
+            Color::Purple.bold().paint("💾 mise 2/2 ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -237,8 +309,8 @@ mod tests {
             );
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Yellow.bold().paint("💾 mise 1/2")
+            "with {}",
+            Color::Yellow.bold().paint("💾 mise 1/2 ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -295,7 +367,7 @@ mod tests {
                 }),
             );
 
-        let expected = Some(format!("with {} ", Color::Red.bold().paint("💾 mise 0/2")));
+        let expected = Some(format!("with {}", Color::Red.bold().paint("💾 mise 0/2 ")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -366,8 +438,8 @@ mod tests {
             );
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise 1/1")
+            "with {}",
+            Color::Purple.bold().paint("💾 mise 1/1 ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -413,8 +485,64 @@ mod tests {
             );
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise 1/1")
+            "with {}",
+            Color::Purple.bold().paint("💾 mise 1/1 ")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_untrusted() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+            })
+            .cmd("mise ls --current --json --local", None)
+            .cmd(
+                "mise trust --show",
+                Some(CommandOutput {
+                    stdout: format!("{}: untrusted", dir.path().display()),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!(
+            "with {}",
+            Color::Red.bold().paint("💾 mise untrusted ")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_error() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+            })
+            .cmd("mise ls --current --json --local", None)
+            .cmd("mise trust --show", None);
+
+        let expected = Some(format!(
+            "with {}",
+            Color::Red.bold().paint("💾 mise error ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -436,6 +564,13 @@ mod tests {
                 healthy_enabled = true
             })
             .cmd(
+                "mise doctor",
+                Some(CommandOutput {
+                    stdout: String::default(),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
                 "mise ls --current --json --local",
                 Some(CommandOutput {
                     stdout: String::from(
@@ -457,18 +592,11 @@ mod tests {
                     ),
                     stderr: String::default(),
                 }),
-            )
-            .cmd(
-                "mise doctor",
-                Some(CommandOutput {
-                    stdout: String::from("All checks passed"),
-                    stderr: String::default(),
-                }),
             );
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise healthy 1/1")
+            "with {}",
+            Color::Purple.bold().paint("💾 mise healthy 1/1 ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -489,34 +617,11 @@ mod tests {
                 disabled = false
                 healthy_enabled = true
             })
-            .cmd(
-                "mise ls --current --json --local",
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{
-                            "node": [
-                                {
-                                    "version": "20.0.0",
-                                    "requested_version": "lts",
-                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
-                                    "source": {
-                                        "type": "mise.toml",
-                                        "url": "/home/user/.config/mise/mise.toml"
-                                    },
-                                    "installed": true,
-                                    "active": true
-                                }
-                            ]
-                        }"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
             .cmd("mise doctor", None);
 
         let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise unhealthy 1/1")
+            "with {}",
+            Color::Red.bold().paint("💾 mise unhealthy ")
         ));
         assert_eq!(expected, renderer.collect());
 
@@ -536,45 +641,11 @@ mod tests {
                 [mise]
                 disabled = false
                 healthy_enabled = true
-                healthy_symbol = "✓ "
-                unhealthy_symbol = "✗ "
-                format = "with [$symbol$healthy$installed/$required]($style) "
+                unhealthy_symbol = "💀 "
             })
-            .cmd(
-                "mise ls --current --json --local",
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{
-                            "node": [
-                                {
-                                    "version": "20.0.0",
-                                    "requested_version": "lts",
-                                    "install_path": "/home/user/.local/share/mise/installs/node/20.0.0",
-                                    "source": {
-                                        "type": "mise.toml",
-                                        "url": "/home/user/.config/mise/mise.toml"
-                                    },
-                                    "installed": true,
-                                    "active": true
-                                }
-                            ]
-                        }"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                "mise doctor",
-                Some(CommandOutput {
-                    stdout: String::from("All checks passed"),
-                    stderr: String::default(),
-                }),
-            );
+            .cmd("mise doctor", None);
 
-        let expected = Some(format!(
-            "with {} ",
-            Color::Purple.bold().paint("💾 mise ✓ 1/1")
-        ));
+        let expected = Some(format!("with {}", Color::Red.bold().paint("💾 mise 💀 ")));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
