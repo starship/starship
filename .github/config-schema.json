@@ -675,8 +675,8 @@
         "behind": "⇣",
         "up_to_date": "",
         "diverged": "⇕",
-        "conflicted": "=",
-        "deleted": "✘",
+        "conflicted": "≠",
+        "deleted": "⨯",
         "renamed": "»",
         "modified": "!",
         "staged": "+",
@@ -3523,11 +3523,11 @@
         },
         "conflicted": {
           "type": "string",
-          "default": "="
+          "default": "≠"
         },
         "deleted": {
           "type": "string",
-          "default": "✘"
+          "default": "⨯"
         },
         "renamed": {
           "type": "string",
