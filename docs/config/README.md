@@ -3080,7 +3080,7 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
     unhealthy_symbol: "unhealthy ",
     untrusted_symbol: "untrusted ",
     error_symbol: "error ",
-    tool_seperator_symbol: "/",
+    tool_separator_symbol: "/",
     style: "bold purple",
     style_missing_some: "bold yellow",
     style_missing_all: "bold red",
@@ -3106,7 +3106,7 @@ The `mise` module shows the current [mise](https://mise.jdx.dev/) tool installat
 | `healthy_symbol`        | `'healthy '`                                                         | The symbol displayed when mise is healthy.                           |
 | `unhealthy_symbol`      | `'unhealthy '`                                                       | The symbol displayed when mise is unhealthy.                         |
 | `error_symbol`          | `'error '`                                                           | The symbol displayed when mise encounters an error.                  |
-| `tool_seperator_symbol` | `'/'`                                                                | The symbol used to separate tools.                                   |
+| `tool_separator_symbol` | `'/'`                                                                | The symbol used to separate tools.                                   |
 | `style`                 | `'bold purple'`                                                      | The style used when all tools are installed.                         |
 | `style_missing_some`    | `'bold yellow'`                                                      | The style used when some tools are missing.                          |
 | `style_missing_all`     | `'bold red'`                                                         | The style used when no tools are installed.                          |

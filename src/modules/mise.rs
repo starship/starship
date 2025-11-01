@@ -151,7 +151,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         MiseState::Ok {
             installed,
             required,
-        } => format!("{}{}{} ", installed, config.tool_seperator_symbol, required),
+        } => format!("{}{}{} ", installed, config.tool_separator_symbol, required),
         MiseState::Unhealthy | MiseState::Untrusted | MiseState::Error => "".into(),
     };
 

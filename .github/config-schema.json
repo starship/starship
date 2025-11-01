@@ -1016,7 +1016,7 @@
         "unhealthy_symbol": "unhealthy ",
         "untrusted_symbol": "untrusted ",
         "error_symbol": "error ",
-        "tool_seperator_symbol": "/",
+        "tool_separator_symbol": "/",
         "style": "bold purple",
         "style_missing_all": "bold red",
         "style_missing_some": "bold yellow",
@@ -4563,7 +4563,7 @@
           "type": "string",
           "default": "error "
         },
-        "tool_seperator_symbol": {
+        "tool_separator_symbol": {
           "type": "string",
           "default": "/"
         },
