@@ -1009,17 +1009,16 @@
       "$ref": "#/$defs/MiseConfig",
       "default": {
         "local_only": true,
-        "healthy_enabled": false,
-        "format": "with [$symbol$health_status$tool_status]($style)",
+        "health_check_enabled": false,
+        "format": "with [$symbol($status )($installed/$required )]($style)",
         "symbol": "💾 mise ",
-        "healthy_symbol": "healthy ",
-        "unhealthy_symbol": "unhealthy ",
-        "untrusted_symbol": "untrusted ",
-        "error_symbol": "error ",
-        "tool_separator_symbol": "/",
+        "healthy_symbol": "healthy",
+        "unhealthy_symbol": "unhealthy",
+        "untrusted_symbol": "untrusted",
+        "error_symbol": "error",
         "style": "bold purple",
-        "style_missing_all": "bold red",
         "style_missing_some": "bold yellow",
+        "style_missing_all": "bold red",
         "style_unhealthy": "bold red",
         "style_untrusted": "bold red",
         "style_error": "bold red",
@@ -4535,13 +4534,13 @@
           "type": "boolean",
           "default": true
         },
-        "healthy_enabled": {
+        "health_check_enabled": {
           "type": "boolean",
           "default": false
         },
         "format": {
           "type": "string",
-          "default": "with [$symbol$health_status$tool_status]($style)"
+          "default": "with [$symbol($status )($installed/$required )]($style)"
         },
         "symbol": {
           "type": "string",
@@ -4549,35 +4548,31 @@
         },
         "healthy_symbol": {
           "type": "string",
-          "default": "healthy "
+          "default": "healthy"
         },
         "unhealthy_symbol": {
           "type": "string",
-          "default": "unhealthy "
+          "default": "unhealthy"
         },
         "untrusted_symbol": {
           "type": "string",
-          "default": "untrusted "
+          "default": "untrusted"
         },
         "error_symbol": {
           "type": "string",
-          "default": "error "
-        },
-        "tool_separator_symbol": {
-          "type": "string",
-          "default": "/"
+          "default": "error"
         },
         "style": {
           "type": "string",
           "default": "bold purple"
         },
-        "style_missing_all": {
-          "type": "string",
-          "default": "bold red"
-        },
         "style_missing_some": {
           "type": "string",
           "default": "bold yellow"
+        },
+        "style_missing_all": {
+          "type": "string",
+          "default": "bold red"
         },
         "style_unhealthy": {
           "type": "string",

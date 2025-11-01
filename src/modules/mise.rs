@@ -19,6 +19,7 @@ struct MiseToolInfo {
 }
 
 /// Represents the state of mise that will be displayed
+#[derive(Debug)]
 enum MiseState {
     /// Tools installed / required
     Ok { installed: usize, required: usize },
@@ -82,7 +83,7 @@ fn get_tool_counts(context: &Context, local_only: bool) -> Option<(usize, usize)
 fn determine_mise_state(context: &Context, config: &MiseConfig) -> Option<MiseState> {
     // If health check is enabled, check health first
     // If unhealthy, don't proceed with tool counting
-    if config.healthy_enabled && !check_mise_health(context) {
+    if config.health_check_enabled && !check_mise_health(context) {
         return Some(MiseState::Unhealthy);
     }
 
@@ -119,11 +120,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let state = determine_mise_state(context, &config)?;
+    log::trace!("mise state: {:?}", &state);
 
     if let MiseState::Ok { required: 0, .. } = state
-        && !config.healthy_enabled
+        && !config.health_check_enabled
     {
-        // When healthy is disabled and there are no required versions, we don't want to show the module
+        // When healthy is disabled and there are no required versions, we don't want to show the module at all
+        log::trace!("no required versions, and no health check enabled - returning None");
         return None;
     }
 
@@ -138,22 +141,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         MiseState::Untrusted => config.style_untrusted,
         MiseState::Error => config.style_error,
     };
+    log::trace!("style: {:?}", selected_style);
 
-    let health_status: String = match &state {
-        MiseState::Ok { .. } if config.healthy_enabled => config.healthy_symbol.into(),
-        MiseState::Ok { .. } => "".into(),
-        MiseState::Unhealthy => config.unhealthy_symbol.into(),
-        MiseState::Untrusted => config.untrusted_symbol.into(),
-        MiseState::Error => config.error_symbol.into(),
+    let status: Option<String> = match &state {
+        MiseState::Ok { .. } if config.health_check_enabled => Some(config.healthy_symbol.into()),
+        MiseState::Ok { .. } => None,
+        MiseState::Unhealthy => Some(config.unhealthy_symbol.into()),
+        MiseState::Untrusted => Some(config.untrusted_symbol.into()),
+        MiseState::Error => Some(config.error_symbol.into()),
     };
+    log::trace!("status: {:?}", status);
 
-    let tool_status: String = match &state {
+    let (installed, required) = match &state {
         MiseState::Ok {
             installed,
             required,
-        } => format!("{}{}{} ", installed, config.tool_separator_symbol, required),
-        MiseState::Unhealthy | MiseState::Untrusted | MiseState::Error => "".into(),
+        } if *required > 0 => (Some(installed.to_string()), Some(required.to_string())),
+        _ => (None, None),
     };
+    log::trace!("installed: {:?}", installed);
+    log::trace!("required : {:?}", required);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -163,8 +170,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "symbol" => Some(Ok(config.symbol.to_string())),
-                "health_status" => Some(Ok(health_status.clone())),
-                "tool_status" => Some(Ok(tool_status.clone())),
+                "status" => status.as_ref().map(|s| Ok(s.clone())),
+                "installed" => installed.as_ref().map(|s| Ok(s.clone())),
+                "required" => required.as_ref().map(|s| Ok(s.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -173,7 +181,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(e) => {
-            log::warn!("Error in module `mise`: {e}");
+            log::warn!("error in module `mise`: {e}");
             return None;
         }
     });
@@ -550,7 +558,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_mise_config_healthy_enabled_healthy() -> io::Result<()> {
+    fn folder_with_mise_config_health_check_enabled_healthy() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -561,7 +569,7 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
-                healthy_enabled = true
+                health_check_enabled = true
             })
             .cmd(
                 "mise doctor",
@@ -604,7 +612,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_mise_config_healthy_enabled_unhealthy() -> io::Result<()> {
+    fn folder_with_mise_config_health_check_enabled_unhealthy() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -615,7 +623,7 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
-                healthy_enabled = true
+                health_check_enabled = true
             })
             .cmd("mise doctor", None);
 
@@ -629,7 +637,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_mise_config_custom_healthy_symbols() -> io::Result<()> {
+    fn folder_with_mise_config_health_check_enabled_healthy_no_tools() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join(".mise.toml");
 
@@ -640,12 +648,89 @@ mod tests {
             .config(toml::toml! {
                 [mise]
                 disabled = false
-                healthy_enabled = true
-                unhealthy_symbol = "💀 "
+                health_check_enabled = true
+            })
+            .cmd(
+                "mise doctor",
+                Some(CommandOutput {
+                    stdout: String::default(),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: "{}".into(),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!(
+            "with {}",
+            Color::Purple.bold().paint("💾 mise healthy ")
+        ));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_custom_unhealthy_symbol() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+                health_check_enabled = true
+                unhealthy_symbol = "💀"
             })
             .cmd("mise doctor", None);
 
         let expected = Some(format!("with {}", Color::Red.bold().paint("💾 mise 💀 ")));
+        assert_eq!(expected, renderer.collect());
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_mise_config_custom_healthy_symbol() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join(".mise.toml");
+
+        std::fs::File::create(config_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("mise")
+            .path(dir.path())
+            .config(toml::toml! {
+                [mise]
+                disabled = false
+                health_check_enabled = true
+                healthy_symbol = "✅"
+            })
+            .cmd(
+                "mise doctor",
+                Some(CommandOutput {
+                    stdout: String::default(),
+                    stderr: String::default(),
+                }),
+            )
+            .cmd(
+                "mise ls --current --json --local",
+                Some(CommandOutput {
+                    stdout: "{}".into(),
+                    stderr: String::default(),
+                }),
+            );
+
+        let expected = Some(format!(
+            "with {}",
+            Color::Purple.bold().paint("💾 mise ✅ ")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
