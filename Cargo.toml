@@ -36,9 +36,9 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.42", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.50", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.59"
-clap_complete_nushell = "4.5.9"
+clap = { version = "4.5.51", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.5.60"
+clap_complete_nushell = "4.5.10"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
@@ -71,7 +71,7 @@ sha1 = "0.10.6"
 shadow-rs = { version = "1.4.0", default-features = false, features = ["build"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-starship-battery = { version = "0.10.2", optional = true }
+starship-battery = { version = "0.10.3", optional = true }
 strsim = "0.11.1"
 systemstat = "=0.2.5"
 terminal_size = "0.4.3"
@@ -90,7 +90,7 @@ home = "0.5.12"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "1.0.4"
+version = "1.0.5"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
