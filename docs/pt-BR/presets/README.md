@@ -14,11 +14,7 @@ Essa predefinição altera os símbolos para cada módulo usar símbolos com Ner
 
 Essa predefinição altera os símbolos para vários módulos para que nenhum utilize símbolos das Nerd Fonts em nenhum lugar no prompt.
 
-::: tip
-
-Esta predefinição se tornará padrão em [uma futura release do starship](https://github.com/starship/starship/pull/3544).
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [Clique para visualizar a predefinição de sem Nerd Font](./no-nerd-font)
 
@@ -74,7 +70,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
 
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Captura de tela do Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 

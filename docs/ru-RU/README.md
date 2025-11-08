@@ -136,19 +136,16 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Только elvish v0.18 или выше поддерживается.
-
-   :::
-
-   Добавьте следующую строку в конец `~/.elvish/rc.elv`:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 
    #### Tcsh
@@ -164,11 +161,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   Это изменится в будущем. Поддерживается только Nushell v0.96+.
-
-   :::
+   > [!WARNING] This will change in the future. Поддерживается только Nushell v0.96+.
 
    Добавьте следующее в конец вашей конфигурации Nushell (найдите это, запустив `$nu.config-path` в Nushell):
 

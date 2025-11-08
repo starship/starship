@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     // Hide prompt if current time is not inside time_range
     let (display_start, display_end) = parse_time_range(config.time_range);
@@ -28,15 +28,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::trace!("Timer module is enabled with format string: {time_format}");
 
     let formatted_time_string = if config.utc_time_offset != "local" {
-        match create_offset_time_string(Utc::now(), config.utc_time_offset, time_format) {
-            Ok(formatted_string) => formatted_string,
-            Err(_) => {
+        create_offset_time_string(Utc::now(), config.utc_time_offset, time_format).unwrap_or_else(
+            |_| {
                 log::warn!(
                     "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
                 );
                 format_time(time_format, Local::now())
-            }
-        }
+            },
+        )
     } else {
         format_time(time_format, Local::now())
     };

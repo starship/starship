@@ -136,19 +136,16 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   elvish 버전 v0.18 이상에서만 지원됩니다.
-
-   :::
-
-   `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 
    #### Tcsh
@@ -164,11 +161,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   추후에 변경될 예정입니다. Nushell v0.96 버전 이상에서만 지원됩니다.
-
-   :::
+   > [!WARNING] This will change in the future. Nushell v0.96 버전 이상에서만 지원됩니다.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 

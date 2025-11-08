@@ -1,4 +1,4 @@
-[Retourner aux préréglages](./#pure)
+[Retourner aux préréglages](./#pure-prompt)
 
 # Préréglage Pure
 

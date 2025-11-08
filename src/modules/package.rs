@@ -1,14 +1,17 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::read_file;
 
 use ini::Ini;
+use jsonc_parser::ParseOptions;
 use quick_xml::Reader as QXReader;
 use quick_xml::events::Event as QXEvent;
 use regex::Regex;
 use serde_json as json;
 use std::fs;
 use std::io::Read;
+use versions::Version;
 
 /// Creates a module with the current package version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -57,13 +60,13 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     let raw_version = package_json.get("version")?.as_str()?;
     if raw_version == "null" {
         return None;
-    };
+    }
 
     let formatted_version = format_version(raw_version, config.version_format)?;
     if formatted_version == "v0.0.0-development" || formatted_version.starts_with("v0.0.0-semantic")
     {
         return Some("semantic".to_string());
-    };
+    }
 
     Some(formatted_version)
 }
@@ -78,7 +81,7 @@ fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<
         })?;
 
     let json_content: json::Value = if filename.ends_with(".jsonc") {
-        jsonc_parser::parse_to_serde_value(&contents, &Default::default()).ok()??
+        jsonc_parser::parse_to_serde_value(&contents, &ParseOptions::default()).ok()??
     } else {
         json::from_str(&contents).ok()?
     };
@@ -87,25 +90,74 @@ fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<
     format_version(raw_version, config.version_format)
 }
 
-fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
+fn get_poetry_version(pyproject: &toml::Table) -> Option<String> {
     pyproject
         .get("tool")?
         .get("poetry")?
         .get("version")?
         .as_str()
+        .map(|s| s.to_owned())
 }
 
-fn get_pep621_version(pyproject: &toml::Table) -> Option<&str> {
-    pyproject.get("project")?.get("version")?.as_str()
+fn parse_file_version_for_hatchling(context: &Context, path: &str) -> Option<String> {
+    let file_contents = read_file(context.current_dir.join(path)).ok()?;
+    // https://hatch.pypa.io/latest/version/
+    let re = Regex::new(r#"(__version__|VERSION)\s*=\s*["']([^"']+)["']"#).ok()?;
+    Some(
+        re.captures(&file_contents)
+            .and_then(|cap| cap.get(2))?
+            .as_str()
+            .to_owned(),
+    )
+}
+
+fn parse_hatchling_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    let version_path = pyproject
+        .get("tool")?
+        .get("hatch")?
+        .get("version")?
+        .get("path")?
+        .as_str()?;
+
+    parse_file_version_for_hatchling(context, version_path)
+        .filter(|s| Version::new(s.as_str()).is_some())
+}
+
+fn parse_pep621_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    // TODO: Flit, PDM, Setuptools
+    // https://packaging.python.org/en/latest/discussions/single-source-version#build-system-version-handling
+    parse_hatchling_dynamic_version(context, pyproject)
+}
+
+fn get_pep621_dynamic_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    pyproject
+        .get("project")?
+        .get("dynamic")?
+        .as_array()?
+        .iter()
+        .any(|v| v.as_str() == Some("version"))
+        .then(|| parse_pep621_dynamic_version(context, pyproject))?
+}
+
+fn get_pep621_static_version(pyproject: &toml::Table) -> Option<String> {
+    pyproject
+        .get("project")?
+        .get("version")?
+        .as_str()
+        .map(|s| s.to_owned())
+}
+
+fn get_pep621_version(context: &Context, pyproject: &toml::Table) -> Option<String> {
+    get_pep621_static_version(pyproject).or_else(|| get_pep621_dynamic_version(context, pyproject))
 }
 
 fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pyproject.toml")?;
     let pyproject_toml: toml::Table = toml::from_str(&file_contents).ok()?;
 
-    get_pep621_version(&pyproject_toml)
+    get_pep621_version(context, &pyproject_toml)
         .or_else(|| get_poetry_version(&pyproject_toml))
-        .and_then(|raw_version| format_version(raw_version, config.version_format))
+        .and_then(|raw_version| format_string_version(raw_version, config.version_format))
 }
 
 fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -187,7 +239,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.unescape().ok().map(std::borrow::Cow::into_owned);
+                let ver = t.decode().ok().map(std::borrow::Cow::into_owned);
                 return match ver {
                     // Ignore version which is just a property reference
                     Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
@@ -298,7 +350,7 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
         .is_match()
     {
         return None;
-    };
+    }
 
     let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
     let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
@@ -342,6 +394,14 @@ fn get_rlang_version(context: &Context, config: &PackageConfig) -> Option<String
     format_version(&caps["version"], config.version_format)
 }
 
+fn get_galaxy_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("galaxy.yml")?;
+    let data = yaml_rust2::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = data.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -364,12 +424,13 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_daml_project_version,
         get_dart_pub_version,
         get_rlang_version,
+        get_galaxy_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
 }
 
-fn format_version(version: &str, version_format: &str) -> Option<String> {
+fn format_string_version(version: String, version_format: &str) -> Option<String> {
     let cleaned = version
         .replace('"', "")
         .trim()
@@ -377,6 +438,10 @@ fn format_version(version: &str, version_format: &str) -> Option<String> {
         .to_string();
 
     VersionFormatter::format_module_version("package", &cleaned, version_format)
+}
+
+fn format_version(version: &str, version_format: &str) -> Option<String> {
+    format_string_version(version.to_string(), version_format)
 }
 
 #[cfg(test)]
@@ -950,6 +1015,46 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_dynamic_version_hatchling_1() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            dynamic = ["version"]
+            [tool.hatch.version]
+            path = "src/__init__.py"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let init_contents = "__version__ = \"0.1.0\"".to_string();
+        fill_config(&project_dir, "src/__init__.py", Some(&init_contents))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_dynamic_version_hatchling_2() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            dynamic = ["version"]
+            [tool.hatch.version]
+            path = "foo.py"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let init_contents = "# foo\nVERSION = \"0.1.0\"".to_string();
+        fill_config(&project_dir, "foo.py", Some(&init_contents))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -1546,16 +1651,36 @@ Title: Starship
         expect_output(&project_dir, Some("v1.0.0"), None);
         project_dir.close()
     }
+
+    #[test]
+    fn test_ansible_galaxy_version() -> io::Result<()> {
+        let config_name = "galaxy.yml";
+        let config_content = "namespace: starfleet\nname: starship\nversion: 1.2.3\n".to_string();
+
+        let project_dir = create_project_dir()?;
+
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+
+        project_dir.close()
+    }
+
     fn create_project_dir() -> io::Result<TempDir> {
         tempfile::tempdir()
     }
 
     fn fill_config(
         project_dir: &TempDir,
-        file_name: &str,
+        file_path: &str,
         contents: Option<&str>,
     ) -> io::Result<()> {
-        let mut file = File::create(project_dir.path().join(file_name))?;
+        let mut file = {
+            let path = project_dir.path().join(file_path);
+            if let Some(parent) = path.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            File::create(path)?
+        };
         file.write_all(contents.unwrap_or("").as_bytes())?;
         file.sync_all()
     }

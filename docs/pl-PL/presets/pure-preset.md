@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./#pure)
+[Powrót do ustawień predefiniowanych](./#pure-prompt)
 
 # Ustawienia Pure
 

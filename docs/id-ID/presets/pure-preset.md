@@ -1,4 +1,4 @@
-[Return to Presets](./#pure)
+[Return to Presets](./#pure-prompt)
 
 # Pure Preset
 

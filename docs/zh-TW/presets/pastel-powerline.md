@@ -16,6 +16,6 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
+[點擊此處下載 TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml

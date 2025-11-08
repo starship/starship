@@ -1,10 +1,12 @@
 use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
+use regex::Regex;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
+use std::sync::OnceLock;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
@@ -36,12 +38,20 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
+static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
+
+fn ansi_strip() -> &'static Regex {
+    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+}
+
 impl<T> UnicodeWidthGraphemes for T
 where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        self.as_ref()
+        ansi_strip()
+            .replace_all(self.as_ref(), "")
+            .into_owned()
             .graphemes(true)
             .map(Grapheme)
             .map(|g| g.width())
@@ -55,16 +65,18 @@ fn test_grapheme_aware_width() {
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
+    // Magenta string test
+    assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {
     let context = Context::new(args, target);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
-    write!(handle, "{}", get_prompt(context)).unwrap();
+    write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
-pub fn get_prompt(context: Context) -> String {
+pub fn get_prompt(context: &Context) -> String {
     let config = &context.root_config;
     let mut buf = String::new();
 
@@ -83,7 +95,7 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let (formatter, modules) = load_formatter_and_modules(&context);
+    let (formatter, modules) = load_formatter_and_modules(context);
 
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules not explicitly referenced
@@ -91,7 +103,7 @@ pub fn get_prompt(context: Context) -> String {
             Some(Ok(all_modules_uniq(&modules)
                 .par_iter()
                 .flat_map(|module| {
-                    handle_module(module, &context, &modules)
+                    handle_module(module, context, &modules)
                         .into_iter()
                         .flat_map(|module| module.segments)
                         .collect::<Vec<Segment>>()
@@ -101,7 +113,7 @@ pub fn get_prompt(context: Context) -> String {
             None
         } else {
             // Get segments from module
-            Some(Ok(handle_module(module, &context, &modules)
+            Some(Ok(handle_module(module, context, &modules)
                 .into_iter()
                 .flat_map(|module| module.segments)
                 .collect::<Vec<Segment>>()))
@@ -112,7 +124,7 @@ pub fn get_prompt(context: Context) -> String {
     let mut root_module = Module::new("Starship Root", "The root module", None);
     root_module.set_segments(
         formatter
-            .parse(None, Some(&context))
+            .parse(None, Some(context))
             .expect("Unexpected error returned in root format variables"),
     );
 
@@ -144,12 +156,12 @@ pub fn get_prompt(context: Context) -> String {
 
 pub fn module(module_name: &str, args: Properties) {
     let context = Context::new(args, Target::Main);
-    let module = get_module(module_name, context).unwrap_or_default();
+    let module = get_module(module_name, &context).unwrap_or_default();
     print!("{module}");
 }
 
-pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context).map(|m| m.to_string())
+pub fn get_module(module_name: &str, context: &Context) -> Option<String> {
+    modules::handle(module_name, context).map(|m| m.to_string())
 }
 
 pub fn timings(args: Properties) {
@@ -289,7 +301,7 @@ pub fn explain(args: Properties) {
                 " ".repeat(max_module_width - info.value_len),
                 info.desc,
             );
-        };
+        }
     }
 }
 
@@ -404,7 +416,7 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     let mut prompt_order: Vec<String> = Vec::new();
     for module in PROMPT_ORDER {
         if !module_list.contains(*module) {
-            prompt_order.push(String::from(*module))
+            prompt_order.push(String::from(*module));
         }
     }
 
@@ -454,7 +466,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
             "format".to_string()
         };
         log::error!("Error parsing {name:?}: {e}");
-    };
+    }
 
     if let Err(ref e) = rf {
         log::error!("Error parsing right_format: {e}");
@@ -530,6 +542,8 @@ mod test {
     use crate::test::default_context;
     use crate::utils;
 
+    const NULL_DEVICE: &str = if cfg!(windows) { "NUL" } else { "/dev/null" };
+
     #[test]
     fn main_prompt() {
         let mut context = default_context().set_config(toml::toml! {
@@ -541,7 +555,7 @@ mod test {
         context.target = Target::Main;
 
         let expected = String::from(">\n>");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -555,7 +569,7 @@ mod test {
         context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -568,11 +582,12 @@ mod test {
                 [character]
                 format=">"
         });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from(">");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -585,13 +600,14 @@ mod test {
             [character]
             format=">"
         });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
         context.target = Target::Right;
 
         let expected = String::from(">");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -608,7 +624,7 @@ mod test {
         context.target = Target::Profile("test".to_string());
 
         let expected = String::from("0_0>>");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -624,7 +640,7 @@ mod test {
         context.target = Target::Profile("wrong_prompt".to_string());
 
         let expected = String::from(">");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -636,21 +652,21 @@ mod test {
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
     #[test]
     fn preset_list_returns_one_or_more_items() {
-        assert!(preset_list().trim().split('\n').count() > 0);
+        assert!(preset_list().lines().count() > 0);
     }
 
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
         preset_command(None, None, true);
-        Preset::value_variants()
-            .iter()
-            .for_each(|v| preset_command(Some(v.clone()), None, false));
+        for v in Preset::value_variants() {
+            preset_command(Some(v.clone()), None, false);
+        }
     }
 
     #[test]
@@ -687,7 +703,7 @@ mod test {
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\nab");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -709,7 +725,7 @@ mod test {
         context.env.insert("c", "c".to_string());
 
         let expected = String::from("\nabc");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -731,7 +747,7 @@ mod test {
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\ncab");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -756,7 +772,7 @@ mod test {
         context.env.insert("d", "d".to_string());
 
         let expected = String::from("\ncdab");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
 
@@ -775,7 +791,7 @@ mod test {
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\nb");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -792,7 +808,7 @@ mod test {
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\n");
-        let actual = get_prompt(context);
+        let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
     }

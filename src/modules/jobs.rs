@@ -46,7 +46,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let default_threshold = 1;
     let mut module_symbol = "";
     let mut module_number = String::new();
-    if config.threshold != default_threshold {
+    if config.threshold == default_threshold {
+        if num_of_jobs >= config.symbol_threshold {
+            module_symbol = config.symbol;
+        }
+
+        if num_of_jobs >= config.number_threshold {
+            module_number = num_of_jobs.to_string();
+        }
+    } else {
         log::warn!(
             "`threshold` in [jobs] is deprecated . Please remove it and use `symbol_threshold` and `number_threshold`."
         );
@@ -59,14 +67,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
         if num_of_jobs > config.threshold || config.threshold == 0 {
             module_symbol = config.symbol;
-            module_number = num_of_jobs.to_string();
-        }
-    } else {
-        if num_of_jobs >= config.symbol_threshold {
-            module_symbol = config.symbol;
-        }
-
-        if num_of_jobs >= config.number_threshold {
             module_number = num_of_jobs.to_string();
         }
     }

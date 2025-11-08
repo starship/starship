@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./#pastel-powerline)
+[프리셋으로 돌아가기](./#tokyo-night)
 
 # Tokyo Night 프리셋
 

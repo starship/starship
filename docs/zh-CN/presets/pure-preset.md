@@ -1,4 +1,4 @@
-[返回全部预设](./#pure)
+[返回全部预设](./#pure-prompt)
 
 # Pure Preset
 
