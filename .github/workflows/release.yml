@@ -320,7 +320,8 @@ jobs:
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: rust-lang/crates-io-auth-action@v1
+      - name: Build | Authenticate
+        uses: rust-lang/crates-io-auth-action@v1
         id: auth
 
       - name: Build | Publish
