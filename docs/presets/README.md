@@ -84,4 +84,4 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
 
-[![Screenshot of Pastel Worm preset](/presets/img/pastel-worm.png "Click to view Pastel Worm preset")](./pastel-worm)
+[![Screenshot of Catppuccin Worm preset](/presets/img/catppuccin-worm.png "Click to view Catppuccin Worm preset")](./catppuccin-worm)
