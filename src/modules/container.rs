@@ -26,8 +26,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        let container_env_path = context_path(context, "/run/.containerenv");
+        if context_path(context, "/dev/incus/sock").exists() {
+            // Incus
+            return Some("Incus".into());
+        }
 
+        let container_env_path = context_path(context, "/run/.containerenv");
         if container_env_path.exists() {
             // podman and others
 
@@ -101,7 +105,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `container`: \n{}", error);
+            log::warn!("Error in module `container`: \n{error}");
             return None;
         }
     });
@@ -168,10 +172,10 @@ mod tests {
         // The value that should be rendered by the module.
         let expected = Some(format!(
             "{} ",
-            Color::Red
-                .bold()
-                .dimmed()
-                .paint(format!("⬢ [{}]", name.unwrap_or(image.unwrap_or("podman"))))
+            Color::Red.bold().dimmed().paint(format!(
+                "⬢ [{}]",
+                name.unwrap_or_else(|| image.unwrap_or("podman"))
+            ))
         ));
 
         Ok((actual, expected))
@@ -294,6 +298,34 @@ mod tests {
         // Assert that the actual and expected values are not the same
         assert_ne!(actual, expected);
 
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_incus_container() -> std::io::Result<()> {
+        let renderer = ModuleRenderer::new("container").config(toml::toml! {
+            [container]
+            disabled = false
+        });
+
+        let root_path = renderer.root_path();
+
+        // Create the Incus socket path
+        let incus_socket_path = root_path.join("dev/incus/sock");
+        fs::create_dir_all(incus_socket_path.parent().unwrap())?;
+        fs::File::create(&incus_socket_path)?;
+
+        // The output of the module
+        let actual = renderer.collect();
+
+        // The value that should be rendered by the module
+        let expected = Some(format!(
+            "{} ",
+            Color::Red.bold().dimmed().paint("⬢ [Incus]")
+        ));
+
+        assert_eq!(actual, expected);
         Ok(())
     }
 }

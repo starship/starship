@@ -257,12 +257,18 @@ detect_target() {
   printf '%s' "${target}"
 }
 
+set_interrupt_handler() {
+  trap 'echo; error "Interrupted (please re-run with the '--yes' option)"; exit 130' INT
+}
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
+    set_interrupt_handler
     printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
     set +e
     read -r yn </dev/tty
+    trap - INT
+    yn=$(echo "$yn" | tr '[:upper:]' '[:lower:]')
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
@@ -270,8 +276,29 @@ confirm() {
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
+      if [ "$yn" = "n" ] || [ "$yn" = "no" ]; then
+        set_interrupt_handler
+        set +e
+        printf "Where would you like to install Starship? ${GREY}(e.g., /usr/local/bin)${NO_COLOR}\n"
+        read -p "> Install Starship ${GREEN}${VERSION}${NO_COLOR} to: " path
+        trap - INT
+        rc=$?
+        set -e
+        BIN_DIR=$path
+        if [ $rc != 0 ] || [ -z "$path" ]; then
+          if [ -z "$path" ]; then
+            echo
+          fi
+          error "Error reading from prompt (please re-run with '--yes' or provide path)"
+          exit 1
+        fi
+      else
+        if [ -z "$yn" ]; then
+          echo
+        fi
+        error 'Aborting (please answer "yes" to continue)'
+        exit 1
+      fi
     fi
   fi
 }
@@ -344,7 +371,7 @@ print_install() {
     case ${s} in
       elvish )
         # shellcheck disable=SC2088
-        config_file="~/.elvish/rc.elv"
+        config_file="~/.config/elvish/rc.elv"
         config_cmd="eval (starship init elvish)"
         warning="${warning} Only elvish v0.17 or higher is supported."
         ;;

@@ -39,10 +39,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let symbol = if repeat_count != 1 {
-        Cow::Owned(config.symbol.repeat(repeat_count))
-    } else {
+    let symbol = if repeat_count == 1 {
         Cow::Borrowed(config.symbol)
+    } else {
+        Cow::Owned(config.symbol.repeat(repeat_count))
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -65,7 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `shlvl`:\n{}", error);
+            log::warn!("Error in module `shlvl`:\n{error}");
             return None;
         }
     });

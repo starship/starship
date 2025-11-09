@@ -1,4 +1,4 @@
-[Volver a Preajustes](./#pure)
+[Volver a Preajustes](./#pure-prompt)
 
 # Preajuste Pure
 

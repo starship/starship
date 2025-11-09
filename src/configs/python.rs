@@ -26,7 +26,7 @@ pub struct PythonConfig<'a> {
 
 impl Default for PythonConfig<'_> {
     fn default() -> Self {
-        PythonConfig {
+        Self {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec![

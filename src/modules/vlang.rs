@@ -48,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `vlang`:\n{}", error);
+            log::warn!("Error in module `vlang`:\n{error}");
             return None;
         }
     });
@@ -77,7 +77,7 @@ mod tests {
     #[test]
     fn test_parse_v_version() {
         const OUTPUT: &str = "V 0.2 30c0659\n";
-        assert_eq!(parse_v_version(OUTPUT), Some("0.2".to_string()))
+        assert_eq!(parse_v_version(OUTPUT), Some("0.2".to_string()));
     }
 
     #[test]

@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `nim`:\n{}", error);
+            log::warn!("Error in module `nim`:\n{error}");
             return None;
         }
     });
@@ -95,7 +95,7 @@ mod tests {
             git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
             active boot switches: -d:release\n";
 
-        assert_eq!(Some("1.2.0"), parse_nim_version(sample_nimc_output))
+        assert_eq!(Some("1.2.0"), parse_nim_version(sample_nimc_output));
     }
 
     #[test]

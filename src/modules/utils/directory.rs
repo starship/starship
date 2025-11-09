@@ -31,21 +31,21 @@ mod tests {
     fn truncate_smaller_path_than_provided_length() {
         let path = "~/starship";
         let output = truncate(path, 3);
-        assert_eq!(output, None)
+        assert_eq!(output, None);
     }
 
     #[test]
     fn truncate_same_path_as_provided_length() {
         let path = "~/starship/engines";
         let output = truncate(path, 3);
-        assert_eq!(output, None)
+        assert_eq!(output, None);
     }
 
     #[test]
     fn truncate_slightly_larger_path_than_provided_length() {
         let path = "~/starship/engines/booster";
         let output = truncate(path, 3);
-        assert_eq!(output.as_deref(), Some("starship/engines/booster"))
+        assert_eq!(output.as_deref(), Some("starship/engines/booster"));
     }
 
     #[test]

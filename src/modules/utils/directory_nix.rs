@@ -38,10 +38,11 @@ pub fn is_write_allowed(folder_path: &Path) -> Result<bool, String> {
 
 #[cfg(all(unix, not(any(target_os = "macos", target_os = "ios"))))]
 fn get_supplementary_groups() -> Vec<u32> {
-    match nix::unistd::getgroups() {
-        Err(_) => Vec::new(),
-        Ok(v) => v.into_iter().map(nix::unistd::Gid::as_raw).collect(),
-    }
+    nix::unistd::getgroups()
+        .unwrap_or_default()
+        .into_iter()
+        .map(nix::unistd::Gid::as_raw)
+        .collect()
 }
 
 #[cfg(all(unix, any(target_os = "macos", target_os = "ios")))]

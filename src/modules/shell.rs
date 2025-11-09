@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `shell`: \n{}", error);
+            log::warn!("Error in module `shell`: \n{error}");
             return None;
         }
     });
@@ -414,7 +414,7 @@ mod tests {
             .shell(Shell::Fish)
             .config(toml::toml! {
                 [shell]
-                bash_indicator = "B"
+                fish_indicator = ""
                 format = "($indicator )"
                 disabled = false
             })

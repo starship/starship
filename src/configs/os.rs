@@ -12,19 +12,20 @@ use serde::{Deserialize, Serialize};
 pub struct OSConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
+    #[cfg_attr(feature = "config-schema", schemars(with = "IndexMap<String, String>"))]
     pub symbols: IndexMap<Type, &'a str>,
     pub disabled: bool,
 }
 
 impl<'a> OSConfig<'a> {
-    pub fn get_symbol(&self, key: &Type) -> Option<&'a str> {
-        self.symbols.get(key).copied()
+    pub fn get_symbol(&self, key: Type) -> Option<&'a str> {
+        self.symbols.get(&key).copied()
     }
 }
 
 impl Default for OSConfig<'_> {
     fn default() -> Self {
-        OSConfig {
+        Self {
             format: "[$symbol]($style)",
             style: "bold white",
             symbols: indexmap! {
@@ -34,6 +35,7 @@ impl Default for OSConfig<'_> {
                 Type::Alpine => "🏔️ ",
                 Type::Amazon => "🙂 ",
                 Type::Android => "🤖 ",
+                Type::AOSC => "🐱 ",
                 Type::Arch => "🎗️ ",
                 Type::Artix => "🎗️ ",
                 Type::Bluefin => "🐟 ",
@@ -77,7 +79,7 @@ impl Default for OSConfig<'_> {
                 Type::Ultramarine => "🔷 ",
                 Type::Unknown => "❓ ",
                 Type::Uos => "🐲 ",
-                Type::Void => "  ",
+                Type::Void => " ",
                 Type::Windows => "🪟 ",
                 // Future symbols.
                 //aosc =>       " ",
