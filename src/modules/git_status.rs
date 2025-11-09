@@ -464,7 +464,7 @@ fn get_repo_status(
                 status::Item::TreeIndex(change) => {
                     use gix::diff::index::Change;
                     match change {
-                        Change::Addition { .. } => {
+                        Change::Addition { .. } | Change::Modification { .. } => {
                             repo_status.staged += 1;
                             repo_status.index_added += 1;
                         }
