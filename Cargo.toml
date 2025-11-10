@@ -90,7 +90,7 @@ home = "0.5.12"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "1.0.5"
+version = "1.1.0"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
