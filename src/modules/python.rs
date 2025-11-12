@@ -126,7 +126,14 @@ fn parse_python_version(python_version_string: &str) -> Option<String> {
 fn get_python_virtual_env(context: &Context, config: &PythonConfig) -> Option<String> {
     context.get_env("VIRTUAL_ENV").and_then(|venv| {
         get_prompt_from_venv(Path::new(&venv))
-            .or_else(|| get_venv_from_path(Path::new(&venv), &config.generic_venv_names))
+            .or_else(|| get_venv_from_path(Path::new(&venv)))
+            .and_then(|venv_name| {
+                if config.generic_venv_names.contains(&venv_name.as_str()) {
+                    get_venv_from_path(Path::new(&venv).parent()?)
+                } else {
+                    Some(venv_name)
+                }
+            })
     })
 }
 
@@ -138,18 +145,8 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
 }
 
-fn get_venv_from_path(venv_path: &Path, generic_venv_names: &Vec<&str>) -> Option<String> {
-    venv_path.file_name()?.to_str().and_then(|venv_name| {
-        if generic_venv_names.contains(&venv_name) {
-            venv_path
-                .parent()?
-                .file_name()?
-                .to_str()
-                .map(|s| s.to_string())
-        } else {
-            Some(venv_name.to_string())
-        }
-    })
+fn get_venv_from_path(venv_path: &Path) -> Option<String> {
+    venv_path.file_name()?.to_str().map(|s| s.to_string())
 }
 
 #[cfg(test)]
@@ -538,6 +535,40 @@ prompt = foo\nbar
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint(r"🐍 v3.8.0 (foo\nbar) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_generic_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("bar").join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("bar").join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br"
+home = something
+prompt = 'foo'
+        ",
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env(
+                "VIRTUAL_ENV",
+                dir.path().join("bar").join("my_venv").to_str().unwrap(),
+            )
+            .config(toml::toml! {
+                [python]
+                generic_venv_names = ["foo"]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (bar) ")
         ));
 
         assert_eq!(actual, expected);
