@@ -4035,15 +4035,15 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `detect_extensions` | `['sbt', 'scala']`                       | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `['.metals']`                            | 應觸發此模組的資料夾名稱。                                                             |
-| `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
+| `symbol`            | `'🆂 '`                                   | 用來表示 Scala 符號的格式化字串。                                                      |
 | `style`             | `'red dimmed'`                           | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
+| `disabled`          | `false`                                  | 停用`scala` 模組。                                                             |
 
 ### 變數
 
 | 變數        | 範例       | 說明                     |
 | --------- | -------- | ---------------------- |
-| version   | `2.13.5` | The version of `scala` |
+| version   | `2.13.5` | `scala` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
 | style\* |          | 對應 <0>style</0> 選項的設定值 |
 
@@ -4066,23 +4066,23 @@ The `shell` module shows an indicator for currently used shell.
 
 ### 選項
 
-| 選項                     | 預設                        | 說明                                                                                                     |
-| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                                                                |
-| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                                                                |
-| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                                                                 |
-| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                                                          |
-| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
-| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                                                                 |
-| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                                                              |
-| `tcsh_indicator`       | `'tsh'`                   | 用來表示 tcsh 的格式化字串。                                                                                      |
-| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                                                               |
-| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                                                 |
-| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                                                  |
-| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                                           |
-| `format`               | `'[$indicator]($style) '` | 此模組的格式。                                                                                                |
-| `style`                | `'white bold'`            | 這個模組的風格。                                                                                               |
-| `disabled`             | `true`                    | Disables the `shell` module.                                                                           |
+| 選項                     | 預設                        | 說明                                                                               |
+| ---------------------- | ------------------------- | -------------------------------------------------------------------------------- |
+| `bash_indicator`       | `'bsh'`                   | 用來表示 bash 的格式化字串。                                                                |
+| `fish_indicator`       | `'fsh'`                   | 用來表示 fish 的格式化字串。                                                                |
+| `zsh_indicator`        | `'zsh'`                   | 用來表示 zsh 的格式化字串。                                                                 |
+| `powershell_indicator` | `'psh'`                   | 用來表示 powershell 的格式化字串。                                                          |
+| `pwsh_indicator`       |                           | 用來表示 pwsh 的格式化字串。 The default value mirrors the value of `powershell_indicator`. |
+| `ion_indicator`        | `'ion'`                   | 用來表示 ion 的格式化字串。                                                                 |
+| `elvish_indicator`     | `'esh'`                   | 用來表示 elvish 的格式化字串。                                                              |
+| `tcsh_indicator`       | `'tsh'`                   | 用來表示 tcsh 的格式化字串。                                                                |
+| `xonsh_indicator`      | `'xsh'`                   | 用來表示 xonsh 的格式化字串。                                                               |
+| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                           |
+| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                            |
+| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                     |
+| `format`               | `'[$indicator]($style) '` | 此模組的格式。                                                                          |
+| `style`                | `'white bold'`            | 這個模組的風格。                                                                         |
+| `disabled`             | `true`                    | Disables the `shell` module.                                                     |
 
 ### 變數
 
@@ -4169,7 +4169,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `format`   | `'[$symbol\[$env\]]($style) '` | 此模組的格式。                                          |
 | `symbol`   | `''`                             | A format string displayed before the image name. |
 | `style`    | `'bold dimmed blue'`             | 這個模組的風格。                                         |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| `disabled` | `false`                          | 停用 <0>singularity</0> 模組。                        |
 
 ### 變數
 
@@ -4202,13 +4202,13 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${major}.${minor}.${patch}'`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                       |
-| `compiler          | ['solc']                             | The default compiler for Solidity.                                        |
+| `symbol`            | `'S '`                               | 用來表示 Solidity 符號的格式化字串。                                                   |
+| `compiler          | ['solc']                             | Solidity 的預設編譯器。                                                          |
 | `detect_extensions` | `['sol']`                            | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                              | Disables this module.                                                     |
+| `disabled`          | `false`                              | 停用此模組。                                                                    |
 
 ### 變數
 
