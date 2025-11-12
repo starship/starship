@@ -59,7 +59,7 @@ path-slash = "0.2.1"
 pest = "2.8.3"
 pest_derive = "2.8.3"
 process_control = "5.2.0"
-quick-xml = "0.38.3"
+quick-xml = "0.38.4"
 rand = "0.9.2"
 rayon = "1.11.0"
 regex = { version = "1.12.2", default-features = false, features = ["perf", "std", "unicode-perl"] }
