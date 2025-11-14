@@ -4,6 +4,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
 use crate::formatter::StringFormatter;
+use crate::modules::utils::substitute::substitute_text;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -35,8 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let branch_name = repo.branch.as_deref().unwrap_or("HEAD");
-    let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
+    let branch_name = repo.branch.as_deref().unwrap_or("HEAD").to_string();
 
     if config
         .ignore_branches
@@ -45,6 +45,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     {
         return None;
     }
+
+    // Apply branch name substitutions
+    let branch_string = substitute_text(branch_name, &config.substitutions);
+
+    let mut graphemes: Vec<&str> = branch_string.graphemes(true).collect();
 
     let mut remote_branch_graphemes: Vec<&str> = Vec::new();
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
@@ -175,6 +180,35 @@ mod tests {
             "a",
             "truncation_symbol = \"apple\"",
         )
+    }
+
+    #[test]
+    fn substituted_truncated_branch_name() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let branch_name = "branch/feature/some-super-long-branch-name";
+
+        create_command("git")?
+            .args(["checkout", "-b", branch_name])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                    [git_branch]
+                        truncation_length = 20
+                    [git_branch.substitutions]
+                        "branch/feature/" = "F:"
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint("\u{e0a0} F:some-super-long-br…"),
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 
     #[test]
