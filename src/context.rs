@@ -615,7 +615,10 @@ impl DirContents {
 
                     if remaining_time <= Duration::from_millis(0) && rx.try_recv().is_err() {
                         // Timed-out, and rx has been drained.
-                        log::warn!("from_path_with_timeout has timed-out!");
+                        log::warn!("Scanning current directory timed out.");
+                        log::warn!(
+                            "You can set scan_timeout in your config to a higher value to allow longer-running scans to keep executing."
+                        );
                         break;
                     }
 
