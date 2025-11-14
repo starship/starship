@@ -23,16 +23,10 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### 先決要求
-
-```sh
-pkg install getconf
-```
-
 ### 安裝
 
 ```sh
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
+pkg install starship
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
