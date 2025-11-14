@@ -1921,6 +1921,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | Option               | Default                      | Description                                                                          |
 | -------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
 | `commit_hash_length` | `7`                          | The length of the displayed git commit hash.                                         |
+| `datetime`         | `false`                    | The datime of the last git commit.                                                       |
 | `format`             | `'[\($hash$tag\)]($style) '` | The format for the module.                                                           |
 | `style`              | `'bold green'`               | The style for the module.                                                            |
 | `only_detached`      | `true`                       | Only show git commit hash when in detached `HEAD` state                              |

@@ -15,6 +15,7 @@ pub struct GitCommitConfig<'a> {
     pub disabled: bool,
     pub tag_symbol: &'a str,
     pub tag_disabled: bool,
+    pub datetime_disabled: bool,
     pub tag_max_candidates: usize,
 }
 
@@ -27,6 +28,7 @@ impl Default for GitCommitConfig<'_> {
             style: "green bold",
             only_detached: true,
             disabled: false,
+            datetime_disabled: false,
             tag_symbol: " 🏷  ",
             tag_disabled: true,
             tag_max_candidates: 0,

@@ -1,6 +1,8 @@
 use super::{Context, Module, ModuleConfig};
 use gix::commit::describe::SelectRef::AllTags;
 
+use std::process::Command;
+
 use crate::configs::git_commit::GitCommitConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
@@ -34,6 +36,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     config.tag_symbol,
                     git_tag(context.get_repo().ok()?, &config)?
                 ))),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "datetime" if !config.datetime_disabled => Some(Ok(
+                    git_datetime()?
+                        )),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -74,6 +82,25 @@ fn git_hash(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
         "{}",
         head_id.to_hex_with_len(config.commit_hash_length)
     ))
+}
+
+fn git_datetime() -> Option<String> {
+    let output = Command::new("git")
+        .args(["--no-pager", "log", "-1"])
+        .output()
+        .ok()?;
+
+    if !output.status.success() {
+        eprintln!("Git log failed: {}", String::from_utf8_lossy(&output.stderr));
+        return None;
+    }
+
+    let stdout = str::from_utf8(&output.stdout).ok()?;
+
+    let line = stdout.lines().take(1).last()?;
+    let extracted = &line[12.min(line.len())..18.min(line.len())];
+
+    Some(extracted.to_string())
 }
 
 #[cfg(test)]
@@ -386,6 +413,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
+                    datetime_disabled = false
                     tag_symbol = " "
             })
             .path(repo_dir.path())
@@ -447,6 +475,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
+                    datetime_disabled = true
                     tag_symbol = " "
             })
             .path(repo_dir.path())
