@@ -2047,6 +2047,7 @@ current directory.
 | Option               | Default                                       | Description                                                                                                 |
 | -------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `dirty`              | `'*'`                                         | This branch is dirty.                                                                                       |
 | `conflicted`         | `'='`                                         | This branch has merge conflicts.                                                                            |
 | `ahead`              | `'⇡'`                                         | The format of `ahead`                                                                                       |
 | `behind`             | `'⇣'`                                         | The format of `behind`                                                                                      |
