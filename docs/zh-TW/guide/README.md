@@ -84,7 +84,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
-      alt="印尼文 (Bahasa)"
+      alt="印尼文 Bahasa"
  /></a>
   &nbsp;
   <a
