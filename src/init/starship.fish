@@ -3,10 +3,10 @@ function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish jo
     #   set -g __starship_fish_use_job_groups "false"
     if test "$__starship_fish_use_job_groups" = "false"
         # Legacy behavior: counts PIDs (may overcount pipelines with terminated producers)
-        set -l __count (jobs -p 2>/dev/null | count)
+        set -f __count (jobs -p 2>/dev/null | count)
     else
         # Default behavior: count job groups
-        set -l __count (jobs -g 2>/dev/null | count)
+        set -f __count (jobs -g 2>/dev/null | count)
     end
     set -g STARSHIP_JOBS $__count
 end
