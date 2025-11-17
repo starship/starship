@@ -104,7 +104,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) if config.repo_root_style.is_some() => {
+        Some(repo_root)
+            if config.repo_root_style.is_some()
+                && (!home_dir.starts_with(repo_root) || **repo_root == home_dir) =>
+        {
             // Handle the home directory by doing symbol substitution in both
             // the display directory and the repo root.
             let full_path = contract_path(display_dir, &home_dir, config.home_symbol);
