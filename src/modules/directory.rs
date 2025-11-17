@@ -577,6 +577,35 @@ mod tests {
 
         #[test]
         #[ignore]
+        fn git_repo_in_home_directory_repo_root_style() -> io::Result<()> {
+            let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
+            let dir = tmp_dir.path().join("src/fuel-gauge");
+            fs::create_dir_all(&dir)?;
+            init_repo(tmp_dir.path())?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    truncation_length = 5
+                    repo_root_style = "bold red"
+                })
+                .path(dir)
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .collect();
+            let expected = Some(format!(
+                "{}{}~{} ",
+                Color::Cyan.bold().prefix(),
+                Color::Red.prefix(),
+                Color::Cyan.paint("/src/fuel-gauge")
+            ));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        #[ignore]
         fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
