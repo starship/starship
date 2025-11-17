@@ -1,5 +1,5 @@
 use crate::shadow;
-use crate::utils::{self, exec_cmd};
+use crate::utils::{self, DEFAULT_COMMAND_TIMEOUT_MS, exec_cmd};
 use nu_ansi_term::Style;
 
 use std::fs;
@@ -250,7 +250,7 @@ fn get_starship_config() -> String {
 }
 
 fn get_shell_version(shell: &str) -> String {
-    let time_limit = Duration::from_millis(500);
+    let time_limit = Duration::from_millis(DEFAULT_COMMAND_TIMEOUT_MS);
     match shell {
         "powershell" => exec_cmd(
             shell,
