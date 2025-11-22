@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Test | Security Audit
         uses: EmbarkStudios/cargo-deny-action@v2.0.13
         with:
