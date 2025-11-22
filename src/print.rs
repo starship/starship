@@ -20,7 +20,7 @@ use crate::module::Module;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
+use crate::utils::{wrap_colorseq_for_shell, wrap_widechar_for_zsh};
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -67,6 +67,38 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+}
+
+#[test]
+fn test_zsh_wide_char_glitch_sequences() -> std::io::Result<()> {
+    use crate::context::{Shell, Target};
+    use crate::test::default_context;
+
+    let dir = tempfile::tempdir()?;
+    let mut context = default_context().set_config(toml::toml! {
+        add_newline = false
+        format = "$custom"
+        [custom.emoji_test]
+        when = true
+        format = "🥟 test 🐚"
+    });
+    context.current_dir = dir.path().to_path_buf();
+    context.shell = Shell::Zsh;
+    context.target = Target::Main;
+
+    let result = get_prompt(&context);
+
+    assert!(
+        result.contains("%{🥟%2G%}"),
+        "Should contain dumpling glitch sequence"
+    );
+    assert!(
+        result.contains("%{🐚%2G%}"),
+        "Should contain shell glitch sequence"
+    );
+    assert!(result.contains(" test "), "Should preserve normal text");
+
+    dir.close()
 }
 
 pub fn prompt(args: Properties, target: Target) {
@@ -137,7 +169,10 @@ pub fn get_prompt(context: &Context) -> String {
     // color sequences for this specific shell
     let shell_wrapped_output =
         wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
-    write!(buf, "{shell_wrapped_output}").unwrap();
+
+    // Expliclty tell zsh how many cells wide characters should take up
+    let wide_char_wrapped_output = wrap_widechar_for_zsh(shell_wrapped_output, context.shell);
+    write!(buf, "{wide_char_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
