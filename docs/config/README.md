@@ -3073,7 +3073,7 @@ The `mise` module shows the current mise health as reported by running `mise doc
 ### Options
 
 | Option              | Default                                                              | Description                                      |
-|---------------------|----------------------------------------------------------------------|--------------------------------------------------|
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
 | `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
 | `style`             | `'bold purple'`                                                      | The style for the module.                        |
 | `format`            | `'on [$symbol$health]($style) '`                                     | The format for the module.                       |
