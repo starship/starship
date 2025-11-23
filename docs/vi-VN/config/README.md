@@ -1585,7 +1585,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 | Tuỳ chọn            | Mặc định                                                                                                                    | Mô tả                                                                     |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of COBOL.                   |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                 |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | Định dạng cho module.                                                     |
 | `version_format`    | `'${raw}'`                                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold purple'`                                                                                                             | Kiểu cho module.                                                          |
