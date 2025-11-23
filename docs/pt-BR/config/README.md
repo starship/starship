@@ -1585,7 +1585,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 | Opções              | Padrão                                                                                                                      | Descrição                                                                           |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | O simbolo usado antes de exibir a versão do COBOL.                                  |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                           |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | O formato do módulo.                                                                |
 | `version_format`    | `'${raw}'`                                                                                                                  | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold purple'`                                                                                                             | O estilo do módulo.                                                                 |
