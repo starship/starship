@@ -268,38 +268,51 @@ where
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-enum PrevColor {
-    Fg,
-    Bg,
+pub(crate) enum RefColor {
+    PrevFg,
+    PrevBg,
+    NextFg,
+    NextBg,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 /// Wrapper for `nu_ansi_term::Style` that supports referencing the previous style's foreground/background color.
 pub struct Style {
-    style: nu_ansi_term::Style,
-    bg: Option<PrevColor>,
-    fg: Option<PrevColor>,
+    pub(crate) style: nu_ansi_term::Style,
+    pub(crate) bg: Option<RefColor>,
+    pub(crate) fg: Option<RefColor>,
 }
 
 impl Style {
-    pub fn to_ansi_style(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
-        let Some(prev_style) = prev else {
+    pub fn to_ansi_style(
+        &self,
+        prev: Option<&nu_ansi_term::Style>,
+        next: Option<&nu_ansi_term::Style>,
+    ) -> nu_ansi_term::Style {
+        if prev.is_none() && next.is_none() {
             return self.style;
-        };
+        }
+
+        let prev_style = prev.unwrap_or(&self.style);
+        let next_style = next.unwrap_or(&self.style);
 
         let mut current = self.style;
 
-        if let Some(prev_color) = self.bg {
-            match prev_color {
-                PrevColor::Fg => current.background = prev_style.foreground,
-                PrevColor::Bg => current.background = prev_style.background,
+        if let Some(ref_color) = self.bg {
+            match ref_color {
+                RefColor::PrevFg => current.background = prev_style.foreground,
+                RefColor::PrevBg => current.background = prev_style.background,
+                RefColor::NextFg => current.background = next_style.foreground,
+                RefColor::NextBg => current.background = next_style.background,
             }
         }
 
-        if let Some(prev_color) = self.fg {
-            match prev_color {
-                PrevColor::Fg => current.foreground = prev_style.foreground,
-                PrevColor::Bg => current.foreground = prev_style.background,
+        if let Some(ref_color) = self.fg {
+            match ref_color {
+                RefColor::PrevFg => current.foreground = prev_style.foreground,
+                RefColor::PrevBg => current.foreground = prev_style.background,
+                RefColor::NextFg => current.foreground = next_style.foreground,
+                RefColor::NextBg => current.foreground = next_style.background,
             }
         }
 
@@ -316,14 +329,14 @@ impl Style {
         }
     }
 
-    fn fg(&self, prev_color: PrevColor) -> Self {
+    fn fg(&self, prev_color: RefColor) -> Self {
         Self {
             fg: Some(prev_color),
             ..*self
         }
     }
 
-    fn bg(&self, prev_color: PrevColor) -> Self {
+    fn bg(&self, prev_color: RefColor) -> Self {
         Self {
             bg: Some(prev_color),
             ..*self
@@ -388,11 +401,17 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
                 "hidden" => Some(style.map_style(nu_ansi_term::Style::hidden)),
                 "strikethrough" => Some(style.map_style(nu_ansi_term::Style::strikethrough)),
 
-                "prev_fg" if col_fg => Some(style.fg(PrevColor::Fg)),
-                "prev_fg" => Some(style.bg(PrevColor::Fg)),
+                "prev_fg" if col_fg => Some(style.fg(RefColor::PrevFg)),
+                "prev_fg" => Some(style.bg(RefColor::PrevFg)),
 
-                "prev_bg" if col_fg => Some(style.fg(PrevColor::Bg)),
-                "prev_bg" => Some(style.bg(PrevColor::Bg)),
+                "prev_bg" if col_fg => Some(style.fg(RefColor::PrevBg)),
+                "prev_bg" => Some(style.bg(RefColor::PrevBg)),
+
+                "next_fg" if col_fg => Some(style.fg(RefColor::NextFg)),
+                "next_fg" => Some(style.bg(RefColor::NextFg)),
+
+                "next_bg" if col_fg => Some(style.fg(RefColor::NextBg)),
+                "next_bg" => Some(style.bg(RefColor::NextBg)),
 
                 // When the string is supposed to be a color:
                 // Decide if we yield none, reset background or set color.
@@ -735,12 +754,12 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
         let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert!(mystyle.to_ansi_style(None).is_bold);
-        assert!(mystyle.to_ansi_style(None).is_italic);
-        assert!(mystyle.to_ansi_style(None).is_underline);
-        assert!(mystyle.to_ansi_style(None).is_dimmed);
+        assert!(mystyle.to_ansi_style(None, None).is_bold);
+        assert!(mystyle.to_ansi_style(None, None).is_italic);
+        assert!(mystyle.to_ansi_style(None, None).is_underline);
+        assert!(mystyle.to_ansi_style(None, None).is_dimmed);
         assert_eq!(
-            mystyle.to_ansi_style(None),
+            mystyle.to_ansi_style(None, None),
             AnsiStyle::new()
                 .bold()
                 .italic()
@@ -754,13 +773,13 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_inverted_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD InVeRTed");
         let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert!(mystyle.to_ansi_style(None).is_bold);
-        assert!(mystyle.to_ansi_style(None).is_italic);
-        assert!(mystyle.to_ansi_style(None).is_underline);
-        assert!(mystyle.to_ansi_style(None).is_dimmed);
-        assert!(mystyle.to_ansi_style(None).is_reverse);
+        assert!(mystyle.to_ansi_style(None, None).is_bold);
+        assert!(mystyle.to_ansi_style(None, None).is_italic);
+        assert!(mystyle.to_ansi_style(None, None).is_underline);
+        assert!(mystyle.to_ansi_style(None, None).is_dimmed);
+        assert!(mystyle.to_ansi_style(None, None).is_reverse);
         assert_eq!(
-            mystyle.to_ansi_style(None),
+            mystyle.to_ansi_style(None, None),
             AnsiStyle::new()
                 .bold()
                 .italic()
@@ -775,13 +794,13 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_blink_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD bLiNk");
         let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert!(mystyle.to_ansi_style(None).is_bold);
-        assert!(mystyle.to_ansi_style(None).is_italic);
-        assert!(mystyle.to_ansi_style(None).is_underline);
-        assert!(mystyle.to_ansi_style(None).is_dimmed);
-        assert!(mystyle.to_ansi_style(None).is_blink);
+        assert!(mystyle.to_ansi_style(None, None).is_bold);
+        assert!(mystyle.to_ansi_style(None, None).is_italic);
+        assert!(mystyle.to_ansi_style(None, None).is_underline);
+        assert!(mystyle.to_ansi_style(None, None).is_dimmed);
+        assert!(mystyle.to_ansi_style(None, None).is_blink);
         assert_eq!(
-            mystyle.to_ansi_style(None),
+            mystyle.to_ansi_style(None, None),
             AnsiStyle::new()
                 .bold()
                 .italic()
@@ -796,13 +815,13 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_hidden_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD hIDDen");
         let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert!(mystyle.to_ansi_style(None).is_bold);
-        assert!(mystyle.to_ansi_style(None).is_italic);
-        assert!(mystyle.to_ansi_style(None).is_underline);
-        assert!(mystyle.to_ansi_style(None).is_dimmed);
-        assert!(mystyle.to_ansi_style(None).is_hidden);
+        assert!(mystyle.to_ansi_style(None, None).is_bold);
+        assert!(mystyle.to_ansi_style(None, None).is_italic);
+        assert!(mystyle.to_ansi_style(None, None).is_underline);
+        assert!(mystyle.to_ansi_style(None, None).is_dimmed);
+        assert!(mystyle.to_ansi_style(None, None).is_hidden);
         assert_eq!(
-            mystyle.to_ansi_style(None),
+            mystyle.to_ansi_style(None, None),
             AnsiStyle::new()
                 .bold()
                 .italic()
@@ -817,13 +836,13 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_strikethrough_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD StRiKEthROUgh");
         let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert!(mystyle.to_ansi_style(None).is_bold);
-        assert!(mystyle.to_ansi_style(None).is_italic);
-        assert!(mystyle.to_ansi_style(None).is_underline);
-        assert!(mystyle.to_ansi_style(None).is_dimmed);
-        assert!(mystyle.to_ansi_style(None).is_strikethrough);
+        assert!(mystyle.to_ansi_style(None, None).is_bold);
+        assert!(mystyle.to_ansi_style(None, None).is_italic);
+        assert!(mystyle.to_ansi_style(None, None).is_underline);
+        assert!(mystyle.to_ansi_style(None, None).is_dimmed);
+        assert!(mystyle.to_ansi_style(None, None).is_strikethrough);
         assert_eq!(
-            mystyle.to_ansi_style(None),
+            mystyle.to_ansi_style(None, None),
             AnsiStyle::new()
                 .bold()
                 .italic()
@@ -839,7 +858,7 @@ mod tests {
         // Test a "plain" style with no formatting
         let config = Value::from("");
         let plain_style = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert_eq!(plain_style.to_ansi_style(None), AnsiStyle::new());
+        assert_eq!(plain_style.to_ansi_style(None, None), AnsiStyle::new());
 
         // Test a string that's clearly broken
         let config = Value::from("djklgfhjkldhlhk;j");
@@ -904,18 +923,19 @@ mod tests {
         .0;
 
         assert_eq!(
-            both_prevfg.to_ansi_style(None),
+            both_prevfg.to_ansi_style(None, None),
             AnsiStyle::default().fg(Color::Black).bold().underline()
         );
 
         // But if there is a style on the previous string, then use that
+        let next_style = AnsiStyle::new().underline().fg(Color::Blue).on(Color::Cyan);
         let prev_style = AnsiStyle::new()
             .underline()
             .fg(Color::Yellow)
             .on(Color::Red);
 
         assert_eq!(
-            both_prevfg.to_ansi_style(Some(&prev_style)),
+            both_prevfg.to_ansi_style(Some(&prev_style), Some(&next_style)),
             AnsiStyle::new()
                 .fg(Color::Red)
                 .on(Color::Yellow)
@@ -928,7 +948,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_fg.to_ansi_style(Some(&prev_style)),
+            fg_prev_fg.to_ansi_style(Some(&prev_style), Some(&next_style)),
             AnsiStyle::new().fg(Color::Yellow)
         );
 
@@ -936,7 +956,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_bg.to_ansi_style(Some(&prev_style)),
+            fg_prev_bg.to_ansi_style(Some(&prev_style), Some(&next_style)),
             AnsiStyle::new().fg(Color::Red)
         );
 
@@ -944,7 +964,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_fg.to_ansi_style(Some(&prev_style)),
+            bg_prev_fg.to_ansi_style(Some(&prev_style), Some(&next_style)),
             AnsiStyle::new().on(Color::Yellow)
         );
 
@@ -952,8 +972,72 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_bg.to_ansi_style(Some(&prev_style)),
+            bg_prev_bg.to_ansi_style(Some(&prev_style), Some(&next_style)),
             AnsiStyle::new().on(Color::Red)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_next() {
+        // Test that previous has no effect when there is no previous style
+        let both_prevfg = <StyleWrapper>::from_config(&Value::from(
+            "bold fg:black fg:next_bg bg:next_fg underline",
+        ))
+        .unwrap()
+        .0;
+
+        assert_eq!(
+            both_prevfg.to_ansi_style(None, None),
+            AnsiStyle::default().fg(Color::Black).bold().underline()
+        );
+
+        // But if there is a style on the previous string, then use that
+        let next_style = AnsiStyle::new().underline().fg(Color::Blue).on(Color::Cyan);
+        let prev_style = AnsiStyle::new()
+            .underline()
+            .fg(Color::Yellow)
+            .on(Color::Red);
+
+        assert_eq!(
+            both_prevfg.to_ansi_style(Some(&prev_style), Some(&next_style)),
+            AnsiStyle::new()
+                .fg(Color::Cyan)
+                .on(Color::Blue)
+                .bold()
+                .underline()
+        );
+
+        // Test that all the combinations of previous colors work
+        let fg_prev_fg = <StyleWrapper>::from_config(&Value::from("fg:next_fg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_prev_fg.to_ansi_style(Some(&prev_style), Some(&next_style)),
+            AnsiStyle::new().fg(Color::Blue)
+        );
+
+        let fg_prev_bg = <StyleWrapper>::from_config(&Value::from("fg:next_bg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_prev_bg.to_ansi_style(Some(&prev_style), Some(&next_style)),
+            AnsiStyle::new().fg(Color::Cyan)
+        );
+
+        let bg_prev_fg = <StyleWrapper>::from_config(&Value::from("bg:next_fg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_prev_fg.to_ansi_style(Some(&prev_style), Some(&next_style)),
+            AnsiStyle::new().on(Color::Blue)
+        );
+
+        let bg_prev_bg = <StyleWrapper>::from_config(&Value::from("bg:next_bg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_prev_bg.to_ansi_style(Some(&prev_style), Some(&next_style)),
+            AnsiStyle::new().on(Color::Cyan)
         );
     }
 
@@ -963,7 +1047,7 @@ mod tests {
         let config = Value::from("bg:#050505 underline fg:120");
         let flipped_style = <StyleWrapper>::from_config(&config).unwrap().0;
         assert_eq!(
-            flipped_style.to_ansi_style(None),
+            flipped_style.to_ansi_style(None, None),
             AnsiStyle::new()
                 .underline()
                 .fg(Color::Fixed(120))
@@ -974,7 +1058,7 @@ mod tests {
         let config = Value::from("bg:120 bg:125 bg:127 fg:127 122 125");
         let multi_style = <StyleWrapper>::from_config(&config).unwrap().0;
         assert_eq!(
-            multi_style.to_ansi_style(None),
+            multi_style.to_ansi_style(None, None),
             AnsiStyle::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
     }

@@ -356,7 +356,8 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `none`
 
 where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future.
-`<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise.
+`<color>` can also be set to `prev_fg`, `prev_bg`, `next_fg` or `next_fg`, which evaluates to, respectively, the previous and next item's foreground or background color if available or `none` otherwise.
+Please also note that if the previous or next module also references a color with, for instance, `bg:next_fg`, the reference won't be followed and the default style will apply.
 `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
