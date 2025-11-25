@@ -460,6 +460,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::module::ansi_line;
     use nu_ansi_term::Color;
 
     // match_next(result: IterMut<Segment>, value, style)
@@ -748,19 +749,38 @@ mod tests {
     fn test_empty_textgroup_propagates_prev_bg() {
         const FORMAT_STR: &str = "[](bg:#9A348E)[X](bg:prev_bg)";
 
-        let formatter = StringFormatter::new(FORMAT_STR).unwrap();
-        let result = formatter.parse(None, None).unwrap();
+        let segments = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .parse(None, None)
+            .unwrap();
+        let result = ansi_line(&mut segments.iter().peekable(), None);
 
         assert_eq!(result.len(), 2);
 
-        // First segment: empty with bg:#9A348E
-        let first_ansi = result[0].ansi_string(None);
-        let prev_style = first_ansi.style_ref();
-
         // Second segment: should inherit bg from first
-        let second_ansi = result[1].ansi_string(Some(prev_style));
+        let second_ansi = result.get(1).unwrap();
         assert_eq!(
             second_ansi.style_ref().background,
+            Some(nu_ansi_term::Color::Rgb(154, 52, 142))
+        );
+    }
+
+    #[test]
+    fn test_empty_textgroup_propagates_next_bg() {
+        const FORMAT_STR: &str = "[x](bg:next_bg)[X](bg:#9A348E)";
+
+        let segments = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .parse(None, None)
+            .unwrap();
+        let result = ansi_line(&mut segments.iter().peekable(), None);
+
+        assert_eq!(result.len(), 2);
+
+        // First segment: should inherit bg from second
+        let first_ansi = result.get(0).unwrap();
+        assert_eq!(
+            first_ansi.style_ref().background,
             Some(nu_ansi_term::Color::Rgb(154, 52, 142))
         );
     }
