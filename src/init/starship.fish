@@ -11,6 +11,13 @@ function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish jo
     set -g STARSHIP_JOBS $__count
 end
 
+function __starship_set_fish_needs_clear --description 'Set STARSHIP_FISH_NEEDS_CLEAR on fish <= 3.2.x'
+    set vs (string split . $version)
+    if test \( $vs[1] -eq 3 -a $vs[2] -le 2 \) -o \( $vs[1] -lt 3 \)
+        set -gx STARSHIP_FISH_NEEDS_CLEAR 1
+    end
+end
+
 function fish_prompt
     switch "$fish_key_bindings"
         case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
@@ -25,6 +32,7 @@ function fish_prompt
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
 
     __starship_set_job_count
+    __starship_set_fish_needs_clear
 
     if test "$TRANSIENT" = "1"
         set -g TRANSIENT 0
@@ -56,6 +64,7 @@ function fish_right_prompt
 
     # Now it's safe to call job count function (after status capture)
     __starship_set_job_count
+    __starship_set_fish_needs_clear
 
     if test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
