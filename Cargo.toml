@@ -44,7 +44,7 @@ dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 gix = { version = "0.75.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
 indexmap = { version = "2.12.1", features = ["serde"] }
-jsonc-parser = { version = "0.27.1", features = ["serde"] }
+jsonc-parser = { version = "0.28.0", features = ["serde"] }
 log = { version = "0.4.28", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
