@@ -1,3 +1,5 @@
+use crate::context::Context;
+use crate::context::Shell;
 use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
@@ -6,9 +8,6 @@ use std::io::{Error, ErrorKind, Result};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
-
-use crate::context::Context;
-use crate::context::Shell;
 
 /// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
 #[cfg(not(test))]
