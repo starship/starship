@@ -23,14 +23,6 @@ use crate::segment::Segment;
 use crate::shadow;
 use crate::utils::wrap_colorseq_for_shell;
 
-pub struct Grapheme<'a>(pub &'a str);
-
-impl Grapheme<'_> {
-    pub fn width(&self) -> usize {
-        UnicodeWidthStr::width(self.0)
-    }
-}
-
 pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
@@ -50,7 +42,6 @@ where
             .replace_all(self.as_ref(), "")
             .into_owned()
             .graphemes(true)
-            .map(Grapheme)
             .map(|g| g.width())
             .sum()
     }
@@ -160,7 +151,7 @@ pub fn get_prompt(context: &Context) -> String {
         let mut push_wrapped_text = |range: Range<usize>, new_buf: &mut String| {
             for g in buf[range].graphemes(true) {
                 let mut newline = g == "\n" || g == "\r\n";
-                let width = if !newline { Grapheme(g).width() } else { 0 };
+                let width = if !newline { g.width() } else { 0 };
 
                 if width > 0 && len > 0 && len + width > context.width {
                     new_buf.push('\n');
@@ -328,7 +319,7 @@ pub fn explain(args: Properties) {
                 }
 
                 // Handle normal wrapping
-                current_pos += Grapheme(g).width();
+                current_pos += g.width();
                 // Wrap when hitting max width or newline
                 if g == "\n" || current_pos > desc_width {
                     // trim spaces on linebreak
