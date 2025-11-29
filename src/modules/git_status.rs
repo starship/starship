@@ -17,7 +17,7 @@ const ALL_STATUS_FORMAT: &str =
 ///
 /// Will display the branch name if the current directory is a git repo
 /// By default, the following symbols will be used to represent the repo's status:
-///   - `=` – This branch has merge conflicts
+///   - `≠` – This branch has merge conflicts
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
@@ -27,7 +27,7 @@ const ALL_STATUS_FORMAT: &str =
 ///   - `!` — There are file modifications in the working directory
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
-///   - `✘` — A file's deletion has been added to the staging area
+///   - `⨯` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -943,7 +943,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("=");
+        let expected = format_output("≠");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -958,11 +958,11 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                conflicted = "=$count"
+                conflicted = "≠$count"
             })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("=1");
+        let expected = format_output("≠1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1373,7 +1373,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘");
+        let expected = format_output("⨯");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1388,7 +1388,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘");
+        let expected = format_output("⨯");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1403,11 +1403,11 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                deleted = "✘$count"
+                deleted = "⨯$count"
             })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘1");
+        let expected = format_output("⨯1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1447,7 +1447,7 @@ pub(crate) mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("✘?");
+        let expected = format_output("⨯?");
 
         assert_eq!(expected, actual);
         worktree_dir.close()?;
