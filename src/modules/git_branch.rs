@@ -6,6 +6,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::git_branch::GitBranchConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
+use crate::modules::git_status::uses_reftables;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -33,13 +34,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let uses_reftables = gix_repo
-        .config_snapshot()
-        .string("extensions.refstorage")
-        .is_some_and(|kind| kind.as_ref() == "reftable");
-
     // Get branch and remote information
-    let (branch_name, remote_branch, remote_name) = if uses_reftables {
+    let (branch_name, remote_branch, remote_name) = if uses_reftables(&gix_repo) {
         // Use git executable for branch information
         match get_branch_info_from_git(context, repo) {
             Some((branch, upstream)) => {
