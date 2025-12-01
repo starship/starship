@@ -2089,8 +2089,8 @@ The following variables can be used in `format`:
 | `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working diretory.                             |
-| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working diretory.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
