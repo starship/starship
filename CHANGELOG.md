@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.24.1](https://github.com/starship/starship/compare/v1.24.0...v1.24.1) (2025-11-16)
+
+
+### Bug Fixes
+
+* **fish:** fix job counting ([#7082](https://github.com/starship/starship/issues/7082)) ([7795bab](https://github.com/starship/starship/commit/7795bab3bd55c6515bce73e1e01c977203113ced))
+* improve timeout warning message in the directory scanner ([#7120](https://github.com/starship/starship/issues/7120)) ([d6daf8a](https://github.com/starship/starship/commit/d6daf8a4e1cdfbd361efe26ddefa0b60efaa5b1d))
+
 ## [1.24.0](https://github.com/starship/starship/compare/v1.23.0...v1.24.0) (2025-10-25)
 
 

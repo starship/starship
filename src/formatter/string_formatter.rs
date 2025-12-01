@@ -364,7 +364,7 @@ impl<'a> StringFormatter<'a> {
                                                     VariableValue::Meta(meta_elements) => {
                                                         let meta_variables =
                                                             clone_without_meta(variables);
-                                                        should_show_meta_var(
+                                                        should_show_elements(
                                                             meta_elements,
                                                             &meta_variables,
                                                         )
@@ -381,46 +381,6 @@ impl<'a> StringFormatter<'a> {
                                                 })
                                         })
                                 })
-                            }
-
-                            // Check if a single format element should be shown.
-                            fn should_show_format_element<'a>(
-                                format_element: &FormatElement,
-                                variables: &'a VariableMapType<'a>,
-                            ) -> bool {
-                                match format_element {
-                                    // Should not usually happen, but if it does, check if the variable
-                                    // is set using `should_show_elements`.
-                                    FormatElement::Variable(_) => should_show_elements(
-                                        std::slice::from_ref(format_element),
-                                        variables,
-                                    ),
-                                    FormatElement::Conditional(format) => {
-                                        should_show_elements(format, variables)
-                                    }
-                                    FormatElement::TextGroup(textgroup) => textgroup
-                                        .format
-                                        .iter()
-                                        .any(|f| should_show_format_element(f, variables)),
-                                    FormatElement::Text(t) => !t.is_empty(),
-                                }
-                            }
-
-                            // If metavariables contain a variable they are treated set if one of them
-                            // is not empty.
-                            // If metavariables contain only text, they are also treated as set if the
-                            // string is not empty.
-                            fn should_show_meta_var<'a>(
-                                format_elements: &[FormatElement],
-                                variables: &'a VariableMapType<'a>,
-                            ) -> bool {
-                                if !format_elements.get_variables().is_empty() {
-                                    return should_show_elements(format_elements, variables);
-                                }
-
-                                format_elements
-                                    .iter()
-                                    .any(|f| should_show_format_element(f, variables))
                             }
 
                             let should_show: bool = should_show_elements(&format, variables);
@@ -794,42 +754,6 @@ mod tests {
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, " ", None);
-    }
-
-    #[test]
-    fn test_conditional_meta_variable_empty_string() {
-        const FORMAT_STR: &str = r"($colored $uncolored)";
-
-        let formatter = StringFormatter::new(FORMAT_STR)
-            .unwrap()
-            .map_meta(|var, _| match var {
-                "colored" => Some("[](green)"),
-                "uncolored" => Some(""),
-                _ => None,
-            });
-        let result = formatter.parse(None, None).unwrap();
-
-        let mut result_iter = result.iter();
-        assert!(result_iter.next().is_none());
-    }
-
-    #[test]
-    fn test_conditional_meta_variable_string() {
-        const FORMAT_STR: &str = r"($colored $uncolored)";
-
-        let formatter = StringFormatter::new(FORMAT_STR)
-            .unwrap()
-            .map_meta(|var, _| match var {
-                "colored" => Some("[green](green)"),
-                "uncolored" => Some("text"),
-                _ => None,
-            });
-        let result = formatter.parse(None, None).unwrap();
-        let mut result_iter = result.iter();
-        match_next!(result_iter, "green", Some(Color::Green.normal()));
-        match_next!(result_iter, " ", None);
-        match_next!(result_iter, "text", None);
-        assert!(result_iter.next().is_none());
     }
 
     #[test]
