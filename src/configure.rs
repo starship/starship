@@ -313,7 +313,7 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 
 #[cfg(test)]
 mod tests {
-    use std::{fs::create_dir, io, path::PathBuf};
+    use std::{fs::create_dir_all, io, path::PathBuf};
 
     use tempfile::TempDir;
     use toml_edit::Item;
@@ -584,7 +584,7 @@ mod tests {
     #[test]
     fn write_and_get_configuration_test() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let context = setup_config(&dir, true, StarshipConfigEnvScenario::NotSpecified)?;
+        let context = setup_config(&dir, true, false, StarshipConfigEnvScenario::NotSpecified)?;
         let mut doc = get_configuration_edit(&context);
         doc["directory"]["format"] = Item::Value("myformat".into());
         write_configuration(&context, &doc);
@@ -603,26 +603,30 @@ mod tests {
     #[test]
     fn print_configuration_scenarios() -> io::Result<()> {
         run_print_configuration_test(
-            "~/.config/starship.toml, no STARSHIP_CONFIG uses home",
+            "~/.config/starship/config.toml, no STARSHIP_CONFIG uses home",
             true,
+            false,
             StarshipConfigEnvScenario::NotSpecified,
             PRINT_CONFIG_HOME,
         )?;
         run_print_configuration_test(
-            "no ~/.config/starship.toml, no STARSHIP_CONFIG uses default",
+            "no $XDG_CONFIG_HOME/starship/config.toml, no STARSHIP_CONFIG uses default",
             false,
+            true,
             StarshipConfigEnvScenario::NotSpecified,
             PRINT_CONFIG_DEFAULT,
         )?;
         run_print_configuration_test(
-            "~/.config/starship.toml, STARSHIP_CONFIG nonexisting file uses default",
+            "~/.config/starship/config.toml, STARSHIP_CONFIG nonexisting file uses default",
             true,
+            false,
             StarshipConfigEnvScenario::NonExistingFile,
             PRINT_CONFIG_DEFAULT,
         )?;
         run_print_configuration_test(
-            "~/.config/starship.toml, STARSHIP_CONFIG existing file uses STARSHIP_CONFIG file",
+            "~/.config/starship/config.toml, STARSHIP_CONFIG existing file uses STARSHIP_CONFIG file",
             true,
+            false,
             StarshipConfigEnvScenario::ExistingFile,
             PRINT_CONFIG_ENV,
         )?;
@@ -639,11 +643,17 @@ mod tests {
     fn run_print_configuration_test(
         message: &str,
         home_file_exists: bool,
+        xdg_config_home_set: bool,
         starship_config_env_scenario: StarshipConfigEnvScenario,
         expected_first_line: &str,
     ) -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let context = setup_config(&dir, home_file_exists, starship_config_env_scenario)?;
+        let context = setup_config(
+            &dir,
+            home_file_exists,
+            xdg_config_home_set,
+            starship_config_env_scenario,
+        )?;
         let config = print_configuration(&context, false, &["custom".to_string()]);
         let first_line = config.split('\n').next().unwrap();
         assert_eq!(expected_first_line, first_line, "{message}");
@@ -653,14 +663,15 @@ mod tests {
     fn setup_config(
         dir: &TempDir,
         home_file_exists: bool,
+        xdg_config_home_set: bool,
         starship_config_env_scenario: StarshipConfigEnvScenario,
     ) -> io::Result<Context<'_>> {
-        let config_path = dir.path().to_path_buf().join(".config");
-        create_dir(&config_path)?;
-        let home_starship_toml = config_path.join("starship.toml");
+        let config_dir = dir.path().join(".config/starship");
+        create_dir_all(&config_dir)?;
+        let config_toml = config_dir.join("config.toml");
         let env_toml = dir.path().join("env.toml");
         if home_file_exists {
-            let mut home_file = File::create(home_starship_toml)?;
+            let mut home_file = File::create(config_toml)?;
             home_file.write_all(PRINT_CONFIG_HOME.as_bytes())?;
         }
 
@@ -678,10 +689,15 @@ mod tests {
         if let Some(v) = env_starship_config {
             env.insert("STARSHIP_CONFIG", v.to_string_lossy().to_string());
         }
-        env.insert(
-            "HOME",
-            dir.path().to_path_buf().to_string_lossy().to_string(),
-        );
+
+        if xdg_config_home_set {
+            env.insert(
+                "XDG_CONFIG_HOME",
+                dir.path().join(".config").to_string_lossy().to_string(),
+            );
+        } else {
+            env.insert("HOME", dir.path().to_string_lossy().to_string());
+        }
 
         Ok(Context::new_with_shell_and_path(
             Properties::default(),
