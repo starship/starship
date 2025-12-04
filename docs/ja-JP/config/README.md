@@ -1583,17 +1583,17 @@ The `fortran` module shows the current compiler version of Fortran.
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                                       | 説明                                                     |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `symbol`            | `' '`                                                                                                                      | COBOLのバージョンを表示する前に使用される記号です。                           |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | module のフォーマットです。                                      |
-| `version_format`    | `'${raw}'`                                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `style`             | `'bold purple'`                                                                                                             | モジュールのスタイルです。                                          |
-| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['fpm.toml']`                                                                                                              | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | コンパイラを検出する方法                                           |
-| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                         |
+| オプション               | デフォルト                                                                                                                       | 説明                                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran. |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | module のフォーマットです。                                         |
+| `version_format`    | `'${raw}'`                                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。    |
+| `style`             | `'bold purple'`                                                                                                             | モジュールのスタイルです。                                             |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | どの拡張子がこのモジュールをアクティブにするか                                   |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | どのファイル名がこのモジュールをアクティブにするか                                 |
+| `detect_folders`    | `[]`                                                                                                                        | どのフォルダーがこのモジュールをアクティブにするか                                 |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | コンパイラを検出する方法                                              |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                            |
 
 ### 変数
 
