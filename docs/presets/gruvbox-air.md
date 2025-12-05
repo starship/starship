@@ -1,10 +1,10 @@
 [Return to Presets](./#gruvbox-air)
 
-# Gruvbox Rainbow Preset
+# Gruvbox Air Preset
 
 This preset is heavily inspired by [gruvbox-rainbow](./gruvbox-rainbow.md)
 
-![Screenshot of Gruvbox Air preset](/presets/img/gruvbox-Air.png)
+![Screenshot of Gruvbox Air preset](./docs/public/presets/img/gruvbox-Air.png)
 
 ### Prerequisites
 
@@ -16,6 +16,6 @@ This preset is heavily inspired by [gruvbox-rainbow](./gruvbox-rainbow.md)
 starship preset gruvbox-air -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-air.toml){download}
+[Click to download TOML](./public/presets/toml/gruvbox-air.toml){download}
 
 <<< @/public/presets/toml/gruvbox-air.toml
