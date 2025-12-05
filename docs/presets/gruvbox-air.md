@@ -4,7 +4,7 @@
 
 This preset is heavily inspired by [gruvbox-rainbow](./gruvbox-rainbow.md)
 
-![Screenshot of Gruvbox Air preset](./img/gruvbox-Air.png)
+<img width="716" height="463" alt="gruvbox-air" src="https://github.com/user-attachments/assets/df25d682-838d-4c1b-a76b-38aa39e4cb2a" />
 
 ### Prerequisites
 
