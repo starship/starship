@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.2](https://github.com/starship/starship/compare/v1.24.1...v1.24.2) (2025-12-06)
+
+
+### Bug Fixes
+
+* **zsh:** fix job counting ([#7124](https://github.com/starship/starship/issues/7124)) ([46ab862](https://github.com/starship/starship/commit/46ab8621a7490bdcea635feb6233ce038264ff4e))
+
 ## [1.24.1](https://github.com/starship/starship/compare/v1.24.0...v1.24.1) (2025-11-16)
 
 
