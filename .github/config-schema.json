@@ -1008,7 +1008,7 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "[$symbol$health]($style) ",
+        "format": "on [$symbol$health]($style) ",
         "symbol": "mise ",
         "style": "bold purple",
         "disabled": true,
@@ -4523,7 +4523,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol$health]($style) "
+          "default": "on [$symbol$health]($style) "
         },
         "symbol": {
           "type": "string",
