@@ -249,8 +249,8 @@ fn get_repo_status(
     let has_untracked = !config.untracked.is_empty();
     let git_config = gix_repo.config_snapshot();
     if config.use_git_executable
-        || uses_reftables(&repo.repo.to_thread_local())
         || repo.fs_monitor_value_is_true
+        || uses_reftables(&repo.repo.to_thread_local())
         || gix_repo.index_or_empty().ok()?.is_sparse()
     {
         let mut args = vec!["status", "--porcelain=2"];

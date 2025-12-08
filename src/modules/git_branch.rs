@@ -38,16 +38,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let (branch_name, remote_branch, remote_name) = if uses_reftables(&gix_repo) {
         // Use git executable for branch information
         match get_branch_info_from_git(context, repo) {
-            Some((branch, upstream)) => {
+            Some((branch, remote_branch)) => {
                 // Successfully got branch name, parse upstream into remote_name and remote_branch
-                let (remote_name, remote_branch) = upstream
-                    .map(|upstream| {
-                        (
-                            find_longest_matching_remote_name(
-                                upstream.as_ref(),
-                                &gix_repo.remote_names(),
-                            ),
-                            Some(upstream),
+                let remote_name = remote_branch
+                    .as_ref()
+                    .map(|remote_branch| {
+                        find_longest_matching_remote_name(
+                            remote_branch.as_ref(),
+                            &gix_repo.remote_names(),
                         )
                     })
                     .unwrap_or_default();
