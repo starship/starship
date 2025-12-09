@@ -11,22 +11,12 @@ jobs:
   shellcheck:
     name: Shellcheck [Linter]
     runs-on: ubuntu-latest
-    permissions:
-      checks: write
-      contents: read
-      pull-requests: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v6
 
       - name: Lint | Run shellcheck
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          path: "install/install.sh"
-          severity: "warning"
-          # TODO: Remove exclude after fixing POSIX compatibility
-          # SC3045: read -p is not POSIX compliant
-          exclude: "SC3045"
+        run: shellcheck --severity=warning install/install.sh
 
   test_install_script:
     name: Test Install Script

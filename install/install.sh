@@ -280,6 +280,7 @@ confirm() {
         set_interrupt_handler
         set +e
         printf "Where would you like to install Starship? ${GREY}(e.g., /usr/local/bin)${NO_COLOR}\n"
+        # shellcheck disable=SC3045
         read -p "> Install Starship ${GREEN}${VERSION}${NO_COLOR} to: " path
         trap - INT
         rc=$?
