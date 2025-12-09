@@ -18,6 +18,21 @@ jobs:
       - name: Lint | Run shellcheck
         run: shellcheck --severity=warning install/**/*.sh
 
+  shfmt:
+    name: Shfmt [Formatter]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup | Install shfmt
+        run: |
+          curl -sS https://webi.sh/shfmt | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Format | Check shfmt
+        run: shfmt -d install/**/*.sh
+
   test_install_script:
     name: Test Install Script
     strategy:
