@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Lint | Run shellcheck
-        run: shellcheck --severity=warning install/install.sh
+        run: shellcheck --severity=warning install/**/*.sh
 
   test_install_script:
     name: Test Install Script
