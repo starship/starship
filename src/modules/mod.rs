@@ -104,6 +104,7 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 mod typst;
+mod upterm;
 
 #[cfg(feature = "battery")]
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
@@ -213,6 +214,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "typst" => typst::module(context),
+            "upterm" => upterm::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
             "vlang" => vlang::module(context),
@@ -349,6 +351,7 @@ pub fn description(module: &str) -> &'static str {
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "typst" => "The current installed version of typst",
+        "upterm" => "The upterm session indicator",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",
