@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     } else {
         log::warn!(
-            "`threshold` in [jobs] is deprecated . Please remove it and use `symbol_threshold` and `number_threshold`."
+            "`threshold` in [jobs] is deprecated. Please remove it and use `symbol_threshold` and `number_threshold`."
         );
 
         // The symbol should be shown if there are *any* background
