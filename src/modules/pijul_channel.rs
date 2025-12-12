@@ -1,5 +1,5 @@
 use super::utils::truncate::truncate_text;
-use super::{Context, Module, ModuleConfig};
+use super::{Context, Module, ModuleConfig, vcs};
 
 use crate::configs::pijul_channel::PijulConfig;
 use crate::formatter::StringFormatter;
@@ -8,15 +8,6 @@ use crate::formatter::StringFormatter;
 ///
 /// Will display the channel lame if the current directory is a pijul repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_repo = context
-        .try_begin_scan()?
-        .set_folders(&[".pijul"])
-        .is_match();
-
-    if !is_repo {
-        return None;
-    }
-
     let mut module = context.new_module("pijul_channel");
     let config: PijulConfig = PijulConfig::try_load(module.config);
 
@@ -24,6 +15,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.disabled {
         return None;
     }
+
+    vcs::discover_repo_root(context, vcs::Vcs::Pijul)?;
 
     let channel_name = get_pijul_current_channel(context)?;
 
