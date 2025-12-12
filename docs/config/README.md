@@ -267,6 +267,7 @@ $hostname\
 $localip\
 $shlvl\
 $singularity\
+$upterm\
 $kubernetes\
 $directory\
 $vcsh\
@@ -4772,6 +4773,39 @@ By default, the module will be shown if any of the following conditions are met:
 | style\*       |           | Mirrors the value of option `style`             |
 
 *: This variable can only be used as a part of a style string
+
+## Upterm
+
+The `upterm` module shows an indicator when in an [Upterm](https://upterm.dev) session.
+
+### Options
+
+| Option     | Default                    | Description                                       |
+| ---------- | -------------------------- | ------------------------------------------------- |
+| `format`   | `'via [$symbol]($style) '` | The format for the module.                        |
+| `symbol`   | `'🆙 '`                    | A format string representing the symbol of upterm |
+| `style`    | `'cyan bold'`              | The style for the module.                         |
+| `disabled` | `false`                    | Disables the `upterm` module.                     |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[upterm]
+format = '[$symbol]($style)'
+symbol = '🔗 '
+style = 'yellow bold'
+```
 
 ## Username
 

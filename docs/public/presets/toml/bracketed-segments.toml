@@ -261,6 +261,9 @@ format = '\[[$time]($style)\]'
 [typst]
 format = '\[[$symbol($version)]($style)\]'
 
+[upterm]
+format = '\[[$symbol]($style)\]'
+
 [username]
 format = '\[[$user]($style)\]'
 
