@@ -311,6 +311,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    permissions:
+      id-token: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v6
@@ -318,8 +320,12 @@ jobs:
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Build | Authenticate
+        uses: rust-lang/crates-io-auth-action@v1
+        id: auth
+
       - name: Build | Publish
-        run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish --token ${{ steps.auth.outputs.token }}
 
   update_brew_formula:
     name: Update Brew Formula
