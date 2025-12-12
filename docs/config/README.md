@@ -3956,13 +3956,15 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable     | Example         | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`         | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| Variable     | Example         | Description                                                  |
+| ------------ | --------------- | ------------------------------------------------------------ |
+| version      | `'v3.8.1'`      | The version of `python`                                      |
+| symbol       | `'🐍 '`         | Mirrors the value of option `symbol`                         |
+| style        | `'yellow bold'` | Mirrors the value of option `style`                          |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                   |
+| virtualenv   | `'venv'`        | The current `virtualenv` name                                |
+| dir          | `'./venv'`      | The `virtualenv` directory relative to the current directory |
+| prompt       | `'venv'`        | The `virtualenv` prompt                                      |
 
 ### Example
 
