@@ -5,6 +5,15 @@ If you have a preset to share, please [submit a PR](https://github.com/starship/
 
 To get details on how to use a preset, simply click on the image.
 
+## [Noir Éthéré ∞](https://github.com/Black0S/My-MacOS-Setup/blob/main/Config%20Starship/starship.toml)
+
+**Noir Éthéré ∞** is a fully custom Starship theme, personally designed for a refined and cinematic terminal experience.  
+It’s built using **Nerd Fonts** ideally **JetBrains Mono Nerd Font**, though any Nerd Font will work seamlessly.
+
+[Screenshot of Noir Éthéré ∞ preset](https://github.com/Black0S/My-MacOS-Setup/blob/main/Screenshots/CleanShot%202025-10-07%20at%2000.40.05%402x.png)
+
+[Download the Theme Preset](https://github.com/Black0S/My-MacOS-Setup/blob/main/Config%20Starship/starship.toml)
+
 ## [Nerd Font Symbols](./nerd-font.md)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
