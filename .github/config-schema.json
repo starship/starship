@@ -1200,6 +1200,7 @@
           "Alpaquita": "🔔 ",
           "AlmaLinux": "💠 ",
           "Alpine": "🏔️ ",
+          "ALTLinux": "Ⓐ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "AOSC": "🐱 ",
@@ -1209,6 +1210,7 @@
           "CachyOS": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
+          "Elementary": "🍏 ",
           "DragonFly": "🐉 ",
           "Emscripten": "🔗 ",
           "EndeavourOS": "🚀 ",
@@ -1218,6 +1220,8 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Ios": "📱 ",
+          "InstantOS": "⏲️ ",
           "Kali": "🐉 ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
@@ -1234,6 +1238,7 @@
           "openEuler": "🦉 ",
           "openSUSE": "🦎 ",
           "OracleLinux": "🦴 ",
+          "PikaOS": "🐤 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
           "Redhat": "🎩 ",
@@ -1247,7 +1252,8 @@
           "Unknown": "❓ ",
           "Uos": "🐲 ",
           "Void": " ",
-          "Windows": "🪟 "
+          "Windows": "🪟 ",
+          "Zorin": "🔹 "
         },
         "disabled": true
       }
@@ -5035,6 +5041,7 @@
             "Alpaquita": "🔔 ",
             "AlmaLinux": "💠 ",
             "Alpine": "🏔️ ",
+            "ALTLinux": "Ⓐ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "AOSC": "🐱 ",
@@ -5044,6 +5051,7 @@
             "CachyOS": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
+            "Elementary": "🍏 ",
             "DragonFly": "🐉 ",
             "Emscripten": "🔗 ",
             "EndeavourOS": "🚀 ",
@@ -5053,6 +5061,8 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Ios": "📱 ",
+            "InstantOS": "⏲️ ",
             "Kali": "🐉 ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
@@ -5069,6 +5079,7 @@
             "openEuler": "🦉 ",
             "openSUSE": "🦎 ",
             "OracleLinux": "🦴 ",
+            "PikaOS": "🐤 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
             "Redhat": "🎩 ",
@@ -5082,7 +5093,8 @@
             "Unknown": "❓ ",
             "Uos": "🐲 ",
             "Void": " ",
-            "Windows": "🪟 "
+            "Windows": "🪟 ",
+            "Zorin": "🔹 "
           }
         },
         "disabled": {
