@@ -121,7 +121,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
-            "scaleway" => scaleway::module(context),
             "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
@@ -204,6 +203,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
             "scala" => scala::module(context),
+            "scaleway" => scaleway::module(context),
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),

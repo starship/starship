@@ -86,6 +86,7 @@ pub mod rlang;
 pub mod ruby;
 pub mod rust;
 pub mod scala;
+pub mod scaleway;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
@@ -287,6 +288,8 @@ pub struct FullConfig<'a> {
     rust: rust::RustConfig<'a>,
     #[serde(borrow)]
     scala: scala::ScalaConfig<'a>,
+    #[serde(borrow)]
+    scaleway: scaleway::ScalewayConfig<'a>,
     #[serde(borrow)]
     shell: shell::ShellConfig<'a>,
     #[serde(borrow)]

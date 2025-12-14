@@ -1,10 +1,14 @@
 use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 
 use crate::config::ModuleConfig;
 use crate::context::Context;
 use crate::formatter::StringFormatter;
 use crate::module::Module;
 use serde::{Deserialize, Serialize};
+use serde_yaml;
+use shellexpand;
 
 /// The `scaleway` module shows the current Scaleway profile, project and region.
 ///
@@ -78,7 +82,7 @@ pub struct ScalewayConfig<'a> {
 impl Default for ScalewayConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "$symbol$project($region)($api_url) ",
+            format: "$symbol$project($region) ",
             style: "violet",
             symbol: "☁️ ",
             project_aliases: HashMap::new(),
@@ -87,6 +91,84 @@ impl Default for ScalewayConfig<'_> {
             force_display: false,
         }
     }
+}
+
+/// Reads the Scaleway configuration file and returns values as a HashMap
+fn read_config_file() -> HashMap<String, String> {
+    let mut values = HashMap::new();
+
+    // Check for config file in standard locations
+    let config_paths = [
+        // Linux/Unix standard
+        "~/.config/scw/config.yaml",
+        "~/.config/scw/config.yml",
+        // Alternative location
+        "~/.scwrc",
+        // Current directory
+        "./config.yaml",
+        "./config.yml",
+    ];
+
+    for path_str in &config_paths {
+        let path = shellexpand::full(path_str)
+            .ok()
+            .map(|p| Path::new(&*p).to_path_buf());
+        if let Some(config_path) = path {
+            if config_path.exists() {
+                if let Ok(content) = fs::read_to_string(&config_path) {
+                    // Parse top-level config
+                    let de = serde_yaml::Deserializer::from_str(&content);
+                    if let Ok(mut config_map) =
+                        HashMap::<String, serde_yaml::Value>::deserialize(de)
+                    {
+                        // Extract top-level values first
+                        let mut top_level_values = HashMap::new();
+                        for (key, value) in &config_map {
+                            if let Some(string_value) = value.as_str() {
+                                top_level_values.insert(key.clone(), string_value.to_string());
+                            }
+                        }
+
+                        // Insert top-level values
+                        values.extend(top_level_values);
+
+                        // Try to parse profiles if present
+                        if let Some(profile_name) =
+                            std::env::var("SCW_PROFILE").ok().or_else(|| {
+                                config_map
+                                    .remove("profile")
+                                    .and_then(|v| v.as_str().map(|s| s.to_string()))
+                            })
+                        {
+                            if let Some(profiles) = config_map.remove("profiles") {
+                                if let Some(profile) = profiles.as_mapping() {
+                                    if let Some(profile_data) = profile.get(
+                                        &serde_yaml::Value::String(profile_name.clone().into()),
+                                    ) {
+                                        if let Some(profile_map) = profile_data.as_mapping() {
+                                            for (key, value) in profile_map {
+                                                if let Some(key_str) = key.as_str() {
+                                                    if let Some(value_str) = value.as_str() {
+                                                        values.insert(
+                                                            key_str.to_string(),
+                                                            value_str.to_string(),
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break; // Successfully read a config file, stop searching
+            }
+        }
+    }
+
+    values
 }
 
 /// Creates a module for displaying Scaleway configuration information
@@ -103,19 +185,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     const SCW_PROFILE: &str = "SCW_PROFILE";
     const SCW_API_URL: &str = "SCW_API_URL";
 
-    // Get configuration values from environment variables
-    let scw_access_key = context.get_env(SCW_ACCESS_KEY);
-    let scw_secret_key = context.get_env(SCW_SECRET_KEY);
-    let scw_project_id = context.get_env(SCW_DEFAULT_PROJECT_ID);
-    let scw_region = context.get_env(SCW_DEFAULT_REGION);
-    let scw_zone = context.get_env(SCW_DEFAULT_ZONE);
-    let scw_profile = context.get_env(SCW_PROFILE);
-    let scw_api_url = context.get_env(SCW_API_URL);
+    // Try to read from YAML configuration file
+    let mut config_file_values = read_config_file();
+
+    // Get configuration values from environment variables, falling back to config file
+    let scw_access_key = context
+        .get_env(SCW_ACCESS_KEY)
+        .or_else(|| config_file_values.remove("access_key"));
+    let scw_secret_key = context
+        .get_env(SCW_SECRET_KEY)
+        .or_else(|| config_file_values.remove("secret_key"));
+    let scw_project_id = context
+        .get_env(SCW_DEFAULT_PROJECT_ID)
+        .or_else(|| config_file_values.remove("default_project_id"));
+    let scw_region = context.get_env(SCW_DEFAULT_REGION).or_else(|| {
+        context.get_env(SCW_DEFAULT_ZONE).or_else(|| {
+            config_file_values
+                .remove("default_region")
+                .or_else(|| config_file_values.remove("default_zone"))
+        })
+    });
+    let scw_profile = context
+        .get_env(SCW_PROFILE)
+        .or_else(|| config_file_values.remove("profile"));
+    let scw_api_url = context
+        .get_env(SCW_API_URL)
+        .or_else(|| config_file_values.remove("api_url"));
 
     // Check if we have any Scaleway configuration
     let has_credentials = scw_access_key.is_some() && scw_secret_key.is_some();
     let has_project = scw_project_id.is_some();
-    let has_region = scw_region.is_some() || scw_zone.is_some();
+    let has_region = scw_region.is_some();
     let has_api_url = scw_api_url.is_some();
 
     // Don't display the module if there's no configuration and we're not forcing display
@@ -137,7 +237,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mapped_project = alias_name(scw_project_id.as_ref(), &config.project_aliases);
     let region_to_display = scw_region
         .as_ref()
-        .or(scw_zone.as_ref())
+        .as_ref()
         .and_then(|r| alias_name(Some(r), &config.region_aliases));
     let api_url_to_display = scw_api_url
         .as_ref()
@@ -233,7 +333,10 @@ mod tests {
             .env("SCW_ACCESS_KEY", "dummy")
             .env("SCW_SECRET_KEY", "dummy")
             .collect();
-        let expected = Some(format!("via {}", Color::Purple.bold().paint("☁️ fr-par-1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Color::Purple.bold().paint("☁️ fr-par-1 ")
+        ));
 
         assert_eq!(expected, actual);
         dir.close()

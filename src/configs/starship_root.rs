@@ -117,6 +117,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "gcloud",
     "openstack",
     "azure",
+    "scaleway",
     "direnv",
     "env_var",
     "mise",
