@@ -91,6 +91,7 @@ mod rlang;
 mod ruby;
 mod rust;
 mod scala;
+mod scaleway;
 mod shell;
 mod shlvl;
 mod singularity;
@@ -131,6 +132,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
+            "scaleway" => scaleway::module(context),
             "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
@@ -271,6 +273,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
+        "scaleway" => "The current Scaleway project, region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
