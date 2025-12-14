@@ -52,7 +52,7 @@ notify-rust = { version = "4.11.7", optional = true }
 nu-ansi-term = "0.50.3"
 open = "5.3.3"
 # update os module config and tests when upgrading os_info
-os_info = "3.13.0"
+os_info = "3.14.0"
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
 parking_lot = "0.12.5"
 path-slash = "0.2.1"
