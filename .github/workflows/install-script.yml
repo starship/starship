@@ -1,0 +1,52 @@
+name: Install Script
+on:
+  push:
+    paths:
+      - "install/**"
+  pull_request:
+    paths:
+      - "install/**"
+
+jobs:
+  shellcheck:
+    name: Shellcheck [Linter]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v6
+
+      - name: Lint | Run shellcheck
+        run: shellcheck --severity=warning install/**/*.sh
+
+  shfmt:
+    name: Shfmt [Formatter]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup | Install shfmt
+        run: |
+          curl -sS https://webi.sh/shfmt | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Format | Check shfmt
+        run: shfmt -d install/**/*.sh
+
+  test_install_script:
+    name: Test Install Script
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v6
+
+      - name: Test | Piped execution with curl
+        run: |
+          # Test the installation method described at https://starship.rs/
+          mkdir -p "$HOME/.test-install"
+          curl -sS "file://$(pwd)/install/install.sh" | sh -s -- --yes --bin-dir "$HOME/.test-install"
+          "$HOME/.test-install/starship" --version

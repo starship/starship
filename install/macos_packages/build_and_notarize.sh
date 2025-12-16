@@ -16,48 +16,48 @@ set -euo pipefail
 # INSTALLATION_KEY_IDENT=E525359D0B5AE97B7B6F5BB465FEC872C117D681
 
 usage() {
-  echo "Builds, signs, and notarizes starship."
-  echo "Read readme.md in the script directory to see the assumptions the script makes."
-  echo "Usage: $0 <path-to-starship-binary> <path-to-docs-directory> <arch> [pkgname]"
-  echo "  Example: $0 target/release/starship docs/ x64"
-  echo "  Example: $0 target/debug/starship docs/ arm64 starship-1.2.1-arm64.pkg"
-  echo ""
-  echo "If no pkgname is provided, the package will be named starship-<version>-<arch>.pkg"
+	echo "Builds, signs, and notarizes starship."
+	echo "Read readme.md in the script directory to see the assumptions the script makes."
+	echo "Usage: $0 <path-to-starship-binary> <path-to-docs-directory> <arch> [pkgname]"
+	echo "  Example: $0 target/release/starship docs/ x64"
+	echo "  Example: $0 target/debug/starship docs/ arm64 starship-1.2.1-arm64.pkg"
+	echo ""
+	echo "If no pkgname is provided, the package will be named starship-<version>-<arch>.pkg"
 }
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$script_dir/common.sh"
 
 if [[ -z ${KEYCHAIN_ENTRY+x} ]]; then
-  error "Environmental variable KEYCHAIN_ENTRY must be set."
+	error "Environmental variable KEYCHAIN_ENTRY must be set."
 fi
 
 if [[ -z ${RUNNER_TEMP+x} ]]; then
-  error "Environmental variable RUNNER_TEMP must be set."
+	error "Environmental variable RUNNER_TEMP must be set."
 fi
 
 if [[ -z ${KEYCHAIN_FILENAME+x} ]]; then
-  error "Environmental variable KEYCHAIN_FILENAME must be set."
+	error "Environmental variable KEYCHAIN_FILENAME must be set."
 fi
 
 keychain_path="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
 if [[ ! -f "$keychain_path" ]]; then
-  error "Could not find keychain at $keychain_path"
+	error "Could not find keychain at $keychain_path"
 fi
 
 if [[ -z ${APPLICATION_KEY_IDENT+x} ]]; then
-  APPLICATION_KEY_IDENT=E03290CABE09E9E42341C8FC82608E91241FAD4A
-  echo "APPLICATION_KEY_IDENT not set. Using default value of $APPLICATION_KEY_IDENT"
+	APPLICATION_KEY_IDENT=E03290CABE09E9E42341C8FC82608E91241FAD4A
+	echo "APPLICATION_KEY_IDENT not set. Using default value of $APPLICATION_KEY_IDENT"
 fi
 
 if [[ -z ${INSTALLATION_KEY_IDENT+x} ]]; then
-  INSTALLATION_KEY_IDENT=E525359D0B5AE97B7B6F5BB465FEC872C117D681
-  echo "INSTALLATION_KEY_IDENT not set. Using default value of $INSTALLATION_KEY_IDENT"
+	INSTALLATION_KEY_IDENT=E525359D0B5AE97B7B6F5BB465FEC872C117D681
+	echo "INSTALLATION_KEY_IDENT not set. Using default value of $INSTALLATION_KEY_IDENT"
 fi
 
 if [[ -z ${3+x} ]]; then
-  usage
-  exit 1
+	usage
+	exit 1
 fi
 
 starship_binary="$1"
@@ -66,7 +66,7 @@ arch="$3"
 pkgname="${4:-}"
 
 if [[ ! -d "$starship_docs_dir/.vitepress/dist" ]]; then
-  error "Documentation does not appear to have been built!"
+	error "Documentation does not appear to have been built!"
 fi
 
 echo ">>>> Signing binary"
@@ -74,7 +74,7 @@ codesign --timestamp --keychain "$keychain_path" --sign "$APPLICATION_KEY_IDENT"
 
 # Make ZIP file to notarize binary
 if [ "$starship_binary" != "starship" ]; then
-  cp "$starship_binary" starship
+	cp "$starship_binary" starship
 fi
 zip starship.zip starship
 
@@ -107,8 +107,8 @@ xcrun stapler staple starship.pkg
 
 # Rename to expected name
 if [ "$pkgname" = "" ]; then
-  version="$(starship_version "$starship_binary")"
-  pkgname="starship-$version-$arch.pkg"
+	version="$(starship_version "$starship_binary")"
+	pkgname="starship-$version-$arch.pkg"
 fi
 
 echo ">>>> Placing final output at $pkgname"
