@@ -703,9 +703,10 @@ mod tests {
             pub switch_c: Switch,
         }
 
-        #[derive(Debug, PartialEq, Clone)]
+        #[derive(Debug, PartialEq, Clone, Default)]
         enum Switch {
             On,
+            #[default]
             Off,
         }
 
@@ -719,12 +720,6 @@ mod tests {
                     "on" => Ok(Self::On),
                     _ => Ok(Self::Off),
                 }
-            }
-        }
-
-        impl Default for Switch {
-            fn default() -> Self {
-                Self::Off
             }
         }
 

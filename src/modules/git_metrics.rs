@@ -28,8 +28,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if gix_repo.is_bare() {
         return None;
     }
+    let status_module = context.new_module("git_status");
+    let status_config = GitStatusConfig::try_load(status_module.config);
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
-    let stats = if repo.fs_monitor_value_is_true || gix_repo.index_or_empty().ok()?.is_sparse() {
+    let stats = if repo.fs_monitor_value_is_true
+        || status_config.use_git_executable
+        || gix_repo.index_or_empty().ok()?.is_sparse()
+    {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
@@ -51,8 +56,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 self.deleted += c.removals as usize;
             }
         }
-        let status_module = context.new_module("git_status");
-        let status_config = GitStatusConfig::try_load(status_module.config);
         let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
         let gix_repo = gix_repo.with_object_memory();
         gix_repo.write_blob([]).ok()?; /* create empty blob */
@@ -664,6 +667,34 @@ mod tests {
                     [git_metrics]
                     disabled = false
                     ignore_submodules = true
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+4"),
+            Color::Red.bold().paint("-2")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn works_if_git_executable_is_used() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_status]
+                use_git_executable = true
+                [git_metrics]
+                disabled = false
             })
             .path(path)
             .collect();

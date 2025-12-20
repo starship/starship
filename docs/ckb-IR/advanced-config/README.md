@@ -2,11 +2,7 @@
 
 لەگەڵ ئەوەی Starship شێڵێکە بەکارهێنانی زۆرە، هەندێک جار دەسکاری کردنی `starship.toml` بەس نییە بۆ ئەوەی وای لێبکەی هەندێک شتی دیاریکراو ئەنجام بدات. ئەم پەڕەیە ووردەکاری زیاتر ئەدات لەسەر هەندێک لە شێوازە ڕێکخستنە پێشکەوتووترەکان کە لە Starshipـدا بەکارهاتووە.
 
-::: ئاگادارکردنەوە
-
-ڕێکخستنەکانی ئەم بەشە شایەنی گۆڕانن لە وەشانەکانی داهاتووی Starshipدا.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt in PowerShell
 
