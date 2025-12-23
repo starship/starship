@@ -241,7 +241,7 @@ fn get_starship_config() -> String {
         .ok()
         .or_else(|| {
             utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
+                home_dir.push(".config/starship/config.toml");
                 home_dir
             })
         })
