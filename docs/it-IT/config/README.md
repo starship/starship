@@ -1585,7 +1585,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 | Opzione             | Default                                                                                                                     | Descrizione                                                                                 |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of COBOL.                                     |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                                   |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | The format for the module.                                                                  |
 | `version_format`    | `'${raw}'`                                                                                                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold purple'`                                                                                                             | Lo stile per il modulo.                                                                     |
@@ -3341,6 +3341,7 @@ AIX = "➿ "
 Alpaquita = "🔔 "
 AlmaLinux = "💠 "
 Alpine = "🏔️ "
+ALTLinux = "Ⓐ "
 Amazon = "🙂 "
 Android = "🤖 "
 AOSC = "🐱 "
@@ -3351,6 +3352,7 @@ CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
+Elementary = "🍏 "
 Emscripten = "🔗 "
 EndeavourOS = "🚀 "
 Fedora = "🎩 "
@@ -3359,6 +3361,8 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Ios = "📱 "
+InstantOS = "⏲️ "
 Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
@@ -3375,6 +3379,7 @@ OpenCloudOS = "☁️ "
 openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
+PikaOS = "🐤 "
 Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
@@ -3389,6 +3394,7 @@ Unknown = "❓ "
 Uos = "🐲 "
 Void = " "
 Windows = "🪟 "
+Zorin = "🔹 "
 ```
 
 ### Variables

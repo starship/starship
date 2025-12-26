@@ -1585,7 +1585,7 @@ AA -------------------------------------------- BB -----------------------------
 
 | Параметр            | Стандартно                                                                                                                  | Опис                                                              |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | Символ, який знаходиться перед версією COBOL.                     |
+| `symbol`            | `' '`                                                                                                                      | Символ, який знаходиться перед версією Fortran.                   |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | Формат модуля.                                                    |
 | `version_format`    | `'${raw}'`                                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
 | `style`             | `'bold purple'`                                                                                                             | Стиль модуля.                                                     |
@@ -3341,6 +3341,7 @@ AIX = "➿ "
 Alpaquita = "🔔 "
 AlmaLinux = "💠 "
 Alpine = "🏔️ "
+ALTLinux = "Ⓐ "
 Amazon = "🙂 "
 Android = "🤖 "
 AOSC = "🐱 "
@@ -3351,6 +3352,7 @@ CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
+Elementary = "🍏 "
 Emscripten = "🔗 "
 EndeavourOS = "🚀 "
 Fedora = "🎩 "
@@ -3359,6 +3361,8 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Ios = "📱 "
+InstantOS = "⏲️ "
 Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
@@ -3375,6 +3379,7 @@ OpenCloudOS = "☁️ "
 openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
+PikaOS = "🐤 "
 Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
@@ -3389,6 +3394,7 @@ Unknown = "❓ "
 Uos = "🐲 "
 Void = " "
 Windows = "🪟 "
+Zorin = "🔹 "
 ```
 
 ### Змінні
