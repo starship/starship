@@ -348,22 +348,22 @@ fn get_repo_status(
         let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
         let has_up_to_date_or_diverged =
             !config.up_to_date.is_empty() || !config.diverged.is_empty();
-        if has_ahead_behind || has_up_to_date_or_diverged {
-            if let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
+        if (has_ahead_behind || has_up_to_date_or_diverged)
+            && let Some(branch_name) = gix_repo.head_name().ok().flatten().and_then(|ref_name| {
                 Vec::from(gix::bstr::BString::from(ref_name))
                     .into_string()
                     .ok()
-            }) {
-                let output = repo.exec_git(
-                    context,
-                    ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
-                        .into_iter()
-                        .map(ToOwned::to_owned)
-                        .chain(Some(branch_name)),
-                )?;
-                if let Some(line) = output.stdout.lines().next() {
-                    repo_status.set_ahead_behind_for_each_ref(line);
-                }
+            })
+        {
+            let output = repo.exec_git(
+                context,
+                ["for-each-ref", "--format", "%(upstream) %(upstream:track)"]
+                    .into_iter()
+                    .map(ToOwned::to_owned)
+                    .chain(Some(branch_name)),
+            )?;
+            if let Some(line) = output.stdout.lines().next() {
+                repo_status.set_ahead_behind_for_each_ref(line);
             }
         }
 

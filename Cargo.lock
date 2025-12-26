@@ -2423,6 +2423,7 @@ dependencies = [
  "objc2",
  "objc2-foundation",
  "objc2-ui-kit",
+ "schemars",
  "serde",
  "windows-sys 0.61.2",
 ]
