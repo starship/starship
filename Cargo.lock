@@ -3231,6 +3231,7 @@ dependencies = [
  "os_info",
  "parking_lot",
  "path-slash",
+ "pathdiff",
  "pest",
  "pest_derive",
  "process_control",
