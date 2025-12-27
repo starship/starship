@@ -61,6 +61,7 @@ pub const ALL_MODULES: &[&str] = &[
     "line_break",
     "localip",
     "lua",
+    "maven",
     "memory_usage",
     "meson",
     "mise",

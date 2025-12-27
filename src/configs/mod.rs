@@ -57,6 +57,7 @@ pub mod kubernetes;
 pub mod line_break;
 pub mod localip;
 pub mod lua;
+pub mod maven;
 pub mod memory_usage;
 pub mod meson;
 pub mod mise;
@@ -230,6 +231,8 @@ pub struct FullConfig<'a> {
     localip: localip::LocalipConfig<'a>,
     #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
+    #[serde(borrow)]
+    maven: maven::MavenConfig<'a>,
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
