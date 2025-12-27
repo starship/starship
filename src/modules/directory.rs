@@ -15,7 +15,47 @@ use super::{Context, Module};
 use super::utils::directory::truncate;
 use crate::config::ModuleConfig;
 use crate::configs::directory::DirectoryConfig;
+use crate::context::Repo;
 use crate::formatter::StringFormatter;
+use gix::repository::Kind;
+
+/// Determines the repository root directory for display purposes.
+///
+/// For regular repositories and worktrees within the main working directory,
+/// returns the working directory.
+///
+/// For worktrees that are nested within a bare repository (e.g., bare-repo/branch-name),
+/// returns the parent directory (the bare repository directory) instead of the worktree
+/// directory. This ensures that the repository name is visible in the path display.
+fn get_repository_root(repo: &Repo) -> Option<PathBuf> {
+    let workdir = repo.workdir.as_ref()?;
+
+    // For worktrees, check if they're nested within a bare repository
+    if matches!(repo.kind, Kind::WorkTree { .. }) {
+        // repo.path is the .git directory for this worktree
+        // For nested worktrees in bare repos, this will be something like:
+        // /path/to/bare-repo/worktrees/branch-name
+        // We want to extract /path/to/bare-repo
+
+        // Check if the git directory path contains "worktrees"
+        if let Some(git_dir_parent) = repo.path.parent() {
+            if git_dir_parent.file_name().and_then(|n| n.to_str()) == Some("worktrees") {
+                // This is a worktree under a bare repo structure
+                // The parent of "worktrees" is the bare repo
+                if let Some(bare_repo_dir) = git_dir_parent.parent() {
+                    // Check if the worktree is actually nested inside the bare repo
+                    if workdir.starts_with(bare_repo_dir) {
+                        // Return the bare repo directory as the root
+                        return Some(bare_repo_dir.to_path_buf());
+                    }
+                }
+            }
+        }
+    }
+
+    // Default behavior: return the working directory
+    Some(workdir.clone())
+}
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -57,9 +97,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
     let dir_string = if config.truncate_to_repo {
-        repo.and_then(|r| r.workdir.as_ref())
-            .filter(|&root| root != &home_dir)
-            .and_then(|root| contract_repo_path(display_dir, root))
+        repo.as_ref()
+            .and_then(|r| get_repository_root(r))
+            .filter(|root| root != &home_dir)
+            .and_then(|root| contract_repo_path(display_dir, &root))
     } else {
         None
     };
@@ -103,9 +144,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+    let path_vec = match &repo.as_ref().and_then(|r| get_repository_root(r)) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            let contracted_path = contract_repo_path(display_dir, &repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
