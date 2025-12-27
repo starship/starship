@@ -83,6 +83,11 @@ fn undistract_me<'a>(
             };
         }
 
+        // On macOS 26+ notify-rust will get stuck finding the current application identifier
+        // so we set it manually to the default terminal app.
+        #[cfg(target_os = "macos")]
+        let _ = notify_rust::set_application("com.apple.Terminal");
+
         let body = format!(
             "Command execution {}",
             unstyle(&AnsiStrings(&module.ansi_strings()))
