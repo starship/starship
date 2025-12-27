@@ -41,24 +41,21 @@ $python\
 $docker_context\
 $conda\
 $pixi\
-[](fg:color_bg3 bg:color_bg1)\
-$time\
-[ ](fg:color_bg1)\
 $line_break$character"""
 
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
-color_blue = '#458588'
-color_aqua = '#689d6a'
-color_green = '#98971a'
+color_fg0 = '#000000'
+color_bg1 = '#000000'
+color_bg3 = '#000000'
+color_blue = '#0000ff'
+color_aqua = '#00ff00'
+color_green = '#00ff00'
 color_orange = '#d65d0e'
 color_purple = '#b16286'
 color_red = '#cc241d'
-color_yellow = '#d79921'
+color_yellow = '#ffff00'
 color_white = '#ffffff'
 
 [os]
@@ -91,8 +88,8 @@ Pop = ""
 
 [username]
 show_always = true
-style_user = "bg:color_red fg:color_fg0"
-style_root = "bg:color_red fg:color_fg0"
+style_user = "bg:color_red fg:color_white"
+style_root = "bg:color_red fg:color_white"
 format = '[ $user ]($style)'
 
 [directory]
@@ -101,7 +98,7 @@ format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 truncate_to_repo = true
-read_only = "<U+F456>"
+read_only = "󰌾"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -109,6 +106,9 @@ read_only = "<U+F456>"
 "Music" = "󰝚 "
 "Pictures" = " "
 "Developer" = "󰲋 "
+"CYBER-SEC" = "󰈸"
+"PDFS" = " "
+"VIDEOS" = ""
 
 [git_branch]
 symbol = ""
@@ -277,7 +277,7 @@ disabled = false
 [character]
 disabled = false
 success_symbol = '[  └─❯](bold fg:color_red)'
-error_symbol = '[  └─X❯](bold fg:color_red)'
+error_symbol = '[  └─x❯](bold fg:color_red)'
 vimcmd_symbol = '[ ❮─](bold fg:color_green)'
 vimcmd_replace_one_symbol = '[ ❮─](bold fg:color_purple)'
 vimcmd_replace_symbol = ' [ ❮─](bold fg:color_purple)'
