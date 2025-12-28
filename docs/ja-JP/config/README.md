@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### オプション
 
-| オプション              | デフォルト                            | 説明                                               |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | モジュールのスタイルです。                                    |
-| `format`           | `'on [$symbol$health]($style) '` | module のフォーマットです。                                |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| オプション               | デフォルト                                                                | 説明                                               |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
+| `style`             | `'bold purple'`                                                      | モジュールのスタイルです。                                    |
+| `format`            | `'on [$symbol$health]($style) '`                                     | module のフォーマットです。                                |
+| `detect_extensions` | `[]`                                                                 | どの拡張子がこのモジュールをアクティブにするか                          |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | どのファイル名がこのモジュールをアクティブにするか                        |
+| `detect_folders`    | `['.mise']`                                                          | どのフォルダーがこのモジュールをアクティブにするか                        |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.  |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                      |
 
 ### 変数
 
