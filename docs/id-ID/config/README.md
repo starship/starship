@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### Opsi
 
-| Opsi               | Bawaan                           | Deskripsi                                        |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | Gaya penataan untuk modul.                       |
-| `fromat`           | `'on [$symbol$health]($style) '` | Format dari modul.                               |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Opsi                | Bawaan                                                               | Deskripsi                                        |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
+| `style`             | `'bold purple'`                                                      | Gaya penataan untuk modul.                       |
+| `fromat`            | `'on [$symbol$health]($style) '`                                     | Format dari modul.                               |
+| `detect_extensions` | `[]`                                                                 | Ekstensi mana yang sebaiknya memicu modul ini.   |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | filenames mana yang sebaiknya memicu modul ini.  |
+| `detect_folders`    | `['.mise']`                                                          | Folder mana yang sebaiknya memicul modul ini.    |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.  |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                      |
 
 ### Variabel
 
