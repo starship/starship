@@ -7,8 +7,11 @@ use regex::Regex;
 use super::Context;
 use crate::configs::git_status::GitStatusConfig;
 use crate::{
-    config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
-    formatter::string_formatter::StringFormatterError, module::Module,
+    config::ModuleConfig,
+    configs::git_metrics::{GitMetricsConfig, GitMetricsMode},
+    formatter::StringFormatter,
+    formatter::string_formatter::StringFormatterError,
+    module::Module,
 };
 
 /// Creates a module with the current added/deleted lines in the git repository at the
@@ -38,6 +41,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
+        }
+        if matches!(config.mode, GitMetricsMode::All) {
+            git_args.push("HEAD");
         }
 
         let diff = repo.exec_git(context, &git_args)?.stdout;
@@ -93,6 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     use gix::status;
                     let mut diff = Diff::default();
                     match change {
+                        status::Item::TreeIndex(_) if config.mode == GitMetricsMode::Unstaged => {}
                         status::Item::TreeIndex(change) => {
                             use gix::diff::index::Change;
                             match change {
@@ -444,7 +451,7 @@ mod tests {
     }
 
     #[test]
-    fn shows_staged_addition() -> io::Result<()> {
+    fn dont_show_staged_addition() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -453,14 +460,14 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_rename_modification() -> io::Result<()> {
+    fn dont_show_staged_rename_modification() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -473,14 +480,14 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_staged_addition_intended() -> io::Result<()> {
+    fn dont_show_staged_addition_intended() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
@@ -503,13 +510,29 @@ mod tests {
         std::fs::write(path.join("the_file"), "modify all")?;
         run_git_cmd(["add", "the_file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+        let actual = render_metrics_with_staged(path);
 
         let expected = Some(format!(
             "{} {} ",
             Color::Green.bold().paint("+1"),
             Color::Red.bold().paint("-3")
         ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn dont_show_staged_modification() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("the_file"), "modify all")?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -553,9 +576,23 @@ mod tests {
 
         run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+        let actual = render_metrics_with_staged(path);
 
         let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn dont_show_staged_deletion() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        run_git_cmd(["rm", "the_file"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -637,10 +674,21 @@ mod tests {
             })
             .path(path)
             .collect();
+        let actual_with_git_executable = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                only_nonzero_diffs = true
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect();
 
         let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
@@ -670,31 +718,13 @@ mod tests {
             })
             .path(path)
             .collect();
-
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
-        ));
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
-    fn works_if_git_executable_is_used() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
-
-        let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
-
-        let actual = ModuleRenderer::new("git_metrics")
+        let actual_with_git_executable = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
-                [git_status]
-                use_git_executable = true
-                [git_metrics]
-                disabled = false
+                    [git_metrics]
+                    disabled = false
+                    ignore_submodules = true
+                    [git_status]
+                    use_git_executable = true
             })
             .path(path)
             .collect();
@@ -706,17 +736,56 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        assert_eq!(expected, actual_with_git_executable);
         repo_dir.close()
     }
 
     fn render_metrics(path: &Path) -> Option<String> {
-        ModuleRenderer::new("git_metrics")
+        let gix_output = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
             })
             .path(path)
-            .collect()
+            .collect();
+        let exe_output = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect();
+
+        assert_eq!(gix_output, exe_output);
+
+        gix_output
+    }
+
+    fn render_metrics_with_staged(path: &Path) -> Option<String> {
+        let gix_output = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                mode = "all"
+            })
+            .path(path)
+            .collect();
+
+        let exe_output = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                mode = "all"
+                [git_status]
+                use_git_executable = true
+            })
+            .path(path)
+            .collect();
+
+        assert_eq!(gix_output, exe_output);
+        gix_output
     }
 
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
