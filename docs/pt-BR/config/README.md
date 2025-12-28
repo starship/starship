@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### Opções
 
-| Opções             | Padrão                           | Descrição                                        |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | O estilo do módulo.                              |
-| `format`           | `'on [$symbol$health]($style) '` | O formato do módulo.                             |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Opções              | Padrão                                                               | Descrição                                         |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health.  |
+| `style`             | `'bold purple'`                                                      | O estilo do módulo.                               |
+| `format`            | `'on [$symbol$health]($style) '`                                     | O formato do módulo.                              |
+| `detect_extensions` | `[]`                                                                 | Quais extensões devem ativar este módulo.         |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Quais nomes de arquivos devem ativar este módulo. |
+| `detect_folders`    | `['.mise']`                                                          | Quais pastas devem ativar este módulo.            |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.     |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.   |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                       |
 
 ### Variáveis
 
