@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### 配置项
 
-| 选项                 | 默认值                              | 描述                                               |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | 此组件的样式。                                          |
-| `format`           | `'on [$symbol$health]($style) '` | 组件格式化模板。                                         |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| 选项                  | 默认值                                                                  | 描述                                               |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
+| `style`             | `'bold purple'`                                                      | 此组件的样式。                                          |
+| `format`            | `'on [$symbol$health]($style) '`                                     | 组件格式化模板。                                         |
+| `detect_extensions` | `[]`                                                                 | 触发此组件的扩展名                                        |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | 触发此组件的文件名                                        |
+| `detect_folders`    | `['.mise']`                                                          | 触发此组件的文件夹                                        |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.  |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                      |
 
 ### 变量
 
