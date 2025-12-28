@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn           | Mặc định                         | Mô tả                                            |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | Kiểu cho module.                                 |
-| `format`           | `'on [$symbol$health]($style) '` | Định dạng cho module.                            |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Tuỳ chọn            | Mặc định                                                             | Mô tả                                               |
+| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------- |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health.    |
+| `style`             | `'bold purple'`                                                      | Kiểu cho module.                                    |
+| `format`            | `'on [$symbol$health]($style) '`                                     | Định dạng cho module.                               |
+| `detect_extensions` | `[]`                                                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Những tên tệp nào sẽ kích hoạt mô-đun này.          |
+| `detect_folders`    | `['.mise']`                                                          | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.       |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.     |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                         |
 
 ### Các biến
 
