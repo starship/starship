@@ -25,11 +25,13 @@ function fish_prompt
 
     __starship_set_job_count
 
-    if test "$TRANSIENT" = "1"
-        set -g TRANSIENT 0
-        # Clear from cursor to end of screen as `commandline -f repaint` does not do this
-        # See https://github.com/fish-shell/fish-shell/issues/8418
-        printf \e\[0J
+    if contains -- --final-rendering $argv; or test "$TRANSIENT" = "1"
+        if test "$TRANSIENT" = "1"
+            set -g TRANSIENT 0
+            # Clear from cursor to end of screen as `commandline -f repaint` does not do this
+            # See https://github.com/fish-shell/fish-shell/issues/8418
+            printf \e\[0J
+        end
         if type -q starship_transient_prompt_func
             starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
         else
@@ -56,7 +58,7 @@ function fish_right_prompt
     # Now it's safe to call job count function (after status capture)
     __starship_set_job_count
 
-    if test "$RIGHT_TRANSIENT" = "1"
+    if contains -- --final-rendering $argv; or test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
             starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
@@ -77,12 +79,12 @@ builtin functions -e fish_mode_prompt
 set -gx STARSHIP_SHELL "fish"
 
 # Transience related functions
-function reset-transient --on-event fish_postexec
+function __starship_reset_transient --on-event fish_postexec
     set -g TRANSIENT 0
     set -g RIGHT_TRANSIENT 0
 end
 
-function transient_execute
+function __starship_transient_execute
     if commandline --is-valid || test -z (commandline | string collect) && not commandline --paging-mode
         set -g TRANSIENT 1
         set -g RIGHT_TRANSIENT 1
@@ -91,16 +93,50 @@ function transient_execute
     commandline -f execute
 end
 
+function __starship_fish_version_at_least --description 'Check if fish version is at least the given version'
+    set -l parts (string split '.' $FISH_VERSION)
+    set -l major $parts[1]
+    set -l minor 0
+    if set -q parts[2]
+        set minor $parts[2]
+    end
+
+    set req_parts (string split '.' $argv[1])
+    set req_major $req_parts[1]
+    set req_minor 0
+    if set -q req_parts[2]
+        set req_minor $req_parts[2]
+    end
+
+    if test $major -gt $req_major
+        return 0
+    else if test $major -eq $req_major -a $minor -ge $req_minor
+        return 0
+    else
+        return 1
+    end
+end
+
 # --user is the default, but listed anyway to make it explicit.
 function enable_transience --description 'enable transient prompt keybindings'
-    bind --user \r transient_execute
-    bind --user -M insert \r transient_execute
+    # fish >= 4.1 has transient prompt support built
+    if __starship_fish_version_at_least 4.1
+        set -g fish_transient_prompt 1
+        return
+    end
+    bind --user \r __starship_transient_execute
+    bind --user -M insert \r __starship_transient_execute
 end
 
 # Erase the transient prompt related key bindings.
 # --user is the default, but listed anyway to make it explicit.
 # Erasing a user binding will revert to the preset.
 function disable_transience --description 'remove transient prompt keybindings'
+    # fish >= 4.1 has transient prompt support built
+    if __starship_fish_version_at_least 4.1
+        set -g fish_transient_prompt 0
+        return
+    end
     bind --user -e \r
     bind --user -M insert -e \r
 end
