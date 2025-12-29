@@ -1,9 +1,12 @@
+use gix::bstr::ByteSlice;
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
+use crate::context::Repo;
 use crate::formatter::StringFormatter;
+use crate::modules::git_status::uses_reftables;
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -31,12 +34,62 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if config.only_attached && gix_repo.head().ok()?.is_detached() {
-        return None;
-    }
+    // Get branch and remote information
+    let (branch_name, remote_branch, remote_name) = if uses_reftables(&gix_repo) {
+        // Use git executable for branch information
+        match get_branch_info_from_git(context, repo) {
+            Some((branch, remote_branch)) => {
+                // Successfully got branch name, parse upstream into remote_name and remote_branch
+                let remote_name = remote_branch
+                    .as_ref()
+                    .map(|remote_branch| {
+                        find_longest_matching_remote_name(
+                            remote_branch.as_ref(),
+                            &gix_repo.remote_names(),
+                        )
+                    })
+                    .unwrap_or_default();
+                (
+                    branch.shorten().to_string(),
+                    remote_branch.zip(remote_name.as_deref()).map(
+                        |(remote_branch, remote_name)| {
+                            remote_branch
+                                .shorten()
+                                .to_str_lossy()
+                                .strip_prefix(remote_name)
+                                .expect("remote name determined by finding it as prefix before")
+                                .trim_start_matches("/")
+                                .to_string()
+                        },
+                    ),
+                    remote_name,
+                )
+            }
+            None => {
+                // get_branch_info_from_git returns None when:
+                // 1. HEAD is detached (git symbolic-ref fails)
+                // 2. git command fails for other reasons (corrupted repo, missing git, etc.)
+                // In both cases, if only_attached is set, we should return None
+                if config.only_attached {
+                    return None;
+                }
+                // Fallback to HEAD for detached state or when branch can't be determined
+                ("HEAD".to_string(), None, None)
+            }
+        }
+    } else {
+        if config.only_attached && gix_repo.head().ok()?.is_detached() {
+            return None;
+        }
 
-    let branch_name = repo.branch.as_deref().unwrap_or("HEAD");
-    let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
+        let branch = repo.branch.clone().unwrap_or_else(|| "HEAD".to_string());
+        let (remote_branch, remote_name) = if let Some(remote) = repo.remote.as_ref() {
+            (remote.branch.clone(), remote.name.clone())
+        } else {
+            (None, None)
+        };
+        (branch, remote_branch, remote_name)
+    };
 
     if config
         .ignore_branches
@@ -46,16 +99,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut remote_branch_graphemes: Vec<&str> = Vec::new();
-    let mut remote_name_graphemes: Vec<&str> = Vec::new();
-    if let Some(remote) = repo.remote.as_ref() {
-        if let Some(branch) = &remote.branch {
-            remote_branch_graphemes = branch.graphemes(true).collect();
-        }
-        if let Some(name) = &remote.name {
-            remote_name_graphemes = name.graphemes(true).collect();
-        }
-    }
+    let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
+
+    let remote_branch_string = remote_branch.unwrap_or_default();
+    let mut remote_branch_graphemes: Vec<&str> = remote_branch_string.graphemes(true).collect();
+
+    let remote_name_string = remote_name.unwrap_or_default();
+    let mut remote_name_graphemes: Vec<&str> = remote_name_string.graphemes(true).collect();
 
     // Truncate fields if need be
     for e in &mut [
@@ -117,6 +167,58 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+/// Given `remote_names`, find the longest matching remote name in `remote_ref_name` and return it.
+fn find_longest_matching_remote_name(
+    remote_ref_name: &gix::refs::FullNameRef,
+    remote_names: &gix::remote::Names<'_>,
+) -> Option<String> {
+    let (category, shorthand_name) = remote_ref_name.category_and_short_name()?;
+    if !matches!(category, gix::refs::Category::RemoteBranch) {
+        return None;
+    }
+
+    let longest_remote = remote_names
+        .iter()
+        .rfind(|reference_name| shorthand_name.starts_with(reference_name))?;
+    Some(longest_remote.to_string())
+}
+
+/// Get branch information using the git executable.
+/// Returns `None` if not on a branch (detached HEAD) or if the git command fails.
+fn get_branch_info_from_git(
+    context: &Context,
+    repo: &Repo,
+) -> Option<(gix::refs::FullName, Option<gix::refs::FullName>)> {
+    // Get current branch name using git symbolic-ref
+    let branch_output = repo.exec_git(context, ["symbolic-ref", "HEAD"])?;
+
+    // Check if the command was successful (exit code 0)
+    // symbolic-ref returns non-zero exit code when HEAD is detached
+    let branch_name = branch_output.stdout.trim();
+    if branch_name.is_empty() {
+        return None;
+    }
+
+    let branch_name: gix::refs::FullName = branch_name.try_into().ok()?;
+    // Get upstream tracking branch using git for-each-ref
+    let upstream_output = repo.exec_git(
+        context,
+        [
+            "for-each-ref",
+            "--format=%(upstream)",
+            branch_name.as_bstr().to_str_lossy().as_ref(),
+        ],
+    )?;
+    let upstream = upstream_output.stdout.trim();
+    let remote_info = if upstream.is_empty() {
+        None
+    } else {
+        upstream.try_into().ok()
+    };
+
+    Some((branch_name, remote_info))
+}
+
 fn get_first_grapheme(text: &str) -> &str {
     UnicodeSegmentation::graphemes(text, true)
         .next()
@@ -130,6 +232,11 @@ mod tests {
 
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use crate::utils::create_command;
+
+    const NORMAL_AND_REFTABLE: [FixtureProvider; 2] =
+        [FixtureProvider::Git, FixtureProvider::GitReftable];
+    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
+        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -271,208 +378,235 @@ mod tests {
 
     #[test]
     fn test_works_with_unborn_default_branch() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = tempfile::tempdir()?;
 
-        create_command("git")?
-            .args(["init"])
-            .current_dir(&repo_dir)
-            .output()?;
+            create_command("git")?
+                .arg("init")
+                .args(maybe_reftable_format(mode))
+                .current_dir(&repo_dir)
+                .output()?;
 
-        create_command("git")?
-            .args(["symbolic-ref", "HEAD", "refs/heads/main"])
-            .current_dir(&repo_dir)
-            .output()?;
+            create_command("git")?
+                .args(["symbolic-ref", "HEAD", "refs/heads/main"])
+                .current_dir(&repo_dir)
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "on {} ",
-            Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
-        ));
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "-b", "test_branch"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(toml::toml! {
-                [git_branch]
-                    only_attached = true
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                        only_attached = true
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "on {} ",
-            Color::Purple
-                .bold()
-                .paint(format!("\u{e0a0} {}", "test_branch")),
-        ));
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple
+                    .bold()
+                    .paint(format!("\u{e0a0} {}", "test_branch")),
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "@~1"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "@~1"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(toml::toml! {
-                [git_branch]
-                    only_attached = true
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                        only_attached = true
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = None;
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_works_in_bare_repo() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = tempfile::tempdir()?;
 
-        create_command("git")?
-            .args(["init", "--bare"])
-            .current_dir(&repo_dir)
-            .output()?;
+            create_command("git")?
+                .arg("init")
+                .args(maybe_reftable_format(mode))
+                .arg("--bare")
+                .current_dir(&repo_dir)
+                .output()?;
 
-        create_command("git")?
-            .args(["symbolic-ref", "HEAD", "refs/heads/main"])
-            .current_dir(&repo_dir)
-            .output()?;
+            create_command("git")?
+                .args(["symbolic-ref", "HEAD", "refs/heads/main"])
+                .current_dir(&repo_dir)
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "on {} ",
-            Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
-        ));
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_ignore_branches() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "-b", "test_branch"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(toml::toml! {
-                [git_branch]
-                    ignore_branches = ["dummy", "test_branch"]
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_branches = ["dummy", "test_branch"]
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = None;
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_ignore_bare_repo() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(toml::toml! {
-                [git_branch]
-                    ignore_bare_repo = true
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_bare_repo = true
 
-            })
-            .path(repo_dir.path())
-            .collect();
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = None;
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_remote() -> io::Result<()> {
-        let remote_dir = fixture_repo(FixtureProvider::Git)?;
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let remote_dir = fixture_repo(mode)?;
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "-b", "test_branch"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["remote", "add", "--fetch", "remote_repo"])
-            .arg(remote_dir.path())
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["remote", "add", "--fetch", "remote_repo"])
+                .arg(remote_dir.path())
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        create_command("git")?
-            .args(["branch", "--set-upstream-to", "remote_repo/master"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["branch", "--set-upstream-to", "remote_repo/master"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [git_branch]
-                format = "$branch(:$remote_name/$remote_branch)"
-            })
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_branch]
+                    format = "$branch(:$remote_name/$remote_branch)"
+                })
+                .collect();
 
-        let expected = Some("test_branch:remote_repo/master");
+            let expected = Some("test_branch:remote_repo/master");
 
-        assert_eq!(expected, actual.as_deref());
-        repo_dir.close()?;
-        remote_dir.close()
+            assert_eq!(expected, actual.as_deref());
+            repo_dir.close()?;
+            remote_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn test_branch_fallback_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "@~1"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "@~1"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(toml::toml! {
-                [git_branch]
-                format = "$branch"
-            })
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                    format = "$branch"
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some("HEAD".into());
+            let expected = Some("HEAD".into());
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     // This test is not possible until we switch to `git status --porcelain`
@@ -526,36 +660,39 @@ mod tests {
         truncation_symbol: &str,
         config_options: &str,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "-b", branch_name])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "-b", branch_name])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(
-                toml::from_str(&format!(
-                    "
+            let actual = ModuleRenderer::new("git_branch")
+                .config(
+                    toml::from_str(&format!(
+                        "
                     [git_branch]
                         truncation_length = {truncate_length}
                         {config_options}
                 "
-                ))
-                .unwrap(),
-            )
-            .path(repo_dir.path())
-            .collect();
+                    ))
+                    .unwrap(),
+                )
+                .path(repo_dir.path())
+                .collect();
 
-        let expected = Some(format!(
-            "on {} ",
-            Color::Purple
-                .bold()
-                .paint(format!("\u{e0a0} {expected_name}{truncation_symbol}")),
-        ));
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple
+                    .bold()
+                    .paint(format!("\u{e0a0} {expected_name}{truncation_symbol}")),
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     fn test_format<T: Into<String>>(
@@ -564,28 +701,36 @@ mod tests {
         config_options: &str,
         expected: T,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let expected = expected.into();
+        for mode in NORMAL_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args(["checkout", "-b", branch_name])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["checkout", "-b", branch_name])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
-            .config(
-                toml::from_str(&format!(
-                    r#"
+            let actual = ModuleRenderer::new("git_branch")
+                .config(
+                    toml::from_str(&format!(
+                        r#"
                     [git_branch]
                         format = "{format}"
                         {config_options}
                 "#
-                ))
-                .unwrap(),
-            )
-            .path(repo_dir.path())
-            .collect();
+                    ))
+                    .unwrap(),
+                )
+                .path(repo_dir.path())
+                .collect();
 
-        assert_eq!(Some(expected.into()), actual);
-        repo_dir.close()
+            assert_eq!(Some(&expected), actual.as_ref());
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    fn maybe_reftable_format(provider: FixtureProvider) -> Option<&'static str> {
+        matches!(provider, FixtureProvider::GitReftable).then(|| "--ref-format=reftable")
     }
 }

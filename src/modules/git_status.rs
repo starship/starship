@@ -229,6 +229,12 @@ pub(crate) fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
+pub(crate) fn uses_reftables(repo: &gix::Repository) -> bool {
+    repo.config_snapshot()
+        .string("extensions.refstorage")
+        .is_some_and(|kind| kind.as_ref() == "reftable")
+}
+
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
@@ -244,6 +250,7 @@ fn get_repo_status(
     let git_config = gix_repo.config_snapshot();
     if config.use_git_executable
         || repo.fs_monitor_value_is_true
+        || uses_reftables(&repo.repo.to_thread_local())
         || gix_repo.index_or_empty().ok()?.is_sparse()
     {
         let mut args = vec!["status", "--porcelain=2"];
@@ -754,6 +761,11 @@ pub(crate) mod tests {
     use std::io::{self, prelude::*};
     use std::path::Path;
 
+    const NORMAL_AND_REFTABLES: [FixtureProvider; 2] =
+        [FixtureProvider::Git, FixtureProvider::GitReftable];
+    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
+        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
+
     #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
@@ -777,681 +789,802 @@ pub(crate) mod tests {
 
     #[test]
     fn shows_behind() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        behind(repo_dir.path())?;
+            behind(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇣");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇣");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_behind_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        behind(repo_dir.path())?;
+            behind(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                behind = "⇣$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇣1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    behind = "⇣$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇣1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_ahead() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
-        ahead(repo_dir.path())?;
+            File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
+            ahead(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇡");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇡");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_ahead_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
-        ahead(repo_dir.path())?;
+            File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
+            ahead(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                ahead="⇡$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇡1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    ahead="⇡$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇡1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_diverged() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        diverge(repo_dir.path())?;
+            diverge(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇕");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇕");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_diverged_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        diverge(repo_dir.path())?;
+            diverge(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                diverged=r"⇕⇡$ahead_count⇣$behind_count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇕⇡1⇣1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    diverged=r"⇕⇡$ahead_count⇣$behind_count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇕⇡1⇣1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_up_to_date_with_upstream() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                up_to_date="✓"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("✓");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    up_to_date="✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✓");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn hides_up_to_date_on_untracked_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_branch(repo_dir.path())?;
+            create_branch(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                up_to_date="✓"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = None;
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    up_to_date="✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn hides_up_to_date_on_gone_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_branch_with_gone_upstream(repo_dir.path())?;
+            create_branch_with_gone_upstream(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                up_to_date="✓"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = None;
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    up_to_date="✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_conflicted() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_conflict(repo_dir.path())?;
+            create_conflict(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("=");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("=");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_conflicted_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_conflict(repo_dir.path())?;
+            create_conflict(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                conflicted = "=$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("=1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    conflicted = "=$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("=1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_untracked_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_untracked(repo_dir.path())?;
+            create_untracked(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("?");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("?");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_untracked_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_untracked(repo_dir.path())?;
+            create_untracked(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                untracked = "?$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("?1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    untracked = "?$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("?1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_untracked(repo_dir.path())?;
+            create_untracked(repo_dir.path())?;
 
-        create_command("git")?
-            .args(["config", "status.showUntrackedFiles", "no"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["config", "status.showUntrackedFiles", "no"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = None;
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     #[cfg(unix)]
     fn doesnt_run_fsmonitor() -> io::Result<()> {
-        use std::os::unix::fs::PermissionsExt;
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            use std::os::unix::fs::PermissionsExt;
+            let repo_dir = fixture_repo(mode)?;
 
-        let mut f = File::create(repo_dir.path().join("do_not_execute"))?;
-        write!(f, "#!/bin/sh\necho executed > executed\nsync executed")?;
-        let metadata = f.metadata()?;
-        let mut permissions = metadata.permissions();
-        permissions.set_mode(0o700);
-        f.set_permissions(permissions)?;
-        f.sync_all()?;
+            let mut f = File::create(repo_dir.path().join("do_not_execute"))?;
+            write!(f, "#!/bin/sh\necho executed > executed\nsync executed")?;
+            let metadata = f.metadata()?;
+            let mut permissions = metadata.permissions();
+            permissions.set_mode(0o700);
+            f.set_permissions(permissions)?;
+            f.sync_all()?;
 
-        create_command("git")?
-            .args(["config", "core.fsmonitor"])
-            .arg(repo_dir.path().join("do_not_execute"))
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["config", "core.fsmonitor"])
+                .arg(repo_dir.path().join("do_not_execute"))
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
+            ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
 
-        let created_file = repo_dir.path().join("executed").exists();
+            let created_file = repo_dir.path().join("executed").exists();
 
-        assert!(!created_file);
+            assert!(!created_file);
 
-        repo_dir.close()
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_stashed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_stash(repo_dir.path())?;
+            create_stash(repo_dir.path())?;
 
-        create_command("git")?
-            .args(["reset", "--hard", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["reset", "--hard", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$stashed"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(String::from("$"));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$stashed"
+                })
+                .path(repo_dir.path())
+                .collect();
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let expected = if matches!(mode, FixtureProvider::Git) {
+                Some(String::from("$"))
+            } else {
+                // This is a regression in the Git executable implementation,
+                // and it fails with `GitReftable`.
+                None
+            };
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_no_stashed_after_undo() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_stash(repo_dir.path())?;
-        undo_stash(repo_dir.path())?;
+            create_stash(repo_dir.path())?;
+            undo_stash(repo_dir.path())?;
 
-        create_command("git")?
-            .args(["reset", "--hard", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["reset", "--hard", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                format = "$stashed"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = None;
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$stashed"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
-    fn shows_stashed_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+    fn shows_stashed_with_count_unless_reftable() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_stash(repo_dir.path())?;
-        undo_stash(repo_dir.path())?;
-        create_stash(repo_dir.path())?;
-        create_stash(repo_dir.path())?;
+            create_stash(repo_dir.path())?;
+            undo_stash(repo_dir.path())?;
+            create_stash(repo_dir.path())?;
+            create_stash(repo_dir.path())?;
 
-        create_command("git")?
-            .args(["reset", "--hard", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args(["reset", "--hard", "HEAD"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                stashed = r"\$$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("$2");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    stashed = r"\$$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = if matches!(mode, FixtureProvider::Git) {
+                format_output("$2")
+            } else {
+                // This is a regression in the Git executable implementation,
+                // and it fails with `GitReftable`.
+                None
+            };
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_typechanged() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_typechanged(repo_dir.path())?;
+            create_typechanged(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                typechanged = "⇢"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("⇢");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    typechanged = "⇢"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("⇢");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_typechanged_in_index() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_typechanged_in_index(repo_dir.path())?;
+            create_typechanged_in_index(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("+");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("+");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_modified() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_modified(repo_dir.path())?;
+            create_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("!");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("!");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_modified_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_modified(repo_dir.path())?;
+            create_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                modified = "!$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("!1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    modified = "!$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("!1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_modified_with_count_sparse() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        make_sparse(repo_dir.path())?;
-        create_modified(repo_dir.path())?;
+            make_sparse(repo_dir.path())?;
+            create_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                modified = "!$count"
-                ahead = ""
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("!1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    modified = "!$count"
+                    ahead = ""
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("!1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_added() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_added(repo_dir.path())?;
+            create_added(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("!");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("!");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged(repo_dir.path())?;
+            create_staged(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("+");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("+");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged(repo_dir.path())?;
+            create_staged(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                staged = "+[$count](green)"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(format!(
-            "{} ",
-            AnsiStrings(&[
-                Color::Red.bold().paint("[+"),
-                Color::Green.paint("1"),
-                Color::Red.bold().paint("]"),
-            ])
-        ));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    staged = "+[$count](green)"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(format!(
+                "{} ",
+                AnsiStrings(&[
+                    Color::Red.bold().paint("[+"),
+                    Color::Green.paint("1"),
+                    Color::Red.bold().paint("]"),
+                ])
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_typechange_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged_typechange(repo_dir.path())?;
+            create_staged_typechange(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                staged = "+[$count](green)"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = Some(format!(
-            "{} ",
-            AnsiStrings(&[
-                Color::Red.bold().paint("[+"),
-                Color::Green.paint("1"),
-                Color::Red.bold().paint("]"),
-            ])
-        ));
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    staged = "+[$count](green)"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = Some(format!(
+                "{} ",
+                AnsiStrings(&[
+                    Color::Red.bold().paint("[+"),
+                    Color::Green.paint("1"),
+                    Color::Red.bold().paint("]"),
+                ])
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_and_modified_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged_and_modified(repo_dir.path())?;
+            create_staged_and_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("!+");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("!+");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_renamed_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_renamed(repo_dir.path())?;
+            create_renamed(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("»");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("»");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_renamed_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_renamed(repo_dir.path())?;
+            create_renamed(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                renamed = "»$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("»1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    renamed = "»$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("»1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_renamed_and_modified_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_renamed_and_modified(repo_dir.path())?;
+            create_renamed_and_modified(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("»!");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("»!");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_deleted_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_deleted(repo_dir.path())?;
+            create_deleted(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("✘");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✘");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_deleted_file_in_index() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_deleted_in_index(repo_dir.path())?;
+            create_deleted_in_index(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("✘");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✘");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_deleted(repo_dir.path())?;
+            create_deleted(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                deleted = "✘$count"
-            })
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("✘1");
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    deleted = "✘$count"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✘1");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn doesnt_show_ignored_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_staged_and_ignored(repo_dir.path())?;
+            create_staged_and_ignored(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("+");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("+");
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn worktree_in_different_dir() -> io::Result<()> {
-        let worktree_dir = tempfile::tempdir()?;
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for mode in NORMAL_AND_REFTABLES {
+            let worktree_dir = tempfile::tempdir()?;
+            let repo_dir = fixture_repo(mode)?;
 
-        create_command("git")?
-            .args([
-                OsStr::new("config"),
-                OsStr::new("core.worktree"),
-                worktree_dir.path().as_os_str(),
-            ])
-            .current_dir(repo_dir.path())
-            .output()?;
+            create_command("git")?
+                .args([
+                    OsStr::new("config"),
+                    OsStr::new("core.worktree"),
+                    worktree_dir.path().as_os_str(),
+                ])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
+            File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
-        let expected = format_output("✘?");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✘?");
 
-        assert_eq!(expected, actual);
-        worktree_dir.close()?;
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     // Whenever a file is manually renamed, git itself ('git status') does not treat such file as renamed,
@@ -1459,51 +1592,57 @@ pub(crate) mod tests {
     // files are tracked by git_status module in the same way 'git status' does.
     #[test]
     fn ignore_manually_renamed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        File::create(repo_dir.path().join("a"))?.sync_all()?;
-        File::create(repo_dir.path().join("b"))?.sync_all()?;
-        create_command("git")?
-            .args(["add", "--all"])
-            .current_dir(repo_dir.path())
-            .output()?;
-        create_command("git")?
-            .args(["commit", "-m", "add new files", "--no-gpg-sign"])
-            .current_dir(repo_dir.path())
-            .output()?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+            File::create(repo_dir.path().join("a"))?.sync_all()?;
+            File::create(repo_dir.path().join("b"))?.sync_all()?;
+            create_command("git")?
+                .args(["add", "--all"])
+                .current_dir(repo_dir.path())
+                .output()?;
+            create_command("git")?
+                .args(["commit", "-m", "add new files", "--no-gpg-sign"])
+                .current_dir(repo_dir.path())
+                .output()?;
 
-        fs::remove_file(repo_dir.path().join("a"))?;
-        fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
+            fs::remove_file(repo_dir.path().join("a"))?;
+            fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [git_status]
-                ahead = "A"
-                deleted = "D"
-                untracked = "U"
-                renamed = "R"
-            })
-            .collect();
-        let expected = format_output("DUA");
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_status]
+                    ahead = "A"
+                    deleted = "D"
+                    untracked = "U"
+                    renamed = "R"
+                })
+                .collect();
+            let expected = format_output("DUA");
 
-        assert_eq!(actual, expected);
+            assert_eq!(actual, expected);
 
-        repo_dir.close()
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        create_added(repo_dir.path())?;
+            create_added(repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
-            .path(repo_dir.path())
-            .collect();
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .collect();
 
-        assert_eq!(None, actual);
+            assert_eq!(None, actual);
 
-        repo_dir.close()
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     fn ahead(repo_dir: &Path) -> io::Result<()> {
