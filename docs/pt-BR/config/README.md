@@ -1585,7 +1585,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 | Opções              | Padrão                                                                                                                      | Descrição                                                                           |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | O simbolo usado antes de exibir a versão do COBOL.                                  |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                           |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | O formato do módulo.                                                                |
 | `version_format`    | `'${raw}'`                                                                                                                  | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold purple'`                                                                                                             | O estilo do módulo.                                                                 |
@@ -2907,14 +2907,17 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### Opções
 
-| Opções             | Padrão                           | Descrição                                        |
-| ------------------ | -------------------------------- | ------------------------------------------------ |
-| `symbol`           | `'mise '`                        | The symbol used before displaying _mise_ health. |
-| `style`            | `'bold purple'`                  | O estilo do módulo.                              |
-| `format`           | `'on [$symbol$health]($style) '` | O formato do módulo.                             |
-| `healthy_symbol`   | `healthy`                        | The message displayed when _mise_ is healthy.    |
-| `unhealthy_symbol` | `unhealthy`                      | The message displayed when _mise_ is unhealthy.  |
-| `disabled`         | `true`                           | Disables the `mise` module.                      |
+| Opções              | Padrão                                                               | Descrição                                         |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health.  |
+| `style`             | `'bold purple'`                                                      | O estilo do módulo.                               |
+| `format`            | `'on [$symbol$health]($style) '`                                     | O formato do módulo.                              |
+| `detect_extensions` | `[]`                                                                 | Quais extensões devem ativar este módulo.         |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Quais nomes de arquivos devem ativar este módulo. |
+| `detect_folders`    | `['.mise']`                                                          | Quais pastas devem ativar este módulo.            |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.     |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.   |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                       |
 
 ### Variáveis
 
@@ -3341,6 +3344,7 @@ AIX = "➿ "
 Alpaquita = "🔔 "
 AlmaLinux = "💠 "
 Alpine = "🏔️ "
+ALTLinux = "Ⓐ "
 Amazon = "🙂 "
 Android = "🤖 "
 AOSC = "🐱 "
@@ -3351,6 +3355,7 @@ CachyOS = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
+Elementary = "🍏 "
 Emscripten = "🔗 "
 EndeavourOS = "🚀 "
 Fedora = "🎩 "
@@ -3359,6 +3364,8 @@ Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
+Ios = "📱 "
+InstantOS = "⏲️ "
 Kali = "🐉 "
 Linux = "🐧 "
 Mabox = "📦 "
@@ -3375,6 +3382,7 @@ OpenCloudOS = "☁️ "
 openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
+PikaOS = "🐤 "
 Pop = "🍭 "
 Raspbian = "🍓 "
 Redhat = "🎩 "
@@ -3389,6 +3397,7 @@ Unknown = "❓ "
 Uos = "🐲 "
 Void = " "
 Windows = "🪟 "
+Zorin = "🔹 "
 ```
 
 ### Variáveis
