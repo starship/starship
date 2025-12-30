@@ -33,9 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let helm_version = parse_helm_version(
-                        &context
-                            .exec_cmd("helm", &["version", "--short", "--client"])?
-                            .stdout,
+                        &context.exec_cmd("helm", &["version", "--short"])?.stdout,
                     )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
@@ -61,9 +59,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_helm_version(helm_stdout: &str) -> Option<String> {
-    // `helm version --short --client` output looks like this:
+    // `helm version --short` output looks like this:
     // v3.1.1+gafe7058
-    // `helm version --short --client` output looks like this for Helm 2:
+    // For Helm 2, output looks like this:
     // Client: v2.16.9+g8ad7037
     let version = helm_stdout
         // split into ("v3.1.1","gafe7058") or ("Client: v3.1.1","gafe7058")
