@@ -110,6 +110,15 @@ download() {
 
 	error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
 	printf "\n" >&2
+	case "${VERSION}" in
+	latest) ;;
+	v*) ;;
+	*)
+		info "Note: Release tags include the 'v' prefix (e.g., 'v1.2.3')."
+		info "You specified '${VERSION}'. Did you mean 'v${VERSION}'?"
+		printf "\n" >&2
+		;;
+	esac
 	info "This is likely due to Starship not yet supporting your configuration."
 	info "If you would like to see a build for your configuration,"
 	info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
@@ -157,7 +166,7 @@ usage() {
 		"-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
 		"-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
 		"-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
-		"-v, --version" "Install a specific version of starship [default: ${VERSION}]" \
+		"-v, --version" "Install a specific version of starship (e.g. v1.2.3) [default: ${VERSION}]" \
 		"-h, --help" "Display this help message"
 }
 
