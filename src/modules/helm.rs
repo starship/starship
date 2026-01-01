@@ -33,9 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let helm_version = parse_helm_version(
-                        &context
-                            .exec_cmd("helm", &["version", "--short", "--client"])?
-                            .stdout,
+                        &context.exec_cmd("helm", &["version", "--short"])?.stdout,
                     )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
@@ -61,18 +59,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_helm_version(helm_stdout: &str) -> Option<String> {
-    // `helm version --short --client` output looks like this:
+    // `helm version --short` output looks like this:
     // v3.1.1+gafe7058
-    // `helm version --short --client` output looks like this for Helm 2:
-    // Client: v2.16.9+g8ad7037
     let version = helm_stdout
-        // split into ("v3.1.1","gafe7058") or ("Client: v3.1.1","gafe7058")
+        // split into ("v3.1.1","gafe7058")
         .split_once('+')
-        // return "v3.1.1" or "Client: v3.1.1"
-        .map_or(helm_stdout, |x| x.0)
-        // return "v3.1.1" or " v3.1.1"
-        .trim_start_matches("Client: ")
         // return "v3.1.1"
+        .map_or(helm_stdout, |x| x.0)
         .trim_start_matches('v')
         .trim()
         .to_string();
@@ -124,9 +117,7 @@ mod tests {
 
     #[test]
     fn test_parse_helm_version() {
-        let helm_2 = "Client: v2.16.9+g8ad7037";
         let helm_3 = "v3.1.1+ggit afe7058";
-        assert_eq!(parse_helm_version(helm_2), Some("2.16.9".to_string()));
         assert_eq!(parse_helm_version(helm_3), Some("3.1.1".to_string()));
     }
 }
