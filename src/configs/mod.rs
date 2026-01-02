@@ -55,6 +55,7 @@ pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
 pub mod line_break;
+pub mod loadavg;
 pub mod localip;
 pub mod lua;
 pub mod memory_usage;
@@ -225,6 +226,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     kubernetes: kubernetes::KubernetesConfig<'a>,
     line_break: line_break::LineBreakConfig,
+    #[serde(borrow)]
+    loadavg: loadavg::LoadavgConfig<'a>,
     #[serde(borrow)]
     localip: localip::LocalipConfig<'a>,
     #[serde(borrow)]
