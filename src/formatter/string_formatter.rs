@@ -288,6 +288,11 @@ impl<'a> StringFormatter<'a> {
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
+            // Empty textgroups still produce a segment to preserve style for prev_fg/prev_bg references
+            if format.is_empty() {
+                return Ok(Segment::from_text(style, ""));
+            }
+
             let results: Result<Vec<Vec<Segment>>, StringFormatterError> = format
                 .into_iter()
                 .map(|el| {
@@ -720,6 +725,50 @@ mod tests {
             });
         let result = formatter.parse(None, None).unwrap();
         assert_eq!(result.len(), 0);
+    }
+
+    #[test]
+    fn test_empty_textgroup_with_style() {
+        const FORMAT_STR: &str = "[](bg:#9A348E)";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap();
+        let result = formatter.parse(None, None).unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert!(result[0].value().is_empty());
+        assert!(result[0].style().is_some());
+    }
+
+    #[test]
+    fn test_empty_textgroup_without_style() {
+        const FORMAT_STR: &str = "[]()";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap();
+        let result = formatter.parse(None, None).unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert!(result[0].value().is_empty());
+    }
+
+    #[test]
+    fn test_empty_textgroup_propagates_prev_bg() {
+        const FORMAT_STR: &str = "[](bg:#9A348E)[X](bg:prev_bg)";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap();
+        let result = formatter.parse(None, None).unwrap();
+
+        assert_eq!(result.len(), 2);
+
+        // First segment: empty with bg:#9A348E
+        let first_ansi = result[0].ansi_string(None);
+        let prev_style = first_ansi.style_ref();
+
+        // Second segment: should inherit bg from first
+        let second_ansi = result[1].ansi_string(Some(prev_style));
+        assert_eq!(
+            second_ansi.style_ref().background,
+            Some(nu_ansi_term::Color::Rgb(154, 52, 142))
+        );
     }
 
     #[test]
