@@ -174,6 +174,12 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
             stdout: String::from("1.0.0"),
             stderr: String::default(),
         }),
+        "cabal -v0 path --format=json --compiler-info" => Some(CommandOutput {
+            stdout: String::from(
+                "{\"cabal-version\":\"3.14.2.0\",\"compiler\":{\"flavour\":\"ghc\",\"id\":\"ghc-9.2.1\",\"path\":\"/path/to/ghc\"}}",
+            ),
+            stderr: String::default(),
+        }),
         "cc --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -362,6 +368,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             ),
             stderr: String::default(),
         }),
+        "mhs --numeric-version" => Some(CommandOutput {
+            stdout: String::from("0.13.3.0\n"),
+            stderr: String::default(),
+        }),
         "mojo --version" => Some(CommandOutput {
             stdout: String::from("mojo 24.4.0 (2cb57382)\n"),
             stderr: String::default(),
@@ -510,6 +520,10 @@ Version: 0.8.16+commit.07a7930e.Linux.g++",
         }),
         "solcjs --version" => Some(CommandOutput {
             stdout: String::from("0.8.15+commit.e14f2714.Emscripten.clang"),
+            stderr: String::default(),
+        }),
+        "stack --no-install-ghc query compiler wanted" => Some(CommandOutput {
+            stdout: String::from("ghc-9.2.1"),
             stderr: String::default(),
         }),
         "swift --version" => Some(CommandOutput {
