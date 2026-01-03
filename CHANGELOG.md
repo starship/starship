@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.3](https://github.com/starship/starship/compare/v1.24.2...v1.24.3) (2026-01-03)
+
+
+### Bug Fixes
+
+* **install:** improve UX for version option ([#7197](https://github.com/starship/starship/issues/7197)) ([c576625](https://github.com/starship/starship/commit/c576625343a8353ed2e99157d86065c2e713048e))
+
 ## [1.24.2](https://github.com/starship/starship/compare/v1.24.1...v1.24.2) (2025-12-30)
 
 
