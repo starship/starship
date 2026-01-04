@@ -1931,44 +1931,60 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                        | Mô tả                                                                                                       |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
-| `ahead`              | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | Định dạng của `untracked`                                                                                   |
-| `stashed`            | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | Định dạng của `modified`                                                                                    |
-| `staged`             | `'+'`                                           | Định dạng của `modified`                                                                                    |
-| `renamed`            | `'»'`                                           | Định dạng của `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | Kiểu cho module.                                                                                            |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | Vô hiệu `git_status` module.                                                                                |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| Tuỳ chọn               | Mặc định                                        | Mô tả                                                                                                       |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
+| `ahead`                | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
+| `behind`               | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
+| `diverged`             | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
+| `up_to_date`           | `''`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`            | `'?'`                                           | Định dạng của `untracked`                                                                                   |
+| `stashed`              | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
+| `modified`             | `'!'`                                           | Định dạng của `modified`                                                                                    |
+| `staged`               | `'+'`                                           | Định dạng của `modified`                                                                                    |
+| `renamed`              | `'»'`                                           | Định dạng của `renamed`                                                                                     |
+| `deleted`              | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `style`                | `'bold red'`                                    | Kiểu cho module.                                                                                            |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `disabled`             | `false`                                         | Vô hiệu `git_status` module.                                                                                |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Các biến
 
 Các biến dưới đây có thể được sử dụng trong `format`:
 
-| Biến           | Mô tả                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
-| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
-| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
-| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
-| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
-| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
-| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Giá trị ghi đè của `style`                                                                                    |
+| Biến                   | Mô tả                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
+| `untracked`            | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
+| `stashed`              | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
+| `modified`             | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
+| `staged`               | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
+| `renamed`              | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
+| `deleted`              | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| style\*              | Giá trị ghi đè của `style`                                                                                    |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1979,7 +1995,7 @@ Các biến sau có thể được sử dụng trong `diverged`:
 | `ahead_count`  | Số lượng commit phía trước của nhánh tracking |
 | `behind_count` | Số lượng commit phía sau nhánh tracking       |
 
-Các biến sau có thể được sử dụng trong `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Biến    | Mô tả                         |
 | ------- | ----------------------------- |
