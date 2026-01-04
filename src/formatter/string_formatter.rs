@@ -244,14 +244,13 @@ impl<'a> StringFormatter<'a> {
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
-            let style = parse_style(textgroup.style, style_variables, context);
-            parse_format(
-                textgroup.format,
-                style.transpose()?,
-                variables,
-                style_variables,
-                context,
-            )
+            let style = parse_style(textgroup.style, style_variables, context).transpose()?;
+
+            // Empty textgroups still produce a segment to preserve style for prev_fg/prev_bg references
+            if textgroup.format.is_empty() {
+                return Ok(Segment::from_text(style, ""));
+            }
+            parse_format(textgroup.format, style, variables, style_variables, context)
         }
 
         fn parse_style<'a>(
@@ -288,11 +287,6 @@ impl<'a> StringFormatter<'a> {
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
-            // Empty textgroups still produce a segment to preserve style for prev_fg/prev_bg references
-            if format.is_empty() {
-                return Ok(Segment::from_text(style, ""));
-            }
-
             let results: Result<Vec<Vec<Segment>>, StringFormatterError> = format
                 .into_iter()
                 .map(|el| {
