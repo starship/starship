@@ -138,6 +138,42 @@ bleopt prompt_ps1_final='$(starship module character)'
 bleopt prompt_rps1_final='$(starship module time)'
 ```
 
+## TransientPrompt in Zsh
+
+Zsh does not have a built-in transient prompt feature; it must be implemented manually using ZLE (Zsh Line Editor) hooks within your `~/.zshrc` file.
+
+To enable this, add the following snippet to your `~/.zshrc` file, preferably at the very end after the `eval "$(starship init zsh)"` line:
+
+```bash
+# --- Starship Transient Prompt Logic for Zsh ---
+
+# Define the function that runs when a new line is initialized
+function zle-line-init() {
+    if (( ${+terminfo[smkx]} )); then
+        printf '%s' ${terminfo[smkx]}
+    fi
+    zle .reset-prompt
+    zle -R
+}
+
+# Define the function that runs when a command finishes
+function zle-line-finish() {
+    # This uses your starship.toml character module for the transient prompt
+    PROMPT=$(starship module character)
+    zle .reset-prompt
+    if (( ${+terminfo[rmkx]} )); then
+        printf '%s' ${terminfo[rmkx]}
+    fi
+}
+
+# Bind the functions to the ZLE hooks
+zle -N zle-line-init
+zle -N zle-line-finish
+# --- End Transient Prompt Logic ---
+```
+
+The transient prompt will now display only the character module (by default, a `❯` symbol) when you press Enter, and the full prompt will return when a new command is ready to be entered.
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands
