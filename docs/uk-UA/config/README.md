@@ -1931,44 +1931,60 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### Параметри
 
-| Параметр             | Стандартно                                      | Опис                                                                                                                    |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`         | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
-| `ahead`              | `'⇡'`                                           | Формат `ahead`                                                                                                          |
-| `behind`             | `'⇣'`                                           | Формат `behind`                                                                                                         |
-| `diverged`           | `'⇕'`                                           | Формат `diverged`                                                                                                       |
-| `up_to_date`         | `''`                                            | Формат `up_to_date`                                                                                                     |
-| `untracked`          | `'?'`                                           | Формат `untracked`                                                                                                      |
-| `stashed`            | `'\$'`                                         | Формат `stashed`                                                                                                        |
-| `modified`           | `'!'`                                           | Формат `modified`                                                                                                       |
-| `staged`             | `'+'`                                           | Формат `staged`                                                                                                         |
-| `renamed`            | `'»'`                                           | Формат `renamed`                                                                                                        |
-| `deleted`            | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`        | `""`                                            | Формат `typechanged`                                                                                                    |
-| `style`              | `'bold red'`                                    | Стиль модуля.                                                                                                           |
-| `ignore_submodules`  | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `disabled`           | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
-| `windows_starship`   |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
-| `use_git_executable` | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
+| Параметр               | Стандартно                                      | Опис                                                                                                                    |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
+| `conflicted`           | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
+| `ahead`                | `'⇡'`                                           | Формат `ahead`                                                                                                          |
+| `behind`               | `'⇣'`                                           | Формат `behind`                                                                                                         |
+| `diverged`             | `'⇕'`                                           | Формат `diverged`                                                                                                       |
+| `up_to_date`           | `''`                                            | Формат `up_to_date`                                                                                                     |
+| `untracked`            | `'?'`                                           | Формат `untracked`                                                                                                      |
+| `stashed`              | `'\$'`                                         | Формат `stashed`                                                                                                        |
+| `modified`             | `'!'`                                           | Формат `modified`                                                                                                       |
+| `staged`               | `'+'`                                           | Формат `staged`                                                                                                         |
+| `renamed`              | `'»'`                                           | Формат `renamed`                                                                                                        |
+| `deleted`              | `'✘'`                                           | Формат `deleted`                                                                                                        |
+| `typechanged`          | `""`                                            | Формат `typechanged`                                                                                                    |
+| `style`                | `'bold red'`                                    | Стиль модуля.                                                                                                           |
+| `ignore_submodules`    | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                                          |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                                        |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                                       |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                                    |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                             |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                                           |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                                          |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                                       |
+| `disabled`             | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
+| `windows_starship`     |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
+| `use_git_executable`   | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
 
 ### Змінні
 
 Наступні змінні можуть бути використані у `format`:
 
-| Змінна         | Опис                                                                                                |
-| -------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`   | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
-| `ahead_behind` | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
-| `conflicted`   | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
-| `untracked`    | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
-| `stashed`      | Показує `stashed` за наявності stash у локальному репозиторії.                                      |
-| `modified`     | Показує `modified` коли в робочій теці є змінені файли.                                             |
-| `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
-| `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
-| `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
-| `typechanged`  | Показує `typechanged` коли інформація про файл була змінена у просторі staging.                     |
-| style\*      | Віддзеркалює значення параметра `style`                                                             |
+| Змінна                 | Опис                                                                                                |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `all_status`           | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
+| `ahead_behind`         | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
+| `conflicted`           | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
+| `untracked`            | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
+| `stashed`              | Показує `stashed` за наявності stash у локальному репозиторії.                                      |
+| `modified`             | Показує `modified` коли в робочій теці є змінені файли.                                             |
+| `staged`               | Показує `staged`, коли нові фали були додані до простору staging.                                   |
+| `renamed`              | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
+| `deleted`              | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
+| `typechanged`          | Показує `typechanged` коли інформація про файл була змінена у просторі staging.                     |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                  |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                    |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                  |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.       |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                          |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                            |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                          |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.               |
+| style\*              | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -1979,7 +1995,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `ahead_count`  | Кількість комітів на яку поточна гілка випереджає відстежувану   |
 | `behind_count` | Кількість комітів на яку поточна гілка відстає від відстежуваної |
 
-Наступні змінні можуть використовуватись у  `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` та `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Змінна  | Опис                     |
 | ------- | ------------------------ |
