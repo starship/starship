@@ -4,7 +4,7 @@ use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 
-use whoami::fallible::hostname;
+use whoami::hostname;
 
 /// Creates a module with the system hostname
 ///
