@@ -6,6 +6,7 @@ use regex::Regex;
 
 use super::Context;
 use crate::configs::git_status::GitStatusConfig;
+use crate::modules::git_status::uses_reftables;
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
     formatter::string_formatter::StringFormatterError, module::Module,
@@ -33,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
     let stats = if repo.fs_monitor_value_is_true
         || status_config.use_git_executable
+        || uses_reftables(&repo.repo.to_thread_local())
         || gix_repo.index_or_empty().ok()?.is_sparse()
     {
         let mut git_args = vec!["diff", "--shortstat"];
@@ -412,6 +414,11 @@ mod tests {
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
 
+    const NORMAL_AND_REFTABLES: [FixtureProvider; 2] =
+        [FixtureProvider::Git, FixtureProvider::GitReftable];
+    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
+        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
+
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
@@ -427,286 +434,354 @@ mod tests {
 
     #[test]
     fn shows_added_lines() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
-        writeln!(the_file, "Added line")?;
-        the_file.sync_all()?;
+            let the_file = path.join("the_file");
+            let mut the_file = OpenOptions::new().append(true).open(the_file)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_addition() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        std::fs::write(path.join("new-file"), "new line")?;
-        run_git_cmd(["add", "new-file"], Some(path), true)?;
+            std::fs::write(path.join("new-file"), "new line")?;
+            run_git_cmd(["add", "new-file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = if matches!(mode, FixtureProvider::GitReftable) {
+                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
+                None
+            } else {
+                Some(format!("{} ", Color::Green.bold().paint("+1")))
+            };
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_rename_modification() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
-        writeln!(the_file, "Added line")?;
-        the_file.sync_all()?;
-        run_git_cmd(["add", "the_file"], Some(path), true)?;
-        run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
+            let the_file = path.join("the_file");
+            let mut the_file = OpenOptions::new().append(true).open(the_file)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
+            run_git_cmd(["add", "the_file"], Some(path), true)?;
+            run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = if matches!(mode, FixtureProvider::GitReftable) {
+                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
+                None
+            } else {
+                Some(format!("{} ", Color::Green.bold().paint("+1")))
+            };
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_addition_intended() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        std::fs::write(path.join("new-file"), "new line")?;
-        run_git_cmd(["add", "-N", "new-file"], Some(path), true)?;
+            std::fs::write(path.join("new-file"), "new line")?;
+            run_git_cmd(["add", "-N", "new-file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_modification() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        std::fs::write(path.join("the_file"), "modify all")?;
-        run_git_cmd(["add", "the_file"], Some(path), true)?;
+            std::fs::write(path.join("the_file"), "modify all")?;
+            run_git_cmd(["add", "the_file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-3")
-        ));
+            let expected = if matches!(mode, FixtureProvider::GitReftable) {
+                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
+                None
+            } else {
+                Some(format!(
+                    "{} {} ",
+                    Color::Green.bold().paint("+1"),
+                    Color::Red.bold().paint("-3")
+                ))
+            };
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_deleted_lines() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let file_path = path.join("the_file");
-        write_file(file_path, "First Line\nSecond Line\n")?;
+            let file_path = path.join("the_file");
+            write_file(file_path, "First Line\nSecond Line\n")?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
+            let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_deleted_lines_of_entire_file() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        std::fs::remove_file(path.join("the_file"))?;
+            std::fs::remove_file(path.join("the_file"))?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
+            let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_deletion() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        run_git_cmd(["rm", "the_file"], Some(path), true)?;
+            run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
+            let expected = if matches!(mode, FixtureProvider::GitReftable) {
+                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
+                None
+            } else {
+                Some(format!("{} ", Color::Red.bold().paint("-3")))
+            };
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_all_changes() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
-        ));
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+4"),
+                Color::Red.bold().paint("-2")
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_nothing_if_no_changes() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = None;
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let expected = None;
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_nothing_on_untracked() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
-        std::fs::write(path.join("untracked"), "a line")?;
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
+            std::fs::write(path.join("untracked"), "a line")?;
 
-        let actual = render_metrics(path);
+            let actual = render_metrics(path);
 
-        let expected = None;
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let expected = None;
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_nothing_if_no_changes_sparse() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        make_sparse(path)?;
-        let actual = render_metrics(path);
+            make_sparse(path)?;
+            let actual = render_metrics(path);
 
-        let expected = None;
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let expected = None;
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_all_if_only_nonzero_diffs_is_false() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
-        writeln!(the_file, "Added line")?;
-        the_file.sync_all()?;
+            let the_file = path.join("the_file");
+            let mut the_file = OpenOptions::new().append(true).open(the_file)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
 
-        let actual = ModuleRenderer::new("git_metrics")
-            .config(toml::toml! {
-                [git_metrics]
-                disabled = false
-                only_nonzero_diffs = true
-            })
-            .path(path)
-            .collect();
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    only_nonzero_diffs = true
+                })
+                .path(path)
+                .collect();
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn doesnt_generate_git_metrics_for_bare_repo() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
 
-        let actual = render_metrics(repo_dir.path());
-        assert_eq!(None, actual);
+            let actual = render_metrics(repo_dir.path());
+            assert_eq!(None, actual);
 
-        repo_dir.close()
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_all_changes_with_ignored_submodules() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
-        let actual = ModuleRenderer::new("git_metrics")
-            .config(toml::toml! {
-                    [git_metrics]
-                    disabled = false
-                    ignore_submodules = true
-            })
-            .path(path)
-            .collect();
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                        [git_metrics]
+                        disabled = false
+                        ignore_submodules = true
+                })
+                .path(path)
+                .collect();
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
-        ));
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+4"),
+                Color::Red.bold().paint("-2")
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn works_if_git_executable_is_used() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
 
-        let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
-        let actual = ModuleRenderer::new("git_metrics")
-            .config(toml::toml! {
-                [git_status]
-                use_git_executable = true
-                [git_metrics]
-                disabled = false
-            })
-            .path(path)
-            .collect();
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_status]
+                    use_git_executable = true
+                    [git_metrics]
+                    disabled = false
+                })
+                .path(path)
+                .collect();
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
-        ));
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+4"),
+                Color::Red.bold().paint("-2")
+            ));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     fn render_metrics(path: &Path) -> Option<String> {
@@ -744,18 +819,20 @@ mod tests {
         }
     }
 
-    fn create_repo_with_commit() -> io::Result<tempfile::TempDir> {
+    fn create_repo_with_commit(provider: FixtureProvider) -> io::Result<tempfile::TempDir> {
         let repo_dir = tempfile::tempdir()?;
         let path = repo_dir.path();
         let file = repo_dir.path().join("the_file");
 
         // Initialize a new git repo
         run_git_cmd(
-            [
-                "init",
-                "--quiet",
-                path.to_str().expect("Path was not UTF-8"),
-            ],
+            ["init", "--quiet"]
+                .into_iter()
+                .chain(
+                    matches!(provider, FixtureProvider::GitReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .chain(Some(path.to_str().expect("Path was not UTF-8"))),
             None,
             true,
         )?;

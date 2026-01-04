@@ -188,7 +188,9 @@ impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
+    GitReftable,
     GitBare,
+    GitBareReftable,
     Hg,
     Pijul,
 }
@@ -211,12 +213,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .sync_all()?;
             Ok(path)
         }
-        FixtureProvider::Git => {
+        FixtureProvider::Git | FixtureProvider::GitReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;
@@ -253,12 +260,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             Ok(path)
         }
-        FixtureProvider::GitBare => {
+        FixtureProvider::GitBare | FixtureProvider::GitBareReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master", "--bare"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitBareReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master", "--bare"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;

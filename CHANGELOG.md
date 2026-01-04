@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.24.2](https://github.com/starship/starship/compare/v1.24.1...v1.24.2) (2025-12-30)
+
+
+### Bug Fixes
+
+* **cmd_duration:** avoid freezing on notify on macOS 26 ([#7187](https://github.com/starship/starship/issues/7187)) ([0daa8d3](https://github.com/starship/starship/commit/0daa8d3f921f5b7f08445a29e2842928b6e637c4))
+* **fish:** restore job counting compability with older versions ([#7173](https://github.com/starship/starship/issues/7173)) ([a261b48](https://github.com/starship/starship/commit/a261b48caa4129cd6baa5fa98f364eff66593bc4))
+* **fish:** use native transient prompt if available ([#7015](https://github.com/starship/starship/issues/7015)) ([cc65e0c](https://github.com/starship/starship/commit/cc65e0c7429068f1123fe5d9844ebebdfa1b9547))
+* **git:** Basic Reftable compatibility and future-proofing ([#7154](https://github.com/starship/starship/issues/7154)) ([6d9c8ea](https://github.com/starship/starship/commit/6d9c8ea8a9736d2e12bda46c9cdb1f8fc1de630c))
+* **mise:** align documentation and implementation ([#7131](https://github.com/starship/starship/issues/7131)) ([08824d7](https://github.com/starship/starship/commit/08824d7c6e1f69150cc1c28f3ff46bbb5447a7d0))
+* Revert "feat(install.sh): handle installation directory prompt case-insensitively ([#7138](https://github.com/starship/starship/issues/7138)) ([d11bc8d](https://github.com/starship/starship/commit/d11bc8d5867d7d7c16850803b4eed7643bf33b20))
+* **zsh:** fix job counting ([#7124](https://github.com/starship/starship/issues/7124)) ([46ab862](https://github.com/starship/starship/commit/46ab8621a7490bdcea635feb6233ce038264ff4e))
+
 ## [1.24.1](https://github.com/starship/starship/compare/v1.24.0...v1.24.1) (2025-11-16)
 
 

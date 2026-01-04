@@ -28,10 +28,11 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if let Some(os) = config.os {
-        if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
-            return None;
-        }
+    if let Some(os) = config.os
+        && os != env::consts::OS
+        && !(os == "unix" && cfg!(unix))
+    {
+        return None;
     }
 
     if config.require_repo && context.get_repo().is_err() {
