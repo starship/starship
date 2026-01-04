@@ -682,6 +682,14 @@
         "staged": "+",
         "untracked": "?",
         "typechanged": "",
+        "worktree_added": "",
+        "worktree_deleted": "",
+        "worktree_modified": "",
+        "worktree_typechanged": "",
+        "index_added": "",
+        "index_deleted": "",
+        "index_modified": "",
+        "index_typechanged": "",
         "ignore_submodules": false,
         "disabled": false,
         "use_git_executable": false
@@ -3572,6 +3580,38 @@
           "default": "?"
         },
         "typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_added": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "index_added": {
+          "type": "string",
+          "default": ""
+        },
+        "index_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "index_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "index_typechanged": {
           "type": "string",
           "default": ""
         },
