@@ -93,40 +93,41 @@ download() {
         cmd="curl --fail --silent --location --output $file $url"
         $cmd && return 0
         rc=$?
-        warn "curl failed (exit code $rc): ${cmd}"
+        warn "Command failed (exit code $rc): ${cmd}"
     fi
 
     if has wget; then
         cmd="wget --quiet --output-document=$file $url"
         $cmd && return 0
         rc=$?
-        warn "wget failed (exit code $rc): ${cmd}"
+        warn "Command failed (exit code $rc): ${cmd}"
     fi
 
     if has fetch; then
         cmd="fetch --quiet --output=$file $url"
         $cmd && return 0
         rc=$?
-        warn "fetch failed (exit code $rc): ${cmd}"
+        warn "Command failed (exit code $rc): ${cmd}"
     fi
 
     error "No HTTP download program (curl, wget, fetch) succeeded, exiting…"
     printf "\n" >&2
 
     case "${VERSION}" in
-        latest) ;;
-        v*) ;;
-        *)
-            info "Note: Release tags include the 'v' prefix (e.g., 'v1.2.3')."
-            info "You specified '${VERSION}'. Did you mean 'v${VERSION}'?"
-            printf "\n" >&2
-            ;;
+    latest) ;;
+    v*) ;;
+    *)
+        info "Note: Release tags include the 'v' prefix (e.g., 'v1.2.3')."
+        info "You specified '${VERSION}'. Did you mean 'v${VERSION}'?"
+        printf "\n" >&2
+        ;;
     esac
 
     info "This is likely due to Starship not yet supporting your configuration."
     info "If you would like to see a build for your configuration,"
     info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
     info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+
     return ${rc:-1}
 }
 
