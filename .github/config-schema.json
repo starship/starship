@@ -1749,6 +1749,26 @@
         "detect_folders": []
       }
     },
+    "vcs": {
+      "default": {
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
+        "order": [
+          "git",
+          "hg",
+          "pijul",
+          "fossil"
+        ],
+        "pijul_modules": "$pijul_channel"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VcsConfig"
+        }
+      ]
+    },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
       "default": {
@@ -6517,6 +6537,59 @@
         }
       },
       "additionalProperties": false
+    },
+    "VcsConfig": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "default": [
+            "git",
+            "hg",
+            "pijul",
+            "fossil"
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Vcs"
+          }
+        },
+        "disabled": {
+          "description": "Disables the VCS module.",
+          "default": false,
+          "type": "boolean"
+        },
+        "fossil_modules": {
+          "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
+          "default": "$fossil_branch$fossil_metrics",
+          "type": "string"
+        },
+        "git_modules": {
+          "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
+          "type": "string"
+        },
+        "hg_modules": {
+          "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
+          "default": "$hg_branch$hg_state",
+          "type": "string"
+        },
+        "pijul_modules": {
+          "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
+          "default": "$pijul_channel",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Vcs": {
+      "type": "string",
+      "enum": [
+        "fossil",
+        "git",
+        "hg",
+        "pijul"
+      ]
     },
     "VcshConfig": {
       "type": "object",
