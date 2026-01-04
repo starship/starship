@@ -88,7 +88,10 @@ mod tests {
                 }),
             );
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise healthy")));
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint("mise healthy")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -115,7 +118,10 @@ mod tests {
                 }),
             );
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise healthy")));
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint("mise healthy")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()
@@ -136,7 +142,10 @@ mod tests {
             })
             .cmd("mise doctor", None);
 
-        let expected = Some(format!("{} ", Color::Purple.bold().paint("mise unhealthy")));
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint("mise unhealthy")
+        ));
         assert_eq!(expected, renderer.collect());
 
         dir.close()

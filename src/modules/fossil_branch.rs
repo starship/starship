@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // before it was only checking against whatever is in the config starship.toml
     if config.disabled {
         return None;
-    };
+    }
 
     vcs::discover_repo_root(context, vcs::Vcs::Fossil)?;
 
@@ -196,7 +196,7 @@ mod tests {
                 }
                 Expect::Symbol(symbol) => expect_symbol = symbol,
                 Expect::TruncationSymbol(truncation_symbol) => {
-                    expect_truncation_symbol = truncation_symbol
+                    expect_truncation_symbol = truncation_symbol;
                 }
                 Expect::NoTruncation => expect_truncation_symbol = "",
                 Expect::BranchName(branch_name) => expect_branch_name = branch_name,

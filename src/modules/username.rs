@@ -1,4 +1,4 @@
-use super::{Context, Module, ModuleConfig};
+use super::{Context, Detected, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
@@ -20,7 +20,7 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - If the option `username.detect_env_vars` is set with a negated environment variable [A]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     #[cfg(not(any(test, target_os = "android")))]
-    let mut username = whoami::fallible::username()
+    let mut username = whoami::username()
         .inspect_err(|e| log::debug!("Failed to get username {e:?}"))
         .ok()
         .or_else(|| context.get_env(USERNAME_ENV_VAR))?;
@@ -30,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
-    let has_detected_env_var = context.detect_env_vars(&config.detect_env_vars);
+    let has_detected_env_var = context.detect_env_vars2(&config.detect_env_vars);
 
     let is_root = is_root_user();
     if cfg!(target_os = "windows") && is_root {
@@ -41,9 +41,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
         || is_ssh_session(context) // [3]
-        || ( !config.detect_env_vars.is_empty() && has_detected_env_var ); // [4]
+        || has_detected_env_var == Detected::Yes; // [4]
 
-    if !show_username || !has_detected_env_var {
+    if !show_username || has_detected_env_var == Detected::Negated {
         return None; // [A]
     }
 

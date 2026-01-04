@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if config.disabled {
         return None;
-    };
+    }
 
     let subscription: Option<Subscription> = get_azure_profile_info(context);
 
@@ -126,7 +126,7 @@ mod tests {
     fn generate_test_config(dir: &TempDir, azure_profile_contents: &str) -> io::Result<()> {
         save_string_to_file(
             dir,
-            azure_profile_contents.to_string(),
+            azure_profile_contents,
             String::from("azureProfile.json"),
         )?;
 
@@ -737,7 +737,7 @@ mod tests {
 
         bom_str.push_str(json_str);
 
-        let dir_path_no_bom = save_string_to_file(&dir, bom_str, String::from("bom.json"))?;
+        let dir_path_no_bom = save_string_to_file(&dir, &bom_str, String::from("bom.json"))?;
         let sanitized_json = load_azure_profile(&dir_path_no_bom).unwrap();
 
         assert_eq!(
@@ -755,8 +755,7 @@ mod tests {
         let json_str =
             r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
 
-        let dir_path_no_bom =
-            save_string_to_file(&dir, json_str.to_string(), String::from("bom.json"))?;
+        let dir_path_no_bom = save_string_to_file(&dir, json_str, String::from("bom.json"))?;
         let sanitized_json = load_azure_profile(&dir_path_no_bom).unwrap();
 
         assert_eq!(
@@ -783,7 +782,7 @@ mod tests {
 
     fn save_string_to_file(
         dir: &TempDir,
-        contents: String,
+        contents: &str,
         file_name: String,
     ) -> Result<PathBuf, io::Error> {
         let bom_file_path = dir.path().join(file_name);

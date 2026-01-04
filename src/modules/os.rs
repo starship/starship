@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => get_symbol(&config, &os.os_type()),
+                "symbol" => get_symbol(&config, os.os_type()),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 // Get the operating system symbol from user config, or else default config
 // when user has not defined a symbol for the operating system.
-fn get_symbol<'a>(config: &'a OSConfig, os_type: &os_info::Type) -> Option<&'a str> {
+fn get_symbol<'a>(config: &'a OSConfig, os_type: os_info::Type) -> Option<&'a str> {
     config
         .get_symbol(os_type)
         .or_else(|| OSConfig::default().get_symbol(os_type))
@@ -171,7 +171,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &t), e);
+            assert_eq!(get_symbol(&config, t), e);
         }
     }
 
@@ -261,7 +261,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &t), e);
+            assert_eq!(get_symbol(&config, t), e);
         }
     }
 
@@ -316,7 +316,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &t), e);
+            assert_eq!(get_symbol(&config, t), e);
         }
     }
 
@@ -338,22 +338,27 @@ mod tests {
             Type::AIX => "➿ ",
             Type::Alpaquita => "🔔 ",
             Type::Alpine => "🏔️ ",
+            Type::ALTLinux => "Ⓐ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
             Type::AOSC => "🐱 ",
             Type::Arch | Type::Artix | Type::CachyOS => "🎗️ ",
             Type::Bluefin => "🐟 ",
             Type::CentOS | Type::AlmaLinux | Type::RockyLinux => "💠 ",
+            Type::Cygwin => "",
             Type::Debian => "🌀 ",
             Type::DragonFly => "🐉 ",
+            Type::Elementary => "🍏 ",
             Type::Emscripten => "🔗 ",
             Type::EndeavourOS => "🚀 ",
-            Type::Fedora | Type::Nobara => "🎩 ",
+            Type::Fedora | Type::Nobara | Type::Redhat | Type::RedHatEnterprise => "🎩 ",
             Type::FreeBSD => "😈 ",
             Type::Garuda => "🦅 ",
             Type::Gentoo => "🗜️ ",
             Type::HardenedBSD => "🛡️ ",
             Type::Illumos => "🐦 ",
+            Type::Ios => "📱 ",
+            Type::InstantOS => "⏲️ ",
             Type::Kali => "🐉 ",
             Type::Linux => "🐧 ",
             Type::Mabox => "📦 ",
@@ -369,10 +374,9 @@ mod tests {
             Type::openEuler => "🦉 ",
             Type::openSUSE => "🦎 ",
             Type::OracleLinux => "🦴 ",
+            Type::PikaOS => "🐤 ",
             Type::Pop => "🍭 ",
             Type::Raspbian => "🍓 ",
-            Type::Redhat => "🎩 ",
-            Type::RedHatEnterprise => "🎩 ",
             Type::Redox => "🧪 ",
             Type::Solus => "⛵ ",
             Type::SUSE => "🦎 ",
@@ -382,6 +386,7 @@ mod tests {
             Type::Uos => "🐲 ",
             Type::Void => " ",
             Type::Windows => "🪟 ",
+            Type::Zorin => "🔹 ",
             _ => "",
         };
     }

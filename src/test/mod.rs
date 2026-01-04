@@ -1,4 +1,5 @@
-use crate::context::{Context, Shell, Target};
+use crate::context::{Context, Properties, Shell, Target};
+use crate::context_env::Env;
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -37,12 +38,12 @@ fn init_logger() {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        Default::default(),
+        Properties::default(),
         Shell::Unknown,
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
-        Default::default(),
+        Env::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -168,7 +169,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
-        let ret = crate::print::get_module(self.name, self.context);
+        let ret = crate::print::get_module(self.name, &self.context);
         // all tests rely on the fact that an empty module produces None as output as the
         // convention was that there would be no module but None. This is nowadays not anymore
         // the case (to get durations for all modules). So here we make it so, that an empty
@@ -187,7 +188,9 @@ impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
+    GitReftable,
     GitBare,
+    GitBareReftable,
     Hg,
     Pijul,
 }
@@ -210,12 +213,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .sync_all()?;
             Ok(path)
         }
-        FixtureProvider::Git => {
+        FixtureProvider::Git | FixtureProvider::GitReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;
@@ -252,12 +260,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             Ok(path)
         }
-        FixtureProvider::GitBare => {
+        FixtureProvider::GitBare | FixtureProvider::GitBareReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master", "--bare"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitBareReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master", "--bare"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;

@@ -88,7 +88,6 @@
     "battery": {
       "$ref": "#/$defs/BatteryConfig",
       "default": {
-        "format": "[$symbol$percentage]($style) ",
         "full_symbol": "󰁹 ",
         "charging_symbol": "󰂄 ",
         "discharging_symbol": "󰂃 ",
@@ -102,7 +101,8 @@
             "discharging_symbol": null
           }
         ],
-        "disabled": false
+        "disabled": false,
+        "format": "[$symbol$percentage]($style) "
       }
     },
     "buf": {
@@ -140,7 +140,7 @@
       }
     },
     "c": {
-      "$ref": "#/$defs/CcConfig_for_CConfigMarker",
+      "$ref": "#/$defs/CcConfig",
       "default": {
         "format": "via [$symbol($version(-$name) )]($style)",
         "version_format": "v${raw}",
@@ -201,8 +201,8 @@
     "cmd_duration": {
       "$ref": "#/$defs/CmdDurationConfig",
       "default": {
-        "format": "took [$duration]($style) ",
         "min_time": 2000,
+        "format": "took [$duration]($style) ",
         "style": "yellow bold",
         "show_milliseconds": false,
         "disabled": false,
@@ -231,8 +231,8 @@
     "conda": {
       "$ref": "#/$defs/CondaConfig",
       "default": {
-        "format": "via [$symbol$environment]($style) ",
         "truncation_length": 1,
+        "format": "via [$symbol$environment]($style) ",
         "symbol": "🅒 ",
         "style": "green bold",
         "ignore_base": true,
@@ -252,7 +252,7 @@
       }
     },
     "cpp": {
-      "$ref": "#/$defs/CcConfig_for_CppConfigMarker",
+      "$ref": "#/$defs/CcConfig",
       "default": {
         "format": "via [$symbol($version(-$name) )]($style)",
         "version_format": "v${raw}",
@@ -308,8 +308,8 @@
     "daml": {
       "$ref": "#/$defs/DamlConfig",
       "default": {
-        "format": "via [$symbol($version )]($style)",
         "symbol": "Λ ",
+        "format": "via [$symbol($version )]($style)",
         "version_format": "v${raw}",
         "style": "bold cyan",
         "disabled": false,
@@ -365,12 +365,12 @@
     "directory": {
       "$ref": "#/$defs/DirectoryConfig",
       "default": {
-        "format": "[$path]($style)[$read_only]($read_only_style) ",
         "truncation_length": 3,
         "truncate_to_repo": true,
         "substitutions": {},
         "fish_style_pwd_dir_length": 0,
         "use_logical_path": true,
+        "format": "[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "style": "cyan bold",
         "repo_root_style": null,
@@ -408,9 +408,9 @@
     "docker_context": {
       "$ref": "#/$defs/DockerContextConfig",
       "default": {
-        "format": "via [$symbol$context]($style) ",
         "symbol": "🐳 ",
         "style": "blue bold",
+        "format": "via [$symbol$context]($style) ",
         "only_with_files": true,
         "disabled": false,
         "detect_extensions": [],
@@ -530,6 +530,54 @@
         "disabled": false
       }
     },
+    "fortran": {
+      "$ref": "#/$defs/FortranConfig",
+      "default": {
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "version_format": "${raw}",
+        "symbol": "🅵  ",
+        "style": "bold purple",
+        "disabled": false,
+        "detect_extensions": [
+          "f",
+          "F",
+          "for",
+          "FOR",
+          "ftn",
+          "FTN",
+          "f77",
+          "F77",
+          "f90",
+          "F90",
+          "f95",
+          "F95",
+          "f03",
+          "F03",
+          "f08",
+          "F08",
+          "f18",
+          "F18"
+        ],
+        "detect_files": [
+          "fpm.toml"
+        ],
+        "detect_folders": [],
+        "commands": [
+          [
+            "gfortran",
+            "--version"
+          ],
+          [
+            "flang",
+            "--version"
+          ],
+          [
+            "flang-new",
+            "--version"
+          ]
+        ]
+      }
+    },
     "fossil_branch": {
       "$ref": "#/$defs/FossilBranchConfig",
       "default": {
@@ -574,14 +622,15 @@
         "only_attached": false,
         "always_show_remote": false,
         "ignore_branches": [],
+        "ignore_bare_repo": false,
         "disabled": false
       }
     },
     "git_commit": {
       "$ref": "#/$defs/GitCommitConfig",
       "default": {
-        "format": "[\\($hash$tag\\)]($style) ",
         "commit_hash_length": 7,
+        "format": "[\\($hash$tag\\)]($style) ",
         "style": "green bold",
         "only_detached": true,
         "disabled": false,
@@ -593,10 +642,10 @@
     "git_metrics": {
       "$ref": "#/$defs/GitMetricsConfig",
       "default": {
-        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "added_style": "bold green",
         "deleted_style": "bold red",
         "only_nonzero_diffs": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "disabled": true,
         "ignore_submodules": false
       }
@@ -604,7 +653,6 @@
     "git_state": {
       "$ref": "#/$defs/GitStateConfig",
       "default": {
-        "format": "\\([$state( $progress_current/$progress_total)]($style)\\) ",
         "rebase": "REBASING",
         "merge": "MERGING",
         "revert": "REVERTING",
@@ -613,6 +661,7 @@
         "am": "AM",
         "am_or_rebase": "AM/REBASE",
         "style": "bold yellow",
+        "format": "\\([$state( $progress_current/$progress_total)]($style)\\) ",
         "disabled": false
       }
     },
@@ -771,9 +820,9 @@
     "hg_branch": {
       "$ref": "#/$defs/HgBranchConfig",
       "default": {
-        "format": "on [$symbol$branch(:$topic)]($style) ",
         "symbol": " ",
         "style": "bold purple",
+        "format": "on [$symbol$branch(:$topic)]($style) ",
         "truncation_length": 9223372036854775807,
         "truncation_symbol": "…",
         "disabled": true
@@ -782,7 +831,6 @@
     "hg_state": {
       "$ref": "#/$defs/HgStateConfig",
       "default": {
-        "format": "\\([$state]($style)\\) ",
         "merge": "MERGING",
         "rebase": "REBASING",
         "update": "UPDATING",
@@ -792,17 +840,18 @@
         "transplant": "TRANSPLANTING",
         "histedit": "HISTEDITING",
         "style": "bold yellow",
+        "format": "\\([$state]($style)\\) ",
         "disabled": true
       }
     },
     "hostname": {
       "$ref": "#/$defs/HostnameConfig",
       "default": {
-        "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
         "ssh_symbol": "🌐 ",
         "trim_at": ".",
         "detect_env_vars": [],
+        "format": "[$ssh_symbol$hostname]($style) in ",
         "style": "green dimmed bold",
         "disabled": false,
         "aliases": {}
@@ -811,8 +860,8 @@
     "java": {
       "$ref": "#/$defs/JavaConfig",
       "default": {
-        "format": "via [$symbol($version )]($style)",
         "disabled": false,
+        "format": "via [$symbol($version )]($style)",
         "version_format": "v${raw}",
         "style": "red dimmed",
         "symbol": "☕ ",
@@ -840,10 +889,10 @@
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
-        "format": "[$symbol$number]($style) ",
         "threshold": 1,
         "symbol_threshold": 1,
         "number_threshold": 2,
+        "format": "[$symbol$number]($style) ",
         "symbol": "✦",
         "style": "bold blue",
         "disabled": false
@@ -887,8 +936,8 @@
     "kubernetes": {
       "$ref": "#/$defs/KubernetesConfig",
       "default": {
-        "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "symbol": "☸ ",
+        "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
         "disabled": true,
         "context_aliases": {},
@@ -909,8 +958,8 @@
     "localip": {
       "$ref": "#/$defs/LocalipConfig",
       "default": {
-        "format": "[$localipv4]($style) ",
         "ssh_only": true,
+        "format": "[$localipv4]($style) ",
         "style": "yellow bold",
         "disabled": true
       }
@@ -938,8 +987,8 @@
     "memory_usage": {
       "$ref": "#/$defs/MemoryConfig",
       "default": {
-        "format": "via $symbol[$ram( | $swap)]($style) ",
         "threshold": 75,
+        "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
         "symbol": "🐏 ",
         "disabled": true
@@ -948,9 +997,9 @@
     "meson": {
       "$ref": "#/$defs/MesonConfig",
       "default": {
-        "format": "via [$symbol$project]($style) ",
         "truncation_length": 4294967295,
         "truncation_symbol": "…",
+        "format": "via [$symbol$project]($style) ",
         "symbol": "⬢ ",
         "style": "blue bold",
         "disabled": false
@@ -959,7 +1008,7 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "[$symbol$health]($style) ",
+        "format": "on [$symbol$health]($style) ",
         "symbol": "mise ",
         "style": "bold purple",
         "disabled": true,
@@ -1151,6 +1200,7 @@
           "Alpaquita": "🔔 ",
           "AlmaLinux": "💠 ",
           "Alpine": "🏔️ ",
+          "ALTLinux": "Ⓐ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "AOSC": "🐱 ",
@@ -1160,6 +1210,7 @@
           "CachyOS": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
+          "Elementary": "🍏 ",
           "DragonFly": "🐉 ",
           "Emscripten": "🔗 ",
           "EndeavourOS": "🚀 ",
@@ -1169,6 +1220,8 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Ios": "📱 ",
+          "InstantOS": "⏲️ ",
           "Kali": "🐉 ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
@@ -1185,6 +1238,7 @@
           "openEuler": "🦉 ",
           "openSUSE": "🦎 ",
           "OracleLinux": "🦴 ",
+          "PikaOS": "🐤 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
           "Redhat": "🎩 ",
@@ -1198,7 +1252,8 @@
           "Unknown": "❓ ",
           "Uos": "🐲 ",
           "Void": " ",
-          "Windows": "🪟 "
+          "Windows": "🪟 ",
+          "Zorin": "🔹 "
         },
         "disabled": true
       }
@@ -1260,9 +1315,9 @@
     "pijul_channel": {
       "$ref": "#/$defs/PijulConfig",
       "default": {
-        "format": "on [$symbol$channel]($style) ",
         "symbol": " ",
         "style": "bold purple",
+        "format": "on [$symbol$channel]($style) ",
         "truncation_length": 9223372036854775807,
         "truncation_symbol": "…",
         "disabled": true
@@ -1271,11 +1326,11 @@
     "pixi": {
       "$ref": "#/$defs/PixiConfig",
       "default": {
-        "format": "via [$symbol($version )(\\($environment\\) )]($style)",
         "pixi_binary": [
           "pixi"
         ],
         "show_default_environment": true,
+        "format": "via [$symbol($version )(\\($environment\\) )]($style)",
         "version_format": "v${raw}",
         "symbol": "🧚 ",
         "style": "yellow bold",
@@ -1321,7 +1376,6 @@
     "python": {
       "$ref": "#/$defs/PythonConfig",
       "default": {
-        "format": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
         "pyenv_version_name": false,
         "pyenv_prefix": "pyenv ",
         "python_binary": [
@@ -1335,6 +1389,7 @@
             "python2"
           ]
         ],
+        "format": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
         "version_format": "v${raw}",
         "style": "yellow bold",
         "symbol": "🐍 ",
@@ -1518,8 +1573,8 @@
     "shlvl": {
       "$ref": "#/$defs/ShLvlConfig",
       "default": {
-        "format": "[$symbol$shlvl]($style) ",
         "threshold": 2,
+        "format": "[$symbol$shlvl]($style) ",
         "symbol": "↕️  ",
         "repeat": false,
         "repeat_offset": 0,
@@ -1530,8 +1585,8 @@
     "singularity": {
       "$ref": "#/$defs/SingularityConfig",
       "default": {
-        "format": "[$symbol\\[$env\\]]($style) ",
         "symbol": "",
+        "format": "[$symbol\\[$env\\]]($style) ",
         "style": "blue bold dimmed",
         "disabled": false
       }
@@ -1557,8 +1612,8 @@
     "spack": {
       "$ref": "#/$defs/SpackConfig",
       "default": {
-        "format": "via [$symbol$environment]($style) ",
         "truncation_length": 1,
+        "format": "via [$symbol$environment]($style) ",
         "symbol": "🅢 ",
         "style": "blue bold",
         "disabled": false
@@ -1626,6 +1681,16 @@
         "detect_files": [],
         "detect_folders": [
           ".terraform"
+        ],
+        "commands": [
+          [
+            "terraform",
+            "version"
+          ],
+          [
+            "tofu",
+            "version"
+          ]
         ]
       }
     },
@@ -1660,8 +1725,8 @@
     "username": {
       "$ref": "#/$defs/UsernameConfig",
       "default": {
-        "format": "[$user]($style) in ",
         "detect_env_vars": [],
+        "format": "[$user]($style) in ",
         "style_root": "red bold",
         "style_user": "yellow bold",
         "show_always": false,
@@ -1707,9 +1772,9 @@
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
       "default": {
-        "format": "vcsh [$symbol$repo]($style) ",
         "symbol": "",
         "style": "bold yellow",
+        "format": "vcsh [$symbol$repo]($style) ",
         "disabled": false
       }
     },
@@ -1774,7 +1839,7 @@
   "$defs": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\n The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\n The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\n If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\n When using [aws-vault](https://github.com/99designs/aws-vault) the profile\n is read from the `AWS_VAULT` env var and the credentials expiration date\n is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\n var.\n\n When using [awsu](https://github.com/kreuzwerker/awsu) the profile\n is read from the `AWSU_PROFILE` env var.\n\n When using [`AWSume`](https://awsu.me) the profile\n is read from the `AWSUME_PROFILE` env var and the credentials expiration\n date is read from the `AWSUME_EXPIRATION` env var.\n\n When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\n is read from the `AWS_SSO_PROFILE` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\nThe output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\nIf the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile\nis read from the `AWS_VAULT` env var and the credentials expiration date\nis read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\nvar.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile\nis read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile\nis read from the `AWSUME_PROFILE` env var and the credentials expiration\ndate is read from the `AWSUME_EXPIRATION` env var.\n\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\nis read from the `AWS_SSO_PROFILE` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1858,10 +1923,6 @@
     "BatteryConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$symbol$percentage]($style) "
-        },
         "full_symbol": {
           "type": "string",
           "default": "󰁹 "
@@ -1899,6 +1960,10 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$percentage]($style) "
         }
       },
       "additionalProperties": false
@@ -2034,7 +2099,7 @@
       },
       "additionalProperties": false
     },
-    "CcConfig_for_CConfigMarker": {
+    "CcConfig": {
       "type": "object",
       "properties": {
         "format": {
@@ -2198,14 +2263,14 @@
     "CmdDurationConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "took [$duration]($style) "
-        },
         "min_time": {
           "type": "integer",
           "format": "int64",
           "default": 2000
+        },
+        "format": {
+          "type": "string",
+          "default": "took [$duration]($style) "
         },
         "style": {
           "type": "string",
@@ -2294,15 +2359,15 @@
     "CondaConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol$environment]($style) "
-        },
         "truncation_length": {
           "type": "integer",
           "format": "uint",
           "minimum": 0,
           "default": 1
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol$environment]($style) "
         },
         "symbol": {
           "type": "string",
@@ -2350,86 +2415,6 @@
         "disabled": {
           "type": "boolean",
           "default": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "CcConfig_for_CppConfigMarker": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol($version(-$name) )]($style)"
-        },
-        "version_format": {
-          "type": "string",
-          "default": "v${raw}"
-        },
-        "style": {
-          "type": "string",
-          "default": "149 bold"
-        },
-        "symbol": {
-          "type": "string",
-          "default": "C++ "
-        },
-        "disabled": {
-          "type": "boolean",
-          "default": true
-        },
-        "detect_extensions": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "cpp",
-            "cc",
-            "cxx",
-            "c++",
-            "hpp",
-            "hh",
-            "hxx",
-            "h++",
-            "tcc"
-          ]
-        },
-        "detect_files": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "detect_folders": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "commands": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "default": [
-            [
-              "c++",
-              "--version"
-            ],
-            [
-              "g++",
-              "--version"
-            ],
-            [
-              "clang++",
-              "--version"
-            ]
-          ]
         }
       },
       "additionalProperties": false
@@ -2488,13 +2473,13 @@
     "DamlConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol($version )]($style)"
-        },
         "symbol": {
           "type": "string",
           "default": "Λ "
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
         },
         "version_format": {
           "type": "string",
@@ -2647,10 +2632,6 @@
     "DirectoryConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$path]($style)[$read_only]($read_only_style) "
-        },
         "truncation_length": {
           "type": "integer",
           "format": "int64",
@@ -2675,6 +2656,10 @@
         "use_logical_path": {
           "type": "boolean",
           "default": true
+        },
+        "format": {
+          "type": "string",
+          "default": "[$path]($style)[$read_only]($read_only_style) "
         },
         "repo_root_format": {
           "type": "string",
@@ -2802,10 +2787,6 @@
     "DockerContextConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol$context]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": "🐳 "
@@ -2813,6 +2794,10 @@
         "style": {
           "type": "string",
           "default": "blue bold"
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol$context]($style) "
         },
         "only_with_files": {
           "type": "boolean",
@@ -3020,14 +3005,6 @@
     "EnvVarConfig": {
       "type": "object",
       "properties": {
-        "description": {
-          "type": "string",
-          "default": "<env_var module>"
-        },
-        "format": {
-          "type": "string",
-          "default": "with [$env_value]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": ""
@@ -3048,9 +3025,17 @@
             "null"
           ]
         },
+        "format": {
+          "type": "string",
+          "default": "with [$env_value]($style) "
+        },
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "description": {
+          "type": "string",
+          "default": "<env_var module>"
         }
       },
       "additionalProperties": false
@@ -3168,6 +3153,97 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "FortranConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version(-$name) )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🅵  "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold purple"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "f",
+            "F",
+            "for",
+            "FOR",
+            "ftn",
+            "FTN",
+            "f77",
+            "F77",
+            "f90",
+            "F90",
+            "f95",
+            "F95",
+            "f03",
+            "F03",
+            "f08",
+            "F08",
+            "f18",
+            "F18"
+          ]
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "fpm.toml"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": [
+            [
+              "gfortran",
+              "--version"
+            ],
+            [
+              "flang",
+              "--version"
+            ],
+            [
+              "flang-new",
+              "--version"
+            ]
+          ]
         }
       },
       "additionalProperties": false
@@ -3311,6 +3387,10 @@
           },
           "default": []
         },
+        "ignore_bare_repo": {
+          "type": "boolean",
+          "default": false
+        },
         "disabled": {
           "type": "boolean",
           "default": false
@@ -3321,15 +3401,15 @@
     "GitCommitConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[\\($hash$tag\\)]($style) "
-        },
         "commit_hash_length": {
           "type": "integer",
           "format": "uint",
           "minimum": 0,
           "default": 7
+        },
+        "format": {
+          "type": "string",
+          "default": "[\\($hash$tag\\)]($style) "
         },
         "style": {
           "type": "string",
@@ -3363,10 +3443,6 @@
     "GitMetricsConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )"
-        },
         "added_style": {
           "type": "string",
           "default": "bold green"
@@ -3378,6 +3454,10 @@
         "only_nonzero_diffs": {
           "type": "boolean",
           "default": true
+        },
+        "format": {
+          "type": "string",
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )"
         },
         "disabled": {
           "type": "boolean",
@@ -3393,10 +3473,6 @@
     "GitStateConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "\\([$state( $progress_current/$progress_total)]($style)\\) "
-        },
         "rebase": {
           "type": "string",
           "default": "REBASING"
@@ -3428,6 +3504,10 @@
         "style": {
           "type": "string",
           "default": "bold yellow"
+        },
+        "format": {
+          "type": "string",
+          "default": "\\([$state( $progress_current/$progress_total)]($style)\\) "
         },
         "disabled": {
           "type": "boolean",
@@ -3872,10 +3952,6 @@
     "HgBranchConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "on [$symbol$branch(:$topic)]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": " "
@@ -3883,6 +3959,10 @@
         "style": {
           "type": "string",
           "default": "bold purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "on [$symbol$branch(:$topic)]($style) "
         },
         "truncation_length": {
           "type": "integer",
@@ -3903,10 +3983,6 @@
     "HgStateConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "\\([$state]($style)\\) "
-        },
         "merge": {
           "type": "string",
           "default": "MERGING"
@@ -3943,6 +4019,10 @@
           "type": "string",
           "default": "bold yellow"
         },
+        "format": {
+          "type": "string",
+          "default": "\\([$state]($style)\\) "
+        },
         "disabled": {
           "type": "boolean",
           "default": true
@@ -3953,10 +4033,6 @@
     "HostnameConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$ssh_symbol$hostname]($style) in "
-        },
         "ssh_only": {
           "type": "boolean",
           "default": true
@@ -3975,6 +4051,10 @@
             "type": "string"
           },
           "default": []
+        },
+        "format": {
+          "type": "string",
+          "default": "[$ssh_symbol$hostname]($style) in "
         },
         "style": {
           "type": "string",
@@ -3997,13 +4077,13 @@
     "JavaConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol($version )]($style)"
-        },
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
         },
         "version_format": {
           "type": "string",
@@ -4060,10 +4140,6 @@
     "JobsConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$symbol$number]($style) "
-        },
         "threshold": {
           "type": "integer",
           "format": "int64",
@@ -4078,6 +4154,10 @@
           "type": "integer",
           "format": "int64",
           "default": 2
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$number]($style) "
         },
         "symbol": {
           "type": "string",
@@ -4203,13 +4283,13 @@
     "KubernetesConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$symbol$context( \\($namespace\\))]($style) in "
-        },
         "symbol": {
           "type": "string",
           "default": "☸ "
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$context( \\($namespace\\))]($style) in "
         },
         "style": {
           "type": "string",
@@ -4329,13 +4409,13 @@
     "LocalipConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$localipv4]($style) "
-        },
         "ssh_only": {
           "type": "boolean",
           "default": true
+        },
+        "format": {
+          "type": "string",
+          "default": "[$localipv4]($style) "
         },
         "style": {
           "type": "string",
@@ -4408,14 +4488,14 @@
     "MemoryConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via $symbol[$ram( | $swap)]($style) "
-        },
         "threshold": {
           "type": "integer",
           "format": "int64",
           "default": 75
+        },
+        "format": {
+          "type": "string",
+          "default": "via $symbol[$ram( | $swap)]($style) "
         },
         "style": {
           "type": "string",
@@ -4435,10 +4515,6 @@
     "MesonConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol$project]($style) "
-        },
         "truncation_length": {
           "type": "integer",
           "format": "uint32",
@@ -4448,6 +4524,10 @@
         "truncation_symbol": {
           "type": "string",
           "default": "…"
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol$project]($style) "
         },
         "symbol": {
           "type": "string",
@@ -4469,7 +4549,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol$health]($style) "
+          "default": "on [$symbol$health]($style) "
         },
         "symbol": {
           "type": "string",
@@ -4981,6 +5061,7 @@
             "Alpaquita": "🔔 ",
             "AlmaLinux": "💠 ",
             "Alpine": "🏔️ ",
+            "ALTLinux": "Ⓐ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "AOSC": "🐱 ",
@@ -4990,6 +5071,7 @@
             "CachyOS": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
+            "Elementary": "🍏 ",
             "DragonFly": "🐉 ",
             "Emscripten": "🔗 ",
             "EndeavourOS": "🚀 ",
@@ -4999,6 +5081,8 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Ios": "📱 ",
+            "InstantOS": "⏲️ ",
             "Kali": "🐉 ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
@@ -5015,6 +5099,7 @@
             "openEuler": "🦉 ",
             "openSUSE": "🦎 ",
             "OracleLinux": "🦴 ",
+            "PikaOS": "🐤 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
             "Redhat": "🎩 ",
@@ -5028,7 +5113,8 @@
             "Unknown": "❓ ",
             "Uos": "🐲 ",
             "Void": " ",
-            "Windows": "🪟 "
+            "Windows": "🪟 ",
+            "Zorin": "🔹 "
           }
         },
         "disabled": {
@@ -5182,10 +5268,6 @@
     "PijulConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "on [$symbol$channel]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": " "
@@ -5193,6 +5275,10 @@
         "style": {
           "type": "string",
           "default": "bold purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "on [$symbol$channel]($style) "
         },
         "truncation_length": {
           "type": "integer",
@@ -5213,12 +5299,8 @@
     "PixiConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol($version )(\\($environment\\) )]($style)"
-        },
         "pixi_binary": {
-          "$ref": "#/$defs/Either_for_string_and_Array_of_string",
+          "$ref": "#/$defs/Either",
           "default": [
             "pixi"
           ]
@@ -5226,6 +5308,10 @@
         "show_default_environment": {
           "type": "boolean",
           "default": true
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )(\\($environment\\) )]($style)"
         },
         "version_format": {
           "type": "string",
@@ -5270,7 +5356,7 @@
       },
       "additionalProperties": false
     },
-    "Either_for_string_and_Array_of_string": {
+    "Either": {
       "anyOf": [
         {
           "type": "string"
@@ -5369,10 +5455,6 @@
     "PythonConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)"
-        },
         "pyenv_version_name": {
           "type": "boolean",
           "default": false
@@ -5382,7 +5464,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either_for_Either_for_string_and_Array_of_string_and_Array_of_Either_for_string_and_Array_of_string",
+          "$ref": "#/$defs/Either",
           "default": [
             [
               "python"
@@ -5394,6 +5476,10 @@
               "python2"
             ]
           ]
+        },
+        "format": {
+          "type": "string",
+          "default": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)"
         },
         "version_format": {
           "type": "string",
@@ -5454,19 +5540,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "Either_for_Either_for_string_and_Array_of_string_and_Array_of_Either_for_string_and_Array_of_string": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/Either_for_string_and_Array_of_string"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Either_for_string_and_Array_of_string"
-          }
-        }
-      ]
     },
     "QuartoConfig": {
       "type": "object",
@@ -5921,14 +5994,14 @@
     "ShLvlConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$symbol$shlvl]($style) "
-        },
         "threshold": {
           "type": "integer",
           "format": "int64",
           "default": 2
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$shlvl]($style) "
         },
         "symbol": {
           "type": "string",
@@ -5958,13 +6031,13 @@
     "SingularityConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$symbol\\[$env\\]]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": ""
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol\\[$env\\]]($style) "
         },
         "style": {
           "type": "string",
@@ -6001,7 +6074,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either_for_string_and_Array_of_string",
+          "$ref": "#/$defs/Either",
           "default": [
             "solc"
           ]
@@ -6035,15 +6108,15 @@
     "SpackConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "via [$symbol$environment]($style) "
-        },
         "truncation_length": {
           "type": "integer",
           "format": "uint",
           "minimum": 0,
           "default": 1
+        },
+        "format": {
+          "type": "string",
+          "default": "via [$symbol$environment]($style) "
         },
         "symbol": {
           "type": "string",
@@ -6266,6 +6339,25 @@
           "default": [
             ".terraform"
           ]
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": [
+            [
+              "terraform",
+              "version"
+            ],
+            [
+              "tofu",
+              "version"
+            ]
+          ]
         }
       },
       "additionalProperties": false
@@ -6360,16 +6452,16 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "[$user]($style) in "
-        },
         "detect_env_vars": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": []
+        },
+        "format": {
+          "type": "string",
+          "default": "[$user]($style) in "
         },
         "style_root": {
           "type": "string",
@@ -6502,10 +6594,6 @@
     "VcshConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "type": "string",
-          "default": "vcsh [$symbol$repo]($style) "
-        },
         "symbol": {
           "type": "string",
           "default": ""
@@ -6513,6 +6601,10 @@
         "style": {
           "type": "string",
           "default": "bold yellow"
+        },
+        "format": {
+          "type": "string",
+          "default": "vcsh [$symbol$repo]($style) "
         },
         "disabled": {
           "type": "boolean",
@@ -6675,10 +6767,6 @@
     "CustomConfig": {
       "type": "object",
       "properties": {
-        "description": {
-          "type": "string",
-          "default": "<custom config>"
-        },
         "format": {
           "type": "string",
           "default": "[$symbol($output )]($style)"
@@ -6692,7 +6780,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either_for_boolean_and_string",
+          "$ref": "#/$defs/Either2",
           "default": false
         },
         "require_repo": {
@@ -6700,8 +6788,12 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either_for_string_and_Array_of_string",
+          "$ref": "#/$defs/Either",
           "default": []
+        },
+        "description": {
+          "type": "string",
+          "default": "<custom config>"
         },
         "style": {
           "type": "string",
@@ -6755,7 +6847,7 @@
       },
       "additionalProperties": false
     },
-    "Either_for_boolean_and_string": {
+    "Either2": {
       "anyOf": [
         {
           "type": "boolean"

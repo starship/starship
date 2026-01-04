@@ -17,8 +17,8 @@ pub struct OSConfig<'a> {
 }
 
 impl<'a> OSConfig<'a> {
-    pub fn get_symbol(&self, key: &Type) -> Option<&'a str> {
-        self.symbols.get(key).copied()
+    pub fn get_symbol(&self, key: Type) -> Option<&'a str> {
+        self.symbols.get(&key).copied()
     }
 }
 
@@ -32,6 +32,7 @@ impl Default for OSConfig<'_> {
                 Type::Alpaquita => "🔔 ",
                 Type::AlmaLinux => "💠 ",
                 Type::Alpine => "🏔️ ",
+                Type::ALTLinux => "Ⓐ ",
                 Type::Amazon => "🙂 ",
                 Type::Android => "🤖 ",
                 Type::AOSC => "🐱 ",
@@ -41,6 +42,7 @@ impl Default for OSConfig<'_> {
                 Type::CachyOS => "🎗️ ",
                 Type::CentOS => "💠 ",
                 Type::Debian => "🌀 ",
+                Type::Elementary => "🍏 ",
                 Type::DragonFly => "🐉 ",
                 Type::Emscripten => "🔗 ",
                 Type::EndeavourOS => "🚀 ",
@@ -50,6 +52,8 @@ impl Default for OSConfig<'_> {
                 Type::Gentoo => "🗜️ ",
                 Type::HardenedBSD => "🛡️ ",
                 Type::Illumos => "🐦 ",
+                Type::Ios => "📱 ",
+                Type::InstantOS => "⏲️ ",
                 Type::Kali => "🐉 ",
                 Type::Linux => "🐧 ",
                 Type::Mabox => "📦 ",
@@ -66,6 +70,7 @@ impl Default for OSConfig<'_> {
                 Type::openEuler => "🦉 ",
                 Type::openSUSE => "🦎 ",
                 Type::OracleLinux => "🦴 ",
+                Type::PikaOS => "🐤 ",
                 Type::Pop => "🍭 ",
                 Type::Raspbian => "🍓 ",
                 Type::Redhat => "🎩 ",
@@ -80,12 +85,10 @@ impl Default for OSConfig<'_> {
                 Type::Uos => "🐲 ",
                 Type::Void => " ",
                 Type::Windows => "🪟 ",
+                Type::Zorin => "🔹 ",
                 // Future symbols.
-                //aosc =>       " ",
-                //artix =>      " ",
                 //coreos =>     " ",
                 //devuan =>     " ",
-                //elementary => " ",
                 //mageia =>     " ",
                 //mandriva =>   " ",
                 //sabayon =>    " ",
