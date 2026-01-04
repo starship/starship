@@ -1931,44 +1931,60 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 ### Opciones
 
-| Opción               | Predeterminado                                  | Descripción                                                                                                                               |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
-| `conflicted`         | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
-| `ahead`              | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
-| `behind`             | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
-| `diverged`           | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
-| `up_to_date`         | `''`                                            | El formato de `up_to_date`                                                                                                                |
-| `sin seguimiento`    | `'?'`                                           | El formato de `untracked`                                                                                                                 |
-| `stashed`            | `'\$'`                                         | El formato de `stashed`                                                                                                                   |
-| `modificado`         | `'!'`                                           | El formato de `modified`                                                                                                                  |
-| `staged`             | `'+'`                                           | El formato de `staged`                                                                                                                    |
-| `renamed`            | `'»'`                                           | El formato de `renamed`                                                                                                                   |
-| `eliminado`          | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                                               |
-| `style`              | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
-| `ignore_submodules`  | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
-| `disabled`           | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
-| `windows_starship`   |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
+| Opción                 | Predeterminado                                  | Descripción                                                                                                                               |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
+| `conflicted`           | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
+| `ahead`                | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
+| `behind`               | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
+| `diverged`             | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
+| `up_to_date`           | `''`                                            | El formato de `up_to_date`                                                                                                                |
+| `sin seguimiento`      | `'?'`                                           | El formato de `untracked`                                                                                                                 |
+| `stashed`              | `'\$'`                                         | El formato de `stashed`                                                                                                                   |
+| `modificado`           | `'!'`                                           | El formato de `modified`                                                                                                                  |
+| `staged`               | `'+'`                                           | El formato de `staged`                                                                                                                    |
+| `renamed`              | `'»'`                                           | El formato de `renamed`                                                                                                                   |
+| `eliminado`            | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                                               |
+| `style`                | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
+| `ignore_submodules`    | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                                                            |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                                                          |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                                                         |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                                                      |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                                               |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                                                             |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                                                            |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                                                         |
+| `disabled`             | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
+| `windows_starship`     |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
 
 ### Variables
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable          | Descripción                                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `all_status`      | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                                  |
-| `ahead_behind`    | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
-| `conflicted`      | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
-| `sin seguimiento` | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
-| `stashed`         | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.                          |
-| `modificado`      | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                                     |
-| `staged`          | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                                           |
-| `renamed`         | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                                   |
-| `eliminado`       | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                                              |
-| `typechanged`     | Displays `typechanged` when a file's type has been changed in the staging area.                                          |
-| style\*         | Refleja el valor de la opción `style`                                                                                    |
+| Variable               | Descripción                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                                  |
+| `ahead_behind`         | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
+| `conflicted`           | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
+| `sin seguimiento`      | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
+| `stashed`              | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.                          |
+| `modificado`           | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                                     |
+| `staged`               | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                                           |
+| `renamed`              | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                                   |
+| `eliminado`            | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                                              |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                                          |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                                       |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                                         |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                                       |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                            |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                               |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                                 |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                               |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                                    |
+| style\*              | Refleja el valor de la opción `style`                                                                                    |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -1979,7 +1995,7 @@ Las siguientes variables pueden ser usadas en `diverged`:
 | `ahead_count`  | Número de confirmaciones por delante de la rama de seguimiento |
 | `behind_count` | Número de confirmaciones detrás de la rama de seguimiento      |
 
-Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` y `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Variable | Descripción                   |
 | -------- | ----------------------------- |
