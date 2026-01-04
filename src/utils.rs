@@ -320,7 +320,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("9.2.1\n"),
             stderr: String::default(),
         }),
-        "helm version --short --client" => Some(CommandOutput {
+        "helm version --short" => Some(CommandOutput {
             stdout: String::from("v3.1.1+gafe7058\n"),
             stderr: String::default(),
         }),
