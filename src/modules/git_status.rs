@@ -86,6 +86,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             format_symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
+                    "dirty" => info.get_dirty().and_then(|count| {
+                        format_count(config.dirty, "git_status.dirty", context, count)
+                    }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(config.conflicted, "git_status.conflicted", context, count)
                     }),
@@ -174,6 +177,18 @@ impl<'a> GitStatusInfo<'a> {
                 log::debug!("get_stashed_count: git stash execution failed");
                 None
             })
+        })
+    }
+
+    pub fn get_dirty(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| {
+            data.conflicted
+                + data.staged
+                + data.modified
+                + data.untracked
+                + data.deleted
+                + data.renamed
+                + data.typechanged
         })
     }
 
@@ -971,6 +986,45 @@ pub(crate) mod tests {
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    #[test]
+    fn shows_dirty() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$dirty"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some("*".into());
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_dirty_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$dirty"
+                dirty = "*$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some("*2".into());
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 
     #[test]

@@ -675,6 +675,7 @@
         "behind": "⇣",
         "up_to_date": "",
         "diverged": "⇕",
+        "dirty": "*",
         "conflicted": "=",
         "deleted": "✘",
         "renamed": "»",
@@ -3526,6 +3527,10 @@
         "diverged": {
           "type": "string",
           "default": "⇕"
+        },
+        "dirty": {
+          "type": "string",
+          "default": "*"
         },
         "conflicted": {
           "type": "string",
