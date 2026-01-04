@@ -520,15 +520,19 @@ mod tests {
     #[test]
     fn credentials_file_is_ignored_when_is_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("credentials");
-        create_dir(&config_path)?;
+        let creds_path = dir.path().join("credentials");
+        create_dir(&creds_path)?;
+
+        let config_path = dir.path().join("config");
+        File::create(&config_path)?.sync_all()?;
 
         assert!(
             ModuleRenderer::new("aws")
                 .env(
                     "AWS_SHARED_CREDENTIALS_FILE",
-                    config_path.to_string_lossy().as_ref(),
+                    creds_path.to_string_lossy().as_ref(),
                 )
+                .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
                 .collect()
                 .is_none()
         );
@@ -542,9 +546,16 @@ mod tests {
         let config_path = dir.path().join("config");
         create_dir(&config_path)?;
 
+        let creds_path = dir.path().join("credentials");
+        File::create(&creds_path)?.sync_all()?;
+
         assert!(
             ModuleRenderer::new("aws")
                 .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+                .env(
+                    "AWS_SHARED_CREDENTIALS_FILE",
+                    creds_path.to_string_lossy().as_ref(),
+                )
                 .collect()
                 .is_none()
         );
