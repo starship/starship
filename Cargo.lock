@@ -3825,9 +3825,9 @@ dependencies = [
 
 [[package]]
 name = "wasite"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "313fb64fed616e75426cf738284efe4e85017243bccfae42698be1d7fa9b05d5"
+checksum = "66fe902b4a6b8028a753d5424909b764ccf79b7a209eac9bf97e59cda9f71a42"
 dependencies = [
  "wasi 0.14.7+wasi-0.2.4",
 ]
@@ -3900,9 +3900,9 @@ dependencies = [
 
 [[package]]
 name = "whoami"
-version = "2.0.0"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86dc1eeef7866078951fc09f1857d3d33a37432fe376d7ff45449c8bb50318c1"
+checksum = "80a0d55c8d8f68772be4533e238da83f3a7adada2a85f2c3059099e5f054ebc4"
 dependencies = [
  "libredox",
  "wasite",
