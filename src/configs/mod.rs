@@ -37,6 +37,7 @@ pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
 pub mod git_metrics;
+pub mod git_mob;
 pub mod git_state;
 pub mod git_status;
 pub mod gleam;
@@ -191,6 +192,8 @@ pub struct FullConfig<'a> {
     git_commit: git_commit::GitCommitConfig<'a>,
     #[serde(borrow)]
     git_metrics: git_metrics::GitMetricsConfig<'a>,
+    #[serde(borrow)]
+    git_mob: git_mob::GitMobConfig<'a>,
     #[serde(borrow)]
     git_state: git_state::GitStateConfig<'a>,
     #[serde(borrow)]
