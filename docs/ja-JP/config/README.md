@@ -2168,7 +2168,7 @@ format = 'via [🐂](yellow bold) '
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🅶 '`                               | Gradle のシンボルを表すフォーマット文字列                               |
+| `symbol`            | `' '`                               | Gradle のシンボルを表すフォーマット文字列                               |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `['gradle']`                         | どのフォルダーがこのモジュールをアクティブにするか                              |

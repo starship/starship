@@ -2168,7 +2168,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
 | `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`           | `'🅶 '`                               | A format string representing the symbol of Gradle.                                         |
+| `symbole`           | `' '`                               | A format string representing the symbol of Gradle.                                         |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `['gradle']`                         | Les dossiers qui activent ce module.                                                       |
