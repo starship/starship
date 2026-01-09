@@ -265,7 +265,7 @@ pub fn edit_configuration(
     });
 
     // Ignore the error because the editor might be able to create the directory.
-    if let Err(_e) = create_config_dir(&config_path) {}
+    let _ = create_config_dir(&config_path);
 
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
