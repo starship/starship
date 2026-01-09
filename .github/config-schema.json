@@ -682,6 +682,14 @@
         "staged": "+",
         "untracked": "?",
         "typechanged": "",
+        "worktree_added": "",
+        "worktree_deleted": "",
+        "worktree_modified": "",
+        "worktree_typechanged": "",
+        "index_added": "",
+        "index_deleted": "",
+        "index_modified": "",
+        "index_typechanged": "",
         "ignore_submodules": false,
         "disabled": false,
         "use_git_executable": false
@@ -1008,7 +1016,7 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "[$symbol$health]($style) ",
+        "format": "on [$symbol$health]($style) ",
         "symbol": "mise ",
         "style": "bold purple",
         "disabled": true,
@@ -1200,6 +1208,7 @@
           "Alpaquita": "🔔 ",
           "AlmaLinux": "💠 ",
           "Alpine": "🏔️ ",
+          "ALTLinux": "Ⓐ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "AOSC": "🐱 ",
@@ -1209,6 +1218,7 @@
           "CachyOS": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
+          "Elementary": "🍏 ",
           "DragonFly": "🐉 ",
           "Emscripten": "🔗 ",
           "EndeavourOS": "🚀 ",
@@ -1218,6 +1228,8 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Ios": "📱 ",
+          "InstantOS": "⏲️ ",
           "Kali": "🐉 ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
@@ -1234,6 +1246,7 @@
           "openEuler": "🦉 ",
           "openSUSE": "🦎 ",
           "OracleLinux": "🦴 ",
+          "PikaOS": "🐤 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
           "Redhat": "🎩 ",
@@ -1247,7 +1260,8 @@
           "Unknown": "❓ ",
           "Uos": "🐲 ",
           "Void": " ",
-          "Windows": "🪟 "
+          "Windows": "🪟 ",
+          "Zorin": "🔹 "
         },
         "disabled": true
       }
@@ -1742,6 +1756,26 @@
         ],
         "detect_folders": []
       }
+    },
+    "vcs": {
+      "default": {
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
+        "order": [
+          "git",
+          "hg",
+          "pijul",
+          "fossil"
+        ],
+        "pijul_modules": "$pijul_channel"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VcsConfig"
+        }
+      ]
     },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
@@ -3549,6 +3583,38 @@
           "type": "string",
           "default": ""
         },
+        "worktree_added": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "index_added": {
+          "type": "string",
+          "default": ""
+        },
+        "index_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "index_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "index_typechanged": {
+          "type": "string",
+          "default": ""
+        },
         "ignore_submodules": {
           "type": "boolean",
           "default": false
@@ -4523,7 +4589,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol$health]($style) "
+          "default": "on [$symbol$health]($style) "
         },
         "symbol": {
           "type": "string",
@@ -5035,6 +5101,7 @@
             "Alpaquita": "🔔 ",
             "AlmaLinux": "💠 ",
             "Alpine": "🏔️ ",
+            "ALTLinux": "Ⓐ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "AOSC": "🐱 ",
@@ -5044,6 +5111,7 @@
             "CachyOS": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
+            "Elementary": "🍏 ",
             "DragonFly": "🐉 ",
             "Emscripten": "🔗 ",
             "EndeavourOS": "🚀 ",
@@ -5053,6 +5121,8 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Ios": "📱 ",
+            "InstantOS": "⏲️ ",
             "Kali": "🐉 ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
@@ -5069,6 +5139,7 @@
             "openEuler": "🦉 ",
             "openSUSE": "🦎 ",
             "OracleLinux": "🦴 ",
+            "PikaOS": "🐤 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
             "Redhat": "🎩 ",
@@ -5082,7 +5153,8 @@
             "Unknown": "❓ ",
             "Uos": "🐲 ",
             "Void": " ",
-            "Windows": "🪟 "
+            "Windows": "🪟 ",
+            "Zorin": "🔹 "
           }
         },
         "disabled": {
@@ -6505,6 +6577,59 @@
         }
       },
       "additionalProperties": false
+    },
+    "VcsConfig": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "default": [
+            "git",
+            "hg",
+            "pijul",
+            "fossil"
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Vcs"
+          }
+        },
+        "disabled": {
+          "description": "Disables the VCS module.",
+          "default": false,
+          "type": "boolean"
+        },
+        "fossil_modules": {
+          "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
+          "default": "$fossil_branch$fossil_metrics",
+          "type": "string"
+        },
+        "git_modules": {
+          "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
+          "type": "string"
+        },
+        "hg_modules": {
+          "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
+          "default": "$hg_branch$hg_state",
+          "type": "string"
+        },
+        "pijul_modules": {
+          "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
+          "default": "$pijul_channel",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Vcs": {
+      "type": "string",
+      "enum": [
+        "fossil",
+        "git",
+        "hg",
+        "pijul"
+      ]
     },
     "VcshConfig": {
       "type": "object",

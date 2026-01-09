@@ -2,7 +2,7 @@ use std::io::Error;
 use std::path::Path;
 
 use super::utils::truncate::truncate_text;
-use super::{Context, Module, ModuleConfig};
+use super::{Context, Module, ModuleConfig, vcs};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
+    let repo_root = vcs::discover_repo_root(context, vcs::Vcs::Hg)?;
     let branch_name = get_hg_current_bookmark(&repo_root).unwrap_or_else(|_| {
         get_hg_branch_name(&repo_root).unwrap_or_else(|_| String::from("default"))
     });
