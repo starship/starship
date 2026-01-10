@@ -3210,7 +3210,7 @@ checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
 name = "starship"
-version = "1.24.2"
+version = "1.25.0"
 dependencies = [
  "chrono",
  "clap",
