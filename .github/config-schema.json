@@ -1418,6 +1418,10 @@
         "detect_folders": [],
         "detect_env_vars": [
           "VIRTUAL_ENV"
+        ],
+        "generic_venv_names": [
+          ".venv",
+          "venv"
         ]
       }
     },
@@ -5576,6 +5580,16 @@
           },
           "default": [
             "VIRTUAL_ENV"
+          ]
+        },
+        "generic_venv_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".venv",
+            "venv"
           ]
         }
       },
