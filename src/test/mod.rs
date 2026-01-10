@@ -212,6 +212,7 @@ pub enum FixtureProvider {
     Fossil,
     Git { reftable: bool, bare: bool },
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -324,6 +325,11 @@ pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Re
         FixtureProvider::Pijul => {
             let path = tempfile::tempdir()?;
             fs::create_dir(path.path().join(".pijul"))?;
+            Ok(path)
+        }
+        FixtureProvider::Jujutsu => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".jj"))?;
             Ok(path)
         }
     }
