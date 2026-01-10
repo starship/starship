@@ -1730,6 +1730,15 @@
         "detect_folders": []
       }
     },
+    "upterm": {
+      "$ref": "#/$defs/UptermConfig",
+      "default": {
+        "format": "via [$symbol]($style) ",
+        "symbol": "🆙 ",
+        "style": "cyan bold",
+        "disabled": false
+      }
+    },
     "username": {
       "$ref": "#/$defs/UsernameConfig",
       "default": {
@@ -6485,6 +6494,28 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "UptermConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🆙 "
+        },
+        "style": {
+          "type": "string",
+          "default": "cyan bold"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
