@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
-                        let repo_root = context.get_repo().ok().and_then(|r| r.workdir.as_deref());
+                        let repo_root = context.get_repo_workdir().map(PathBuf::as_path);
                         estimate_dotnet_version(
                             context,
                             &dotnet_files,
