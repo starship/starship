@@ -2168,7 +2168,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                                  |
+| `symbol`            | `' '`                               | A format string representing the symbol of Gradle.                                  |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `['gradle']`                         | Folder mana yang sebaiknya memicul modul ini.                                       |

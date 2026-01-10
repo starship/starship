@@ -2168,7 +2168,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                        |
+| `symbol`            | `' '`                               | A format string representing the symbol of Gradle.                        |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `['gradle']`                         | 應觸發此模組的資料夾名稱。                                                             |

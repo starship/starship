@@ -157,7 +157,7 @@ zipStorePath=wrapper/dists",
 
         let expected = Some(format!(
             "via {}",
-            Color::LightCyan.bold().paint("🅶 v7.5.1 ")
+            Color::LightCyan.bold().paint(" v7.5.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -200,7 +200,7 @@ zipStorePath=wrapper/dists",
 
         let expected = Some(format!(
             "via {}",
-            Color::LightCyan.bold().paint("🅶 v7.5.1 ")
+            Color::LightCyan.bold().paint(" v7.5.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

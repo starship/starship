@@ -743,7 +743,7 @@
       "default": {
         "format": "via [$symbol($version )]($style)",
         "version_format": "v${raw}",
-        "symbol": "🅶 ",
+        "symbol": " ",
         "style": "bold bright-cyan",
         "disabled": false,
         "recursive": false,
@@ -3763,7 +3763,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": "🅶 "
+          "default": " "
         },
         "style": {
           "type": "string",
