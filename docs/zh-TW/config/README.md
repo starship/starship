@@ -1931,44 +1931,60 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### 選項
 
-| 選項                   | 預設                                              | 說明                                                                                                          |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
-| `ahead`              | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
-| `behind`             | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
-| `diverged`           | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
-| `up_to_date`         | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
-| `untracked`          | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
-| `stashed`            | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
-| `modified`           | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
-| `staged`             | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
-| `renamed`            | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
-| `deleted`            | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | 停用 `git_status` 模組。                                                                                         |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| 選項                     | 預設                                              | 說明                                                                                                          |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
+| `ahead`                | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
+| `behind`               | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
+| `diverged`             | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
+| `up_to_date`           | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
+| `untracked`            | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
+| `stashed`              | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
+| `modified`             | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
+| `staged`               | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
+| `renamed`              | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
+| `deleted`              | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `style`                | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `disabled`             | `false`                                         | 停用 `git_status` 模組。                                                                                         |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### 變數
 
 The following variables can be used in `format`:
 
-| 變數             | 說明                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | 對應 <0>style</0> 選項的設定值                                                                                        |
+| 變數                     | 說明                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`              | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`             | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`               | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| style\*              | 對應 <0>style</0> 選項的設定值                                                                                        |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1979,7 +1995,7 @@ The following variables can be used in `diverged`:
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | 變數      | 說明                       |
 | ------- | ------------------------ |
@@ -4663,6 +4679,45 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### 選項
+
+| 選項               | 預設                                                          | 說明                                                    |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH

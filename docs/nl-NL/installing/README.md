@@ -57,7 +57,7 @@ Activeer de `programs.starship` module in het `home.nix` bestand en voeg je inst
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuratie geschreven naar ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
