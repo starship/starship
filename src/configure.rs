@@ -8,8 +8,8 @@ use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
 use crate::utils;
-use std::fs::File;
-use std::io::Write;
+use std::fs::{self, File};
+use std::io::{self, Write};
 use toml_edit::DocumentMut;
 
 #[cfg(not(windows))]
@@ -247,6 +247,7 @@ pub fn write_configuration(context: &Context, doc: &DocumentMut) {
 
     let config_str = doc.to_string();
 
+    create_config_dir(&config_path).expect("Error creating configuration directory");
     File::create(config_path)
         .and_then(|mut file| file.write_all(config_str.as_ref()))
         .expect("Error writing starship config");
@@ -262,6 +263,9 @@ pub fn edit_configuration(
         eprintln!("config path required to edit configuration");
         process::exit(1);
     });
+
+    // Ignore the error because the editor might be able to create the directory.
+    let _ = create_config_dir(&config_path);
 
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
@@ -311,9 +315,17 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
     STD_EDITOR.into()
 }
 
+fn create_config_dir<P: AsRef<std::path::Path>>(config_path: P) -> io::Result<()> {
+    let config_path = config_path.as_ref();
+    config_path
+        .parent()
+        .map(fs::create_dir_all)
+        .unwrap_or(Ok(()))
+}
+
 #[cfg(test)]
 mod tests {
-    use std::{fs::create_dir, io, path::PathBuf};
+    use std::{io, path::PathBuf};
 
     use tempfile::TempDir;
     use toml_edit::Item;
@@ -655,9 +667,8 @@ mod tests {
         home_file_exists: bool,
         starship_config_env_scenario: StarshipConfigEnvScenario,
     ) -> io::Result<Context<'_>> {
-        let config_path = dir.path().to_path_buf().join(".config");
-        create_dir(&config_path)?;
-        let home_starship_toml = config_path.join("starship.toml");
+        let home_starship_toml = dir.path().to_path_buf().join(".config/starship.toml");
+        create_config_dir(&home_starship_toml).unwrap();
         let env_toml = dir.path().join("env.toml");
         if home_file_exists {
             let mut home_file = File::create(home_starship_toml)?;
