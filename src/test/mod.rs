@@ -188,10 +188,11 @@ impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
-    GitReftable,
     GitBare,
     GitBareReftable,
+    GitReftable,
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -291,6 +292,11 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         FixtureProvider::Pijul => {
             let path = tempfile::tempdir()?;
             fs::create_dir(path.path().join(".pijul"))?;
+            Ok(path)
+        }
+        FixtureProvider::Jujutsu => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".jj"))?;
             Ok(path)
         }
     }

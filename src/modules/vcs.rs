@@ -25,6 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Vcs::Fossil => config.fossil_modules,
         Vcs::Git => config.git_modules,
         Vcs::Hg => config.hg_modules,
+        Vcs::Jujutsu => config.jujutsu_modules,
         Vcs::Pijul => config.pijul_modules,
     };
 
@@ -63,9 +64,10 @@ pub fn discover_repo_root<'a>(context: &'a Context, vcs: Vcs) -> Option<Cow<'a, 
         } else {
             &[".fslckout"]
         }),
-        Vcs::Hg => scan.set_folders(&[".hg"]),
-        Vcs::Pijul => scan.set_folders(&[".pijul"]),
         Vcs::Git => return context.get_repo().ok().map(|r| r.repo.path().into()),
+        Vcs::Hg => scan.set_folders(&[".hg"]),
+        Vcs::Jujutsu => scan.set_folders(&[".jj"]),
+        Vcs::Pijul => scan.set_folders(&[".pijul"]),
     };
 
     scan.scan().map(Into::into)
@@ -75,8 +77,8 @@ pub fn discover_repo_root<'a>(context: &'a Context, vcs: Vcs) -> Option<Cow<'a, 
 pub enum Vcs {
     Fossil,
     Git,
-    // NOTE: uses `hg` to correspond to existing `hg_branch` module
-    Hg,
+    Hg, // NOTE: uses `hg` to correspond to existing `hg_branch` module
+    Jujutsu,
     Pijul,
 }
 
@@ -88,6 +90,7 @@ impl<'a> TryFrom<&'a str> for Vcs {
             "fossil" => Ok(Self::Fossil),
             "git" => Ok(Self::Git),
             "hg" | "mercurial" => Ok(Self::Hg),
+            "jj" | "jujutsu" => Ok(Self::Jujutsu),
             "pijul" => Ok(Self::Pijul),
             _ => Err(value),
         }
