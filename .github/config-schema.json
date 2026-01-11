@@ -2650,11 +2650,33 @@
           "default": true
         },
         "substitutions": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "default": {}
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "regex": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to"
+                ]
+              }
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "default": []
         },
         "fish_style_pwd_dir_length": {
           "type": "integer",
