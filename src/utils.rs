@@ -9,6 +9,8 @@ use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
+use crate::print::Grapheme;
+use unicode_segmentation::UnicodeSegmentation;
 
 /// Default timeout for command execution in milliseconds
 pub const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 500;
@@ -577,28 +579,46 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     Some(out)
 }
 
+/// Wraps a string in shell-specific escape sequences.
+pub fn wrap_seq_for_shell(text: String, shell: Shell) -> String {
+    let Some((beg, end)) = get_shell_wrappers(shell) else {
+        return text;
+    };
+
+    format!("{beg}{text}{end}")
+}
+
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
-    wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
+    wrap_ansi_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
+}
+
+/// Gets the shell-specific wrapper sequences used to escape non-printable characters.
+///
+/// Returns (begin_wrapper, end_wrapper) or None if shell doesn't need wrapping.
+fn get_shell_wrappers(shell: Shell) -> Option<(&'static str, &'static str)> {
+    match shell {
+        // \[ and \]
+        Shell::Bash => Some(("\u{5c}\u{5b}", "\u{5c}\u{5d}")),
+        // %{ and %}
+        Shell::Tcsh | Shell::Zsh => Some(("\u{25}\u{7b}", "\u{25}\u{7d}")),
+        _ => None,
+    }
 }
 
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
-/// leading to strange visual bugs like duplicated/missing chars. This function wraps a specified
-/// sequence in shell-specific escapes to avoid these problems.
-pub fn wrap_seq_for_shell(
+/// leading to strange visual bugs like duplicated/missing chars. This function wraps ANSI
+/// escape sequences in shell-specific escapes to avoid these problems.
+pub fn wrap_ansi_seq_for_shell(
     ansi: String,
     shell: Shell,
     escape_begin: char,
     escape_end: char,
 ) -> String {
-    let (beg, end) = match shell {
-        // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
-        // %{ and %}
-        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
-        _ => return ansi,
+    let Some((beg, end)) = get_shell_wrappers(shell) else {
+        return ansi;
     };
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
@@ -619,6 +639,37 @@ pub fn wrap_seq_for_shell(
         })
         .collect();
     final_string
+}
+
+/// Wraps wide Unicode characters in zsh-specific [glitch sequences] to explicitly tell the shell
+/// how wide to consider the character, avoiding positioning bugs. For zsh, wide characters (width
+/// > 1) are wrapped as `%{<char>%<width>G%}`.
+///
+/// [glitch sequences]: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Visual-effects
+pub fn wrap_widechar_for_zsh(text: String, shell: Shell) -> String {
+    if shell != Shell::Zsh {
+        return text;
+    }
+
+    let mut result = None;
+    let mut processed_len = 0;
+
+    for grapheme in text.graphemes(true) {
+        let width = Grapheme(grapheme).width();
+
+        if width > 1 {
+            let result = result.get_or_insert_with(|| text[..processed_len].to_string());
+
+            let glitch_seq = format!("{grapheme}%{width}G");
+            result.push_str(&wrap_seq_for_shell(glitch_seq, Shell::Zsh));
+        } else if let Some(ref mut result) = result {
+            result.push_str(grapheme);
+        }
+
+        processed_len += grapheme.len();
+    }
+
+    result.unwrap_or(text)
 }
 
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
@@ -939,12 +990,12 @@ mod tests {
         let test4 = "herpaderp";
         let test5 = "";
 
-        let zresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Zsh, '\x1b', 'm');
-        let zresult1 = wrap_seq_for_shell(test1.to_string(), Shell::Zsh, '\x1b', 'm');
-        let zresult2 = wrap_seq_for_shell(test2.to_string(), Shell::Zsh, '\x1b', 'J');
-        let zresult3 = wrap_seq_for_shell(test3.to_string(), Shell::Zsh, 'O', 'O');
-        let zresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Zsh, '\x1b', 'm');
-        let zresult5 = wrap_seq_for_shell(test5.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult0 = wrap_ansi_seq_for_shell(test0.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult1 = wrap_ansi_seq_for_shell(test1.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult2 = wrap_ansi_seq_for_shell(test2.to_string(), Shell::Zsh, '\x1b', 'J');
+        let zresult3 = wrap_ansi_seq_for_shell(test3.to_string(), Shell::Zsh, 'O', 'O');
+        let zresult4 = wrap_ansi_seq_for_shell(test4.to_string(), Shell::Zsh, '\x1b', 'm');
+        let zresult5 = wrap_ansi_seq_for_shell(test5.to_string(), Shell::Zsh, '\x1b', 'm');
 
         assert_eq!(&zresult0, "%{\x1b2m%}hellomynamekeyes%{\x1b2m%}");
         assert_eq!(&zresult1, "%{\x1b]330;m%}lol%{\x1b]0m%}");
@@ -953,12 +1004,12 @@ mod tests {
         assert_eq!(&zresult4, "herpaderp");
         assert_eq!(&zresult5, "");
 
-        let bresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Bash, '\x1b', 'm');
-        let bresult1 = wrap_seq_for_shell(test1.to_string(), Shell::Bash, '\x1b', 'm');
-        let bresult2 = wrap_seq_for_shell(test2.to_string(), Shell::Bash, '\x1b', 'J');
-        let bresult3 = wrap_seq_for_shell(test3.to_string(), Shell::Bash, 'O', 'O');
-        let bresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Bash, '\x1b', 'm');
-        let bresult5 = wrap_seq_for_shell(test5.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult0 = wrap_ansi_seq_for_shell(test0.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult1 = wrap_ansi_seq_for_shell(test1.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult2 = wrap_ansi_seq_for_shell(test2.to_string(), Shell::Bash, '\x1b', 'J');
+        let bresult3 = wrap_ansi_seq_for_shell(test3.to_string(), Shell::Bash, 'O', 'O');
+        let bresult4 = wrap_ansi_seq_for_shell(test4.to_string(), Shell::Bash, '\x1b', 'm');
+        let bresult5 = wrap_ansi_seq_for_shell(test5.to_string(), Shell::Bash, '\x1b', 'm');
 
         assert_eq!(&bresult0, "\\[\x1b2m\\]hellomynamekeyes\\[\x1b2m\\]");
         assert_eq!(&bresult1, "\\[\x1b]330;m\\]lol\\[\x1b]0m\\]");
@@ -988,5 +1039,39 @@ mod tests {
             encode_to_hex(&[8, 13, 9, 189, 129, 94]),
             "080d09bd815e".to_string()
         );
+    }
+
+    #[test]
+    fn test_wrap_seq_for_shell() {
+        let test_text = "example";
+
+        let zsh_result = wrap_seq_for_shell(test_text.to_string(), Shell::Zsh);
+        assert_eq!(zsh_result, "%{example%}");
+
+        let bash_result = wrap_seq_for_shell(test_text.to_string(), Shell::Bash);
+        assert_eq!(bash_result, "\\[example\\]");
+
+        let fish_result = wrap_seq_for_shell(test_text.to_string(), Shell::Fish);
+        assert_eq!(fish_result, "example");
+    }
+
+    #[test]
+    fn test_wrap_widechar_for_shell() {
+        let surrounding_wide_chars = "🥟 normal 🐚";
+
+        let zsh_result = wrap_widechar_for_zsh(surrounding_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(zsh_result, "%{🥟%2G%} normal %{🐚%2G%}");
+
+        let bash_result = wrap_widechar_for_zsh(surrounding_wide_chars.to_string(), Shell::Bash);
+        assert_eq!(bash_result, "🥟 normal 🐚");
+
+        let surrounded_wide_chars = "a🥟b";
+        let surrounded_wide_chars =
+            wrap_widechar_for_zsh(surrounded_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(surrounded_wide_chars, "a%{🥟%2G%}b");
+
+        let no_wide_chars = "normal text";
+        let no_wide_chars_result = wrap_widechar_for_zsh(no_wide_chars.to_string(), Shell::Zsh);
+        assert_eq!(no_wide_chars_result, "normal text");
     }
 }
