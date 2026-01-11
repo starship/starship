@@ -368,19 +368,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
-name = "chrono"
-version = "0.4.42"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "145052bdd345b87320e369255277e3fb5152762ad123a901ef5c262dd38fe8d2"
-dependencies = [
- "iana-time-zone",
- "js-sys",
- "num-traits",
- "wasm-bindgen",
- "windows-link 0.2.1",
-]
-
-[[package]]
 name = "clap"
 version = "4.5.54"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3212,7 +3199,6 @@ checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 name = "starship"
 version = "1.24.2"
 dependencies = [
- "chrono",
  "clap",
  "clap_complete",
  "clap_complete_nushell",
@@ -3223,6 +3209,7 @@ dependencies = [
  "guess_host_triple",
  "home",
  "indexmap",
+ "jiff",
  "jsonc-parser",
  "log",
  "mockall",
