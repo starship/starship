@@ -86,44 +86,49 @@ test_writeable() {
 }
 
 download() {
-	file="$1"
-	url="$2"
+    file="$1"
+    url="$2"
 
-	if has curl && curl_is_snap; then
-		warn "curl installed through snap cannot download starship."
-		warn "See https://github.com/starship/starship/issues/5403 for details."
-		warn "Searching for other HTTP download programs..."
-	fi
+    if has curl && ! curl_is_snap; then
+        cmd="curl --fail --silent --location --output $file $url"
+        $cmd && return 0
+        rc=$?
+        warn "Command failed (exit code $rc): ${cmd}"
+    fi
 
-	if has curl && ! curl_is_snap; then
-		cmd="curl --fail --silent --location --output $file $url"
-	elif has wget; then
-		cmd="wget --quiet --output-document=$file $url"
-	elif has fetch; then
-		cmd="fetch --quiet --output=$file $url"
-	else
-		error "No HTTP download program (curl, wget, fetch) found, exiting…"
-		return 1
-	fi
+    if has wget; then
+        cmd="wget --quiet --output-document=$file $url"
+        $cmd && return 0
+        rc=$?
+        warn "Command failed (exit code $rc): ${cmd}"
+    fi
 
-	$cmd && return 0 || rc=$?
+    if has fetch; then
+        cmd="fetch --quiet --output=$file $url"
+        $cmd && return 0
+        rc=$?
+        warn "Command failed (exit code $rc): ${cmd}"
+    fi
 
-	error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
-	printf "\n" >&2
-	case "${VERSION}" in
-	latest) ;;
-	v*) ;;
-	*)
-		info "Note: Release tags include the 'v' prefix (e.g., 'v1.2.3')."
-		info "You specified '${VERSION}'. Did you mean 'v${VERSION}'?"
-		printf "\n" >&2
-		;;
-	esac
-	info "This is likely due to Starship not yet supporting your configuration."
-	info "If you would like to see a build for your configuration,"
-	info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
-	info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
-	return $rc
+    error "No HTTP download program (curl, wget, fetch) succeeded, exiting…"
+    printf "\n" >&2
+
+    case "${VERSION}" in
+    latest) ;;
+    v*) ;;
+    *)
+        info "Note: Release tags include the 'v' prefix (e.g., 'v1.2.3')."
+        info "You specified '${VERSION}'. Did you mean 'v${VERSION}'?"
+        printf "\n" >&2
+        ;;
+    esac
+
+    info "This is likely due to Starship not yet supporting your configuration."
+    info "If you would like to see a build for your configuration,"
+    info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
+    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+
+    return ${rc:-1}
 }
 
 unpack() {
