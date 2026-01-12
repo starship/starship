@@ -54,9 +54,6 @@ pub struct Context<'a> {
     /// Private field to store Git information for modules who need it
     repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
 
-    /// Cached workdir from lightweight git discovery (avoids full repo open)
-    repo_workdir: OnceLock<Option<PathBuf>>,
-
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
@@ -173,7 +170,6 @@ impl<'a> Context<'a> {
             logical_dir,
             dir_contents: OnceLock::new(),
             repo: OnceLock::new(),
-            repo_workdir: OnceLock::new(),
             shell,
             target,
             width,
@@ -390,20 +386,6 @@ impl<'a> Context<'a> {
             })
             .as_ref()
             .map_err(std::convert::AsRef::as_ref)
-    }
-
-    /// Get repo workdir without opening the full repo
-    pub fn get_repo_workdir(&self) -> Option<&PathBuf> {
-        if let Some(Ok(repo)) = self.repo.get() {
-            return repo.workdir.as_ref();
-        }
-        self.repo_workdir
-            .get_or_init(|| {
-                gix::discover::upwards(&self.current_dir)
-                    .ok()
-                    .and_then(|(path, _)| path.into_repository_and_work_tree_directories().1)
-            })
-            .as_ref()
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {

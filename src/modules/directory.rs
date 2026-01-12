@@ -52,13 +52,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
     let repo_workdir = if config.truncate_to_repo || config.repo_root_style.is_some() {
-        context.get_repo_workdir()
+        gix::discover::upwards(&context.current_dir)
+            .ok()
+            .and_then(|(path, _)| path.into_repository_and_work_tree_directories().1)
     } else {
         None
     };
     let dir_string = if config.truncate_to_repo {
         repo_workdir
-            .filter(|&root| root != &home_dir)
+            .as_ref()
+            .filter(|root| *root != &home_dir)
             .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
@@ -103,7 +106,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
-    let path_vec = match repo_workdir {
+    let path_vec = match repo_workdir.as_ref() {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();

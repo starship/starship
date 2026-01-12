@@ -53,12 +53,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
-                        let repo_root = context.get_repo_workdir().map(PathBuf::as_path);
+                        let repo_root = gix::discover::upwards(&context.current_dir)
+                            .ok()
+                            .and_then(|(path, _)| path.into_repository_and_work_tree_directories().1);
                         estimate_dotnet_version(
                             context,
                             &dotnet_files,
                             &context.current_dir,
-                            repo_root,
+                            repo_root.as_deref(),
                         )
                     } else {
                         get_version_from_cli(context)
