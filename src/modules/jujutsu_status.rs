@@ -139,18 +139,9 @@ pub(crate) struct BookmarkInfo {
     pub is_tracked: bool,
 }
 
-fn normalize_id_length(label: &str, length: isize) -> isize {
-    if length <= 0 {
-        log::warn!("{label} should be a positive value, found {length}");
-        7 // default to 7
-    } else {
-        length
-    }
-}
-
 const TRACKED_BOOKMARKS_TEMPLATE: &str = r#"if(remote, name ++ "\x1f" ++ tracking_ahead_count.lower() ++ "\x1f" ++ tracking_behind_count.lower() ++ "\n", "")"#;
 
-fn jujutsu_log_template(change_id_length: isize, commit_hash_length: isize) -> String {
+fn jujutsu_log_template(change_id_length: usize, commit_hash_length: usize) -> String {
     format!(
         r#"change_id.short({}) ++ "\n"
         ++ local_bookmarks.map(|b| b.name()).join("\x1e") ++ "\n"
@@ -217,9 +208,6 @@ pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
         ctx.config.get_module_config("jujutsu_commit"),
     )
     .commit_hash_length;
-
-    let change_id_length = normalize_id_length("change_id_length", change_id_length);
-    let commit_hash_length = normalize_id_length("commit_hash_length", commit_hash_length);
 
     // Use a single jj log command with a template to get all needed information
     // We use --ignore-working-copy to avoid automatic snapshotting
@@ -303,8 +291,8 @@ pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
 
 #[cfg(test)]
 pub(crate) fn jujutsu_log_command(
-    change_id_length: isize,
-    commit_hash_length: isize,
+    change_id_length: usize,
+    commit_hash_length: usize,
 ) -> &'static str {
     Box::leak(
         format!(

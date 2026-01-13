@@ -4284,7 +4284,8 @@
         },
         "change_id_length": {
           "type": "integer",
-          "format": "int",
+          "format": "uint",
+          "minimum": 0,
           "default": 7
         },
         "disabled": {
@@ -4311,7 +4312,8 @@
         },
         "commit_hash_length": {
           "type": "integer",
-          "format": "int",
+          "format": "uint",
+          "minimum": 0,
           "default": 7
         },
         "disabled": {

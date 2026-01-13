@@ -11,7 +11,7 @@ pub struct JujutsuChangeConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub format: &'a str,
-    pub change_id_length: isize,
+    pub change_id_length: usize,
     pub disabled: bool,
 }
 

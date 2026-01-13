@@ -11,7 +11,7 @@ pub struct JujutsuCommitConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub format: &'a str,
-    pub commit_hash_length: isize,
+    pub commit_hash_length: usize,
     pub disabled: bool,
 }
 
