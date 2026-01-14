@@ -55,7 +55,6 @@ pub mod jujutsu_bookmark;
 pub mod jujutsu_change;
 pub mod jujutsu_commit;
 pub mod jujutsu_state;
-pub mod jujutsu_status;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
@@ -230,8 +229,6 @@ pub struct FullConfig<'a> {
     jujutsu_commit: jujutsu_commit::JujutsuCommitConfig<'a>,
     #[serde(borrow)]
     jujutsu_state: jujutsu_state::JujutsuStateConfig<'a>,
-    #[serde(borrow)]
-    jujutsu_status: jujutsu_status::JjStatusConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]

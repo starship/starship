@@ -59,7 +59,6 @@ pub const ALL_MODULES: &[&str] = &[
     "jujutsu_change",
     "jujutsu_commit",
     "jujutsu_state",
-    "jujutsu_status",
     "julia",
     "kotlin",
     "kubernetes",

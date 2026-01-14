@@ -33,14 +33,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let mut name = bookmark.name.clone();
                     let local_ahead = bookmark.remote_behind;
                     let local_behind = bookmark.remote_ahead;
-                    let tracked_diverged =
-                        bookmark.is_tracked && (local_ahead > 0 || local_behind > 0);
-                    if tracked_diverged {
-                        name.push('*');
-                    }
                     if bookmark.is_tracked {
                         if local_ahead > 0 && local_behind > 0 {
-                            name.push_str(&format!(" ⇕⇡{}⇣{}", local_ahead, local_behind));
+                            name.push_str(&format!(" ⇡{}⇣{}", local_ahead, local_behind));
                         } else if local_ahead > 0 {
                             name.push_str(&format!(" ⇡{}", local_ahead));
                         } else if local_behind > 0 {
@@ -308,7 +303,7 @@ mod tests {
             )
             .collect();
 
-        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main* ⇕⇡2⇣5")));
+        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main ⇡2⇣5")));
         assert_eq!(expected, actual);
 
         tempdir.close()

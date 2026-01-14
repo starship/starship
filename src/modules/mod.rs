@@ -52,7 +52,6 @@ mod jujutsu_bookmark;
 mod jujutsu_change;
 mod jujutsu_commit;
 mod jujutsu_state;
-mod jujutsu_status;
 mod julia;
 mod kotlin;
 mod kubernetes;
@@ -176,7 +175,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "jujutsu_change" => jujutsu_change::module(context),
             "jujutsu_commit" => jujutsu_commit::module(context),
             "jujutsu_state" => jujutsu_state::module(context),
-            "jujutsu_status" => jujutsu_status::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -314,7 +312,6 @@ pub fn description(module: &str) -> &'static str {
         "jujutsu_change" => "The current change ID in a Jujutsu repository",
         "jujutsu_commit" => "The current commit ID in a Jujutsu repository",
         "jujutsu_state" => "The current state of a Jujutsu repository",
-        "jujutsu_status" => "The current status of a Jujutsu repository",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",

@@ -940,26 +940,6 @@
         "disabled": true
       }
     },
-    "jujutsu_status": {
-      "$ref": "#/$defs/JjStatusConfig",
-      "default": {
-        "symbol": "",
-        "style": "purple",
-        "format": "[$symbol$change_id( $bookmarks)]($style)[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$bookmark_conflicted]($bookmark_conflicted_style) ",
-        "conflicted": "⚠ ",
-        "conflicted_style": "red",
-        "divergent": "󰓁 ",
-        "divergent_style": "purple",
-        "hidden": "󰘓 ",
-        "hidden_style": "none",
-        "immutable": " ",
-        "immutable_style": "red",
-        "bookmark_conflicted": "??",
-        "bookmark_conflicted_style": "red",
-        "no_description": "(no description)",
-        "disabled": true
-      }
-    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -4365,72 +4345,6 @@
         "style": {
           "type": "string",
           "default": "red"
-        },
-        "disabled": {
-          "type": "boolean",
-          "default": true
-        }
-      },
-      "additionalProperties": false
-    },
-    "JjStatusConfig": {
-      "type": "object",
-      "properties": {
-        "symbol": {
-          "type": "string",
-          "default": ""
-        },
-        "style": {
-          "type": "string",
-          "default": "purple"
-        },
-        "format": {
-          "type": "string",
-          "default": "[$symbol$change_id( $bookmarks)]($style)[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$bookmark_conflicted]($bookmark_conflicted_style) "
-        },
-        "conflicted": {
-          "type": "string",
-          "default": "⚠ "
-        },
-        "conflicted_style": {
-          "type": "string",
-          "default": "red"
-        },
-        "divergent": {
-          "type": "string",
-          "default": "󰓁 "
-        },
-        "divergent_style": {
-          "type": "string",
-          "default": "purple"
-        },
-        "hidden": {
-          "type": "string",
-          "default": "󰘓 "
-        },
-        "hidden_style": {
-          "type": "string",
-          "default": "none"
-        },
-        "immutable": {
-          "type": "string",
-          "default": " "
-        },
-        "immutable_style": {
-          "type": "string",
-          "default": "red"
-        },
-        "bookmark_conflicted": {
-          "type": "string",
-          "default": "??"
-        },
-        "bookmark_conflicted_style": {
-          "type": "string",
-          "default": "red"
-        },
-        "no_description": {
-          "type": "string",
-          "default": "(no description)"
         },
         "disabled": {
           "type": "boolean",
