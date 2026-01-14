@@ -107,7 +107,7 @@ fn merge_tracked_bookmarks(
     }
 }
 
-pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
+pub(crate) fn get_jujutsu_info(ctx: &Context, ignore_working_copy: &bool) -> Option<JjRepoInfo> {
     vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
 
     let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
@@ -127,7 +127,11 @@ pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
                 "--no-graph",
                 "-r",
                 "@",
-                "--ignore-working-copy",
+                if *ignore_working_copy {
+                    "--ignore-working-copy"
+                } else {
+                    ""
+                },
                 "-T",
                 &jujutsu_log_template(change_id_length, commit_hash_length),
             ],
@@ -149,7 +153,11 @@ pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
                 "bookmark",
                 "list",
                 "--tracked",
-                "--ignore-working-copy",
+                if *ignore_working_copy {
+                    "--ignore-working-copy"
+                } else {
+                    ""
+                },
                 "-T",
                 TRACKED_BOOKMARKS_TEMPLATE,
             ],
