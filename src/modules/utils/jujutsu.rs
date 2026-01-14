@@ -16,6 +16,10 @@ pub(crate) struct JjRepoInfo {
     pub bookmark_conflicted: bool,
 }
 
+pub(crate) struct JjClosestBookmarksInfo {
+    pub bookmarks: Vec<BookmarkInfo>,
+}
+
 #[derive(Debug, Clone)]
 pub(crate) struct BookmarkInfo {
     pub name: String,
@@ -45,6 +49,7 @@ struct TrackedBookmarkOutput {
 }
 
 const TRACKED_BOOKMARKS_TEMPLATE: &str = r#"if(remote, '{"name":' ++ json(name) ++ ',"ahead":' ++ json(tracking_ahead_count.lower()) ++ ',"behind":' ++ json(tracking_behind_count.lower()) ++ '}' ++ "\n", "")"#;
+const CLOSEST_BOOKMARKS_TEMPLATE: &str =  r#"bookmarks.map(|b| b.normal_target().change_id() ++ "\x1f")"#;
 
 fn jujutsu_log_template(change_id_length: usize, commit_hash_length: usize) -> String {
     format!(
@@ -72,6 +77,14 @@ fn jujutsu_log_template(change_id_length: usize, commit_hash_length: usize) -> S
         ++ '}}'"#,
         change_id_length = change_id_length,
         commit_hash_length = commit_hash_length,
+    )
+}
+
+pub fn jujutsu_closest_template() -> String {
+    format!(
+        r#"local_bookmarks.map(|b| b.name()).join("\x1e") ++ "\n"
+        ++ remote_bookmarks.filter(|b| b.tracked()).map(|b| b.name() ++ "\x1f" ++ b.tracking_ahead_count().lower() ++ "\x1f" ++ b.tracking_behind_count().lower()).join("\x1e") ++ "\n"
+        ++ (local_bookmarks.any(|b| b.conflict()) || remote_bookmarks.any(|b| b.conflict()))"#,
     )
 }
 
@@ -199,6 +212,85 @@ pub(crate) fn get_jujutsu_info(ctx: &Context, ignore_working_copy: &bool) -> Opt
         hidden: log_output.hidden,
         immutable: log_output.immutable,
         bookmark_conflicted: log_output.bookmark_conflict,
+    })
+}
+
+pub(crate) fn get_closest_jujutsu_bookmarks_info(ctx: &Context, ignore_working_copy: &bool) -> Option<JjClosestBookmarksInfo> {
+    vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
+
+    let closest_bookmarks_output = ctx
+        .exec_cmd(
+            "jj",
+            &[
+                "log",
+                "--no-graph",
+                "-r",
+                "heads(::@ & bookmarks())",
+                if *ignore_working_copy {
+                    "--ignore-working-copy"
+                } else {
+                    ""
+                },
+                "-T",
+                CLOSEST_BOOKMARKS_TEMPLATE,
+            ],
+        )?
+        .stdout;
+
+    let change_id_closest = closest_bookmarks_output.split("\x1f").next().unwrap_or("");
+    let mut closest_bookmarks = Vec::new();
+
+    if !change_id_closest.is_empty() {
+        let output = ctx
+            .exec_cmd(
+                "jj",
+                &[
+                    "log",
+                    "--no-graph",
+                    "-r",
+                    change_id_closest,
+                    if *ignore_working_copy {
+                        "--ignore-working-copy"
+                    } else {
+                        ""
+                    },
+                    "-T",
+                    &jujutsu_closest_template(),
+                ],
+            )?
+            .stdout;
+
+        let mut lines = output.lines();
+
+        let bookmarks_str = lines.next().unwrap_or("");
+        let tracked_bookmarks_str = lines.next().unwrap_or("");
+
+        let tracked_bookmarks = parse_tracked_bookmarks(tracked_bookmarks_str);
+
+        closest_bookmarks = if bookmarks_str.is_empty() {
+            Vec::new()
+        } else {
+            bookmarks_str
+                .split('\x1e')
+                .filter(|entry| !entry.is_empty())
+                .map(|name| {
+                    let (ahead, behind, is_tracked) = tracked_bookmarks
+                        .get(name)
+                        .map(|(ahead, behind)| (*ahead, *behind, true))
+                        .unwrap_or((0, 0, false));
+                    BookmarkInfo {
+                        name: name.to_string(),
+                        remote_ahead: ahead,
+                        remote_behind: behind,
+                        is_tracked,
+                    }
+                })
+                .collect()
+        };
+    }
+
+    Some(JjClosestBookmarksInfo {
+        bookmarks: closest_bookmarks,
     })
 }
 

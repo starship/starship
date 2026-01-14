@@ -49,6 +49,7 @@ mod hostname;
 mod java;
 mod jobs;
 mod jujutsu_bookmark;
+mod jujutsu_closest_bookmarks;
 mod jujutsu_change;
 mod jujutsu_commit;
 mod jujutsu_state;
@@ -172,6 +173,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hostname" => hostname::module(context),
             "java" => java::module(context),
             "jujutsu_bookmark" => jujutsu_bookmark::module(context),
+            "jujutsu_closest_bookmarks" => jujutsu_closest_bookmarks::module(context),
             "jujutsu_change" => jujutsu_change::module(context),
             "jujutsu_commit" => jujutsu_commit::module(context),
             "jujutsu_state" => jujutsu_state::module(context),
@@ -309,6 +311,7 @@ pub fn description(module: &str) -> &'static str {
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jujutsu_bookmark" => "The current bookmark in a Jujutsu repository",
+        "jujutsu_closest_bookmarks" => "The closest bookmarks in a Jujutsu repository",
         "jujutsu_change" => "The current change ID in a Jujutsu repository",
         "jujutsu_commit" => "The current commit ID in a Jujutsu repository",
         "jujutsu_state" => "The current state of a Jujutsu repository",

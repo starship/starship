@@ -55,6 +55,7 @@ pub mod jujutsu_bookmark;
 pub mod jujutsu_change;
 pub mod jujutsu_commit;
 pub mod jujutsu_state;
+pub mod jujutsu_closest_bookmarks;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
@@ -223,6 +224,8 @@ pub struct FullConfig<'a> {
     java: java::JavaConfig<'a>,
     #[serde(borrow)]
     jujutsu_bookmark: jujutsu_bookmark::JujutsuBookmarkConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_closest_bookmarks: jujutsu_closest_bookmarks::JujutsuClosestBookmarksConfig<'a>,
     #[serde(borrow)]
     jujutsu_change: jujutsu_change::JujutsuChangeConfig<'a>,
     #[serde(borrow)]

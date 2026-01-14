@@ -905,6 +905,17 @@
         "ignore_working_copy": true
       }
     },
+    "jujutsu_closest_bookmarks": {
+      "$ref": "#/$defs/JujutsuClosestBookmarksConfig",
+      "default": {
+        "symbol": "󰑟 ",
+        "style": "purple",
+        "format": "[$symbol$bookmarks]($style) ",
+        "bookmark_conflicted": "??",
+        "disabled": true,
+        "ignore_working_copy": true
+      }
+    },
     "jujutsu_change": {
       "$ref": "#/$defs/JujutsuChangeConfig",
       "default": {
@@ -4226,6 +4237,36 @@
       "additionalProperties": false
     },
     "JujutsuBookmarkConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": "󰑟 "
+        },
+        "style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$bookmarks]($style) "
+        },
+        "bookmark_conflicted": {
+          "type": "string",
+          "default": "??"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ignore_working_copy": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuClosestBookmarksConfig": {
       "type": "object",
       "properties": {
         "symbol": {
