@@ -2,6 +2,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_state::JujutsuStateConfig;
 use crate::formatter::StringFormatter;
+use crate::modules::utils::jujutsu::get_jujutsu_info;
 use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu state indicators in the current directory
@@ -20,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = crate::modules::jujutsu_status::get_jujutsu_info(context)?;
+    let jujutsu_info = get_jujutsu_info(context)?;
 
     if !jujutsu_info.conflicted
         && !jujutsu_info.divergent
@@ -134,16 +135,16 @@ mod tests {
             })
             .path(repo_dir)
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_log_command(7, 7),
+                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
                 Some(CommandOutput {
                     stdout: String::from(
-                        "abcdefg\nmain\n\nabcdefg\ntrue\nfalse\nfalse\nfalse\nfalse",
+                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":true,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
                     ),
                     stderr: String::default(),
                 }),
             )
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_tracked_bookmarks_command(),
+                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
                 Some(CommandOutput {
                     stdout: String::new(),
                     stderr: String::default(),
@@ -170,16 +171,16 @@ mod tests {
             })
             .path(repo_dir)
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_log_command(7, 7),
+                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
                 Some(CommandOutput {
                     stdout: String::from(
-                        "abcdefg\nmain\n\nabcdefg\nfalse\ntrue\nfalse\nfalse\nfalse",
+                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":true,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
                     ),
                     stderr: String::default(),
                 }),
             )
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_tracked_bookmarks_command(),
+                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
                 Some(CommandOutput {
                     stdout: String::new(),
                     stderr: String::default(),
@@ -206,16 +207,16 @@ mod tests {
             })
             .path(repo_dir)
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_log_command(7, 7),
+                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
                 Some(CommandOutput {
                     stdout: String::from(
-                        "abcdefg\nmain\n\nabcdefg\nfalse\nfalse\ntrue\nfalse\nfalse",
+                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":true,"immutable":false,"bookmark_conflict":false}"#,
                     ),
                     stderr: String::default(),
                 }),
             )
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_tracked_bookmarks_command(),
+                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
                 Some(CommandOutput {
                     stdout: String::new(),
                     stderr: String::default(),
@@ -242,16 +243,16 @@ mod tests {
             })
             .path(repo_dir)
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_log_command(7, 7),
+                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
                 Some(CommandOutput {
                     stdout: String::from(
-                        "abcdefg\nmain\n\nabcdefg\nfalse\nfalse\nfalse\ntrue\nfalse",
+                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":true,"bookmark_conflict":false}"#,
                     ),
                     stderr: String::default(),
                 }),
             )
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_tracked_bookmarks_command(),
+                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
                 Some(CommandOutput {
                     stdout: String::new(),
                     stderr: String::default(),
@@ -278,14 +279,14 @@ mod tests {
             })
             .path(repo_dir)
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_log_command(7, 7),
+                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
                 Some(CommandOutput {
-                    stdout: String::from("abcdefg\nmain\n\nabcdefg\ntrue\ntrue\ntrue\nfalse\nfalse"),
+                    stdout: String::from(r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":true,"divergent":true,"hidden":true,"immutable":false,"bookmark_conflict":false}"#),
                     stderr: String::default(),
                 }),
             )
             .cmd(
-                crate::modules::jujutsu_status::jujutsu_tracked_bookmarks_command(),
+                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
                 Some(CommandOutput {
                     stdout: String::new(),
                     stderr: String::default(),
