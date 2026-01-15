@@ -151,6 +151,9 @@ symbol = "kubernetes "
 [lua]
 symbol = "lua "
 
+[maven]
+symbol = "maven "
+
 [nodejs]
 symbol = "nodejs "
 
