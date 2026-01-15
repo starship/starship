@@ -1,3 +1,5 @@
+use indexmap::IndexMap;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -11,6 +13,7 @@ pub struct GitBranchConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
+    pub substitutions: IndexMap<String, &'a str>,
     pub truncation_length: i64,
     pub truncation_symbol: &'a str,
     pub only_attached: bool,
@@ -26,6 +29,7 @@ impl Default for GitBranchConfig<'_> {
             format: "on [$symbol$branch(:$remote_branch)]($style) ",
             symbol: " ",
             style: "bold purple",
+            substitutions: IndexMap::new(),
             truncation_length: i64::MAX,
             truncation_symbol: "…",
             only_attached: false,
