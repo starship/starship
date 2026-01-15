@@ -1,40 +1,40 @@
-# Frequently Asked Questions
+# Veelgestelde Vragen
 
-## What is the configuration used in the demo GIF?
+## Wat is de configuratie gebruikt in de demo GIF?
 
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **Thema**: Minimal
+  - **Kleurschema**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Lettertype**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Configuratie**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Hoe kan ik de opdracht voltooien zoals weergegeven in de demo GIF?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Ondersteuning voor voltooiing, of automatische voltooiing, wordt aangeboden door jouw opdrachtshell van jouw keuze. In het geval van de demo werd de demo gedaan met [Fish Shell](https://fishshell.com/), die standaard automatische voltooiing biedt. Als je Z Shell (zsh) gebruikt, zou ik voorstellen een kijkje te nemen bij [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Doen het hoogste niveau `format` en `<module>.disabled` hetzelfde?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Ja, ze kunnen beide worden gebruikt om modules uit te schakelen in de prompt. Als u alleen modules wilt uitschakelen, is `<module>.disabled` de beste manier om dit te doen om deze redenen:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- Het uitschakelen van modules is uitdrukkelijker dan het weglaten van deze op het bovenste niveau `format`
+- Nieuw aangemaakte modules zullen worden toegevoegd aan de prompt als Starship wordt bijgewerkt
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## De documentatie zegt dat Starship cross-shell is. Waarom wordt mijn voorkeursopdrachtshell niet ondersteund?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+De manier waarop Starship wordt gebouwd, moet het mogelijk zijn om bijna elke opdrachtshell te ondersteunen. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
-Here's a small example getting Starship working with bash:
+Hier is een klein voorbeeld van het werken met een bash:
 
 ```sh
-# Get the status code from the last command executed
+# Haal de statuscode op van het laatst uitgevoerde commando
 STATUS=$?
 
-# Get the number of jobs running.
+# Haal het aantal draaiende taken op.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Stel het prompt in naar de uitvoer van `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
