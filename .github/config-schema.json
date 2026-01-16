@@ -901,7 +901,19 @@
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
         "bookmark_conflicted": "??",
-        "disabled": true
+        "disabled": true,
+        "ignore_working_copy": true
+      }
+    },
+    "jujutsu_closest_bookmarks": {
+      "$ref": "#/$defs/JujutsuClosestBookmarksConfig",
+      "default": {
+        "symbol": "󰑟 ",
+        "style": "purple",
+        "format": "[$symbol$bookmarks]($style) ",
+        "bookmark_conflicted": "??",
+        "disabled": true,
+        "ignore_working_copy": true
       }
     },
     "jujutsu_change": {
@@ -911,7 +923,8 @@
         "style": "purple",
         "format": "[$symbol$change_id]($style) ",
         "change_id_length": 7,
-        "disabled": true
+        "disabled": true,
+        "ignore_working_copy": true
       }
     },
     "jujutsu_commit": {
@@ -921,7 +934,8 @@
         "style": "blue",
         "format": "[$symbol$commit]($style) ",
         "commit_hash_length": 7,
-        "disabled": true
+        "disabled": true,
+        "ignore_working_copy": true
       }
     },
     "jujutsu_state": {
@@ -937,7 +951,8 @@
         "immutable_style": "red",
         "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
         "style": "red",
-        "disabled": true
+        "disabled": true,
+        "ignore_working_copy": true
       }
     },
     "jobs": {
@@ -4243,6 +4258,40 @@
         "disabled": {
           "type": "boolean",
           "default": true
+        },
+        "ignore_working_copy": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuClosestBookmarksConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": "󰑟 "
+        },
+        "style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$bookmarks]($style) "
+        },
+        "bookmark_conflicted": {
+          "type": "string",
+          "default": "??"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ignore_working_copy": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -4271,6 +4320,10 @@
         "disabled": {
           "type": "boolean",
           "default": true
+        },
+        "ignore_working_copy": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -4297,6 +4350,10 @@
           "default": 7
         },
         "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ignore_working_copy": {
           "type": "boolean",
           "default": true
         }
@@ -4347,6 +4404,10 @@
           "default": "red"
         },
         "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ignore_working_copy": {
           "type": "boolean",
           "default": true
         }

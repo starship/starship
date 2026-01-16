@@ -1,16 +1,16 @@
 use super::{Context, Module, ModuleConfig};
 
-use crate::configs::jujutsu_bookmark::JujutsuBookmarkConfig;
+use crate::configs::jujutsu_closest_bookmarks::JujutsuClosestBookmarksConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::get_jujutsu_info;
+use crate::modules::utils::jujutsu::get_closest_jujutsu_bookmarks_info;
 use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu bookmarks in the current directory
 ///
 /// Will display bookmarks pointing to the current change if the current directory is a jj repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("jujutsu_bookmark");
-    let config: JujutsuBookmarkConfig = JujutsuBookmarkConfig::try_load(module.config);
+    let mut module = context.new_module("jujutsu_closest_bookmarks");
+    let config: JujutsuClosestBookmarksConfig = JujutsuClosestBookmarksConfig::try_load(module.config);
 
     // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = get_jujutsu_info(context, &config.ignore_working_copy)?;
+    let jujutsu_info = get_closest_jujutsu_bookmarks_info(context, &config.ignore_working_copy)?;
 
     let bookmarks = if jujutsu_info.bookmarks.is_empty() {
         None
@@ -65,11 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .as_ref()?
                     .iter()
                     .map(|bookmark| {
-                        if jujutsu_info.bookmark_conflicted {
-                            format!("{}{}", bookmark, config.bookmark_conflicted)
-                        } else {
                             bookmark.to_string()
-                        }
                     })
                     .collect::<Vec<_>>()
                     .join(" "))),
@@ -81,7 +77,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `jujutsu_bookmark`:\n{}", error);
+            log::warn!("Error in module `jujutsu_closest_bookmarks`:\n{}", error);
             return None;
         }
     });
@@ -101,7 +97,7 @@ mod tests {
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .path(repo_dir.path())
             .collect();
 
@@ -115,7 +111,7 @@ mod tests {
         let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
         let repo_dir = tempdir.path();
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .path(repo_dir)
             .collect();
 
@@ -130,9 +126,9 @@ mod tests {
         let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
         let repo_dir = tempdir.path();
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .config(toml::toml! {
-                [jujutsu_bookmark]
+                [jujutsu_closest_bookmarks]
                 disabled = false
                 format = "[$symbol$bookmarks]($style) "
             })
@@ -166,9 +162,9 @@ mod tests {
         let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
         let repo_dir = tempdir.path();
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .config(toml::toml! {
-                [jujutsu_bookmark]
+                [jujutsu_closest_bookmarks]
                 disabled = false
                 format = "[$symbol$bookmarks]($style) "
             })
@@ -205,7 +201,7 @@ mod tests {
         let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
         let repo_dir = tempdir.path();
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .config(toml::toml! {
                 [jujutsu_bookmark]
                 disabled = false
@@ -244,9 +240,9 @@ mod tests {
         let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
         let repo_dir = tempdir.path();
 
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
+        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
             .config(toml::toml! {
-                [jujutsu_bookmark]
+                [jujutsu_closest_bookmarks]
                 disabled = false
                 format = "[$symbol$bookmarks]($style) "
             })
@@ -268,114 +264,6 @@ mod tests {
             .collect();
 
         let expected = None; // Should be None when no bookmarks
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_ahead_behind() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
-            .config(toml::toml! {
-                [jujutsu_bookmark]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::from("{\"name\":\"main\",\"ahead\":5,\"behind\":2}\n"),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main ⇡2⇣5")));
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_conflicted() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
-            .config(toml::toml! {
-                [jujutsu_bookmark]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":true}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::new(),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main??")));
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_tracked_in_sync() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_bookmark")
-            .config(toml::toml! {
-                [jujutsu_bookmark]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::from("{\"name\":\"main\",\"ahead\":0,\"behind\":0}\n"),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main")));
         assert_eq!(expected, actual);
 
         tempdir.close()

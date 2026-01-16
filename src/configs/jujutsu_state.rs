@@ -19,12 +19,14 @@ pub struct JujutsuStateConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub ignore_working_copy: bool,
 }
 
 impl Default for JujutsuStateConfig<'_> {
     fn default() -> Self {
         Self {
             disabled: true,
+            ignore_working_copy: true,
             format: "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
             style: "red",
             conflicted: "⚠ ",
