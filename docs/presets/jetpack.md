@@ -16,7 +16,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 ### Configuration
 
 ```sh
-starship preset jetpack -o ~/.config/starship.toml
+starship preset jetpack -o ~/.config/starship/config.toml
 ```
 
 [Click to download TOML](/presets/toml/jetpack.toml){download}
