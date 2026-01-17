@@ -30,6 +30,9 @@ use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
 
+mod jujutsu;
+pub use jujutsu::JujutsuRepo;
+
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
@@ -53,6 +56,8 @@ pub struct Context<'a> {
 
     /// Private field to store Git information for modules who need it
     repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
+    /// Private field to store Jujutsu information for modules who need it
+    jujutsu_repo: OnceLock<Option<JujutsuRepo>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -170,6 +175,7 @@ impl<'a> Context<'a> {
             logical_dir,
             dir_contents: OnceLock::new(),
             repo: OnceLock::new(),
+            jujutsu_repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -386,6 +392,12 @@ impl<'a> Context<'a> {
             })
             .as_ref()
             .map_err(std::convert::AsRef::as_ref)
+    }
+
+    pub fn get_jujutsu_repo(&self) -> Option<&JujutsuRepo> {
+        self.jujutsu_repo
+            .get_or_init(|| JujutsuRepo::load(self))
+            .as_ref()
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
