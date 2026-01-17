@@ -1,7 +1,17 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 [aws]
-symbol = " "
+symbol = " "
+
+[azure]
+symbol = " "
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰂑 "
+empty_symbol = "󰂎 "
 
 [buf]
 symbol = " "
@@ -18,17 +28,26 @@ symbol = " "
 [cmake]
 symbol = " "
 
+[cobol]
+symbol = " "
+
 [conda]
-symbol = " "
+symbol = " "
+
+[container]
+symbol = " "
 
 [crystal]
 symbol = " "
 
 [dart]
-symbol = " "
+symbol = " "
 
 [deno]
 symbol = " "
+
+[direnv]
+symbol = " "
 
 [directory]
 read_only = " 󰌾"
@@ -36,11 +55,17 @@ read_only = " 󰌾"
 [docker_context]
 symbol = " "
 
+[dotnet]
+symbol = " "
+
 [elixir]
 symbol = " "
 
 [elm]
 symbol = " "
+
+[erlang]
+symbol = " "
 
 [fennel]
 symbol = " "
@@ -52,7 +77,10 @@ symbol = " "
 symbol = " "
 
 [gcloud]
-symbol = " "
+symbol = "󱇶 "
+
+[gleam]
+symbol = " "
 
 [git_branch]
 symbol = " "
@@ -75,6 +103,9 @@ symbol = " "
 [haxe]
 symbol = " "
 
+[helm]
+symbol = " "
+
 [hg_branch]
 symbol = " "
 
@@ -82,13 +113,16 @@ symbol = " "
 ssh_symbol = " "
 
 [java]
-symbol = " "
+symbol = " "
 
 [julia]
 symbol = " "
 
 [kotlin]
 symbol = " "
+
+[kubernetes]
+symbol = "󱃾 "
 
 [lua]
 symbol = " "
@@ -99,8 +133,17 @@ symbol = "󰍛 "
 [meson]
 symbol = "󰔷 "
 
+[mojo]
+symbol = "󰈸 "
+
+[nats]
+symbol = " "
+
+[netns]
+symbol = "󰛳 "
+
 [nim]
-symbol = "󰆥 "
+symbol = " "
 
 [nix_shell]
 symbol = " "
@@ -111,28 +154,41 @@ symbol = " "
 [ocaml]
 symbol = " "
 
+[odin]
+symbol = "󰟢 "
+
+[opa]
+symbol = " "
+
+[openstack]
+symbol = " "
+
 [os.symbols]
+AIX = " "
+ALTLinux = " "
+AOSC = " "
+AlmaLinux = " "
 Alpaquita = " "
 Alpine = " "
-AlmaLinux = " "
 Amazon = " "
 Android = " "
-AOSC = " "
 Arch = " "
 Artix = " "
+Bluefin = " "
 CachyOS = " "
 CentOS = " "
 Debian = " "
 DragonFly = " "
 Elementary = " "
-Emscripten = " "
-EndeavourOS = " "
+Emscripten = " "
+EndeavourOS = " "
 Fedora = " "
 FreeBSD = " "
-Garuda = "󰛓 "
+Garuda = " "
 Gentoo = " "
 HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
+Illumos = " "
+InstantOS = " "
 Ios = "󰀷 "
 Kali = " "
 Linux = " "
@@ -145,22 +201,27 @@ Mint = " "
 NetBSD = " "
 NixOS = " "
 Nobara = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
+OpenBSD = " "
+OpenCloudOS = " "
+OracleLinux = "󰺡 "
+PikaOS = " "
 Pop = " "
 Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
+RedHatEnterprise = "󱄛 "
+Redhat = "󱄛 "
 Redox = "󰀘 "
-Solus = "󰠳 "
+RockyLinux = " "
 SUSE = " "
+Solus = " "
 Ubuntu = " "
+Ultramarine = " "
 Unknown = " "
+Uos = " "
 Void = " "
 Windows = "󰍲 "
 Zorin = " "
+openEuler = " "
+openSUSE = " "
 
 [package]
 symbol = "󰏗 "
@@ -177,8 +238,20 @@ symbol = " "
 [pixi]
 symbol = "󰏗 "
 
+[pulumi]
+symbol = " "
+
+[purescript]
+symbol = " "
+
 [python]
 symbol = " "
+
+[raku]
+symbol = "󱖊 "
+
+[red]
+symbol = "󱍼 "
 
 [rlang]
 symbol = "󰟔 "
@@ -192,11 +265,38 @@ symbol = "󱘗 "
 [scala]
 symbol = " "
 
+[shlvl]
+symbol = "󰹍 "
+
+[singularity]
+symbol = " "
+
+[solidity]
+symbol = " "
+
+[spack]
+symbol = " "
+
 [status]
 symbol = " "
 
+[sudo]
+symbol = " "
+
 [swift]
 symbol = " "
+
+[terraform]
+symbol = " "
+
+[vlang]
+symbol = " "
+
+[typst]
+symbol = " "
+
+[vagrant]
+symbol = " "
 
 [xmake]
 symbol = " "
