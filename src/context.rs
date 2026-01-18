@@ -5,6 +5,7 @@ use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
 use crate::modules;
+use crate::modules::utils::jujutsu::JujutsuRepo;
 use crate::utils;
 use clap::Parser;
 use gix::{
@@ -29,9 +30,6 @@ use std::sync::{Arc, OnceLock, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
-
-mod jujutsu;
-pub use jujutsu::JujutsuRepo;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
