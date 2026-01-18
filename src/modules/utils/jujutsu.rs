@@ -349,9 +349,10 @@ fn load_settings(context: &Context, workspace_root: &Path) -> Option<UserSetting
     }
 
     if let Some(path) = repo_config_path(workspace_root)
-        && let Err(error) = config.load_file(ConfigSource::Repo, path) {
-            log::debug!("Failed to read JJ repo config file: {error}");
-        }
+        && let Err(error) = config.load_file(ConfigSource::Repo, path)
+    {
+        log::debug!("Failed to read JJ repo config file: {error}");
+    }
 
     UserSettings::from_config(config).ok()
 }
@@ -396,9 +397,10 @@ fn load_revset_aliases(settings: &UserSettings) -> RevsetAliasesMap {
     let config = settings.config();
     for alias in config.table_keys("revset-aliases") {
         if let Ok(value) = config.get::<String>(["revset-aliases", alias])
-            && let Err(error) = aliases.insert(alias, value) {
-                log::debug!("Failed to load revset alias '{alias}': {error}");
-            }
+            && let Err(error) = aliases.insert(alias, value)
+        {
+            log::debug!("Failed to load revset alias '{alias}': {error}");
+        }
     }
     aliases
 }
