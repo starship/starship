@@ -132,7 +132,7 @@ pub(crate) struct BookmarkInfo {
 pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
     vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
     let repo = ctx.get_jujutsu_repo()?;
-     let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
+    let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
         ctx.config.get_module_config("jujutsu_change"),
     )
     .change_id_length;
