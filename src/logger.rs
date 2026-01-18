@@ -21,15 +21,28 @@ pub struct StarshipLogger {
 
 /// Returns the path to the log directory.
 pub fn get_log_dir() -> PathBuf {
-    env::var_os("STARSHIP_CACHE")
+    let log_dir = env::var_os("STARSHIP_CACHE")
         .map(PathBuf::from)
-        .unwrap_or_else(|| {
-            utils::home_dir()
-                .map(|home| home.join(".cache"))
-                .or_else(dirs::cache_dir)
-                .unwrap_or_else(std::env::temp_dir)
-                .join("starship")
-        })
+        .or_else(dirs::cache_dir)
+        .unwrap_or_else(std::env::temp_dir)
+        .join("starship");
+
+    if !log_dir.join(".migrated").exists()
+        && let Some(home_dir) = utils::home_dir()
+    {
+        let _ = fs::File::create(log_dir.join(".migrated"));
+        let old_log_dir = home_dir.join(".cache/starship");
+        cleanup_log_files(&old_log_dir);
+        if let Err(err) = fs::remove_dir(&old_log_dir) {
+            eprintln!(
+                "Failed to cleanup old log dir {}: {}!",
+                old_log_dir.display(),
+                err
+            );
+        }
+    }
+
+    log_dir
 }
 
 /// Deletes all log files in the log directory that were modified more than 24 hours ago.
