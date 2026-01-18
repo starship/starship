@@ -13,7 +13,6 @@ pub struct JujutsuClosestBookmarksConfig<'a> {
     pub format: &'a str,
     pub bookmark_conflicted: &'a str,
     pub disabled: bool,
-    pub ignore_working_copy: bool,
 }
 
 impl Default for JujutsuClosestBookmarksConfig<'_> {
@@ -24,7 +23,6 @@ impl Default for JujutsuClosestBookmarksConfig<'_> {
             style: "purple",
             symbol: "󰑟 ",
             bookmark_conflicted: "??",
-            ignore_working_copy: true,
         }
     }
 }

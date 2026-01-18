@@ -13,7 +13,6 @@ pub struct JujutsuChangeConfig<'a> {
     pub format: &'a str,
     pub change_id_length: usize,
     pub disabled: bool,
-    pub ignore_working_copy: bool,
 }
 
 impl Default for JujutsuChangeConfig<'_> {
@@ -24,7 +23,6 @@ impl Default for JujutsuChangeConfig<'_> {
             style: "purple",
             symbol: "",
             change_id_length: 7,
-            ignore_working_copy: true,
         }
     }
 }

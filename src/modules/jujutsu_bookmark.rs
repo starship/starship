@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = get_jujutsu_info(context, &config.ignore_working_copy)?;
+    let jujutsu_info = get_jujutsu_info(context)?;
 
     let bookmarks = if jujutsu_info.bookmarks.is_empty() {
         None

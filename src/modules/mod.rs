@@ -99,7 +99,7 @@ mod swift;
 mod terraform;
 mod time;
 mod username;
-mod utils;
+pub(crate) mod utils;
 mod vagrant;
 mod vcs;
 mod vcsh;

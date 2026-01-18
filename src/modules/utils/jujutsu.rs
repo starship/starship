@@ -42,7 +42,7 @@ latest(
 'mutable()' = '~immutable()'
 "#;
 
-pub(crate) struct JujutsuRepo {
+pub struct JujutsuRepo {
     repo: Arc<ReadonlyRepo>,
     settings: UserSettings,
     workspace_name: jj_lib::ref_name::WorkspaceNameBuf,
@@ -129,13 +129,14 @@ pub(crate) struct BookmarkInfo {
     pub is_tracked: bool,
 }
 
-pub(crate) fn get_jujutsu_info(ctx: &Context, _ignore_working_copy: &bool) -> Option<JjRepoInfo> {
+pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
     vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
     let repo = ctx.get_jujutsu_repo()?;
-    let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
+     let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
         ctx.config.get_module_config("jujutsu_change"),
     )
     .change_id_length;
+
     let commit_hash_length = crate::configs::jujutsu_commit::JujutsuCommitConfig::try_load(
         ctx.config.get_module_config("jujutsu_commit"),
     )
@@ -173,10 +174,7 @@ pub(crate) fn get_jujutsu_info(ctx: &Context, _ignore_working_copy: &bool) -> Op
     })
 }
 
-pub(crate) fn get_closest_jujutsu_bookmarks_info(
-    ctx: &Context,
-    _ignore_working_copy: &bool,
-) -> Option<JjClosestBookmarksInfo> {
+pub(crate) fn get_closest_jujutsu_bookmarks_info(ctx: &Context) -> Option<JjClosestBookmarksInfo> {
     vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
     let repo = ctx.get_jujutsu_repo()?;
     let commit_id = closest_bookmark_commit_id(repo)?;
@@ -339,20 +337,14 @@ fn load_settings(context: &Context, workspace_root: &Path) -> Option<UserSetting
     let default_layer = ConfigLayer::parse(ConfigSource::Default, DEFAULT_REVSET_ALIASES).ok()?;
     config.add_layer(default_layer);
 
-    if let Some(path) = context.get_env("JJ_CONFIG") {
+    for path in user_config_paths(context) {
         if let Err(error) = config.load_file(ConfigSource::User, path) {
-            log::debug!("Failed to read JJ_CONFIG file: {error}");
+            log::debug!("Failed to read JJ config file: {error}");
         }
-    } else {
-        for path in user_config_paths(context) {
-            if let Err(error) = config.load_file(ConfigSource::User, path) {
-                log::debug!("Failed to read JJ config file: {error}");
-            }
-        }
-        for dir in user_config_dirs(context) {
-            if let Err(error) = config.load_dir(ConfigSource::User, dir) {
-                log::debug!("Failed to read JJ config dir: {error}");
-            }
+    }
+    for dir in user_config_dirs(context) {
+        if let Err(error) = config.load_dir(ConfigSource::User, dir) {
+            log::debug!("Failed to read JJ config dir: {error}");
         }
     }
 

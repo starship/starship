@@ -901,8 +901,7 @@
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
         "bookmark_conflicted": "??",
-        "disabled": true,
-        "ignore_working_copy": true
+        "disabled": true
       }
     },
     "jujutsu_closest_bookmarks": {
@@ -912,8 +911,7 @@
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
         "bookmark_conflicted": "??",
-        "disabled": true,
-        "ignore_working_copy": true
+        "disabled": true
       }
     },
     "jujutsu_change": {
@@ -923,8 +921,7 @@
         "style": "purple",
         "format": "[$symbol$change_id]($style) ",
         "change_id_length": 7,
-        "disabled": true,
-        "ignore_working_copy": true
+        "disabled": true
       }
     },
     "jujutsu_commit": {
@@ -934,8 +931,7 @@
         "style": "blue",
         "format": "[$symbol$commit]($style) ",
         "commit_hash_length": 7,
-        "disabled": true,
-        "ignore_working_copy": true
+        "disabled": true
       }
     },
     "jujutsu_state": {
@@ -951,8 +947,7 @@
         "immutable_style": "red",
         "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
         "style": "red",
-        "disabled": true,
-        "ignore_working_copy": true
+        "disabled": true
       }
     },
     "jobs": {
@@ -4258,10 +4253,6 @@
         "disabled": {
           "type": "boolean",
           "default": true
-        },
-        "ignore_working_copy": {
-          "type": "boolean",
-          "default": true
         }
       },
       "additionalProperties": false
@@ -4286,10 +4277,6 @@
           "default": "??"
         },
         "disabled": {
-          "type": "boolean",
-          "default": true
-        },
-        "ignore_working_copy": {
           "type": "boolean",
           "default": true
         }
@@ -4320,10 +4307,6 @@
         "disabled": {
           "type": "boolean",
           "default": true
-        },
-        "ignore_working_copy": {
-          "type": "boolean",
-          "default": true
         }
       },
       "additionalProperties": false
@@ -4350,10 +4333,6 @@
           "default": 7
         },
         "disabled": {
-          "type": "boolean",
-          "default": true
-        },
-        "ignore_working_copy": {
           "type": "boolean",
           "default": true
         }
@@ -4404,10 +4383,6 @@
           "default": "red"
         },
         "disabled": {
-          "type": "boolean",
-          "default": true
-        },
-        "ignore_working_copy": {
           "type": "boolean",
           "default": true
         }
