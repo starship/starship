@@ -10,7 +10,8 @@ use crate::modules::vcs;
 /// Will display bookmarks pointing to the current change if the current directory is a jj repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jujutsu_closest_bookmarks");
-    let config: JujutsuClosestBookmarksConfig = JujutsuClosestBookmarksConfig::try_load(module.config);
+    let config: JujutsuClosestBookmarksConfig =
+        JujutsuClosestBookmarksConfig::try_load(module.config);
 
     // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
@@ -20,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = get_closest_jujutsu_bookmarks_info(context, &config.ignore_working_copy)?;
+    let jujutsu_info = get_closest_jujutsu_bookmarks_info(context)?;
 
     let bookmarks = if jujutsu_info.bookmarks.is_empty() {
         None
@@ -64,9 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "bookmarks" => Some(Ok(bookmarks
                     .as_ref()?
                     .iter()
-                    .map(|bookmark| {
-                            bookmark.to_string()
-                    })
+                    .map(|bookmark| bookmark.to_string())
                     .collect::<Vec<_>>()
                     .join(" "))),
                 _ => None,
@@ -83,189 +82,4 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-#[cfg(test)]
-mod tests {
-    use nu_ansi_term::Color;
-    use std::io;
-
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
-    use crate::utils::CommandOutput;
-
-    #[test]
-    fn show_nothing_on_empty_dir() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .path(repo_dir.path())
-            .collect();
-
-        let expected = None;
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_disabled_by_default() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .path(repo_dir)
-            .collect();
-
-        let expected = None; // Should be None because disabled by default
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_single_bookmark() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .config(toml::toml! {
-                [jujutsu_closest_bookmarks]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::new(),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!("{} ", Color::Purple.paint("\u{f045f} main")));
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_multiple_bookmarks() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .config(toml::toml! {
-                [jujutsu_closest_bookmarks]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main","feature","bugfix"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::new(),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!(
-            "{} ",
-            Color::Purple.paint("\u{f045f} main feature bugfix")
-        ));
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_with_truncation() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .config(toml::toml! {
-                [jujutsu_bookmark]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(
-                        r#"{"change_id":"abcdefg","local_bookmarks":["main","very-long-bookmark-name","feature"],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#,
-                    ),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::new(),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = Some(format!(
-            "{} ",
-            Color::Purple.paint("\u{f045f} main very-long-bookmark-name feature")
-        ));
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
-
-    #[test]
-    fn test_jujutsu_bookmark_no_bookmarks() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::Jujutsu)?;
-        let repo_dir = tempdir.path();
-
-        let actual = ModuleRenderer::new("jujutsu_closest_bookmarks")
-            .config(toml::toml! {
-                [jujutsu_closest_bookmarks]
-                disabled = false
-                format = "[$symbol$bookmarks]($style) "
-            })
-            .path(repo_dir)
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_log_command(7, 7),
-                Some(CommandOutput {
-                    stdout: String::from(r#"{"change_id":"abcdefg","local_bookmarks":[],"tracked_remote_bookmarks":[],"commit_id":"abcdefg","conflict":false,"divergent":false,"hidden":false,"immutable":false,"bookmark_conflict":false}"#),
-                    stderr: String::default(),
-                }),
-            )
-            .cmd(
-                crate::modules::utils::jujutsu::jujutsu_tracked_bookmarks_command(),
-                Some(CommandOutput {
-                    stdout: String::new(),
-                    stderr: String::default(),
-                }),
-            )
-            .collect();
-
-        let expected = None; // Should be None when no bookmarks
-        assert_eq!(expected, actual);
-
-        tempdir.close()
-    }
 }

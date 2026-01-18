@@ -13,7 +13,6 @@ pub struct JujutsuCommitConfig<'a> {
     pub format: &'a str,
     pub commit_hash_length: usize,
     pub disabled: bool,
-    pub ignore_working_copy: bool,
 }
 
 impl Default for JujutsuCommitConfig<'_> {
@@ -24,7 +23,6 @@ impl Default for JujutsuCommitConfig<'_> {
             style: "blue",
             symbol: "",
             commit_hash_length: 7,
-            ignore_working_copy: true,
         }
     }
 }
