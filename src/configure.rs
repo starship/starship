@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fmt::Write as _;
 use std::process;
 use std::process::Stdio;
@@ -7,10 +8,15 @@ use crate::config::ModuleConfig;
 use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
+use crate::module::ALL_MODULES;
 use crate::utils;
+use inquire::MultiSelect;
+use inquire::formatter::MultiOptionFormatter;
 use std::fs::File;
 use std::io::Write;
 use toml_edit::DocumentMut;
+use toml_edit::Item;
+use toml_edit::Table;
 
 #[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
@@ -220,6 +226,96 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
     *new_value.as_value_mut().unwrap().decor_mut() = old_value.as_value().unwrap().decor().clone();
 
     values.insert(key, new_value);
+    Ok(())
+}
+
+pub fn toggle_multiple_configurations(context: &Context, key: &str) {
+    let mut doc = get_configuration_edit(context);
+
+    match handle_toggle_multiple_configurations(context, &mut doc, key) {
+        Err(e) => {
+            eprintln!("{e}");
+            process::exit(1);
+        }
+        _ => write_configuration(context, &doc),
+    }
+}
+
+fn handle_toggle_multiple_configurations(
+    context: &Context,
+    doc: &mut DocumentMut,
+    key: &str,
+) -> Result<(), String> {
+    let modules_enabled = ALL_MODULES
+        .iter()
+        .enumerate()
+        .filter(|(_, module)| !context.is_module_disabled(module));
+
+    let default = modules_enabled
+        .clone()
+        .map(|(index, _)| index)
+        .collect::<Vec<usize>>();
+
+    let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} modules selected", a.len());
+    let options = Vec::from(ALL_MODULES);
+
+    let modules = MultiSelect::new("Select the modules to enable:", options)
+        .with_default(&default)
+        .with_formatter(formatter)
+        .prompt();
+
+    match modules {
+        Ok(modules) => {
+            let modules: HashSet<&str> = modules.into_iter().collect();
+            let default_modules = modules_enabled.map(|(_, module)| module).copied().collect();
+
+            let modules_enabled = modules.difference(&default_modules);
+            for module in modules_enabled {
+                handle_set_configuration(doc, module, key, false)?;
+            }
+
+            let modules_disabled = default_modules.difference(&modules);
+            for module in modules_disabled {
+                handle_set_configuration(doc, module, key, true)?;
+            }
+
+            Ok(())
+        }
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+fn handle_set_configuration(
+    doc: &mut DocumentMut,
+    name: &str,
+    key: &str,
+    value: bool,
+) -> Result<(), String> {
+    if name.is_empty() || key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let root = doc.as_table_mut();
+
+    let module_root = root
+        .entry(name)
+        .or_insert_with(|| Item::Table(Table::new()));
+
+    let module_table = module_root
+        .as_table_mut()
+        .ok_or_else(|| format!("Config entry '{name}' exists but is not a table"))?;
+
+    let mut new_value = toml_edit::value(value);
+
+    if let Some(old_item) = module_table.get(key) {
+        if let (Some(old_val), Some(new_val)) = (old_item.as_value(), new_value.as_value_mut()) {
+            *new_val.decor_mut() = old_val.decor().clone();
+        }
+    }
+
+    // Insert or overwrite the key
+    module_table.insert(key, new_value);
+
     Ok(())
 }
 
