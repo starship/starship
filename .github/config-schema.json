@@ -60,7 +60,9 @@
       "additionalProperties": {
         "type": "string"
       },
-      "default": {}
+      "default": {
+        "claude-code": "$claude_model$git_branch$claude_context$claude_cost"
+      }
     },
     "aws": {
       "$ref": "#/$defs/AwsConfig",
@@ -179,6 +181,72 @@
         "vimcmd_visual_symbol": "[❮](bold yellow)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
+        "disabled": false
+      }
+    },
+    "claude_context": {
+      "$ref": "#/$defs/ClaudeContextConfig",
+      "default": {
+        "format": "[$gauge $percentage]($style) ",
+        "symbol": "",
+        "gauge_width": 5,
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 30.0,
+            "style": "bold green",
+            "hidden": false
+          },
+          {
+            "threshold": 60.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 80.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_cost": {
+      "$ref": "#/$defs/ClaudeCostConfig",
+      "default": {
+        "format": "[$symbol(\\$$cost)]($style) ",
+        "symbol": "💰 ",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 1.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 5.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_model": {
+      "$ref": "#/$defs/ClaudeModelConfig",
+      "default": {
+        "format": "[$symbol$model]($style) ",
+        "symbol": "🤖 ",
+        "style": "bold blue",
+        "model_aliases": {},
         "disabled": false
       }
     },
@@ -1758,24 +1826,20 @@
       }
     },
     "vcs": {
+      "$ref": "#/$defs/VcsConfig",
       "default": {
-        "disabled": false,
-        "fossil_modules": "$fossil_branch$fossil_metrics",
-        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
-        "hg_modules": "$hg_branch$hg_state",
         "order": [
           "git",
           "hg",
           "pijul",
           "fossil"
         ],
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
         "pijul_modules": "$pijul_channel"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/VcsConfig"
-        }
-      ]
+      }
     },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
@@ -2210,6 +2274,148 @@
         "vimcmd_replace_one_symbol": {
           "type": "string",
           "default": "[❮](bold purple)"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeContextConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$gauge $percentage]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": ""
+        },
+        "gauge_width": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 5
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 30.0,
+              "style": "bold green",
+              "hidden": false
+            },
+            {
+              "threshold": 60.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 80.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "format": "float",
+          "default": 0.0
+        },
+        "style": {
+          "type": "string",
+          "default": "bold green"
+        },
+        "hidden": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeCostConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol(\\$$cost)]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "💰 "
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 1.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 5.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeModelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol$model]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🤖 "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold blue"
+        },
+        "model_aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
         },
         "disabled": {
           "type": "boolean",
@@ -6582,54 +6788,45 @@
       "type": "object",
       "properties": {
         "order": {
-          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "description": "Order in which to discover VCSes.\nThe first one found is the one used.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "default": [
             "git",
             "hg",
             "pijul",
             "fossil"
-          ],
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Vcs"
-          }
+          ]
         },
         "disabled": {
           "description": "Disables the VCS module.",
-          "default": false,
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "fossil_modules": {
           "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
-          "default": "$fossil_branch$fossil_metrics",
-          "type": "string"
+          "type": "string",
+          "default": "$fossil_branch$fossil_metrics"
         },
         "git_modules": {
           "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
-          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
-          "type": "string"
+          "type": "string",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status"
         },
         "hg_modules": {
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
-          "default": "$hg_branch$hg_state",
-          "type": "string"
+          "type": "string",
+          "default": "$hg_branch$hg_state"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
-          "default": "$pijul_channel",
-          "type": "string"
+          "type": "string",
+          "default": "$pijul_channel"
         }
       },
       "additionalProperties": false
-    },
-    "Vcs": {
-      "type": "string",
-      "enum": [
-        "fossil",
-        "git",
-        "hg",
-        "pijul"
-      ]
     },
     "VcshConfig": {
       "type": "object",

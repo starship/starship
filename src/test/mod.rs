@@ -1,5 +1,4 @@
-use crate::context::{Context, Properties, Shell, Target};
-use crate::context_env::Env;
+use crate::context::{Context, Env, Properties, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -145,6 +144,11 @@ impl<'a> ModuleRenderer<'a> {
 
     pub fn width(mut self, width: usize) -> Self {
         self.context.width = width;
+        self
+    }
+
+    pub fn claude_code_data(mut self, data: crate::context::ClaudeCodeData) -> Self {
+        self.context.claude_code_data = Some(Box::new(data));
         self
     }
 

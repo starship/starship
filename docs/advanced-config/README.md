@@ -338,6 +338,316 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = '▶▶ '
 ```
 
+## Statusline for Claude Code
+
+Starship supports displaying a custom statusline when running inside Claude Code, Anthropic's CLI tool for interactive coding with Claude. This statusline provides real-time information about your Claude session, including the model being used, context window usage, and session costs.
+
+For more information about the Claude Code statusline feature, see the [Claude Code statusline documentation](https://code.claude.com/docs/en/statusline).
+
+### Setup
+
+To use Starship as your Claude Code statusline:
+
+1. Run `/statusline` in Claude Code and ask it to configure Starship, or manually add the following to your `.claude/settings.json`:
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "starship statusline claude-code"
+  }
+}
+```
+
+2. Customize the statusline appearance in your `~/.config/starship.toml` (see [Configuration](#configuration) below)
+
+### Overview
+
+When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
+
+The profile includes three specialized modules:
+
+- `claude_model`: Displays the current Claude model being used
+- `claude_context`: Shows context window usage with a visual gauge
+- `claude_cost`: Displays session cost and statistics
+
+The default profile format is:
+
+```toml
+[profiles]
+claude-code = "$claude_model$git_branch$claude_context$claude_cost"
+```
+
+### Configuration
+
+You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
+
+```toml
+# ~/.config/starship.toml
+
+# Customize the claude-code profile
+[profiles]
+claude-code = "$claude_model$claude_context$claude_cost"
+
+# Configure individual modules
+[claude_model]
+format = "[$symbol$model]($style) "
+symbol = "🤖 "
+style = "bold blue"
+
+[claude_context]
+format = "[$gauge $percentage]($style) "
+gauge_width = 10
+
+[claude_cost]
+format = "[$symbol$cost]($style) "
+symbol = "💰 "
+```
+
+### Claude Model
+
+The `claude_model` module displays the current Claude model being used in the session.
+
+#### Options
+
+| Option          | Default                      | Description                                                                               |
+| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                |
+| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                   |
+| `style`         | `'bold blue'`                | The style for the module.                                                                 |
+| `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
+| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+
+#### Variables
+
+| Variable | Example             | Description                           |
+| -------- | ------------------- | ------------------------------------- |
+| model    | `Claude 3.5 Sonnet` | The display name of the current model |
+| model_id | `claude-3-5-sonnet` | The model ID                          |
+| symbol   |                     | Mirrors the value of option `symbol`  |
+| style\*  |                     | Mirrors the value of option `style`   |
+
+\*: This variable can only be used as a part of a style string
+
+#### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Basic customization
+[claude_model]
+format = "on [$symbol$model]($style) "
+symbol = "🧠 "
+style = "bold cyan"
+
+# Using model aliases for vendor-specific model names
+# You can alias by model ID or display name
+[claude_model.model_aliases]
+# Alias by vendor model ID (e.g. AWS Bedrock)
+"global.anthropic.claude-sonnet-4-5-20250929-v1:0" = "Sonnet 4.5"
+# Alias by display name
+"Claude Sonnet 4.5 (Vendor Proxy)" = "Sonnet"
+```
+
+### Claude Context
+
+The `claude_context` module displays context window usage as a percentage and visual gauge. The style automatically changes based on configurable thresholds.
+
+#### Options
+
+| Option                 | Default                           | Description                                        |
+| ---------------------- | --------------------------------- | -------------------------------------------------- |
+| `format`               | `'[$gauge $percentage]($style) '` | The format for the module.                         |
+| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
+| `gauge_width`          | `5`                               | The width of the gauge in characters.              |
+| `gauge_full_symbol`    | `'▰'`                             | The symbol used for filled segments of the gauge.  |
+| `gauge_partial_symbol` | `''`                              | The symbol used for partial segments of the gauge. |
+| `gauge_empty_symbol`   | `'▱'`                             | The symbol used for empty segments of the gauge.   |
+| `display`              | [see below](#display)             | Threshold and style configurations.                |
+| `disabled`             | `false`                           | Disables the `claude_context` module.              |
+
+##### Display
+
+The `display` option is an array of objects that define thresholds and styles for different usage levels. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+
+| Option      | Default      | Description                                                              |
+| ----------- | ------------ | ------------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched            |
+| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+
+```toml
+[[claude_context.display]]
+threshold = 0
+hidden = true
+
+[[claude_context.display]]
+threshold = 30
+style = "bold green"
+
+[[claude_context.display]]
+threshold = 60
+style = "bold yellow"
+
+[[claude_context.display]]
+threshold = 80
+style = "bold red"
+```
+
+#### Variables
+
+| Variable                   | Example | Description                                           |
+| -------------------------- | ------- | ----------------------------------------------------- |
+| gauge                      | `▰▰▰▱▱` | Visual representation of context usage                |
+| percentage                 | `65%`   | Context usage as a percentage                         |
+| input_tokens               | `45.2k` | Total input tokens in conversation                    |
+| output_tokens              | `12.3k` | Total output tokens in conversation                   |
+| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
+| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
+| curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
+| curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
+| total_tokens               | `200k`  | Total context window size                             |
+| symbol                     |         | Mirrors the value of option `symbol`                  |
+| style\*                    |         | Mirrors the style from the matching display threshold |
+
+\*: This variable can only be used as a part of a style string
+
+#### Examples
+
+**Minimal gauge-only display**
+
+```toml
+# ~/.config/starship.toml
+
+[claude_context]
+format = "[$gauge]($style) "
+gauge_width = 10
+```
+
+**Detailed token information**
+
+```toml
+# ~/.config/starship.toml
+
+[claude_context]
+format = "[$percentage ($input_tokens in / $output_tokens out)]($style) "
+```
+
+**Custom gauge symbols**
+
+```toml
+# ~/.config/starship.toml
+
+[claude_context]
+gauge_full_symbol = "█"
+gauge_partial_symbol = "▒"
+gauge_empty_symbol = "░"
+gauge_width = 10
+format = "[$gauge]($style) "
+```
+
+**Custom thresholds**
+
+```toml
+# ~/.config/starship.toml
+
+[[claude_context.display]]
+threshold = 0
+style = "bold green"
+
+[[claude_context.display]]
+threshold = 50
+style = "bold yellow"
+
+[[claude_context.display]]
+threshold = 75
+style = "bold orange"
+
+[[claude_context.display]]
+threshold = 90
+style = "bold red"
+```
+
+### Claude Cost
+
+The `claude_cost` module displays the total cost of the current Claude Code session in USD. Like `claude_context`, it supports threshold-based styling.
+
+#### Options
+
+| Option     | Default                          | Description                         |
+| ---------- | -------------------------------- | ----------------------------------- |
+| `format`   | `'[$symbol(\\$$cost)]($style) '` | The format for the module.          |
+| `symbol`   | `'💰 '`                          | The symbol shown before the cost.   |
+| `display`  | [see below](#display-1)          | Threshold and style configurations. |
+| `disabled` | `false`                          | Disables the `claude_cost` module.  |
+
+##### Display
+
+The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+
+| Option      | Default      | Description                                                   |
+| ----------- | ------------ | ------------------------------------------------------------- |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched |
+| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+
+**Default configuration:**
+
+```toml
+[[claude_cost.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_cost.display]]
+threshold = 1.0
+style = "bold yellow"
+
+[[claude_cost.display]]
+threshold = 5.0
+style = "bold red"
+```
+
+#### Variables
+
+| Variable      | Example  | Description                                           |
+| ------------- | -------- | ----------------------------------------------------- |
+| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
+| duration      | `1m 30s` | Total session duration                                |
+| api_duration  | `45s`    | Total API call duration                               |
+| lines_added   | `1.2k`   | Total lines of code added                             |
+| lines_removed | `500`    | Total lines of code removed                           |
+| symbol        |          | Mirrors the value of option `symbol`                  |
+| style\*       |          | Mirrors the style from the matching display threshold |
+
+\*: This variable can only be used as a part of a style string
+
+#### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Cost with code change statistics
+[claude_cost]
+format = "[$symbol$cost (+$lines_added -$lines_removed)]($style) "
+
+# Hide module until cost exceeds $0.10
+[[claude_cost.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_cost.display]]
+threshold = 0.10
+style = "bold yellow"
+
+[[claude_cost.display]]
+threshold = 2.0
+style = "bold red"
+
+# Show duration information
+[claude_cost]
+format = "[$symbol$cost ($duration)]($style) "
+```
+
 ## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
