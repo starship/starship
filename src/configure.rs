@@ -10,6 +10,7 @@ use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
 use crate::module::ALL_MODULES;
 use crate::utils;
+use inquire::InquireError;
 use inquire::MultiSelect;
 use inquire::formatter::MultiOptionFormatter;
 use std::fs::File;
@@ -246,35 +247,22 @@ fn handle_toggle_multiple_configurations(
     doc: &mut DocumentMut,
     key: &str,
 ) -> Result<(), String> {
-    let modules_enabled = ALL_MODULES
-        .iter()
-        .enumerate()
-        .filter(|(_, module)| !context.is_module_disabled(module));
+    let default_modules: HashSet<&str> = ALL_MODULES
+        .into_iter()
+        .filter(|module| !context.is_module_disabled(module))
+        .copied()
+        .collect();
 
-    let default = modules_enabled
-        .clone()
-        .map(|(index, _)| index)
-        .collect::<Vec<usize>>();
+    match prompt_modules_selection(&default_modules) {
+        Ok(selected_modules) => {
+            let selected_modules: HashSet<&str> = selected_modules.into_iter().collect();
 
-    let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} modules selected", a.len());
-    let options = Vec::from(ALL_MODULES);
-
-    let modules = MultiSelect::new("Select the modules to enable:", options)
-        .with_default(&default)
-        .with_formatter(formatter)
-        .prompt();
-
-    match modules {
-        Ok(modules) => {
-            let modules: HashSet<&str> = modules.into_iter().collect();
-            let default_modules = modules_enabled.map(|(_, module)| module).copied().collect();
-
-            let modules_enabled = modules.difference(&default_modules);
+            let modules_enabled = selected_modules.difference(&default_modules);
             for module in modules_enabled {
                 handle_set_configuration(doc, module, key, false)?;
             }
 
-            let modules_disabled = default_modules.difference(&modules);
+            let modules_disabled = default_modules.difference(&selected_modules);
             for module in modules_disabled {
                 handle_set_configuration(doc, module, key, true)?;
             }
@@ -283,6 +271,25 @@ fn handle_toggle_multiple_configurations(
         }
         Err(e) => Err(e.to_string()),
     }
+}
+
+fn prompt_modules_selection<'a>(
+    default_modules: &'a HashSet<&'a str>,
+) -> Result<Vec<&'a str>, InquireError> {
+    let default = ALL_MODULES
+        .iter()
+        .enumerate()
+        .filter(|(_, module)| default_modules.contains(*module))
+        .map(|(index, _)| index)
+        .collect::<Vec<usize>>();
+
+    let formatter: MultiOptionFormatter<'_, &str> = &|a| format!("{} modules selected", a.len());
+    let options = Vec::from(ALL_MODULES);
+
+    MultiSelect::new("Select the modules to enable:", options)
+        .with_default(&default)
+        .with_formatter(formatter)
+        .prompt()
 }
 
 fn handle_set_configuration(
