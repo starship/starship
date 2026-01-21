@@ -157,7 +157,7 @@
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
   alt="Starship com iTerm2 e o tema Snazzy"
-  width="50%"
+  width="40%"
   align="right"
  />
 
