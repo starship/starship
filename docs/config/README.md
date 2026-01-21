@@ -65,6 +65,12 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 ```
 
+To completely disable logging to a file, and only log to standard error, set the environment variable `STARSHIP_DISABLE_LOG_FILE`:
+
+```sh
+export STARSHIP_DISABLE_LOG_FILE=1
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
