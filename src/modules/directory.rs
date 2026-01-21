@@ -108,23 +108,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let path_vec = repo
         .and_then(|r| r.workdir.as_ref())
         .and_then(|repo_root| {
-            if config.repo_root_style.is_some() {
-                if let Some(contracted_path) = contract_repo_path(display_dir, repo_root) {
-                    let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-                    let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-                    let num_segments_after_root = after_repo_root.split('/').count();
+            if config.repo_root_style.is_some()
+                && let Some(contracted_path) = contract_repo_path(display_dir, repo_root)
+            {
+                let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+                let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+                let num_segments_after_root = after_repo_root.split('/').count();
 
-                    if config.truncation_length == 0
-                        || ((num_segments_after_root - 1) as i64) < config.truncation_length
-                    {
-                        let root = repo_path_vec[0];
-                        let before = before_root_dir(&dir_string, &contracted_path);
-                        return Some([
-                            maybe_prefix.take()? + before,
-                            root.to_string(),
-                            after_repo_root,
-                        ]);
-                    }
+                if config.truncation_length == 0
+                    || ((num_segments_after_root - 1) as i64) < config.truncation_length
+                {
+                    let root = repo_path_vec[0];
+                    let before = before_root_dir(&dir_string, &contracted_path);
+                    return Some([
+                        maybe_prefix.take()? + before,
+                        root.to_string(),
+                        after_repo_root,
+                    ]);
                 }
             }
             None
