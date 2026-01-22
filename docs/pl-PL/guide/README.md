@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+Dodaj następujący fragment na końcu pliku <0>~/.config/elvish/rc.elv</0> (<0>%AppData%\elvish\rc.elv</0> w systemie Windows):
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Uwaga: Obsługiwana jest tylko wersja Elvish v0.18+. W wersjach elvish starszych niż v0.21.0 plik konfiguracyjny może znajdować się w lokalizacji `~/.elvish/rc.elv`.
 
 </details>
 
@@ -341,7 +341,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie <0>$nu.config-path</0> w Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
@@ -408,7 +408,7 @@ Lecz jeśli chcesz nieco dostosować Starship:
 
 ## 🤝Wspomóż nas
 
-Zawsze szukamy pomocy od osób **na każdym poziomie zaawansowania**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+Zawsze szukamy pomocy od osób **na każdym poziomie zaawansowania**! Jeśli chcesz łatwo rozpocząć pracę nad projektem, wypróbuj <0>good first issue</0>.
 
 Jeśli płynnie władasz językiem innym niż angielski, bardzo doceniamy każdą pomoc w tłumaczeniu dokumentacji. Jeśli chcesz pomóc, tłumaczenia można dodawać na [Crowdin Starship](https://translate.starship.rs/).
 
@@ -428,16 +428,16 @@ Zapoznaj się z wcześniejszymi projektami, które zainspirowały nas do stworze
 
 Wspomóż ten projekt [stając się sponsorem](https://github.com/sponsors/starship). Twoja nazwa bądź logo pojawi się tutaj wraz z linkiem do Twojej witryny.
 
-## 🔒 Code Signing Policy
+## 🔒 Polityka Podpisywania Kodu
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Bezpłatne podpisywanie kodu zapewnione przez <0>SignPath.io</0>, certyfikat wydany przez <1>SignPath Foundation</1>.
 
-Code Signing Roles:
+Role podpisywania kodu:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Recenzenci: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Osoby zatwierdzające i autorzy: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Program ten nie będzie przesyłał żadnych informacji do innych systemów sieciowych, chyba że użytkownik lub osoba instalująca lub obsługująca program wyraźnie tego zażąda.
 
 <p align="center">
     <br>
