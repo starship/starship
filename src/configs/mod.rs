@@ -54,6 +54,7 @@ pub mod jobs;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
+pub mod lean;
 pub mod line_break;
 pub mod localip;
 pub mod lua;
@@ -225,6 +226,8 @@ pub struct FullConfig<'a> {
     kotlin: kotlin::KotlinConfig<'a>,
     #[serde(borrow)]
     kubernetes: kubernetes::KubernetesConfig<'a>,
+    #[serde(borrow)]
+    lean: lean::LeanConfig<'a>,
     line_break: line_break::LineBreakConfig,
     #[serde(borrow)]
     localip: localip::LocalipConfig<'a>,

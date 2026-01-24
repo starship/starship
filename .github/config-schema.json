@@ -957,6 +957,28 @@
         "contexts": []
       }
     },
+    "lean": {
+      "$ref": "#/$defs/LeanConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": " L∃∀N ",
+        "style": "blue",
+        "disabled": false,
+        "detect_extensions": [
+          "lean"
+        ],
+        "detect_files": [
+          "lake-manifest.json",
+          "lakefile.toml",
+          "lakefile.lean",
+          "lean-toolchain"
+        ],
+        "detect_folders": [
+          ".lake"
+        ]
+      }
+    },
     "line_break": {
       "$ref": "#/$defs/LineBreakConfig",
       "default": {
@@ -1758,24 +1780,20 @@
       }
     },
     "vcs": {
+      "$ref": "#/$defs/VcsConfig",
       "default": {
-        "disabled": false,
-        "fossil_modules": "$fossil_branch$fossil_metrics",
-        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
-        "hg_modules": "$hg_branch$hg_state",
         "order": [
           "git",
           "hg",
           "pijul",
           "fossil"
         ],
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
         "pijul_modules": "$pijul_channel"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/VcsConfig"
-        }
-      ]
+      }
     },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
@@ -4436,6 +4454,62 @@
       },
       "additionalProperties": false
     },
+    "LeanConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": " L∃∀N "
+        },
+        "style": {
+          "type": "string",
+          "default": "blue"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lean"
+          ]
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lake-manifest.json",
+            "lakefile.toml",
+            "lakefile.lean",
+            "lean-toolchain"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".lake"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
     "LineBreakConfig": {
       "type": "object",
       "properties": {
@@ -6582,54 +6656,45 @@
       "type": "object",
       "properties": {
         "order": {
-          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "description": "Order in which to discover VCSes.\nThe first one found is the one used.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "default": [
             "git",
             "hg",
             "pijul",
             "fossil"
-          ],
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Vcs"
-          }
+          ]
         },
         "disabled": {
           "description": "Disables the VCS module.",
-          "default": false,
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "fossil_modules": {
           "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
-          "default": "$fossil_branch$fossil_metrics",
-          "type": "string"
+          "type": "string",
+          "default": "$fossil_branch$fossil_metrics"
         },
         "git_modules": {
           "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
-          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
-          "type": "string"
+          "type": "string",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status"
         },
         "hg_modules": {
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
-          "default": "$hg_branch$hg_state",
-          "type": "string"
+          "type": "string",
+          "default": "$hg_branch$hg_state"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
-          "default": "$pijul_channel",
-          "type": "string"
+          "type": "string",
+          "default": "$pijul_channel"
         }
       },
       "additionalProperties": false
-    },
-    "Vcs": {
-      "type": "string",
-      "enum": [
-        "fossil",
-        "git",
-        "hg",
-        "pijul"
-      ]
     },
     "VcshConfig": {
       "type": "object",
