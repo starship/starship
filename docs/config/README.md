@@ -1205,7 +1205,7 @@ it would have been `nixpkgs/pkgs`.
 
 | Advanced Option             | Default | Description                                                                                                                                                            |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                                         |
+| `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
