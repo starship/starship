@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ format = 'via [🦕 $version](green bold) '
 
 | 詳細設定                        | デフォルト  | 説明                                                                                                                          |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | パスに適用される置換の辞書。                                                                                                              |
+| `substitutions`             |        | An Array or table of substitutions to be made to the path.                                                                  |
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。 It takes an array of the following key/value pairs:
+
+| Value   | 種類      | 説明                                       |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -2761,6 +2782,41 @@ disabled = false
 format = 'via [🌕 $version](bold blue) '
 ```
 
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.      |
+| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['pom.xml']`                        | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `['.mvn']`                           | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'bold bright-cyan'`                 | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables the `maven` module.                           |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.    |
+
+### 変数
+
+| 変数      | 設定例      | 説明                      |
+| ------- | -------- | ----------------------- |
+| version | `v3.2.0` | The version of `maven`  |
+| symbol  |          | オプション `symbol` の値をミラーする |
+| style*  |          | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
 ## メモリ使用量
 
 `memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
@@ -3765,6 +3821,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | どの拡張子がこのモジュールをアクティブにするか                                                               |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                             |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                             |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                 |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3773,13 +3830,13 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 ### 変数
 
-| 変数           | 設定例             | 説明                                         |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | オプション `symbol` の値をミラーする                    |
-| style        | `'yellow bold'` | オプション `style` の値をミラーする                     |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| 変数           | 設定例             | 説明                                                                          |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`          | オプション `symbol` の値をミラーする                                                     |
+| style        | `'yellow bold'` | オプション `style` の値をミラーする                                                      |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### 設定例
 
@@ -4154,8 +4211,8 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | 変数        | 設定例 | 説明                           |
 | --------- | --- | ---------------------------- |
 | shlvl     | `3` | The current value of `SHLVL` |
-| symbol    |     | オプション `symbol` の値をミラーする      |
-| style\* |     | オプション `style` の値をミラーする       |
+| symbol    |     | オプション `symbol` の値をミラーします     |
+| style\* |     | オプション `style` の値をミラーします      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4201,8 +4258,8 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | 変数        | 設定例          | 説明                            |
 | --------- | ------------ | ----------------------------- |
 | env       | `centos.img` | The current Singularity image |
-| symbol    |              | オプション `symbol` の値をミラーします      |
-| style\* |              | オプション `style` の値をミラーします       |
+| symbol    |              | オプション `symbol` の値をミラーする       |
+| style\* |              | オプション `style` の値をミラーする        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
