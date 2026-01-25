@@ -1,6 +1,19 @@
+use crate::config::Either;
 use indexmap::IndexMap;
-
 use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+pub struct SubstitutionConfig<'a> {
+    pub from: String,
+    pub to: &'a str,
+    #[serde(default)]
+    pub regex: bool,
+}
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -12,7 +25,7 @@ use serde::{Deserialize, Serialize};
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
-    pub substitutions: IndexMap<String, &'a str>,
+    pub substitutions: Either<Vec<SubstitutionConfig<'a>>, IndexMap<String, &'a str>>,
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
     pub format: &'a str,
@@ -28,6 +41,15 @@ pub struct DirectoryConfig<'a> {
     pub use_os_path_sep: bool,
 }
 
+impl<'a> DirectoryConfig<'a> {
+    pub fn substitutions_empty(&self) -> bool {
+        match &self.substitutions {
+            Either::First(vec) => vec.is_empty(),
+            Either::Second(table) => table.is_empty(),
+        }
+    }
+}
+
 impl Default for DirectoryConfig<'_> {
     fn default() -> Self {
         Self {
@@ -35,7 +57,7 @@ impl Default for DirectoryConfig<'_> {
             truncate_to_repo: true,
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
-            substitutions: IndexMap::new(),
+            substitutions: Either::First(vec![]),
             format: "[$path]($style)[$read_only]($read_only_style) ",
             repo_root_format: "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
             style: "cyan bold",

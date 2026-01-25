@@ -5,6 +5,7 @@ use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
+use regex::{Error, Regex};
 use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
@@ -13,8 +14,8 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::ModuleConfig;
-use crate::configs::directory::DirectoryConfig;
+use crate::config::{Either, ModuleConfig};
+use crate::configs::directory::{DirectoryConfig, SubstitutionConfig};
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current logical or physical directory
@@ -74,7 +75,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = remove_extended_path_prefix(dir_string);
 
     // Apply path substitutions
-    let dir_string = substitute_path(dir_string, &config.substitutions);
+    let dir_string = match substitute_path(dir_string.clone(), &config.substitutions) {
+        Ok(result) => result,
+        Err(err) => {
+            log::warn!("Invalid regex in directory substitutions: {err}");
+            dir_string
+        }
+    };
 
     // Truncate the dir string to the maximum number of path components
     let dir_string =
@@ -88,7 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let prefix = if is_truncated {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
-        if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
+        if config.fish_style_pwd_dir_length > 0 && config.substitutions_empty() {
             // If user is using fish style path, we need to add the segment first
             let contracted_home_dir = contract_path(display_dir, &home_dir, config.home_symbol);
             to_fish_style(
@@ -291,12 +298,35 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
 ///
 /// Given a list of (from, to) pairs, this will perform the string
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
+fn substitute_path(
+    dir_string: String,
+    substitutions: &Either<Vec<SubstitutionConfig>, IndexMap<String, &str>>,
+) -> Result<String, Error> {
+    let substitutions: &Vec<SubstitutionConfig> = match substitutions {
+        Either::First(vec) => vec,
+        Either::Second(table) => &table
+            .iter()
+            .map(|(from, to)| SubstitutionConfig {
+                from: String::from(from),
+                to,
+                regex: false,
+            })
+            .collect(),
+    };
+
     let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions {
-        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
+
+    for substitution in substitutions {
+        if substitution.regex {
+            let re = Regex::new(substitution.from.as_str())?;
+            substituted_dir = re
+                .replace(substituted_dir.as_str(), substitution.to)
+                .to_string()
+        } else {
+            substituted_dir = substituted_dir.replace(substitution.from.as_str(), substitution.to)
+        }
     }
-    substituted_dir
+    Ok(substituted_dir)
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -350,6 +380,7 @@ fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> &'a str {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::config::Either::First;
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
@@ -443,11 +474,19 @@ mod tests {
     #[test]
     fn substitute_prefix_and_middle() {
         let full_path = "/absolute/path/foo/bar/baz";
-        let mut substitutions = IndexMap::new();
-        substitutions.insert("/absolute/path".to_string(), "");
-        substitutions.insert("/bar/".to_string(), "/");
-
-        let output = substitute_path(full_path.to_string(), &substitutions);
+        let substitutions = First(vec![
+            SubstitutionConfig {
+                from: "/absolute/path".to_string(),
+                to: "",
+                regex: false,
+            },
+            SubstitutionConfig {
+                from: "/bar/".to_string(),
+                to: "/",
+                regex: false,
+            },
+        ]);
+        let output = substitute_path(full_path.to_string(), &substitutions).unwrap();
         assert_eq!(output, "/foo/baz");
     }
 
@@ -686,6 +725,73 @@ mod tests {
             Color::Cyan
                 .bold()
                 .paint(convert_path_sep(&format!("/foo/bar/{strange_sub}/path")))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn regex_substitution() {
+        let actual = ModuleRenderer::new("directory")
+            .path("/var/log")
+            .config(toml::toml! {
+                [directory]
+                format = "[$path]($style)"
+                substitutions = [
+                    { from = "~/Documents", to = "docs"},
+                    { from = "^/", to = "<root>/", regex = true},
+                    { from = "/", to = " | "},
+                    { from = "^<root>", to = "/", regex = true},
+                ]
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}",
+            Color::Cyan.bold().paint(convert_path_sep("/ | var | log"))
+        ));
+
+        assert_eq!(expected, actual);
+
+        let actual = ModuleRenderer::new("directory")
+            .path("~/Documents/var/log")
+            .config(toml::toml! {
+                [directory]
+                format = "[$path]($style)"
+                substitutions = [
+                    { from = "~/Documents", to = "docs"},
+                    { from = "^/", to = "<root>/", regex = true},
+                    { from = "/", to = " | "},
+                    { from = "^<root>", to = "/", regex = true},
+                ]
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep("docs | var | log"))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn bad_regex_substitution_leaves_path_untouched() {
+        let path = "/var/log";
+        let actual = ModuleRenderer::new("directory")
+            .path(path)
+            .config(toml::toml! {
+                [directory]
+                format = "[$path]($style)"
+                substitutions = [
+                    { from = "~/Documents", to = "docs"},
+                    { from = "(^/", to = "<home>/", regex = true},
+                ]
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}",
+            Color::Cyan.bold().paint(convert_path_sep(path))
         ));
 
         assert_eq!(expected, actual);
