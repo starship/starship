@@ -1436,7 +1436,8 @@
         "detect_folders": [],
         "detect_env_vars": [
           "VIRTUAL_ENV"
-        ]
+        ],
+        "generic_venv_names": []
       }
     },
     "quarto": {
@@ -5683,6 +5684,13 @@
           "default": [
             "VIRTUAL_ENV"
           ]
+        },
+        "generic_venv_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         }
       },
       "additionalProperties": false

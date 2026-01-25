@@ -4020,6 +4020,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP]
@@ -4039,13 +4040,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable     | Example         | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`         | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| Variable     | Example         | Description                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`         | Mirrors the value of option `symbol`                                        |
+| style        | `'yellow bold'` | Mirrors the value of option `style`                                         |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Example
 
