@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ format = 'via [🦕 $version](green bold) '
 
 | Advanced Option             | 默认值    | 描述                                                                                                                                                                     |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
+| `substitutions`             |        | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`    | 使用 fish shell 当前目录路径逻辑时每个省略目录名使用的字符数。                                                                                                                                  |
 | `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
+
+| Value   | 类型      | 描述                                       |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -2761,6 +2782,41 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 format = 'via [🌕 $version](bold blue) '
 ```
 
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+默认情况下，此组件将在满足以下任意条件时显示：
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                  |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                            |
+| `version_format`    | `'v${raw}'`                          | 版本格式 可用的字段有 `raw`, `major`, `minor` 和 `patch`       |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.   |
+| `detect_extensions` | `[]`                                 | 触发此组件的扩展名                                           |
+| `detect_files`      | `['pom.xml']`                        | 触发此组件的文件名                                           |
+| `detect_folders`    | `['.mvn']`                           | 触发此组件的文件夹                                           |
+| `style`             | `'bold bright-cyan'`                 | 此组件的样式。                                             |
+| `disabled`          | `false`                              | Disables the `maven` module.                        |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory. |
+
+### 变量
+
+| 字段      | 示例       | 描述                     |
+| ------- | -------- | ---------------------- |
+| version | `v3.2.0` | The version of `maven` |
+| symbol  |          | `symbol`对应值            |
+| style*  |          | `style`对应值             |
+
+*: 此变量只能作为样式字符串的一部分使用
+
 ## Memory Usage
 
 `memory_usage` 组件显示当前系统内存和交换区使用情况。
@@ -3765,6 +3821,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                       |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3773,13 +3830,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### 变量
 
-| 字段           | 示例              | 描述                                         |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | `python`版本                                 |
-| symbol       | `'🐍 '`          | `symbol`对应值                                |
-| style        | `'yellow bold'` | `style`对应值                                 |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | 当前`virtualenv`名称                           |
+| 字段           | 示例              | 描述                                                                          |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | `python`版本                                                                  |
+| symbol       | `'🐍 '`          | `symbol`对应值                                                                 |
+| style        | `'yellow bold'` | `style`对应值                                                                  |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### 示例
 
