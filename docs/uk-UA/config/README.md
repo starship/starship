@@ -245,7 +245,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом до
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ format = 'via [🦕 $version](green bold) '
 
 | Додатковий параметр         | Стандартно | Опис                                                                                                                                                                                     |
 | --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |            | Таблиця підстановок, які буде зроблена у шляху теки.                                                                                                                                     |
+| `substitutions`             |            | An Array or table of substitutions to be made to the path.                                                                                                                               |
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD.
+`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD. It takes an array of the following key/value pairs:
+
+| Value   | Тип     | Опис                                     |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -2761,6 +2782,41 @@ disabled = false
 format = 'via [🌕 $version](bold blue) '
 ```
 
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Параметри
+
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                 |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['pom.xml']`                        | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.mvn']`                           | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold bright-cyan'`                 | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `maven` module.                                      |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.               |
+
+### Змінні
+
+| Змінна  | Приклад  | Опис                                     |
+| ------- | -------- | ---------------------------------------- |
+| version | `v3.2.0` | The version of `maven`                   |
+| symbol  |          | Віддзеркалює значення параметра `symbol` |
+| style*  |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
 ## Memory Usage
 
 Модуль `memory_usage` показує поточне використання оперативної памʼяті та памʼяті файлу підкачки.
@@ -3765,6 +3821,7 @@ format = 'via [$symbol$version](bold white)'
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                              |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                       |
 | `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                           |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                      |
 | `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                 |
 
 > [!TIP] Змінна `python_binary` приймає або рядок, або список рядків. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Зауважте, що можна змінити двійковий файл, який використовується Starship, щоб отримати версію Python, а не параметрів, які використовуються.
@@ -3773,13 +3830,13 @@ format = 'via [$symbol$version](bold white)'
 
 ### Змінні
 
-| Змінна       | Приклад         | Опис                                           |
-| ------------ | --------------- | ---------------------------------------------- |
-| version      | `'v3.8.1'`      | Версія `python`                                |
-| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`       |
-| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`        |
-| pyenv_prefix | `'pyenv '`      | Віддзеркалює значення параметра `pyenv_prefix` |
-| virtualenv   | `'venv'`        | Назва `virtualenv`                             |
+| Змінна       | Приклад         | Опис                                                                        |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | Версія `python`                                                             |
+| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`                                    |
+| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`                                     |
+| pyenv_prefix | `'pyenv '`      | Віддзеркалює значення параметра `pyenv_prefix`                              |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Приклад
 
