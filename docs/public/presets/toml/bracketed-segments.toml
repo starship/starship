@@ -144,6 +144,9 @@ format = '\[[$localipv4]($style)\]'
 [lua]
 format = '\[[$symbol($version)]($style)\]'
 
+[maven]
+format = '\[[$symbol($version)]($style)\]'
+
 [memory_usage]
 format = '\[$symbol[$ram( | $swap)]($style)\]'
 
