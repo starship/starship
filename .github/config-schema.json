@@ -367,7 +367,7 @@
       "default": {
         "truncation_length": 3,
         "truncate_to_repo": true,
-        "substitutions": {},
+        "substitutions": [],
         "fish_style_pwd_dir_length": 0,
         "use_logical_path": true,
         "format": "[$path]($style)[$read_only]($read_only_style) ",
@@ -2616,32 +2616,7 @@
           "default": true
         },
         "substitutions": {
-          "anyOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "from": {
-                    "type": "string"
-                  },
-                  "to": {
-                    "type": "string"
-                  },
-                  "regex": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "from",
-                  "to"
-                ]
-              }
-            },
-            {
-              "type": "object"
-            }
-          ],
+          "$ref": "#/$defs/Either",
           "default": []
         },
         "fish_style_pwd_dir_length": {
@@ -2705,6 +2680,42 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubstitutionConfig"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SubstitutionConfig": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
     },
     "DirenvConfig": {
       "type": "object",
@@ -5290,7 +5301,7 @@
       "type": "object",
       "properties": {
         "pixi_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             "pixi"
           ]
@@ -5346,7 +5357,7 @@
       },
       "additionalProperties": false
     },
-    "Either": {
+    "Either2": {
       "anyOf": [
         {
           "type": "string"
@@ -5454,7 +5465,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             [
               "python"
@@ -6064,7 +6075,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             "solc"
           ]
@@ -6717,7 +6728,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/Either3",
           "default": false
         },
         "require_repo": {
@@ -6725,7 +6736,7 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": []
         },
         "description": {
@@ -6784,7 +6795,7 @@
       },
       "additionalProperties": false
     },
-    "Either2": {
+    "Either3": {
       "anyOf": [
         {
           "type": "boolean"
