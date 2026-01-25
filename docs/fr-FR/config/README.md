@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ Par exemple, `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'
 
 | Options avancées            | Défaut | Description                                                                                                                                                                              |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | Une table de substitutions à appliquer aux chemins.                                                                                                                                      |
+| `substitutions`             |        | An Array or table of substitutions to be made to the path.                                                                                                                               |
 | `fish_style_pwd_dir_length` | `0`    | Le nombre de caractères à utiliser lors de l'application de la logique de troncature du pwd de fish.                                                                                     |
 | `use_logical_path`          | `true` | Si `true` affiche le chemin logique issu du shell via `PWD` ou `--logical-path`. Si `false` renvoie plutôt le chemin du système de fichiers physique avec les liens symboliques résolus. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Notez que cela désactivera la PWD de style fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Notez que cela désactivera la PWD de style fish. It takes an array of the following key/value pairs:
+
+| Value   | Type    | Description                              |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -2761,6 +2782,41 @@ Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. Par
 format = 'via [🌕 $version](bold blue) '
 ```
 
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Options
+
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`    | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`           | `'🅼 '`                               | A format string representing the symbol of Maven.                                          |
+| `detect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`      | `['pom.xml']`                        | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `['.mvn']`                           | Les dossiers qui activent ce module.                                                       |
+| `style`             | `'bold bright-cyan'`                 | Le style pour le module.                                                                   |
+| `disabled`          | `false`                              | Disables the `maven` module.                                                               |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                                        |
+
+### Variables
+
+| Variable | Exemple  | Description                            |
+| -------- | -------- | -------------------------------------- |
+| version  | `v3.2.0` | The version of `maven`                 |
+| symbole  |          | Reflète la valeur de l'option `symbol` |
+| style*   |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
 ## Utilisation mémoire
 
 Le module `memory_usage` affiche la mémoire système actuelle et l'utilisation de swap.
@@ -3765,6 +3821,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Les extensions qui déclenchent ce module                                                   |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Quels fichiers devraient activer ce module                                                 |
 | `detect_folders`     | `[]`                                                                                                         | Quels dossiers devraient activer ce module                                                 |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                        |
 | `disabled`           | `false`                                                                                                      | Désactive le module `python`.                                                              |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship essayera d'exécuter chaque binaire jusqu'à obtenir un résultat. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3773,13 +3830,13 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Variables
 
-| Variable     | Exemple         | Description                                  |
-| ------------ | --------------- | -------------------------------------------- |
-| version      | `'v3.8.1'`      | La version de `python`                       |
-| symbole      | `'🐍 '`          | Reflète la valeur de l'option `symbol`       |
-| style        | `'yellow bold'` | Reflète la valeur de l'option `style`        |
-| pyenv_prefix | `'pyenv '`      | Reflète la valeur de l'option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | Le nom du `virtualenv` courant               |
+| Variable     | Exemple         | Description                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | La version de `python`                                                      |
+| symbole      | `'🐍 '`          | Reflète la valeur de l'option `symbol`                                      |
+| style        | `'yellow bold'` | Reflète la valeur de l'option `style`                                       |
+| pyenv_prefix | `'pyenv '`      | Reflète la valeur de l'option `pyenv_prefix`                                |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Exemple
 
