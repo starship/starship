@@ -331,6 +331,7 @@ $vagrant\
 $zig\
 $buf\
 $nix_shell\
+$lean\
 $conda\
 $meson\
 $spack\
@@ -2895,6 +2896,39 @@ ssh_only = false
 format = '@[$localipv4](bold red) '
 disabled = false
 ```
+
+## Lean
+
+The `lean` module finds the current selected Lean version.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Options
+
+| Option              | Default                                                                      | Description                                      |
+| ------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                                         | The format for the module.                       |
+| `symbol`            | `' L∃∀N '`                                                                   | A format string representing the symbol of Lean. |
+| `detect_extensions` | `['lean']`                                                                   | Which extensions should trigger this module.     |
+| `detect_files`      | `['lake-manifest.json', 'lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.      |
+| `detect_folders`    | `['.lake']`                                                                  | Which folders should trigger this module.        |
+| `style`             | `'blue'`                                                                     | The style for the module.                        |
+| `disabled`          | `false`                                                                      | Disables the `lean` module.                      |
+
+### Variables
+
+| Variable          | Example      | Description                                                                                     |
+| ----------------- | ------------ | ----------------------------------------------------------------------------------------------- |
+| version           |              | `lean_version` or `toolchain_version` depending on whether `lean-toolchain` contains a version. |
+| toolchain_version | `4.27.0-rc1` | Currently selected Lean toolchain.                                                              |
+| lean\_version     | `4.27.0-rc1` | Currently installed Lean version                                                                |
+| symbol            |              | Mirrors the value of option `symbol`                                                            |
+| style\*           |              | Mirrors the value of option `style`                                                             |
+
+*: This variable can only be used as a part of a style string
 
 ## Lua
 

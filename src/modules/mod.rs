@@ -51,6 +51,7 @@ mod jobs;
 mod julia;
 mod kotlin;
 mod kubernetes;
+mod lean;
 mod line_break;
 mod localip;
 mod lua;
@@ -172,6 +173,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
+            "lean" => lean::module(context),
             "line_break" => line_break::module(context),
             "localip" => localip::module(context),
             "lua" => lua::module(context),
@@ -306,6 +308,7 @@ pub fn description(module: &str) -> &'static str {
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
+        "lean" => "The selected version of the Lean toolchain",
         "line_break" => "Separates the prompt into two lines",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
