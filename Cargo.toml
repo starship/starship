@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.24.2"
+version = "1.25.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -36,7 +36,7 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.43", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.55", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.5.54", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.65"
 clap_complete_nushell = "4.5.10"
 dirs = "6.0.0"
