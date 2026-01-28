@@ -1,6 +1,5 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
-use crate::context_env::Env;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
@@ -29,6 +28,11 @@ use std::sync::{Arc, OnceLock, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
+
+pub use crate::utils::env::Env;
+pub use crate::utils::statusline::{
+    ClaudeCodeData, ContextWindow, CostInfo, CurrentUsage, ModelInfo, Workspace,
+};
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -79,6 +83,9 @@ pub struct Context<'a> {
 
     /// Starship root config
     pub root_config: StarshipRootConfig,
+
+    /// Claude Code session data (when running as statusline)
+    pub claude_code_data: Option<Box<ClaudeCodeData>>,
 
     /// Avoid issues with unused lifetimes when features are disabled
     _marker: PhantomData<&'a ()>,
@@ -181,6 +188,7 @@ impl<'a> Context<'a> {
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             root_config,
+            claude_code_data: None,
             _marker: PhantomData,
         }
     }
@@ -191,6 +199,12 @@ impl<'a> Context<'a> {
         self.config = StarshipConfig {
             config: Some(config),
         };
+        self
+    }
+
+    /// Sets the Claude Code session data
+    pub fn with_claude_code_data(mut self, data: ClaudeCodeData) -> Self {
+        self.claude_code_data = Some(Box::new(data));
         self
     }
 
@@ -965,7 +979,7 @@ pub struct Properties {
     terminal_width: usize,
     /// The path that the prompt should render for.
     #[clap(short, long)]
-    path: Option<PathBuf>,
+    pub path: Option<PathBuf>,
     /// The logical path that the prompt should render for.
     /// This path should be a virtual/logical representation of the PATH argument.
     #[clap(short = 'P', long)]
