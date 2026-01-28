@@ -5,6 +5,7 @@ use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
 use crate::modules;
+use crate::modules::utils::jujutsu::JujutsuRepo;
 use crate::utils;
 use clap::Parser;
 use gix::{
@@ -53,6 +54,8 @@ pub struct Context<'a> {
 
     /// Private field to store Git information for modules who need it
     repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
+    /// Private field to store Jujutsu information for modules who need it
+    jujutsu_repo: OnceLock<Option<JujutsuRepo>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -170,6 +173,7 @@ impl<'a> Context<'a> {
             logical_dir,
             dir_contents: OnceLock::new(),
             repo: OnceLock::new(),
+            jujutsu_repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -386,6 +390,12 @@ impl<'a> Context<'a> {
             })
             .as_ref()
             .map_err(std::convert::AsRef::as_ref)
+    }
+
+    pub fn get_jujutsu_repo(&self) -> Option<&JujutsuRepo> {
+        self.jujutsu_repo
+            .get_or_init(|| JujutsuRepo::load(self))
+            .as_ref()
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
