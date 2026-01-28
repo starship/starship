@@ -2,13 +2,13 @@
 
 Mimo że Starship jest wszechstronny, czasem nie wystarczy modyfikacja pliku `starship.toml` żeby osiągnąć zamierzony efekt. Na tej stronie opisano bardziej zaawansowane sposoby konfigurowania używane w Starship.
 
-> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
+> [!WARNING] Konfiguracje opisane w tej sekcji mogą ulec zmianie w przyszłych wersjach programu Starship.
 
-## TransientPrompt in PowerShell
+## TransientPrompt w PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Możliwe jest zastąpienie poprzednio komunikatu niestandardowym ciągiem znaków. Jest to przydatne w przypadkach, gdy nie zawsze potrzebne są wszystkie informacje zawarte w monicie. Aby to włączyć, uruchom polecenie `Enable-TransientPrompt` w sesji powłoki. Aby ustawić to na stałe, umieść to oświadczenie w swoim `$PROFILE`. Tymczasowość można wyłączyć w locie za pomocą `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+Domyślnie lewa strona danych wejściowych zostaje zastąpiona przez `>`. Aby dostosować to ustawienie, zdefiniuj nową funkcję o nazwie `Invoke-Starship-TransientFunction`. Na przykład, aby wyświetlić tutaj moduł `character` programu Starship, należy wykonać następujące czynności
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -22,7 +22,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Jest to przydatne w przypadkach, gdy nie zawsze potrzebne są wszystkie informacje zawarte w monicie. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -30,7 +30,7 @@ Clink allows you to replace the previous-printed prompt with custom strings. Thi
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- Domyślnie lewa strona danych wejściowych zostaje zastąpiona przez `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Na przykład, aby wyświetlić tutaj moduł `character` programu Starship, należy wykonać następujące czynności
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -52,11 +52,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Możliwe jest zastąpienie poprzednio komunikatu niestandardowym ciągiem znaków. Jest to przydatne w przypadkach, gdy nie zawsze potrzebne są wszystkie informacje zawarte w monicie. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Na przykład, aby wyświetlić tutaj moduł `character` programu Starship, należy wykonać następujące czynności
 
 ```fish
 function starship_transient_prompt_func
