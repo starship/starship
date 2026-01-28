@@ -72,6 +72,11 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
 
+## [Gruvbox Air](./gruvbox-air)
+
+This preset is just another form of Gruvbox Rainbow with some tweaks [gruvbox-air](./gruvbox-air.md).
+[![Screenshot of Gruvbox Air preset](/presets/img/gruvbox-air.png "Click to view Gruvbox Air preset")](./gruvbox-air)
+
 ## [Jetpack](./jetpack.md)
 
 This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
