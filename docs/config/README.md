@@ -1697,6 +1697,35 @@ Produces a prompt that looks like:
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+## Blank Fill
+
+The `blank_fill` module fills any extra space on the line with specifically empty space. If multiple `blank_fill` modules are
+present in a line they will split the space evenly between them. This is useful for aligning
+other modules.
+
+### Options
+
+| Option     | Default | Description                      |
+| ---------- | ------- | -------------------------------- |
+| `disabled` | `false` | Disables the `blank_fill` module |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+format = 'AA $blank_fill BB $blank_fill CC'
+
+[blank_fill]
+symbol = '-'
+style = 'bold green'
+```
+
+Produces a prompt that looks like:
+
+```
+AA                                              BB                                              CC
+```
+
 ## Fortran
 
 The `fortran` module shows the current compiler version of Fortran.

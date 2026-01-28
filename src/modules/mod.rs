@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod azure;
+mod blank_fill;
 mod buf;
 mod bun;
 mod c;
@@ -125,6 +126,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
+            "blank_fill" => blank_fill::module(context),
             "buf" => buf::module(context),
             "bun" => bun::module(context),
             "c" => c::module(context),
@@ -257,6 +259,7 @@ pub fn description(module: &str) -> &'static str {
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
+        "blank_fill" => "Fills the remaining space on the line with blank space",
         "buf" => "The currently installed version of the Buf CLI",
         "bun" => "The currently installed version of the Bun",
         "c" => "Your C compiler type",
