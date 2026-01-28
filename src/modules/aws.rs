@@ -265,6 +265,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
+    let is_aws_wanted = if config.detect_files.is_empty() && config.detect_folders.is_empty() {
+        true
+    } else {
+        context
+            .try_begin_scan()?
+            .set_files(&config.detect_files)
+            .set_folders(&config.detect_folders)
+            .is_match()
+    };
+
+    if !is_aws_wanted {
+        return None;
+    }
+
     let aws_config = OnceCell::new();
     let aws_creds = OnceCell::new();
 
@@ -1288,6 +1302,90 @@ source_profile = starship
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts ")
         ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_files_present() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("terraform.tfvars"))?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                detect_files = ["terraform.tfvars"]
+            })
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_files_absent() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                detect_files = ["terraform.tfvars"]
+            })
+            .path(dir.path())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_folders_present() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir(dir.path().join(".terraform"))?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                detect_folders = [".terraform"]
+            })
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_folders_absent() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                detect_folders = [".terraform"]
+            })
+            .path(dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         dir.close()
