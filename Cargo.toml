@@ -36,7 +36,7 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.43", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.55", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.5.56", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.5.65"
 clap_complete_nushell = "4.5.10"
 dirs = "6.0.0"
