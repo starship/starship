@@ -1,4 +1,4 @@
-[Вернуться к пресетам](./#pastel-powerline)
+[Вернуться к пресетам](./#tokyo-night)
 
 # Пресет Tokyo Night
 

@@ -23,16 +23,10 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### 준비 사항
-
-```sh
-pkg install getconf
-```
-
 ### 설치
 
 ```sh
-curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
+pkg install starship
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)

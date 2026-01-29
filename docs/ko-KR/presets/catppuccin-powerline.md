@@ -21,7 +21,7 @@ starship preset catppuccin-powerline -o ~/.config/starship.toml
 - `catppuccin_mocha`
 - `catppuccin_frappe`
 - `catppuccin_macchiato`
-- `catppucin_latte`
+- `catppuccin_latte`
 
 [클릭하여 TOML 다운로드](/presets/toml/catppuccin-powerline.toml)
 

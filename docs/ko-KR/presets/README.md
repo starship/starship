@@ -14,11 +14,7 @@
 
 이 프리셋은 여러 모듈의 기호를 변경하여 프롬프트의 어느 곳에서도 Nerd Font 기호가 사용되지 않도록 합니다.
 
-::: tip
-
-이 프리셋은 [starship의 추후 배포](https://github.com/starship/starship/pull/3544)에서 기본 프리셋이 될 예정입니다.
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [클릭하여 No Nerd Font 프리셋 보기](./no-nerd-font)
 

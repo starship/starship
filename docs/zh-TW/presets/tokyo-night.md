@@ -1,4 +1,4 @@
-[Return to Presets](./#pastel-powerline)
+[Return to Presets](./#tokyo-night)
 
 # Tokyo Night Preset
 
@@ -8,7 +8,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+-
 
 ### 設定
 
@@ -16,6 +16,6 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/tokyo-night.toml){download}
+[點擊此處下載 TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

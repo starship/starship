@@ -367,7 +367,7 @@
       "default": {
         "truncation_length": 3,
         "truncate_to_repo": true,
-        "substitutions": {},
+        "substitutions": [],
         "fish_style_pwd_dir_length": 0,
         "use_logical_path": true,
         "format": "[$path]($style)[$read_only]($read_only_style) ",
@@ -530,6 +530,54 @@
         "disabled": false
       }
     },
+    "fortran": {
+      "$ref": "#/$defs/FortranConfig",
+      "default": {
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "version_format": "${raw}",
+        "symbol": "🅵  ",
+        "style": "bold purple",
+        "disabled": false,
+        "detect_extensions": [
+          "f",
+          "F",
+          "for",
+          "FOR",
+          "ftn",
+          "FTN",
+          "f77",
+          "F77",
+          "f90",
+          "F90",
+          "f95",
+          "F95",
+          "f03",
+          "F03",
+          "f08",
+          "F08",
+          "f18",
+          "F18"
+        ],
+        "detect_files": [
+          "fpm.toml"
+        ],
+        "detect_folders": [],
+        "commands": [
+          [
+            "gfortran",
+            "--version"
+          ],
+          [
+            "flang",
+            "--version"
+          ],
+          [
+            "flang-new",
+            "--version"
+          ]
+        ]
+      }
+    },
     "fossil_branch": {
       "$ref": "#/$defs/FossilBranchConfig",
       "default": {
@@ -574,6 +622,7 @@
         "only_attached": false,
         "always_show_remote": false,
         "ignore_branches": [],
+        "ignore_bare_repo": false,
         "disabled": false
       }
     },
@@ -633,6 +682,14 @@
         "staged": "+",
         "untracked": "?",
         "typechanged": "",
+        "worktree_added": "",
+        "worktree_deleted": "",
+        "worktree_modified": "",
+        "worktree_typechanged": "",
+        "index_added": "",
+        "index_deleted": "",
+        "index_modified": "",
+        "index_typechanged": "",
         "ignore_submodules": false,
         "disabled": false,
         "use_git_executable": false
@@ -935,6 +992,24 @@
         ]
       }
     },
+    "maven": {
+      "$ref": "#/$defs/MavenConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": "🅼 ",
+        "style": "bold bright-cyan",
+        "disabled": false,
+        "recursive": false,
+        "detect_extensions": [],
+        "detect_files": [
+          "pom.xml"
+        ],
+        "detect_folders": [
+          ".mvn"
+        ]
+      }
+    },
     "memory_usage": {
       "$ref": "#/$defs/MemoryConfig",
       "default": {
@@ -959,7 +1034,7 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "[$symbol$health]($style) ",
+        "format": "on [$symbol$health]($style) ",
         "symbol": "mise ",
         "style": "bold purple",
         "disabled": true,
@@ -1151,6 +1226,7 @@
           "Alpaquita": "🔔 ",
           "AlmaLinux": "💠 ",
           "Alpine": "🏔️ ",
+          "ALTLinux": "Ⓐ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "AOSC": "🐱 ",
@@ -1160,6 +1236,7 @@
           "CachyOS": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
+          "Elementary": "🍏 ",
           "DragonFly": "🐉 ",
           "Emscripten": "🔗 ",
           "EndeavourOS": "🚀 ",
@@ -1169,6 +1246,8 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Ios": "📱 ",
+          "InstantOS": "⏲️ ",
           "Kali": "🐉 ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
@@ -1185,6 +1264,7 @@
           "openEuler": "🦉 ",
           "openSUSE": "🦎 ",
           "OracleLinux": "🦴 ",
+          "PikaOS": "🐤 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
           "Redhat": "🎩 ",
@@ -1198,7 +1278,8 @@
           "Unknown": "❓ ",
           "Uos": "🐲 ",
           "Void": " ",
-          "Windows": "🪟 "
+          "Windows": "🪟 ",
+          "Zorin": "🔹 "
         },
         "disabled": true
       }
@@ -1355,7 +1436,8 @@
         "detect_folders": [],
         "detect_env_vars": [
           "VIRTUAL_ENV"
-        ]
+        ],
+        "generic_venv_names": []
       }
     },
     "quarto": {
@@ -1693,6 +1775,26 @@
         ],
         "detect_folders": []
       }
+    },
+    "vcs": {
+      "default": {
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
+        "order": [
+          "git",
+          "hg",
+          "pijul",
+          "fossil"
+        ],
+        "pijul_modules": "$pijul_channel"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VcsConfig"
+        }
+      ]
     },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
@@ -2567,11 +2669,8 @@
           "default": true
         },
         "substitutions": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "default": {}
+          "$ref": "#/$defs/Either",
+          "default": []
         },
         "fish_style_pwd_dir_length": {
           "type": "integer",
@@ -2634,6 +2733,42 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubstitutionConfig"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SubstitutionConfig": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
     },
     "DirenvConfig": {
       "type": "object",
@@ -3082,6 +3217,97 @@
       },
       "additionalProperties": false
     },
+    "FortranConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version(-$name) )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🅵  "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold purple"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "f",
+            "F",
+            "for",
+            "FOR",
+            "ftn",
+            "FTN",
+            "f77",
+            "F77",
+            "f90",
+            "F90",
+            "f95",
+            "F95",
+            "f03",
+            "F03",
+            "f08",
+            "F08",
+            "f18",
+            "F18"
+          ]
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "fpm.toml"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": [
+            [
+              "gfortran",
+              "--version"
+            ],
+            [
+              "flang",
+              "--version"
+            ],
+            [
+              "flang-new",
+              "--version"
+            ]
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
     "FossilBranchConfig": {
       "type": "object",
       "properties": {
@@ -3220,6 +3446,10 @@
             "type": "string"
           },
           "default": []
+        },
+        "ignore_bare_repo": {
+          "type": "boolean",
+          "default": false
         },
         "disabled": {
           "type": "boolean",
@@ -3402,6 +3632,38 @@
           "default": "?"
         },
         "typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_added": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "worktree_typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "index_added": {
+          "type": "string",
+          "default": ""
+        },
+        "index_deleted": {
+          "type": "string",
+          "default": ""
+        },
+        "index_modified": {
+          "type": "string",
+          "default": ""
+        },
+        "index_typechanged": {
           "type": "string",
           "default": ""
         },
@@ -4315,6 +4577,61 @@
       },
       "additionalProperties": false
     },
+    "MavenConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🅼 "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold bright-cyan"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "recursive": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "pom.xml"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".mvn"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
     "MemoryConfig": {
       "type": "object",
       "properties": {
@@ -4379,7 +4696,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol$health]($style) "
+          "default": "on [$symbol$health]($style) "
         },
         "symbol": {
           "type": "string",
@@ -4891,6 +5208,7 @@
             "Alpaquita": "🔔 ",
             "AlmaLinux": "💠 ",
             "Alpine": "🏔️ ",
+            "ALTLinux": "Ⓐ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "AOSC": "🐱 ",
@@ -4900,6 +5218,7 @@
             "CachyOS": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
+            "Elementary": "🍏 ",
             "DragonFly": "🐉 ",
             "Emscripten": "🔗 ",
             "EndeavourOS": "🚀 ",
@@ -4909,6 +5228,8 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Ios": "📱 ",
+            "InstantOS": "⏲️ ",
             "Kali": "🐉 ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
@@ -4925,6 +5246,7 @@
             "openEuler": "🦉 ",
             "openSUSE": "🦎 ",
             "OracleLinux": "🦴 ",
+            "PikaOS": "🐤 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
             "Redhat": "🎩 ",
@@ -4938,7 +5260,8 @@
             "Unknown": "❓ ",
             "Uos": "🐲 ",
             "Void": " ",
-            "Windows": "🪟 "
+            "Windows": "🪟 ",
+            "Zorin": "🔹 "
           }
         },
         "disabled": {
@@ -5124,7 +5447,7 @@
       "type": "object",
       "properties": {
         "pixi_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             "pixi"
           ]
@@ -5180,7 +5503,7 @@
       },
       "additionalProperties": false
     },
-    "Either": {
+    "Either2": {
       "anyOf": [
         {
           "type": "string"
@@ -5288,7 +5611,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             [
               "python"
@@ -5361,6 +5684,13 @@
           "default": [
             "VIRTUAL_ENV"
           ]
+        },
+        "generic_venv_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         }
       },
       "additionalProperties": false
@@ -5898,7 +6228,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": [
             "solc"
           ]
@@ -6362,6 +6692,59 @@
       },
       "additionalProperties": false
     },
+    "VcsConfig": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "default": [
+            "git",
+            "hg",
+            "pijul",
+            "fossil"
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Vcs"
+          }
+        },
+        "disabled": {
+          "description": "Disables the VCS module.",
+          "default": false,
+          "type": "boolean"
+        },
+        "fossil_modules": {
+          "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
+          "default": "$fossil_branch$fossil_metrics",
+          "type": "string"
+        },
+        "git_modules": {
+          "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
+          "type": "string"
+        },
+        "hg_modules": {
+          "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
+          "default": "$hg_branch$hg_state",
+          "type": "string"
+        },
+        "pijul_modules": {
+          "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
+          "default": "$pijul_channel",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Vcs": {
+      "type": "string",
+      "enum": [
+        "fossil",
+        "git",
+        "hg",
+        "pijul"
+      ]
+    },
     "VcshConfig": {
       "type": "object",
       "properties": {
@@ -6551,7 +6934,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/Either3",
           "default": false
         },
         "require_repo": {
@@ -6559,7 +6942,7 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/Either2",
           "default": []
         },
         "description": {
@@ -6618,7 +7001,7 @@
       },
       "additionalProperties": false
     },
-    "Either2": {
+    "Either3": {
       "anyOf": [
         {
           "type": "boolean"

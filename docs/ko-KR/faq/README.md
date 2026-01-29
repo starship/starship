@@ -117,8 +117,7 @@ Starship을 패키지 매니저로 설치하였다면 해당 패키지 매니저
 Starship을 설치 스크립트로 설치하였다면 바이너리 파일 제거를 위해 아래 명령어를 실행하세요:
 
 ```sh
-# starship 바이너리 파일을 찾고 제거합니다.
-sh -c 'rm "$(command -v 'starship')"'
+# starship 바이너리 파일을 찾고 제거합니다. sh -c 'rm "$(command -v 'starship')"'
 ```
 
 ## `sudo` 없이 Starship을 어떻게 설치하나요?

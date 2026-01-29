@@ -498,10 +498,10 @@ pub enum Detected {
 }
 
 fn home_dir(env: &Env) -> Option<PathBuf> {
-    if cfg!(test) {
-        if let Some(home) = env.get_env("HOME") {
-            return Some(PathBuf::from(home));
-        }
+    if cfg!(test)
+        && let Some(home) = env.get_env("HOME")
+    {
+        return Some(PathBuf::from(home));
     }
     utils::home_dir()
 }
@@ -552,9 +552,9 @@ impl DirContents {
 
         {
             let worker = move || {
-                let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
-                let _ = enumerated_dir
-                    .filter_map(|(_, entry)| entry.ok())
+                let dir_iter = fs::read_dir(base).unwrap();
+                let _ = dir_iter
+                    .filter_map(|entry| entry.ok())
                     .try_for_each(|entry| tx.send(entry));
             };
 
@@ -615,7 +615,10 @@ impl DirContents {
 
                     if remaining_time <= Duration::from_millis(0) && rx.try_recv().is_err() {
                         // Timed-out, and rx has been drained.
-                        log::warn!("from_path_with_timeout has timed-out!");
+                        log::warn!("Scanning current directory timed out.");
+                        log::warn!(
+                            "You can set scan_timeout in your config to a higher value to allow longer-running scans to keep executing."
+                        );
                         break;
                     }
 

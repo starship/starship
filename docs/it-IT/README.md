@@ -58,7 +58,7 @@ onMounted(() => {
    Con Shell:
 
    ```sh
-   curl -sS https://starship.rs/install.sh | sh
+   curl -sS https://starship.rs/install.sh <unk> sh
    ```
 
    Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
@@ -136,19 +136,16 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Only elvish v0.18 or higher is supported.
-
-   :::
-
-   Aggiungi quanto segue alla fine di `~/.elvish/rc.elv`:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 
    #### Tcsh
@@ -164,11 +161,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   This will change in the future. Only Nushell v0.96+ is supported.
-
-   :::
+   > [!WARNING] This will change in the future. Only Nushell v0.96+ is supported.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 

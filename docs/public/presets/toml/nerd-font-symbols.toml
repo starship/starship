@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 [aws]
 symbol = " "
 
@@ -43,11 +45,14 @@ symbol = " "
 [fennel]
 symbol = " "
 
+[fortran]
+symbol = " "
+
 [fossil_branch]
 symbol = " "
 
 [gcloud]
-symbol = "  "
+symbol = " "
 
 [git_branch]
 symbol = " "
@@ -88,6 +93,9 @@ symbol = " "
 [lua]
 symbol = " "
 
+[maven]
+symbol = " "
+
 [memory_usage]
 symbol = "󰍛 "
 
@@ -119,6 +127,7 @@ CachyOS = " "
 CentOS = " "
 Debian = " "
 DragonFly = " "
+Elementary = " "
 Emscripten = " "
 EndeavourOS = " "
 Fedora = " "
@@ -127,6 +136,7 @@ Garuda = "󰛓 "
 Gentoo = " "
 HardenedBSD = "󰞌 "
 Illumos = "󰈸 "
+Ios = "󰀷 "
 Kali = " "
 Linux = " "
 Mabox = " "
@@ -153,6 +163,7 @@ Ubuntu = " "
 Unknown = " "
 Void = " "
 Windows = "󰍲 "
+Zorin = " "
 
 [package]
 symbol = "󰏗 "

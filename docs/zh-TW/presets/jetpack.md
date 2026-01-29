@@ -11,7 +11,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 ### Prerequisite
 
 - Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
-- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
+- 建議使用 [Jetbrains Mono](https://www.jetbrains.com/lp/mono/)。
 
 ### 設定
 
@@ -19,6 +19,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/jetpack.toml){download}
+[點擊此處下載 TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml
