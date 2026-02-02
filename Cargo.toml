@@ -48,7 +48,7 @@ jsonc-parser = { version = "0.29.0", features = ["serde"] }
 log = { version = "0.4.29", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.11.7", optional = true }
+notify-rust = { version = "4.12.0", optional = true }
 nu-ansi-term = "0.50.3"
 open = "5.3.3"
 # update os module config and tests when upgrading os_info
