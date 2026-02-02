@@ -32,3 +32,10 @@ docs/.vitepress/cache/
 
 # Ignore pkg files within the install directory
 install/**/*.pkg
+
+# Agent documentation (local development only, not for upstream)
+.agent-plan.md
+.jj-workflow.md
+.starship-dev-practices.md
+.agent-notes.md
+.pr-template-*.md

@@ -50,6 +50,7 @@ pub mod hg_branch;
 pub mod hg_state;
 pub mod hostname;
 pub mod java;
+pub mod jj_status;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
@@ -220,6 +221,8 @@ pub struct FullConfig<'a> {
     java: java::JavaConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
+    #[serde(borrow)]
+    jj_status: jj_status::JjStatusConfig<'a>,
     #[serde(borrow)]
     julia: julia::JuliaConfig<'a>,
     #[serde(borrow)]

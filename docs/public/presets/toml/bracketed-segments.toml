@@ -129,6 +129,9 @@ format = '\[[$symbol($version)]($style)\]'
 [jobs]
 format = '\[[$symbol$number]($style)\]'
 
+[jj_status]
+format = '\[[$all_status$ahead_behind]($style)\]'
+
 [julia]
 format = '\[[$symbol($version)]($style)\]'
 

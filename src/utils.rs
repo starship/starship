@@ -572,6 +572,25 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
+        // Jujutsu (jj) mocks for testing
+        "jj status --ignore-working-copy --color=never" => Some(CommandOutput {
+            stdout: String::from("Working copy changes:\nM modified.txt\nA added.txt\n"),
+            stderr: String::default(),
+        }),
+        "jj log -r @ --no-graph -T bookmarks.map(|b| b ++ \"\\n\").join(\"\")" => {
+            Some(CommandOutput {
+                stdout: String::from("main\n"),
+                stderr: String::default(),
+            })
+        }
+        "jj log -r main@origin..@ --no-graph -T commit_id" => Some(CommandOutput {
+            stdout: String::from("abc123\n"),
+            stderr: String::default(),
+        }),
+        "jj log -r @..main@origin --no-graph -T commit_id" => Some(CommandOutput {
+            stdout: String::from(""),
+            stderr: String::default(),
+        }),
         _ => return None,
     };
     Some(out)

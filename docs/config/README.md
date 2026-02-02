@@ -279,6 +279,7 @@ $git_metrics\
 $git_status\
 $hg_branch\
 $hg_state\
+$jj_status\
 $pijul_channel\
 $docker_context\
 $package\
@@ -2174,6 +2175,91 @@ Use Windows Starship executable on Windows paths in WSL
 
 [git_status]
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
+## Jujutsu Status
+
+The `jj_status` module shows symbols representing the state of the repo in your
+current directory.
+
+### Options
+
+| Option            | Default                                       | Description                                                |
+| ----------------- | --------------------------------------------- | ---------------------------------------------------------- |
+| `format`          | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `jj_status`                         |
+| `conflicted`      | `'='`                                         | This change has conflicts.                                 |
+| `ahead`           | `'⇡'`                                         | The format of `ahead`                                      |
+| `behind`          | `'⇣'`                                         | The format of `behind`                                     |
+| `diverged`        | `'⇕'`                                         | The format of `diverged`                                   |
+| `modified`        | `'!'`                                         | The format of `modified`                                   |
+| `staged`          | `'+'`                                         | The format of `staged` (added files)                       |
+| `renamed`         | `'»'`                                         | The format of `renamed`                                    |
+| `deleted`         | `'✘'`                                         | The format of `deleted`                                    |
+| `untracked`       | `'?'`                                         | The format of `untracked`                                  |
+| `style`           | `'bold red'`                                  | The style for the module.                                  |
+| `ahead_behind`    | `true`                                        | Show ahead/behind tracking counts.                         |
+| `conflicted_count`| `true`                                        | Show the number of conflicted files. (Not yet implemented) |
+| `disabled`        | `true`                                        | Disables the `jj_status` module.                           |
+
+### Variables
+
+The following variables can be used in `format`:
+
+| Variable       | Description                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for `$conflicted$modified$staged$renamed$deleted$untracked`                                          |
+| `ahead_behind` | Displays `diverged`, `ahead`, or `behind` format string based on the current status of the repo.              |
+| `conflicted`   | Displays `conflicted` when this change has conflicts.                                                         |
+| `modified`     | Displays `modified` when there are file modifications in the working copy.                                    |
+| `staged`       | Displays `staged` when a new file has been added to the working copy (shown as "A" in `jj status`).           |
+| `renamed`      | Displays `renamed` when a renamed file has been detected.                                                     |
+| `deleted`      | Displays `deleted` when a file has been deleted.                                                              |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
+| style\*        | Mirrors the value of option `style`                                                                           |
+
+*: This variable can only be used as a part of a style string
+
+The following variables can be used in `diverged`:
+
+| Variable       | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `ahead_count`  | Number of commits ahead of the tracking branch |
+| `behind_count` | Number of commits behind the tracking branch   |
+
+The following variables can be used in `conflicted`, `ahead`, `behind`, `modified`, `staged`, `renamed`, `deleted`, and `untracked`:
+
+| Variable | Description              |
+| -------- | ------------------------ |
+| `count`  | Show the number of files |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_status]
+disabled = false
+conflicted = '🏳'
+ahead = '🏎💨'
+behind = '😰'
+diverged = '😵'
+modified = '📝'
+staged = '[++\($count\)](green)'
+renamed = '👅'
+deleted = '🗑'
+untracked = '🤷'
+```
+
+Show ahead/behind count of the bookmark being tracked
+
+```toml
+# ~/.config/starship.toml
+
+[jj_status]
+disabled = false
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
 ```
 
 ## Gleam

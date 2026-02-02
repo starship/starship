@@ -139,6 +139,9 @@ symbol = "java "
 [jobs]
 symbol = "*"
 
+[jj_status]
+symbol = "jj "
+
 [julia]
 symbol = "jl "
 
