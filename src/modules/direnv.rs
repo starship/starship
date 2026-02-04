@@ -41,6 +41,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
+            .map_meta(|variable, _| match variable {
+                "allowed" => Some(match state.allowed {
+                    AllowStatus::Allowed => config.allowed_msg,
+                    AllowStatus::NotAllowed => config.not_allowed_msg,
+                    AllowStatus::Denied => config.denied_msg,
+                }),
+                "loaded" => state
+                    .loaded
+                    .then_some(config.loaded_msg)
+                    .or(Some(config.unloaded_msg)),
+                _ => None,
+            })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
@@ -48,17 +60,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "symbol" => Some(Ok(Cow::from(config.symbol))),
                 "rc_path" => Some(Ok(state.rc_path.to_string_lossy())),
-                "allowed" => Some(Ok(match state.allowed {
-                    AllowStatus::Allowed => Cow::from(config.allowed_msg),
-                    AllowStatus::NotAllowed => Cow::from(config.not_allowed_msg),
-                    AllowStatus::Denied => Cow::from(config.denied_msg),
-                })),
-                "loaded" => state
-                    .loaded
-                    .then_some(config.loaded_msg)
-                    .or(Some(config.unloaded_msg))
-                    .map(Cow::from)
-                    .map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -455,6 +456,44 @@ mod tests {
         let expected = Some(format!(
             "{} ",
             Color::LightYellow.bold().paint("direnv loaded/denied")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+    #[test]
+    fn msg_formatting() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(rc_path)?.sync_all()?;
+
+        let actual = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+                allowed_msg = "[allowed](green bold)"
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
+                    stderr: String::default(),
+                }),
+            )
+            .collect();
+
+        let default = Color::LightYellow.bold();
+        let nested = Color::Green.bold();
+
+        let expected = Some(format!(
+            "{}{}{}{}{} ",
+            default.prefix(),
+            "direnv loaded/",
+            default.infix(nested),
+            "allowed",
+            nested.suffix()
         ));
 
         assert_eq!(expected, actual);
