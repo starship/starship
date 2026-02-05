@@ -26,12 +26,13 @@ struct Cli {
     command: Commands,
 }
 
-#[derive(clap::Parser, ValueEnum, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
 enum CompletionShell {
     Bash,
     Elvish,
     Fish,
     Nushell,
+    #[clap(name = "powershell", alias = "pwsh", alias = "power-shell")]
     PowerShell,
     Zsh,
 }

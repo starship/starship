@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#catppuccin-powerline)
+[Return to Presets](./#catppuccin-powerline)
 
 # Catppuccin Powerline Preset
 
@@ -8,7 +8,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- 已安裝 [Nerd Font](https://www.nerdfonts.com/)，並在終端機被啟用。
 
 ### 設定
 
@@ -21,8 +21,8 @@ By default this preset uses the Mocha flavour of Catppucin, but you can specify 
 - `catppuccin_mocha`
 - `catppuccin_frappe`
 - `catppuccin_macchiato`
-- `catppucin_latte`
+- `catppuccin_latte`
 
-[Click to download TOML](/presets/toml/catppuccin-powerline.toml)
+[點擊此處下載 TOML](/presets/toml/catppuccin-powerline.toml)
 
 <<< @/public/presets/toml/catppuccin-powerline.toml

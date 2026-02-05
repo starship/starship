@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -43,7 +43,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -98,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -120,7 +120,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -156,7 +156,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
@@ -181,10 +181,16 @@ jobs:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
 
-      # Install Mercurial (pre-installed on Linux and windows)
+      # Install Mercurial (pre-installed on Linux)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
         run: brew install mercurial
+
+      - name: Setup | Mercurial (windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
@@ -222,7 +228,7 @@ jobs:
           STARSHIP_VERSION: v1.2.3
 
       - name: Sign | Upload Executable [Windows]
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         id: unsigned-artifacts
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
@@ -233,7 +239,7 @@ jobs:
             target/debug/starship-x86_64-pc-windows-msvc.msi
 
       - name: Sign | Sign [Windows]
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
         with:

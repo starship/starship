@@ -333,19 +333,17 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     if context
         .dir_contents()
         .is_ok_and(|dir| dir.has_file("rust-toolchain"))
+        && let Some(toolchain) = read_channel(Path::new("rust-toolchain"), false)
     {
-        if let Some(toolchain) = read_channel(Path::new("rust-toolchain"), false) {
-            return Some(toolchain);
-        }
+        return Some(toolchain);
     }
 
     if context
         .dir_contents()
         .is_ok_and(|dir| dir.has_file("rust-toolchain.toml"))
+        && let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml"), true)
     {
-        if let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml"), true) {
-            return Some(toolchain);
-        }
+        return Some(toolchain);
     }
 
     let mut dir = &*context.current_dir;
@@ -365,13 +363,14 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
         if let Ok(output) = String::from_utf8(output.stdout) {
             return RustupRunRustcVersionOutcome::RustcVersion(output);
         }
-    } else if let Ok(stderr) = String::from_utf8(output.stderr) {
-        if stderr.starts_with("error: toolchain '") && stderr.ends_with("' is not installed\n") {
-            let stderr = stderr
-                ["error: toolchain '".len()..stderr.len() - "' is not installed\n".len()]
-                .to_owned();
-            return RustupRunRustcVersionOutcome::ToolchainNotInstalled(stderr);
-        }
+    } else if let Ok(stderr) = String::from_utf8(output.stderr)
+        && stderr.starts_with("error: toolchain '")
+        && stderr.ends_with("' is not installed\n")
+    {
+        let stderr = stderr
+            ["error: toolchain '".len()..stderr.len() - "' is not installed\n".len()]
+            .to_owned();
+        return RustupRunRustcVersionOutcome::ToolchainNotInstalled(stderr);
     }
     RustupRunRustcVersionOutcome::Err
 }

@@ -27,6 +27,7 @@ mod env_var;
 mod erlang;
 mod fennel;
 mod fill;
+mod fortran;
 mod fossil_branch;
 mod fossil_metrics;
 mod gcloud;
@@ -53,6 +54,7 @@ mod kubernetes;
 mod line_break;
 mod localip;
 mod lua;
+mod maven;
 mod memory_usage;
 mod meson;
 mod mise;
@@ -95,6 +97,7 @@ mod time;
 mod username;
 mod utils;
 mod vagrant;
+mod vcs;
 mod vcsh;
 mod vlang;
 mod xmake;
@@ -145,6 +148,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "env_var" => env_var::module(None, context),
             "fennel" => fennel::module(context),
             "fill" => fill::module(context),
+            "fortran" => fortran::module(context),
             "fossil_branch" => fossil_branch::module(context),
             "fossil_metrics" => fossil_metrics::module(context),
             "gcloud" => gcloud::module(context),
@@ -171,6 +175,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "line_break" => line_break::module(context),
             "localip" => localip::module(context),
             "lua" => lua::module(context),
+            "maven" => maven::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
             "mise" => mise::module(context),
@@ -215,6 +220,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "username" => username::module(context),
             "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
+            "vcs" => vcs::module(context),
             "vcsh" => vcsh::module(context),
             "xmake" => xmake::module(context),
             "zig" => zig::module(context),
@@ -276,6 +282,7 @@ pub fn description(module: &str) -> &'static str {
         "erlang" => "Current OTP version",
         "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
+        "fortran" => "The currently used version of Fortran",
         "fossil_branch" => "The active branch of the check-out in your current directory",
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
@@ -302,6 +309,7 @@ pub fn description(module: &str) -> &'static str {
         "line_break" => "Separates the prompt into two lines",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
+        "maven" => "The Maven Wrapper version of the current project",
         "memory_usage" => "Current system memory and swap usage",
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
@@ -348,6 +356,7 @@ pub fn description(module: &str) -> &'static str {
         "typst" => "The current installed version of typst",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
+        "vcs" => "The currently active VCS repository (first one matching)",
         "vcsh" => "The currently active VCSH repository",
         "vlang" => "The currently installed version of V",
         "xmake" => "The currently installed version of XMake",
