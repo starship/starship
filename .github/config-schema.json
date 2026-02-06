@@ -894,6 +894,62 @@
         "detect_folders": []
       }
     },
+    "jujutsu_bookmark": {
+      "$ref": "#/$defs/JujutsuBookmarkConfig",
+      "default": {
+        "symbol": "󰑟 ",
+        "style": "purple",
+        "format": "[$symbol$bookmarks]($style) ",
+        "bookmark_conflicted": "??",
+        "disabled": true
+      }
+    },
+    "jujutsu_closest_bookmarks": {
+      "$ref": "#/$defs/JujutsuClosestBookmarksConfig",
+      "default": {
+        "symbol": "󰑟 ",
+        "style": "purple",
+        "format": "[$symbol$bookmarks]($style) ",
+        "bookmark_conflicted": "??",
+        "disabled": true
+      }
+    },
+    "jujutsu_change": {
+      "$ref": "#/$defs/JujutsuChangeConfig",
+      "default": {
+        "symbol": "",
+        "style": "purple",
+        "format": "[$symbol$change_id]($style) ",
+        "change_id_length": 7,
+        "disabled": true
+      }
+    },
+    "jujutsu_commit": {
+      "$ref": "#/$defs/JujutsuCommitConfig",
+      "default": {
+        "symbol": "",
+        "style": "blue",
+        "format": "[$symbol$commit]($style) ",
+        "commit_hash_length": 7,
+        "disabled": true
+      }
+    },
+    "jujutsu_state": {
+      "$ref": "#/$defs/JujutsuStateConfig",
+      "default": {
+        "conflicted": "⚠ ",
+        "conflicted_style": "red",
+        "divergent": "󰓁 ",
+        "divergent_style": "purple",
+        "hidden": "󰘓 ",
+        "hidden_style": "none",
+        "immutable": " ",
+        "immutable_style": "red",
+        "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
+        "style": "red",
+        "disabled": true
+      }
+    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -1777,24 +1833,22 @@
       }
     },
     "vcs": {
+      "$ref": "#/$defs/VcsConfig",
       "default": {
-        "disabled": false,
-        "fossil_modules": "$fossil_branch$fossil_metrics",
-        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
-        "hg_modules": "$hg_branch$hg_state",
         "order": [
           "git",
           "hg",
           "pijul",
-          "fossil"
+          "fossil",
+          "jujutsu"
         ],
+        "disabled": false,
+        "fossil_modules": "$fossil_branch$fossil_metrics",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "hg_modules": "$hg_branch$hg_state",
+        "jujutsu_modules": "$jujutsu_state$jujutsu_change$jujutsu_commit$jujutsu_bookmark",
         "pijul_modules": "$pijul_channel"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/VcsConfig"
-        }
-      ]
+      }
     },
     "vcsh": {
       "$ref": "#/$defs/VcshConfig",
@@ -4225,6 +4279,164 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuBookmarkConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": "󰑟 "
+        },
+        "style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$bookmarks]($style) "
+        },
+        "bookmark_conflicted": {
+          "type": "string",
+          "default": "??"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuClosestBookmarksConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": "󰑟 "
+        },
+        "style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$bookmarks]($style) "
+        },
+        "bookmark_conflicted": {
+          "type": "string",
+          "default": "??"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuChangeConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": ""
+        },
+        "style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$change_id]($style) "
+        },
+        "change_id_length": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 7
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuCommitConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": ""
+        },
+        "style": {
+          "type": "string",
+          "default": "blue"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol$commit]($style) "
+        },
+        "commit_hash_length": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 7
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuStateConfig": {
+      "type": "object",
+      "properties": {
+        "conflicted": {
+          "type": "string",
+          "default": "⚠ "
+        },
+        "conflicted_style": {
+          "type": "string",
+          "default": "red"
+        },
+        "divergent": {
+          "type": "string",
+          "default": "󰓁 "
+        },
+        "divergent_style": {
+          "type": "string",
+          "default": "purple"
+        },
+        "hidden": {
+          "type": "string",
+          "default": "󰘓 "
+        },
+        "hidden_style": {
+          "type": "string",
+          "default": "none"
+        },
+        "immutable": {
+          "type": "string",
+          "default": " "
+        },
+        "immutable_style": {
+          "type": "string",
+          "default": "red"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)"
+        },
+        "style": {
+          "type": "string",
+          "default": "red"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -6696,54 +6908,51 @@
       "type": "object",
       "properties": {
         "order": {
-          "description": "Order in which to discover VCSes. The first one found is the one used.",
+          "description": "Order in which to discover VCSes.\nThe first one found is the one used.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "default": [
             "git",
             "hg",
             "pijul",
-            "fossil"
-          ],
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Vcs"
-          }
+            "fossil",
+            "jujutsu"
+          ]
         },
         "disabled": {
           "description": "Disables the VCS module.",
-          "default": false,
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "fossil_modules": {
           "description": "Modules to use when Fossil is matched.\n\nThey are configured separately at the top level.",
-          "default": "$fossil_branch$fossil_metrics",
-          "type": "string"
+          "type": "string",
+          "default": "$fossil_branch$fossil_metrics"
         },
         "git_modules": {
           "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
-          "default": "$git_branch$git_commit$git_state$git_metrics$git_status",
-          "type": "string"
+          "type": "string",
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status"
         },
         "hg_modules": {
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
-          "default": "$hg_branch$hg_state",
-          "type": "string"
+          "type": "string",
+          "default": "$hg_branch$hg_state"
+        },
+        "jujutsu_modules": {
+          "description": "Modules to use when Jujutsu is matched.\n\nThey are configured separately at the top level.",
+          "type": "string",
+          "default": "$jujutsu_state$jujutsu_change$jujutsu_commit$jujutsu_bookmark"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
-          "default": "$pijul_channel",
-          "type": "string"
+          "type": "string",
+          "default": "$pijul_channel"
         }
       },
       "additionalProperties": false
-    },
-    "Vcs": {
-      "type": "string",
-      "enum": [
-        "fossil",
-        "git",
-        "hg",
-        "pijul"
-      ]
     },
     "VcshConfig": {
       "type": "object",
