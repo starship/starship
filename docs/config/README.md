@@ -268,6 +268,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$talos\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -4718,6 +4719,92 @@ The module will be shown if any of the following conditions are met:
 [swift]
 format = 'via [🏎  $version](red bold)'
 ```
+
+## Talos
+
+Displays the current [Talos Linux](https://www.talos.dev) [context](https://www.talos.dev/latest/learn-more/talosctl/#client-configuration) name and, if set, the cluster, endpoints and roles from the Talos config file.
+If the `$TALOSCONFIG` env var is set the module will use that if not it will use the default `~/.talos/config`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+>
+> When the module is enabled it will always be active, unless any of
+> `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have
+> been set in which case the module will only be active in directories that match
+> those conditions or one of the environmatal variable has been set.
+
+### Options
+
+| Option              | Default                                                                                                         | Description                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `'󰰥 '`                                                                                                          | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context]($style bold)(\\([$cluster]($style)\\)) via [$endpoints]($style) (as [$roles]($style) )in '` | The format for the module.                                            |
+| `style`             | `'208'` (`'208 bold'`) for context                                                                              | The style for the module.                                             |
+| `detect_extensions` | `[]`                                                                                                            | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                                                                                            | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                                                                                            | Which folders should trigger this modules.                            |
+| `detect_env_vars`   | `[]`                                                                                                            | Which environmental variables should trigger this module              |
+| `contexts`          | `[]`                                                                                                            | Customized styles and symbols for specific contexts.                  |
+| `disabled`          | `true`                                                                                                          | Disables the `talos` module.                                          |
+
+To customize the style of the module for specific environments, use the following configuration as
+part of the `contexts` list:
+
+| Variable          | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `context_pattern` | **Required** Regular expression to match current Talos context name.                     |
+| `context_alias`   | Context alias to display instead of the full context name.                               |
+| `style`           | The style for the module when using this context. If not set, will use module's style.   |
+| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+
+Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
+regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
+(see example below and the
+[rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
+
+### Variables
+
+| Variable  | Example           | Description                                  |
+| --------- | ----------------- | -------------------------------------------- |
+| context   | `talos-context`   | The current Talos context name               |
+| endpoints | `talos-endpoints` | If set, list of endpoints in current context |
+| roles     | `talos-roles`     | If set, list of roles in current context     |
+| cluster   | `talos-cluster`   | If set, `cluster:` field of current context  |
+| symbol    |                   | Mirrors the value of option `symbol`         |
+| style\*   |                   | Mirrors the value of option `style`          |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[talos]
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+disabled = false
+contexts = [
+  { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
+]
+```
+
+#### Talos Context specific config
+
+The `contexts` configuration option is used to customise what the current Talos context name looks
+like (style and symbol) if the name matches the defined regular expression.
+
+```toml
+# ~/.config/starship.toml
+
+[[talos.contexts]]
+# "bold red" style + default symbol when Talos current context name equals "production"
+context_pattern = "production"
+style = "bold red"
+context_alias = "prod"
+```
+
+Overall, configuration is similar to [Kubernetes] module.
 
 ## Terraform
 
