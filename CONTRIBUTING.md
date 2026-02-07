@@ -287,11 +287,11 @@ writing new modules low, starship provides a lot of functionality for a module,
 which requires quite a few things be done. These are listed here to help
 everyone remember what they are. Don't worry: most of them are quite simple!
 
-- [ ] Add a section to `docs/config/README.md` describing the module, and
-      its configuration options/variables (more documentation is often
+- [ ] Create a new file `docs/config/modules/<category>/<module>.md` describing the module and its configuration options/variables (more documentation is often
       appropriate--this is a bare minimum).
+- [ ] Add a link to the module in the `docs/config/README.md` file under the appropriate category.
 - [ ] Add the variable to the appropriate location in the "Default Prompt
-      Format" section of the documentation
+      Format" section of `docs/config/README.md`
 - [ ] Add an appropriate choice of options to each preset in `docs/public/presets/toml`
 - [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
