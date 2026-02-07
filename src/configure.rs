@@ -318,10 +318,7 @@ mod tests {
     use tempfile::TempDir;
     use toml_edit::Item;
 
-    use crate::{
-        context::{Properties, Shell, Target},
-        context_env::Env,
-    };
+    use crate::context::{Env, Properties, Shell, Target};
 
     use super::*;
 
