@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fmt::Write as _;
 use std::process;
 use std::process::Stdio;
@@ -7,10 +8,18 @@ use crate::config::ModuleConfig;
 use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::context::Context;
+use crate::module::ALL_MODULES;
 use crate::utils;
+use inquire::InquireError;
+use inquire::MultiSelect;
+use inquire::formatter::MultiOptionFormatter;
+#[cfg(test)]
+use mockall::automock;
 use std::fs::File;
 use std::io::Write;
 use toml_edit::DocumentMut;
+use toml_edit::Item;
+use toml_edit::Table;
 
 #[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
@@ -223,6 +232,85 @@ fn handle_toggle_configuration(doc: &mut DocumentMut, name: &str, key: &str) -> 
     Ok(())
 }
 
+pub fn toggle_multiple_configurations(context: &Context, key: &str) {
+    let mut doc = get_configuration_edit(context);
+
+    match handle_toggle_multiple_configurations(context, &mut doc, key, ShellPromptProviderImpl) {
+        Err(e) => {
+            eprintln!("{e}");
+            process::exit(1);
+        }
+        _ => write_configuration(context, &doc),
+    }
+}
+
+fn handle_toggle_multiple_configurations(
+    context: &Context,
+    doc: &mut DocumentMut,
+    key: &str,
+    prompt_provider: impl ShellPromptProvider,
+) -> Result<(), String> {
+    let default_modules: HashSet<&str> = ALL_MODULES
+        .into_iter()
+        .filter(|module| !context.is_module_disabled(module))
+        .copied()
+        .collect();
+
+    match prompt_provider.prompt_modules_selection(&default_modules) {
+        Ok(selected_modules) => {
+            let selected_modules: HashSet<&str> =
+                selected_modules.iter().map(|s| s.as_str()).collect();
+
+            let modules_enabled = selected_modules.difference(&default_modules);
+            for module in modules_enabled {
+                handle_set_configuration(doc, module, key, false)?;
+            }
+
+            let modules_disabled = default_modules.difference(&selected_modules);
+            for module in modules_disabled {
+                handle_set_configuration(doc, module, key, true)?;
+            }
+
+            Ok(())
+        }
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+fn handle_set_configuration(
+    doc: &mut DocumentMut,
+    name: &str,
+    key: &str,
+    value: bool,
+) -> Result<(), String> {
+    if name.is_empty() || key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let root = doc.as_table_mut();
+
+    let module_root = root
+        .entry(name)
+        .or_insert_with(|| Item::Table(Table::new()));
+
+    let module_table = module_root
+        .as_table_mut()
+        .ok_or_else(|| format!("Config entry '{name}' exists but is not a table"))?;
+
+    let mut new_value = toml_edit::value(value);
+
+    if let Some(old_item) = module_table.get(key) {
+        if let (Some(old_val), Some(new_val)) = (old_item.as_value(), new_value.as_value_mut()) {
+            *new_val.decor_mut() = old_val.decor().clone();
+        }
+    }
+
+    // Insert or overwrite the key
+    module_table.insert(key, new_value);
+
+    Ok(())
+}
+
 pub fn get_configuration(context: &Context) -> toml::Table {
     let starship_config = StarshipConfig::initialize(context.get_config_path_os().as_deref());
 
@@ -309,6 +397,40 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
         return editor_name;
     }
     STD_EDITOR.into()
+}
+
+#[cfg_attr(test, automock)]
+trait ShellPromptProvider {
+    fn prompt_modules_selection<'a>(
+        &self,
+        default_modules: &'a HashSet<&'a str>,
+    ) -> Result<Vec<String>, InquireError>;
+}
+
+struct ShellPromptProviderImpl;
+
+impl ShellPromptProvider for ShellPromptProviderImpl {
+    fn prompt_modules_selection<'a>(
+        &self,
+        default_modules: &'a HashSet<&'a str>,
+    ) -> Result<Vec<String>, InquireError> {
+        let default = ALL_MODULES
+            .iter()
+            .enumerate()
+            .filter(|(_, module)| default_modules.contains(*module))
+            .map(|(index, _)| index)
+            .collect::<Vec<usize>>();
+
+        let formatter: MultiOptionFormatter<'_, &str> =
+            &|a| format!("{} modules selected", a.len());
+        let options = Vec::from(ALL_MODULES);
+
+        MultiSelect::new("Select the modules to enable:", options)
+            .with_default(&default)
+            .with_formatter(formatter)
+            .prompt()
+            .map(|v| v.into_iter().map(|s| s.to_string()).collect::<Vec<_>>())
+    }
 }
 
 #[cfg(test)]
@@ -500,6 +622,123 @@ mod tests {
 
         assert!(handle_toggle_configuration(&mut doc, "status", "").is_err());
         assert!(handle_toggle_configuration(&mut doc, "", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_toggle_multiple_no_changes() {
+        let config = toml::toml! {
+            [aws]
+            disabled = false
+
+            [azure]
+            disabled = false
+        };
+        let context = Context::default();
+
+        let mut doc = config.to_string().parse::<DocumentMut>().unwrap();
+
+        let mut mock = MockShellPromptProvider::new();
+        mock.expect_prompt_modules_selection()
+            .times(1)
+            .returning(|default_modules| {
+                Ok(default_modules.iter().map(|s| s.to_string()).collect())
+            });
+
+        assert!(
+            handle_toggle_multiple_configurations(&context, &mut doc, "disabled", mock).is_ok()
+        );
+
+        let expected = toml::toml! {
+            [aws]
+            disabled = false
+
+            [azure]
+            disabled = false
+        };
+
+        assert_eq!(doc.to_string(), expected.to_string());
+    }
+
+    #[test]
+    fn test_toggle_multiple_with_new_modules_enabled() {
+        let config = toml::toml! {
+            [aws]
+            disabled = false
+
+            [azure]
+            disabled = false
+        };
+        let context = Context::default();
+
+        let mut doc = config.to_string().parse::<DocumentMut>().unwrap();
+
+        let mut mock = MockShellPromptProvider::new();
+        mock.expect_prompt_modules_selection()
+            .times(1)
+            .returning(|default_modules| {
+                Ok(default_modules
+                    .iter()
+                    .map(|s| s.to_string())
+                    .chain(vec!["bun".to_string(), "nats".to_string()])
+                    .collect())
+            });
+
+        assert!(
+            handle_toggle_multiple_configurations(&context, &mut doc, "disabled", mock).is_ok()
+        );
+
+        // "bun" already enabled by default
+        let expected = toml::toml! {
+            [aws]
+            disabled = false
+
+            [azure]
+            disabled = false
+
+            [nats]
+            disabled = false
+        };
+
+        assert_eq!(doc.to_string(), expected.to_string());
+    }
+
+    #[test]
+    fn test_toggle_multiple_with_new_modules_disabled() {
+        let config = toml::toml! {
+            [aws]
+            disabled = false
+
+            [azure]
+            disabled = false
+        };
+        let context = Context::default();
+
+        let mut doc = config.to_string().parse::<DocumentMut>().unwrap();
+
+        let mut mock = MockShellPromptProvider::new();
+        mock.expect_prompt_modules_selection()
+            .times(1)
+            .returning(|default_modules| {
+                Ok(default_modules
+                    .iter()
+                    .filter(|m| m != &&"aws")
+                    .map(|s| s.to_string())
+                    .collect())
+            });
+
+        assert!(
+            handle_toggle_multiple_configurations(&context, &mut doc, "disabled", mock).is_ok()
+        );
+
+        let expected = toml::toml! {
+            [aws]
+            disabled = true
+
+            [azure]
+            disabled = false
+        };
+
+        assert_eq!(doc.to_string(), expected.to_string());
     }
 
     #[test]
