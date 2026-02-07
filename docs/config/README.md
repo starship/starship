@@ -1,9 +1,9 @@
 # Configuration
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.config/starship/config.toml`.
 
 ```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config/starship && touch ~/.config/starship/config.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
@@ -29,20 +29,25 @@ disabled = true
 You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
+export STARSHIP_CONFIG=~/example/non/default/path/config.toml
 ```
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\config.toml"
 ```
 
 Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\config.toml')
 ```
+
+You can also change default configuration directory location `~/.cache` with `XDG_CONFIG_HOME` environment variable.
+
+> [!NOTE]
+> The previous default configuration file location `~/.config/starship.toml` has been deprecated.
 
 ### Logging
 
@@ -228,7 +233,7 @@ This is the list of prompt-wide configuration options.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 # Use custom format
 format = '''
@@ -422,7 +427,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 #### Display everything
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [aws]
 format = 'on [$symbol($profile )(\($region\) )]($style)'
@@ -438,7 +443,7 @@ CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 #### Display region
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [aws]
 format = 'on [$symbol$region]($style) '
@@ -452,7 +457,7 @@ us-east-1 = 'va'
 #### Display profile
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [aws]
 format = 'on [$symbol$profile]($style) '
@@ -485,7 +490,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 #### Display Subscription Name
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [azure]
 disabled = false
@@ -497,7 +502,7 @@ style = 'blue bold'
 #### Display Username
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [azure]
 disabled = false
@@ -509,7 +514,7 @@ style = "blue bold"
 #### Display Subscription Name Alias
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [azure.subscription_aliases]
 very-long-subscription-name = 'vlsn'
@@ -536,7 +541,7 @@ The module is only visible when the device's battery is below 10%.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [battery]
 full_symbol = '🔋 '
@@ -613,7 +618,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [buf]
 symbol = '🦬 '
@@ -656,7 +661,7 @@ By default the module will be shown if any of the following conditions are met:
 #### Customize the format
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [bun]
 format = 'via [🍔 $version](bold green) '
@@ -702,7 +707,7 @@ If a C compiler is not supported by this module, you can request it by [raising 
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [c]
 format = 'via [$name $version]($style)'
@@ -801,7 +806,7 @@ look at [this example](#with-custom-error-shape).
 #### With custom error shape
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [character]
 success_symbol = '[➜](bold green) '
@@ -811,7 +816,7 @@ error_symbol = '[✗](bold red) '
 #### Without custom error shape
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [character]
 success_symbol = '[➜](bold green) '
@@ -821,7 +826,7 @@ error_symbol = '[➜](bold red) '
 #### With custom vim shape
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [character]
 vimcmd_symbol = '[V](bold green) '
@@ -931,7 +936,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [cmd_duration]
 min_time = 500
@@ -971,7 +976,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [conda]
 format = '[$symbol$environment](dimmed green) '
@@ -1003,7 +1008,7 @@ The `container` module displays a symbol and container name, if inside a contain
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [container]
 format = '[$symbol \[$name\]]($style) '
@@ -1043,7 +1048,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [crystal]
 format = 'via [✨ $version](bold blue) '
@@ -1085,7 +1090,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [daml]
 format = 'via [D $version](bold bright-green) '
@@ -1126,7 +1131,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [dart]
 format = 'via [🔰 $version](bold red) '
@@ -1163,7 +1168,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [deno]
 format = 'via [🦕 $version](green bold) '
@@ -1276,7 +1281,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [directory]
 truncation_length = 8
@@ -1324,7 +1329,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [direnv]
 disabled = false
@@ -1364,7 +1369,7 @@ the context in use).
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [docker_context]
 format = 'via [🐋 $context](blue bold)'
@@ -1427,7 +1432,7 @@ when there is a `.csproj` file in the current directory.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [dotnet]
 symbol = '🥅 '
@@ -1469,7 +1474,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [elixir]
 symbol = '🔮 '
@@ -1512,7 +1517,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [elm]
 format = 'via [ $version](cyan bold) '
@@ -1538,7 +1543,7 @@ The module will be shown only if any of the following conditions are met:
 > Example: following configuration will display value of USER environment variable
 >
 > ```toml
-> # ~/.config/starship.toml
+> # ~/.config/starship/config.toml
 >
 > [env_var.USER]
 > default = 'unknown user'
@@ -1568,7 +1573,7 @@ The module will be shown only if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [env_var]
 variable = 'SHELL'
@@ -1578,7 +1583,7 @@ default = 'unknown shell'
 Displaying multiple environmental variables:
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [env_var.SHELL]
 variable = 'SHELL'
@@ -1621,7 +1626,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [erlang]
 format = 'via [e $version](bold red) '
@@ -1660,7 +1665,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [fennel]
 symbol = '⫰ '
@@ -1683,7 +1688,7 @@ other modules.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 format = 'AA $fill BB $fill CC'
 
 [fill]
@@ -1766,7 +1771,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [fossil_branch]
 symbol = '🦎 '
@@ -1806,7 +1811,7 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [fossil_metrics]
 added_style = 'bold blue'
@@ -1853,7 +1858,7 @@ environment variables has been set.
 #### Display account and project
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [gcloud]
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
@@ -1862,7 +1867,7 @@ format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 #### Display active config name only
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [gcloud]
 format = '[$symbol$active]($style) '
@@ -1872,7 +1877,7 @@ style = 'bold yellow'
 #### Display account and aliased region
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [gcloud]
 symbol = '️🇬️ '
@@ -1884,7 +1889,7 @@ asia-northeast1 = 'an1'
 #### Display account and aliased project
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [gcloud]
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
@@ -1926,7 +1931,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_branch]
 symbol = '🌱 '
@@ -1965,7 +1970,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_commit]
 commit_hash_length = 4
@@ -2008,7 +2013,7 @@ that information will be shown too.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
@@ -2049,7 +2054,7 @@ the current git repository.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_metrics]
 added_style = 'bold blue'
@@ -2140,7 +2145,7 @@ The following variables can be used in `conflicted`, `ahead`, `behind`, `untrack
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_status]
 conflicted = '🏳'
@@ -2159,7 +2164,7 @@ deleted = '🗑'
 Show ahead/behind count of the branch being tracked
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_status]
 ahead = '⇡${count}'
@@ -2170,7 +2175,7 @@ behind = '⇣${count}'
 Use Windows Starship executable on Windows paths in WSL
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [git_status]
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
@@ -2209,7 +2214,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [gleam]
 format = 'via [⭐ $version](bold red) '
@@ -2258,7 +2263,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
@@ -2267,7 +2272,7 @@ format = 'via [🏎💨 $version](bold cyan) '
 ### Using `mod_version`
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [golang]
 format = 'via [$symbol($version )($mod_version )]($style)'
@@ -2299,7 +2304,7 @@ The module will be shown when inside a guix-shell environment.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [guix_shell]
 disabled = true
@@ -2410,7 +2415,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [haxe]
 format = "via [⌘ $version](bold fg:202) "
@@ -2450,7 +2455,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [helm]
 format = 'via [⎈ $version](bold white) '
@@ -2488,7 +2493,7 @@ The `hostname` module shows the system hostname.
 #### Always show the hostname
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [hostname]
 ssh_only = false
@@ -2500,7 +2505,7 @@ disabled = false
 #### Hide the hostname in remote tmux sessions
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [hostname]
 ssh_only = false
@@ -2511,7 +2516,7 @@ disabled = false
 #### Replace the hostname with a nickname
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 [hostname]
 aliases = { "Max's MacBook Pro" = "home" }
 ```
@@ -2550,7 +2555,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [java]
 symbol = '🌟 '
@@ -2609,7 +2614,7 @@ The default functionality is:
 ### Examples
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [jobs]
 symbol = '+ '
@@ -2660,7 +2665,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [julia]
 symbol = '∴ '
@@ -2700,14 +2705,14 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [kotlin]
 symbol = '🅺 '
 ```
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [kotlin]
 # Uses the Kotlin Compiler binary to get the installed version
@@ -2787,7 +2792,7 @@ regular expressions may contain capture groups, which can be referenced in the c
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [kubernetes]
 format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
@@ -2800,7 +2805,7 @@ contexts = [
 Only show the module in directories that contain a `k8s` file.
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [kubernetes]
 disabled = false
@@ -2813,7 +2818,7 @@ The `contexts` configuration option is used to customise what the current Kubern
 like (style and symbol) if the name matches the defined regular expression.
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [[kubernetes.contexts]]
 # "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
@@ -2853,7 +2858,7 @@ The `line_break` module separates the prompt into two lines.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [line_break]
 disabled = true
@@ -2888,7 +2893,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [localip]
 ssh_only = false
@@ -2932,7 +2937,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [lua]
 format = 'via [🌕 $version](bold blue) '
@@ -3010,7 +3015,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [memory_usage]
 disabled = false
@@ -3049,7 +3054,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [meson]
 disabled = false
@@ -3091,7 +3096,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [hg_branch]
 format = 'on [🌱 $branch](bold purple)'
@@ -3206,7 +3211,7 @@ The `mojo` module shows the current version of [Mojo programming language](https
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [mojo]
 format = 'via [mojo ($version )($hash )]($style)'
@@ -3266,7 +3271,7 @@ This uses `ip netns identify` to get the network namespace, so only network name
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [netns]
 style = 'bold yellow'
@@ -3309,7 +3314,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [nim]
 style = 'yellow'
@@ -3348,7 +3353,7 @@ The module will be shown when inside a nix-shell environment.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [nix_shell]
 disabled = true
@@ -3400,7 +3405,7 @@ Additionally, the module will be hidden by default if the directory contains a `
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [nodejs]
 format = 'via [🤖 $version](bold green) '
@@ -3448,7 +3453,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [ocaml]
 format = 'via [🐪 $version]($style) '
@@ -3484,7 +3489,7 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [odin]
 format = 'via [󰹩 ($version )]($style)'
@@ -3522,7 +3527,7 @@ By default the module will be shown if the current directory contains a `.rego` 
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [opa]
 format = 'via [⛑️  $version](bold red) '
@@ -3558,7 +3563,7 @@ to fetch the current project in use.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [openstack]
 format = 'on [$symbol$cloud(\($project\))]($style) '
@@ -3672,7 +3677,7 @@ Zorin = "🔹 "
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [os]
 format = "on [($name )]($style)"
@@ -3740,7 +3745,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [package]
 format = 'via [🎁 $version](208 bold) '
@@ -3781,7 +3786,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [perl]
 format = 'via [🦪 $version]($style) '
@@ -3822,7 +3827,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [php]
 format = 'via [🔹 $version](147 bold) '
@@ -3928,7 +3933,7 @@ By default the module will be shown if any of the following conditions are met:
 #### With Pulumi Version
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [pulumi]
 format = '[🛥 ($version )$stack]($style) '
@@ -3937,7 +3942,7 @@ format = '[🛥 ($version )$stack]($style) '
 #### Without Pulumi version
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 [pulumi]
 symbol = '🛥 '
 format = '[$symbol$stack]($style) '
@@ -3979,7 +3984,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [purescript]
 format = 'via [$symbol$version](bold white)'
@@ -4051,7 +4056,7 @@ By default, the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [python]
 symbol = '👾 '
@@ -4059,7 +4064,7 @@ pyenv_version_name = true
 ```
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [python]
 # Only use the `python3` binary to get the version.
@@ -4067,7 +4072,7 @@ python_binary = 'python3'
 ```
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [python]
 # Don't trigger for files with the py extension
@@ -4143,7 +4148,7 @@ any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [rlang]
 format = 'with [📐 $version](blue bold) '
@@ -4182,7 +4187,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [raku]
 format = 'via [🦪 $version]($style) '
@@ -4221,7 +4226,7 @@ The module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [red]
 symbol = '🔴 '
@@ -4267,7 +4272,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [ruby]
 symbol = '🔺 '
@@ -4309,7 +4314,7 @@ The module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [rust]
 format = 'via [⚙️ $version](red bold)'
@@ -4350,7 +4355,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [scala]
 symbol = '🌟 '
@@ -4396,7 +4401,7 @@ The `shell` module shows an indicator for currently used shell.
 ### Examples
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [shell]
 fish_indicator = '󰈺 '
@@ -4440,7 +4445,7 @@ set to a number and meets or exceeds the specified threshold.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [shlvl]
 disabled = false
@@ -4453,7 +4458,7 @@ prompt like `❯❯❯` where last character is colored appropriately for return
 status code and preceding characters are provided by `shlvl`.
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [shlvl]
 disabled = false
@@ -4490,7 +4495,7 @@ and `$SINGULARITY_NAME` is set.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
@@ -4530,7 +4535,7 @@ The module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 [solidity]
 format = "via [S $version](blue bold)"
 ```
@@ -4562,7 +4567,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [spack]
 format = '[$symbol$environment](dimmed blue) '
@@ -4620,7 +4625,7 @@ The status code will cast to a signed 32-bit integer.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [status]
 style = 'bg:blue'
@@ -4662,7 +4667,7 @@ The module will only be shown if credentials are cached.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [sudo]
 style = 'bold green'
@@ -4713,7 +4718,7 @@ The module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [swift]
 format = 'via [🏎  $version](red bold)'
@@ -4763,7 +4768,7 @@ By default the module will be shown if any of the following conditions are met:
 #### With Terraform Version
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [terraform]
 format = 'via [$symbol$version $workspace]($style) '
@@ -4772,7 +4777,7 @@ format = 'via [$symbol$version $workspace]($style) '
 #### Without Terraform version
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [terraform]
 format = 'via [$symbol$workspace]($style) '
@@ -4814,7 +4819,7 @@ Manually setting `time_format` will override the `use_12hr` setting.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [time]
 disabled = false
@@ -4897,7 +4902,7 @@ The module will be shown if any of the following conditions are met:
 #### Always show the username
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [username]
 style_user = 'white bold'
@@ -4941,7 +4946,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [vagrant]
 format = 'via [⍱ $version](bold white) '
@@ -4979,7 +4984,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 [vlang]
 format = 'via [V $version](blue bold) '
 ```
@@ -5052,7 +5057,7 @@ The module will be shown only if a repository is currently in use.
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [vcsh]
 format = '[🆅 $repo](bold blue) '
@@ -5121,7 +5126,7 @@ The module will be shown if any of the following conditions are met:
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [zig]
 symbol = '⚡️ '
@@ -5243,7 +5248,7 @@ shell = ['pwsh', '-Command', '-']
 ### Example
 
 ```toml
-# ~/.config/starship.toml
+# ~/.config/starship/config.toml
 
 [custom.foo]
 command = 'echo foo' # shows output of command

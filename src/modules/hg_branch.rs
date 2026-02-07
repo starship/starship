@@ -16,7 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: HgBranchConfig = HgBranchConfig::try_load(module.config);
 
     // As we default to disabled=true, we have to check here after loading our config module,
-    // before it was only checking against whatever is in the config starship.toml
+    // before it was only checking against whatever is in the config.toml
     if config.disabled {
         return None;
     }
