@@ -26,7 +26,7 @@ impl Default for EnvVarConfig<'_> {
             style: "black bold dimmed",
             variable: None,
             default: None,
-            format: "with [$env_value]($style) ",
+            format: "with [$symbol$env_value]($style) ",
             disabled: false,
             description: "<env_var module>",
         }
