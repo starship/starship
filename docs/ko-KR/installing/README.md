@@ -3,11 +3,11 @@
 Starship을 설치하려면 다음 두 가지를 수행해주세요
 
 1. **Starship** 바이너리를 당신의 컴퓨터에 받으세요
-1. 셸의 초기화 스크립트를 수정하여 starship 바이너리를 프롬프트로 사용하도록 셸에 지시하세요.
+2. 셸의 초기화 스크립트를 수정하여 starship 바이너리를 프롬프트로 사용하도록 셸에 지시하세요.
 
 대부분의 사용자에게는 [메인 페이지](../guide/#🚀-installation)의 지침이 잘 작동할 것입니다. 그러나 일부 더 전문화된 플랫폼의 경우 다른 지침이 필요합니다.
 
-너무 많은 플랫폼이 있어서 메인 README.md 파일에 모두 포함할 수 없었으므로, 다음은 커뮤니티에서 제공하는 다른 플랫폼에 대한 설치 지침입니다. Is yours not here? Please do add it here if you figure it out!
+너무 많은 플랫폼이 있어서 메인 README.md 파일에 모두 포함할 수 없었으므로, 다음은 커뮤니티에서 제공하는 다른 플랫폼에 대한 설치 지침입니다. 여기에 없는 플랫폼이 있다면, 알아낸 경우 여기에 추가해 주세요!
 
 ## [Chocolatey](https://chocolatey.org)
 
@@ -41,9 +41,9 @@ emerge app-shells/starship
 
 ## [Nix](https://wiki.nixos.org/wiki/Nix)
 
-### Getting the Binary
+### 바이너리 가져오기
 
-#### Imperatively
+#### 명령형
 
 ```sh
 nix-env -iA nixos.starship

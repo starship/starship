@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./#catppuccin-powerline)
+[프리셋으로 돌아가기](./README.md#catppuccin-powerline)
 
 # Catppuccin Powerline 프리셋
 

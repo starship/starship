@@ -1,10 +1,10 @@
 [프리셋으로 돌아가기](./#no-empty-icons)
 
-# No Empty Icons Preset
+# 빈 아이콘 없음 프리셋
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+툴셋 파일이 식별되면 툴셋 아이콘이 표시됩니다. 툴셋의 버전 번호를 결정할 수 없는 경우 표시되지 않습니다. 이 프리셋은 툴셋 정보를 확인할 수 있는 경우에만 아이콘을 표시하도록 동작을 변경합니다.
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![빈 아이콘 없음 프리셋 스크린샷](/presets/img/no-empty-icons.png)
 
 ### 설정
 
