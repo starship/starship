@@ -78,44 +78,41 @@ En la sintaxis TOML, los [valores de texto](https://toml.io/en/v1.0.0#string) se
 
 Los siguientes símbolos de sintaxis de Starship tienen un uso especial en una cadena de formato y deben escaparse para mostrarse como ese carácter: `$ [ ] ( )`.
 
-| Simbol | Tipo                       | Notas                                                  |
-| ------ | -------------------------- | ------------------------------------------------------ |
-| `'`    | cadena literal             | menos escapes                                          |
-| `"`    | cadena                     | mas escapes                                            |
-| `'''`  | cadena literal multilineas | menos escapes                                          |
-| `"""`  | multi-line string          | more escaping, newlines in declarations can be ignored |
+| Simbol | Tipo                       | Notas                                                                    |
+| ------ | -------------------------- | ------------------------------------------------------------------------ |
+| `'`    | cadena literal             | menos escapes                                                            |
+| `"`    | cadena                     | mas escapes                                                              |
+| `'''`  | cadena literal multilineas | menos escapes                                                            |
+| `"""`  | Cadena multilínea          | Más escapes, las nuevas líneas en las declaraciones pueden ser ignoradas |
 
 Por ejemplo:
 
 ```toml
-# literal string
+# cadena literal
 format = '☺\☻ '
 
-# regular string
+# cadena estándar
 format = "☺\\☻ "
 
-# escaping Starship symbols
+# escapando símbolos de Starship
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+Al usar saltos de línea, se pueden utilizar declaraciones multilínea. Por ejemplo, si quieres imprimir un símbolo <0>$</0> en una línea nueva, los siguientes valores para <0>format</0> son equivalentes:
 
 ```toml
-# with literal string
+# con cadena literal
 format = '''
 
 \$'''
 
-# with multiline basic string
+# con cadena básica multilínea
 format = """
 
 \\$"""
-
-# with basic string
-format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+En las cadenas básicas multilínea, se pueden usar saltos de línea para dar formato sin que estén presentes en el valor, escapándolos.
 
 ```toml
 format = """
@@ -138,9 +135,9 @@ Una variable contiene un símbolo `$` seguido por el nombre de la variable. El n
 
 Por ejemplo:
 
-- `'$version'` is a format string with a variable named `version`.
-- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
+- `'$version'` es una cadena de formato con una variable llamada `version`.
+- `'gitb​ranchgit_commit'` es una cadena de formato con dos variables llamadas <0>git_branch</0> y <0>git_commit</0>.
+- `'$git_branch $git_commit'` tiene las dos variables separadas por un espacio.
 
 #### Grupo de Texto
 
@@ -161,11 +158,11 @@ Por ejemplo:
 La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consultar la [guía de configuración avanzada](../advanced-config/).
 
 - `'fg:green bg:blue'` define el texto con color verde y el color de fondo azul
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `'underline bg:#bf5700'` sets underlined text on a burnt orange background
-- `'bold italic fg:purple'` sets bold italic purple text
-- `''` explicitly disables all styling
+- `'bg:blue fg:bright-green'` establece texto verde brillante sobre un fondo azul
+- `'bold fg:27'` establece texto en negrita con el [color ANSI](https://i.stack.imgur.com/KTSQa.png) 27
+- `'underline bg:#bf5700'` establece texto subrayado sobre un fondo naranja quemado
+- `'bold italic fg:purple'` establece texto en púrpura, negrita y cursiva
+- `''` explicitly disables all styling Español: `''` desactiva explícitamente todos los estilos
 
 Nótese que el estilo es similar a como se controlaría por el emulador de terminal. Por ejemplo, algunos emuladores de terminal harán los colores más brillantes en lugar de más gruesos, y algunos temas de colores usan los mismos valores para texto normal y colores brillantes. Además, para mostrar textos en cursiva tu terminal debe tener soporte para hacerlo.
 
@@ -175,13 +172,13 @@ Una cadena de formato condicional envuelto en `(` y `)` no se renderizará si to
 
 Por ejemplo:
 
-- `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
-- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
+- `'(@$region)'` no mostrará nada si la variable `region` es `None` o una cadena vacía; de lo contrario, mostrará `@` seguido del valor de region.
+- `'(some text)'` siempre mostrará nada ya que no hay variables envueltas en los paréntesis.
+- Cuando `$combined` es un atajo para `\[$a$b\]`, `'($combined)'` no mostrará nada solo si tanto `$a` como `$b` son `None`. Esto funciona igual que `'(\[$a$b\] )'`.
 
 ### Coincidencia negativa
 
-Varios módulos tienen variables `detect_extensions`, `detect_files`y `detect_folders`. Estas toman listas de cadenas de texto para que coincidan o no coincidan. "Negative" options, those which should not be matched, are indicated with a leading '!' character. La presencia de _cualquier_ indicador negativo en el directorio hará que el módulo no coincida.
+Varios módulos tienen variables `detect_extensions`, `detect_files`y `detect_folders`. Estas toman listas de cadenas de texto para que coincidan o no coincidan. Las opciones "negativas", aquellas que no deben coincidir, se indican con un carácter '!' al principio. La presencia de _cualquier_ indicador negativo en el directorio hará que el módulo no coincida.
 
 Las extensiones coinciden tanto con los caracteres después del último punto en un nombre de archivo, como con los caracteres después del primer punto en un nombre de archivo. Por ejemplo, `foo.bar.tar.gz` será emparejado contra `bar.tar.gz` y `gz` en la variable `detect_extensions`. Los archivos cuyo nombre comienza con un punto no se consideran extensiones en absoluto.
 
@@ -195,57 +192,59 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 Esta es la lista de opciones de configuración del prompt.
 
-### Opciones
+### OpcionesVer Habilitar el Prompt Derecho</</td> </tr> 
 
-| Opción            | Predeterminado                     | Descripción                                                                                                                                                                                                                             |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                                                                        |
-| `right_format`    | `''`                               | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                                                                      |
-| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).                                                                                                                                                               |
-| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).                                                                                                                                                           |
-| `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                                                                          |
-| `paleta`          | `''`                               | Establece la paleta de color de `paletas` a utilizar.                                                                                                                                                                                   |
-| `paletas`         | `{}`                               | Colección de paletas de colores que asignan [colores](../advanced-config/#style-strings) a nombres definidos por el usuario. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
-| `follow_symlinks` | `true`                             | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                                          |
+</tbody> </table> 
 
-> [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+
+
+> [!TIP] Si tienes enlaces simbólicos a sistemas de archivos en red, considera establecer <0>follow_symlinks</0> en <0>false</0>.
+
+
 
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Usar un formato personalizado
 format = '''
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) '''
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Esperar 10 milisegundos para que starship verifique los archivos en el directorio actual.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Desactivar la línea en blanco al principio del prompt
 add_newline = false
 
-# Set 'foo' as custom color palette
+# Establecer 'foo' como la paleta de colores personalizada
 palette = 'foo'
 
-# Define custom colors
+# Definir colores personalizados
 [palettes.foo]
-# Overwrite existing color
+# Sobrescribir un color existente
 blue = '21'
-# Define new color
+# Definir un nuevo color
 mustard = '#af8700'
 ```
+
+
+
 
 ### Formato por Defecto del Prompt
 
 La varieble `format` por defecto se utiliza para definir el formato del prompt, si está vacía o `format` no se proporciona. El valor predeterminado es el siguiente:
 
+
+
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Que es equivalente a
 format = """
 $username\
 $hostname\
@@ -290,6 +289,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -343,18 +343,23 @@ $shell\
 $character"""
 ```
 
+
 Si solo quieres extender el formato predeterminado, puedes usar `$all`; los módulos que se añaden explícitamente al formato no serán duplicados. Ej.
 
+
+
 ```toml
-# Move the directory to the second line
-format = '$all$directory$character'
+# Mover el directorio a la segunda línea Código: format = '$all$directory$character'
 ```
+
+
+
 
 ## AWS
 
 El módulo `aws` muestra la región y el perfil actual de AWS y un temporizador de vencimiento cuando se utilizan credenciales temporales. La salida del módulo utiliza las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION` y `AWS_PROFILE`, y los archivos `~/. ws/config` y `~/.aws/credenciales` según sea necesario.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+El módulo mostrará un perfil solo si sus credenciales están presentes en `~/.aws/credentials` o si se definen `credential_process`, `sso_start_url` o `sso_session` en `~/.aws/config`. Alternativamente, tener definida cualquiera de las variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` o `AWS_SESSION_TOKEN` también será suficiente. Si la opción `force_display` se establece en `true`, se mostrará toda la información disponible incluso si no se detectan credenciales según las condiciones anteriores.
 
 Cuando se utiliza [aws-vault](https://github.com/99designs/aws-vault), el perfil se obtiene de la variable de entorno `AWS_VAULT` y la fecha de expiración de credenciales se obtiene de la variable de entorno `AWS_SESSION_EXPIRATION`.
 
@@ -362,9 +367,11 @@ Cuando uses [awsu](https://github.com/kreuzwerker/awsu) el perfil se obtiene de 
 
 Cuando se utiliza [AWSume](https://awsu.me), el perfil se obtiene de la variable de entorno `AWSUME_PROFILE` y la fecha de expiración de credenciales se obtiene de la variable de entorno `AWSUME_EXPIRATION`.
 
-When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+Al usar [saml2aws](https://github.com/Versent/saml2aws), la información de expiración obtenida de `~/.aws/credentials` recurre a la clave `x_security_token_expires`.
 
-When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
+Al usar <0>aws-sso-cli</0>, el perfil se lee de la variable de entorno <1>AWS_SSO_PROFILE</1>.
+
+
 
 ### Opciones
 
@@ -379,6 +386,9 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | `disabled`          | `false`                                                               | Desactiva el módulo AWS.                                                                                                 |
 | `force_display`     | `false`                                                               | Si `true` muestra información incluso si `credentials`, `credential_process` o `sso_start_url` no han sido configuradas. |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                                              |
@@ -389,11 +399,18 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | symbol    |                  | Refleja el valor de la opción `symbol`                   |
 | style\* |                  | Refleja el valor de la opción `style`                    |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplos
 
+
+
 #### Mostrar todo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -409,7 +426,12 @@ us-east-1 = 'va'
 CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
+
+
+
 #### Mostrar región
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -423,7 +445,12 @@ ap-southeast-2 = 'au'
 us-east-1 = 'va'
 ```
 
+
+
+
 #### Mostrar perfil
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -436,25 +463,39 @@ symbol = '🅰 '
 Enterprise_Naming_Scheme-voidstars = 'void**'
 ```
 
+
+
+
 ## Azure
 
-El módulo `azure` muestra la suscripción Azure actual. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+El módulo `azure` muestra la suscripción Azure actual. Esto se basa en mostrar el nombre de la suscripción predeterminada o el nombre de usuario, tal como se define en el archivo `~/.azure/azureProfile.json`.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
-| Variable               | Predeterminado                           | Descripción                                                                           |
-| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
-| `format`               | `'on [$symbol($subscription)]($style) '` | El formato para renderizar el módulo Azure.                                           |
-| `symbol`               | `'󰠅 '`                                   | El símbolo utilizado en el formato.                                                   |
-| `style`                | `'blue bold'`                            | El estilo utilizado en el formato.                                                    |
-| `disabled`             | `true`                                   | Deshabilita el módulo `azure`.                                                        |
-| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
+| Variable               | Predeterminado                           | Descripción                                                                                         |
+| ---------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | El formato para renderizar el módulo Azure.                                                         |
+| `symbol`               | `'󰠅'`                                    | El símbolo utilizado en el formato.                                                                 |
+| `style`                | `'blue bold'`                            | El estilo utilizado en el formato.                                                                  |
+| `disabled`             | `true`                                   | Deshabilita el módulo `azure`.                                                                      |
+| `subscription_aliases` | `{}`                                     | Tabla de alias de nombres de suscripción para mostrar además del nombre de la suscripción de Azure. |
+
+
+
 
 ### Ejemplos
 
-#### Display Subscription Name
+
+
+#### Mostrar el nombre de la suscripción
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -466,7 +507,12 @@ symbol = '󰠅 '
 style = 'blue bold'
 ```
 
-#### Display Username
+
+
+
+#### Mostrar el nombre de usuario
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -478,7 +524,12 @@ symbol = "󰠅 "
 style = "blue bold"
 ```
 
-#### Display Subscription Name Alias
+
+
+
+#### Mostrar alias del nombre de la suscripción
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -487,9 +538,14 @@ style = "blue bold"
 very-long-subscription-name = 'vlsn'
 ```
 
+
+
+
 ## Battery
 
 El módulo `battery` muestra qué tan cargada está la batería del dispositivo y su estado de carga actual. El módulo solamente es visible cuando la batería del dispositivo está por debajo del 10%.
+
+
 
 ### Opciones
 
@@ -504,7 +560,12 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -515,9 +576,14 @@ charging_symbol = '⚡️ '
 discharging_symbol = '💀 '
 ```
 
+
+
+
 ### Indicador de batería
 
 La opción de configuración `display` se utiliza para definir cuándo debe mostrarse el indicador de batería (threshold), cuál símbolo se utilizaría (symbol), y cómo sería (style). Si no se provee ningún valor para `display`. El valor predeterminado es el siguiente:
+
+
 
 ```toml
 [[battery.display]]
@@ -525,7 +591,10 @@ threshold = 10
 style = 'bold red'
 ```
 
+
 El valor por defecto para las opciones `charging_symbol` y `discharging_symbol` son respectivamente los valores `charging_symbol` y `discharging_symbol` de las opciones de `battery`.
+
+
 
 #### Opciones
 
@@ -538,24 +607,34 @@ La opción `display` es un arreglo de la siguiente tabla.
 | `charging_symbol`    |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `charging_symbol` de la batería.    |
 | `discharging_symbol` |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `discharging_symbol` de la batería. |
 
+
+
+
 #### Ejemplo
 
+
+
 ```toml
-[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # estilo 'bold red' y símbolo de descarga cuando la capacidad está entre 0% y 10%
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # estilo 'bold yellow' y símbolo 💦 cuando la capacidad está entre 10% y 30%
 threshold = 30
 style = 'bold yellow'
 discharging_symbol = '💦 '
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# cuando la capacidad es superior al 30%, el indicador de batería no se mostrará
 ```
+
+
+
 
 ## Buf
 
 El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+
+
 
 ### Opciones
 
@@ -570,6 +649,9 @@ El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). By d
 | `style`             | `'bold blue'`                                   | El estilo del módulo.                                |
 | `disabled`          | `false`                                         | Deshabilita el módulo `elixir`.                      |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -578,9 +660,14 @@ El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). By d
 | `symbol`  |          | Refleja el valor de la opción `symbol` |
 | `style`*  |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -589,6 +676,9 @@ El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). By d
 symbol = '🦬 '
 ```
 
+
+
+
 ## Bun
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -596,6 +686,8 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 - El directorio actual contiene un archivo `bun.lock`
 - El directorio actual contiene un archivo `bun.lockb`
 - El directorio actual contiene un archivo `bunfig.toml`
+
+
 
 ### Opciones
 
@@ -610,6 +702,9 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | `style`             | `'bold red'`                               | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                    | Disables the `bun` module.                                                              |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -618,11 +713,18 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplo
 
+
+
 #### Customize the format
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -631,9 +733,14 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 format = 'via [🍔 $version](bold green) '
 ```
 
+
+
+
 ## C
 
 El módulo `c` muestra información sobre su compilador de C. Por defecto el módulo se mostrará si el directorio actual contiene un archivo `.c` o `.h`.
+
+
 
 ### Opciones
 
@@ -649,6 +756,9 @@ El módulo `c` muestra información sobre su compilador de C. Por defecto el mó
 | `style`             | `'bold 149'`                                                                  | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                       | Deshabilita el módulo `c`.                                                              |
 
+
+
+
 ### Variables
 
 | Variable | Ejemplo | Descripción                            |
@@ -658,6 +768,9 @@ El módulo `c` muestra información sobre su compilador de C. Por defecto el mó
 | symbol   |         | Refleja el valor de la opción `symbol` |
 | style    |         | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Commands
 
 La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
@@ -666,7 +779,11 @@ Each command is represented as a list of the executable name, followed by its ar
 
 If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -675,11 +792,18 @@ If a C compiler is not supported by this module, you can request it by [raising 
 format = 'via [$name $version]($style)'
 ```
 
+
+
+
 ## CPP
 
 The `cpp` module shows some information about your `C++` compiler. By default, the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -695,6 +819,9 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | `style`             | `'bold 149'`                                                                     | El estilo del módulo.                                                                   |
 | `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                              |
 
+
+
+
 ### Variables
 
 | Variable | Ejemplo | Descripción                            |
@@ -704,6 +831,9 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 | symbol   |         | Refleja el valor de la opción `symbol` |
 | style    |         | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Commands
 
 La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
@@ -712,7 +842,11 @@ Each command is represented as a list of the executable name, followed by its ar
 
 If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -721,6 +855,9 @@ If a C++ compiler is not supported by this module, you can request it by [raisin
 disabled = false
 format = 'via [$name $version]($style)'
 ```
+
+
+
 
 ## Carácter
 
@@ -733,7 +870,11 @@ El caracter te dirá si el último comando fue exitoso o no. Se puede hacer de d
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
+
+
 > [!WARNING] `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+
+
 
 ### Opciones
 
@@ -748,15 +889,25 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 | `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.                        |
 | `disabled`                  | `false`              | Desactiva el módulo `character`.                                                                        |
 
+
+
+
 ### Variables
 
 | Variable | Ejemplo | Descripción                                                                                              |
 | -------- | ------- | -------------------------------------------------------------------------------------------------------- |
 | symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
+
+
+
 ### Ejemplos
 
+
+
 #### Con formato de error personalizado
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -766,7 +917,12 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
+
+
+
 #### Sin formato de error personalizado
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -776,7 +932,12 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
+
+
+
 #### Con formato de vim personalizado
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -785,12 +946,17 @@ error_symbol = '[➜](bold red) '
 vimcmd_symbol = '[V](bold green) '
 ```
 
+
+
+
 ## CMake
 
 El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://cmake.org/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
+
+
 
 ### Opciones
 
@@ -805,6 +971,9 @@ El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://
 | `style`             | `'bold blue'`                          | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                | Deshabilita el módulo `cmake`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -813,7 +982,10 @@ El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## COBOL / GNUCOBOL
 
@@ -821,6 +993,8 @@ El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módu
 
 - El directorio actual contiene cualquier archivo que termine en `.cob` o `.COB`
 - El directorio actual contiene cualquier archivo que termine en `.cbl` o `.CBL`
+
+
 
 ### Opciones
 
@@ -835,6 +1009,9 @@ El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módu
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `disabled`          | `false`                              | Deshabilita el módulo `cobol`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo    | Descripción                            |
@@ -843,17 +1020,24 @@ El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módu
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Tiempo de Ejecución
 
 El módulo `cmd_duration` muestra cuánto tiempo tomó ejecutarse el último comando. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time` si existe.
+
+
 
 > [!WARNING] Do not hook the DEBUG trap in Bash
 > 
 > If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Basta con definir los arreglos `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
+
+
 
 ### Opciones
 
@@ -868,6 +1052,9 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `min_time_to_notify`   | `45_000`                      | Duración más corta para la notificación (en milisegundos).                                                                                                                                                   |
 | `notification_timeout` |                               | Duración para mostrar la notificación (en milisegundos). Si no se establece, el tiempo de espera para notificar será determinado por el demonio. No todos los demonios de notificaciones honran esta opción. |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                                |
@@ -875,9 +1062,14 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | duration  | `16m40s` | El tiempo que tardó en ejecutar el comando |
 | style\* |          | Refleja el valor de la opción `style`      |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -887,11 +1079,18 @@ min_time = 500
 format = 'underwent [$duration](bold yellow)'
 ```
 
+
+
+
 ## Conda
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
+
+
 > [!TIP] This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`. If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
+
+
 
 ### Opciones
 
@@ -905,6 +1104,9 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Qué variable(s) de entorno deben activar este módulo. If it's a pixi environment, this module is not being triggered by default.                                                                                       |
 | `disabled`          | `false`                                | Deshabilita el módulo `conda`.                                                                                                                                                                                         |
 
+
+
+
 ### Variables
 
 | Variable    | Ejemplo      | Descripción                            |
@@ -913,9 +1115,14 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | symbol      |              | Refleja el valor de la opción `symbol` |
 | style\*   |              | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -924,9 +1131,14 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 format = '[$symbol$environment](dimmed green) '
 ```
 
+
+
+
 ## Contenedor
 
 El módulo `container` muestra el símbolo y nombre del contenedor, si está dentro de un contenedor.
+
+
 
 ### Opciones
 
@@ -937,6 +1149,9 @@ El módulo `container` muestra el símbolo y nombre del contenedor, si está den
 | `format`   | `'[$symbol \[$name\]]($style) '` | El formato del módulo.                                           |
 | `disabled` | `false`                            | Deshabilita el módulo `container`.                               |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo             | Descripción                            |
@@ -945,9 +1160,14 @@ El módulo `container` muestra el símbolo y nombre del contenedor, si está den
 | symbol    |                     | Refleja el valor de la opción `symbol` |
 | style\* |                     | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -956,12 +1176,17 @@ El módulo `container` muestra el símbolo y nombre del contenedor, si está den
 format = '[$symbol \[$name\]]($style) '
 ```
 
+
+
+
 ## Crystal
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
+
+
 
 ### Opciones
 
@@ -976,6 +1201,9 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `disabled`          | `false`                              | Deshabilita el módulo `crystal`.                                                        |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -984,9 +1212,14 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -995,11 +1228,16 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 format = 'via [✨ $version](bold blue) '
 ```
 
+
+
+
 ## Daml
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `daml.yaml`
+
+
 
 ### Opciones
 
@@ -1014,6 +1252,9 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `disabled`          | `false`                              | Deshabilita el módulo `daml`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -1022,9 +1263,14 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1033,6 +1279,9 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 format = 'via [D $version](bold bright-green) '
 ```
 
+
+
+
 ## Dart
 
 The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -1040,6 +1289,8 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 - El directorio actual contiene un archivo con la extensión `.dart`
 - El directorio actual contiene un directorio `.dart_tool`
 - El directorio actual contiene un archivo `pubspec.yaml`, `pubspec.yml` o `pubspec.lock`
+
+
 
 ### Opciones
 
@@ -1054,6 +1305,9 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `style`             | `'bold blue'`                                     | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                           | Deshabilita el módulo `dart`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -1062,9 +1316,14 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1073,11 +1332,16 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 format = 'via [🔰 $version](bold red) '
 ```
 
+
+
+
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+
+
 
 ### Opciones
 
@@ -1092,6 +1356,9 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `style`             | `'green bold'`                                                                       | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                              | Deshabilita el módulo `deno`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -1100,7 +1367,12 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1109,6 +1381,9 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 format = 'via [🦕 $version](green bold) '
 ```
 
+
+
+
 ## Directory
 
 El módulo `directory` muestra la ruta a tu directorio actual, truncado a tres carpetas padres. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
@@ -1116,6 +1391,8 @@ El módulo `directory` muestra la ruta a tu directorio actual, truncado a tres c
 When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
 Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
+
+
 
 ### Opciones
 
@@ -1135,16 +1412,44 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `home_symbol`            | `'~'`                                                                                                                        | El símbolo que indica el directorio de inicio.                                                                              |
 | `use_os_path_sep`        | `true`                                                                                                                       | Utiliza el separador de ruta del sistema operativo específico en lugar de usar siempre `/` (por ejemplo, `\` en Windows) |
 
+
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
 | Opción avanzada             | Predeterminado | Descripción                                                                                                                                                                                                                  |
 | --------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sustituciones`             |                | Una tabla de sustituciones que se deben hacer a la ruta.                                                                                                                                                                     |
+| `sustituciones`             |                | An Array or table of substitutions to be made to the path.                                                                                                                                                                   |
 | `fish_style_pwd_dir_length` | `0`            | El número de caracteres a usar al aplicar la lógica de ruta pwd del intérprete de comandos de Fish.                                                                                                                          |
 | `use_logical_path`          | `true`         | Si `true` renderiza la ruta lógica originada desde el intérprete de comandos a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Ten en cuenta que esto desactivará el estilo PWD de fish.
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Ten en cuenta que esto desactivará el estilo PWD de fish. It takes an array of the following key/value pairs:
+
+| Value   | Tipo    | Descripción                              |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
+
+
 
 ```toml
 [directory.substitutions]
@@ -1152,9 +1457,12 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 'src/com/long/java/path' = 'mypath'
 ```
 
+
 `fish_style_pwd_dir_length` interactúa con las opciones de truncamiento estándar de una manera que puede sorprenderse primero: si no es cero, los componentes de la ruta que normalmente se truncarían se muestran con esa cantidad de caracteres. Por ejemplo, la ruta `/built/this/city/on/rock/and/roll`, que normalmente se mostraría como `rock/and/roll`, se mostraría como `/b/t/c/o/rock/and/roll` con `fish_style_pwd_dir_length = 1`--los componentes de ruta que normalmente se eliminarían, se muestran con un solo carácter. Para `fish_style_pwd_dir_length = 2`, sería `/bu/th/ci/on/rock/and/roll`.
 
 </details>
+
+
 
 ### Variables
 
@@ -1162,6 +1470,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | --------- | --------------------- | ------------------------------------- |
 | ruta      | `'D:/Projects'`       | La ruta del directorio actual         |
 | style\* | `'black bold dimmed'` | Refleja el valor de la opción `style` |
+
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -1178,9 +1487,14 @@ Consideremos la ruta `/path/to/home/git_repo/src/lib`
 | style              | `'black bold dimmed'` | Refleja el valor de la opción `style`               |
 | repo_root_style  | `'underline white'`   | Estilo para el nombre del directorio raíz de git    |
 
+
 </details>
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1190,11 +1504,18 @@ truncation_length = 8
 truncation_symbol = '…/'
 ```
 
+
+
+
 ## Direnv
 
 The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -1214,6 +1535,9 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.                  |
 | `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.              |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo             | Descripción                             |
@@ -1224,9 +1548,14 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | symbol    |                     | Refleja el valor de la opción `symbol`. |
 | style\* | `red bold`          | Refleja el valor de la opción `style`.  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1235,9 +1564,14 @@ The `direnv` module shows the status of the current rc file if one is present. T
 disabled = false
 ```
 
+
+
+
 ## Contexto de Docker
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+
+
 
 ### Opciones
 
@@ -1252,6 +1586,9 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `style`             | `'blue bold'`                                                                                | El estilo del módulo.                                                                                                    |
 | `disabled`          | `false`                                                                                      | Deshabilita el módulo `docker_context`.                                                                                  |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo        | Descripción                            |
@@ -1260,9 +1597,14 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Refleja el valor de la opción `symbol` |
 | style\* |                | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1270,6 +1612,9 @@ The `docker_context` module shows the currently active [Docker context](https://
 [docker_context]
 format = 'via [🐋 $context](blue bold)'
 ```
+
+
+
 
 ## Dotnet
 
@@ -1292,6 +1637,8 @@ Internamente, este módulo utiliza su propio mecanismo para la detección de ver
 
 El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks)) cuando exista un archivo `.csproj` en el directorio actual.
 
+
+
 ### Opciones
 
 | Opción              | Predeterminado                                                                                          | Descripción                                                                             |
@@ -1306,6 +1653,9 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 | `style`             | `'bold blue'`                                                                                           | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                                 | Desactiva el módulo `dotnet`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                                                     |
@@ -1315,9 +1665,14 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 | symbol    |                  | Refleja el valor de la opción `symbol`                          |
 | style\* |                  | Refleja el valor de la opción `style`                           |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1328,11 +1683,16 @@ style = 'green'
 heuristic = false
 ```
 
+
+
+
 ## Elixir
 
 El módulo `elixir` muestra la versión instalada de [Elixir](https://elixir-lang.org/) y [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `mix.exs`.
+
+
 
 ### Opciones
 
@@ -1347,6 +1707,9 @@ El módulo `elixir` muestra la versión instalada de [Elixir](https://elixir-lan
 | `style`             | `'bold purple'`                                             | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                     | Deshabilita el módulo `elixir`.                                                         |
 
+
+
+
 ### Variables
 
 | Variable    | Ejemplo | Descripción                            |
@@ -1356,9 +1719,14 @@ El módulo `elixir` muestra la versión instalada de [Elixir](https://elixir-lan
 | symbol      |         | Refleja el valor de la opción `symbol` |
 | style\*   |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1366,6 +1734,9 @@ El módulo `elixir` muestra la versión instalada de [Elixir](https://elixir-lan
 [elixir]
 symbol = '🔮 '
 ```
+
+
+
 
 ## Elm
 
@@ -1376,6 +1747,8 @@ El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). 
 - El directorio actual contiene un archivo `.elm-version`
 - El directorio actual contiene una carpeta `elm-stuff`
 - El directorio actual contiene archivos `*.elm`
+
+
 
 ### Opciones
 
@@ -1390,6 +1763,9 @@ El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). 
 | `style`             | `'cyan bold'`                                      | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                            | Deshabilita el módulo `elm`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -1398,9 +1774,14 @@ El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). 
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1409,6 +1790,9 @@ El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). 
 format = 'via [ $version](cyan bold) '
 ```
 
+
+
+
 ## Variable de entorno
 
 El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
@@ -1416,7 +1800,11 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración se encuentra `por defecto`
 
+
+
 > [!TIP] The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+
+
 
 > [!TIP] Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 > 
@@ -1427,6 +1815,8 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 > # ~/.config/starship.toml
 > 
 > [env_var.USER] default = 'unknown user' ```
+
+
 
 ### Opciones
 
@@ -1439,6 +1829,9 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 | `description` | `"<env_var module>"`    | La descripción del módulo que se muestra al ejecutar `starship explain`.               |
 | `disabled`    | `false`                       | Deshabilita el módulo `env_var`.                                                       |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo                                     | Descripción                                 |
@@ -1447,9 +1840,14 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 | symbol    |                                             | Refleja el valor de la opción `symbol`      |
 | style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`       |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1459,7 +1857,10 @@ variable = 'SHELL'
 default = 'unknown shell'
 ```
 
+
 Mostrando múltiples variables de entorno:
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1471,12 +1872,17 @@ default = 'unknown shell'
 default = 'unknown user'
 ```
 
+
+
+
 ## Erlang
 
 El módulo `erlang` muestra la versión instalada de [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
+
+
 
 ### Opciones
 
@@ -1491,6 +1897,9 @@ El módulo `erlang` muestra la versión instalada de [Erlang/OTP](https://erlang
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                            |
 | `disabled`          | `false`                              | Deshabilita el módulo `erlang`.                                                         |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -1499,9 +1908,14 @@ El módulo `erlang` muestra la versión instalada de [Erlang/OTP](https://erlang
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1510,11 +1924,16 @@ El módulo `erlang` muestra la versión instalada de [Erlang/OTP](https://erlang
 format = 'via [e $version](bold red) '
 ```
 
+
+
+
 ## Fennel
 
 The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a file with the `.fnl` extension
+
+
 
 ### Opciones
 
@@ -1529,6 +1948,9 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                            |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -1537,9 +1959,14 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1548,9 +1975,14 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 symbol = '⫰ '
 ```
 
+
+
+
 ## Rellenar
 
 El módulo `fill` llena cualquier espacio extra en la línea con un símbolo. Si múltiples módulos `fill` están presentes en una línea, dividirán el espacio equitativamente entre ellos. Esto es útil para alinear otros módulos.
+
+
 
 ### Opciones
 
@@ -1560,7 +1992,12 @@ El módulo `fill` llena cualquier espacio extra en la línea con un símbolo. Si
 | `style`    | `'bold black'` | El estilo del módulo.                      |
 | `disabled` | `false`        | Deshabilita el módulo `fill`               |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1571,15 +2008,23 @@ symbol = '-'
 style = 'bold green'
 ```
 
+
 Produce un prompt que se ve como:
+
+
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
 
+
+
+
 ## Fortran
 
 The `fortran` module shows the current compiler version of Fortran.
+
+
 
 ### Opciones
 
@@ -1595,6 +2040,9 @@ The `fortran` module shows the current compiler version of Fortran.
 | `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | Cómo detectar cuál compilador es                                                        |
 | `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -1604,7 +2052,10 @@ The `fortran` module shows the current compiler version of Fortran.
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Commands
 
@@ -1614,11 +2065,17 @@ Each command is represented as a list of the executable name, followed by its ar
 
 If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
+
+
 ## Fossil Branch
 
 The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -1631,6 +2088,9 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | `truncation_symbol` | `'…'`                            | El símbolo usado para indicar que un nombre de rama fue truncado. You can use `''` for no symbol. |
 | `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                              |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -1639,9 +2099,14 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1652,11 +2117,18 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+
+
+
 ## Fossil Metrics
 
 The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -1668,6 +2140,9 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 | `only_nonzero_diffs` | `true`                                                       | Mostrar sólo el estado de los elementos cambiados. |
 | `disabled`           | `true`                                                       | Disables the `fossil_metrics` module.              |
 
+
+
+
 ### Variables
 
 | Variable          | Ejemplo | Descripción                                   |
@@ -1677,9 +2152,14 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 | added_style\*   |         | Refleja el valor de la opción `added_style`   |
 | deleted_style\* |         | Refleja el valor de la opción `deleted_style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1689,11 +2169,16 @@ added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
+
+
+
 ## Google Cloud (`gcloud`)
 
 El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](https://cloud.google.com/sdk/gcloud). Esto se basa en el archivo `~/.config/gcloud/active_config`, el archivo `~/.config/gcloud/configurations/config_{CONFIG NAME}` y la variable de entorno `CLOUDSDK_CONFIG`.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
+
+
 
 ### Opciones
 
@@ -1707,6 +2192,9 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | `style`           | `'bold blue'`                                              | El estilo del módulo.                                        |
 | `disabled`        | `false`                                                    | Deshabilita el módulo `gcloud`.                              |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo       | Descripción                                                                   |
@@ -1719,11 +2207,18 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | symbol    |               | Refleja el valor de la opción `symbol`                                        |
 | style\* |               | Refleja el valor de la opción `style`                                         |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplos
 
+
+
 #### Mostrar cuenta y proyecto
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1732,7 +2227,12 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
+
+
+
 #### Mostrar solo el nombre de la configuración activa
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1742,7 +2242,12 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
+
+
+
 #### Mostrar los alias de cuenta y región
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1754,7 +2259,12 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
+
+
+
 #### Mostrar cuenta y proyecto con alias
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1765,9 +2275,14 @@ format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 very-long-project-name = 'vlpn'
 ```
 
+
+
+
 ## Rama Git
 
 El módulo `git_branch` muestra la rama activa del repositorio en tu directorio actual.
+
+
 
 ### Opciones
 
@@ -1784,6 +2299,9 @@ El módulo `git_branch` muestra la rama activa del repositorio en tu directorio 
 | `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                                    |
 | `disabled`           | `false`                                           | Deshabilita el módulo `git_branch`.                                                                 |
 
+
+
+
 ### Variables
 
 | Variable      | Ejemplo   | Descripción                                                                                                    |
@@ -1794,9 +2312,14 @@ El módulo `git_branch` muestra la rama activa del repositorio en tu directorio 
 | symbol        |           | Refleja el valor de la opción `symbol`                                                                         |
 | style\*     |           | Refleja el valor de la opción `style`                                                                          |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1808,9 +2331,14 @@ truncation_symbol = ''
 ignore_branches = ['master', 'main']
 ```
 
+
+
+
 ## Git commit
 
 El módulo `git_commit` muestra el hash de la confirmación actual y también la etiqueta (si existe) del repositorio en su directorio actual.
+
+
 
 ### Opciones
 
@@ -1825,6 +2353,9 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 | `tag_symbol`         | `' 🏷  '`                       | Símbolo de etiqueta prefijando la información mostrada                                                 |
 | `disabled`           | `false`                        | Deshabilita el módulo `git_commit`.                                                                    |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                                  |
@@ -1833,9 +2364,14 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 | etiqueta  | `v1.0.0`  | The tag name if showing tag info is enabled. |
 | style\* |           | Refleja el valor de la opción `style`        |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1845,9 +2381,14 @@ commit_hash_length = 4
 tag_symbol = '🔖 '
 ```
 
+
+
+
 ## Git State
 
 El módulo `git_state` se mostrará en directorios que son parte de un repositorio git, y donde hay una operación en curso, tales como: _REBASING_, _BISECTING_, etc. Si hay información de progreso (por ejemplo, REBASING 3/10), esa información será mostrada también.
+
+
 
 ### Opciones
 
@@ -1864,6 +2405,9 @@ El módulo `git_state` se mostrará en directorios que son parte de un repositor
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                              |
 | `disabled`     | `false`                                                         | Deshabilita el módulo `git_state`.                                                                  |
 
+
+
+
 ### Variables
 
 | Variable         | Ejemplo    | Descripción                           |
@@ -1873,9 +2417,14 @@ El módulo `git_state` se mostrará en directorios que son parte de un repositor
 | progress_total   | `2`        | El progreso total de la operación     |
 | style\*        |            | Refleja el valor de la opción `style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1885,11 +2434,18 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = '[🍒 PICKING](bold red)'
 ```
 
+
+
+
 ## Métricas de Git
 
 El módulo `git_metrics` mostrará el número de líneas añadidas y eliminadas en el repositorio git actual.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -1902,6 +2458,9 @@ El módulo `git_metrics` mostrará el número de líneas añadidas y eliminadas 
 | `disabled`           | `true`                                                       | Deshabilita el módulo `git_metrics`.               |
 | `ignore_submodules`  | `false`                                                      | Ignorar cambios a los submódulos                   |
 
+
+
+
 ### Variables
 
 | Variable          | Ejemplo | Descripción                                   |
@@ -1911,9 +2470,14 @@ El módulo `git_metrics` mostrará el número de líneas añadidas y eliminadas 
 | added_style\*   |         | Refleja el valor de la opción `added_style`   |
 | deleted_style\* |         | Refleja el valor de la opción `deleted_style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -1923,52 +2487,79 @@ added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
+
+
+
 ## Git status
 
 El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
 
+
+
 > [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. Puedes desactivar el módulo o utilizar la opción `windows_starship` para usar un ejecutable de la Starship nativa de Windows para calcular `git_status` para esas rutas.
+
+
 
 ### Opciones
 
-| Opción               | Predeterminado                                  | Descripción                                                                                                                               |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
-| `conflicted`         | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
-| `ahead`              | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
-| `behind`             | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
-| `diverged`           | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
-| `up_to_date`         | `''`                                            | El formato de `up_to_date`                                                                                                                |
-| `sin seguimiento`    | `'?'`                                           | El formato de `untracked`                                                                                                                 |
-| `stashed`            | `'\$'`                                         | El formato de `stashed`                                                                                                                   |
-| `modificado`         | `'!'`                                           | El formato de `modified`                                                                                                                  |
-| `staged`             | `'+'`                                           | El formato de `staged`                                                                                                                    |
-| `renamed`            | `'»'`                                           | El formato de `renamed`                                                                                                                   |
-| `eliminado`          | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                                               |
-| `style`              | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
-| `ignore_submodules`  | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
-| `disabled`           | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
-| `windows_starship`   |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
+| Opción                 | Predeterminado                                  | Descripción                                                                                                                               |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
+| `conflicted`           | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
+| `ahead`                | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
+| `behind`               | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
+| `diverged`             | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
+| `up_to_date`           | `''`                                            | El formato de `up_to_date`                                                                                                                |
+| `sin seguimiento`      | `'?'`                                           | El formato de `untracked`                                                                                                                 |
+| `stashed`              | `'\$'`                                         | El formato de `stashed`                                                                                                                   |
+| `modificado`           | `'!'`                                           | El formato de `modified`                                                                                                                  |
+| `staged`               | `'+'`                                           | El formato de `staged`                                                                                                                    |
+| `renamed`              | `'»'`                                           | El formato de `renamed`                                                                                                                   |
+| `eliminado`            | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                                               |
+| `style`                | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
+| `ignore_submodules`    | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                                                            |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                                                          |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                                                         |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                                                      |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                                               |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                                                             |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                                                            |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                                                         |
+| `disabled`             | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
+| `windows_starship`     |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
+
+
+
 
 ### Variables
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable          | Descripción                                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `all_status`      | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                                  |
-| `ahead_behind`    | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
-| `conflicted`      | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
-| `sin seguimiento` | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
-| `stashed`         | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.                          |
-| `modificado`      | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                                     |
-| `staged`          | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                                           |
-| `renamed`         | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                                   |
-| `eliminado`       | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                                              |
-| `typechanged`     | Displays `typechanged` when a file's type has been changed in the staging area.                                          |
-| style\*         | Refleja el valor de la opción `style`                                                                                    |
+| Variable               | Descripción                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                                  |
+| `ahead_behind`         | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
+| `conflicted`           | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
+| `sin seguimiento`      | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
+| `stashed`              | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.                          |
+| `modificado`           | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                                     |
+| `staged`               | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                                           |
+| `renamed`              | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                                   |
+| `eliminado`            | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                                              |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                                          |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                                       |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                                         |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                                       |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                            |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                               |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                                 |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                               |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                                    |
+| style\*              | Refleja el valor de la opción `style`                                                                                    |
+
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -1979,13 +2570,19 @@ Las siguientes variables pueden ser usadas en `diverged`:
 | `ahead_count`  | Número de confirmaciones por delante de la rama de seguimiento |
 | `behind_count` | Número de confirmaciones detrás de la rama de seguimiento      |
 
-Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` y `deleted`:
+
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Variable | Descripción                   |
 | -------- | ----------------------------- |
 | `count`  | Mostrar el número de archivos |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2004,7 +2601,10 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
+
 Muestra el conteo delante/detrás de la rama que está siendo rastreada
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2015,7 +2615,10 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 ```
 
+
 Usar el ejecutable de Starship de Windows en las rutas de Windows en WSL
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2024,12 +2627,17 @@ Usar el ejecutable de Starship de Windows en las rutas de Windows en WSL
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
+
+
+
 ## Gleam
 
 The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `gleam.toml`
 - The current directory contains a file with the `.gleam` extension
+
+
 
 ### Opciones
 
@@ -2043,6 +2651,9 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | `style`             | `'bold #FFAFF3'`                     | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Disables the `gleam` module.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2051,9 +2662,14 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2061,6 +2677,9 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 [gleam]
 format = 'via [⭐ $version](bold red) '
 ```
+
+
+
 
 ## Go
 
@@ -2076,6 +2695,8 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 - El directorio actual contiene un directorio `Godeps`
 - El directorio actual contiene un archivo con la extensión `.go`
 
+
+
 ### Opciones
 
 | Opción              | Predeterminado                                                                            | Descripción                                                                                                |
@@ -2090,6 +2711,9 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
 | `disabled`          | `false`                                                                                   | Deshabilita el módulo de `golang`.                                                                         |
 
+
+
+
 ### Variables
 
 | Variable    | Ejemplo   | Descripción                                                                                                                                 |
@@ -2099,9 +2723,14 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 | symbol      |           | Refleja el valor de la opción `symbol`                                                                                                      |
 | style\*   |           | Refleja el valor de la opción `style`                                                                                                       |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2110,7 +2739,12 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 format = 'via [🏎💨 $version](bold cyan) '
 ```
 
+
+
+
 ### Using `mod_version`
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2119,9 +2753,14 @@ format = 'via [🏎💨 $version](bold cyan) '
 format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
+
+
+
 ## Guix-shell
 
 The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+
+
 
 ### Opciones
 
@@ -2132,6 +2771,9 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | `style`    | `'yellow bold'`            | El estilo del módulo.                                  |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -2139,9 +2781,14 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2150,6 +2797,9 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 disabled = true
 format = 'via [🐂](yellow bold) '
 ```
+
+
+
 
 ## Gradle
 
@@ -2161,6 +2811,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 - The current directory contains a file ending with `.gradle` or `.gradle.kts`.
 
 The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+
 
 ### Opciones
 
@@ -2176,6 +2828,9 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | `disabled`          | `false`                              | Deshabilita el módulo `gradle`.                                                         |
 | `recursivo`         | `false`                              | Enables recursive finding for the `gradle` directory.                                   |
 
+
+
+
 ### Variables
 
 | Variable | Ejemplo  | Descripción                            |
@@ -2184,7 +2839,10 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | symbol   |          | Refleja el valor de la opción `symbol` |
 | style*   |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Haskell
 
@@ -2194,6 +2852,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - El directorio actual contiene un archivo `stack.yaml`
 - El directorio actual contiene cualquier archivo `.hs`, `.cabal` o `.hs-boot`
+
+
 
 ### Opciones
 
@@ -2207,6 +2867,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `style`             | `'bold purple'`                      | El estilo del módulo.                                      |
 | `disabled`          | `false`                              | Deshabilita el módulo `haskell`.                           |
 
+
+
+
 ### Variables
 
 | Variable       | Ejemplo     | Descripción                                                                          |
@@ -2217,7 +2880,10 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol         |             | Refleja el valor de la opción `symbol`                                               |
 | style\*      |             | Refleja el valor de la opción `style`                                                |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Haxe
 
@@ -2226,6 +2892,8 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 - The current directory contains a `project.xml`, `Project.xml`, `application.xml`, `haxelib.json`, `hxformat.json` or `.haxerc` file
 - The current directory contains a `.haxelib` or a `haxe_libraries` directory
 - The current directory contains a file with the `.hx` or `.hxml` extension
+
+
 
 ### Opciones
 
@@ -2240,6 +2908,9 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `style`             | `'bold fg:202'`                                                                                 | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                         | Deshabilita el módulo `haxe`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2248,9 +2919,14 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2259,12 +2935,17 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 format = "via [⌘ $version](bold fg:202) "
 ```
 
+
+
+
 ## Helm
 
 El módulo `helm` muestra la versión instalada de [Helm](https://helm.sh/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - El directorio actual contiene un archivo `Chart.yaml`
+
+
 
 ### Opciones
 
@@ -2279,6 +2960,9 @@ El módulo `helm` muestra la versión instalada de [Helm](https://helm.sh/). Por
 | `style`             | `'bold white'`                       | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `helm`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2287,9 +2971,14 @@ El módulo `helm` muestra la versión instalada de [Helm](https://helm.sh/). Por
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2298,9 +2987,14 @@ El módulo `helm` muestra la versión instalada de [Helm](https://helm.sh/). Por
 format = 'via [⎈ $version](bold white) '
 ```
 
+
+
+
 ## Hostname
 
 El módulo `hostname` muestra el nombre de host del sistema.
+
+
 
 ### Opciones
 
@@ -2315,6 +3009,9 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `disabled`        | `false`                                | Deshabilita el módulo `hostname`.                                                                                                                                 |
 | `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.                                        |
 
+
+
+
 ### Variables
 
 | Variable        | Ejemplo       | Descripción                                                    |
@@ -2323,11 +3020,18 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | style\*       |               | Refleja el valor de la opción `style`                          |
 | ssh_symbol      | `'🌏 '`        | El símbolo a representar cuando está conectado a la sesión SSH |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplos
 
+
+
 #### Mostrar siempre el nombre del host
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2339,7 +3043,12 @@ trim_at = '.companyname.com'
 disabled = false
 ```
 
+
+
+
 #### Ocultar el nombre de host en sesiones remotas de tmux
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2350,7 +3059,12 @@ detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
+
+
+
 #### Replace the hostname with a nickname
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2358,12 +3072,17 @@ disabled = false
 aliases = { "Max's MacBook Pro" = "home" }
 ```
 
+
+
+
 ## Java
 
 El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com/java/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`, `.clj` o `.cljc`
+
+
 
 ### Opciones
 
@@ -2378,6 +3097,9 @@ El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com
 | `style`             | `'red dimmed'`                                                                                                        | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                                               | Deshabilita el módulo `java`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -2386,9 +3108,14 @@ El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2396,6 +3123,9 @@ El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com
 [java]
 symbol = '🌟 '
 ```
+
+
+
 
 ## Trabajos
 
@@ -2407,9 +3137,15 @@ La funcionalidad por defecto es:
 - 1 tarea -> `symbol` se muestra.
 - 2 tareas o más -> `symbol` + `number` son mostrados.
 
+
+
 > [!WARNING] This module is not supported on tcsh.
 
+
+
 > [!WARNING] The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+
 
 ### Opciones
 
@@ -2423,7 +3159,10 @@ La funcionalidad por defecto es:
 | `style`            | `'bold blue'`                 | El estilo del módulo.                                                              |
 | `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                                        |
 
+
 *: Esta opción está desaprobada, por favor utiliza las opciones `number_threshold` y `symbol_threshold` en su lugar.
+
+
 
 ### Variables
 
@@ -2433,9 +3172,14 @@ La funcionalidad por defecto es:
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplos
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2446,13 +3190,21 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
+
+
+
 #### Changing process grouping behavior in fish
 
 When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
 
+
+
 ```fish
 set -g __starship_fish_use_job_groups "false"
 ```
+
+
+
 
 ## Julia
 
@@ -2461,6 +3213,8 @@ El módulo `julia` muestra la versión instalada de [Julia](https://julialang.or
 - El directorio actual contiene un archivo `Project.toml`
 - El directorio actual contiene un archivo `Manifest.toml`
 - El directorio actual contiene un archivo con la extensión `.jl`
+
+
 
 ### Opciones
 
@@ -2475,6 +3229,9 @@ El módulo `julia` muestra la versión instalada de [Julia](https://julialang.or
 | `style`             | `'bold purple'`                      | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `julia`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2483,9 +3240,14 @@ El módulo `julia` muestra la versión instalada de [Julia](https://julialang.or
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2494,11 +3256,16 @@ El módulo `julia` muestra la versión instalada de [Julia](https://julialang.or
 symbol = '∴ '
 ```
 
+
+
+
 ## Kotlin
 
 El módulo `kotlin` muestra la versión instalada de [Kotlin](https://kotlinlang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.kt` o un `.kts`
+
+
 
 ### Opciones
 
@@ -2514,6 +3281,9 @@ El módulo `kotlin` muestra la versión instalada de [Kotlin](https://kotlinlang
 | `kotlin_binary`     | `'kotlin'`                           | Configura el binario kotlin que Starship ejecuta al obtener la versión.                 |
 | `disabled`          | `false`                              | Deshabilita el módulo `kotlin`.                                                         |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -2522,9 +3292,14 @@ El módulo `kotlin` muestra la versión instalada de [Kotlin](https://kotlinlang
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2532,6 +3307,9 @@ El módulo `kotlin` muestra la versión instalada de [Kotlin](https://kotlinlang
 [kotlin]
 symbol = '🅺 '
 ```
+
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2541,15 +3319,24 @@ symbol = '🅺 '
 kotlin_binary = 'kotlinc'
 ```
 
+
+
+
 ## Kubernetes
 
 Muestra el nombre actual del [contexto de Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) y, si se establece, el espacio de nombres, el usuario y el clúster del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 > 
 > When the module is enabled it will always be active, unless any of `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions or one of the environmental variables has been set.
 
+
+
 ### Opciones
+
+
 
 > [!WARNING] The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
 
@@ -2567,6 +3354,7 @@ Muestra el nombre actual del [contexto de Kubernetes](https://kubernetes.io/docs
 | `contextos`         | `[]`                                                 | Customized styles and symbols for specific contexts.                        |
 | `disabled`          | `true`                                               | Desactiva el módulo `kubernetes`.                                           |
 
+
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
 To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
@@ -2580,7 +3368,10 @@ To customize the style of the module for specific environments, use the followin
 | `style`           | The style for the module when using this context. If not set, will use module's style.   |
 | `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
 
+
 Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern` regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N` (see example below and the [rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
+
+
 
 ### Variables
 
@@ -2593,9 +3384,14 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 | symbol    |                      | Refleja el valor de la opción `symbol`                      |
 | style\* |                      | Refleja el valor de la opción `style`                       |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2608,7 +3404,10 @@ contexts = [
 ]
 ```
 
+
 Only show the module in directories that contain a `k8s` file.
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2618,9 +3417,14 @@ disabled = false
 detect_files = ['k8s']
 ```
 
+
+
+
 #### Configuración específica del Contexto de Kubernetes
 
 The `contexts` configuration option is used to customise what the current Kubernetes context name looks like (style and symbol) if the name matches the defined regular expression.
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2650,9 +3454,14 @@ context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
 ```
 
+
+
+
 ## Salto de línea
 
 El módulo `line_break` separa el prompt en dos líneas.
+
+
 
 ### Opciones
 
@@ -2660,7 +3469,12 @@ El módulo `line_break` separa el prompt en dos líneas.
 | ---------- | -------------- | ------------------------------------------------------------------------------ |
 | `disabled` | `false`        | Deshabilita el módulo `line_break`, haciendo que el prompt sea una sola línea. |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2669,11 +3483,18 @@ El módulo `line_break` separa el prompt en dos líneas.
 disabled = true
 ```
 
+
+
+
 ## IP local
 
 El módulo `localip` muestra la dirección IPv4 de la interfaz de red principal.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -2684,6 +3505,9 @@ El módulo `localip` muestra la dirección IPv4 de la interfaz de red principal.
 | `style`    | `'bold yellow'`           | El estilo del módulo.                                                   |
 | `disabled` | `true`                    | Deshabilita el módulo `localip`.                                        |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                           |
@@ -2691,9 +3515,14 @@ El módulo `localip` muestra la dirección IPv4 de la interfaz de red principal.
 | localipv4 | 192.168.1.13 | Contiene la dirección IPv4 primaria   |
 | style\* |              | Refleja el valor de la opción `style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2704,6 +3533,9 @@ format = '@[$localipv4](bold red) '
 disabled = false
 ```
 
+
+
+
 ## Lua
 
 El módulo `lua` muestra la versión instalada de [Lua](http://www.lua.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -2711,6 +3543,8 @@ El módulo `lua` muestra la versión instalada de [Lua](http://www.lua.org/). Po
 - El directorio actual contiene un archivo `.lua-version`
 - El directorio actual contiene un directorio `lua`
 - El directorio actual contiene un archivo con la extensión `.lua`
+
+
 
 ### Opciones
 
@@ -2726,6 +3560,9 @@ El módulo `lua` muestra la versión instalada de [Lua](http://www.lua.org/). Po
 | `lua_binary`        | `'lua'`                              | Configura el binario lua que Starship ejecuta al obtener la versión.                    |
 | `disabled`          | `false`                              | Deshabilita el módulo `lua`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2734,9 +3571,14 @@ El módulo `lua` muestra la versión instalada de [Lua](http://www.lua.org/). Po
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2745,13 +3587,63 @@ El módulo `lua` muestra la versión instalada de [Lua](http://www.lua.org/). Po
 format = 'via [🌕 $version](bold blue) '
 ```
 
+
+
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+
+
+### Opciones
+
+| Opción              | Predeterminado                       | Descripción                                                                             |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
+| `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                                       |
+| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `['pom.xml']`                        | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `['.mvn']`                           | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `'bold bright-cyan'`                 | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                              | Disables the `maven` module.                                                            |
+| `recursivo`         | `false`                              | Enables recursive finding for the `.mvn` directory.                                     |
+
+
+
+
+### Variables
+
+| Variable | Ejemplo  | Descripción                            |
+| -------- | -------- | -------------------------------------- |
+| version  | `v3.2.0` | The version of `maven`                 |
+| symbol   |          | Refleja el valor de la opción `symbol` |
+| style*   |          | Refleja el valor de la opción `style`  |
+
+
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
+
 ## Uso de la memoria
 
 El módulo `memory_usage` muestra la memoria del sistema actual y el uso de la memoria de intercambio.
 
 Por defecto, el uso de la memoria de intercambio se muestra si no es cero.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -2762,6 +3654,9 @@ Por defecto, el uso de la memoria de intercambio se muestra si no es cero.
 | `symbol`    | `'🐏'`                                           | El símbolo usado antes de mostrar el uso de memoria.          |
 | `style`     | `'bold dimmed white'`                           | El estilo del módulo.                                         |
 | `disabled`  | `true`                                          | Desactiva el módulo `memory_usage`.                           |
+
+
+
 
 ### Variables
 
@@ -2774,9 +3669,14 @@ Por defecto, el uso de la memoria de intercambio se muestra si no es cero.
 | symbol           | `🐏`           | Refleja el valor de la opción `symbol`                                             |
 | style\*        |               | Refleja el valor de la opción `style`                                              |
 
+
 *: Está variable solo puede utilizarse como parte de una cadena de estilo *\*: La información del archivo SWAP solo se muestra si se detecta en el sistema actual
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2788,11 +3688,16 @@ symbol = ' '
 style = 'bold dimmed green'
 ```
 
+
+
+
 ## Meson
 
 The `meson` module shows the current Meson developer environment status.
 
 By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
+
+
 
 ### Opciones
 
@@ -2805,6 +3710,9 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `style`             | `'blue bold'`                      | El estilo del módulo.                                                                     |
 | `disabled`          | `false`                            | Deshabilita el módulo `meson`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo    | Descripción                            |
@@ -2813,9 +3721,14 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | symbol    | `🐏`        | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2827,11 +3740,18 @@ symbol = ' '
 style = 'bold dimmed green'
 ```
 
+
+
+
 ## Rama Mercurial
 
 The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -2844,6 +3764,9 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `truncation_symbol` | `'…'`                                     | El símbolo usado para indicar que un nombre de rama fue truncado.                                   |
 | `disabled`          | `true`                                    | Deshabilita el módulo `hg_branch`.                                                                  |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -2853,9 +3776,14 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2866,11 +3794,18 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+
+
+
 ## Estado Mercurial
 
 The `hg_state` module will show in directories which are part of a mercurial repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -2888,6 +3823,9 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 | `format`     | `'\([$state]($style)\) '` | El formato del módulo.                                                    |
 | `disabled`   | `true`                      | Desactiva el módulo `git_state`.                                          |
 
+
+
+
 ### Variables
 
 | Variable         | Ejemplo    | Descripción                           |
@@ -2897,13 +3835,20 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 | progress_total   | `2`        | El progreso total de la operación     |
 | style\*        |            | Refleja el valor de la opción `style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Mise
 
 The `mise` module shows the current mise health as reported by running `mise doctor`.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -2919,6 +3864,9 @@ The `mise` module shows the current mise health as reported by running `mise doc
 | `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.      |
 | `disabled`          | `true`                                                               | Disables the `mise` module.                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -2927,9 +3875,14 @@ The `mise` module shows the current mise health as reported by running `mise doc
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2938,9 +3891,14 @@ The `mise` module shows the current mise health as reported by running `mise doc
 health = 'ready'
 ```
 
+
+
+
 ## Mojo
 
 The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+
 
 ### Opciones
 
@@ -2954,6 +3912,9 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | `detect_files`      | `[]`                                  | Qué nombres de archivo deberían activar este módulo.   |
 | `detect_folders`    | `[]`                                  | Qué carpetas deberían activar este módulo.             |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -2962,9 +3923,14 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -2973,9 +3939,14 @@ The `mojo` module shows the current version of [Mojo programming language](https
 format = 'via [mojo ($version )($hash )]($style)'
 ```
 
+
+
+
 ## NATS
 
 The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+
 
 ### Opciones
 
@@ -2986,6 +3957,9 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 | `format`   | `'[$symbol$name]($style)'` | El formato del módulo.                                       |
 | `disabled` | `false`                    | Disables the `nats` module.                                  |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo     | Descripción                            |
@@ -2994,7 +3968,12 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 | symbol    |             | Refleja el valor de la opción `symbol` |
 | style\* |             | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 [nats]
@@ -3002,9 +3981,14 @@ format = '[$symbol]($style)'
 style = 'bold purple'
 ```
 
+
+
+
 ## Network Namespace
 
 The `netns` module shows the current network namespace. This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+
 
 ### Opciones
 
@@ -3015,6 +3999,9 @@ The `netns` module shows the current network namespace. This uses `ip netns iden
 | `style`    | `'blue bold dimmed'`              | El estilo del módulo.                                             |
 | `disabled` | `false`                           | Disables the `netns` module.                                      |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo    | Descripción                               |
@@ -3023,7 +4010,12 @@ The `netns` module shows the current network namespace. This uses `ip netns iden
 | symbol    |            | Refleja el valor de la opción `symbol`    |
 | style\* |            | Refleja el valor de la opción `style`     |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3033,6 +4025,9 @@ style = 'bold yellow'
 symbol = '🌐 '
 ```
 
+
+
+
 ## Nim
 
 El módulo `nim` muestra la versión instalada de [Nim](https://nim-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -3041,6 +4036,8 @@ El módulo `nim` muestra la versión instalada de [Nim](https://nim-lang.org/). 
 - El directorio actual contiene un archivo con la extensión `.nim`
 - El directorio actual contiene un archivo con la extensión `.nims`
 - El directorio actual contiene un archivo con la extensión `.nimble`
+
+
 
 ### Opciones
 
@@ -3055,6 +4052,9 @@ El módulo `nim` muestra la versión instalada de [Nim](https://nim-lang.org/). 
 | `style`             | `'bold yellow'`                      | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `nim`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -3063,9 +4063,14 @@ El módulo `nim` muestra la versión instalada de [Nim](https://nim-lang.org/). 
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3075,9 +4080,14 @@ style = 'yellow'
 symbol = '🎣 '
 ```
 
+
+
+
 ## Nix-shell
 
 El módulo `nix_shell` muestra el entorno [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). El módulo se mostrará dentro de un entorno nix-shell.
+
+
 
 ### Opciones
 
@@ -3092,6 +4102,9 @@ El módulo `nix_shell` muestra el entorno [nix-shell](https://nixos.org/guides/n
 | `disabled`    | `false`                                        | Desactiva el módulo `nix_shell`.                                                 |
 | `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.                |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -3101,9 +4114,14 @@ El módulo `nix_shell` muestra el entorno [nix-shell](https://nixos.org/guides/n
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3115,6 +4133,9 @@ pure_msg = '[pure shell](bold green)'
 unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
+
+
+
 
 ## Node.js
 
@@ -3128,6 +4149,8 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 - El directorio actual contiene un archivo con la extensión `.ts`, `.mts` o `.cts`
 
 Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+
+
 
 ### Opciones
 
@@ -3143,6 +4166,9 @@ Additionally, the module will be hidden by default if the directory contains a `
 | `disabled`          | `false`                                       | Deshabilita el módulo `nodejs`.                                                                                 |
 | `not_capable_style` | `'bold red'`                                  | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de Node.js. |
 
+
+
+
 ### Variables
 
 | Variable        | Ejemplo       | Descripción                                                                                                                                               |
@@ -3152,9 +4178,14 @@ Additionally, the module will be hidden by default if the directory contains a `
 | symbol          |               | Refleja el valor de la opción `symbol`                                                                                                                    |
 | style\*       |               | Refleja el valor de la opción `style`                                                                                                                     |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3162,6 +4193,9 @@ Additionally, the module will be hidden by default if the directory contains a `
 [nodejs]
 format = 'via [🤖 $version](bold green) '
 ```
+
+
+
 
 ## OCamlz
 
@@ -3173,6 +4207,8 @@ El módulo `ocaml` muestra la versión instalada de [OCaml](https://ocaml.org/).
 - El directorio actual contiene un archivo `jbuild` o `jbuild-ignore`
 - El directorio actual contiene un archivo `.merlin`
 - El directorio actual contiene un archivo con la extensión `.ml`, `.mli`, `.re` o `.rei`
+
+
 
 ### Opciones
 
@@ -3189,6 +4225,9 @@ El módulo `ocaml` muestra la versión instalada de [OCaml](https://ocaml.org/).
 | `style`                   | `'bold yellow'`                                                            | El estilo del módulo.                                                                   |
 | `disabled`                | `false`                                                                    | Deshabilita el módulo `ocaml`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable         | Ejemplo      | Descripción                                                                 |
@@ -3199,9 +4238,14 @@ El módulo `ocaml` muestra la versión instalada de [OCaml](https://ocaml.org/).
 | symbol           |              | Refleja el valor de la opción `symbol`                                      |
 | style\*        |              | Refleja el valor de la opción `style`                                       |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3210,9 +4254,14 @@ El módulo `ocaml` muestra la versión instalada de [OCaml](https://ocaml.org/).
 format = 'via [🐪 $version]($style) '
 ```
 
+
+
+
 ## Odin
 
 The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+
 
 ### Opciones
 
@@ -3227,6 +4276,9 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.   |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.             |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo       | Descripción                            |
@@ -3235,9 +4287,14 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 | symbol    |               | Refleja el valor de la opción `symbol` |
 | style\* |               | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3247,9 +4304,14 @@ format = 'via [󰹩 ($version )]($style)'
 show_commit = true
 ```
 
+
+
+
 ## Open Policy Agent
 
 The `opa` module shows the currently installed version of the OPA tool. By default the module will be shown if the current directory contains a `.rego` file.
+
+
 
 ### Opciones
 
@@ -3264,6 +4326,9 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | `style`             | `'bold blue'`                        | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `opa`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -3272,9 +4337,14 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3283,9 +4353,14 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 format = 'via [⛑️  $version](bold red) '
 ```
 
+
+
+
 ## OpenStack
 
 El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módulo solo está activo cuando la variable de entorno `OS_CLOUD` está definida, en cuyo caso leerá el archivo `clouds.yaml` desde cualquiera de las [ubicaciones por defecto](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para obtener el proyecto actual en uso.
+
+
 
 ### Opciones
 
@@ -3296,6 +4371,9 @@ El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módul
 | `style`    | `'bold yellow'`                                 | El estilo del módulo.                                       |
 | `disabled` | `false`                                         | Deshabilita el módulo `openstack`.                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -3305,9 +4383,14 @@ El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módul
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3318,13 +4401,22 @@ style = 'bold yellow'
 symbol = '☁️ '
 ```
 
+
+
+
 ## SO
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
+
+
 > [!WARNING] The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -3335,7 +4427,10 @@ The `os` module shows the current operating system. OS information is detected v
 | `disabled` | `true`                | Deshabilita el módulo `os`.                            |
 | `símbolos` |                       | A table that maps each operating system to its symbol. |
 
+
 `symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
+
+
 
 ```toml
 # This is the default symbols table.
@@ -3400,6 +4495,9 @@ Windows = "🪟 "
 Zorin = "🔹 "
 ```
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                                                        |
@@ -3412,9 +4510,14 @@ Zorin = "🔹 "
 | version   |              | The current operating system version, if applicable                |
 | style\* |              | Refleja el valor de la opción `style`                              |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3428,6 +4531,9 @@ disabled = false
 Windows = " "
 Arch = "Arch es lo mejor! "
 ```
+
+
+
 
 ## Package Version
 
@@ -3453,7 +4559,11 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) - La versión del paquete `dart` se extrae del archivo `pubspec.yaml` presente en el directorio actual
 
+
+
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
+
+
 
 ### Opciones
 
@@ -3466,6 +4576,9 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 | `display_private` | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
 | `disabled`        | `false`                           | Desactiva el módulo `package`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -3474,9 +4587,14 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3484,6 +4602,9 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 [package]
 format = 'vía [🎁 $version](208 bold) '
 ```
+
+
+
 
 ## Perl
 
@@ -3494,6 +4615,8 @@ El módulo `perl` muestra la versión instalada de [Perl](https://www.perl.org/)
 - El directorio actual contiene un archivo `META.json` o `META.yml`
 - El directorio actual contiene un archivo `.perl-version`
 - El directorio actual contiene un `.pl`, `.pm` o `.pod`
+
+
 
 ### Opciones
 
@@ -3508,6 +4631,9 @@ El módulo `perl` muestra la versión instalada de [Perl](https://www.perl.org/)
 | `style`             | `'bold 149'`                                                                                             | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                                                                                  | Deshabilita el módulo `perl`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -3516,7 +4642,12 @@ El módulo `perl` muestra la versión instalada de [Perl](https://www.perl.org/)
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3525,6 +4656,9 @@ El módulo `perl` muestra la versión instalada de [Perl](https://www.perl.org/)
 format = 'via [🦪 $version]($style) '
 ```
 
+
+
+
 ## PHP
 
 El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -3532,6 +4666,8 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 - El directorio actual contiene un archivo `composer.json`
 - El directorio actual contiene un archivo `.php-version`
 - El directorio actual contiene una extensión `.php`
+
+
 
 ### Opciones
 
@@ -3546,6 +4682,9 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 | `style`             | `'147 bold'`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `php`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -3554,9 +4693,14 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3565,11 +4709,18 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 format = 'via [🔹 $version](147 bold) '
 ```
 
+
+
+
 ## Canal Pijul
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -3582,11 +4733,18 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `truncation_symbol` | `'…'`                             | El símbolo usado para indicar que un nombre de rama fue truncado.                    |
 | `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
+
+
+
 ## Pixi
 
 The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
 
+
+
 > [!TIP] This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
+
+
 
 ### Opciones
 
@@ -3603,6 +4761,9 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 | `detect_folders`           | `[]`                                                      | Qué carpetas deberían activar este módulo.                                        |
 | `disabled`                 | `false`                                                   | Disables the `pixi` module.                                                       |
 
+
+
+
 ### Variables
 
 | Variable    | Ejemplo   | Descripción                            |
@@ -3612,7 +4773,12 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 | symbol      |           | Refleja el valor de la opción `symbol` |
 | style       |           | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3621,9 +4787,14 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 format = '[$symbol$environment](yellow) '
 ```
 
+
+
+
 ## Pulumi
 
 El módulo `pulumi` muestra el nombre de usuario actual, [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/)seleccionado y la versión.
+
+
 
 > [!TIP] By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-pulumi-version).
 
@@ -3631,6 +4802,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - El directorio actual contiene `Pulumi.yaml` o `Pulumi.yml`
 - A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
+
+
 
 ### Opciones
 
@@ -3643,6 +4816,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                          |
 | `disabled`       | `false`                                      | Deshabilita el módulo `pulumi`.                                                         |
 
+
+
+
 ### Variables
 
 | Variable          | Ejemplo    | Descripción                            |
@@ -3653,11 +4829,18 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol            |            | Refleja el valor de la opción `symbol` |
 | style\*         |            | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplo
 
+
+
 #### Con la versión de Pulumi
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3666,7 +4849,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🛥 ($version )$stack]($style) '
 ```
 
+
+
+
 #### Sin versión de Pulumi
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3674,6 +4862,9 @@ format = '[🛥 ($version )$stack]($style) '
 symbol = '🛥 '
 format = '[$symbol$stack]($style) '
 ```
+
+
+
 
 ## PureScript
 
@@ -3683,6 +4874,8 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 - El directorio actual contiene un archivo `spago.yaml`
 - El directorio actual contiene un archivo `spago.lock`
 - El directorio actual contiene un archivo con la extensión `.purs`
+
+
 
 ### Opciones
 
@@ -3697,6 +4890,9 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 | `style`             | `'bold white'`                                | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                       | Desactiva el módulo `purescript`.                                                       |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -3705,9 +4901,14 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3715,6 +4916,9 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 [purescript]
 format = 'via [$symbol$version](bold white)'
 ```
+
+
+
 
 ## Python
 
@@ -3735,6 +4939,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 - The current directory contains a file with the `.ipynb` extension.
 - Un entorno virtual está activado actualmente
 
+
+
 ### Opciones
 
 | Opción               | Predeterminado                                                                                               | Descripción                                                                             |
@@ -3749,23 +4955,34 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                     |
 | `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
+
+
+
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. La Starship intentará ejecutar cada binario hasta que obtenga un resultado. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 > 
 > The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
+
+
 ### Variables
 
-| Variable     | Ejemplo         | Descripción                                  |
-| ------------ | --------------- | -------------------------------------------- |
-| version      | `'v3.8.1'`      | La versión de `python`                       |
-| symbol       | `'🐍 '`          | Refleja el valor de la opción `symbol`       |
-| style        | `'yellow bold'` | Refleja el valor de la opción `style`        |
-| pyenv_prefix | `'pyenv '`      | Refleja el valor de la opción `pyenv_prefix` |
-| virtualenv   | `'venv'`        | El nombre actual del `virtualenv`            |
+| Variable     | Ejemplo         | Descripción                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | La versión de `python`                                                      |
+| symbol       | `'🐍 '`          | Refleja el valor de la opción `symbol`                                      |
+| style        | `'yellow bold'` | Refleja el valor de la opción `style`                                       |
+| pyenv_prefix | `'pyenv '`      | Refleja el valor de la opción `pyenv_prefix`                                |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
+
+
+
 
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3775,6 +4992,9 @@ symbol = '👾 '
 pyenv_version_name = true
 ```
 
+
+
+
 ```toml
 # ~/.config/starship.toml
 
@@ -3782,6 +5002,9 @@ pyenv_version_name = true
 # Solo usa el binario `python3` para obtener la versión.
 python_binary = 'python3'
 ```
+
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3791,6 +5014,9 @@ python_binary = 'python3'
 detect_extensions = []
 ```
 
+
+
+
 ## Quarto
 
 The `quarto` module shows the current installed version of Quarto used in a project.
@@ -3799,6 +5025,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - The current directory contains a `_quarto.yml` file
 - The current directory contains any `*.qmd` file
+
+
 
 ### Opciones
 
@@ -3813,6 +5041,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `disabled`          | `false`                              | Disables the `quarto` module.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
@@ -3821,7 +5052,10 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## R
 
@@ -3834,6 +5068,8 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 - El directorio actual contiene un archivo con la extensión `.Rsx`.
 - El directorio actual contiene un archivo `.Rprofile`
 - El directorio actual contiene una carpeta `.Rproj.user`
+
+
 
 ### Opciones
 
@@ -3848,6 +5084,9 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 | `detect_folders`    | `['.Rproj.user']`                    | Qué carpetas deben activar este módulo                                                  |
 | `disabled`          | `false`                              | Deshabilita el módulo `r`.                                                              |
 
+
+
+
 ### Variables
 
 | Variable | Ejemplo       | Descripción                            |
@@ -3856,7 +5095,12 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 | symbol   |               | Refleja el valor de la opción `symbol` |
 | style    | `'blue bold'` | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3865,12 +5109,17 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 format = 'with [📐 $version](blue bold) '
 ```
 
+
+
+
 ## Raku
 
 El módulo `raku` muestra la versión instalada de [Raku](https://www.raku.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `META6.json`
 - El directorio actual contiene un `.p6`, `.pm6`, `.raku`, `.rakumod` o `.pod6`
+
+
 
 ### Opciones
 
@@ -3885,6 +5134,9 @@ El módulo `raku` muestra la versión instalada de [Raku](https://www.raku.org/)
 | `style`             | `'bold 149'`                                     | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                          | Deshabilita el módulo `raku`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable   | Ejemplo | Descripción                                                |
@@ -3894,7 +5146,12 @@ El módulo `raku` muestra la versión instalada de [Raku](https://www.raku.org/)
 | symbol     |         | Refleja el valor de la opción `symbol`                     |
 | style\*  |         | Refleja el valor de la opción `style`                      |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3903,11 +5160,16 @@ El módulo `raku` muestra la versión instalada de [Raku](https://www.raku.org/)
 format = 'via [🦪 $version]($style) '
 ```
 
+
+
+
 ## Red
 
 Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red](https://www.red-lang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con extensión `.red` o `.Red`
+
+
 
 ### Opciones
 
@@ -3922,6 +5184,9 @@ Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red]
 | `style`             | `'red bold'`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `red`.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -3930,9 +5195,14 @@ Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red]
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3940,6 +5210,9 @@ Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red]
 [red]
 symbol = '🔴 '
 ```
+
+
+
 
 ## Ruby
 
@@ -3951,6 +5224,8 @@ Por defecto, el módulo `ruby` muestra la versión actualmente instalada de [Rub
 - Las variables de entorno `RUBY_VERSION` o `RBENV_VERSION` están configuradas
 
 Starship obtiene la versión actual de Ruby ejecutando `ruby -v`.
+
+
 
 ### Opciones
 
@@ -3966,6 +5241,9 @@ Starship obtiene la versión actual de Ruby ejecutando `ruby -v`.
 | `style`             | `'bold red'`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `ruby`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                                 |
@@ -3975,9 +5253,14 @@ Starship obtiene la versión actual de Ruby ejecutando `ruby -v`.
 | style\* |          | Refleja el valor de la opción `style`       |
 | gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -3986,12 +5269,17 @@ Starship obtiene la versión actual de Ruby ejecutando `ruby -v`.
 symbol = '🔺 '
 ```
 
+
+
+
 ## Rust
 
 Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://www.rust-lang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Cargo.toml`
 - El directorio actual contiene un archivo con la extensión `.rs`
+
+
 
 ### Opciones
 
@@ -4006,6 +5294,9 @@ Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://w
 | `style`             | `'bold red'`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `rust`.                                                           |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo           | Descripción                                  |
@@ -4016,9 +5307,14 @@ Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://w
 | symbol    |                   | Refleja el valor de la opción `symbol`       |
 | style\* |                   | Refleja el valor de la opción `style`        |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4027,6 +5323,9 @@ Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://w
 format = 'via [⚙️ $version](red bold)'
 ```
 
+
+
+
 ## Scala
 
 El módulo `scala` muestra la versión actualmente instalada de [Scala](https://www.scala-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -4034,6 +5333,8 @@ El módulo `scala` muestra la versión actualmente instalada de [Scala](https://
 - El directorio actual contiene un archivo `build.sbt`, `.scalaenv` o `.sbtenv`
 - El directorio actual contiene un archivo con la extensión `.scala` o `.sbt`
 - El directorio actual contiene un directorio llamado `.metals`
+
+
 
 ### Opciones
 
@@ -4048,6 +5349,9 @@ El módulo `scala` muestra la versión actualmente instalada de [Scala](https://
 | `style`             | `'red dimmed'`                           | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                  | Deshabilita el módulo `scala`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -4056,9 +5360,14 @@ El módulo `scala` muestra la versión actualmente instalada de [Scala](https://
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4067,11 +5376,18 @@ El módulo `scala` muestra la versión actualmente instalada de [Scala](https://
 symbol = '🌟 '
 ```
 
+
+
+
 ## Shell
 
 El módulo `shell` muestra un indicador para el intérprete de comandos actualmente utilizado.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -4093,6 +5409,9 @@ El módulo `shell` muestra un indicador para el intérprete de comandos actualme
 | `style`                | `'white bold'`            | El estilo del módulo.                                                                                  |
 | `disabled`             | `true`                    | Deshabilita el módulo `shell`.                                                                         |
 
+
+
+
 ### Variables
 
 | Variable  | Predeterminado | Descripción                                                                           |
@@ -4100,9 +5419,14 @@ El módulo `shell` muestra un indicador para el intérprete de comandos actualme
 | indicador |                | Refleja el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
 | style\* |                | Refleja el valor de la opción `style`.                                                |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplos
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4115,11 +5439,18 @@ style = 'cyan bold'
 disabled = false
 ```
 
+
+
+
 ## SHLVL
 
 The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -4133,6 +5464,9 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | `style`         | `'bold yellow'`              | El estilo del módulo.                                               |
 | `disabled`      | `true`                       | Deshabilita el módulo `shlvl`.                                      |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -4141,9 +5475,14 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4154,7 +5493,10 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
+
 Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceding characters are provided by `shlvl`.
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4167,9 +5509,14 @@ symbol = '❯'
 repeat_offset = 1
 ```
 
+
+
+
 ## Singularity
 
 El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/singularity/) actual, si se encuentra dentro de un contenedor y `$SINGULARITY_NAME` está establecido.
+
+
 
 ### Opciones
 
@@ -4180,6 +5527,9 @@ El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/si
 | `style`    | `'bold dimmed blue'`             | El estilo del módulo.                                               |
 | `disabled` | `false`                          | Deshabilita el módulo de `singularity`.                             |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                            |
@@ -4188,9 +5538,14 @@ El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/si
 | symbol    |              | Refleja el valor de la opción `symbol` |
 | style\* |              | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4199,11 +5554,16 @@ El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/si
 format = '[📦 \[$env\]]($style) '
 ```
 
+
+
+
 ## Solidity
 
 The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with the `.sol` extension
+
+
 
 ### Opciones
 
@@ -4219,6 +5579,9 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | `style`             | `'bold blue'`                        | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Disables this module.                                                                   |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -4227,9 +5590,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4237,9 +5605,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 format = "via [S $version](blue bold)"
 ```
 
+
+
+
 ## Spack
 
 El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.io/en/latest/), si `$SPACK_ENV` está configurado.
+
+
 
 ### Opciones
 
@@ -4251,6 +5624,9 @@ El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.i
 | `format`            | `'via [$symbol$environment]($style) '` | El formato del módulo.                                                                                                                                  |
 | `disabled`          | `false`                                | Deshabilita el módulo `spack`.                                                                                                                          |
 
+
+
+
 ### Variables
 
 | Variable    | Ejemplo      | Descripción                            |
@@ -4259,9 +5635,14 @@ El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.i
 | symbol      |              | Refleja el valor de la opción `symbol` |
 | style\*   |              | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4270,11 +5651,18 @@ El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.i
 format = '[$symbol$environment](dimmed blue) '
 ```
 
+
+
+
 ## Estado
 
 El módulo `status` muestra el código de salida del comando anterior. Si $success_symbol está vacío (por defecto), el módulo solo se mostrará si el código de salida no es `0`. El código de estado se convertirá a un entero con signo de 32 bits.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -4298,6 +5686,9 @@ El módulo `status` muestra el código de salida del comando anterior. Si $succe
 | `pipestatus_segment_format` |                                                                                     | Cuando se especifica, reemplaza `formato` al formatear segmentos de pipestatus         |
 | `disabled`                  | `true`                                                                              | Deshabilita el módulo `status`.                                                        |
 
+
+
+
 ### Variables
 
 | Variable       | Ejemplo | Descripción                                                                                            |
@@ -4313,9 +5704,14 @@ El módulo `status` muestra el código de salida del comando anterior. Si $succe
 | symbol         |         | Refleja el valor de la opción `symbol`                                                                 |
 | style\*      |         | Copia el valor de la opción `success_style` en el éxito del programa y `failure_style` de lo contrario |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4329,11 +5725,18 @@ map_symbol = true
 disabled = false
 ```
 
+
+
+
 ## Sudo
 
 El módulo `sudo` muestra si las credenciales de sudo están actualmente en caché. El módulo solo se mostrará si las credenciales están guardadas en caché.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -4345,6 +5748,9 @@ El módulo `sudo` muestra si las credenciales de sudo están actualmente en cach
 | `allow_windows` | `false`                  | Como Windows no tiene sudo por defecto, el valor por defecto está deshabilitado. |
 | `disabled`      | `true`                   | Deshabilita el módulo `sudo`.                                                    |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -4352,9 +5758,14 @@ El módulo `sudo` muestra si las credenciales de sudo están actualmente en cach
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4365,6 +5776,9 @@ symbol = '👩‍💻 '
 disabled = false
 ```
 
+
+
+
 ```toml
 # On windows
 # $HOME\.starship\config.toml
@@ -4374,12 +5788,17 @@ allow_windows = true
 disabled = false
 ```
 
+
+
+
 ## Swift
 
 Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https://swift.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
+
+
 
 ### Opciones
 
@@ -4394,6 +5813,9 @@ Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https:/
 | `style`             | `'bold 202'`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `swift`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -4402,9 +5824,14 @@ Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https:/
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4413,9 +5840,14 @@ Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https:/
 format = 'vía [🏎  $version](red bold)'
 ```
 
+
+
+
 ## Terraform
 
 El módulo `Terraform` muestra el [espacio de trabajo de Terraform](https://www.terraform.io/docs/language/state/workspaces.html) y la versión seleccionados actualmente. It supports both Hashicorp Terraform and OpenTofu for version detection.
+
+
 
 > [!TIP] By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-terraform-version).
 
@@ -4423,6 +5855,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - El directorio actual contiene una carpeta `.terraform`
 - El directorio actual contiene un archivo con las extensiones `.tf`, `.tfplan` o `.tfstate`
+
+
 
 ### Opciones
 
@@ -4438,6 +5872,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `disabled`          | `false`                                                 | Deshabilita el módulo `terraform`.                                                      |
 | `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                            |
 
+
+
+
 ### Variables
 
 | Variable        | Ejemplo    | Descripción                               |
@@ -4447,11 +5884,18 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol          |            | Refleja el valor de la opción `symbol`    |
 | style\*       |            | Refleja el valor de la opción `style`     |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ### Ejemplo
 
+
+
 #### Con Terraform Version
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4460,7 +5904,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = 'via [$symbol$version $workspace]($style) '
 ```
 
+
+
+
 #### Sin Terraform Version
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4469,11 +5918,18 @@ format = 'via [$symbol$version $workspace]($style) '
 format = 'via [$symbol$workspace]($style) '
 ```
 
+
+
+
 ## Time
 
 El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por el crate de [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
 
-> [!TIP] This module is disabled by default. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
+> [!TIP] This module is disabled by default. Español: [!TIP] Este módulo está desactivado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
+
+
 
 ### Opciones
 
@@ -4487,7 +5943,10 @@ El módulo `time` muestra la hora **local** actual. El valor de configuración d
 | `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                                               |
 | `time_range`      | `'-'`                   | Establece el intervalo de tiempo durante el cual se mostrará el módulo. Las horas deben especificarse en formato de 24 horas                                                |
 
+
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. De lo contrario, el valor predeterminado es `'%T'`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
+
+
 
 ### Variables
 
@@ -4496,9 +5955,14 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. De lo contrario,
 | tiempo    | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4511,6 +5975,9 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
+
+
+
 ## Typst
 
 The `typst` module shows the current installed version of Typst used in a project.
@@ -4519,6 +5986,8 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - El directorio actual contiene un archivo `template.typ`
 - The current directory contains any `*.typ` file
+
+
 
 ### Opciones
 
@@ -4533,6 +6002,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `disabled`          | `false`                              | Disables the `typst` module.                                                            |
 
+
+
+
 ### Variables
 
 | Variable      | Ejemplo   | Descripción                                     |
@@ -4542,7 +6014,10 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol        |           | Refleja el valor de la opción `symbol`          |
 | style\*     |           | Refleja el valor de la opción `style`           |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Username
 
@@ -4554,7 +6029,11 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se mostrar
 - La variable `show_always` se establece en true
 - The array `detect_env_vars` contains at least the name of one environment variable, that is set
 
+
+
 > [!TIP] SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+
+
 
 ### Opciones
 
@@ -4568,6 +6047,9 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se mostrar
 | `disabled`        | `false`                 | Deshabilita el módulo `username`.                     |
 | `aliases`         | `{}`                    | Translate system usernames to something else.         |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                                                                                         |
@@ -4575,9 +6057,16 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se mostrar
 | `style`   | `'red bold'` | Refleja el valor de la opción `style_root` cuando root inició sesión y `style_user` por otra parte. |
 | `usuario` | `'matchai'`  | El ID de usuario conectado actualmente.                                                             |
 
+
+
+
 ### Ejemplo
 
+
+
 #### Always show the username
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4591,11 +6080,16 @@ show_always = true
 aliases = { "corpuser034g" = "matchai" }
 ```
 
+
+
+
 ## Vagrant
 
 El módulo `vagrant` muestra la versión instalada de [Vagrant](https://www.vagrantup.com/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Vagrantfile`
+
+
 
 ### Opciones
 
@@ -4610,6 +6104,9 @@ El módulo `vagrant` muestra la versión instalada de [Vagrant](https://www.vagr
 | `style`             | `'cyan bold'`                        | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Deshabilita el módulo `vagrant`.                                                        |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                            |
@@ -4618,9 +6115,14 @@ El módulo `vagrant` muestra la versión instalada de [Vagrant](https://www.vagr
 | symbol    |                  | Refleja el valor de la opción `symbol` |
 | style\* |                  | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4629,12 +6131,17 @@ El módulo `vagrant` muestra la versión instalada de [Vagrant](https://www.vagr
 format = 'via [⍱ $version](bold white) '
 ```
 
+
+
+
 ## V
 
 El módulo `vlang` te muestra la versión instalada de [V](https://vlang.io/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con la extensión `.v`
 - El directorio actual contiene un archivo `v.mod`, `vpkg.json` o `.vpkg-lock.json`
+
+
 
 ### Opciones
 
@@ -4649,6 +6156,9 @@ El módulo `vlang` te muestra la versión instalada de [V](https://vlang.io/). P
 | `style`             | `'blue bold'`                                | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                      | Deshabilita el módulo `vlang`.                                                          |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
@@ -4657,7 +6167,12 @@ El módulo `vlang` te muestra la versión instalada de [V](https://vlang.io/). P
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
+
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4665,9 +6180,65 @@ El módulo `vlang` te muestra la versión instalada de [V](https://vlang.io/). P
 format = 'via [V $version](blue bold) '
 ```
 
+
+
+
+## VCS
+
+
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+
+
+### Opciones
+
+| Opción           | Predeterminado                                              | Descripción                                           |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+
+
+
+### Ejemplo
+
+
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
+```
+
+
+
+
 ## VCSH
 
 El módulo `vcsh` muestra el repositorio activo [VCSH](https://github.com/RichiH/vcsh) actual. El módulo sólo se mostrará si un repositorio está actualmente en uso.
+
+
 
 ### Opciones
 
@@ -4678,6 +6249,9 @@ El módulo `vcsh` muestra el repositorio activo [VCSH](https://github.com/RichiH
 | `format`   | `'vcsh [$symbol$repo]($style) '` | El formato del módulo.                                       |
 | `disabled` | `false`                          | Deshabilita el módulo `vcsh`.                                |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo                                                     | Descripción                            |
@@ -4686,9 +6260,14 @@ El módulo `vcsh` muestra el repositorio activo [VCSH](https://github.com/RichiH
 | symbol    |                                                             | Refleja el valor de la opción `symbol` |
 | style\* | `black bold dimmed`                                         | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4697,11 +6276,16 @@ El módulo `vcsh` muestra el repositorio activo [VCSH](https://github.com/RichiH
 format = '[🆅 $repo](bold blue) '
 ```
 
+
+
+
 ## XMake
 
 The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `xmake.lua`
+
+
 
 ### Opciones
 
@@ -4716,6 +6300,9 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | `style`             | `'bold green'`                       | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Disables the `xmake` module.                                                            |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -4724,13 +6311,18 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 ## Zig
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.zig`
+
+
 
 ### Opciones
 
@@ -4745,6 +6337,9 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 
+
+
+
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
@@ -4753,9 +6348,14 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml
@@ -4763,6 +6363,9 @@ By default the `zig` module shows the currently installed version of [Zig](https
 [zig]
 symbol = '⚡️ '
 ```
+
+
+
 
 ## Comandos personalizados
 
@@ -4776,17 +6379,27 @@ Estos módulos se mostrarán si se cumple alguna de las siguientes condiciones:
 - El comando `when` devuelve 0
 - El sistema operativo actual (std::env::consts::OS) coincide con el campo `os` si está definido.
 
+
+
 > [!TIP] Multiple custom modules can be defined by using a `.`.
+
+
 
 > [!TIP] The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). Por defecto, el módulo `personalizado` simplemente mostrará todos los módulos personalizados en el orden en que fueron definidos.
 
+
+
 > [!TIP] [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. ¡Si tienes un ejemplo interesante no cubierto, siéntete libre de compartirlo ahí!
+
+
 
 > [!WARNING] If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
 > 
 > Cualquiera que sea la salida que genere el comando se imprime sin modificar en el prompt. This means if the output contains shell-specific interpretable sequences, they could be interpreted on display. Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell. Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 > 
 > Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+
+
 
 ### Opciones
 
@@ -4809,6 +6422,9 @@ Estos módulos se mostrarán si se cumple alguna de las siguientes condiciones:
 | `use_stdin`         |                                  | Un valor booleano opcional que anula si los comandos deben ser reenviados al shell a través de la entrada estándar o como argumento. Si la entrada estándar unset es usada de manera predeterminada, a menos que el shell no lo soporte (cmd, nushell). Configurar esto desactiva el manejo de argumentos específicos del shell. |
 | `ignore_timeout`    | `false`                          | Ignorar la configuración global de `command_timeout` y seguir ejecutando comandos externos, sin importar el tiempo que tarden.                                                                                                                                                                                                   |
 
+
+
+
 ### Variables
 
 | Variable  | Descripción                            |
@@ -4817,7 +6433,10 @@ Estos módulos se mostrarán si se cumple alguna de las siguientes condiciones:
 | symbol    | Refleja el valor de la opción `symbol` |
 | style\* | Refleja el valor de la opción `style`  |
 
+
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+
+
 
 #### Comando personalizado del intérprete de comandos
 
@@ -4832,9 +6451,14 @@ The `command` (and `when`, if applicable) will be passed in on stdin.
 
 Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell los siguientes argumentos se añadirán automáticamente: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. Este comportamiento puede evitarse pasando explícitamente argumentos al intérprete de comandos, p.ej.
 
+
+
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
+
+
+
 
 > [!WARNING] Make sure your custom shell configuration exits gracefully
 > 
@@ -4846,7 +6470,11 @@ shell = ['pwsh', '-Command', '-']
 > 
 > Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
+
+
 ### Ejemplo
+
+
 
 ```toml
 # ~/.config/starship.toml

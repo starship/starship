@@ -138,14 +138,14 @@ onMounted(() => {
 
    > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+   Dodaj następujący fragment na końcu pliku <0>~/.config/elvish/rc.elv</0> (<0>%AppData%\elvish\rc.elv</0> w systemie Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+   W wersjach elvish starszych niż v0.21.0 plik konfiguracyjny może znajdować się w lokalizacji `~/.elvish/rc.elv`.
 
 
    #### Tcsh
@@ -163,7 +163,7 @@ onMounted(() => {
 
    > [!WARNING] This will change in the future. Działa tylko na Nushell v0.96+.
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie <0>$nu.config-path</0> w Nushell):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
