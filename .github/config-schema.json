@@ -85,6 +85,20 @@
         "subscription_aliases": {}
       }
     },
+    "azurerm": {
+      "default": {
+        "disabled": false,
+        "format": "on [$symbol($subscription)]($style) ",
+        "style": "blue bold",
+        "subscription_aliases": {},
+        "symbol": "󰠅 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/AzureRMConfig"
+        }
+      ]
+    },
     "battery": {
       "$ref": "#/$defs/BatteryConfig",
       "default": {
@@ -1943,6 +1957,35 @@
             "type": "string"
           },
           "default": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "AzureRMConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol($subscription)]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "󰠅 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

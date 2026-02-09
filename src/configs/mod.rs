@@ -3,6 +3,7 @@ use serde::{self, Deserialize, Serialize};
 
 pub mod aws;
 pub mod azure;
+pub mod azurerm;
 pub mod battery;
 pub mod buf;
 pub mod bun;
@@ -128,6 +129,8 @@ pub struct FullConfig<'a> {
     aws: aws::AwsConfig<'a>,
     #[serde(borrow)]
     azure: azure::AzureConfig<'a>,
+    #[serde(borrow)]
+    azurerm: azurerm::AzureRMConfig<'a>,
     #[serde(borrow)]
     battery: battery::BatteryConfig<'a>,
     #[serde(borrow)]
