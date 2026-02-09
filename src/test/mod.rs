@@ -13,6 +13,9 @@ use std::sync::LazyLock;
 use std::sync::Once;
 use tempfile::TempDir;
 
+#[cfg(target_os = "linux")]
+pub mod fuse_fs;
+
 static FIXTURE_DIR: LazyLock<PathBuf> =
     LazyLock::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
 

@@ -121,6 +121,10 @@ winres = "0.1.12"
 mockall = "0.14.0"
 tempfile = "3.24.0"
 
+[target.'cfg(unix)'.dev-dependencies]
+fuser = "0.16.0"
+libc = "0.2.172"
+
 [profile.release]
 codegen-units = 1
 lto = true
