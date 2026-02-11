@@ -574,11 +574,11 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
         }),
         "p4 login -s" => Some(CommandOutput {
             stdout: String::from("User human ticket expires in 11 hours 21 minutes.\n"),
-            stderr: String::default()
+            stderr: String::default(),
         }),
         "p4 info" => Some(CommandOutput {
             stdout: String::from(
-r"User name: human
+                r"User name: human
 Client name: MyWorkspace
 Client host: MyPC
 Client root: /home/human/p4/MyWorkspace
@@ -595,12 +595,15 @@ Server cert expires: Jul  3 13:53:58 2024 GMT
 Server license: University of Test 1000 users (support ends 2023/02/15) (expires 2023/02/15) 
 Server license-ip: 127.0.0.1:1666
 Case Handling: insensitive
-"),
-            stderr: String::default()
+",
+            ),
+            stderr: String::default(),
         }),
         "p4 changes -m1 #have" => Some(CommandOutput {
-            stdout: String::from("Change 176579 on 2023/01/23 by human@MyWorkspace 'doing some work'\n"),
-            stderr: String::default()
+            stdout: String::from(
+                "Change 176579 on 2023/01/23 by human@MyWorkspace 'doing some work'\n",
+            ),
+            stderr: String::default(),
         }),
         _ => return None,
     };
