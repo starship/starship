@@ -1285,43 +1285,13 @@
       }
     },
     "p4": {
+      "$ref": "#/$defs/P4Config",
       "default": {
-        "disabled": false,
-        "format": "[$symbol $user@$client#$changelist]($style) ",
+        "symbol": "p4",
         "style": "bold blue",
-        "symbol": "p4"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/P4Config"
-        }
-      ]
-    },
-    "p4": {
-      "default": {
-        "disabled": false,
         "format": "[$symbol $user@$client#$changelist]($style) ",
-        "style": "bold blue",
-        "symbol": "p4"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/P4Config"
-        }
-      ]
-    },
-    "p4": {
-      "default": {
-        "disabled": false,
-        "format": "[$symbol $user@$client#$changelist]($style) ",
-        "style": "bold blue",
-        "symbol": "p4"
-      },
-      "allOf": [
-        {
-          "$ref": "#/definitions/P4Config"
-        }
-      ]
+        "disabled": false
+      }
     },
     "package": {
       "$ref": "#/$defs/PackageConfig",
@@ -5314,64 +5284,20 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "default": "p4",
-          "type": "string"
+          "type": "string",
+          "default": "p4"
         },
         "style": {
-          "default": "bold blue",
-          "type": "string"
+          "type": "string",
+          "default": "bold blue"
         },
         "format": {
-          "default": "[$symbol $user@$client#$changelist]($style) ",
-          "type": "string"
+          "type": "string",
+          "default": "[$symbol $user@$client#$changelist]($style) "
         },
         "disabled": {
-          "default": false,
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false
-    },
-    "P4Config": {
-      "type": "object",
-      "properties": {
-        "symbol": {
-          "default": "p4",
-          "type": "string"
-        },
-        "style": {
-          "default": "bold blue",
-          "type": "string"
-        },
-        "format": {
-          "default": "[$symbol $user@$client#$changelist]($style) ",
-          "type": "string"
-        },
-        "disabled": {
-          "default": false,
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false
-    },
-    "P4Config": {
-      "type": "object",
-      "properties": {
-        "symbol": {
-          "default": "p4",
-          "type": "string"
-        },
-        "style": {
-          "default": "bold blue",
-          "type": "string"
-        },
-        "format": {
-          "default": "[$symbol $user@$client#$changelist]($style) ",
-          "type": "string"
-        },
-        "disabled": {
-          "default": false,
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
