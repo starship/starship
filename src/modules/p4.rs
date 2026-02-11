@@ -200,7 +200,7 @@ mod tests {
         };
 
         let actual = ModuleRenderer::new("p4")
-            .cmd("p4 info", build_mock_p4_info_output(&info))
+            .cmd("p4 info", build_mock_p4_info_output(&info, client_root))
             .path(client_root)
             .collect();
         let expected = Some(format!(
@@ -242,7 +242,7 @@ mod tests {
         })
     }
 
-    fn build_mock_p4_info_output(info: &P4Info) -> Option<CommandOutput> {
+    fn build_mock_p4_info_output(info: &P4Info, current_directory: &str) -> Option<CommandOutput> {
         Some(CommandOutput {
             stdout: format!(
                 r"\
@@ -264,7 +264,7 @@ Server license: University of Test 1000 users (support ends 2023/02/15) (expires
 Server license-ip: 127.0.0.1:1666
 Case Handling: insensitive
 ",
-                info.user_name, info.client_name, info.client_root, ""
+                info.user_name, info.client_name, info.client_root, current_directory
             ),
             stderr: String::default(),
         })
