@@ -8,4 +8,5 @@ pub mod directory_nix;
 
 pub mod path;
 
+pub mod jujutsu;
 pub mod truncate;

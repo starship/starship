@@ -51,6 +51,11 @@ pub mod hg_state;
 pub mod hostname;
 pub mod java;
 pub mod jobs;
+pub mod jujutsu_bookmark;
+pub mod jujutsu_change;
+pub mod jujutsu_closest_bookmarks;
+pub mod jujutsu_commit;
+pub mod jujutsu_state;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
@@ -218,6 +223,16 @@ pub struct FullConfig<'a> {
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_bookmark: jujutsu_bookmark::JujutsuBookmarkConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_closest_bookmarks: jujutsu_closest_bookmarks::JujutsuClosestBookmarksConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_change: jujutsu_change::JujutsuChangeConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_commit: jujutsu_commit::JujutsuCommitConfig<'a>,
+    #[serde(borrow)]
+    jujutsu_state: jujutsu_state::JujutsuStateConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]
