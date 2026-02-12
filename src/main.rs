@@ -7,7 +7,7 @@ use std::time::SystemTime;
 
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
-use rand::Rng;
+use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
