@@ -1,9 +1,7 @@
-use crate::{
-    config::Style,
-    print::{Grapheme, UnicodeWidthGraphemes},
-};
+use crate::{config::Style, print::UnicodeWidthGraphemes};
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
 use unicode_segmentation::UnicodeSegmentation;
+use unicode_width::UnicodeWidthStr;
 
 /// Type that holds text with an associated style
 #[derive(Clone)]
@@ -44,7 +42,7 @@ impl FillSegment {
                 .graphemes(true)
                 .cycle()
                 .scan(0usize, |len, g| {
-                    *len += Grapheme(g).width();
+                    *len += g.width();
                     if *len <= w { Some(g) } else { None }
                 })
                 .collect::<String>(),
