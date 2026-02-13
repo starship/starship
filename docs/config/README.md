@@ -276,6 +276,7 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
+$git_remote\
 $git_status\
 $hg_branch\
 $hg_state\
@@ -2054,6 +2055,64 @@ the current git repository.
 [git_metrics]
 added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
+## Git Remote
+
+The `git_remote` module shows a symbol representing the git remote provider
+(GitHub, GitLab, Bitbucket, etc.) based on the remote URL of the current branch.
+When inside a git repo with no remote configured, a fallback symbol is shown.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Options
+
+| Option             | Default                  | Description                                                                                                        |
+| ------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `format`           | `'on [$symbol]($style)'` | The format for the module.                                                                                         |
+| `symbol`           | `'\u{f02a2} '`           | The default symbol shown when the remote provider is not matched.                                                  |
+| `no_remote_symbol` | `'\u{f1d3} '`            | The symbol shown when the repo has no remote configured.                                                           |
+| `style`            | `'bold dimmed white'`    | The style for the module.                                                                                          |
+| `disabled`         | `true`                   | Disables the `git_remote` module.                                                                                  |
+| `providers`        | See below                | A map of domain substrings to symbols. If the remote URL contains the key, the corresponding symbol will be shown. |
+
+#### Default providers
+
+| Domain          | Symbol      |
+| --------------- | ----------- |
+| `github.com`    | `\u{eb00}`  |
+| `gitlab.com`    | `\u{f0ba0}` |
+| `bitbucket.org` | `\u{f00a8}` |
+| `codeberg.org`  | `\u{f08e0}` |
+| `sr.ht`         | `\u{f4aa}`  |
+| `dev.azure.com` | `\u{f0fd5}` |
+
+### Variables
+
+| Variable    | Example                            | Description                                                  |
+| ----------- | ---------------------------------- | ------------------------------------------------------------ |
+| symbol      | `\u{eb00}`                         | The matched provider symbol, `symbol`, or `no_remote_symbol` |
+| url         | `https://github.com/user/repo.git` | The remote URL (empty if no remote)                          |
+| remote_name | `origin`                           | The remote name (empty if no remote)                         |
+| style\*     |                                    | Mirrors the value of option `style`                          |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_remote]
+disabled = false
+format = '[$symbol]($style)'
+
+[git_remote.providers]
+"github.com" = "\u{eb00} "
+"gitlab.com" = "\u{f0ba0} "
+"my-company-git.com" = "🏢 "
 ```
 
 ## Git Status
