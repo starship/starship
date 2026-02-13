@@ -784,6 +784,7 @@ impl Repo {
 pub struct Remote {
     pub branch: Option<String>,
     pub name: Option<String>,
+    pub url: Option<String>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is
@@ -923,7 +924,17 @@ fn get_remote_repository_info(
         .branch_remote_name(branch_name.shorten(), gix::remote::Direction::Fetch)
         .map(|n| n.as_bstr().to_string());
 
-    Some(Remote { branch, name })
+    let url = name.as_ref().and_then(|remote_name| {
+        repository
+            .find_remote(remote_name.as_str())
+            .ok()?
+            .url(gix::remote::Direction::Fetch)?
+            .to_bstring()
+            .to_string()
+            .into()
+    });
+
+    Some(Remote { branch, name, url })
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

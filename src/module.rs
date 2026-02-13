@@ -41,6 +41,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_branch",
     "git_commit",
     "git_metrics",
+    "git_remote",
     "git_state",
     "git_status",
     "gleam",
