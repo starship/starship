@@ -21,7 +21,7 @@
 - 모듈 비활성화는 최상위 `format`에서 생략하는 것보다 더 명시적입니다.
 - 새로 생성된 모듈은 Starship이 업데이트됨에 따라 프롬프트에 추가됩니다.
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## 문서에 Starship이 크로스-셸이라고 나와 있는데, 제가 선호하는 셸은 왜 지원되지 않나요?
 
 Starship이 구축된 방식으로는 사실상 모든 셸에 대한 지원을 추가할 수 있어야 합니다. starship 바이너리는 상태 비저장이며 셸에 구애받지 않으므로, 셸이 프롬프트 사용자 지정을 지원하고 셸 확장을 지원하는 한 Starship을 사용할 수 있습니다.
 
@@ -91,7 +91,7 @@ starship bug-report
 가장 흔한 원인은 시스템 설정 오류입니다. 특히 일부 Linux 배포판은 기본적으로 글꼴 지원이 제공되지 않습니다. 다음 사항을 확인해야 합니다.
 
 - 로케일이 `de_DE.UTF-8` 또는 `ja_JP.UTF-8`과 같은 UTF-8 값으로 설정되어 있는지 확인하세요. `LC_ALL`이 UTF-8 값이 아닌 경우 [변경해야 합니다](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. 대부분의 시스템에는 기본적으로 이모지 글꼴이 제공되지만, 일부(특히 Arch Linux)는 그렇지 않습니다. 일반적으로 시스템의 패키지 관리자를 통해 설치할 수 있습니다. [noto emoji](https://www.google.com/get/noto/help/emoji/)는 인기 있는 선택입니다.
+- 이모지 글꼴이 설치되어 있는지 확인하세요. 대부분의 시스템에는 기본적으로 이모지 글꼴이 제공되지만, 일부(특히 Arch Linux)는 그렇지 않습니다. 일반적으로 시스템의 패키지 관리자를 통해 설치할 수 있습니다. [noto emoji](https://www.google.com/get/noto/help/emoji/)는 인기 있는 선택입니다.
 - [Nerd Font](https://www.nerdfonts.com/)를 사용하고 있는지 확인하세요.
 
 시스템을 테스트하려면 터미널에서 다음 명령을 실행하세요.
@@ -110,7 +110,7 @@ echo -e "\xee\x82\xa0"
 Starship은 처음 설치하는 것만큼이나 쉽게 제거할 수 있습니다.
 
 1. 셸 설정 파일 (예시: `~/.bashrc`) 에서 Starship 초기화에 사용되는 모든 줄을 제거하세요.
-1. Starship 바이너리 파일을 제거하세요.
+2. Starship 바이너리 파일을 제거하세요.
 
 Starship을 패키지 매니저로 설치하였다면 해당 패키지 매니저의 제거 지침 문서를 참조해 주세요.
 
@@ -122,7 +122,7 @@ Starship을 설치 스크립트로 설치하였다면 바이너리 파일 제거
 
 ## `sudo` 없이 Starship을 어떻게 설치하나요?
 
-셸 설치 스크립트(`https://starship.rs/install.sh`)는 대상 설치 디렉토리가 현재 사용자가 쓸 수 없는 경우에만 `sudo`를 사용하려고 시도합니다. 예를 들어, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin`은 설치 스크립트의 `-b` 명령줄 옵션을 사용하여 설치 디렉토리를 `~/.local/bin`으로 설정합니다. 기본 설치 디렉토리는 `$BIN_DIR` 환경 변수의 값 또는 `$BIN_DIR`이 설정되지 않은 경우 `/usr/local/bin`입니다. 대신 설치 디렉토리를 사용자가 쓸 수 있는 디렉토리로 설정하면 `sudo` 없이 starship을 설치할 수 있습니다.
+셸 설치 스크립트(`https://starship.rs/install.sh`)는 대상 설치 디렉토리가 현재 사용자가 쓸 수 없는 경우에만 `sudo`를 사용하려고 시도합니다. 기본 설치 디렉토리는 `$BIN_DIR` 환경 변수의 값 또는 `$BIN_DIR`이 설정되지 않은 경우 `/usr/local/bin`입니다. 대신 설치 디렉토리를 사용자가 쓸 수 있는 디렉토리로 설정하면 `sudo` 없이 starship을 설치할 수 있습니다. 예를 들어, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin`은 설치 스크립트의 `-b` 명령줄 옵션을 사용하여 설치 디렉토리를 `~/.local/bin`으로 설정합니다.
 
 Starship의 비대화형 설치의 경우 확인을 건너뛰려면 `-y` 옵션을 추가하는 것을 잊지 마세요. 지원되는 모든 설치 옵션 목록은 설치 스크립트의 소스를 확인하세요.
 

@@ -342,6 +342,38 @@ export default defineConfig({
                 },
             },
         },
+        "ko-KR": {
+            label: "한국어",
+            lang: "ko-KR",
+            title: "Starship",
+            description: "모든 셸에 적합한, 최소한의, 초고속, 무한 커스터마이징이 가능한 프롬프트!",
+            themeConfig: {
+                // text for the language dropdown
+                langMenuLabel: "한글",
+                returnToTopLabel: "맨 위로 돌아가기",
+                sidebarMenuLabel: "목차",
+                // Custom navbar values
+                nav: [
+                    {
+                        text: "설정",
+                        link: "/ko-KR/config/"
+                    }
+                ],
+                // Custom sidebar values
+                sidebar: sidebar("ko-KR", {
+                    guide: "지침",
+                    installing: "고급 설치",
+                    config: "설정",
+                    "advanced-config": "고급 설정",
+                    faq: "자주 묻는 질문",
+                    presets: "프리셋",
+                }),
+                editLink: {
+                    text: "이 페이지를 GitHub에서 수정하기",
+                    pattern: editLinkPattern
+                }
+            }
+        },
     },
     // prettier-ignore
     head: [

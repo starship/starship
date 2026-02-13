@@ -163,7 +163,7 @@ onMounted(() => {
 
    > [!WARNING] This will change in the future. Nushell v0.96 버전 이상에서만 지원됩니다.
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Nushell 설정 파일의 끝에 다음을 추가하세요 (Nushell에서 `$nu.config-path`를 실행하여 찾을 수 있습니다):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
