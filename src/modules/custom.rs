@@ -183,7 +183,6 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
-
     let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
 
     if !use_stdin {
@@ -205,13 +204,11 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     }
 
     let mut output = child.controlled_with_output();
-
     if !config.ignore_timeout {
         output = output
             .time_limit(Duration::from_millis(context.root_config.command_timeout))
             .terminate_for_timeout()
     }
-
     match output.wait().ok()? {
         None => {
             log::warn!("Executing custom command {cmd:?} timed out.");
@@ -223,7 +220,6 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         Some(status) => Some(status),
     }
 }
-
 /// Execute the given command capturing all output, and return whether it return 0
 fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
     log::trace!("Running '{cmd}'");
