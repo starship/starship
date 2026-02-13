@@ -377,3 +377,11 @@ Not every style string will be displayed correctly by every terminal. In particu
 - Many terminals disable support for `blink` by default.
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app.
+
+## Async prompt in Fish
+
+If using [fish-async-prompt][fish-async-prompt] to render the prompt asynchronously, you'll need to make sure some of Starship's internal variables are correctly propagated to the `fish_prompt` function.
+To do this, you should either set `$async_prompt_inherit_variables` to `all`, or make sure it includes `STARSHIP_CMD_PIPESTATUS`, `STARSHIP_CMD_STATUS`, `STARSHIP_DURATION`, `STARSHIP_JOBS`, and `STARSHIP_KEYMAP`.
+If you don't do this, it's likely that the `character`, `cmd_duration`, `jobs`, and `status` modules won't work properly.
+
+[fish-async-prompt]: https://github.com/acomagu/fish-async-prompt
