@@ -957,6 +957,28 @@
         "contexts": []
       }
     },
+    "lean": {
+      "$ref": "#/$defs/LeanConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": " L∃∀N ",
+        "style": "blue",
+        "disabled": false,
+        "detect_extensions": [
+          "lean"
+        ],
+        "detect_files": [
+          "lake-manifest.json",
+          "lakefile.toml",
+          "lakefile.lean",
+          "lean-toolchain"
+        ],
+        "detect_folders": [
+          ".lake"
+        ]
+      }
+    },
     "line_break": {
       "$ref": "#/$defs/LineBreakConfig",
       "default": {
@@ -4480,6 +4502,62 @@
             "null"
           ],
           "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "LeanConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": " L∃∀N "
+        },
+        "style": {
+          "type": "string",
+          "default": "blue"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lean"
+          ]
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lake-manifest.json",
+            "lakefile.toml",
+            "lakefile.lean",
+            "lean-toolchain"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".lake"
+          ]
         }
       },
       "additionalProperties": false
