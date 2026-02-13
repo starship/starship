@@ -18,12 +18,14 @@ function fish_prompt
             set STARSHIP_KEYMAP insert
     end
 
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
+    set -l _pipestatus $pipestatus
+    set -l _status $status
+    set -q STARSHIP_CMD_PIPESTATUS; or set STARSHIP_CMD_PIPESTATUS $_pipestatus
+    set -q STARSHIP_CMD_STATUS; or set STARSHIP_CMD_STATUS $_status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
 
-    __starship_set_job_count
+    set -q STARSHIP_JOBS; or __starship_set_job_count
 
     if contains -- --final-rendering $argv; or test "$TRANSIENT" = "1"
         if test "$TRANSIENT" = "1"
@@ -40,6 +42,8 @@ function fish_prompt
     else
         ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
+
+    set -eg STARSHIP_CMD_PIPESTATUS STARSHIP_CMD_STATUS STARSHIP_JOBS
 end
 
 function fish_right_prompt
@@ -50,13 +54,15 @@ function fish_right_prompt
             set STARSHIP_KEYMAP insert
     end
 
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
+    set -l _pipestatus $pipestatus
+    set -l _status $status
+    set -q STARSHIP_CMD_PIPESTATUS; or set STARSHIP_CMD_PIPESTATUS $_pipestatus
+    set -q STARSHIP_CMD_STATUS; or set STARSHIP_CMD_STATUS $_status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
 
     # Now it's safe to call job count function (after status capture)
-    __starship_set_job_count
+    set -q STARSHIP_JOBS; or __starship_set_job_count
 
     if contains -- --final-rendering $argv; or test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
@@ -68,6 +74,8 @@ function fish_right_prompt
     else
         ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
+
+    set -eg STARSHIP_CMD_PIPESTATUS STARSHIP_CMD_STATUS STARSHIP_JOBS
 end
 
 # Disable virtualenv prompt, it breaks starship
