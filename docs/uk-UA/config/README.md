@@ -245,7 +245,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
