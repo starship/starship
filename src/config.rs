@@ -1,8 +1,8 @@
 use crate::configs::Palette;
 use crate::context::Context;
 
-use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
+use crate::utils::serde::{ValueDeserializer, ValueRef};
 use nu_ansi_term::Color;
 use serde::{
     Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
