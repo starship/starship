@@ -1,28 +1,122 @@
 import { defineConfig } from "vitepress";
+import * as fs from "fs";
+import * as path from "path";
 
-const sidebar = (lang: string | undefined, override = {}) =>
-    [
-        { page: "guide", text: "Guide" }, // README, which should always have a override
-        // Overrides for any page below is an inconsistency between the sidebar title and page title
-        { page: "installing", text: "Installation" },
-        { page: "config", text: "Configuration" },
-        { page: "advanced-config", text: "Advanced Configuration" },
-        { page: "faq", text: "FAQ" },
-        { page: "presets", text: "Presets" },
-    ].map(item => {
-        let path = "/";
+const moduleSections = (category: string, shortName: string, key = shortName) => {
+    const categoryDir = path.join(__dirname, '..', 'config', 'modules', shortName);
+    const files = fs.readdirSync(categoryDir);
 
-        if (lang) {
-            path += `${lang}/`;
+    // For each module file, create a sidebar entry, and extract its title
+    const items = files.filter((file: string) => file.endsWith('.md')).sort().map((file: string) => {
+        const filePath = path.join(categoryDir, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+
+        // Extract title from the first markdown heading
+        const match = content.match(/#\s+(.+)$/m);
+        const title = match ? match[1].trim() : file.replace('.md', '');
+
+        return {
+            text: title,
+            page: `config/modules/${shortName}/${file.replace('.md', '')}`
+        };
+    });
+
+    return {
+        text: category,
+        collapsed: true,
+        items: items,
+        section: "configuration",
+        key,
+    };
+}
+type SidebarSectionOverride = {
+    text?: string;
+    items?: Record<string, string>;
+};
+
+type SidebarOverride = {
+    pages?: Record<string, string>;
+    labels?: Record<string, string>;
+    configuration?: SidebarSectionOverride;
+    [key: string]: string | Record<string, string> | SidebarSectionOverride | undefined;
+};
+
+const sidebar = (lang: string | undefined, override: SidebarOverride = {}) => {
+    const withLangPrefix = (link: string) => {
+        if (!lang || !link.startsWith("/")) {
+            return link;
+        }
+
+        const normalized = link.endsWith("/") ? link : `${link}/`;
+        const prefix = `/${lang}/`;
+
+        if (normalized.startsWith(prefix)) {
+            return normalized;
+        }
+
+        return `${prefix}${normalized.slice(1)}`;
+    };
+
+    const localizeItem = (item: any): any => {
+        const pageOverride = item.page
+            ? override.pages?.[item.page] ?? (typeof override?.[item.page] === "string" ? override[item.page] : undefined)
+            : undefined;
+        const configurationOverride =
+            item.section === "configuration"
+                ? (item.key ? override.configuration?.items?.[item.key] : override.configuration?.text)
+                : undefined;
+        const localizedText = pageOverride ?? configurationOverride ?? item.text;
+
+        if (item.items) {
+            return {
+                ...item,
+                text: localizedText,
+                link: item.link ? withLangPrefix(item.link) : item.link,
+                items: item.items.map((child: any) => localizeItem(child)),
+            };
         }
 
         if (item.page) {
-            path += `${item.page}/`;
+            const path = `/${lang ? `${lang}/` : ""}${item.page}/`;
+            return { ...item, link: path, text: localizedText };
         }
 
-        // If no override is set for current page, let VitePress fallback to page title
-        return { link: path, text: override?.[item.page] ?? item.text };
-    });
+        if (item.link) {
+            return { ...item, link: withLangPrefix(item.link), text: localizedText };
+        }
+
+        return { ...item, text: localizedText };
+    };
+
+    return [
+        { page: "guide", text: "Guide" }, // README, which should always have a override
+        // Overrides for any page below is an inconsistency between the sidebar title and page title
+        { page: "installing", text: "Installation" },
+        {
+            text: "Configuration",
+            section: "configuration",
+            items: [
+                {
+                    text: "Prompt",
+                    page: "config/modules/prompt",
+                    section: "configuration",
+                    key: "prompt",
+                },
+                moduleSections("Core & System", "core"),
+                moduleSections("Version Control", "vcs"),
+                moduleSections("Programming Languages", "languages"),
+                moduleSections("Cloud & Container", "cloud"),
+                moduleSections("Package & Environment", "environment"),
+                moduleSections("Build & Tools", "build_tools"),
+                moduleSections("System Info & Status", "info"),
+                moduleSections("Custom Commands", "custom"),
+            ],
+        },
+        { page: "advanced-config", text: "Advanced Configuration" },
+        { page: "faq", text: "FAQ" },
+        { page: "presets", text: "Presets" },
+    ].map(localizeItem);
+};
 
 const editLinkPattern = 'https://github.com/starship/starship/edit/master/docs/:path';
 
@@ -67,6 +161,19 @@ export default defineConfig({
                     installing: "Erweiterte Installation",
                     faq: "Häufig gestellte Fragen",
                     presets: "Konfigurations-Beispiele",
+                    configuration: {
+                        text: "Konfiguration",
+                        items: {
+                            core: "Kern & System",
+                            vcs: "Versionskontrolle",
+                            languages: "Programmiersprachen",
+                            cloud: "Cloud & Container",
+                            environment: "Pakete & Umgebung",
+                            build_tools: "Build & Werkzeuge",
+                            info: "Systeminfo & Status",
+                            custom: "Benutzerdefinierte Module",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Bearbeite diese Seite auf GitHub",
@@ -93,6 +200,19 @@ export default defineConfig({
                     installing: "Instalación avanzada",
                     faq: "Preguntas frecuentes",
                     presets: "Ajustes predeterminados",
+                    configuration: {
+                        text: "Configuración",
+                        items: {
+                            core: "Núcleo y sistema",
+                            vcs: "Control de versiones",
+                            languages: "Lenguajes de programación",
+                            cloud: "Nube y contenedores",
+                            environment: "Paquetes y entorno",
+                            build_tools: "Build y herramientas",
+                            info: "Información del sistema y estado",
+                            custom: "Módulos personalizados",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Edita esta página en GitHub",
@@ -115,6 +235,20 @@ export default defineConfig({
                 sidebar: sidebar("fr-FR", {
                     guide: "Guide",
                     installing: "Installation avancée",
+                    configuration: {
+                        text: "Configuration",
+                        items: {
+                            prompt: "Prompt",
+                            core: "Noyau et système",
+                            vcs: "Contrôle de version",
+                            languages: "Langages de programmation",
+                            cloud: "Cloud et conteneurs",
+                            environment: "Paquets et environnement",
+                            build_tools: "Build et outils",
+                            info: "Infos système et état",
+                            custom: "Modules personnalisés",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Éditez cette page sur GitHub",
@@ -139,6 +273,19 @@ export default defineConfig({
                     installing: "Advanced Installation",
                     faq: "Pertanyaan Umum",
                     presets: "Prasetel",
+                    configuration: {
+                        text: "Konfigurasi",
+                        items: {
+                            core: "Inti & Sistem",
+                            vcs: "Kontrol Versi",
+                            languages: "Bahasa Pemrograman",
+                            cloud: "Cloud & Kontainer",
+                            environment: "Paket & Lingkungan",
+                            build_tools: "Build & Alat",
+                            info: "Info Sistem & Status",
+                            custom: "Perintah Kustom",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Sunting halaman ini di Github",
@@ -161,6 +308,20 @@ export default defineConfig({
                 sidebar: sidebar("it-IT", {
                     guide: "Guide",
                     installing: "Installazione Avanzata",
+                    configuration: {
+                        text: "Configurazione",
+                        items: {
+                            prompt: "Prompt",
+                            core: "Nucleo e sistema",
+                            vcs: "Controllo di versione",
+                            languages: "Linguaggi di programmazione",
+                            cloud: "Cloud e container",
+                            environment: "Pacchetti e ambiente",
+                            build_tools: "Build e strumenti",
+                            info: "Info sistema e stato",
+                            custom: "Moduli personalizzati",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Modifica questa pagina in Github",
@@ -183,7 +344,21 @@ export default defineConfig({
                 // Custom sidebar values
                 sidebar: sidebar("ja-JP", {
                     guide: "ガイド",
-                    installing: "高度なインストール",
+                    installing: "インストール",
+                    configuration: {
+                        text: "設定",
+                        items: {
+                            prompt: "プロンプト",
+                            core: "コア & システム",
+                            vcs: "バージョン管理",
+                            languages: "プログラミング言語",
+                            cloud: "クラウド & コンテナ",
+                            environment: "パッケージ & 環境",
+                            build_tools: "ビルド & ツール",
+                            info: "システム情報 & ステータス",
+                            custom: "カスタムコマンド",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "GitHub で編集する",
@@ -209,6 +384,20 @@ export default defineConfig({
                     installing: "Instalação avançada",
                     faq: "Perguntas frequentes",
                     presets: "Predefinições",
+                    configuration: {
+                        text: "Configuração",
+                        items: {
+                            prompt: "Prompt",
+                            core: "Núcleo e sistema",
+                            vcs: "Controle de versão",
+                            languages: "Linguagens de programação",
+                            cloud: "Nuvem e contêineres",
+                            environment: "Pacotes e ambiente",
+                            build_tools: "Build e ferramentas",
+                            info: "Informações do sistema e status",
+                            custom: "Módulos personalizados",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Edite esta página no Github",
@@ -235,6 +424,20 @@ export default defineConfig({
                     config: "Настройка",
                     "advanced-config": "Расширенная Настройка",
                     faq: "Часто Задаваемые Вопросы",
+                    configuration: {
+                        text: "Настройка",
+                        items: {
+                            prompt: "Промпт",
+                            core: "Ядро и Система",
+                            vcs: "Система контроля версий",
+                            languages: "Языки программирования",
+                            cloud: "Облако и Контейнеры",
+                            environment: "Пакеты и Окружение",
+                            build_tools: "Сборка и Инструменты",
+                            info: "Системная информация и Статус",
+                            custom: "Пользовательские команды",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Редактировать эту страницу на GitHub",
@@ -262,6 +465,20 @@ export default defineConfig({
                     "advanced-config": "Розширені налаштування",
                     faq: "Часті питання",
                     presets: "Шаблони",
+                    configuration: {
+                        text: "Налаштування",
+                        items: {
+                            prompt: "Запит",
+                            core: "Ядро та Система",
+                            vcs: "Контроль версій",
+                            languages: "Мови програмування",
+                            cloud: "Хмара та Контейнери",
+                            environment: "Пакети та Середовище",
+                            build_tools: "Збірка та Інструменти",
+                            info: "Системна інформація та Статус",
+                            custom: "Користувацькі команди",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Редагувати цю сторінку на GitHub",
@@ -285,6 +502,20 @@ export default defineConfig({
                     guide: "Hướng dẫn",
                     installing: "Cài đặt nâng cao",
                     faq: "Các hỏi thường gặp",
+                    configuration: {
+                        text: "Cấu hình",
+                        items: {
+                            prompt: "Dấu nhắc",
+                            core: "Cốt lõi & Hệ thống",
+                            vcs: "Kiểm soát phiên bản",
+                            languages: "Ngôn ngữ lập trình",
+                            cloud: "Đám mây & Container",
+                            environment: "Gói & Môi trường",
+                            build_tools: "Công cụ & Xây dựng",
+                            info: "Thông tin hệ thống & Trạng thái",
+                            custom: "Lệnh tùy chỉnh",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "Chỉnh sửa trang này trên GitHub",
@@ -312,6 +543,20 @@ export default defineConfig({
                     "advanced-config": "高级配置",
                     faq: "常见问题",
                     presets: "社区配置分享",
+                    configuration: {
+                        text: "配置",
+                        items: {
+                            prompt: "提示符",
+                            core: "核心 & 系统",
+                            vcs: "版本控制",
+                            languages: "编程语言",
+                            cloud: "云 & 容器",
+                            environment: "包 & 环境",
+                            build_tools: "构建 & 工具",
+                            info: "系统信息 & 状态",
+                            custom: "自定义命令",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "在 GitHub 上修改此页",
@@ -335,6 +580,20 @@ export default defineConfig({
                 sidebar: sidebar("zh-TW", {
                     guide: "指引",
                     installing: "進階安裝",
+                    configuration: {
+                        text: "設定",
+                        items: {
+                            prompt: "提示字元",
+                            core: "核心 & 系統",
+                            vcs: "版本控制",
+                            languages: "程式語言",
+                            cloud: "雲端 & 容器",
+                            environment: "套件 & 環境",
+                            build_tools: "建置 & 工具",
+                            info: "系統資訊 & 狀態",
+                            custom: "自定義指令",
+                        }
+                    },
                 }),
                 editLink: {
                     text: "在 GitHub 上修改此頁面",
