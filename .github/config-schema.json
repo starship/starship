@@ -3083,7 +3083,7 @@
         },
         "format": {
           "type": "string",
-          "default": "with [$env_value]($style) "
+          "default": "with [$symbol$env_value]($style) "
         },
         "disabled": {
           "type": "boolean",
