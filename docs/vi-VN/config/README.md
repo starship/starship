@@ -1459,6 +1459,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
 | `mô tả`    | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | Vô hiệu `env_var`.                                                           |
+| `style`    | `"black bold dimmed"`          | Kiểu cho module.                                                             |
 
 ### Các biến
 
@@ -1466,7 +1467,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ----------------------------------------- | ----------------------------------------------- |
 | env_value | `Windows NT` (nếu _variable_ sẽ là `$OS`) | Giá trị biến môi trường của tùy chọn `variable` |
 | symbol    |                                           | Giá trị ghi đè tuỳ chọn `symbol`                |
-| style\* | `black bold dimmed`                       | Giá trị ghi đè của `style`                      |
+| style\* |                                           | Giá trị ghi đè của `style`                      |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
