@@ -1459,6 +1459,7 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 | `format`      | `"with [$env_value]($style) "` | Format du module.                                                                    |
 | `description` | `"<env_var module>"`     | La description du module qui est affichée lors de l’exécution de `starship explain`. |
 | `disabled`    | `false`                        | Désactive le module `env_var`.                                                       |
+| `style`       | `"black bold dimmed"`          | Le style pour le module.                                                             |
 
 ### Variables
 
@@ -1466,7 +1467,7 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 | --------- | ---------------------------------------- | ------------------------------------------------ |
 | env_value | `Windows NT` (si _variable_ était `$OS`) | La valeur d'environnement de l'option `variable` |
 | symbole   |                                          | Reflète la valeur de l'option `symbol`           |
-| style\* | `black bold dimmed`                      | Reflète la valeur de l'option `style`            |
+| style\* |                                          | Reflète la valeur de l'option `style`            |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
