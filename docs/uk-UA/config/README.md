@@ -1459,6 +1459,7 @@ format = 'via [ $version](cyan bold) '
 | `format`      | `"with [$env_value]($style) "` | Формат модуля.                                                          |
 | `description` | `"<env_var module>"`     | Опис модуля, який показується під час запуску `starship explain`.       |
 | `disabled`    | `false`                        | Вимикає модуль `env_var`.                                               |
+| `style`       | `"black bold dimmed"`          | Стиль модуля.                                                           |
 
 ### Змінні
 
@@ -1466,7 +1467,7 @@ format = 'via [ $version](cyan bold) '
 | --------- | ----------------------------------------- | ------------------------------------------------ |
 | env_value | `Windows NT` (якщо _variable_ буде `$OS`) | Значення змінної оточення з параметра `variable` |
 | symbol    |                                           | Віддзеркалює значення параметра `symbol`         |
-| style\* | `black bold dimmed`                       | Віддзеркалює значення параметра `style`          |
+| style\* |                                           | Віддзеркалює значення параметра `style`          |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
