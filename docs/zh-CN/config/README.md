@@ -1459,6 +1459,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | 组件格式化模板。                                                                     |
 | `描述`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | 禁用 `env_var` 组件。                                                             |
+| `style`    | `"black bold dimmed"`          | 此组件的样式。                                                                      |
 
 ### 变量
 
@@ -1466,7 +1467,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | `symbol`对应值                                |
-| style\* | `black bold dimmed`                         | `style`对应值                                 |
+| style\* |                                             | `style`对应值                                 |
 
 *: 此变量只能作为样式字符串的一部分使用
 
