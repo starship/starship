@@ -1459,6 +1459,7 @@ Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih
 | `fromat`    | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
 | `deskripsi` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.          |
 | `disabled`  | `false`                        | Menonaktifkan modul `env_var`.                                                        |
+| `style`     | `"black bold dimmed"`          | Gaya penataan untuk modul.                                                            |
 
 ### Variabel
 
@@ -1466,7 +1467,7 @@ Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih
 | --------- | ------------------------------------------------- | -------------------------------------- |
 | env_value | `Windows NT` (jika _variable_ akan menjadi `$OS`) | Nilai environment dari opsi `variable` |
 | symbol    |                                                   | Menyalin nilai dari opsi `symbol`      |
-| style\* | `black bold dimmed`                               | Menyalin nilai dari opsi `style`       |
+| style\* |                                                   | Menyalin nilai dari opsi `style`       |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
