@@ -1,5 +1,6 @@
 use super::{Context, Detected, Module, ModuleConfig};
 
+use super::utils::user::is_root_user;
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 
@@ -85,38 +86,6 @@ fn is_login_user(context: &Context, username: &str) -> bool {
     context
         .get_env("LOGNAME")
         .is_none_or(|logname| logname == username)
-}
-
-#[cfg(all(target_os = "windows", not(test)))]
-fn is_root_user() -> bool {
-    use deelevate::{PrivilegeLevel, Token};
-    let token = match Token::with_current_process() {
-        Ok(token) => token,
-        Err(e) => {
-            log::warn!("Failed to get process token: {e:?}");
-            return false;
-        }
-    };
-    matches!(
-        match token.privilege_level() {
-            Ok(level) => level,
-            Err(e) => {
-                log::warn!("Failed to get privilege level: {e:?}");
-                return false;
-            }
-        },
-        PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
-    )
-}
-
-#[cfg(test)]
-fn is_root_user() -> bool {
-    false
-}
-
-#[cfg(all(not(target_os = "windows"), not(test)))]
-fn is_root_user() -> bool {
-    nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
 fn is_ssh_session(context: &Context) -> bool {
