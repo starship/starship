@@ -1459,6 +1459,7 @@ format = 'via [ $version](cyan bold) '
 | `format`      | `"with [$env_value]($style) "` | module のフォーマットです。                      |
 | `description` | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
 | `disabled`    | `false`                        | `env_var`モジュールを無効にします。                 |
+| `style`       | `"black bold dimmed"`          | モジュールのスタイルです。                          |
 
 ### 変数
 
@@ -1466,7 +1467,7 @@ format = 'via [ $version](cyan bold) '
 | --------- | ------------------------------------------- | ----------------------- |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | オプション`variable`の値       |
 | symbol    |                                             | オプション `symbol` の値をミラーする |
-| style\* | `black bold dimmed`                         | オプション `style` の値をミラーする  |
+| style\* |                                             | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
