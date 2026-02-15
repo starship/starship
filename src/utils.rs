@@ -1,4 +1,5 @@
 use process_control::{ChildExt, Control};
+use std::env::var_os;
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -740,6 +741,14 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
 
 pub fn home_dir() -> Option<PathBuf> {
     dirs::home_dir()
+}
+
+pub fn config_home_dir() -> Option<PathBuf> {
+    if let Some(xdg_config_home) = var_os("XDG_CONFIG_HOME") {
+        Some(PathBuf::from(xdg_config_home))
+    } else {
+        Some(home_dir()?.join(".config"))
+    }
 }
 
 const HEXTABLE: &[char] = &[
