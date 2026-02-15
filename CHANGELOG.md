@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.25.0](https://github.com/starship/starship/compare/v1.24.2...v1.25.0) (2026-02-15)
+
+
+### Features
+
+* add Maven module ([#7189](https://github.com/starship/starship/issues/7189)) ([70b0f73](https://github.com/starship/starship/commit/70b0f7355497715a0e9d480326dc7b721b5314fb))
+* **directory:** add support for regexes in substitutions  ([#7145](https://github.com/starship/starship/issues/7145)) ([2e8f26e](https://github.com/starship/starship/commit/2e8f26e44846cd52d06563aef98e22b89965dd25))
+* **git_status:** add variables to track worktree and index changes ([#5655](https://github.com/starship/starship/issues/5655)) ([0110bf5](https://github.com/starship/starship/commit/0110bf59c86f6f0f33f95dc614c231acc19547b8))
+* **python:** add option to replace generic venv-names with parent dir ([#7112](https://github.com/starship/starship/issues/7112)) ([083ab00](https://github.com/starship/starship/commit/083ab008fc77b982a223af8f4f18020c7a64fec6))
+* **vcs:** Introduce the VCS module ([#6388](https://github.com/starship/starship/issues/6388)) ([0dd5a4f](https://github.com/starship/starship/commit/0dd5a4f402c8d94524aaaa5632b2d0cba7fe1630))
+
+
+### Bug Fixes
+
+* **aws:** isolate tests from host AWS config files ([#7196](https://github.com/starship/starship/issues/7196)) ([e910f47](https://github.com/starship/starship/commit/e910f47597f3acec36c1c21bf4204af1a3265b92))
+* **aws:** support `$duration` for `sso_session` ([#7100](https://github.com/starship/starship/issues/7100)) ([8108cc9](https://github.com/starship/starship/commit/8108cc95cf1b1182f239a3a4cc399d3fcd912187))
+* enable std feature for whoami crate ([#7211](https://github.com/starship/starship/issues/7211)) ([9931ab2](https://github.com/starship/starship/commit/9931ab25b28b91b502dae93fc3826fd9a18a01b0))
+* **format:** allow empty textgroups to set prev_fg/prev_bg ([#7201](https://github.com/starship/starship/issues/7201)) ([9186188](https://github.com/starship/starship/commit/91861886a779805cd8265a85c629e579d513aa75))
+* **helm:** remove deprecated --client flag from helm version command ([#7193](https://github.com/starship/starship/issues/7193)) ([8a69666](https://github.com/starship/starship/commit/8a69666084d248b8fd76b6c54f38aea12abce6e3))
+* **install:** improve UX for version option ([#7197](https://github.com/starship/starship/issues/7197)) ([c576625](https://github.com/starship/starship/commit/c576625343a8353ed2e99157d86065c2e713048e))
+
 ## [1.24.2](https://github.com/starship/starship/compare/v1.24.1...v1.24.2) (2025-12-30)
 
 
