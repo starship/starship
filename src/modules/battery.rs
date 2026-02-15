@@ -313,7 +313,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from("󰁽 0% "));
+        let expected = Some(String::from("󰂑 0% "));
 
         assert_eq!(expected, actual);
     }
