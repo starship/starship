@@ -25,7 +25,7 @@ impl Default for BatteryConfig<'_> {
             full_symbol: "󰁹 ",
             charging_symbol: "󰂄 ",
             discharging_symbol: "󰂃 ",
-            unknown_symbol: "󰁽 ",
+            unknown_symbol: "󰂑 ",
             empty_symbol: "󰂎 ",
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig::default()],
