@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ format = 'via [🦕 $version](green bold) '
 
 | 詳細設定                        | デフォルト  | 説明                                                                                                                          |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | パスに適用される置換の辞書。                                                                                                              |
+| `substitutions`             |        | An Array or table of substitutions to be made to the path.                                                                  |
 | `fish_style_pwd_dir_length` | `0`    | fish shellのpwdパスロジックを適用するときに使用する文字数です。                                                                                      |
 | `use_logical_path`          | `true` | `true` の場合、シェルによって `PWD` または `--logical-path` を通して指定される起点からの論理パスを表示します。 `false` の場合、代わりにシンボリックリンクを解決したファイルシステム上の物理パスを表示します。 |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. ※これは fish 形式の PWD を無効化します。 It takes an array of the following key/value pairs:
+
+| Value   | 種類      | 説明                                       |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1438,6 +1459,7 @@ format = 'via [ $version](cyan bold) '
 | `format`      | `"with [$env_value]($style) "` | module のフォーマットです。                      |
 | `description` | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
 | `disabled`    | `false`                        | `env_var`モジュールを無効にします。                 |
+| `style`       | `"black bold dimmed"`          | モジュールのスタイルです。                          |
 
 ### 変数
 
@@ -1445,7 +1467,7 @@ format = 'via [ $version](cyan bold) '
 | --------- | ------------------------------------------- | ----------------------- |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | オプション`variable`の値       |
 | symbol    |                                             | オプション `symbol` の値をミラーする |
-| style\* | `black bold dimmed`                         | オプション `style` の値をミラーする  |
+| style\* |                                             | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1931,44 +1953,60 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### オプション
 
-| オプション                | デフォルト                                           | 説明                                                                                    |
-| -------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット                                                             |
-| `conflicted`         | `'='`                                           | このブランチにはマージの競合があります。                                                                  |
-| `ahead`              | `'⇡'`                                           | `ahead`のフォーマット                                                                        |
-| `behind`             | `'⇣'`                                           | `behind`のフォーマット                                                                       |
-| `diverged`           | `'⇕'`                                           | `diverged`のフォーマット                                                                     |
-| `up_to_date`         | `''`                                            | `up_to_date`のフォーマット                                                                   |
-| `untracked`          | `'?'`                                           | `untracked`のフォーマット                                                                    |
-| `stashed`            | `'\$'`                                         | `stashed`のフォーマット                                                                      |
-| `modified`           | `'!'`                                           | `modified`のフォーマット                                                                     |
-| `staged`             | `'+'`                                           | `staged`のフォーマット                                                                       |
-| `renamed`            | `'»'`                                           | `renamed`のフォーマット                                                                      |
-| `deleted`            | `'✘'`                                           | `deleted`のフォーマット                                                                      |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                           |
-| `style`              | `'bold red'`                                    | モジュールのスタイルです。                                                                         |
-| `ignore_submodules`  | `false`                                         | サブモジュールの変更を無視します。                                                                     |
-| `disabled`           | `false`                                         | `git_status`モジュールを無効にします。                                                             |
-| `windows_starship`   |                                                 | WSLでWindowsディレクトリの`git_status`で使用するWindows Starshipの実行ファイルのLinux上でのパス。                |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead. |
+| オプション                  | デフォルト                                           | 説明                                                                                    |
+| ---------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット                                                             |
+| `conflicted`           | `'='`                                           | このブランチにはマージの競合があります。                                                                  |
+| `ahead`                | `'⇡'`                                           | `ahead`のフォーマット                                                                        |
+| `behind`               | `'⇣'`                                           | `behind`のフォーマット                                                                       |
+| `diverged`             | `'⇕'`                                           | `diverged`のフォーマット                                                                     |
+| `up_to_date`           | `''`                                            | `up_to_date`のフォーマット                                                                   |
+| `untracked`            | `'?'`                                           | `untracked`のフォーマット                                                                    |
+| `stashed`              | `'\$'`                                         | `stashed`のフォーマット                                                                      |
+| `modified`             | `'!'`                                           | `modified`のフォーマット                                                                     |
+| `staged`               | `'+'`                                           | `staged`のフォーマット                                                                       |
+| `renamed`              | `'»'`                                           | `renamed`のフォーマット                                                                      |
+| `deleted`              | `'✘'`                                           | `deleted`のフォーマット                                                                      |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                           |
+| `style`                | `'bold red'`                                    | モジュールのスタイルです。                                                                         |
+| `ignore_submodules`    | `false`                                         | サブモジュールの変更を無視します。                                                                     |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                        |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                      |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                     |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                  |
+| `index_added`          | `""`                                            | The format of `index_added`                                                           |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                         |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                        |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                     |
+| `disabled`             | `false`                                         | `git_status`モジュールを無効にします。                                                             |
+| `windows_starship`     |                                                 | WSLでWindowsディレクトリの`git_status`で使用するWindows Starshipの実行ファイルのLinux上でのパス。                |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead. |
 
 ### 変数
 
 ` format` 内では以下の変数が利用できます。
 
-| 変数             | 説明                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------ |
-| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット |
-| `ahead_behind` | 現在のリポジトリに応じてフォーマット文字列 `diverged`, `ahead`, `behind`, `up_to_date` の何れかを表示します。        |
-| `conflicted`   | このブランチにマージコンフリクトがある場合、 `conflicted` を表示します。                                          |
-| `untracked`    | 作業ディレクトリに追跡されていないファイルがある場合、 `untracked` を表示します。                                      |
-| `stashed`      | Stash がローカルリポジトリに存在する場合、 `stashed` を表示します。                                           |
-| `modified`     | 作業ディレクトリのファイルに変更がある場合に、 `modified` を表示します。                                           |
-| `staged`       | インデックスに新しく追加されたファイルがあるときに、 `staged` を表示します。                                          |
-| `renamed`      | インデックスに名前が変更されたファイルがあるときに、 `renamed` を表示します。                                         |
-| `deleted`      | インデックスに削除されたファイルがあるときに、 `deleted` を表示します。                                            |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.      |
-| style\*      | オプション `style` の値をミラーする                                                               |
+| 変数                     | 説明                                                                                            |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `all_status`           | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット          |
+| `ahead_behind`         | 現在のリポジトリに応じてフォーマット文字列 `diverged`, `ahead`, `behind`, `up_to_date` の何れかを表示します。                 |
+| `conflicted`           | このブランチにマージコンフリクトがある場合、 `conflicted` を表示します。                                                   |
+| `untracked`            | 作業ディレクトリに追跡されていないファイルがある場合、 `untracked` を表示します。                                               |
+| `stashed`              | Stash がローカルリポジトリに存在する場合、 `stashed` を表示します。                                                    |
+| `modified`             | 作業ディレクトリのファイルに変更がある場合に、 `modified` を表示します。                                                    |
+| `staged`               | インデックスに新しく追加されたファイルがあるときに、 `staged` を表示します。                                                   |
+| `renamed`              | インデックスに名前が変更されたファイルがあるときに、 `renamed` を表示します。                                                  |
+| `deleted`              | インデックスに削除されたファイルがあるときに、 `deleted` を表示します。                                                     |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory. |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                    |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                      |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                    |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.         |
+| style\*              | オプション `style` の値をミラーする                                                                        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1979,7 +2017,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `ahead_count`  | 追跡対象のブランチよりこちらが進んでいるコミット数 |
 | `behind_count` | 追跡対象のブランチよりこちらが遅れているコミット数 |
 
-`conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` および `deleted` の中で以下の変数が使えます:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | 変数      | 説明            |
 | ------- | ------------- |
@@ -2744,6 +2782,41 @@ disabled = false
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.      |
+| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['pom.xml']`                        | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `['.mvn']`                           | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'bold bright-cyan'`                 | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables the `maven` module.                           |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.    |
+
+### 変数
+
+| 変数      | 設定例      | 説明                      |
+| ------- | -------- | ----------------------- |
+| version | `v3.2.0` | The version of `maven`  |
+| symbol  |          | オプション `symbol` の値をミラーする |
+| style*  |          | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 ## メモリ使用量
 
@@ -3749,6 +3822,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | どの拡張子がこのモジュールをアクティブにするか                                                               |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                             |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                             |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                 |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3831,13 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 ### 変数
 
-| 変数           | 設定例             | 説明                                         |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | オプション `symbol` の値をミラーする                    |
-| style        | `'yellow bold'` | オプション `style` の値をミラーする                     |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| 変数           | 設定例             | 説明                                                                          |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`          | オプション `symbol` の値をミラーする                                                     |
+| style        | `'yellow bold'` | オプション `style` の値をミラーする                                                      |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### 設定例
 
@@ -4138,8 +4212,8 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | 変数        | 設定例 | 説明                           |
 | --------- | --- | ---------------------------- |
 | shlvl     | `3` | The current value of `SHLVL` |
-| symbol    |     | オプション `symbol` の値をミラーする      |
-| style\* |     | オプション `style` の値をミラーする       |
+| symbol    |     | オプション `symbol` の値をミラーします     |
+| style\* |     | オプション `style` の値をミラーします      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4185,8 +4259,8 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | 変数        | 設定例          | 説明                            |
 | --------- | ------------ | ----------------------------- |
 | env       | `centos.img` | The current Singularity image |
-| symbol    |              | オプション `symbol` の値をミラーします      |
-| style\* |              | オプション `style` の値をミラーします       |
+| symbol    |              | オプション `symbol` の値をミラーする       |
+| style\* |              | オプション `style` の値をミラーする        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -4663,6 +4737,45 @@ format = 'via [⍱ $version](bold white) '
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### オプション
+
+| オプション            | デフォルト                                                       | 説明                                                    |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH

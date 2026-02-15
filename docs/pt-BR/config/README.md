@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 | Opções Avançadas            | Padrão | Descrição                                                                                                                                                             |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substituições`             |        | Uma tabela de substituições para fazer no path.                                                                                                                       |
+| `substituições`             |        | An Array or table of substitutions to be made to the path.                                                                                                            |
 | `fish_style_pwd_dir_length` | `0`    | O número de caracteres para usar quando aplicado no path logico do fish shell pwd.                                                                                    |
 | `use_logical_path`          | `true` | Se `true` exibe um caminho lógico originado do shell via `PWD` ou`--logical-path`. Se `false` em vez disso, exibe o caminho do filesystem com os symlinks resolvidos. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note isto irá desabilita o estilo PWD do fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note isto irá desabilita o estilo PWD do fish. It takes an array of the following key/value pairs:
+
+| Value   | Tipo    | Descrição                                |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1438,6 +1459,7 @@ O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada
 | `format`      | `"with [$env_value]($style) "` | O formato do módulo.                                                         |
 | `description` | `"<env_var module>"`     | A descrição do módulo, isto será exibido quando executar `starship explain`. |
 | `disabled`    | `false`                        | Desabilita o módulo `env_var`.                                               |
+| `style`       | `"black bold dimmed"`          | O estilo do módulo.                                                          |
 
 ### Variáveis
 
@@ -1445,7 +1467,7 @@ O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada
 | --------- | ----------------------------------------- | --------------------------------------- |
 | env_value | `Windows NT` (se a variável __ for `$OS`) | O valor de ambiente da opção `variable` |
 | symbol    |                                           | Espelha o valor da opção `symbol`       |
-| style\* | `black bold dimmed`                       | Espelha o valor da opção `style`        |
+| style\* |                                           | Espelha o valor da opção `style`        |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1931,44 +1953,60 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 
 ### Opções
 
-| Opções               | Padrão                                          | Descrição                                                                                                                               |
-| -------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`                                                                                                      |
-| `conflicted`         | `'='`                                           | Este braço tem conflitos.                                                                                                               |
-| `ahead`              | `'⇡'`                                           | O formato do `ahead`                                                                                                                    |
-| `behind`             | `'⇣'`                                           | O formato do `behind`                                                                                                                   |
-| `diverged`           | `'⇕'`                                           | O formato do `diverged`                                                                                                                 |
-| `up_to_date`         | `''`                                            | O formato do `up_to_date`                                                                                                               |
-| `untracked`          | `'?'`                                           | O formato do `untracked`                                                                                                                |
-| `stashed`            | `'\$'`                                         | O formato do `stashed`                                                                                                                  |
-| `modified`           | `'!'`                                           | O formato do `modified`                                                                                                                 |
-| `staged`             | `'+'`                                           | O formato do `staged`                                                                                                                   |
-| `renamed`            | `'»'`                                           | O formato do `renamed`                                                                                                                  |
-| `deleted`            | `'✘'`                                           | O formato do `deleted`                                                                                                                  |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                                             |
-| `style`              | `'bold red'`                                    | O estilo do módulo.                                                                                                                     |
-| `ignore_submodules`  | `false`                                         | Ignora as alterações de submódulos.                                                                                                     |
-| `disabled`           | `false`                                         | Desabilita o módulo `git_status`.                                                                                                       |
-| `windows_starship`   |                                                 | Use este caminho (Linux) para um executável do Windows Starship renderizar o `git_status` quando estiver em caminhos do Windows no WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                   |
+| Opções                 | Padrão                                          | Descrição                                                                                                                               |
+| ---------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`                                                                                                      |
+| `conflicted`           | `'='`                                           | Este braço tem conflitos.                                                                                                               |
+| `ahead`                | `'⇡'`                                           | O formato do `ahead`                                                                                                                    |
+| `behind`               | `'⇣'`                                           | O formato do `behind`                                                                                                                   |
+| `diverged`             | `'⇕'`                                           | O formato do `diverged`                                                                                                                 |
+| `up_to_date`           | `''`                                            | O formato do `up_to_date`                                                                                                               |
+| `untracked`            | `'?'`                                           | O formato do `untracked`                                                                                                                |
+| `stashed`              | `'\$'`                                         | O formato do `stashed`                                                                                                                  |
+| `modified`             | `'!'`                                           | O formato do `modified`                                                                                                                 |
+| `staged`               | `'+'`                                           | O formato do `staged`                                                                                                                   |
+| `renamed`              | `'»'`                                           | O formato do `renamed`                                                                                                                  |
+| `deleted`              | `'✘'`                                           | O formato do `deleted`                                                                                                                  |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                                             |
+| `style`                | `'bold red'`                                    | O estilo do módulo.                                                                                                                     |
+| `ignore_submodules`    | `false`                                         | Ignora as alterações de submódulos.                                                                                                     |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                                                          |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                                                        |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                                                       |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                                                    |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                                             |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                                                           |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                                                          |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                                                       |
+| `disabled`             | `false`                                         | Desabilita o módulo `git_status`.                                                                                                       |
+| `windows_starship`     |                                                 | Use este caminho (Linux) para um executável do Windows Starship renderizar o `git_status` quando estiver em caminhos do Windows no WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                   |
 
 ### Variáveis
 
 As variáveis a seguir podem ser usadas no `format`:
 
-| Variável       | Descrição                                                                                                  |
-| -------------- | ---------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                    |
-| `ahead_behind` | Exibe `diverged`, `ahead`, `behind` or `up_to_date` conforme o formato da string do status do repositório. |
-| `conflicted`   | Exibe `conflicted` quando este braço tenha conflitos no merge.                                             |
-| `untracked`    | Exibe `untracked` quando há arquivos não rastreados no diretório atual.                                    |
-| `stashed`      | Exibe `stashed` quando um stash existe para o repositório local.                                           |
-| `modified`     | Exibe `modified` quando um arquivo tenha modificações for adicionado na área de staging.                   |
-| `staged`       | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                   |
-| `renamed`      | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                             |
-| `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                              |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                            |
-| style\*      | Espelha o valor da opção `style`                                                                           |
+| Variável               | Descrição                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                    |
+| `ahead_behind`         | Exibe `diverged`, `ahead`, `behind` or `up_to_date` conforme o formato da string do status do repositório. |
+| `conflicted`           | Exibe `conflicted` quando este braço tenha conflitos no merge.                                             |
+| `untracked`            | Exibe `untracked` quando há arquivos não rastreados no diretório atual.                                    |
+| `stashed`              | Exibe `stashed` quando um stash existe para o repositório local.                                           |
+| `modified`             | Exibe `modified` quando um arquivo tenha modificações for adicionado na área de staging.                   |
+| `staged`               | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                   |
+| `renamed`              | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                             |
+| `deleted`              | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                              |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                            |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                         |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                           |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                         |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.              |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                 |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                   |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                 |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                      |
+| style\*              | Espelha o valor da opção `style`                                                                           |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1979,7 +2017,7 @@ As variáveis a seguir podem ser usadas em `diverged`:
 | `ahead_count`  | Número de commits a frente do braço de rastreamento |
 | `behind_count` | Número de commits atrás do braço de rastreamento    |
 
-As variaveis a seguir podem ser usadas em `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` e `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Variável | Descrição                  |
 | -------- | -------------------------- |
@@ -2744,6 +2782,41 @@ O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). P
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                                   |
+| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['pom.xml']`                        | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `['.mvn']`                           | Quais pastas devem ativar este módulo.                                              |
+| `style`             | `'bold bright-cyan'`                 | O estilo do módulo.                                                                 |
+| `disabled`          | `false`                              | Disables the `maven` module.                                                        |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                                 |
+
+### Variáveis
+
+| Variável | Exemplo  | Descrição                         |
+| -------- | -------- | --------------------------------- |
+| version  | `v3.2.0` | The version of `maven`            |
+| symbol   |          | Espelha o valor da opção `symbol` |
+| style*   |          | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
 
 ## Uso de Memória
 
@@ -3749,6 +3822,7 @@ Por padrão, o módulo será exibido se qualquer das seguintes condições for a
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Quais extensões devem acionar este módulo                                             |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | []                                                                                    |
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                 |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                         |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. O Starship vai tentar executar cada binário até obter um resultado. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3831,13 @@ Por padrão, o módulo será exibido se qualquer das seguintes condições for a
 
 ### Variáveis
 
-| Variável     | Exemplo         | Descrição                               |
-| ------------ | --------------- | --------------------------------------- |
-| version      | `'v3.8.1'`      | A versão do `python`                    |
-| symbol       | `'🐍 '`          | Espelha o valor da opção `symbol`       |
-| style        | `'yellow bold'` | Espelha o valor da opção `style`        |
-| pyenv_prefix | `'pyenv '`      | Espelha o valor da opção `pyenv_prefix` |
-| virtualenv   | `'venv'`        | O nome atual do `virtualenv`            |
+| Variável     | Exemplo         | Descrição                                                                   |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | A versão do `python`                                                        |
+| symbol       | `'🐍 '`          | Espelha o valor da opção `symbol`                                           |
+| style        | `'yellow bold'` | Espelha o valor da opção `style`                                            |
+| pyenv_prefix | `'pyenv '`      | Espelha o valor da opção `pyenv_prefix`                                     |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Exemplo
 
@@ -4663,6 +4737,45 @@ O módulo `vlang` exibe a versão atual instalada do [V](https://vlang.io/). Por
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### Opções
+
+| Opções           | Padrão                                                      | Descrição                                             |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH

@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ When using the `fish_style_pwd_dir_length` option, instead of hiding the path th
 
 | 進階選項                        | 預設     | 說明                                                                                                                                                                     |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
+| `substitutions`             |        | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。                                                                                                                                     |
 | `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
+
+| Value   | 型別      | 說明                                       |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1438,6 +1459,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | 此模組的格式。                                                                      |
 | `說明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | 停用 `env_var` 模組。                                                             |
+| `style`    | `"black bold dimmed"`          | 這個模組的風格。                                                                     |
 
 ### 變數
 
@@ -1445,7 +1467,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | 對應 `symbol` 選項的設定值                         |
-| style\* | `black bold dimmed`                         | 對應 <0>style</0> 選項的設定值                     |
+| style\* |                                             | 對應 <0>style</0> 選項的設定值                     |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1931,44 +1953,60 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### 選項
 
-| 選項                   | 預設                                              | 說明                                                                                                          |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
-| `ahead`              | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
-| `behind`             | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
-| `diverged`           | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
-| `up_to_date`         | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
-| `untracked`          | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
-| `stashed`            | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
-| `modified`           | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
-| `staged`             | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
-| `renamed`            | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
-| `deleted`            | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | 停用 `git_status` 模組。                                                                                         |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| 選項                     | 預設                                              | 說明                                                                                                          |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
+| `ahead`                | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
+| `behind`               | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
+| `diverged`             | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
+| `up_to_date`           | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
+| `untracked`            | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
+| `stashed`              | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
+| `modified`             | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
+| `staged`               | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
+| `renamed`              | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
+| `deleted`              | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `style`                | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `disabled`             | `false`                                         | 停用 `git_status` 模組。                                                                                         |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### 變數
 
 The following variables can be used in `format`:
 
-| 變數             | 說明                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | 對應 <0>style</0> 選項的設定值                                                                                        |
+| 變數                     | 說明                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`              | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`             | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`               | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| style\*              | 對應 <0>style</0> 選項的設定值                                                                                        |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1979,7 +2017,7 @@ The following variables can be used in `diverged`:
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | 變數      | 說明                       |
 | ------- | ------------------------ |
@@ -2744,6 +2782,41 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### 選項
+
+| 選項                  | 預設                                   | 說明                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                   |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
+| `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
+| `detect_files`      | `['pom.xml']`                        | 應觸發此模組的檔案名稱。                                                              |
+| `detect_folders`    | `['.mvn']`                           | 應觸發此模組的資料夾名稱。                                                             |
+| `style`             | `'bold bright-cyan'`                 | 這個模組的風格。                                                                  |
+| `disabled`          | `false`                              | Disables the `maven` module.                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+
+### 變數
+
+| 變數      | 範例       | 說明                     |
+| ------- | -------- | ---------------------- |
+| version | `v3.2.0` | The version of `maven` |
+| symbol  |          | 對應 `symbol` 選項的設定值     |
+| style*  |          | 對應 <0>style</0> 選項的設定值 |
+
+*: 此變數僅能用於 style 字串的一部分
 
 ## 記憶體使用量
 
@@ -3749,6 +3822,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | 應觸發此模組的副檔名。                                                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | 應觸發此模組的檔案名稱。                                                                          |
 | `detect_folders`     | `[]`                                                                                                         | 應觸發此模組的資料夾名稱。                                                                         |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | 停用 `python` 模組。                                                                       |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3831,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### 變數
 
-| 變數           | 範例              | 說明                                         |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | 對應 `symbol` 選項的設定值                         |
-| style        | `'yellow bold'` | 對應 <0>style</0> 選項的設定值                     |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| 變數           | 範例              | 說明                                                                          |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`          | 對應 `symbol` 選項的設定值                                                          |
+| style        | `'yellow bold'` | 對應 <0>style</0> 選項的設定值                                                      |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### 範例
 
@@ -4663,6 +4737,45 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### 選項
+
+| 選項               | 預設                                                          | 說明                                                    |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH

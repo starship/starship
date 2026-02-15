@@ -1,4 +1,4 @@
-[Return to Presets](./#catppuccin-powerline)
+[Zurück zu den Voreinstellungen](./#catppuccin-powerline)
 
 # Catppuccin Powerline Preset
 

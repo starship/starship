@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -1140,11 +1141,31 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 
 | Tùy chọn nâng cao           | Mặc định | Mô tả                                                                                                                                                                  |
 | --------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |          | A table of substitutions to be made to the path.                                                                                                                       |
+| `substitutions`             |          | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`   | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
+
+| Value   | Type    | Mô tả                                    |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1438,6 +1459,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
 | `mô tả`    | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | Vô hiệu `env_var`.                                                           |
+| `style`    | `"black bold dimmed"`          | Kiểu cho module.                                                             |
 
 ### Các biến
 
@@ -1445,7 +1467,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ----------------------------------------- | ----------------------------------------------- |
 | env_value | `Windows NT` (nếu _variable_ sẽ là `$OS`) | Giá trị biến môi trường của tùy chọn `variable` |
 | symbol    |                                           | Giá trị ghi đè tuỳ chọn `symbol`                |
-| style\* | `black bold dimmed`                       | Giá trị ghi đè của `style`                      |
+| style\* |                                           | Giá trị ghi đè của `style`                      |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1931,44 +1953,60 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                        | Mô tả                                                                                                       |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
-| `ahead`              | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | Định dạng của `untracked`                                                                                   |
-| `stashed`            | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | Định dạng của `modified`                                                                                    |
-| `staged`             | `'+'`                                           | Định dạng của `modified`                                                                                    |
-| `renamed`            | `'»'`                                           | Định dạng của `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | Kiểu cho module.                                                                                            |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | Vô hiệu `git_status` module.                                                                                |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| Tuỳ chọn               | Mặc định                                        | Mô tả                                                                                                       |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
+| `ahead`                | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
+| `behind`               | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
+| `diverged`             | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
+| `up_to_date`           | `''`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`            | `'?'`                                           | Định dạng của `untracked`                                                                                   |
+| `stashed`              | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
+| `modified`             | `'!'`                                           | Định dạng của `modified`                                                                                    |
+| `staged`               | `'+'`                                           | Định dạng của `modified`                                                                                    |
+| `renamed`              | `'»'`                                           | Định dạng của `renamed`                                                                                     |
+| `deleted`              | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
+| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `style`                | `'bold red'`                                    | Kiểu cho module.                                                                                            |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
+| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
+| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
+| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
+| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
+| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
+| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
+| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `disabled`             | `false`                                         | Vô hiệu `git_status` module.                                                                                |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Các biến
 
 Các biến dưới đây có thể được sử dụng trong `format`:
 
-| Biến           | Mô tả                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
-| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
-| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
-| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
-| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
-| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
-| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Giá trị ghi đè của `style`                                                                                    |
+| Biến                   | Mô tả                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
+| `untracked`            | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
+| `stashed`              | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
+| `modified`             | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
+| `staged`               | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
+| `renamed`              | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
+| `deleted`              | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
+| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| style\*              | Giá trị ghi đè của `style`                                                                                    |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1979,7 +2017,7 @@ Các biến sau có thể được sử dụng trong `diverged`:
 | `ahead_count`  | Số lượng commit phía trước của nhánh tracking |
 | `behind_count` | Số lượng commit phía sau nhánh tracking       |
 
-Các biến sau có thể được sử dụng trong `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Biến    | Mô tả                         |
 | ------- | ----------------------------- |
@@ -2744,6 +2782,41 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `['pom.xml']`                        | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `['.mvn']`                           | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `'bold bright-cyan'`                 | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `maven` module.                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+
+### Các biến
+
+| Biến    | Ví dụ    | Mô tả                            |
+| ------- | -------- | -------------------------------- |
+| version | `v3.2.0` | The version of `maven`           |
+| symbol  |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style*  |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ## Memory Usage
 
@@ -3749,6 +3822,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                    |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Tên tệp nào sẽ kích hoạt mô-đun này                                                   |
 | `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                   |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3831,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Các biến
 
-| Biến         | Ví dụ           | Mô tả                                      |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | Giá trị ghi đè tuỳ chọn `symbol`           |
-| style        | `'yellow bold'` | Giá trị ghi đè của `style`                 |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| Biến         | Ví dụ           | Mô tả                                                                       |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`          | Giá trị ghi đè tuỳ chọn `symbol`                                            |
+| style        | `'yellow bold'` | Giá trị ghi đè của `style`                                                  |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Ví dụ
 
@@ -4663,6 +4737,45 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn         | Mặc định                                                    | Mô tả                                                 |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH
