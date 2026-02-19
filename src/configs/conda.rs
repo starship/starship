@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct CondaConfig<'a> {
     pub truncation_length: usize,
+    pub truncation_width: usize,
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
@@ -21,6 +22,7 @@ impl Default for CondaConfig<'_> {
     fn default() -> Self {
         Self {
             truncation_length: 1,
+            truncation_width: 0,
             format: "via [$symbol$environment]($style) ",
             symbol: "🅒 ",
             style: "green bold",
