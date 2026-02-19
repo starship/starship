@@ -596,7 +596,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `symbol`            | `'🐃 '`                                         | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this module.            |
 | `style`             | `'bold blue'`                                   | The style for the module.                             |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
@@ -1409,7 +1409,7 @@ when there is a `.csproj` file in the current directory.
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this module.                                |
 | `style`             | `'bold blue'`                                                                                           | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
@@ -1451,7 +1451,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`            | `'💧 '`                                                   | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `['mix.exs']`                                             | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                      | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                      | Which folders should trigger this module.                                |
 | `style`             | `'bold purple'`                                           | The style for the module.                                                 |
 | `disabled`          | `false`                                                   | Disables the `elixir` module.                                             |
 
@@ -1495,7 +1495,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`            | `'🌳 '`                                            | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this module.                                |
 | `style`             | `'cyan bold'`                                      | The style for the module.                                                 |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
@@ -1606,7 +1606,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `'bold red'`                         | The style for the module.                                                 |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Variables
@@ -1645,7 +1645,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `'bold green'`                       | The style for the module.                                                 |
 | `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
 
 ### Variables
@@ -2393,7 +2393,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this module.                                |
 | `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
@@ -2433,7 +2433,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                |
 | `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `'bold white'`                       | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
@@ -2533,7 +2533,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this module.                                |
 | `symbol`            | `'☕ '`                                                                                                               | A format string representing the symbol of Java                           |
 | `style`             | `'red dimmed'`                                                                                                        | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                               | Disables the `java` module.                                               |
@@ -2643,7 +2643,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                |
 | `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `'bold purple'`                      | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
@@ -2682,7 +2682,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                    |
 | `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `'bold blue'`                        | The style for the module.                                                     |
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -2748,7 +2748,7 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 | `user_aliases`*     | `{}`                                               | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
-| `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
+| `detect_folders`    | `[]`                                               | Which folders should trigger this module.                            |
 | `detect_env_vars`   | `[]`                                               | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                               | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
@@ -4333,7 +4333,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.metals']`                            | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.metals']`                            | Which folders should trigger this module.                                |
 | `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `'red dimmed'`                           | The style for the module.                                                 |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
