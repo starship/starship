@@ -8,6 +8,7 @@ $directory\
 [](fg:#769ff0 bg:#394260)\
 $git_branch\
 $git_status\
+$git_user\
 [](fg:#394260 bg:#212736)\
 $nodejs\
 $rust\
@@ -38,6 +39,10 @@ format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
 [git_status]
 style = "bg:#394260"
 format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+
+[git_user]
+style = "bg:#394260"
+format = '[[($name<$email> )](fg:#769ff0 bg:#394260)]($style)'
 
 [nodejs]
 symbol = ""

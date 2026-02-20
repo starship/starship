@@ -9,6 +9,7 @@ $directory\
 [](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
+$git_user\
 [](fg:yellow bg:green)\
 $c\
 $rust\
@@ -83,6 +84,11 @@ format = '[[ $symbol $branch ](fg:crust bg:yellow)]($style)'
 [git_status]
 style = "bg:yellow"
 format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
+
+[git_user]
+style = "bg:yellow"
+format = "[[ $email ](fg:crust bg:yellow)]($style)"
+show_always = true
 
 [nodejs]
 symbol = ""

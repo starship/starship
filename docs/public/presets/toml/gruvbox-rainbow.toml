@@ -9,6 +9,7 @@ $directory\
 [](fg:color_yellow bg:color_aqua)\
 $git_branch\
 $git_status\
+$git_user\
 [](fg:color_aqua bg:color_blue)\
 $c\
 $cpp\
@@ -98,6 +99,10 @@ format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
 [git_status]
 style = "bg:color_aqua"
 format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_user]
+style = "bg:color_aqua"
+format = '[[($name@$email )](fg:color_fg0 bg:color_aqua)]($style)'
 
 [nodejs]
 symbol = ""
