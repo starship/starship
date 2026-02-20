@@ -695,6 +695,17 @@
         "use_git_executable": false
       }
     },
+    "git_user": {
+      "$ref": "#/$defs/GitUserConfig",
+      "default": {
+        "format": "as [$name( \\($email\\))]($style) ",
+        "style": "bold green",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…",
+        "show_always": false,
+        "disabled": false
+      }
+    },
     "gleam": {
       "$ref": "#/$defs/GleamConfig",
       "default": {
@@ -1787,7 +1798,7 @@
         ],
         "disabled": false,
         "fossil_modules": "$fossil_branch$fossil_metrics",
-        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status$git_user",
         "hg_modules": "$hg_branch$hg_state",
         "pijul_modules": "$pijul_channel"
       }
@@ -3680,6 +3691,37 @@
             "string",
             "null"
           ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitUserConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "as [$name( \\($email\\))]($style) "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold green"
+        },
+        "truncation_length": {
+          "type": "integer",
+          "format": "int64",
+          "default": 9223372036854775807
+        },
+        "truncation_symbol": {
+          "type": "string",
+          "default": "…"
+        },
+        "show_always": {
+          "type": "boolean",
+          "default": false
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
@@ -6717,7 +6759,7 @@
         "git_modules": {
           "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
-          "default": "$git_branch$git_commit$git_state$git_metrics$git_status"
+          "default": "$git_branch$git_commit$git_state$git_metrics$git_status$git_user"
         },
         "hg_modules": {
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
