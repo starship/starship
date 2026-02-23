@@ -22,7 +22,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. Jest to przydatne w przypadkach, gdy nie zawsze potrzebne są wszystkie informacje zawarte w monicie. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink pozwala zastąpić poprzednio wydrukowany monit niestandardowymi ciągami. Jest to przydatne w przypadkach, gdy nie zawsze potrzebne są wszystkie informacje zawarte w monicie. Aby to włączyć, uruchom `clink set prompt.transient <value>` gdzie \<value\> może być:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
