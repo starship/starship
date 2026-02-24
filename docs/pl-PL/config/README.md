@@ -9,22 +9,22 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Cała konfiguracja starship jest wykonywana w tym pliku [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
+# Uzyskaj uzupełnienia edytora na podstawie schematu konfiguracyjnego
+"$schema" = 'https://starship.rs/config-schema. son'
 
-# Inserts a blank line between shell prompts
+# Wstawia pustą linię między monitami
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Zastąp symbol '<unk> ' w monicie symbolem '<unk> '
+[character] # Nazwa modułu, który konfigurujemy to 'character'
+success_symbol = '[<unk> ](bold green)' # Segment 'success_symbol' jest ustawiony na '<unk> ' w kolorze 'bold green'  (pogrubiony zielony)
 
-# Disable the package module, hiding it from the prompt completely
+# Wyłącz moduł paczki, ukrywając go całkowicie
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Lokalizacja pliku konfiguracyjnego
 
 Możesz zmienić domyślną lokalizację pliku konfiguracyjnego za pomocą zmiennej środowiskowej `STARSHIP_CONFIG`:
 
@@ -38,7 +38,7 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Lub dla Cmd (Windows) byłoby dodanie tej linii w twoim `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logi
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
+Domyślnie, logi ostrzerzenia i błędy starship trafiają do pliku `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowida instancji twojego terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -58,7 +58,7 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Lub dla Cmd (Windows) byłoby dodanie tej linii w twoim `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -74,11 +74,11 @@ W ramach konwencji większość modułów posiada przedrostek w domyślnym kolor
 
 ### Strings
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+W składni TOML [wartości tekstowe](https://toml.io/en/v1.0.0#string) są deklarowane z `'`, `"`, `'''`lub `"""`.
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
+| Symbol | Typ                       | Notatka                                                |
 | ------ | ------------------------- | ------------------------------------------------------ |
 | `'`    | literal string            | less escaping                                          |
 | `"`    | string                    | more escaping                                          |
@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+When using line breaks, multi-line declarations can be used. Dla przykładu, jeżeli chcesz wyświetlić symbol `$` na osobnej linii, następujące wartości `format` są równoważne:
 
 ```toml
 # with literal string
@@ -134,7 +134,7 @@ Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większoś
 
 #### Zmienne
 
-Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. The name of a variable can only contain letters, numbers and `_`.
+Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. Nazwa zmiennej może zawierać jedynie litery, cyfry, i `_`.
 
 Na przykład:
 
@@ -1147,7 +1147,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
 
-| Value   | Type    | Description                              |
+| Value   | Typ     | Description                              |
 | ------- | ------- | ---------------------------------------- |
 | `from`  | String  | The value to substitute                  |
 | `to`    | String  | The replacement for that value, if found |
