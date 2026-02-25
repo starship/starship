@@ -42,7 +42,7 @@ clap_complete_nushell = "4.5.10"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.78.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
+gix = { version = "0.80.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
 indexmap = { version = "2.13.0", features = ["serde"] }
 jsonc-parser = { version = "0.29.0", features = ["serde"] }
 log = { version = "0.4.29", features = ["std"] }
