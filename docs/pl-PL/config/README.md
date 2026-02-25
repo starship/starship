@@ -3479,7 +3479,7 @@ Zorin = "🔹 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| typ       | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
