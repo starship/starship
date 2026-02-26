@@ -186,6 +186,24 @@ mod test {
     }
 
     #[test]
+    fn symbol_in_default_format() {
+        // Issue #7208: $symbol should be included in the default format
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                symbol = "🔑 "
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(format!("🔑 {TEST_VAR_VALUE}"))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn prefix() {
         let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
