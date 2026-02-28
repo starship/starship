@@ -499,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | 當電池充飽時顯示的符號。     |
 | `charging_symbol`    | `'󰂄 '`                            | 當電池正在充電時顯示的符號。   |
 | `discharging_symbol` | `'󰂃 '`                            | 當電池正在放電時顯示的符號。   |
-| `unknown_symbol`     | `'󰁽 '`                            | 當電池狀態不明時顯示的符號。   |
+| `unknown_symbol`     | `'󰂑 '`                            | 當電池狀態不明時顯示的符號。   |
 | `empty_symbol`       | `'󰂎 '`                            | 當電池沒電時顯示的符號。     |
 | `format`             | `'[$symbol$percentage]($style) '` | 此模組的格式。          |
 | `display`            | [連結](#battery-display)            | 顯示的門檻與模組的風格。     |
@@ -1451,15 +1451,14 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### 選項
 
-| 選項         | 預設                             | 說明                                                                           |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | 顯示在變數數值之前的符號。                                                                |
-| `variable` |                                | 要顯示的環境變數。                                                                    |
-| `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。                                                         |
-| `format`   | `"with [$env_value]($style) "` | 此模組的格式。                                                                      |
-| `說明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                        | 停用 `env_var` 模組。                                                             |
-| `style`    | `"black bold dimmed"`          | 這個模組的風格。                                                                     |
+| 選項         | 預設                                    | 說明                                                                           |
+| ---------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                                  | 顯示在變數數值之前的符號。                                                                |
+| `variable` |                                       | 要顯示的環境變數。                                                                    |
+| `default`  |                                       | 在選擇的變數值沒有定義時，顯示的預設值。                                                         |
+| `format`   | `"with [$symbol$env_value]($style) "` | 此模組的格式。                                                                      |
+| `說明`       | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                               | 停用 `env_var` 模組。                                                             |
 
 ### 變數
 
@@ -1956,28 +1955,28 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | 選項                     | 預設                                              | 說明                                                                                                          |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`           | `'='`                                           | 這個分支有合併衝突。                                                                                                  |
-| `ahead`                | `'⇡'`                                           | `ahead` 的顯示格式 (符號)                                                                                          |
-| `behind`               | `'⇣'`                                           | `behind` 的顯示格式 (符號)                                                                                         |
-| `diverged`             | `'⇕'`                                           | `diverged` 的顯示格式 (符號)                                                                                       |
-| `up_to_date`           | `''`                                            | `up_to_date` 的顯示格式 (符號)                                                                                     |
-| `untracked`            | `'?'`                                           | `untracked` 的顯示格式 (符號)                                                                                      |
-| `stashed`              | `'\$'`                                         | `stashed` 的顯示格式 (符號)                                                                                        |
-| `modified`             | `'!'`                                           | `modified` 的顯示格式 (符號)                                                                                       |
-| `staged`               | `'+'`                                           | `staged` 的顯示格式 (符號)                                                                                         |
-| `renamed`              | `'»'`                                           | `renamed` 的顯示格式 (符號)                                                                                        |
-| `deleted`              | `'✘'`                                           | `deleted` 的顯示格式 (符號)                                                                                        |
-| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `style`                | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
 | `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
-| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
-| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
-| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
-| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
-| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
-| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
-| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
-| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `disabled`             | `false`                                         | 停用 `git_status` 模組。                                                                                         |
 | `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 | `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
@@ -1988,7 +1987,7 @@ The following variables can be used in `format`:
 
 | 變數                     | 說明                                                                                                            |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`           | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` 的快捷方式                             |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
 | `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -2003,9 +2002,9 @@ The following variables can be used in `format`:
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
-| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
-| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
 | style\*              | 對應 <0>style</0> 選項的設定值                                                                                        |
 
 *: 此變數僅能用於 style 字串的一部分
