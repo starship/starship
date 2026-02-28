@@ -1554,6 +1554,7 @@ The module will be shown only if any of the following conditions are met:
 | `format`      | `"with [$symbol$env_value]($style) "` | The format for the module.                                                   |
 | `description` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
 | `disabled`    | `false`                               | Disables the `env_var` module.                                               |
+| `style`       | `"black bold dimmed"`                 | The style for the module.                                                    |
 
 ### Variables
 
