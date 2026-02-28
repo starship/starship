@@ -554,7 +554,7 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 | `full_symbol`        | `'󰁹 '`                            | Se muestra cuando la batería está cargada.                               |
 | `charging_symbol`    | `'󰁹 '`                            | Se muestra cuando la batería se está cargando.                           |
 | `discharging_symbol` | `'󰁹 '`                            | Se muestra cuando la batería se está descargando.                        |
-| `unknown_symbol`     | `'󰁹 '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `unknown_symbol`     | `'󰂑 '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
 | `empty_symbol`       | `'󰁹 '`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 | `format`             | `'[$symbol$percentage]($style) '` | El formato del módulo.                                                   |
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
@@ -1820,15 +1820,14 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 
 ### Opciones
 
-| Opción        | Predeterminado                | Descripción                                                                            |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| `symbol`      | `""`                          | El símbolo usado antes de mostrar el valor de la variable.                             |
-| `variable`    |                               | La variable de entorno a mostrar.                                                      |
-| `default`     |                               | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
-| `format`      | `"con [$env_value]($style) "` | El formato del módulo.                                                                 |
-| `description` | `"<env_var module>"`    | La descripción del módulo que se muestra al ejecutar `starship explain`.               |
-| `disabled`    | `false`                       | Deshabilita el módulo `env_var`.                                                       |
-| `style`       | `"black bold dimmed"`         | El estilo del módulo.                                                                  |
+| Opción        | Predeterminado                        | Descripción                                                                            |
+| ------------- | ------------------------------------- | -------------------------------------------------------------------------------------- |
+| `symbol`      | `""`                                  | El símbolo usado antes de mostrar el valor de la variable.                             |
+| `variable`    |                                       | La variable de entorno a mostrar.                                                      |
+| `default`     |                                       | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
+| `format`      | `"with [$symbol$env_value]($style) "` | El formato del módulo.                                                                 |
+| `description` | `"<env_var module>"`            | La descripción del módulo que se muestra al ejecutar `starship explain`.               |
+| `disabled`    | `false`                               | Deshabilita el módulo `env_var`.                                                       |
 
 
 
@@ -2506,28 +2505,28 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | Opción                 | Predeterminado                                  | Descripción                                                                                                                               |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                                               |
-| `conflicted`           | `'='`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
-| `ahead`                | `'⇡'`                                           | El formato de `ahead`                                                                                                                     |
-| `behind`               | `'⇣'`                                           | El formato de `behind`                                                                                                                    |
-| `diverged`             | `'⇕'`                                           | El formato de `diverged`                                                                                                                  |
-| `up_to_date`           | `''`                                            | El formato de `up_to_date`                                                                                                                |
-| `sin seguimiento`      | `'?'`                                           | El formato de `untracked`                                                                                                                 |
-| `stashed`              | `'\$'`                                         | El formato de `stashed`                                                                                                                   |
-| `modificado`           | `'!'`                                           | El formato de `modified`                                                                                                                  |
-| `staged`               | `'+'`                                           | El formato de `staged`                                                                                                                    |
-| `renamed`              | `'»'`                                           | El formato de `renamed`                                                                                                                   |
-| `eliminado`            | `'✘'`                                           | El formato de `deleted`                                                                                                                   |
-| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                                               |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                                                    |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                                                   |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                                                     |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                                                             |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                                                            |
+| `sin seguimiento`      | `'?'`                                           | The format shown when there are untracked files in the working directory.                                                                 |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                                                            |
+| `modificado`           | `'!'`                                           | The format shown when there are file modifications in the working directory.                                                              |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                                                      |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                                                  |
+| `eliminado`            | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                                               |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                                                 |
 | `style`                | `'bold red'`                                    | El estilo del módulo.                                                                                                                     |
 | `ignore_submodules`    | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
-| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                                                            |
-| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                                                          |
-| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                                                         |
-| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                                                      |
-| `index_added`          | `""`                                            | The format of `index_added`                                                                                                               |
-| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                                                             |
-| `index_modified`       | `""`                                            | The format of `index_modified`                                                                                                            |
-| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                                                         |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                                                 |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                                                   |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                                                  |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                                                            |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                                                      |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                                                      |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                                                       |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                                                 |
 | `disabled`             | `false`                                         | Deshabilita el módulo `git_status`.                                                                                                       |
 | `windows_starship`     |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
 | `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                                                     |
@@ -2541,7 +2540,7 @@ Las siguientes variables se pueden utilizar en `format`:
 
 | Variable               | Descripción                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                                  |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                                |
 | `ahead_behind`         | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
 | `conflicted`           | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
 | `sin seguimiento`      | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
@@ -2556,9 +2555,9 @@ Las siguientes variables se pueden utilizar en `format`:
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                                       |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                            |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                               |
-| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                                 |
-| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                               |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                             |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                             |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                                    |
 | style\*              | Refleja el valor de la opción `style`                                                                                    |
 
 
