@@ -499,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | Символ, повного заряду батареї.      |
 | `charging_symbol`    | `'󰂄 '`                            | Символ процесу заряджання.           |
 | `discharging_symbol` | `'󰂃 '`                            | Символ, коли батарея розряджається.  |
-| `unknown_symbol`     | `'󰁽 '`                            | Символ, коли стан батареї невідомий. |
+| `unknown_symbol`     | `'󰂑 '`                            | Символ, коли стан батареї невідомий. |
 | `empty_symbol`       | `'󰂎 '`                            | Символ повністю розрядженої батареї. |
 | `format`             | `'[$symbol$percentage]($style) '` | Формат модуля.                       |
 | `display`            | [link](#battery-display)          | Граничні значення і стиль модуля.    |
@@ -1451,15 +1451,14 @@ format = 'via [ $version](cyan bold) '
 
 ### Параметри
 
-| Параметр      | Стандартно                     | Опис                                                                    |
-| ------------- | ------------------------------ | ----------------------------------------------------------------------- |
-| `symbol`      | `""`                           | Символ, який знаходиться перед значенням variable.                      |
-| `variable`    |                                | Змінна середовища для показу.                                           |
-| `default`     |                                | Стандартне значення буде показане, якщо змінні для показу не визначені. |
-| `format`      | `"with [$env_value]($style) "` | Формат модуля.                                                          |
-| `description` | `"<env_var module>"`     | Опис модуля, який показується під час запуску `starship explain`.       |
-| `disabled`    | `false`                        | Вимикає модуль `env_var`.                                               |
-| `style`       | `"black bold dimmed"`          | Стиль модуля.                                                           |
+| Параметр      | Стандартно                            | Опис                                                                    |
+| ------------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| `symbol`      | `""`                                  | Символ, який знаходиться перед значенням variable.                      |
+| `variable`    |                                       | Змінна середовища для показу.                                           |
+| `default`     |                                       | Стандартне значення буде показане, якщо змінні для показу не визначені. |
+| `format`      | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                          |
+| `description` | `"<env_var module>"`            | Опис модуля, який показується під час запуску `starship explain`.       |
+| `disabled`    | `false`                               | Вимикає модуль `env_var`.                                               |
 
 ### Змінні
 
@@ -1956,28 +1955,28 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | Параметр               | Стандартно                                      | Опис                                                                                                                    |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`           | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
-| `ahead`                | `'⇡'`                                           | Формат `ahead`                                                                                                          |
-| `behind`               | `'⇣'`                                           | Формат `behind`                                                                                                         |
-| `diverged`             | `'⇕'`                                           | Формат `diverged`                                                                                                       |
-| `up_to_date`           | `''`                                            | Формат `up_to_date`                                                                                                     |
-| `untracked`            | `'?'`                                           | Формат `untracked`                                                                                                      |
-| `stashed`              | `'\$'`                                         | Формат `stashed`                                                                                                        |
-| `modified`             | `'!'`                                           | Формат `modified`                                                                                                       |
-| `staged`               | `'+'`                                           | Формат `staged`                                                                                                         |
-| `renamed`              | `'»'`                                           | Формат `renamed`                                                                                                        |
-| `deleted`              | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`          | `""`                                            | Формат `typechanged`                                                                                                    |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                                  |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                                 |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                                   |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                                           |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                                          |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                               |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                                          |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                            |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                                    |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                                |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                             |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
 | `style`                | `'bold red'`                                    | Стиль модуля.                                                                                                           |
 | `ignore_submodules`    | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `worktree_added`       | `""`                                            | Формат `worktree_added`                                                                                                 |
-| `worktree_deleted`     | `""`                                            | Формат `worktree_deleted`                                                                                               |
-| `worktree_modified`    | `""`                                            | Формат `worktree_modified`                                                                                              |
-| `worktree_typechanged` | `""`                                            | Формат `worktree_typechanged`                                                                                           |
-| `index_added`          | `""`                                            | Формат `index_added`                                                                                                    |
-| `index_deleted`        | `""`                                            | Формат `index_deleted`                                                                                                  |
-| `index_modified`       | `""`                                            | Формат `index_modified`                                                                                                 |
-| `index_typechanged`    | `""`                                            | Формат `index_typechanged`                                                                                              |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                               |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                                 |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                                |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                                          |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                                    |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                                    |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                                     |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
 | `disabled`             | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
 | `windows_starship`     |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
 | `use_git_executable`   | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
@@ -1988,7 +1987,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 | Змінна                 | Опис                                                                                                |
 | ---------------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`           | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.           |
 | `ahead_behind`         | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
 | `conflicted`           | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
 | `untracked`            | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
@@ -2003,9 +2002,9 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `worktree_modified`    | Показує `worktree_modified `, коли фал було змінено в робочій теці.                                 |
 | `worktree_typechanged` | Показує `worktree_typechanged`, коли тип файлу було змінено в робочій теці.                         |
 | `index_added`          | Показує `index_added`, коли новий файл було додано до простору staging.                             |
-| `index_deleted`        | Показує `index_deleted`, коли файл було вилучено з простору staging.                                |
-| `index_modified`       | Показує `index_modified`, коли файл було змінено в просторі staging.                                |
-| `index_typechanged`    | Показує `index_typechanged`, коли тип файлу було змінено в просторі staging.                        |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                        |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                        |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.               |
 | style\*              | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
