@@ -499,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | Kí hiệu cho biết khi pin đầy.                            |
 | `charging_symbol`    | `'󰂄 '`                            | Kí hiệu cho biết khi ping đang sạc.                      |
 | `discharging_symbol` | `'󰂃 '`                            | Kí hiệu cho biết khi pin đang không sạc.                 |
-| `unknown_symbol`     | `'󰁽 '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
+| `unknown_symbol`     | `'󰂑 '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
 | `empty_symbol`       | `'󰂎 '`                            | Kí hiệu cho biết khi hết pin.                            |
 | `format`             | `'[$symbol$percentage]($style) '` | Định dạng cho module.                                    |
 | `display`            | [link](#battery-display)          | Ngưỡng hiển thị và kiểu cho module.                      |
@@ -1451,15 +1451,14 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Options
 
-| Tuỳ chọn   | Mặc định                       | Mô tả                                                                        |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | Biểu tượng sử dụng để hiển thị trước giá trị của biến.                       |
-| `variable` |                                | Biến môi trường được hiển thị.                                               |
-| `default`  |                                | Giá trị mặc định được hiển thị khi biến được chọn không được định nghĩa.     |
-| `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
-| `mô tả`    | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                        | Vô hiệu `env_var`.                                                           |
-| `style`    | `"black bold dimmed"`          | Kiểu cho module.                                                             |
+| Tuỳ chọn   | Mặc định                              | Mô tả                                                                        |
+| ---------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                                  | Biểu tượng sử dụng để hiển thị trước giá trị của biến.                       |
+| `variable` |                                       | Biến môi trường được hiển thị.                                               |
+| `default`  |                                       | Giá trị mặc định được hiển thị khi biến được chọn không được định nghĩa.     |
+| `format`   | `"with [$symbol$env_value]($style) "` | Định dạng cho module.                                                        |
+| `mô tả`    | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                               | Vô hiệu `env_var`.                                                           |
 
 ### Các biến
 
@@ -1956,28 +1955,28 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 | Tuỳ chọn               | Mặc định                                        | Mô tả                                                                                                       |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
-| `conflicted`           | `'='`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
-| `ahead`                | `'⇡'`                                           | Định dạng của `ahead`                                                                                       |
-| `behind`               | `'⇣'`                                           | Định dạng của `behind`                                                                                      |
-| `diverged`             | `'⇕'`                                           | Định dạng của `diverged`                                                                                    |
-| `up_to_date`           | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`            | `'?'`                                           | Định dạng của `untracked`                                                                                   |
-| `stashed`              | `'\$'`                                         | Định dạng của `stashed`                                                                                     |
-| `modified`             | `'!'`                                           | Định dạng của `modified`                                                                                    |
-| `staged`               | `'+'`                                           | Định dạng của `modified`                                                                                    |
-| `renamed`              | `'»'`                                           | Định dạng của `renamed`                                                                                     |
-| `deleted`              | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
-| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `style`                | `'bold red'`                                    | Kiểu cho module.                                                                                            |
 | `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
-| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
-| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
-| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
-| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
-| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
-| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
-| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
-| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `disabled`             | `false`                                         | Vô hiệu `git_status` module.                                                                                |
 | `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 | `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
@@ -1988,7 +1987,7 @@ Các biến dưới đây có thể được sử dụng trong `format`:
 
 | Biến                   | Mô tả                                                                                                         |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
 | `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`           | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
 | `untracked`            | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
@@ -2003,9 +2002,9 @@ Các biến dưới đây có thể được sử dụng trong `format`:
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
-| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
-| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
 | style\*              | Giá trị ghi đè của `style`                                                                                    |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
