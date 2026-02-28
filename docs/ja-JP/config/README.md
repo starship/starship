@@ -499,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | バッテリーが満タンのときに表示される記号です。   |
 | `charging_symbol`    | `'󰂄 '`                            | バッテリーの充電中に表示される記号です。      |
 | `discharging_symbol` | `'󰂃 '`                            | バッテリーが放電しているときに表示される記号です。 |
-| `unknown_symbol`     | `'󰁽 '`                            | バッテリー状態が不明なときに表示される記号です。  |
+| `unknown_symbol`     | `'󰂑 '`                            | バッテリー状態が不明なときに表示される記号です。  |
 | `empty_symbol`       | `'󰂎 '`                            | バッテリーが空のときに表示される記号です。     |
 | `format`             | `'[$symbol$percentage]($style) '` | module のフォーマットです。         |
 | `display`            | [link](#battery-display)          | モジュールの閾値とスタイルを表示します。      |
@@ -1451,15 +1451,14 @@ format = 'via [ $version](cyan bold) '
 
 ### オプション
 
-| オプション         | デフォルト                          | 説明                                     |
-| ------------- | ------------------------------ | -------------------------------------- |
-| `symbol`      | `""`                           | 環境変数を表示する前に使用される記号です。                  |
-| `variable`    |                                | 表示される環境変数です。                           |
-| `default`     |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。  |
-| `format`      | `"with [$env_value]($style) "` | module のフォーマットです。                      |
-| `description` | `"<env_var module>"`     | `starship explain` 実行の際に表示されるモジュールの説明。 |
-| `disabled`    | `false`                        | `env_var`モジュールを無効にします。                 |
-| `style`       | `"black bold dimmed"`          | モジュールのスタイルです。                          |
+| オプション         | デフォルト                                 | 説明                                     |
+| ------------- | ------------------------------------- | -------------------------------------- |
+| `symbol`      | `""`                                  | 環境変数を表示する前に使用される記号です。                  |
+| `variable`    |                                       | 表示される環境変数です。                           |
+| `default`     |                                       | 上のvariableが定義されていない場合に表示されるデフォルトの値です。  |
+| `format`      | `"with [$symbol$env_value]($style) "` | module のフォーマットです。                      |
+| `description` | `"<env_var module>"`            | `starship explain` 実行の際に表示されるモジュールの説明。 |
+| `disabled`    | `false`                               | `env_var`モジュールを無効にします。                 |
 
 ### 変数
 
@@ -1956,28 +1955,28 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | オプション                  | デフォルト                                           | 説明                                                                                    |
 | ---------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット                                                             |
-| `conflicted`           | `'='`                                           | このブランチにはマージの競合があります。                                                                  |
-| `ahead`                | `'⇡'`                                           | `ahead`のフォーマット                                                                        |
-| `behind`               | `'⇣'`                                           | `behind`のフォーマット                                                                       |
-| `diverged`             | `'⇕'`                                           | `diverged`のフォーマット                                                                     |
-| `up_to_date`           | `''`                                            | `up_to_date`のフォーマット                                                                   |
-| `untracked`            | `'?'`                                           | `untracked`のフォーマット                                                                    |
-| `stashed`              | `'\$'`                                         | `stashed`のフォーマット                                                                      |
-| `modified`             | `'!'`                                           | `modified`のフォーマット                                                                     |
-| `staged`               | `'+'`                                           | `staged`のフォーマット                                                                       |
-| `renamed`              | `'»'`                                           | `renamed`のフォーマット                                                                      |
-| `deleted`              | `'✘'`                                           | `deleted`のフォーマット                                                                      |
-| `typechanged`          | `""`                                            | The format of `typechanged`                                                           |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.               |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                 |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.         |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.        |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.             |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                        |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.          |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                  |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.              |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.           |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.             |
 | `style`                | `'bold red'`                                    | モジュールのスタイルです。                                                                         |
 | `ignore_submodules`    | `false`                                         | サブモジュールの変更を無視します。                                                                     |
-| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                        |
-| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                      |
-| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                     |
-| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                  |
-| `index_added`          | `""`                                            | The format of `index_added`                                                           |
-| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                         |
-| `index_modified`       | `""`                                            | The format of `index_modified`                                                        |
-| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                     |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.             |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.               |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.              |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.        |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                  |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                  |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                   |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.             |
 | `disabled`             | `false`                                         | `git_status`モジュールを無効にします。                                                             |
 | `windows_starship`     |                                                 | WSLでWindowsディレクトリの`git_status`で使用するWindows Starshipの実行ファイルのLinux上でのパス。                |
 | `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead. |
@@ -1988,7 +1987,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 | 変数                     | 説明                                                                                            |
 | ---------------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`           | `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked` のショートカット          |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.     |
 | `ahead_behind`         | 現在のリポジトリに応じてフォーマット文字列 `diverged`, `ahead`, `behind`, `up_to_date` の何れかを表示します。                 |
 | `conflicted`           | このブランチにマージコンフリクトがある場合、 `conflicted` を表示します。                                                   |
 | `untracked`            | 作業ディレクトリに追跡されていないファイルがある場合、 `untracked` を表示します。                                               |
@@ -2003,9 +2002,9 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.            |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory. |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                    |
-| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                      |
-| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                    |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.         |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.         |
 | style\*              | オプション `style` の値をミラーする                                                                        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
