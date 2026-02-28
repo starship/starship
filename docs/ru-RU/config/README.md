@@ -499,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | Символ, отображаемый при полной батарее.                |
 | `charging_symbol`    | `'󰂄 '`                            | Символ, показываемый при зарядке аккумулятора.          |
 | `discharging_symbol` | `'󰂃 '`                            | Символ, показываемый при разрядке аккумулятора.         |
-| `unknown_symbol`     | `'󰁽 '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
+| `unknown_symbol`     | `'󰂑 '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
 | `empty_symbol`       | `'󰂎 '`                            | Символ, отображаемый при пустом состоянии батареи.      |
 | `format`             | `'[$symbol$percentage]($style) '` | Формат модуля.                                          |
 | `display`            | [ссылка](#battery-display)        | Порог отображения и стиль для модуля.                   |
@@ -1451,15 +1451,14 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Опции
 
-| Параметр   | По умолчанию                   | Описание                                                                     |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | Символ, используемый перед отображением значения переменной.                 |
-| `variable` |                                | Отображаемая переменная окружения.                                           |
-| `default`  |                                | Значение отображаемое, когда выбранная переменная не определена.             |
-| `format`   | `"with [$env_value]($style) "` | Формат модуля.                                                               |
-| `описание` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                        | Отключает модуль `env_var`.                                                  |
-| `style`    | `"black bold dimmed"`          | Стиль модуля.                                                                |
+| Параметр   | По умолчанию                          | Описание                                                                     |
+| ---------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                                  | Символ, используемый перед отображением значения переменной.                 |
+| `variable` |                                       | Отображаемая переменная окружения.                                           |
+| `default`  |                                       | Значение отображаемое, когда выбранная переменная не определена.             |
+| `format`   | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                               |
+| `описание` | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                               | Отключает модуль `env_var`.                                                  |
 
 ### Переменные
 
@@ -1956,28 +1955,28 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | Параметр               | По умолчанию                                    | Описание                                                                                                    |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`           | `'='`                                           | Эта ветка имеет конфликты слияния.                                                                          |
-| `ahead`                | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`               | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`             | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`           | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`            | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`              | `'\$'`                                         | The format of `stashed`                                                                                     |
-| `modified`             | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`               | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`              | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`              | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`          | `""`                                            | The format of `typechanged`                                                                                 |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `style`                | `'bold red'`                                    | Стиль модуля.                                                                                               |
 | `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
-| `worktree_added`       | `""`                                            | The format of `worktree_added`                                                                              |
-| `worktree_deleted`     | `""`                                            | The format of `worktree_deleted`                                                                            |
-| `worktree_modified`    | `""`                                            | The format of `worktree_modified`                                                                           |
-| `worktree_typechanged` | `""`                                            | The format of `worktree_typechanged`                                                                        |
-| `index_added`          | `""`                                            | The format of `index_added`                                                                                 |
-| `index_deleted`        | `""`                                            | The format of `index_deleted`                                                                               |
-| `index_modified`       | `""`                                            | The format of `index_modified`                                                                              |
-| `index_typechanged`    | `""`                                            | The format of `index_typechanged`                                                                           |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
 | `disabled`             | `false`                                         | Отключает модуль `git_status`.                                                                              |
 | `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 | `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
@@ -1988,7 +1987,7 @@ The following variables can be used in `format`:
 
 | Переменная             | Описание                                                                                                      |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`           | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
 | `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
@@ -2003,9 +2002,9 @@ The following variables can be used in `format`:
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
 | `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
 | `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
-| `index_deleted`        | Displays `index_deleted` when a file's been deleted to the staging area.                                      |
-| `index_modified`       | Displays `index_modified` when a file's been modified to the staging area.                                    |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed to the staging area.                         |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
 | style\*              | Отражает значение параметра `style`                                                                           |
 
 *: Эта переменная может использоваться только в качестве части строки style
