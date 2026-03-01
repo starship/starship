@@ -1828,6 +1828,7 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 | `format`      | `"with [$symbol$env_value]($style) "` | El formato del módulo.                                                                 |
 | `description` | `"<env_var module>"`            | La descripción del módulo que se muestra al ejecutar `starship explain`.               |
 | `disabled`    | `false`                               | Deshabilita el módulo `env_var`.                                                       |
+| `style`       | `"black bold dimmed"`                 | El estilo del módulo.                                                                  |
 
 
 
