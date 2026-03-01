@@ -1459,6 +1459,7 @@ format = 'via [ $version](cyan bold) '
 | `format`      | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                          |
 | `description` | `"<env_var module>"`            | Опис модуля, який показується під час запуску `starship explain`.       |
 | `disabled`    | `false`                               | Вимикає модуль `env_var`.                                               |
+| `style`       | `"black bold dimmed"`                 | Стиль модуля.                                                           |
 
 ### Змінні
 
