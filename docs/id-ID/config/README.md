@@ -1459,6 +1459,7 @@ Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih
 | `fromat`    | `"with [$symbol$env_value]($style) "` | Format dari modul.                                                                    |
 | `deskripsi` | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`.          |
 | `disabled`  | `false`                               | Menonaktifkan modul `env_var`.                                                        |
+| `style`     | `"black bold dimmed"`                 | Gaya penataan untuk modul.                                                            |
 
 ### Variabel
 
