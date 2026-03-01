@@ -1459,6 +1459,7 @@ format = 'via [ $version](cyan bold) '
 | `format`      | `"with [$symbol$env_value]($style) "` | module のフォーマットです。                      |
 | `description` | `"<env_var module>"`            | `starship explain` 実行の際に表示されるモジュールの説明。 |
 | `disabled`    | `false`                               | `env_var`モジュールを無効にします。                 |
+| `style`       | `"black bold dimmed"`                 | モジュールのスタイルです。                          |
 
 ### 変数
 
