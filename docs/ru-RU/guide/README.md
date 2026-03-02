@@ -279,7 +279,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 ### Шаг 2. Настройте оболочку для использования Starship
 
-Настройте оболочку для инициализации starship. Выберете вашу оболочку из списка:
+Настройте оболочку для инициализации starship. Выберите вашу оболочку из списка:
 
 <details>
 <summary>Bash</summary>
@@ -408,7 +408,7 @@ eval "$(starship init zsh)"
 
 ## 🤝 Помощь
 
-Мы всегда ищем помощь людей **всех уровней навыков**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+Мы всегда ищем помощь людей **всех уровней навыков**! Если вы хотите погрузиться в проект, попробуйте начать с  [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Если Вы свободно владеете иностранным языком отличным от английского, мы высоко оценим любую помощь в переводе нашей документации на другие языки и поддержании ее в актуальном состоянии. Если вы хотите помочь, переводы могут быть сделаны на платформе [Starship Crowdin](https://translate.starship.rs/).
 
