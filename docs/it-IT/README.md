@@ -75,7 +75,7 @@ onMounted(() => {
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   winget install starship
+   winget install --id Starship.Starship
    ```
 
 1. Aggiungi lo script di inizializzazione al file di configurazione della shell:

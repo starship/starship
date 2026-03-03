@@ -75,7 +75,7 @@ onMounted(() => {
    С помощью [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   winget install starship
+   winget install --id Starship.Starship
    ```
 
 1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
