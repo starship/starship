@@ -42,6 +42,7 @@ $elm\
 $erlang\
 $fennel\
 $fortran\
+$godot\
 $golang\
 $guix_shell\
 $haskell\
@@ -291,6 +292,10 @@ format = " exs [$symbol $version OTP $otp_version ]($style)"
 [elm]
 symbol = "◩ "
 format = " elm [$symbol($version )]($style)"
+
+[godot]
+symbol = "◯ "
+format = " godot [$symbol($version )]($style)"
 
 [golang]
 symbol = "∩ "

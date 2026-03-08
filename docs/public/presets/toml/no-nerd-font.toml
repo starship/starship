@@ -13,6 +13,9 @@ symbol = "ⓔ "
 [fortran]
 symbol = "F "
 
+[godot]
+symbol = "🤖 "
+
 [nodejs]
 symbol = "[⬢](bold green) "
 
