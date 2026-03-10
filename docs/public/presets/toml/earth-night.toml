@@ -1,0 +1,77 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[░▒▓](accent)\
+[  ](bg:accent fg:#090c0c)\
+[](bg:primary fg:accent)\
+$directory\
+[](fg:primary bg:secondary)\
+$git_branch\
+$git_status\
+[](fg:secondary bg:tertiary)\
+$nodejs\
+$rust\
+$golang\
+$php\
+[](fg:tertiary bg:deepest)\
+$time\
+[ ](fg:deepest)\
+\n$character"""
+
+palette = 'earth_night'
+
+[palettes.earth_night]
+accent = '#c4a882'
+primary = '#8a6e4e'
+secondary = '#5c4333'
+tertiary = '#3a2a1c'
+deepest = '#241a10'
+text = '#e8dfd5'
+muted = '#b8a898'
+
+[directory]
+style = "fg:text bg:primary"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:secondary"
+format = '[[ $symbol $branch ](fg:primary bg:secondary)]($style)'
+
+[git_status]
+style = "bg:secondary"
+format = '[[($all_status$ahead_behind )](fg:primary bg:secondary)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol ($version) ](fg:primary bg:tertiary)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol ($version) ](fg:primary bg:tertiary)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol ($version) ](fg:primary bg:tertiary)]($style)'
+
+[php]
+symbol = ""
+style = "bg:tertiary"
+format = '[[ $symbol ($version) ](fg:primary bg:tertiary)]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:deepest"
+format = '[[  $time ](fg:muted bg:deepest)]($style)'
