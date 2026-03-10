@@ -37,14 +37,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || uses_reftables(&repo.repo.to_thread_local())
         || gix_repo.index_or_empty().ok()?.is_sparse()
     {
-        let mut git_args = vec!["diff", "--shortstat"];
+        let mut unstaged_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
-            git_args.push("--ignore-submodules");
+            unstaged_args.push("--ignore-submodules");
         }
+        let unstaged_diff = repo.exec_git(context, &unstaged_args)?.stdout;
 
-        let diff = repo.exec_git(context, &git_args)?.stdout;
+        let mut staged_args = vec!["diff", "--cached", "--shortstat"];
+        if config.ignore_submodules {
+            staged_args.push("--ignore-submodules");
+        }
+        let staged_diff = repo.exec_git(context, &staged_args)?.stdout;
 
-        GitDiff::parse(&diff)
+        GitDiff::parse(&unstaged_diff).merge(GitDiff::parse(&staged_diff))
     } else {
         #[derive(Default)]
         struct Diff {
@@ -386,6 +391,18 @@ impl GitDiff {
         }
     }
 
+    fn parse_count(changed: &str) -> usize {
+        changed.parse::<usize>().unwrap_or_default()
+    }
+
+    fn merge(self, other: Self) -> Self {
+        Self {
+            added: (Self::parse_count(&self.added) + Self::parse_count(&other.added)).to_string(),
+            deleted: (Self::parse_count(&self.deleted) + Self::parse_count(&other.deleted))
+                .to_string(),
+        }
+    }
+
     pub fn get_variable(
         only_nonzero_diffs: bool,
         changed: &str,
@@ -403,6 +420,7 @@ impl GitDiff {
 
 #[cfg(test)]
 mod tests {
+    use super::GitDiff;
     use crate::utils::{create_command, write_file};
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
@@ -418,6 +436,17 @@ mod tests {
         [FixtureProvider::Git, FixtureProvider::GitReftable];
     const BARE_AND_REFTABLE: [FixtureProvider; 2] =
         [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
+
+    #[test]
+    fn combines_staged_and_unstaged_shortstat() {
+        let unstaged = GitDiff::parse(" 1 file changed, 4 insertions(+), 2 deletions(-)\n");
+        let staged = GitDiff::parse(" 2 files changed, 3 insertions(+), 1 deletion(-)\n");
+
+        let combined = unstaged.merge(staged);
+
+        assert_eq!(combined.added, "7");
+        assert_eq!(combined.deleted, "3");
+    }
 
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
@@ -464,17 +493,35 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::GitReftable) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Green.bold().paint("+1")))
-            };
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    #[test]
+    fn shows_staged_addition_with_git_executable_non_reftable() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit(FixtureProvider::Git)?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("new-file"), "new line")?;
+        run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_status]
+                use_git_executable = true
+                [git_metrics]
+                disabled = false
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 
     #[test]
@@ -492,12 +539,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::GitReftable) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Green.bold().paint("+1")))
-            };
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -535,16 +577,11 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::GitReftable) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!(
-                    "{} {} ",
-                    Color::Green.bold().paint("+1"),
-                    Color::Red.bold().paint("-3")
-                ))
-            };
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+1"),
+                Color::Red.bold().paint("-3")
+            ));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -599,12 +636,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::GitReftable) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Red.bold().paint("-3")))
-            };
+            let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -680,6 +712,49 @@ mod tests {
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    #[test]
+    fn shows_staged_changes_sparse() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
+
+            make_sparse(path)?;
+            let mut still_visible = OpenOptions::new()
+                .append(true)
+                .open(path.join("sparse-dir/still-visible"))?;
+            writeln!(still_visible, "Added line")?;
+            still_visible.sync_all()?;
+            run_git_cmd(["add", "sparse-dir/still-visible"], Some(path), true)?;
+
+            let actual = render_metrics(path);
+
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_staged_changes_sparse_non_reftable() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit(FixtureProvider::Git)?;
+        let path = repo_dir.path();
+
+        make_sparse(path)?;
+        let mut still_visible = OpenOptions::new()
+            .append(true)
+            .open(path.join("sparse-dir/still-visible"))?;
+        writeln!(still_visible, "Added line")?;
+        still_visible.sync_all()?;
+        run_git_cmd(["add", "sparse-dir/still-visible"], Some(path), true)?;
+
+        let actual = render_metrics(path);
+
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 
     #[test]
