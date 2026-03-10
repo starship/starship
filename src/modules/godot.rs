@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_godot_version(raw_godot_version.as_str(), &config.version_format).map(Ok)
+                    format_godot_version(raw_godot_version.as_str(), config.version_format).map(Ok)
                 }
                 "numver" => {
                     format_godot_version(raw_godot_version.as_str(), "${major}.${minor}.${patch}")
@@ -92,7 +92,6 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
-    use std::io::Write;
 
     #[test]
     fn test_format_godot_version() {
