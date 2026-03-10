@@ -9,6 +9,7 @@ A warm, earthy take on the [Tokyo Night](./tokyo-night) layout — same structur
 ### Prerequisites
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- For the best experience, set your terminal background to a warm dark brown (e.g. `#2a211a`)
 
 ### Configuration
 
