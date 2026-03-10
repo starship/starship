@@ -88,6 +88,12 @@ mod tests {
 
     use super::*;
 
+    use crate::test::ModuleRenderer;
+    use nu_ansi_term::Color;
+    use std::fs::{self, File};
+    use std::io;
+    use std::io::Write;
+
     #[test]
     fn test_format_godot_version() {
         let config = GodotConfig::default();
@@ -111,5 +117,77 @@ mod tests {
             ),
             Some("major:4 minor:6 patch:1 raw:4.6.1".to_string())
         );
+    }
+
+    #[test]
+    fn folder_without_godot_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_godot_gdscript_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("custom_node.gd"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_godot_project_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("project.godot"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_godot_resource_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("big_bad_boss.tres"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_godot_scene_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("level1.tscn"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_godot_metadata_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let godeps = dir.path().join(".godot");
+        fs::create_dir_all(godeps)?;
+
+        let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

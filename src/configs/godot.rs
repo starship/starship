@@ -27,7 +27,7 @@ impl Default for GodotConfig<'_> {
             symbol: " ",
             style: "bold blue",
             disabled: false,
-            detect_extensions: vec!["gd", "tscn"],
+            detect_extensions: vec!["gd", "tscn", "tres"],
             detect_files: vec!["project.godot"],
             detect_folders: vec![".godot"],
             godot_command: "godot",
