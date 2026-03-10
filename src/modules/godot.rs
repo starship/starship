@@ -34,8 +34,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_godot_version(raw_godot_version.as_str(), &config.version_format).map(Ok),
-                "numver" => format_godot_version(raw_godot_version.as_str(), "${major}.${minor}.${patch}").map(Ok),
+                "version" => {
+                    format_godot_version(raw_godot_version.as_str(), &config.version_format).map(Ok)
+                }
+                "numver" => {
+                    format_godot_version(raw_godot_version.as_str(), "${major}.${minor}.${patch}")
+                        .map(Ok)
+                }
                 "fullver" => Some(Ok(raw_godot_version.clone())),
                 _ => None,
             })
@@ -53,7 +58,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-
 /// Get the output for `godot --version`
 fn get_godot_version(command: &str, context: &Context) -> Option<String> {
     context
@@ -63,7 +67,6 @@ fn get_godot_version(command: &str, context: &Context) -> Option<String> {
         .next()
         .map(str::to_owned)
 }
-
 
 fn format_godot_version(version: &str, version_format: &str) -> Option<String> {
     let re = Regex::new(r"(^\d+\.\d+\.\d+)").unwrap();
@@ -79,7 +82,6 @@ fn format_godot_version(version: &str, version_format: &str) -> Option<String> {
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -103,7 +105,10 @@ mod tests {
         );
 
         assert_eq!(
-            format_godot_version(godot_linux, "major:${major} minor:${minor} patch:${patch} raw:${raw}"),
+            format_godot_version(
+                godot_linux,
+                "major:${major} minor:${minor} patch:${patch} raw:${raw}"
+            ),
             Some("major:4 minor:6 patch:1 raw:4.6.1".to_string())
         );
     }

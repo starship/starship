@@ -2244,13 +2244,13 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example                             | Description                                  |
-| --------- | ----------------------------------- | -------------------------------------------- |
-| version   | `v4.6.1`                            | The formatted version of `godot`             |
-| numver    | `1.51.0`                            | The numeric component of the `godot` version |
-| fullver   | `4.6.1.stable.arch_linux.14d19694e` | The full original `godot` version            |
-| symbol    |                                     | Mirrors the value of option `symbol`         |
-| style\*   |                                     | Mirrors the value of option `style`          |
+| Variable | Example                             | Description                                  |
+| -------- | ----------------------------------- | -------------------------------------------- |
+| version  | `v4.6.1`                            | The formatted version of `godot`             |
+| numver   | `1.51.0`                            | The numeric component of the `godot` version |
+| fullver  | `4.6.1.stable.arch_linux.14d19694e` | The full original `godot` version            |
+| symbol   |                                     | Mirrors the value of option `symbol`         |
+| style\*  |                                     | Mirrors the value of option `style`          |
 
 *: This variable can only be used as a part of a style string
 
@@ -2263,7 +2263,6 @@ By default the module will be shown if any of the following conditions are met:
 format = 'via [🎮 $version](red bold)'
 godot_command = "/Applications/Godot.app/Contents/MacOS/Godot"
 ```
-
 
 ## Go
 
