@@ -21,7 +21,7 @@ truncate_to_repo = false
 
 [git_branch]
 # We escape the parentheses with \ so Starship reads them as literal text
-format = '[git:\(]($style)[$branch](bold red)[\)]($style)'
+format = ' [git:\(]($style)[$branch](bold red)[\)]($style)'
 style = "bold blue"
 
 [git_status]
