@@ -92,6 +92,7 @@ mod spack;
 mod status;
 mod sudo;
 mod swift;
+mod talos;
 mod terraform;
 mod time;
 mod username;
@@ -213,6 +214,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
+            "talos" => talos::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "typst" => typst::module(context),
@@ -351,6 +353,7 @@ pub fn description(module: &str) -> &'static str {
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",
+        "talos" => "The current Talos Linux context name, endpoints and if set, roles",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "typst" => "The current installed version of typst",
