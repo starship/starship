@@ -19,6 +19,7 @@ mod dart;
 mod deno;
 mod directory;
 mod direnv;
+mod disk_usage;
 mod docker_context;
 mod dotnet;
 mod elixir;
@@ -140,6 +141,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "deno" => deno::module(context),
             "directory" => directory::module(context),
             "direnv" => direnv::module(context),
+            "disk_usage" => disk_usage::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
             "elixir" => elixir::module(context),
@@ -275,6 +277,7 @@ pub fn description(module: &str) -> &'static str {
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "direnv" => "The currently applied direnv file",
+        "disk_usage" => "Current system disk usage",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "elixir" => "The currently installed versions of Elixir and OTP",
