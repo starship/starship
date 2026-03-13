@@ -105,6 +105,9 @@ symbol = "gcp "
 symbol = "git "
 truncation_symbol = "..."
 
+[git_user]
+truncation_symbol = "..."
+
 [gleam]
 symbol = "gleam "
 

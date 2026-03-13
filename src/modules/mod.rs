@@ -36,6 +36,7 @@ mod git_commit;
 mod git_metrics;
 mod git_state;
 pub(crate) mod git_status;
+mod git_user;
 mod gleam;
 mod golang;
 mod gradle;
@@ -157,6 +158,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_metrics" => git_metrics::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
+            "git_user" => git_user::module(context),
             "gleam" => gleam::module(context),
             "golang" => golang::module(context),
             "gradle" => gradle::module(context),
@@ -291,6 +293,7 @@ pub fn description(module: &str) -> &'static str {
         "git_metrics" => "The currently added/deleted lines in your repo",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
+        "git_user" => "Display the username and email in the git configuration file",
         "gleam" => "The currently installed version of Gleam",
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",

@@ -277,6 +277,7 @@ $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
+$git_user\
 $hg_branch\
 $hg_state\
 $pijul_channel\
@@ -2175,6 +2176,46 @@ Use Windows Starship executable on Windows paths in WSL
 
 [git_status]
 windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
+## Git User
+
+The `git_user` module will show the user of either the current active repository or the user saved in the git configurations file
+
+> [!TIP]
+> The Git configuration of the local repository is taken into account first; if this doesn’t exist, then the module uses the global Git configuration.
+
+### Options
+
+| Option              | Default                                | Description                                                                                                                                                |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'as [$name( \\($email\\))]($style) '` | The format that the module uses to show the git configuration username and email                                                                           |
+| `style`             | `'bold green'`                         | The style for the module.                                                                                                                                  |
+| `truncation_length` | `2^63 - 1`                             | Truncates the git username and email to `N` graphemes.                                                                                                     |
+| `truncation_symbol` | `'…'`                                  | The symbol used to indicate the truncated username and email. You can use `''` for no symbol.                                                              |
+| `show_always`       | `false`                                | If `true` will display the git username and email system wide,If `false` the git username and email will only be displayed when in a active git repository |
+| `disabled`          | `false`                                | Disables the `git_user` module.                                                                                                                            |
+
+### Variables
+
+| Variable | Example | Description                                                                                                                     |
+| -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| name     |         | The username stored in your git configuration, if there is no username stored in the configuration file this will not displayed |
+| email    |         | The email stored in your git configuration, if there is no username stored in the configuration file this will not displayed    |
+| style\*  |         | Mirrors the value of option `style`                                                                                             |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_user]
+format = '\[[\($name $email\)]($style)\]'
+truncation_length = 4
+truncation_symbol = ''
+show_always = true
 ```
 
 ## Gleam

@@ -9,6 +9,7 @@ $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
 $git_status\
+$git_user\
 [](fg:#FCA17D bg:#86BBD8)\
 $c\
 $elixir\
@@ -100,6 +101,10 @@ format = '[ $symbol $branch ]($style)'
 [git_status]
 style = "bg:#FCA17D"
 format = '[$all_status$ahead_behind ]($style)'
+
+[git_user]
+style = "bg:#FCA17D"
+format = '[$name\[$email\] ]($style)'
 
 [golang]
 symbol = " "
