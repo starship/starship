@@ -1034,9 +1034,20 @@
     "mise": {
       "$ref": "#/$defs/MiseConfig",
       "default": {
-        "format": "on [$symbol$health]($style) ",
+        "local_only": true,
+        "health_check_enabled": false,
+        "format": "on [$symbol($status )($installed/$required )]($style)",
         "symbol": "mise ",
+        "healthy_symbol": "healthy",
+        "unhealthy_symbol": "unhealthy",
+        "untrusted_symbol": "untrusted",
+        "error_symbol": "error",
         "style": "bold purple",
+        "style_missing_some": "bold yellow",
+        "style_missing_all": "bold red",
+        "style_unhealthy": "bold red",
+        "style_untrusted": "bold red",
+        "style_error": "bold red",
         "disabled": true,
         "detect_extensions": [],
         "detect_files": [
@@ -1047,9 +1058,7 @@
         ],
         "detect_folders": [
           ".mise"
-        ],
-        "healthy_symbol": "healthy",
-        "unhealthy_symbol": "unhealthy"
+        ]
       }
     },
     "mojo": {
@@ -4690,17 +4699,61 @@
     "MiseConfig": {
       "type": "object",
       "properties": {
+        "local_only": {
+          "type": "boolean",
+          "default": true
+        },
+        "health_check_enabled": {
+          "type": "boolean",
+          "default": false
+        },
         "format": {
           "type": "string",
-          "default": "on [$symbol$health]($style) "
+          "default": "on [$symbol($status )($installed/$required )]($style)"
         },
         "symbol": {
           "type": "string",
           "default": "mise "
         },
+        "healthy_symbol": {
+          "type": "string",
+          "default": "healthy"
+        },
+        "unhealthy_symbol": {
+          "type": "string",
+          "default": "unhealthy"
+        },
+        "untrusted_symbol": {
+          "type": "string",
+          "default": "untrusted"
+        },
+        "error_symbol": {
+          "type": "string",
+          "default": "error"
+        },
         "style": {
           "type": "string",
           "default": "bold purple"
+        },
+        "style_missing_some": {
+          "type": "string",
+          "default": "bold yellow"
+        },
+        "style_missing_all": {
+          "type": "string",
+          "default": "bold red"
+        },
+        "style_unhealthy": {
+          "type": "string",
+          "default": "bold red"
+        },
+        "style_untrusted": {
+          "type": "string",
+          "default": "bold red"
+        },
+        "style_error": {
+          "type": "string",
+          "default": "bold red"
         },
         "disabled": {
           "type": "boolean",
@@ -4733,14 +4786,6 @@
           "default": [
             ".mise"
           ]
-        },
-        "healthy_symbol": {
-          "type": "string",
-          "default": "healthy"
-        },
-        "unhealthy_symbol": {
-          "type": "string",
-          "default": "unhealthy"
         }
       },
       "additionalProperties": false
