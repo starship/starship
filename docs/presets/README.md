@@ -88,4 +88,4 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 This preset emulates the look and behavior of [Oh My Zsh's robbyrussell](https://github.com/ohmyzsh/ohmyzsh/wiki/themes#robbyrussell).
 
-[![Screenshot of the robbyrussell preset](/presets/img/robbyrussell.png "Click to view the robbyrussell preset")](./robbyrussell)
+[![Screenshot of the robbyrussell preset](/presets/img/robbyrussell.jpg "Click to view the robbyrussell preset")](./robbyrussell)
