@@ -1,0 +1,41 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Disable the blank line at the start of the prompt
+add_newline = false
+
+# Strictly define the format to mimic 'robbyrussell'
+format = "$character$directory$git_branch$git_status "
+
+[character]
+# OMZ arrow with a space
+success_symbol = "[➜](bold green) "
+error_symbol = "[➜](bold red) "
+
+[directory]
+format = "[$path]($style)"
+style = "bold cyan"
+# robbyrussell only shows the current directory name, not the full path
+truncation_length = 1
+truncate_to_repo = false
+
+[git_branch]
+# We escape the parentheses with \ so Starship reads them as literal text
+format = '[git:\(]($style)[$branch](bold red)[\)]($style)'
+style = "bold blue"
+
+[git_status]
+# Shows ✗ if the repository is dirty
+format = '[$all_status]($style)'
+style = "bold blue"
+conflicted = "✗"
+untracked  = "✗"
+modified   = "✗"
+staged     = "✗"
+renamed    = "✗"
+deleted    = "✗"
+typechanged = "✗"
+# Hide stash, ahead, and behind indicators to keep it minimal
+stashed    = ""
+ahead      = ""
+behind     = ""
