@@ -97,6 +97,7 @@ mod time;
 mod username;
 mod utils;
 mod vagrant;
+mod vault;
 mod vcs;
 mod vcsh;
 mod vlang;
@@ -220,6 +221,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "username" => username::module(context),
             "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
+            "vault" => vault::module(context),
             "vcs" => vcs::module(context),
             "vcsh" => vcsh::module(context),
             "xmake" => xmake::module(context),
@@ -356,6 +358,7 @@ pub fn description(module: &str) -> &'static str {
         "typst" => "The current installed version of typst",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
+        "vault" =>  "Shows the Vault token expiration time if valid and within configured days",
         "vcs" => "The currently active VCS repository (first one matching)",
         "vcsh" => "The currently active VCSH repository",
         "vlang" => "The currently installed version of V",

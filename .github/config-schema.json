@@ -1776,6 +1776,16 @@
         "detect_folders": []
       }
     },
+    "vault": {
+      "$ref": "#/$defs/VaultConfig",
+      "default": {
+        "format": "[$symbol Token expires: $expire_time]($style)",
+        "symbol": "⚠️",
+        "style": "bold red",
+        "show_within_days": 7,
+        "disabled": false
+      }
+    },
     "vcs": {
       "$ref": "#/$defs/VcsConfig",
       "default": {
@@ -6684,6 +6694,34 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "VaultConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol Token expires: $expire_time]($style)"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "⚠️"
+        },
+        "style": {
+          "type": "string",
+          "default": "bold red"
+        },
+        "show_within_days": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "default": 7
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
