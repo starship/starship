@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod azure;
+mod azurerm;
 mod buf;
 mod bun;
 mod c;
@@ -123,6 +124,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
             "azure" => azure::module(context),
+            "azurerm" => azurerm::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "buf" => buf::module(context),
@@ -256,6 +258,7 @@ pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
+        "azurerm" => "The current Azure subscription for the Azure PowerShell modules",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
         "bun" => "The currently installed version of the Bun",
