@@ -46,7 +46,14 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal.
+Starship logs warnings and errors into files named `session_${STARSHIP_SESSION_KEY}.log`, where `STARSHIP_SESSION_KEY` corresponds to an instance of your terminal.
+
+These files are stored in platform-specific cache directories:
+
+- Linux: `XDG_CACHE_HOME` (if set) or `~/.cache/starship` (default)
+- macOS: `~/Library/Caches/starship`
+- Windows: `~/AppData/Local/starship`
+
 This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
 ```sh
