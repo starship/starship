@@ -137,9 +137,9 @@ enum Commands {
     /// Toggle a given starship module
     Toggle {
         /// The name of the module to be toggled
-        name: String,
+        name: Option<String>,
         /// The key of the config to be toggled
-        #[clap(default_value = "disabled")]
+        #[clap(default_value = "disabled", requires = "name")]
         value: String,
     },
     #[cfg(feature = "config-schema")]
@@ -252,7 +252,10 @@ fn main() {
             configure::print_configuration(&Context::default(), default, &name);
         }
         Commands::Toggle { name, value } => {
-            configure::toggle_configuration(&Context::default(), &name, &value);
+            match name {
+                Some(name) => configure::toggle_configuration(&Context::default(), &name, &value),
+                None => configure::toggle_multiple_configurations(&Context::default(), &value),
+            };
         }
         Commands::BugReport => bug_report::create(),
         Commands::Time => {
