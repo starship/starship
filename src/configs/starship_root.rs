@@ -39,6 +39,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "kubernetes",
     "nats",
     "directory",
+    "p4",
     "vcsh",
     "fossil_branch",
     "fossil_metrics",

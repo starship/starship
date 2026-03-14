@@ -72,6 +72,7 @@ pub mod odin;
 pub mod opa;
 pub mod openstack;
 pub mod os;
+pub mod p4;
 pub mod package;
 pub mod perl;
 pub mod php;
@@ -261,6 +262,8 @@ pub struct FullConfig<'a> {
     openstack: openstack::OspConfig<'a>,
     #[serde(borrow)]
     os: os::OSConfig<'a>,
+    #[serde(borrow)]
+    p4: p4::P4Config<'a>,
     #[serde(borrow)]
     package: package::PackageConfig<'a>,
     #[serde(borrow)]

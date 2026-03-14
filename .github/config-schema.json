@@ -1284,6 +1284,15 @@
         "disabled": true
       }
     },
+    "p4": {
+      "$ref": "#/$defs/P4Config",
+      "default": {
+        "symbol": "p4",
+        "style": "bold blue",
+        "format": "[$symbol $user@$client#$changelist]($style) ",
+        "disabled": false
+      }
+    },
     "package": {
       "$ref": "#/$defs/PackageConfig",
       "default": {
@@ -5263,6 +5272,28 @@
         "disabled": {
           "type": "boolean",
           "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "P4Config": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "default": "p4"
+        },
+        "style": {
+          "type": "string",
+          "default": "bold blue"
+        },
+        "format": {
+          "type": "string",
+          "default": "[$symbol $user@$client#$changelist]($style) "
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
