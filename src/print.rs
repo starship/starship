@@ -73,6 +73,19 @@ pub fn prompt(args: Properties, target: Target) {
     let context = Context::new(args, target);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
+
+    write!(handle, "{}", get_prompt(&context)).unwrap();
+}
+
+pub fn prompt_with_claude_code(args: Properties, target: Target) {
+    let claude_data = serde_json::from_reader(io::stdin())
+        .inspect_err(|e| log::error!("Failed to read Claude Code JSON from stdin: {e}"))
+        .unwrap_or_default();
+
+    let context = Context::new(args, target).with_claude_code_data(claude_data);
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
@@ -446,7 +459,11 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let (left_format_str, right_format_str): (&str, &str) = match context.target {
         Target::Main | Target::Right => (&config.format, &config.right_format),
         Target::Profile(ref name) => {
-            if let Some(lf) = config.profiles.get(name) {
+            if let Some(lf) = config
+                .user_profiles
+                .get(name)
+                .or_else(|| config.internal_profiles.get(name))
+            {
                 (lf, "")
             } else {
                 log::error!("Profile {name:?} not found");
@@ -811,5 +828,19 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn test_prefer_user_profile() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [profiles]
+            claude-code = "user profile"
+        });
+        context.target = Target::Profile("claude-code".to_string());
+
+        let expected = "user profile";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
     }
 }
