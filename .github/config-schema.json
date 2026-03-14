@@ -4467,6 +4467,13 @@
           ],
           "default": null
         },
+        "format": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
         "context_alias": {
           "type": [
             "string",
@@ -4479,6 +4486,53 @@
             "string",
             "null"
           ],
+          "default": null
+        },
+        "disabled": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "detect_extensions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "detect_files": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "detect_folders": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "detect_env_vars": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
           "default": null
         }
       },

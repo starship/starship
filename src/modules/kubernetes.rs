@@ -142,33 +142,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let have_env_config = !config.detect_env_vars.is_empty();
-    let have_env_vars = have_env_config.then(|| context.detect_env_vars(&config.detect_env_vars));
-
-    // If we have some config for doing the directory scan then we use it but if we don't then we
-    // assume we should treat it like the module is enabled to preserve backward compatibility.
-    let have_scan_config = [
-        &config.detect_files,
-        &config.detect_folders,
-        &config.detect_extensions,
-    ]
-    .into_iter()
-    .any(|v| !v.is_empty());
-
-    let is_kube_project = have_scan_config.then(|| {
-        context.try_begin_scan().is_some_and(|scanner| {
-            scanner
-                .set_files(&config.detect_files)
-                .set_folders(&config.detect_folders)
-                .set_extensions(&config.detect_extensions)
-                .is_match()
-        })
-    });
-
-    if !is_kube_project.or(have_env_vars).unwrap_or(true) {
-        return None;
-    }
-
+    // Read kubeconfig and match context before detection so per-context
+    // detect_*, disabled, and format overrides can take effect.
     let default_config_file = context.get_home()?.join(".kube").join("config");
 
     let kube_cfg = context
@@ -202,7 +177,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             KubeCtxComponents::default()
         });
 
-    // Select the first style that matches the context_pattern and,
+    // Select the first context config that matches the context_pattern and,
     // if it is defined, the user_pattern
     let (matched_context_config, display_context, display_user) = config
         .contexts
@@ -228,6 +203,55 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         })
         .unwrap_or_else(|| (None, current_kube_ctx_name.to_string(), ctx_components.user));
 
+    if matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.disabled)
+        .unwrap_or(false)
+    {
+        return None;
+    }
+
+    // Resolve effective detect_* from matched context, falling back to parent config.
+    // None = inherit parent, Some(vec![]) = clear parent, Some(vec![...]) = override.
+    let effective_detect_extensions = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.detect_extensions.as_deref())
+        .unwrap_or(&config.detect_extensions);
+    let effective_detect_files = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.detect_files.as_deref())
+        .unwrap_or(&config.detect_files);
+    let effective_detect_folders = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.detect_folders.as_deref())
+        .unwrap_or(&config.detect_folders);
+    let effective_detect_env_vars = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.detect_env_vars.as_deref())
+        .unwrap_or(&config.detect_env_vars);
+
+    let have_env_config = !effective_detect_env_vars.is_empty();
+    let have_env_vars = have_env_config.then(|| context.detect_env_vars(effective_detect_env_vars));
+
+    // If we have some config for doing the directory scan then we use it but if we don't then we
+    // assume we should treat it like the module is enabled to preserve backward compatibility.
+    let have_scan_config = [
+        effective_detect_files,
+        effective_detect_folders,
+        effective_detect_extensions,
+    ]
+    .into_iter()
+    .any(|v| !v.is_empty());
+
+    let is_kube_project = have_scan_config.then(|| {
+        context.try_begin_scan().is_some_and(|scanner| {
+            scanner
+                .set_files(effective_detect_files)
+                .set_folders(effective_detect_folders)
+                .set_extensions(effective_detect_extensions)
+                .is_match()
+        })
+    });
+
+    if !is_kube_project.or(have_env_vars).unwrap_or(true) {
+        return None;
+    }
+
     // TODO: remove deprecated aliases after starship 2.0
     let display_context =
         deprecated::get_alias(display_context, &config.context_aliases, "context").unwrap();
@@ -240,8 +264,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_symbol = matched_context_config
         .and_then(|ctx_cfg| ctx_cfg.symbol)
         .unwrap_or(config.symbol);
+    let display_format = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.format)
+        .unwrap_or(config.format);
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(display_symbol),
@@ -1538,6 +1565,241 @@ users: []
             Color::Red.bold().paint("☸ test_context (test_namespace)")
         ));
         assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_overwrites_format() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($namespace\\))]($style) in "
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                format = "$symbol$context >> $namespace"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ test_context >> test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_disabled() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                disabled = true
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_detect_files_override() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let dir_with_file = tempfile::tempdir()?;
+        File::create(dir_with_file.path().join("ctx.ext"))?.sync_all()?;
+
+        let actual_match = ModuleRenderer::new("kubernetes")
+            .path(dir_with_file.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                detect_files = ["ctx.ext"]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context")
+        ));
+        assert_eq!(expected, actual_match);
+
+        let empty_dir = tempfile::tempdir()?;
+
+        let actual_no_match = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                detect_files = ["ctx.ext"]
+            })
+            .collect();
+
+        assert_eq!(None, actual_no_match);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_detect_folders_clear() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        // Parent requires k8s_folder, but context clears it with detect_folders = []
+        let empty_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_folders = ["k8s_folder"]
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                detect_folders = []
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context")
+        ));
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_inherits_parent_detect() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        // Context omits detect_files, so it inherits detect_files from parent.
+        // Without the required file present, the module should not show.
+        let empty_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(empty_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                style = "bold green"
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+
         dir.close()
     }
 

@@ -2758,14 +2758,20 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 To customize the style of the module for specific environments, use the following configuration as
 part of the `contexts` list:
 
-| Variable          | Description                                                                              |
-| ----------------- | ---------------------------------------------------------------------------------------- |
-| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
-| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
-| `context_alias`   | Context alias to display instead of the full context name.                               |
-| `user_alias`      | User alias to display instead of the full user name.                                     |
-| `style`           | The style for the module when using this context. If not set, will use module's style.   |
-| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+| Variable            | Description                                                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `context_pattern`   | **Required** Regular expression to match current Kubernetes context name.                                               |
+| `user_pattern`      | Regular expression to match current Kubernetes user name.                                                               |
+| `context_alias`     | Context alias to display instead of the full context name.                                                              |
+| `user_alias`        | User alias to display instead of the full user name.                                                                    |
+| `style`             | The style for the module when using this context. If not set, will use module's style.                                  |
+| `symbol`            | The symbol for the module when using this context. If not set, will use module's symbol.                                |
+| `format`            | The format for the module when using this context. If not set, will use module's format.                                |
+| `disabled`          | If `true`, the module will not be shown when this context matches.                                                      |
+| `detect_extensions` | Which extensions should trigger this module for this context. Set to `[]` to clear parent's value. Inherits if not set. |
+| `detect_files`      | Which filenames should trigger this module for this context. Set to `[]` to clear parent's value. Inherits if not set.  |
+| `detect_folders`    | Which folders should trigger this module for this context. Set to `[]` to clear parent's value. Inherits if not set.    |
+| `detect_env_vars`   | Which env vars should trigger this module for this context. Set to `[]` to clear parent's value. Inherits if not set.   |
 
 Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
 regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
@@ -2810,8 +2816,9 @@ detect_files = ['k8s']
 
 #### Kubernetes Context specific config
 
-The `contexts` configuration option is used to customise what the current Kubernetes context name looks
-like (style and symbol) if the name matches the defined regular expression.
+The `contexts` configuration option is used to customise how the module renders for specific Kubernetes
+contexts. Each entry can override any module-level property including `format`, `style`, `symbol`,
+`disabled`, and detection rules (`detect_files`, `detect_folders`, `detect_extensions`, `detect_env_vars`).
 
 ```toml
 # ~/.config/starship.toml
@@ -2839,6 +2846,19 @@ context_alias = "openshift"
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
 context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
+
+[[kubernetes.contexts]]
+# Override format and disable detection for dev contexts (always show)
+context_pattern = "dev-.*"
+format = "$symbol$context"
+style = "green"
+detect_files = []
+detect_folders = []
+
+[[kubernetes.contexts]]
+# Hide the module entirely for local contexts
+context_pattern = "local-.*"
+disabled = true
 ```
 
 ## Line Break
