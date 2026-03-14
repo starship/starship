@@ -87,6 +87,9 @@ format = '\[[$symbol$branch]($style)\]'
 [git_commit]
 format = '\[[\($hash$tag\)]($style)\]'
 
+[git_remote]
+format = '\[[$symbol]($style)\]'
+
 [git_metrics]
 format = '\[[+$added]($added_style)\]\[[-$deleted]($deleted_style)\]'
 

@@ -650,6 +650,24 @@
         "ignore_submodules": false
       }
     },
+    "git_remote": {
+      "$ref": "#/$defs/GitRemoteConfig",
+      "default": {
+        "format": "on [$symbol]($style)",
+        "symbol": "󰊢 ",
+        "no_remote_symbol": " ",
+        "style": "bold dimmed white",
+        "disabled": true,
+        "providers": {
+          "github.com": " ",
+          "gitlab.com": "󰮠 ",
+          "bitbucket.org": "󰂨 ",
+          "codeberg.org": "󰣠 ",
+          "sr.ht": " ",
+          "dev.azure.com": "󰿕 "
+        }
+      }
+    },
     "git_state": {
       "$ref": "#/$defs/GitStateConfig",
       "default": {
@@ -3522,6 +3540,46 @@
         "ignore_submodules": {
           "type": "boolean",
           "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitRemoteConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "on [$symbol]($style)"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "󰊢 "
+        },
+        "no_remote_symbol": {
+          "type": "string",
+          "default": " "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold dimmed white"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "providers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {
+            "github.com": " ",
+            "gitlab.com": "󰮠 ",
+            "bitbucket.org": "󰂨 ",
+            "codeberg.org": "󰣠 ",
+            "sr.ht": " ",
+            "dev.azure.com": "󰿕 "
+          }
         }
       },
       "additionalProperties": false

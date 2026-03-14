@@ -48,6 +48,9 @@ format = '(via [$symbol($version )]($style))'
 [fortran]
 format = "(via [$symbol($version )]($style))"
 
+[git_remote]
+format = '(on [$symbol]($style))'
+
 [gleam]
 format = '(via [$symbol($version )]($style))'
 

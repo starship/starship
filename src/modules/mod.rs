@@ -34,6 +34,7 @@ mod gcloud;
 mod git_branch;
 mod git_commit;
 mod git_metrics;
+mod git_remote;
 mod git_state;
 pub(crate) mod git_status;
 mod gleam;
@@ -155,6 +156,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
             "git_metrics" => git_metrics::module(context),
+            "git_remote" => git_remote::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
             "gleam" => gleam::module(context),
@@ -289,6 +291,7 @@ pub fn description(module: &str) -> &'static str {
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
         "git_metrics" => "The currently added/deleted lines in your repo",
+        "git_remote" => "The symbol for the git remote provider",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "gleam" => "The currently installed version of Gleam",
