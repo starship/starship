@@ -113,6 +113,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "pixi",
     "meson",
     "spack",
+    "loadavg",
     "memory_usage",
     "aws",
     "gcloud",

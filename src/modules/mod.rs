@@ -52,6 +52,7 @@ mod julia;
 mod kotlin;
 mod kubernetes;
 mod line_break;
+mod loadavg;
 mod localip;
 mod lua;
 mod maven;
@@ -173,6 +174,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
+            "loadavg" => loadavg::module(context),
             "localip" => localip::module(context),
             "lua" => lua::module(context),
             "maven" => maven::module(context),
@@ -307,6 +309,7 @@ pub fn description(module: &str) -> &'static str {
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
+        "loadavg" => "The current system load average",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
         "maven" => "The Maven Wrapper version of the current project",
