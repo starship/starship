@@ -1211,7 +1211,7 @@ it would have been `nixpkgs/pkgs`.
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
-prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following
+prefixes or development directories of Java. Note that when substitutions are configured, `fish_style_pwd_dir_length` is ignored. It takes an array of the following
 key/value pairs:
 
 | Value   | Type    | Description                              |
