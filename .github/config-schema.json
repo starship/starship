@@ -1757,6 +1757,7 @@
         "style_root": "red bold",
         "style_user": "yellow bold",
         "show_always": false,
+        "show_git_user": false,
         "disabled": false,
         "aliases": {}
       }
@@ -6622,6 +6623,10 @@
           "default": "yellow bold"
         },
         "show_always": {
+          "type": "boolean",
+          "default": false
+        },
+        "show_git_user": {
           "type": "boolean",
           "default": false
         },
