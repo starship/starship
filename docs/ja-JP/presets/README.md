@@ -74,6 +74,7 @@
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+[Catppuccin](https://github.com/catppuccin/catppuccin) のテーマを利用して [Gruvbox Rainbow](./gruvbox-rainbow.md) に最小限の変更を加えたプリセットです。
 
-[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+[![Catppuccin プリセットのスクリーンショット](/presets/img/catppuccin-powerline.png "Catppuccin プリセットを表示するにはクリックしてください
+")](./catppuccin-powerline)

@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+Thêm các dòng sau vào cuối tệp `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` trên Windows):
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Note: Only Elvish v0.18+ is supported. Đối với các phiên bản elvish trước v0.21.0 tệp cấu hình có thể là `~/.elvish/rc.elv`
 
 </details>
 
@@ -341,7 +341,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Thêm những dòng sau vào cuối tệp cấu hình Nushell (tìm bằng cách chạy `$nu.config-path` trong Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")

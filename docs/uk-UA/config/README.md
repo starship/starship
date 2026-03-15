@@ -290,6 +290,7 @@ $julia\
 $kotlin\
 $gradle\
 $lua\
+$maven\
 $nim\
 $nodejs\
 $ocaml\
@@ -498,7 +499,7 @@ very-long-subscription-name = 'vlsn'
 | `full_symbol`        | `'󰁹 '`                            | Символ, повного заряду батареї.      |
 | `charging_symbol`    | `'󰂄 '`                            | Символ процесу заряджання.           |
 | `discharging_symbol` | `'󰂃 '`                            | Символ, коли батарея розряджається.  |
-| `unknown_symbol`     | `'󰁽 '`                            | Символ, коли стан батареї невідомий. |
+| `unknown_symbol`     | `'󰂑 '`                            | Символ, коли стан батареї невідомий. |
 | `empty_symbol`       | `'󰂎 '`                            | Символ повністю розрядженої батареї. |
 | `format`             | `'[$symbol$percentage]($style) '` | Формат модуля.                       |
 | `display`            | [link](#battery-display)          | Граничні значення і стиль модуля.    |
@@ -1140,11 +1141,31 @@ format = 'via [🦕 $version](green bold) '
 
 | Додатковий параметр         | Стандартно | Опис                                                                                                                                                                                     |
 | --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |            | Таблиця підстановок, які буде зроблена у шляху теки.                                                                                                                                     |
+| `substitutions`             |            | Масив або таблиця замін, які необхідно внести в шлях.                                                                                                                                    |
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD.
+`substitutions` дозволяє визначити довільні заміни літеральних рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки в Java. Зауважте, що це відключить стиль fish у PWD. Приймається масив наступних пар ключ/значення:
+
+| Значення | Тип     | Опис                                         |
+| -------- | ------- | -------------------------------------------- |
+| `from`   | String  | Значення для заміни                          |
+| `to`     | String  | Заміна цього значення, якщо знайдено         |
+| `regex`  | Boolean | (Опціонально) Чи є `from` регулярним виразом |
+
+Використовуючи `regex = true`, ви можете використовувати [регулярні вирази Rust](https://docs.rs/regex/latest/regex/#syntax) у `from`. Наприклад, ви можете замінити кожну косу риску, окрім першої за допомогою:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+Це замінить `/var/log` на `/ | var | log`.
+
+Старий синтаксис все ще працює, хоча він не підтримує регулярні вирази:
 
 ```toml
 [directory.substitutions]
@@ -1430,14 +1451,15 @@ format = 'via [ $version](cyan bold) '
 
 ### Параметри
 
-| Параметр      | Стандартно                     | Опис                                                                    |
-| ------------- | ------------------------------ | ----------------------------------------------------------------------- |
-| `symbol`      | `""`                           | Символ, який знаходиться перед значенням variable.                      |
-| `variable`    |                                | Змінна середовища для показу.                                           |
-| `default`     |                                | Стандартне значення буде показане, якщо змінні для показу не визначені. |
-| `format`      | `"with [$env_value]($style) "` | Формат модуля.                                                          |
-| `description` | `"<env_var module>"`     | Опис модуля, який показується під час запуску `starship explain`.       |
-| `disabled`    | `false`                        | Вимикає модуль `env_var`.                                               |
+| Параметр      | Стандартно                            | Опис                                                                    |
+| ------------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| `symbol`      | `""`                                  | Символ, який знаходиться перед значенням variable.                      |
+| `variable`    |                                       | Змінна середовища для показу.                                           |
+| `default`     |                                       | Стандартне значення буде показане, якщо змінні для показу не визначені. |
+| `format`      | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                          |
+| `description` | `"<env_var module>"`            | Опис модуля, який показується під час запуску `starship explain`.       |
+| `disabled`    | `false`                               | Вимикає модуль `env_var`.                                               |
+| `style`       | `"black bold dimmed"`                 | Стиль модуля.                                                           |
 
 ### Змінні
 
@@ -1445,7 +1467,7 @@ format = 'via [ $version](cyan bold) '
 | --------- | ----------------------------------------- | ------------------------------------------------ |
 | env_value | `Windows NT` (якщо _variable_ буде `$OS`) | Значення змінної оточення з параметра `variable` |
 | symbol    |                                           | Віддзеркалює значення параметра `symbol`         |
-| style\* | `black bold dimmed`                       | Віддзеркалює значення параметра `style`          |
+| style\* |                                           | Віддзеркалює значення параметра `style`          |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -1931,44 +1953,60 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### Параметри
 
-| Параметр             | Стандартно                                      | Опис                                                                                                                    |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`         | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
-| `ahead`              | `'⇡'`                                           | Формат `ahead`                                                                                                          |
-| `behind`             | `'⇣'`                                           | Формат `behind`                                                                                                         |
-| `diverged`           | `'⇕'`                                           | Формат `diverged`                                                                                                       |
-| `up_to_date`         | `''`                                            | Формат `up_to_date`                                                                                                     |
-| `untracked`          | `'?'`                                           | Формат `untracked`                                                                                                      |
-| `stashed`            | `'\$'`                                         | Формат `stashed`                                                                                                        |
-| `modified`           | `'!'`                                           | Формат `modified`                                                                                                       |
-| `staged`             | `'+'`                                           | Формат `staged`                                                                                                         |
-| `renamed`            | `'»'`                                           | Формат `renamed`                                                                                                        |
-| `deleted`            | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`        | `""`                                            | Формат `typechanged`                                                                                                    |
-| `style`              | `'bold red'`                                    | Стиль модуля.                                                                                                           |
-| `ignore_submodules`  | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `disabled`           | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
-| `windows_starship`   |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
-| `use_git_executable` | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
+| Параметр               | Стандартно                                      | Опис                                                                                                                    |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                                  |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                                 |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                                   |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                                           |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                                          |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                               |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                                          |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                            |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                                    |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                                |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                             |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
+| `style`                | `'bold red'`                                    | Стиль модуля.                                                                                                           |
+| `ignore_submodules`    | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                               |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                                 |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                                |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                                          |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                                    |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                                    |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                                     |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
+| `disabled`             | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
+| `windows_starship`     |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
+| `use_git_executable`   | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
 
 ### Змінні
 
 Наступні змінні можуть бути використані у `format`:
 
-| Змінна         | Опис                                                                                                |
-| -------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`   | Скорочення для `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`          |
-| `ahead_behind` | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
-| `conflicted`   | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
-| `untracked`    | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
-| `stashed`      | Показує `stashed` за наявності stash у локальному репозиторії.                                      |
-| `modified`     | Показує `modified` коли в робочій теці є змінені файли.                                             |
-| `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
-| `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
-| `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
-| `typechanged`  | Показує `typechanged` коли інформація про файл була змінена у просторі staging.                     |
-| style\*      | Віддзеркалює значення параметра `style`                                                             |
+| Змінна                 | Опис                                                                                                |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.           |
+| `ahead_behind`         | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
+| `conflicted`           | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
+| `untracked`            | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
+| `stashed`              | Показує `stashed` за наявності stash у локальному репозиторії.                                      |
+| `modified`             | Показує `modified` коли в робочій теці є змінені файли.                                             |
+| `staged`               | Показує `staged`, коли нові фали були додані до простору staging.                                   |
+| `renamed`              | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
+| `deleted`              | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
+| `typechanged`          | Показує `typechanged` коли інформація про файл була змінена у просторі staging.                     |
+| `worktree_added`       | Показує `worktree_added`, коли новий фал будо додано до робочої теки.                               |
+| `worktree_deleted`     | Показує `worktree_deleted`, коли фал було вилучено з робочої теки.                                  |
+| `worktree_modified`    | Показує `worktree_modified `, коли фал було змінено в робочій теці.                                 |
+| `worktree_typechanged` | Показує `worktree_typechanged`, коли тип файлу було змінено в робочій теці.                         |
+| `index_added`          | Показує `index_added`, коли новий файл було додано до простору staging.                             |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                        |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                        |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.               |
+| style\*              | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -1979,7 +2017,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `ahead_count`  | Кількість комітів на яку поточна гілка випереджає відстежувану   |
 | `behind_count` | Кількість комітів на яку поточна гілка відстає від відстежуваної |
 
-Наступні змінні можуть використовуватись у  `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` та `deleted`:
+Наступні змінні можуть використовуватись в `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified` та `index_typechanged`:
 
 | Змінна  | Опис                     |
 | ------- | ------------------------ |
@@ -2744,6 +2782,41 @@ disabled = false
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+Модуль `Maven` вказує на наявність проєкту Maven у поточній теці. Якщо [Maven Wrapper](https://maven.apache.org/wrapper/) увімкнено, версія Maven буде отримана та показана з `mvn/wrapper/maven-wrapper.properties`.
+
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+
+- Поточна тека містить файл `pom.xml`.
+- Поточна тека містить файл `.mvn/wrapper/maven-wrapper.properties`.
+
+Якщо ви використовуєте альтернативний синтаксис POM (наприклад, `pom.hocon`), додайте його імʼя файлу до `detect_files`.
+
+### Параметри
+
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🅼 '`                               | Формат рядка, що представляє символ Maven.                        |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['pom.xml']`                        | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.mvn']`                           | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold bright-cyan'`                 | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Вимикає модуль `maven`.                                           |
+| `recursive`         | `false`                              | Дозволяє рекурсивний пошук теки `.mvn`.                           |
+
+### Змінні
+
+| Змінна  | Приклад  | Опис                                     |
+| ------- | -------- | ---------------------------------------- |
+| version | `v3.2.0` | Версія `maven`                           |
+| symbol  |          | Віддзеркалює значення параметра `symbol` |
+| style*  |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ## Memory Usage
 
@@ -3749,6 +3822,7 @@ format = 'via [$symbol$version](bold white)'
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Які розширення повинні запускати цей модуль                                              |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                       |
 | `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                           |
+| `generic_venv_names` | `[]`                                                                                                         | Які імена venv слід замінити на імʼя батьківської теки.                                  |
 | `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                 |
 
 > [!TIP] Змінна `python_binary` приймає або рядок, або список рядків. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Зауважте, що можна змінити двійковий файл, який використовується Starship, щоб отримати версію Python, а не параметрів, які використовуються.
@@ -3757,13 +3831,13 @@ format = 'via [$symbol$version](bold white)'
 
 ### Змінні
 
-| Змінна       | Приклад         | Опис                                           |
-| ------------ | --------------- | ---------------------------------------------- |
-| version      | `'v3.8.1'`      | Версія `python`                                |
-| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`       |
-| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`        |
-| pyenv_prefix | `'pyenv '`      | Віддзеркалює значення параметра `pyenv_prefix` |
-| virtualenv   | `'venv'`        | Назва `virtualenv`                             |
+| Змінна       | Приклад         | Опис                                                                               |
+| ------------ | --------------- | ---------------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | Версія `python`                                                                    |
+| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`                                           |
+| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`                                            |
+| pyenv_prefix | `'pyenv '`      | Віддзеркалює значення параметра `pyenv_prefix`                                     |
+| virtualenv   | `'venv'`        | Поточна назва `virtualenv` або батьківська, якщо збігається з `generic_venv_names` |
 
 ### Приклад
 
@@ -4663,6 +4737,45 @@ format = 'via [⍱ $version](bold white) '
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Зверніть увагу, що модуль є стандартно увімкненим, але **не** є у списку стандартних модулів, оскільки це була б суттєва зміна. Крім того, точний формат модуля може змінитися в майбутньому, наприклад, для обробки вирівнювання праворуч.
+
+Модуль `vcs` показує поточну активну систему контролю версій (VCS). Модуль буде показаний тільки в тому випадку, якщо налаштована VCS зараз використовується.
+
+### Параметри
+
+| Параметр         | Стандартно                                                  | Опис                                                    |
+| ---------------- | ----------------------------------------------------------- | ------------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | Порядок в якому потрібно шукати VCS.                    |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Модулі для показу, коли знайдено репозиторій Fossil.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Модулі для показу, коли знайдено репозиторій Git.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Модулі для показу, коли знайдено репозиторій Mercurial. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Модулі для показу, коли знайдено репозиторій Pijul.     |
+| `disabled`       | `false`                                                     | Вимикає модуль `vcs`.                                   |
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Шукатиме Git, а потім Pijul, якщо Git не знайдено, але не шукатиме інші VCS.
+order = [
+  "git",
+  "pijul",
+]
+# Тут можна включити будь-який модуль (крім самого `$vcs`, щоб уникнути нескінченних циклів).
+git_modules = "$git_branch${custom.foo}"
+
+# Дивіться документацію для власних модулів
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH
