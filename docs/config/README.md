@@ -328,6 +328,7 @@ $terraform\
 $typst\
 $vlang\
 $vagrant\
+$vault\
 $zig\
 $buf\
 $nix_shell\
@@ -4946,6 +4947,44 @@ By default the module will be shown if any of the following conditions are met:
 
 [vagrant]
 format = 'via [⍱ $version](bold white) '
+```
+
+## Vault
+
+The `vault` module shows your current [HashiCorp Vault](https://www.hashicorp.com/en/products/vault) context in the prompt.\
+The module only displays token expiration (in days) when the token is close to expiring.
+
+### Options
+
+| Option             | Default                                           | Description                                                           |
+| ------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`           | `'⚠️'`                                             | The symbol shown when displaying Vault token expiration.              |
+| `style`            | `'bold red'`                                      | The style for the module output.                                      |
+| `format`           | `'[$symbol Token expires: $expire_time]($style)'` | The format string used to display the expiration time.                |
+| `show_within_days` | `7`                                               | Show expiration time only if the token expires within this many days. |
+| `disabled`         | `false`                                           | Disables the `vault` module.                                          |
+
+### Variables
+
+| Variable    | Example  | Description                                       |
+| ----------- | -------- | ------------------------------------------------- |
+| expire_time | `5 days` | Shows the remaining token expiration time in days |
+| symbol      | ⚠️        | Mirrors the value of option `symbol`              |
+| style*      |          | Mirrors the value of option `style`               |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vault]
+format = "[$symbol Token expires: $expire_time]($style) "
+symbol = "⚠️"
+style = "bold red"
+show_within_days = 7
+disabled = false
 ```
 
 ## V

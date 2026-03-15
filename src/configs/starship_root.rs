@@ -103,6 +103,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "typst",
     "vlang",
     "vagrant",
+    "vault",
     "xmake",
     "zig",
     // ↑ Toolchain version modules ↑
