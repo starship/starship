@@ -358,7 +358,7 @@ pub fn description(module: &str) -> &'static str {
         "typst" => "The current installed version of typst",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
-        "vault" =>  "Shows the Vault token expiration time if valid and within configured days",
+        "vault" => "Shows the Vault token expiration time if valid and within configured days",
         "vcs" => "The currently active VCS repository (first one matching)",
         "vcsh" => "The currently active VCSH repository",
         "vlang" => "The currently installed version of V",

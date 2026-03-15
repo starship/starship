@@ -4951,28 +4951,26 @@ format = 'via [⍱ $version](bold white) '
 
 ## Vault
 
-The `vault` module shows your current [HashiCorp Vault](https://www.hashicorp.com/en/products/vault) context in the prompt.  
+The `vault` module shows your current [HashiCorp Vault](https://www.hashicorp.com/en/products/vault) context in the prompt.\
 The module only displays token expiration (in days) when the token is close to expiring.
 
 ### Options
 
-| Option            | Default                                        | Description                                                                 |
-| ----------------- | ---------------------------------------------- | --------------------------------------------------------------------------- |
-| `symbol`          | `'⚠️'`                                         | The symbol shown when displaying Vault token expiration.                     |
-| `style`           | `'bold red'`                                   | The style for the module output.                                             |
-| `format`          | `'[$symbol Token expires: $expire_time]($style)'` | The format string used to display the expiration time.                        |
-| `show_within_days`| `7`                                            | Show expiration time only if the token expires within this many days.        |
-| `disabled`        | `false`                                        | Disables the `vault` module.                                                 |
-
+| Option             | Default                                           | Description                                                           |
+| ------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`           | `'⚠️'`                                             | The symbol shown when displaying Vault token expiration.              |
+| `style`            | `'bold red'`                                      | The style for the module output.                                      |
+| `format`           | `'[$symbol Token expires: $expire_time]($style)'` | The format string used to display the expiration time.                |
+| `show_within_days` | `7`                                               | Show expiration time only if the token expires within this many days. |
+| `disabled`         | `false`                                           | Disables the `vault` module.                                          |
 
 ### Variables
 
-| Variable       | Example          | Description                                      |
-| -------------- | ---------------- | ------------------------------------------------ |
-| expire_time    | `5 days`         | Shows the remaining token expiration time in days |
-| symbol         | ⚠️               | Mirrors the value of option `symbol`              |
-| style*         |                  | Mirrors the value of option `style`               |
-
+| Variable    | Example  | Description                                       |
+| ----------- | -------- | ------------------------------------------------- |
+| expire_time | `5 days` | Shows the remaining token expiration time in days |
+| symbol      | ⚠️        | Mirrors the value of option `symbol`              |
+| style*      |          | Mirrors the value of option `style`               |
 
 *: This variable can only be used as a part of a style string
 
