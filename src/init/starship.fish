@@ -1,4 +1,9 @@
-function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish job groups (or legacy PIDs if toggled)'
+function __starship_update_variables --on-event fish_postexec
+    set -g STARSHIP_CMD_PIPESTATUS $pipestatus
+    set -g STARSHIP_CMD_STATUS $status
+    # Account for changes in variable name between v2.7 and v3.0
+    set -g STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+
     # To force legacy behavior (process PIDs), set this variable to "false":
     #   set -g __starship_fish_use_job_groups "false"
     if test "$__starship_fish_use_job_groups" = "false"
@@ -7,24 +12,17 @@ function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish jo
     else
         # Default behavior: count job groups
         set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
-    end    
+    end
+
+    switch "$fish_key_bindings"
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
+            set -g STARSHIP_KEYMAP "$fish_bind_mode"
+        case '*'
+            set -g STARSHIP_KEYMAP insert
+    end
 end
 
 function fish_prompt
-    switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
-            set STARSHIP_KEYMAP "$fish_bind_mode"
-        case '*'
-            set STARSHIP_KEYMAP insert
-    end
-
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
-    set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-
-    __starship_set_job_count
-
     if contains -- --final-rendering $argv; or test "$TRANSIENT" = "1"
         if test "$TRANSIENT" = "1"
             set -g TRANSIENT 0
@@ -43,21 +41,6 @@ function fish_prompt
 end
 
 function fish_right_prompt
-    switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
-            set STARSHIP_KEYMAP "$fish_bind_mode"
-        case '*'
-            set STARSHIP_KEYMAP insert
-    end
-
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
-    set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-
-    # Now it's safe to call job count function (after status capture)
-    __starship_set_job_count
-
     if contains -- --final-rendering $argv; or test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
