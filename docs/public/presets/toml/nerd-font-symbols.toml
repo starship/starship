@@ -60,6 +60,9 @@ symbol = " "
 [git_commit]
 tag_symbol = '  '
 
+[godot]
+symbol = " "
+
 [golang]
 symbol = " "
 

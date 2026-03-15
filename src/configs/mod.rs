@@ -41,6 +41,7 @@ pub mod git_state;
 pub mod git_status;
 pub mod gleam;
 pub mod go;
+pub mod godot;
 pub mod gradle;
 pub mod guix_shell;
 pub mod haskell;
@@ -198,6 +199,8 @@ pub struct FullConfig<'a> {
     git_status: git_status::GitStatusConfig<'a>,
     #[serde(borrow)]
     gleam: gleam::GleamConfig<'a>,
+    #[serde(borrow)]
+    godot: godot::GodotConfig<'a>,
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
