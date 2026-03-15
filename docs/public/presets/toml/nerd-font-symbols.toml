@@ -60,6 +60,13 @@ symbol = " "
 [git_commit]
 tag_symbol = '  '
 
+[git_status]
+ahead = ""
+behind = ""
+diverged = ""
+renamed = ""
+deleted = ""
+
 [golang]
 symbol = " "
 
