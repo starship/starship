@@ -75,7 +75,7 @@ onMounted(() => {
    [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   winget install starship
+   winget install --id Starship.Starship
    ```
 
 1. Додайте init скрипт до конфігураційного файлу оболонки:

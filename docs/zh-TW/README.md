@@ -75,7 +75,7 @@ onMounted(() => {
    使用 [Winget](https://github.com/microsoft/winget-cli)：
 
    ```powershell
-   winget install starship
+   winget install --id Starship.Starship
    ```
 
 1. 將初始化腳本 (script) 加入你的 shell 的設定檔：

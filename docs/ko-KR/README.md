@@ -75,7 +75,7 @@ onMounted(() => {
    [Winget](https://github.com/microsoft/winget-cli)으로 설치:
 
    ```powershell
-   winget install starship
+   winget install --id Starship.Starship
    ```
 
 1. 쉘 설정 파일에 init 스크립트 추가:
