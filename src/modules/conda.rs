@@ -24,7 +24,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
+    let conda_env = truncate(
+        &conda_env,
+        config.truncation_length,
+        config.truncation_width,
+    )
+    .unwrap_or(conda_env);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -116,6 +121,25 @@ mod tests {
             .collect();
 
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn truncation_width() {
+        let actual = ModuleRenderer::new("conda")
+            .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
+            .config(toml::toml! {
+                [conda]
+                truncation_length = 0
+                truncation_width = 15
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {} ",
+            Color::Green.bold().paint("🅒 conda/my_env")
+        ));
 
         assert_eq!(expected, actual);
     }
