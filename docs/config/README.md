@@ -2234,7 +2234,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($numver )]($style)'`  | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `' '`                               | A format string representing the symbol of Rust                           |
+| `symbol`            | `'🤖 '`                              | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `['gd', 'tscn', 'tres']`             | Which extensions should trigger this module.                              |
 | `detect_files`      | `['project.godot']`                  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.godot']`                         | Which folders should trigger this module.                                 |
