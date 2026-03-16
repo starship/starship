@@ -2230,17 +2230,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($numver )]($style)'`  | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🤖 '`                              | A format string representing the symbol of Rust                           |
-| `detect_extensions` | `['gd', 'tscn', 'tres']`             | Which extensions should trigger this module.                              |
-| `detect_files`      | `['project.godot']`                  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.godot']`                         | Which folders should trigger this module.                                 |
-| `style`             | `'bold blue'`                        | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `rust` module.                                               |
-| `godot_command`     | `godot`                              | Path to the `godot` command if not already in your $PATH                  |
+| Option              | Default                             | Description                                                               |
+| ------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($numver )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                         | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🤖 '`                             | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `['gd', 'tscn', 'tres']`            | Which extensions should trigger this module.                              |
+| `detect_files`      | `['project.godot']`                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.godot']`                        | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                       | The style for the module.                                                 |
+| `disabled`          | `false`                             | Disables the `rust` module.                                               |
+| `godot_command`     | `godot`                             | Path to the `godot` command if not already in your $PATH                  |
 
 ### Variables
 
