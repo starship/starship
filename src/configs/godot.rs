@@ -22,9 +22,9 @@ pub struct GodotConfig<'a> {
 impl Default for GodotConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$numver )]($style)",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: "🤖 ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["gd", "tscn", "tres"],

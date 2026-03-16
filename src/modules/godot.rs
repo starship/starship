@@ -3,7 +3,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::godot::GodotConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
-use regex::Regex;
+use std::sync::LazyLock;
 
 /// Creates a module with the current Godot version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let raw_godot_version = get_godot_version(config.godot_command, context)?;
+    let raw_godot_version = LazyLock::new(|| get_godot_version(config.godot_command, context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -35,13 +35,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_godot_version(raw_godot_version.as_str(), config.version_format).map(Ok)
-                }
+                    format_godot_version(raw_godot_version.as_ref().unwrap().as_str(), config.version_format).map(Ok)
+                },
                 "numver" => {
-                    format_godot_version(raw_godot_version.as_str(), "${major}.${minor}.${patch}")
+                    format_godot_version(raw_godot_version.as_ref().unwrap().as_str(), "${major}.${minor}.${patch}")
                         .map(Ok)
-                }
-                "fullver" => Some(Ok(raw_godot_version.clone())),
+                },
+                "fullver" => {
+                    Some(Ok(raw_godot_version.as_ref().unwrap().to_string()))
+                },
                 _ => None,
             })
             .parse(None, Some(context))
@@ -69,12 +71,7 @@ fn get_godot_version(command: &str, context: &Context) -> Option<String> {
 }
 
 fn format_godot_version(version: &str, version_format: &str) -> Option<String> {
-    let re = Regex::new(r"(^\d+\.\d+\.\d+)").unwrap();
-    let ver = match re.captures(version) {
-        Some(caps) => caps[0].to_string(),
-        _ => version.to_string(),
-    };
-    match VersionFormatter::format_version(ver.as_str(), version_format) {
+    match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formatting `godot` version:\n{error}");
@@ -101,20 +98,38 @@ mod tests {
 
         assert_eq!(
             format_godot_version(godot_linux, config.version_format),
-            Some("v4.6.1".to_string())
+            Some("v4.6.1.stable.arch_linux.14d19694e".to_string())
         );
 
         assert_eq!(
             format_godot_version(godot_windows, config.version_format),
-            Some("v4.6.1".to_string())
+            Some("v4.6.1.stable.official.14d19694e".to_string())
         );
+    }
+
+    #[test]
+    fn test_custom_format_godot_version() {
+        let godot_linux = "4.6.1.stable.arch_linux.14d19694e";
 
         assert_eq!(
             format_godot_version(
                 godot_linux,
                 "major:${major} minor:${minor} patch:${patch} raw:${raw}"
             ),
-            Some("major:4 minor:6 patch:1 raw:4.6.1".to_string())
+            Some("major:4 minor:6 patch:1 raw:4.6.1.stable.arch_linux.14d19694e".to_string())
+        );
+    }
+
+    #[test]
+    fn test_robust_godot_version() {
+        let patchless_version = "4.6.nightly.imaginary_os.23985570a";
+
+        assert_eq!(
+            format_godot_version(
+                patchless_version,
+                "major:${major} minor:${minor} patch:${patch} raw:${raw}"
+            ),
+            Some("major:4 minor:6 patch: raw:4.6.nightly.imaginary_os.23985570a".to_string())
         );
     }
 
@@ -136,7 +151,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🤖 v4.6.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -148,7 +163,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🤖 v4.6.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -160,7 +175,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🤖 v4.6.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -172,7 +187,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🤖 v4.6.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -185,7 +200,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("godot").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v4.6.1 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🤖 v4.6.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
