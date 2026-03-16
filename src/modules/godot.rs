@@ -34,16 +34,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    format_godot_version(raw_godot_version.as_ref().unwrap().as_str(), config.version_format).map(Ok)
-                },
-                "numver" => {
-                    format_godot_version(raw_godot_version.as_ref().unwrap().as_str(), "${major}.${minor}.${patch}")
-                        .map(Ok)
-                },
-                "fullver" => {
-                    Some(Ok(raw_godot_version.as_ref().unwrap().to_string()))
-                },
+                "version" => format_godot_version(
+                    raw_godot_version.as_ref().unwrap().as_str(),
+                    config.version_format,
+                )
+                .map(Ok),
+                "numver" => format_godot_version(
+                    raw_godot_version.as_ref().unwrap().as_str(),
+                    "${major}.${minor}.${patch}",
+                )
+                .map(Ok),
+                "fullver" => Some(Ok(raw_godot_version.as_ref().unwrap().to_string())),
                 _ => None,
             })
             .parse(None, Some(context))
