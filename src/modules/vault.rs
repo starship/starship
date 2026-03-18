@@ -3,88 +3,60 @@ use crate::configs::vault::VaultConfig;
 use crate::formatter::StringFormatter;
 use chrono::{DateTime, FixedOffset, Local};
 use serde_json::Value;
-use std::process::Command;
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("vault");
+/// Build the Vault module if enabled and valid.
+pub fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
+    let module = context.new_module("vault");
     let config: VaultConfig = VaultConfig::try_load(module.config);
 
     if config.disabled {
         return None;
     }
 
-    // Run vault CLI to get token info in JSON format
-    let output = Command::new("vault")
-        .args(&["token", "lookup", "--format=json"])
-        .output()
-        .ok()?;
-
-    let json: Value = serde_json::from_slice(&output.stdout).ok()?;
-    let expire_time = json["data"]["expire_time"].as_str().unwrap_or("null");
-
-    if expire_time != "null" {
-        if let Ok(expire_dt) = DateTime::parse_from_rfc3339(expire_time) {
-            let now = Local::now();
-            let expire_local = expire_dt.with_timezone(&Local);
-            let duration = expire_local.signed_duration_since(now);
-
-            if duration.num_days() <= config.show_within_days as i64 {
-                let dt: DateTime<FixedOffset> = expire_time.parse().ok()?;
-                let formatted = dt.format("%Y-%m-%d").to_string();
-                // Replace variables (symbol, style, expire_time) in format string
-                let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                    formatter
-                        .map_meta(|variable, _| match variable {
-                            "symbol" => Some(config.symbol),
-                            _ => None,
-                        })
-                        .map_style(|variable| match variable {
-                            "style" => Some(Ok(config.style)),
-                            _ => None,
-                        })
-                        .map(|variable| match variable {
-                            "expire_time" => Some(Ok(&formatted)),
-                            _ => None,
-                        })
-                        .parse(None, Some(context))
-                });
-
-                module.set_segments(match parsed {
-                    Ok(segments) => segments,
-                    Err(error) => {
-                        log::warn!("Error in module `vault`: \n{error}");
-                        return None;
-                    }
-                });
-                return Some(module);
-            }
-        }
-    }
-    None
+    let output = vault_lookup(context)?;
+    parse_vault_output(&String::from_utf8_lossy(&output), &config, context)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::context::{Context, Properties, Target};
-    use chrono::{DateTime, FixedOffset, Local};
+/// Run `vault token lookup` and return JSON output.
+fn vault_lookup<'a>(context: &'a Context<'a>) -> Option<Vec<u8>> {
+    use std::env;
+    use std::fs;
 
-    // Test default VaultConfig values
-    #[test]
-    fn test_default_config() {
-        let config = VaultConfig::default();
-        assert_eq!(config.symbol, "⚠️");
-        assert_eq!(config.style, "bold red");
-        assert!(config.format.contains("$expire_time"));
+    if env::var("VAULT_TOKEN").is_err() {
+        let Ok(home) = env::var("HOME") else {
+            return None;
+        };
+        let Ok(_) = fs::read_to_string(format!("{home}/.vault-token")) else {
+            return None;
+        };
     }
+    context
+        .exec_cmd("vault", &["token", "lookup", "--format=json"])
+        .map(|out| out.stdout.into_bytes())
+}
 
-    // Test formatter parses symbol and expire_time correctly
-    #[test]
-    fn test_formatter_parses_symbol_and_expire_time() {
-        let config = VaultConfig::default();
-        let dt: DateTime<FixedOffset> = "2026-03-19T00:00:00+00:00".parse().unwrap();
-        let formatted = dt.format("%Y-%m-%d").to_string();
+/// Parse Vault JSON output and build the module if token is near expiry.
+fn parse_vault_output<'a>(
+    output: &str,
+    config: &VaultConfig,
+    context: &'a Context<'a>,
+) -> Option<Module<'a>> {
+    let json: Value = serde_json::from_str(output).ok()?;
+    let expire_time = json["data"]["expire_time"].as_str()?;
 
+    let Ok(expire_dt) = DateTime::parse_from_rfc3339(expire_time) else {
+        return None;
+    };
+
+    let now = Local::now();
+    let expire_local = expire_dt.with_timezone(&Local);
+    let duration = expire_local.signed_duration_since(now);
+
+    if duration.num_days() <= config.show_within_days as i64 {
+        let Ok(dt) = expire_time.parse::<DateTime<FixedOffset>>() else {
+            return None;
+        };
+        let expire_date_str = dt.format("%Y-%m-%d").to_string();
         let parsed = StringFormatter::new(config.format).and_then(|formatter| {
             formatter
                 .map_meta(|variable, _| match variable {
@@ -96,238 +68,129 @@ mod tests {
                     _ => None,
                 })
                 .map(|variable| match variable {
-                    "expire_time" => Some(Ok(&formatted)),
+                    "expire_time" => Some(Ok(expire_time)),
+                    "expire_date" => Some(Ok(&expire_date_str)),
                     _ => None,
                 })
-                .parse(None, None)
+                .parse(None, Some(context))
         });
 
-        assert!(parsed.is_ok());
-        let segments = parsed.unwrap();
-        let mut module = Module::new("vault", "test module", None);
-        module.set_segments(segments);
-        let output = module.to_string();
-        assert!(output.contains(&config.symbol));
-        assert!(output.contains(&formatted));
-    }
-
-    // Test expire_time within show_within_days
-    #[test]
-    fn test_expire_time_within_days() {
-        let config = VaultConfig::default();
-        let now = Local::now();
-        let expire_local = now + chrono::Duration::days(3);
-        let duration = expire_local.signed_duration_since(now);
-        assert!(duration.num_days() <= config.show_within_days as i64);
-    }
-
-    // Test disabled config flag
-    #[test]
-    fn test_disabled_config() {
-        let mut config = VaultConfig::default();
-        config.disabled = true;
-        assert!(config.disabled);
-    }
-
-    // Test expired token logic
-    #[test]
-    fn test_expired_token() {
-        let now = Local::now();
-        let expire_local = now - chrono::Duration::days(1);
-        let duration = expire_local.signed_duration_since(now);
-        assert!(duration.num_days() < 0, "Token should be expired");
-    }
-
-    // Test boundary condition for show_within_days
-    #[test]
-    fn test_show_within_days_boundary() {
-        let config = VaultConfig::default();
-        let now = Local::now();
-        let expire_local = now + chrono::Duration::days(config.show_within_days as i64);
-        let duration = expire_local.signed_duration_since(now);
-        assert_eq!(duration.num_days(), config.show_within_days as i64);
-    }
-
-    // Test formatter with symbol only
-    #[test]
-    fn test_formatter_symbol_only() {
-        let config = VaultConfig {
-            format: "⛁ $symbol",
-            ..VaultConfig::default()
-        };
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map_meta(|variable, _| match variable {
-                    "symbol" => Some(config.symbol),
-                    _ => None,
-                })
-                .parse(None, None)
+        let mut module = context.new_module("vault");
+        module.set_segments(match parsed {
+            Ok(segments) => segments,
+            Err(error) => {
+                log::warn!("Error in module `vault`: \n{error}");
+                return None;
+            }
         });
-        assert!(parsed.is_ok());
-        let segments = parsed.unwrap();
-        let mut module = Module::new("vault", "test module", None);
-        module.set_segments(segments);
-        let output = module.to_string();
-        assert!(output.contains("⛁"));
+        return Some(module);
+    }
+    None
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
+    use chrono::{Duration, Local};
+    use serde_json::json;
+    use std::io;
+
+    /// Test that the Vault module renders correctly when expire_time is within allowed days.
+    #[test]
+    fn test_module_full_render_success() -> io::Result<()> {
+        let expire_time = (Local::now() + Duration::days(1)).to_rfc3339();
+        let fake_json = json!({
+            "data": { "expire_time": expire_time }
+        })
+        .to_string();
+
+        let renderer = ModuleRenderer::new("vault")
+            .cmd(
+                "vault token lookup --format=json",
+                Some(CommandOutput {
+                    stdout: fake_json,
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [vault]
+                disabled = false
+                show_within_days = 7
+            });
+
+        let output = renderer.collect();
+        assert!(output.is_some());
+        let output_str = output.unwrap();
+        let expected_date = &expire_time[..10];
+        assert!(output_str.contains("🔒"));
+        assert!(output_str.contains(expected_date));
+        Ok(())
     }
 
-    // Test module returns None when disabled
+    /// Test that the Vault module does not render when disabled in configuration.
     #[test]
-    fn test_module_disabled_returns_none() {
-        let props = Properties::default();
-        let target = Target::Main;
-        let context = Context::new(props, target);
-
-        let result = module(&context);
-        assert!(result.is_none(), "Disabled config should return None");
-    }
-
-    // Test invalid JSON parsing
-    #[test]
-    fn test_invalid_json_returns_none() {
-        let invalid_json = b"{ not valid json }";
-        let parsed: Result<serde_json::Value, _> = serde_json::from_slice(invalid_json);
-        assert!(parsed.is_err(), "Invalid JSON should not parse");
-    }
-
-    // Test expire_time equals "null"
-    #[test]
-    fn test_expire_time_null() {
-        let json = r#"{ "data": { "expire_time": "null" } }"#;
-        let parsed: serde_json::Value = serde_json::from_str(json).unwrap();
-        let expire_time = parsed["data"]["expire_time"].as_str().unwrap_or("null");
-        assert_eq!(expire_time, "null");
-    }
-
-    // Test invalid RFC3339 date format
-    #[test]
-    fn test_invalid_expire_time_format() {
-        let bad_time = "not-a-date";
-        let parsed = DateTime::parse_from_rfc3339(bad_time);
-        assert!(parsed.is_err(), "Invalid RFC3339 date should fail");
-    }
-
-    // Test formatter with unknown variable
-    #[test]
-    fn test_formatter_parse_error() {
-        let config = VaultConfig {
-            format: "$unknown_var",
-            ..VaultConfig::default()
-        };
-        let parsed =
-            StringFormatter::new(config.format).and_then(|formatter| formatter.parse(None, None));
-
-        assert!(
-            parsed.is_ok(),
-            "Formatter should succeed even with unknown variable"
-        );
-        let segments = parsed.unwrap();
-        let mut module = Module::new("vault", "test module", None);
-        module.set_segments(segments);
-        let output = module.to_string();
-        assert_eq!(
-            output, "",
-            "Output should be empty when variable is unknown"
-        );
-    }
-
-    // Test full success path with expire_time inside show_within_days
-    #[test]
-    fn test_module_expire_time_full_success() {
-        let props = Properties::default();
-        let target = Target::Main;
-        let context = Context::new(props, target);
-
-        let expire_time = (Local::now() + chrono::Duration::days(1)).to_rfc3339();
-        let dt: DateTime<FixedOffset> = expire_time.parse().unwrap();
-        let formatted = dt.format("%Y-%m-%d").to_string();
-
-        let parsed = StringFormatter::new(VaultConfig::default().format).and_then(|formatter| {
-            formatter
-                .map_meta(|variable, _| match variable {
-                    "symbol" => Some(VaultConfig::default().symbol),
-                    _ => None,
-                })
-                .map_style(|variable| match variable {
-                    "style" => Some(Ok(VaultConfig::default().style)),
-                    _ => None,
-                })
-                .map(|variable| match variable {
-                    "expire_time" => Some(Ok(&formatted)),
-                    _ => None,
-                })
-                .parse(None, Some(&context))
+    fn test_module_disabled() -> io::Result<()> {
+        let renderer = ModuleRenderer::new("vault").config(toml::toml! {
+            [vault]
+            disabled = true
         });
 
-        assert!(
-            parsed.is_ok(),
-            "Formatter should succeed with valid expire_time"
-        );
-        let segments = parsed.unwrap();
-        let mut module = Module::new("vault", "test module", None);
-        module.set_segments(segments);
-        let output = module.to_string();
-        assert!(output.contains(&formatted));
+        let output = renderer.collect();
+        assert_eq!(output, None);
+        Ok(())
     }
 
-    // Test formatter with invalid format should keep literal text
+    /// Test that the Vault module does not render when the command fails (no output).
     #[test]
-    fn test_module_expire_time_formatter_failure() {
-        let props = Properties::default();
-        let target = Target::Main;
-        let context = Context::new(props, target);
+    fn test_module_command_failure() -> io::Result<()> {
+        let renderer = ModuleRenderer::new("vault").cmd("vault token lookup --format=json", None);
 
-        let expire_time = (Local::now() + chrono::Duration::days(1)).to_rfc3339();
-        let dt: DateTime<FixedOffset> = expire_time.parse().unwrap();
-        let formatted = dt.format("%Y-%m-%d").to_string();
-
-        let config = VaultConfig {
-            format: "{unclosed", // deliberately invalid format
-            ..VaultConfig::default()
-        };
-
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map(|variable| match variable {
-                    "expire_time" => Some(Ok(&formatted)),
-                    _ => None,
-                })
-                .parse(None, Some(&context))
-        });
-
-        assert!(
-            parsed.is_ok(),
-            "Formatter should succeed even with invalid format"
-        );
-        let segments = parsed.unwrap();
-        let mut module = Module::new("vault", "test module", None);
-        module.set_segments(segments);
-        let output = module.to_string();
-        assert_eq!(
-            output, "{unclosed",
-            "Output should preserve the literal invalid format"
-        );
+        let output = renderer.collect();
+        assert_eq!(output, None);
+        Ok(())
     }
 
-    // Test module returns None when expire_time is beyond show_within_days
+    /// Test that the Vault module does not render when expire_time is beyond allowed days.
     #[test]
-    fn test_module_expire_time_beyond_days_none() {
-        let props = Properties::default();
-        let target = Target::Main;
+    fn test_module_beyond_expiry_days() -> io::Result<()> {
+        let expire_time = (Local::now() + Duration::days(10)).to_rfc3339();
+        let fake_json = json!({
+            "data": { "expire_time": expire_time }
+        })
+        .to_string();
 
-        // expire_time 在 30 天後，超過 show_within_days
-        let expire_time = (Local::now() + chrono::Duration::days(30)).to_rfc3339();
-        let expire_dt = DateTime::parse_from_rfc3339(&expire_time)
-            .unwrap()
-            .with_timezone(&Local);
-        let now = Local::now();
-        let duration = expire_dt.signed_duration_since(now);
+        let renderer = ModuleRenderer::new("vault")
+            .cmd(
+                "vault token lookup --format=json",
+                Some(CommandOutput {
+                    stdout: fake_json,
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [vault]
+                show_within_days = 7
+            });
 
-        // 驗證超過 show_within_days
-        assert!(duration.num_days() > VaultConfig::default().show_within_days as i64);
+        let output = renderer.collect();
+        assert_eq!(output, None);
+        Ok(())
+    }
 
-        // 模擬 module 邏輯：因為超過 show_within_days，應該 return None
-        let config = VaultConfig::default();
-        assert!(duration.num_days() > config.show_within_days as i64);
+    /// Test that the Vault module does not render when the command returns invalid JSON.
+    #[test]
+    fn test_module_invalid_json() -> io::Result<()> {
+        let renderer = ModuleRenderer::new("vault").cmd(
+            "vault token lookup --format=json",
+            Some(CommandOutput {
+                stdout: "invalid json".to_string(),
+                stderr: String::new(),
+            }),
+        );
+
+        let output = renderer.collect();
+        assert_eq!(output, None);
+        Ok(())
     }
 }

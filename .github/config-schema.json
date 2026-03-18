@@ -1779,8 +1779,8 @@
     "vault": {
       "$ref": "#/$defs/VaultConfig",
       "default": {
-        "format": "[$symbol Token expires: $expire_time]($style)",
-        "symbol": "⚠️",
+        "format": "[$symbol $expire_time]($style)",
+        "symbol": "🔒",
         "style": "bold red",
         "show_within_days": 7,
         "disabled": false
@@ -6703,11 +6703,11 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol Token expires: $expire_time]($style)"
+          "default": "[$symbol $expire_time]($style)"
         },
         "symbol": {
           "type": "string",
-          "default": "⚠️"
+          "default": "🔒"
         },
         "style": {
           "type": "string",

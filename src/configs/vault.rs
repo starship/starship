@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-
 pub struct VaultConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -19,8 +18,8 @@ pub struct VaultConfig<'a> {
 impl Default for VaultConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "[$symbol Token expires: $expire_time]($style)",
-            symbol: "⚠️",
+            format: "[$symbol $expire_time]($style)",
+            symbol: "🔒",
             style: "bold red",
             show_within_days: 7,
             disabled: false,
