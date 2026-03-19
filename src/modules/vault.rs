@@ -102,9 +102,11 @@ mod tests {
             "data": {
                 "expire_time": expire_time
             }
-        }).to_string();
+        })
+        .to_string();
 
         let output = ModuleRenderer::new("vault")
+            .env("VAULT_TOKEN", "present")
             .cmd(
                 "vault token lookup --format=json",
                 Some(CommandOutput {
@@ -121,7 +123,7 @@ mod tests {
 
         let expected_date = &expire_time[..10];
         let output_str = output.expect("Module should have rendered an output");
-        
+
         assert!(output_str.contains("🔒"));
         assert!(output_str.contains(expected_date));
     }
@@ -144,6 +146,7 @@ mod tests {
     fn test_module_command_failure() {
         // Mocking a command failure by passing None to .cmd()
         let output = ModuleRenderer::new("vault")
+            .env("VAULT_TOKEN", "present")
             .cmd("vault token lookup --format=json", None)
             .collect();
 
@@ -156,9 +159,11 @@ mod tests {
         let expire_time = (Local::now() + Duration::days(10)).to_rfc3339();
         let fake_json = json!({
             "data": { "expire_time": expire_time }
-        }).to_string();
+        })
+        .to_string();
 
         let output = ModuleRenderer::new("vault")
+            .env("VAULT_TOKEN", "present")
             .cmd(
                 "vault token lookup --format=json",
                 Some(CommandOutput {
@@ -179,6 +184,7 @@ mod tests {
     #[test]
     fn test_module_invalid_json() {
         let output = ModuleRenderer::new("vault")
+            .env("VAULT_TOKEN", "present")
             .cmd(
                 "vault token lookup --format=json",
                 Some(CommandOutput {
