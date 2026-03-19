@@ -448,7 +448,7 @@ This program will not transfer any information to other networked systems unless
 
 ## 📝 License
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
+Copyright © 2019-2026, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
 This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
