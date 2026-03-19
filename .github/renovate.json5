@@ -59,8 +59,22 @@
             "groupName": "npm",
             "matchDatasources": ["npm"],
             "extends": ["schedule:weekly"]
+        },
+        {
+            // use "chore" commit type for copyright year updates
+            "matchPackageNames": ["current-year"],
+            "semanticCommitType": "chore"
         }
     ],
+    // fetch current year from external time API for copyright year updates
+    "customDatasources": {
+        "current-year": {
+            "defaultRegistryUrlTemplate": "https://timeapi.io/api/Time/current/zone?timeZone=UTC",
+            "transformTemplates": [
+                "{\"releases\":[{\"version\": $string(year)}]}"
+            ]
+        }
+    },
     // custom regex update managers
     "regexManagers": [
         {
@@ -72,6 +86,16 @@
             "fileMatch": ["^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$"],
             "matchStrings": ["cargo install.*--version (?<currentValue>\\S+).*\\s(?<depName>\\S+)"],
             "datasourceTemplate": "crate"
+        },
+        {
+            // auto-update copyright year in LICENSE and README.md
+            "fileMatch": ["^README\\.md$", "^LICENSE$"],
+            "matchStrings": [
+                "2019-(?<currentValue>\\d{4}),"
+            ],
+            "depNameTemplate": "current-year",
+            "datasourceTemplate": "custom.current-year",
+            "versioningTemplate": "regex:^(?<major>\\d{4})$"
         }
     ]
 }
