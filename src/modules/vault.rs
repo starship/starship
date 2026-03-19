@@ -19,17 +19,16 @@ pub fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 
 /// Run `vault token lookup` and return JSON output.
 fn vault_lookup<'a>(context: &'a Context<'a>) -> Option<Vec<u8>> {
-    use std::env;
-    use std::fs;
+    let has_token = context.get_env("VAULT_TOKEN").is_some()
+        || context
+            .get_home()
+            .map(|home| home.join(".vault-token").exists())
+            .unwrap_or(false);
 
-    if env::var("VAULT_TOKEN").is_err() {
-        let Ok(home) = env::var("HOME") else {
-            return None;
-        };
-        let Ok(_) = fs::read_to_string(format!("{home}/.vault-token")) else {
-            return None;
-        };
+    if !has_token {
+        return None;
     }
+
     context
         .exec_cmd("vault", &["token", "lookup", "--format=json"])
         .map(|out| out.stdout.into_bytes())
