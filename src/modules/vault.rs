@@ -90,22 +90,21 @@ fn parse_vault_output<'a>(
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
-    use crate::utils::CommandOutput;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use chrono::{Duration, Local};
     use serde_json::json;
-    use std::io;
 
     /// Test that the Vault module renders correctly when expire_time is within allowed days.
     #[test]
-    fn test_module_full_render_success() -> io::Result<()> {
+    fn test_module_full_render_success() {
         let expire_time = (Local::now() + Duration::days(1)).to_rfc3339();
         let fake_json = json!({
-            "data": { "expire_time": expire_time }
-        })
-        .to_string();
+            "data": {
+                "expire_time": expire_time
+            }
+        }).to_string();
 
-        let renderer = ModuleRenderer::new("vault")
+        let output = ModuleRenderer::new("vault")
             .cmd(
                 "vault token lookup --format=json",
                 Some(CommandOutput {
@@ -117,50 +116,49 @@ mod tests {
                 [vault]
                 disabled = false
                 show_within_days = 7
-            });
+            })
+            .collect();
 
-        let output = renderer.collect();
-        assert!(output.is_some());
-        let output_str = output.unwrap();
         let expected_date = &expire_time[..10];
+        let output_str = output.expect("Module should have rendered an output");
+        
         assert!(output_str.contains("🔒"));
         assert!(output_str.contains(expected_date));
-        Ok(())
     }
 
     /// Test that the Vault module does not render when disabled in configuration.
     #[test]
-    fn test_module_disabled() -> io::Result<()> {
-        let renderer = ModuleRenderer::new("vault").config(toml::toml! {
-            [vault]
-            disabled = true
-        });
+    fn test_module_disabled() {
+        let output = ModuleRenderer::new("vault")
+            .config(toml::toml! {
+                [vault]
+                disabled = true
+            })
+            .collect();
 
-        let output = renderer.collect();
-        assert_eq!(output, None);
-        Ok(())
+        assert!(output.is_none());
     }
 
     /// Test that the Vault module does not render when the command fails (no output).
     #[test]
-    fn test_module_command_failure() -> io::Result<()> {
-        let renderer = ModuleRenderer::new("vault").cmd("vault token lookup --format=json", None);
+    fn test_module_command_failure() {
+        // Mocking a command failure by passing None to .cmd()
+        let output = ModuleRenderer::new("vault")
+            .cmd("vault token lookup --format=json", None)
+            .collect();
 
-        let output = renderer.collect();
-        assert_eq!(output, None);
-        Ok(())
+        assert!(output.is_none());
     }
 
     /// Test that the Vault module does not render when expire_time is beyond allowed days.
     #[test]
-    fn test_module_beyond_expiry_days() -> io::Result<()> {
+    fn test_module_beyond_expiry_days() {
         let expire_time = (Local::now() + Duration::days(10)).to_rfc3339();
         let fake_json = json!({
             "data": { "expire_time": expire_time }
-        })
-        .to_string();
+        }).to_string();
 
-        let renderer = ModuleRenderer::new("vault")
+        let output = ModuleRenderer::new("vault")
             .cmd(
                 "vault token lookup --format=json",
                 Some(CommandOutput {
@@ -171,26 +169,25 @@ mod tests {
             .config(toml::toml! {
                 [vault]
                 show_within_days = 7
-            });
+            })
+            .collect();
 
-        let output = renderer.collect();
-        assert_eq!(output, None);
-        Ok(())
+        assert!(output.is_none());
     }
 
     /// Test that the Vault module does not render when the command returns invalid JSON.
     #[test]
-    fn test_module_invalid_json() -> io::Result<()> {
-        let renderer = ModuleRenderer::new("vault").cmd(
-            "vault token lookup --format=json",
-            Some(CommandOutput {
-                stdout: "invalid json".to_string(),
-                stderr: String::new(),
-            }),
-        );
+    fn test_module_invalid_json() {
+        let output = ModuleRenderer::new("vault")
+            .cmd(
+                "vault token lookup --format=json",
+                Some(CommandOutput {
+                    stdout: "invalid json".to_string(),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
 
-        let output = renderer.collect();
-        assert_eq!(output, None);
-        Ok(())
+        assert!(output.is_none());
     }
 }
