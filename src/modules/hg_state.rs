@@ -80,7 +80,7 @@ fn get_state_description<'a>(
         Some(StateDescription {
             label: config.histedit,
         })
-    } else if is_merge_state(hg_root).is_ok() {
+    } else if is_merge_state(hg_root).is_ok_and(|is_merge| is_merge) {
         Some(StateDescription {
             label: config.merge,
         })
