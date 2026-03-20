@@ -1,10 +1,10 @@
 [Retourner aux préréglages](./#tokyo-night)
 
-# Tokyo Night Preset
+# Préréglage Tokyo Night
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Ce préréglage est inspiré par [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Capture d'écran du préréglage Tokyo Night](/presets/img/tokyo-night.png)
 
 ### Pré-requis
 
@@ -16,6 +16,6 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/tokyo-night.toml){download}
+[Cliquez pour télécharger le TOML](/presets/toml/tokyo-night.toml){download}
 
 <<< @/public/presets/toml/tokyo-night.toml

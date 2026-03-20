@@ -221,22 +221,22 @@ curl -sS https://starship.rs/install.sh | sh
 
 Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de paquets:
 
-| Distribution       | Dépôt                                                                                          | Instructions                                                                   |
-| ------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Toutes_**       | **[crates.io](https://crates.io/crates/starship)**                                             | `cargo install starship --locked`                                              |
-| _Toutes_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                       | `conda install -c conda-forge starship`                                        |
-| _Toutes_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                         | `brew install starship`                                                        |
-| Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                       | `pacman -S starship`                                                           |
+| Distribution       | Dépôt                                                                                          | Instructions                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **_Toutes_**       | **[crates.io](https://crates.io/crates/starship)**                                             | `cargo install starship --locked`                             |
+| _Toutes_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                       | `conda install -c conda-forge starship`                       |
+| _Toutes_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                         | `brew install starship`                                       |
+| Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                            |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                       | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Debian 13+         | [Debian principal](https://sources.debian.org/src/starship/1.22.1-1/)                          | `apt install starship`                                                         |
+| Debian 13+         | [Debian principal](https://sources.debian.org/src/starship/1.22.1-1/)                          | `apt install starship`                                        |
 | Fedora 40+         | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
-| Manjaro            |                                                                                                | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
-| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                          | `zypper in starship`                                                           |
-| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                          | `apt install starship`                                                         |
-| Void Linux         | [Paquets Void Linux](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
+| Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                  |
+| Manjaro            |                                                                                                | `pacman -S starship`                                          |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)   | `nix-env -iA nixpkgs.starship`                                |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                          | `zypper in starship`                                          |
+| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                          | `apt install starship`                                        |
+| Void Linux         | [Paquets Void Linux](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                    |
 
 </details>
 
@@ -267,13 +267,13 @@ Installez la dernière version pour votre système à partir de l'installeur MSI
 
 Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
-| Dépôt                                                                                         | Instructions                            |
-| --------------------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                                            | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                              | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                                      | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)              | `scoop install starship`                |
-| [aileron](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
+| Dépôt                                                                                        | Instructions                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+Ajoutez ce qui suit à la fin de `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` sous Windows) :
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Seul Elvish v0.18+ est supporté. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Note : Seul Elvish v0.18+ est supporté. Pour les versions d'Elvish antérieures à v0.21.0, le fichier de configuration pourrait se trouver à `~/.elvish/rc.elv`
 
 </details>
 
@@ -408,7 +408,7 @@ Si vous cherchez à personnaliser davantage Starship :
 
 ## 🤝 Contribuer
 
-Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence** ! Si vous cherchez à vous lancer facilement dans le projet, essayez une [bonne première contribution](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
 
 Si vous parlez couramment une langue autre que l'anglais, nous apprécions grandement toute aide pour traduire et mettre à jour notre documentation dans d'autres langues. Si vous souhaitez nous aider, les traductions se font sur le [Crowdin Starship](https://translate.starship.rs/).
 
@@ -428,16 +428,16 @@ Voyez ces travaux précédents qui ont contribué à inspirer la création de St
 
 Soutenez ce projet en [devenant un collaborateur](https://github.com/sponsors/starship). Votre nom ou logo apparaîtra ici avec un lien vers votre site Web.
 
-## 🔒 Code Signing Policy
+## 🔒 Politique de signature du code
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Signature de code gratuite fournie par [SignPath.io](https://signpath.io), certificat par [SignPath Foundation](https://signpath.org).
 
-Code Signing Roles:
+Rôles de signature du code :
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Réviseurs : [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Approbateurs et auteurs : [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Ce programme ne transférera aucune information vers d'autres systèmes en réseau, sauf demande spécifique de l'utilisateur ou de la personne qui l'installe ou l'exploite.
 
 <p align="center">
     <br>

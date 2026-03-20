@@ -1,10 +1,10 @@
 [Retourner aux préréglages](./#gruvbox-rainbow)
 
-# Gruvbox Rainbow Preset
+# Préréglage Gruvbox Rainbow
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Ce préréglage est fortement inspiré par [Pastel Powerline](./pastel-powerline.md) et [Tokyo Night](./tokyo-night.md).
 
-![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
+![Capture d'écran du préréglage Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png)
 
 ### Pré-requis
 
@@ -16,6 +16,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
+[Cliquez pour télécharger le TOML](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml

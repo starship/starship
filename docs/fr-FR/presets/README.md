@@ -12,11 +12,11 @@ Ce préréglage change les symboles de chaque module pour utiliser les symboles 
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+Ce préréglage modifie les symboles de plusieurs modules afin qu'aucun symbole Nerd Font ne soit utilisé dans l'invite.
 
-> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+> [!TIP] Ce préréglage deviendra le préréglage par défaut [dans une future version de starship](https://github.com/starship/starship/pull/3544).
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[Cliquez pour voir le préréglage No Nerd Font](./no-nerd-font)
 
 ## [Segments entre crochets](./bracketed-segments.md)
 
@@ -36,11 +36,11 @@ Ce préréglage masque la version des environnements. Si vous travaillez dans de
 
 [![Capture d'écran du préréglage Pas de version des environnements](/presets/img/no-runtime-versions.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-runtimes)
 
-## [No Empty Icons](./no-empty-icons.md)
+## [Icônes non vides](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+Ce préréglage n'affiche pas les icônes si l'ensemble d'outils n'est pas trouvé.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-empty-icons.md)
+[![Capture d'écran du préréglage No Empty Icons](/presets/img/no-empty-icons.png "Cliquez pour voir le préréglage Icônes non vides")](./no-empty-icons.md)
 
 ## [Invite de commande Pure](./pure-preset.md)
 
@@ -56,24 +56,24 @@ Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Ce préréglage est inspiré par [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Capture d'écran du préréglage Tokyo Night](/presets/img/tokyo-night.png "Cliquez pour voir le préréglage Tokyo Night")](./tokyo-night)
 
 ## [Gruvbox Rainbow](./gruvbox-rainbow.md)
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Ce préréglage est fortement inspiré par [Pastel Powerline](./pastel-powerline.md) et [Tokyo Night](./tokyo-night.md).
 
-[![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Capture d'écran du préréglage Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Cliquez pour voir le préréglage Gruvbox Rainbow")](./gruvbox-rainbow)
 
 ## [Jetpack](./jetpack.md)
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+C'est un préréglage pseudo-minimaliste inspiré par les invites [geometry](https://github.com/geometry-zsh/geometry) et [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Capture d'écran du préréglage Jetpack](/presets/img/jetpack.png "Cliquez pour voir le préréglage Jetpack")](./jetpack)
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+Ce préréglage est une version légèrement modifiée de [Gruvbox Rainbow](./gruvbox-rainbow.md) utilisant la palette de thème [Catppuccin](https://github.com/catppuccin/catppuccin).
 
-[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+[![Capture d'écran du préréglage Catppuccin Powerline](/presets/img/catppuccin-powerline.png "Cliquez pour voir le préréglage Catppuccin Powerline")](./catppuccin-powerline)

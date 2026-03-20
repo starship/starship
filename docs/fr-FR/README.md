@@ -5,19 +5,15 @@ hero:
   text:
   tagline: L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Commencez →
       link: ./guide/
 features:
-  - 
-    title: Compatibilité avant tout
+  - title: Compatibilité avant tout
     details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
-  - 
-    title: Propulsé par Rust
+  - title: Propulsé par Rust
     details: Profitez de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes la plus rapide et fiable possible.
-  - 
-    title: Personnalisable
+  - title: Personnalisable
     details: Tous les petits détails sont personnalisables à votre goût, pour rendre votre invite de commandes aussi légère ou complète que vous le souhaitez.
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
@@ -52,7 +48,6 @@ onMounted(() => {
 
 1. Installer le binaire **starship** :
 
-
    #### Installer la dernière version
 
    Avec Shell:
@@ -62,7 +57,6 @@ onMounted(() => {
    ```
 
    Pour mettre à jour Starship, relancez le script ci-dessus. Cela remplacera la version actuelle sans toucher à la configuration de Starship.
-
 
    #### Installer via le gestionnaire de paquets
 
@@ -80,7 +74,6 @@ onMounted(() => {
 
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
 
-
    #### Bash
 
    Ajouter ce qui suit à la fin de `~/.bashrc`:
@@ -90,7 +83,6 @@ onMounted(() => {
 
    eval "$(starship init bash)"
    ```
-
 
    #### Fish
 
@@ -102,7 +94,6 @@ onMounted(() => {
    starship init fish | source
    ```
 
-
    #### Zsh
 
    Ajouter ce qui suit à la fin de `~/.zshrc`:
@@ -113,7 +104,6 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-
    #### Powershell
 
    Ajouter ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement, son chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
@@ -121,7 +111,6 @@ onMounted(() => {
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -133,20 +122,19 @@ onMounted(() => {
    eval $(starship init ion)
    ```
 
-
    #### Elvish
 
-   > [!WARNING] Only elvish v0.18 or higher is supported.
+   > [!WARNING] Seul elvish v0.18 ou supérieur est supporté.
 
-   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+   Ajoutez ce qui suit à la fin de `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` sous Windows) :
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   Pour les versions d'elvish antérieures à v0.21.0, le fichier de configuration pourrait se trouver à `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +146,9 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Seul Nushell v0.96+ est supporté.
+   > [!WARNING] Ceci changera dans le futur. Seul Nushell v0.96+ est supporté.
 
    Ajoutez la ligne suivante à la fin de votre configuration Nushell (trouvable en exécutant `$nu.config-path` dans Nushell) :
 
@@ -169,7 +156,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +166,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 

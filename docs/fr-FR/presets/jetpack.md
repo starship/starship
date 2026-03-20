@@ -1,17 +1,17 @@
 [Retourner aux préréglages](./#jetpack)
 
-# Jetpack Preset
+# Préréglage Jetpack
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+C'est un préréglage pseudo-minimaliste inspiré par les invites [geometry](https://github.com/geometry-zsh/geometry) et [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-> Jetpack uses the terminal's color theme.
+> Jetpack utilise le thème de couleurs de votre terminal.
 
-![Screenshot of Jetpack preset](/presets/img/jetpack.png)
+![Capture d'écran du préréglage Jetpack](/presets/img/jetpack.png)
 
-### Prerequisite
+### Pré-requis
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
-- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
+- Nécessite un shell supportant le [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt).
+- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) est recommandé.
 
 ### Configuration
 
@@ -19,6 +19,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 starship preset jetpack -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/jetpack.toml){download}
+[Cliquez pour télécharger le TOML](/presets/toml/jetpack.toml){download}
 
 <<< @/public/presets/toml/jetpack.toml
