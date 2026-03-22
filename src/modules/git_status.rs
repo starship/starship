@@ -166,6 +166,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             count,
                         )
                     }),
+                    "clean" => info.get_is_clean().and_then(|is_clean| {
+                        if is_clean {
+                            format_symbol(config.clean, "git_status.clean", context)
+                        } else {
+                            None
+                        }
+                    }),
                     _ => None,
                 };
                 segments.map(Ok)
@@ -294,6 +301,18 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_index_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.index_typechanged)
+    }
+
+    pub fn get_is_clean(&self) -> Option<bool> {
+        self.get_repo_status().map(|data| {
+            data.conflicted == 0
+                && data.deleted == 0
+                && data.renamed == 0
+                && data.modified == 0
+                && data.staged == 0
+                && data.untracked == 0
+                && data.typechanged == 0
+        })
     }
 }
 
@@ -1076,6 +1095,50 @@ pub(crate) mod tests {
                 .path(repo_dir.path())
                 .collect();
             let expected = format_output("✓");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_clean_on_clean_repo() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$clean\]]($style) )"
+                    clean = "✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✓");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_clean_when_dirty() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_modified(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$clean\]]($style) )"
+                    clean = "✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
