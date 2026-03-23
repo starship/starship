@@ -4027,7 +4027,7 @@ By default, the module will be shown if any of the following conditions are met:
 > [!TIP]
 > The `python_binary` variable accepts either a string, a list of strings, or a
 > list of lists of strings. Each entry can be a binary name (e.g. `'python3'`) or
-> a binary with arguments (e.g. `['uv', 'run', 'python', '--version']`).
+> a binary with arguments (e.g. `['python3.11', '--version']`).
 > Starship will try executing each command until it gets a result.
 >
 > The default values and order for `python_binary` was chosen to first identify
@@ -4073,14 +4073,6 @@ python_binary = 'python3'
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
-```
-
-```toml
-# ~/.config/starship.toml
-
-[python]
-# Use `uv run python` to get the Python version managed by uv.
-python_binary = [['uv', 'run', 'python'], 'python3', 'python']
 ```
 
 ## Quarto
