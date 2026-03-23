@@ -160,6 +160,7 @@ mod tests {
                 context_window_size: 200000,
                 total_input_tokens: 1000,
                 total_output_tokens: 500,
+                used_percentage: 0.0,
                 current_usage: crate::context::CurrentUsage {
                     input_tokens: 100,
                     output_tokens: 50,

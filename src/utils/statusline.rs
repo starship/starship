@@ -25,6 +25,8 @@ pub struct ContextWindow {
     pub context_window_size: u64,
     pub total_input_tokens: u64,
     pub total_output_tokens: u64,
+    /// Pre-computed usage percentage (0–100) provided by Claude Code
+    pub used_percentage: f32,
     /// Usage of the most recent API call
     pub current_usage: CurrentUsage,
 }

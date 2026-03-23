@@ -14,17 +14,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Read Claude Code data from Context
     let claude_data = context.claude_code_data.as_ref()?;
 
-    // Calculate context usage percentage
-    let current_tokens = claude_data.context_window.total_input_tokens
-        + claude_data.context_window.total_output_tokens;
     let total_tokens = claude_data.context_window.context_window_size;
-
-    let percentage_float = if total_tokens > 0 {
-        (current_tokens as f32 / total_tokens as f32) * 100.0
-    } else {
-        0.0
-    };
-    let percentage = percentage_float.round().clamp(0.0, 100.0) as u8;
+    let percentage_float = claude_data
+        .context_window
+        .used_percentage
+        .clamp(0.0, 100.0);
+    let percentage = percentage_float.round() as u8;
 
     // Determine style based on percentage
     let display_style = config
@@ -142,7 +137,7 @@ mod tests {
 
     #[test]
     fn test_disabled() {
-        let data = get_test_claude_data(100000, 0);
+        let data = get_test_claude_data(50.0);
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
                 [claude_context]
@@ -155,7 +150,7 @@ mod tests {
 
     #[test]
     fn test_token_format_variables() {
-        let data = get_test_claude_data(1000, 500); // small round values: "1k", "500"
+        let data = get_test_claude_data(0.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -179,7 +174,7 @@ mod tests {
 
     #[test]
     fn test_zero_total_tokens() {
-        let mut data = get_test_claude_data(0, 0);
+        let mut data = get_test_claude_data(0.0);
         data.context_window.context_window_size = 0;
 
         let actual = ModuleRenderer::new("claude_context")
@@ -199,10 +194,7 @@ mod tests {
         );
     }
 
-    fn get_test_claude_data(
-        total_input_tokens: u64,
-        total_output_tokens: u64,
-    ) -> crate::context::ClaudeCodeData {
+    fn get_test_claude_data(used_percentage: f32) -> crate::context::ClaudeCodeData {
         crate::context::ClaudeCodeData {
             cwd: None,
             model: crate::context::ModelInfo {
@@ -211,8 +203,9 @@ mod tests {
             },
             context_window: crate::context::ContextWindow {
                 context_window_size: 200000,
-                total_input_tokens,
-                total_output_tokens,
+                total_input_tokens: 1000,
+                total_output_tokens: 500,
+                used_percentage,
                 current_usage: crate::context::CurrentUsage {
                     input_tokens: 1000,
                     output_tokens: 500,
@@ -227,7 +220,7 @@ mod tests {
 
     #[test]
     fn test_render_with_data() {
-        let data = get_test_claude_data(100000, 0); // 50%
+        let data = get_test_claude_data(50.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -244,9 +237,9 @@ mod tests {
 
     #[test]
     fn test_multiple_thresholds() {
-        let data_low = get_test_claude_data(50000, 0); // 25%
-        let data_medium = get_test_claude_data(130000, 0); // 65%
-        let data_high = get_test_claude_data(170000, 0); // 85%
+        let data_low = get_test_claude_data(25.0);
+        let data_medium = get_test_claude_data(65.0);
+        let data_high = get_test_claude_data(85.0);
 
         let config = toml::toml! {
             [claude_context]
@@ -286,7 +279,7 @@ mod tests {
 
     #[test]
     fn test_gauge_width() {
-        let data = get_test_claude_data(100000, 0); // 50%
+        let data = get_test_claude_data(50.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -305,7 +298,7 @@ mod tests {
 
     #[test]
     fn test_no_partial_symbol_rounds() {
-        let data = get_test_claude_data(100000, 0); // 50%
+        let data = get_test_claude_data(50.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -327,7 +320,7 @@ mod tests {
 
     #[test]
     fn test_partial_not_shown_when_remainder_below_threshold() {
-        let data = get_test_claude_data(44000, 0); // 22%, rem=0.1 < 0.25
+        let data = get_test_claude_data(22.0); // rem=0.1 < 0.25 at gauge_width=5
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -348,7 +341,7 @@ mod tests {
 
     #[test]
     fn test_full_gauge_suppresses_partial() {
-        let data = get_test_claude_data(200000, 0); // 100%
+        let data = get_test_claude_data(100.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -369,7 +362,7 @@ mod tests {
 
     #[test]
     fn test_hidden_when_below_threshold() {
-        let data = get_test_claude_data(50000, 0); // 25%, below default threshold of 30
+        let data = get_test_claude_data(25.0); // below default threshold of 30
 
         let actual = ModuleRenderer::new("claude_context")
             .claude_code_data(data)
@@ -383,7 +376,7 @@ mod tests {
 
     #[test]
     fn test_hidden_when_no_display_matches() {
-        let data = get_test_claude_data(20000, 0); // 10%
+        let data = get_test_claude_data(10.0);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
@@ -403,7 +396,7 @@ mod tests {
 
     #[test]
     fn test_partial_gauge_symbols() {
-        let data = get_test_claude_data(55000, 0); // 27.5%
+        let data = get_test_claude_data(27.5);
 
         let actual = ModuleRenderer::new("claude_context")
             .config(toml::toml! {
