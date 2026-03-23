@@ -15,10 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let claude_data = context.claude_code_data.as_ref()?;
 
     let total_tokens = claude_data.context_window.context_window_size;
-    let percentage_float = claude_data
-        .context_window
-        .used_percentage
-        .clamp(0.0, 100.0);
+    let percentage_float = claude_data.context_window.used_percentage.clamp(0.0, 100.0);
     let percentage = percentage_float.round() as u8;
 
     // Determine style based on percentage

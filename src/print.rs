@@ -82,7 +82,8 @@ pub fn prompt_with_claude_code(args: Properties, target: Target) {
         .inspect_err(|e| log::error!("Failed to read Claude Code JSON from stdin: {e}"))
         .unwrap_or_default();
 
-    let context = Context::new(args, target).with_claude_code_data(claude_data);
+    let mut context = Context::new(args, target).with_claude_code_data(claude_data);
+    context.shell = Shell::Unknown;
     let stdout = io::stdout();
     let mut handle = stdout.lock();
 
