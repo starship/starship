@@ -4017,7 +4017,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `style`              | `'yellow bold'`                                                                                              | The style for the module.                                                             |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
 | `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries (or binaries with arguments) that Starship should execute when getting the version. |
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
@@ -4025,10 +4025,10 @@ By default, the module will be shown if any of the following conditions are met:
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP]
-> The `python_binary` variable accepts either a string or a list of strings.
-> Starship will try executing each binary until it gets a result. Note you can
-> only change the binary that Starship executes to get the version of Python not
-> the arguments that are used.
+> The `python_binary` variable accepts either a string, a list of strings, or a
+> list of lists of strings. Each entry can be a binary name (e.g. `'python3'`) or
+> a binary with arguments (e.g. `['uv', 'run', 'python', '--version']`).
+> Starship will try executing each command until it gets a result.
 >
 > The default values and order for `python_binary` was chosen to first identify
 > the Python version in a virtualenv/conda environments (which currently still
@@ -4073,6 +4073,14 @@ python_binary = 'python3'
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Use `uv run python` to get the Python version managed by uv.
+python_binary = [['uv', 'run', 'python'], 'python3', 'python']
 ```
 
 ## Quarto
