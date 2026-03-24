@@ -4,6 +4,32 @@ use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use std::fmt;
 use std::time::Duration;
 
+// List of modules whose config structs default to `disabled: true`.
+// When no explicit `disabled` field exists in the user's config, these modules are skipped.
+pub const DEFAULT_DISABLED_MODULES: &[&str] = &[
+    "azure",
+    "cpp",
+    "direnv",
+    "fennel",
+    "fossil_branch",
+    "fossil_metrics",
+    "git_metrics",
+    "hg_branch",
+    "hg_state",
+    "kubernetes",
+    "localip",
+    "memory_usage",
+    "mise",
+    "nats",
+    "os",
+    "pijul_channel",
+    "shell",
+    "shlvl",
+    "status",
+    "sudo",
+    "time",
+];
+
 // List of all modules
 // Default ordering is handled in configs/starship_root.rs
 pub const ALL_MODULES: &[&str] = &[

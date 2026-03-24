@@ -234,7 +234,11 @@ impl<'a> Context<'a> {
         // If the segment has "disabled" set to "true", don't show it
         let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
-        disabled == Some(true)
+        match disabled {
+            Some(val) => val,
+            // No explicit `disabled` in user config; fall back to the compiled default
+            None => crate::module::DEFAULT_DISABLED_MODULES.contains(&name),
+        }
     }
 
     /// Returns true when a negated environment variable is defined in `env_vars` and is present
