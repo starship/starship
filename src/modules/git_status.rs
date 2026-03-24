@@ -173,6 +173,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             None
                         }
                     }),
+                    "dirty" => info.get_is_clean().and_then(|is_clean| {
+                        if !is_clean {
+                            format_symbol(config.dirty, "git_status.dirty", context)
+                        } else {
+                            None
+                        }
+                    }),
                     _ => None,
                 };
                 segments.map(Ok)
@@ -1135,6 +1142,50 @@ pub(crate) mod tests {
                     [git_status]
                     format = r"([\[$clean\]]($style) )"
                     clean = "✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_dirty_when_dirty() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_modified(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$dirty\]]($style) )"
+                    dirty = "✗"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✗");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_dirty_on_clean_repo() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$dirty\]]($style) )"
+                    dirty = "✗"
                 })
                 .path(repo_dir.path())
                 .collect();
