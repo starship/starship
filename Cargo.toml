@@ -35,16 +35,16 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
-chrono = { version = "0.4.43", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.5.58", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.5.66"
-clap_complete_nushell = "4.5.10"
+chrono = { version = "0.4.44", default-features = false, features = ["clock", "std", "wasmbind"] }
+clap = { version = "4.6.0", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.6.0"
+clap_complete_nushell = "4.6.0"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.78.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
+gix = { version = "0.80.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status"] }
 indexmap = { version = "2.13.0", features = ["serde"] }
-jsonc-parser = { version = "0.29.0", features = ["serde"] }
+jsonc-parser = { version = "0.31.0", features = ["serde"] }
 log = { version = "0.4.29", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
@@ -59,7 +59,7 @@ path-slash = "0.2.1"
 pest = "2.8.6"
 pest_derive = "2.8.6"
 process_control = "5.2.0"
-quick-xml = "0.39.0"
+quick-xml = "0.39.2"
 rand = "0.10.0"
 rayon = "1.11.0"
 regex = { version = "1.12.3", default-features = false, features = ["perf", "std", "unicode-perl"] }
@@ -68,21 +68,21 @@ semver = "1.0.27"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 sha1 = "0.10.6"
-shadow-rs = { version = "1.7.0", default-features = false, features = ["build"] }
+shadow-rs = { version = "1.7.1", default-features = false, features = ["build"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.10.3", optional = true }
 strsim = "0.11.1"
-systemstat = "=0.2.5"
+systemstat = "=0.2.6"
 terminal_size = "0.4.3"
-toml = { version = "1.0.0", features = ["preserve_order"] }
-toml_edit = "0.25.0"
+toml = { version = "1.0.7", features = ["preserve_order"] }
+toml_edit = "0.25.5"
 unicode-segmentation = "1.12.0"
 unicode-width = "0.2.2"
 urlencoding = "2.1.3"
 versions = "7.0.0"
-which = "8.0.0"
-whoami = { version = "2.1.0", default-features = false, features = ["std", "wasi-wasite"] }
+which = "8.0.2"
+whoami = { version = "2.1.1", default-features = false, features = ["std", "wasi-wasite"] }
 yaml-rust2 = "0.11.0"
 
 guess_host_triple = "0.1.5"
@@ -108,10 +108,10 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.31.1", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.31.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "1.7.0", default-features = false, features = ["build"] }
+shadow-rs = { version = "1.7.1", default-features = false, features = ["build"] }
 dunce = "1.0.5"
 
 [target.'cfg(windows)'.build-dependencies]
@@ -119,7 +119,7 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.14.0"
-tempfile = "3.25.0"
+tempfile = "3.27.0"
 
 [profile.release]
 codegen-units = 1

@@ -91,7 +91,7 @@
         "full_symbol": "󰁹 ",
         "charging_symbol": "󰂄 ",
         "discharging_symbol": "󰂃 ",
-        "unknown_symbol": "󰁽 ",
+        "unknown_symbol": "󰂑 ",
         "empty_symbol": "󰂎 ",
         "display": [
           {
@@ -1961,7 +1961,7 @@
         },
         "unknown_symbol": {
           "type": "string",
-          "default": "󰁽 "
+          "default": "󰂑 "
         },
         "empty_symbol": {
           "type": "string",
@@ -3084,7 +3084,7 @@
         },
         "format": {
           "type": "string",
-          "default": "with [$env_value]($style) "
+          "default": "with [$symbol$env_value]($style) "
         },
         "disabled": {
           "type": "boolean",

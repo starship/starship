@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
-    if repo.kind.is_bare() {
+    if repo.open().is_bare() {
         log::debug!("This is a bare repository, git_status is not applicable");
         return None;
     }

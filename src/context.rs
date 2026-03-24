@@ -9,7 +9,6 @@ use crate::utils;
 use clap::Parser;
 use gix::{
     Repository, ThreadSafeRepository,
-    repository::Kind,
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state,
 };
@@ -381,7 +380,6 @@ impl<'a> Context<'a> {
                     state: repository.state(),
                     remote,
                     fs_monitor_value_is_true,
-                    kind: repository.kind(),
                 })
             })
             .as_ref()
@@ -727,9 +725,6 @@ pub struct Repo {
     /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
     /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
     pub(crate) fs_monitor_value_is_true: bool,
-
-    // Kind of repository, work tree or bare
-    pub kind: Kind,
 }
 
 impl Repo {
