@@ -6,13 +6,14 @@ use crate::utils::get_command_string_output;
 
 /// Creates a module with the current Pixi environment
 ///
-/// Will display the Pixi environment iff `$PIXI_ENVIRONMENT_NAME` is set.
+/// Will display the Pixi environment and project name iff `$PIXI_ENVIRONMENT_NAME` or `$PIXI_PROJECT_NAME` is set.
 /// Will display the Pixi version iff pixi files are detected or `$PIXI_ENVIRONMENT_NAME` is set.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("pixi");
     let config: PixiConfig = PixiConfig::try_load(module.config);
 
     let pixi_environment_name = context.get_env("PIXI_ENVIRONMENT_NAME");
+    let pixi_project_name = context.get_env("PIXI_PROJECT_NAME");
     let is_pixi_project = pixi_environment_name.is_some()
         || context
             .try_begin_scan()?
@@ -44,6 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "environment" => pixi_environment_name.clone().map(Ok),
+                "project_name" => pixi_project_name.clone().map(Ok),
                 "version" => {
                     let pixi_version = get_pixi_version(context, &config)?;
                     VersionFormatter::format_module_version(
@@ -115,6 +117,45 @@ mod tests {
     fn env_set() {
         let actual = ModuleRenderer::new("pixi")
             .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🧚 v0.33.0 (py312) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn project_name_set() {
+        let actual = ModuleRenderer::new("pixi")
+            .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .env("PIXI_PROJECT_NAME", "my-project")
+            .config(toml::toml! {
+                [pixi]
+                format = "via [$symbol($version )(\\($environment\\) )(\\[$project_name\\] )]($style)"
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow
+                .bold()
+                .paint("🧚 v0.33.0 (py312) [my-project] ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn project_name_not_set() {
+        let actual = ModuleRenderer::new("pixi")
+            .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .config(toml::toml! {
+                [pixi]
+                format = "via [$symbol($version )(\\($environment\\) )(\\[$project_name\\] )]($style)"
+            })
             .collect();
 
         let expected = Some(format!(
