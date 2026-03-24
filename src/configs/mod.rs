@@ -334,7 +334,7 @@ pub struct FullConfig<'a> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::module::ALL_MODULES;
+    use crate::module::{ALL_MODULES, DEFAULT_DISABLED_MODULES};
     use toml::value::Value;
 
     #[test]
@@ -343,6 +343,41 @@ mod test {
         let cfg_table = full_cfg.as_table().unwrap();
         for module in ALL_MODULES {
             assert!(cfg_table.contains_key(*module));
+        }
+    }
+
+    #[test]
+    fn test_default_disabled_modules_matches_config_defaults() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+
+        // Verify every entry in DEFAULT_DISABLED_MODULES is a known module
+        for module in DEFAULT_DISABLED_MODULES {
+            assert!(
+                ALL_MODULES.contains(module),
+                "DEFAULT_DISABLED_MODULES contains '{module}' which is not in ALL_MODULES"
+            );
+        }
+
+        // Verify DEFAULT_DISABLED_MODULES matches actual config defaults
+        for module in ALL_MODULES {
+            let disabled_in_config = cfg_table
+                .get(*module)
+                .and_then(|v| v.as_table())
+                .and_then(|t| t.get("disabled"))
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
+
+            let in_default_disabled = DEFAULT_DISABLED_MODULES.contains(module);
+
+            assert_eq!(
+                disabled_in_config,
+                in_default_disabled,
+                "Module '{module}': config default disabled={disabled_in_config}, \
+                 but {is}in DEFAULT_DISABLED_MODULES. Please update DEFAULT_DISABLED_MODULES \
+                 in src/module.rs.",
+                is = if in_default_disabled { "" } else { "not " }
+            );
         }
     }
 }

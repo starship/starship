@@ -1328,6 +1328,27 @@ mod tests {
     }
 
     #[test]
+    fn test_default_disabled_module_with_no_config() {
+        let context = default_context();
+        assert!(context.is_module_disabled_in_config("pijul_channel"));
+    }
+
+    #[test]
+    fn test_default_disabled_module_enabled_by_user() {
+        let context = default_context().set_config(toml::toml! {
+            [pijul_channel]
+            disabled = false
+        });
+        assert!(!context.is_module_disabled_in_config("pijul_channel"));
+    }
+
+    #[test]
+    fn test_default_enabled_module_with_no_config() {
+        let context = default_context();
+        assert!(!context.is_module_disabled_in_config("git_branch"));
+    }
+
+    #[test]
     fn set_config_method_overwrites_constructor() {
         let context = default_context();
         let mod_context = default_context().set_config(toml::toml! {

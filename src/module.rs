@@ -285,6 +285,13 @@ mod tests {
     }
 
     #[test]
+    fn test_default_disabled_modules_is_in_alphabetical_order() {
+        let mut sorted_modules: Vec<&str> = DEFAULT_DISABLED_MODULES.to_vec();
+        sorted_modules.sort_unstable();
+        assert_eq!(sorted_modules.as_slice(), DEFAULT_DISABLED_MODULES);
+    }
+
+    #[test]
     fn test_module_is_empty_with_no_segments() {
         let name = "unit_test";
         let desc = "This is a unit test";
