@@ -55,9 +55,9 @@ jobs:
             os: ubuntu-latest
             name: starship-arm-unknown-linux-musleabihf.tar.gz
 
-          - target: riscv64gc-unknown-linux-gnu
+          - target: riscv64gc-unknown-linux-musl
             os: ubuntu-latest
-            name: starship-riscv64gc-unknown-linux-gnu.tar.gz
+            name: starship-riscv64gc-unknown-linux-musl.tar.gz
 
           - target: x86_64-apple-darwin
             os: macos-latest
