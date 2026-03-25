@@ -19,7 +19,7 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   aarch64-apple-darwin x86_64-pc-windows-msvc \
                   i686-pc-windows-msvc aarch64-pc-windows-msvc \
                   x86_64-unknown-freebsd \
-                  riscv64gc-unknown-linux-gnu"
+                  riscv64gc-unknown-linux-musl"
 
 info() {
 	printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
