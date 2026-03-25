@@ -567,7 +567,7 @@ impl DirContents {
                 let dir_iter = fs::read_dir(base).unwrap();
                 let _ = dir_iter
                     .filter_map(|entry| entry.ok())
-                    .try_for_each(|entry| tx.send(entry));
+                    .try_for_each(|entry| tx.send(entry).map_err(Box::new));
             };
 
             let _ = thread::Builder::new()
