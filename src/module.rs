@@ -76,6 +76,7 @@ pub const ALL_MODULES: &[&str] = &[
     "opa",
     "openstack",
     "os",
+    "p4",
     "package",
     "perl",
     "php",
