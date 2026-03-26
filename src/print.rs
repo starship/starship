@@ -342,7 +342,7 @@ fn handle_module<'a>(
         // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
         modules.extend(modules::handle(module, context));
     } else if matches!(module, "custom" | "env_var") {
-        // env var is a spacial case and may contain a top-level module definition
+        // env var is a special case and may contain a top-level module definition
         if module == "env_var" {
             modules.extend(modules::handle(module, context));
         }
