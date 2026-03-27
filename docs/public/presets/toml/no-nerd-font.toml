@@ -19,5 +19,8 @@ symbol = "[⬢](bold green) "
 [pulumi]
 symbol = "🧊 "
 
+[talos]
+symbol = "T "
+
 [typst]
 symbol = "t "
