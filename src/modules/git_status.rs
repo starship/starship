@@ -2146,25 +2146,32 @@ pub(crate) mod tests {
     }
 
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
+        // Make conflicting changes and merge them locally
         create_command("git")?
-            .args(["reset", "--hard", "HEAD^"])
+            .args(["checkout", "-b", "branch1"])
             .current_dir(repo_dir)
             .output()?;
 
-        fs::write(repo_dir.join("readme.md"), "# goodbye")?;
-
+        fs::write(repo_dir.join("readme.md"), "# branch1")?;
         create_command("git")?
-            .args(["add", "."])
-            .current_dir(repo_dir)
-            .output()?;
-
-        create_command("git")?
-            .args(["commit", "-m", "Change readme", "--no-gpg-sign"])
+            .args(["commit", "-am", "Branch1 change", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(["pull", "--rebase"])
+            .args(["checkout", "-b", "branch2", "HEAD~1"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        fs::write(repo_dir.join("readme.md"), "# branch2")?;
+        create_command("git")?
+            .args(["commit", "-am", "Branch2 change", "--no-gpg-sign"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        // Merge to create conflict
+        let _ = create_command("git")?
+            .args(["merge", "branch1", "--no-edit"])
             .current_dir(repo_dir)
             .output()?;
 
