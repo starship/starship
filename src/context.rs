@@ -1,5 +1,5 @@
 use crate::config::{ModuleConfig, StarshipConfig};
-use crate::configs::StarshipRootConfig;
+use crate::configs::{FullConfig, StarshipRootConfig};
 use crate::context_env::Env;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
@@ -234,11 +234,7 @@ impl<'a> Context<'a> {
         // If the segment has "disabled" set to "true", don't show it
         let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
-        match disabled {
-            Some(val) => val,
-            // No explicit `disabled` in user config; fall back to the compiled default
-            None => crate::module::DEFAULT_DISABLED_MODULES.contains(&name),
-        }
+        disabled.unwrap_or_else(|| default_module_disabled(name))
     }
 
     /// Returns true when a negated environment variable is defined in `env_vars` and is present
@@ -479,6 +475,18 @@ impl<'a> Context<'a> {
     pub fn get_config_path_os(&self) -> Option<OsString> {
         get_config_path_os(&self.env)
     }
+}
+
+fn default_module_disabled(name: &str) -> bool {
+    static DEFAULT_CONFIG: OnceLock<toml::Value> = OnceLock::new();
+
+    DEFAULT_CONFIG
+        .get_or_init(|| toml::Value::try_from(FullConfig::default()).unwrap())
+        .get(name)
+        .and_then(|value| value.as_table())
+        .and_then(|table| table.get("disabled"))
+        .and_then(|value| value.as_bool())
+        == Some(true)
 }
 
 impl Default for Context<'_> {
@@ -1330,6 +1338,15 @@ mod tests {
     #[test]
     fn test_default_disabled_module_with_no_config() {
         let context = default_context();
+        assert!(context.is_module_disabled_in_config("pijul_channel"));
+    }
+
+    #[test]
+    fn test_default_disabled_module_stays_disabled_without_explicit_override() {
+        let context = default_context().set_config(toml::toml! {
+            [pijul_channel]
+            format = "[$channel]($style) "
+        });
         assert!(context.is_module_disabled_in_config("pijul_channel"));
     }
 
