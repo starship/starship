@@ -3851,7 +3851,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 ## Pixi
 
 The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated
-environment and project name, if `$PIXI_ENVIRONMENT_NAME` or `$PIXI_PROJECT_NAME` is set.
+environment and project name, if `$PIXI_ENVIRONMENT_NAME` is set.
 
 > [!TIP]
 > This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
