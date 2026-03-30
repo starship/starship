@@ -13,6 +13,7 @@ $git_status\
 $c\
 $cpp\
 $rust\
+$godot\
 $golang\
 $nodejs\
 $php\
@@ -116,6 +117,11 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [rust]
 symbol = ""
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[godot]
+symbol = ""
 style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 

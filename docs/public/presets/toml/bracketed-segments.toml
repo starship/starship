@@ -99,6 +99,9 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 [gleam]
 format = '\[[$symbol($version)]($style)\]'
 
+[godot]
+format = '\[[$symbol($version)]($style)\]'
+
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 

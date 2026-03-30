@@ -51,6 +51,9 @@ format = 'via [$symbol]($style)'
 [gleam]
 format = 'via [$symbol]($style)'
 
+[godot]
+format = 'via [$symbol]($style)'
+
 [golang]
 format = 'via [$symbol]($style)'
 

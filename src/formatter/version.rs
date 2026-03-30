@@ -38,16 +38,19 @@ impl<'a> VersionFormatter<'a> {
                 "major" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.major.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(0)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(0)?.to_string())),
                     _ => None,
                 },
                 "minor" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.minor.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(1)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(1)?.to_string())),
                     _ => None,
                 },
                 "patch" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.patch.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(2)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(2)?.to_string())),
                     _ => None,
                 },
                 _ => None,

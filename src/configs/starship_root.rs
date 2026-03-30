@@ -69,6 +69,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "fennel",
     "fortran",
     "gleam",
+    "godot",
     "golang",
     "gradle",
     "haskell",

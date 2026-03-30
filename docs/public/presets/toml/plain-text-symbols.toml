@@ -108,6 +108,9 @@ truncation_symbol = "..."
 [gleam]
 symbol = "gleam "
 
+[godot]
+symbol = "godot "
+
 [golang]
 symbol = "go "
 
