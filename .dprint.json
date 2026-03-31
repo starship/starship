@@ -25,9 +25,9 @@
     "target/"
   ],
   "plugins": [
-    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.95.15/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-json/releases/download/0.21.1/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.21.1/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-toml/releases/download/0.7.0/plugin.wasm"
+    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.95.15/plugin.wasm@44730030935227dab70366454c5e9b55c5ea8c4fe4d126cc3e5119e94014c85c",
+    "https://github.com/dprint/dprint-plugin-json/releases/download/0.21.1/plugin.wasm@09eb556cb5e581972b06ceb2c4536a90ae032b84d384beea8837c99188454cdf",
+    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.21.1/plugin.wasm@064467750514c9ce5192b375582d762ec64cb3ba99673413fa86645d50406279",
+    "https://github.com/dprint/dprint-plugin-toml/releases/download/0.7.0/plugin.wasm@0126c8112691542d30b52a639076ecc83e07bace877638cee7c6915fd36b8629"
   ]
 }
