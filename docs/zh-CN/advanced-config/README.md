@@ -30,7 +30,7 @@ Enable-TransientPrompt
 
 你只需要这样做一次。 对您的 `starship.lua` 进行以下更改，以自定义左侧和右侧显示的内容：
 
-- 默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 This function receives the current prompt as a string that you can utilize. 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 这个函数接受当前的提示符作为字符串参数，你可以在函数中使用它。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
 
 ```lua
 function starship_transitent_propt_func(empt)
@@ -41,7 +41,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))
 ```
 
-- 默认情况下，输入的右侧为空。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 This function receives the current prompt as a string that you can utilize. 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
+- 默认情况下，输入的右侧为空。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 这个函数接受当前的提示符作为字符串参数，你可以在函数中使用它。 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -76,9 +76,9 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## Bash 中的 TransientPrompt 和 TransientRightPrompt
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+Ble.sh 框架在V0.4或更高版本允许您用自定义字符串替换之前打印的提示符。 这在并非总是需要所有提示信息的情况下非常有用。 To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
 The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
 
