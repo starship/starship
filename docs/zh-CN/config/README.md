@@ -3033,6 +3033,40 @@ style = 'bold yellow'
 symbol = '🌐 '
 ```
 
+## NFS
+
+The `nfs` module displays the hostname of the NFS server when the current directory is located on an NFS mount. It supports Linux, macOS, FreeBSD, OpenBSD, NetBSD, and Windows. On Linux, it additionally displays the average Round Trip Time (RTT).
+
+### 配置项
+
+| 选项         | 默认值                                | 描述                          |
+| ---------- | ------------------------------------ | --------------------------- |
+| `format`   | `'[$symbol$hostname]($style) '`      | 组件格式化模板。                  |
+| `symbol`   | `'☁︎ '`                               | 在主机名之前显示的符号。             |
+| `style`    | `'cyan bold'`                        | 此组件的样式。                    |
+| `disabled` | `false`                              | 禁用 `nfs` 组件。               |
+
+### 变量
+
+| 字段       | 示例      | 描述                                                                |
+| -------- | -------- | ----------------------------------------------------------------- |
+| hostname | `server` | NFS 服务器的主机名（例如 `server` 或 `server:/path`）                    |
+| rtt      | `12ms`   | 平均往返时间（RTT），以毫秒为单位（仅限 Linux）                             |
+| symbol   |          | `symbol` 对应值                                                     |
+| style\*  |          | `style` 对应值                                                      |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[nfs]
+style = 'bold blue'
+symbol = '☁︎ '
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). 默认情况下，此组件将在满足以下任意条件时显示：
