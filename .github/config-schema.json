@@ -1085,6 +1085,15 @@
         "disabled": false
       }
     },
+    "nfs": {
+      "$ref": "#/$defs/NfsConfig",
+      "default": {
+        "format": "[$symbol$hostname]($style) ",
+        "symbol": "☁︎ ",
+        "style": "cyan bold",
+        "disabled": false
+      }
+    },
     "nim": {
       "$ref": "#/$defs/NimConfig",
       "default": {
@@ -4827,6 +4836,28 @@
         "style": {
           "type": "string",
           "default": "blue bold dimmed"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "NfsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol$hostname]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "☁︎ "
+        },
+        "style": {
+          "type": "string",
+          "default": "cyan bold"
         },
         "disabled": {
           "type": "boolean",

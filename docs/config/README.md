@@ -3274,6 +3274,40 @@ style = 'bold yellow'
 symbol = '🌐 '
 ```
 
+## NFS
+
+The `nfs` module displays the hostname of the NFS server when the current directory is located on an NFS mount. It supports Linux, macOS, FreeBSD, OpenBSD, NetBSD, and Windows. On Linux, it additionally displays the average Round Trip Time (RTT).
+
+### Options
+
+| Option     | Default                              | Description                          |
+| ---------- | ------------------------------------ | ------------------------------------ |
+| `format`   | `'[$symbol $hostname]($style)'` | The format for the module.           |
+| `symbol`   | `'☁︎ '`                              | The symbol used before the hostname. |
+| `style`    | `'cyan bold'`                        | The style for the module.            |
+| `disabled` | `false`                              | Disables the `nfs` module.           |
+
+### Variables
+
+| Variable | Example  | Description                                                      |
+| -------- | -------- | ---------------------------------------------------------------- |
+| hostname | `server` | The hostname of the NFS server (e.g. `server` or `server:/path`) |
+| rtt      | `12ms`   | The average round-trip time in milliseconds (Linux only)         |
+| symbol   |          | Mirrors the value of option `symbol`                             |
+| style\*  |          | Mirrors the value of option `style`                              |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[nfs]
+style = 'bold blue'
+symbol = '☁︎ '
+```
+
 ## Nim
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/).
