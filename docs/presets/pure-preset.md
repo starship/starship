@@ -9,7 +9,7 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 ### Configuration
 
 ```sh
-starship preset pure-preset -o ~/.config/starship.toml
+starship preset pure-preset -o ~/.config/starship/config.toml
 ```
 
 [Click to download TOML](/presets/toml/pure-preset.toml){download}
