@@ -74,9 +74,9 @@ get_tmpfile() {
 	fi
 }
 
-# Test if a location is writeable by trying to write to it. Windows does not let
+# Test if a location is writable by trying to write to it. Windows does not let
 # you test writeability other than by writing: https://stackoverflow.com/q/1999988
-test_writeable() {
+test_writable() {
 	path="${1:-}/test.txt"
 	if touch "${path}" 2>/dev/null; then
 		rm "${path}"
@@ -188,7 +188,7 @@ elevate_priv() {
 install() {
 	ext="$1"
 
-	if test_writeable "${BIN_DIR}"; then
+	if test_writable "${BIN_DIR}"; then
 		sudo=""
 		msg="Installing Starship, please wait…"
 	else
