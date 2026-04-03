@@ -244,7 +244,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = '$all'
 
-# Que es equivalente a
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -252,6 +252,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$nats\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -266,9 +267,11 @@ $hg_state\
 $pijul_channel\
 $docker_context\
 $package\
+$bun\
 $c\
 $cmake\
 $cobol\
+$cpp\
 $daml\
 $dart\
 $deno\
@@ -280,19 +283,20 @@ $fennel\
 $fortran\
 $gleam\
 $golang\
-$guix_shell\
+$gradle\
 $haskell\
 $haxe\
 $helm\
 $java\
 $julia\
 $kotlin\
-$gradle\
 $lua\
 $maven\
+$mojo\
 $nim\
 $nodejs\
 $ocaml\
+$odin\
 $opa\
 $perl\
 $php\
@@ -312,10 +316,13 @@ $terraform\
 $typst\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
+$guix_shell\
 $nix_shell\
 $conda\
+$pixi\
 $meson\
 $spack\
 $memory_usage\
@@ -323,7 +330,6 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
-$nats\
 $direnv\
 $env_var\
 $mise\
@@ -336,9 +342,9 @@ $jobs\
 $battery\
 $time\
 $status\
-$os\
 $container\
 $netns\
+$os\
 $shell\
 $character"""
 ```
