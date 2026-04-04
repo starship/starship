@@ -355,7 +355,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | symbol    |                     | Espelha o valor da opção `symbol`     |
 | style\* |                     | Espelha o valor da opção `style`      |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 #### Exemplos
 
@@ -438,7 +438,7 @@ style = "bold red"
 | symbol                       |         | Espelha o valor da opção `symbol`                     |
 | style\*                    |         | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 #### Exemplos
 
@@ -547,7 +547,7 @@ style = "bold red"
 | symbol        |          | Espelha o valor da opção `symbol`                     |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 #### Exemplos
 
