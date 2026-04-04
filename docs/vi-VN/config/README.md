@@ -2795,7 +2795,7 @@ The `maven` module indicates the presence of a Maven project in the current dire
 
 Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `pom.xml` file.
+- Thư mục hiện tại chứa một tập tin `pom.xml`.
 - The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
 
 If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
