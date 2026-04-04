@@ -90,6 +90,7 @@ pub const ALL_MODULES: &[&str] = &[
     "quarto",
     "raku",
     "red",
+    "remote_mount",
     "rlang",
     "ruby",
     "rust",

@@ -83,6 +83,7 @@ mod python;
 mod quarto;
 mod raku;
 mod red;
+mod remote_mount;
 mod rlang;
 mod ruby;
 mod rust;
@@ -113,6 +114,8 @@ mod typst;
 #[cfg(feature = "battery")]
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
+pub use self::remote_mount::{RemoteMountInfoProvider, RemoteMountInfoProviderImpl};
+
 use crate::config::ModuleConfig;
 use crate::context::{Context, Detected, Shell};
 use crate::module::Module;
@@ -141,6 +144,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "conda" => conda::module(context),
             "container" => container::module(context),
             "cpp" => cpp::module(context),
+            "crystal" => crystal::module(context),
             "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
@@ -151,7 +155,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
-            "env_var" => env_var::module(None, context),
             "fennel" => fennel::module(context),
             "fill" => fill::module(context),
             "fortran" => fortran::module(context),
@@ -206,8 +209,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "python" => python::module(context),
             "quarto" => quarto::module(context),
             "raku" => raku::module(context),
-            "rlang" => rlang::module(context),
             "red" => red::module(context),
+            "remote_mount" => remote_mount::module(context),
+            "rlang" => rlang::module(context),
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
             "scala" => scala::module(context),
@@ -216,20 +220,20 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "solidity" => solidity::module(context),
             "spack" => spack::module(context),
-            "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
+            "swift" => swift::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "typst" => typst::module(context),
-            "crystal" => crystal::module(context),
             "username" => username::module(context),
-            "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
             "vcs" => vcs::module(context),
             "vcsh" => vcsh::module(context),
+            "vlang" => vlang::module(context),
             "xmake" => xmake::module(context),
             "zig" => zig::module(context),
+            "env_var" => env_var::module(None, context),
             env if env.starts_with("env_var.") => {
                 env_var::module(env.strip_prefix("env_var."), context)
             }
@@ -327,6 +331,7 @@ pub fn description(module: &str) -> &'static str {
         "mojo" => "The currently installed version of Mojo",
         "nats" => "The current NATS context",
         "netns" => "The current network namespace",
+        "remote_mount" => "The current remote mount server",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",

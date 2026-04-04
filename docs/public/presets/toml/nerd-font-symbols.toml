@@ -206,3 +206,6 @@ symbol = " "
 
 [zig]
 symbol = " "
+
+[remote_mount]
+symbol = "󰒍 "

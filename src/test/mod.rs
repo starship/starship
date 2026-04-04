@@ -161,6 +161,14 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn remote_mount_info_provider(
+        mut self,
+        remote_mount_info_provider: &'a (dyn crate::modules::RemoteMountInfoProvider + Send + Sync),
+    ) -> Self {
+        self.context.remote_mount_info_provider = remote_mount_info_provider;
+        self
+    }
+
     pub fn pipestatus(mut self, status: &[i64]) -> Self {
         self.context.properties.pipestatus = Some(
             status

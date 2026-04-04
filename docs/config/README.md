@@ -348,6 +348,7 @@ $openstack\
 $azure\
 $direnv\
 $env_var\
+$remote_mount\
 $mise\
 $crystal\
 $custom\
@@ -4232,6 +4233,50 @@ The module will be shown if any of the following conditions are met:
 
 [red]
 symbol = '🔴 '
+```
+
+## Remote Mount
+
+The `remote_mount` module displays the hostname of the remote mount when the current directory is located on an NFS, SMB/CIFS, SSHFS, WebDAV, S3, or Rclone mount. It supports Linux, macOS, FreeBSD, OpenBSD, NetBSD, and Windows. On Linux, it additionally displays the average Round Trip Time (RTT) for NFS mounts.
+
+### Options
+
+| Option         | Default                                 | Description                             |
+| -------------- | --------------------------------------- | --------------------------------------- |
+| `format`       | `'[$symbol($user@)$hostname]($style) '` | The format for the module.              |
+| `symbol`       | `'☁︎ '`                                  | The symbol used before the hostname.    |
+| `style`        | `'cyan bold'`                           | The style for the module.               |
+| `disabled`     | `false`                                 | Disables the `remote_mount` module.     |
+| `type_aliases` | `{}`                                    | Table of mount type aliases to display. |
+
+### Variables
+
+| Variable   | Example  | Description                                                                    |
+| ---------- | -------- | ------------------------------------------------------------------------------ |
+| `hostname` | `server` | The hostname of the remote mount (e.g. `server` or `bucket`)                   |
+| `user`     | `user`   | The username of the remote mount if present                                    |
+| `type`     | `NFS`    | The type of the remote mount (`NFS`, `SMB`, `SSHFS`, `WebDAV`, `S3`, `Rclone`) |
+| `rtt`      | `12ms`   | The average round-trip time in milliseconds (NFS on Linux only)                |
+| `symbol`   |          | Mirrors the value of option `symbol`                                           |
+| `style`\*  |          | Mirrors the value of option `style`                                            |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[remote_mount]
+style = 'bold blue'
+symbol = '☁︎ '
+format = '[$symbol($type )($user@)$hostname]($style) '
+
+[remote_mount.type_aliases]
+NFS = "☁️ NFS"
+SMB = "🖧 SMB"
+SSHFS = "🔑 SSHFS"
+S3 = "🪣 S3"
 ```
 
 ## Ruby

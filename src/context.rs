@@ -80,6 +80,8 @@ pub struct Context<'a> {
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
+    pub remote_mount_info_provider: &'a (dyn crate::modules::RemoteMountInfoProvider + Send + Sync),
+
     /// Starship root config
     pub root_config: StarshipRootConfig,
 
@@ -186,6 +188,7 @@ impl<'a> Context<'a> {
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
+            remote_mount_info_provider: &crate::modules::RemoteMountInfoProviderImpl,
             root_config,
             claude_code_data: None,
             _marker: PhantomData,

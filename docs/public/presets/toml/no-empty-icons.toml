@@ -137,3 +137,6 @@ format = '(via [$symbol($version )]($style))'
 
 [zig]
 format = '(via [$symbol($version )]($style))'
+
+[remote_mount]
+format = '(via [$symbol($type )($user@)$hostname]($style) )'

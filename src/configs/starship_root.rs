@@ -131,6 +131,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "azure",
     "direnv",
     "env_var",
+    "remote_mount",
     "mise",
     "crystal",
     "custom",

@@ -333,3 +333,6 @@ symbol = "xmake "
 
 [zig]
 symbol = "zig "
+
+[remote_mount]
+symbol = "mount "

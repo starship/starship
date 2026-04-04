@@ -1153,6 +1153,16 @@
         "disabled": false
       }
     },
+    "remote_mount": {
+      "$ref": "#/$defs/RemoteMountConfig",
+      "default": {
+        "format": "[$symbol($user@)$hostname]($style) ",
+        "symbol": "☁︎ ",
+        "style": "cyan bold",
+        "disabled": false,
+        "type_aliases": {}
+      }
+    },
     "nim": {
       "$ref": "#/$defs/NimConfig",
       "default": {
@@ -5041,6 +5051,35 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "RemoteMountConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol($user@)$hostname]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "☁︎ "
+        },
+        "style": {
+          "type": "string",
+          "default": "cyan bold"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "type_aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
         }
       },
       "additionalProperties": false

@@ -86,6 +86,7 @@ pub mod python;
 pub mod quarto;
 pub mod raku;
 pub mod red;
+pub mod remote_mount;
 pub mod rlang;
 pub mod ruby;
 pub mod rust;
@@ -254,6 +255,8 @@ pub struct FullConfig<'a> {
     nats: nats::NatsConfig<'a>,
     #[serde(borrow)]
     netns: netns::NetnsConfig<'a>,
+    #[serde(borrow)]
+    remote_mount: remote_mount::RemoteMountConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]

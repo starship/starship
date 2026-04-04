@@ -281,3 +281,6 @@ format = '\[[$symbol($version)]($style)\]'
 
 [zig]
 format = '\[[$symbol($version)]($style)\]'
+
+[remote_mount]
+format = '\[[$symbol($type )($user@)$hostname]($style)\]'
