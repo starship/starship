@@ -355,7 +355,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | symbol    |                     | オプション `symbol` の値をミラーする               |
 | style\* |                     | オプション `style` の値をミラーする                |
 
-\*: This variable can only be used as a part of a style string
+\*: この変数はスタイル文字列の一部としてのみ使用できます
 
 #### 設定例
 
@@ -438,7 +438,7 @@ style = "bold red"
 | symbol                       |         | オプション `symbol` の値をミラーする                               |
 | style\*                    |         | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: この変数はスタイル文字列の一部としてのみ使用できます
 
 #### 設定例
 
@@ -547,7 +547,7 @@ style = "bold red"
 | symbol        |          | オプション `symbol` の値をミラーする                               |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: この変数はスタイル文字列の一部としてのみ使用できます
 
 #### 設定例
 
