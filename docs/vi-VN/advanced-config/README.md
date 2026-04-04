@@ -355,7 +355,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | symbol    |                     | Giá trị ghi đè tuỳ chọn `symbol`      |
 | style\* |                     | Giá trị ghi đè của `style`            |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 #### Các ví dụ
 
@@ -438,7 +438,7 @@ style = "bold red"
 | symbol                       |         | Giá trị ghi đè tuỳ chọn `symbol`                      |
 | style\*                    |         | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 #### Các ví dụ
 
@@ -547,7 +547,7 @@ style = "bold red"
 | symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                      |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 #### Các ví dụ
 
