@@ -355,7 +355,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | symbol    |                     | Menyalin nilai dari opsi `symbol`     |
 | style\* |                     | Menyalin nilai dari opsi `style`      |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 #### Contoh
 
@@ -438,7 +438,7 @@ style = "bold red"
 | symbol                       |         | Menyalin nilai dari opsi `symbol`                     |
 | style\*                    |         | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 #### Contoh
 
@@ -547,7 +547,7 @@ style = "bold red"
 | symbol        |          | Menyalin nilai dari opsi `symbol`                     |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 #### Contoh
 
