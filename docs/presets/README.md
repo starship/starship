@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Compañero Claudio](./companero-claudio.md)
+
+A six-segment powerline preset whose colors are sampled directly from the color progression displayed by Claude Code's `/buddy` command. The palette follows the natural order of the color wheel — red, orange, yellow, green, blue, purple — with each segment mapping to OS, directory, git branch, git status, language runtime, and command duration.
+
+[![Screenshot of Compañero Claudio preset](/presets/img/companero-claudio.png "Click to view Compañero Claudio preset")](./companero-claudio)

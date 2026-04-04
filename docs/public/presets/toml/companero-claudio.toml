@@ -1,0 +1,147 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](red)\
+$os\
+[](bg:orange fg:red)\
+$directory\
+[](bg:yellow fg:orange)\
+$git_branch\
+[](bg:green fg:yellow)\
+$git_status\
+[](bg:blue fg:green)\
+$rust\
+$golang\
+$nodejs\
+$java\
+$python\
+$dotnet\
+[](fg:blue bg:purple)\
+$cmd_duration\
+[ ](fg:purple)\
+$line_break\
+$character"""
+
+palette = 'companero_claudio'
+
+[os]
+disabled = false
+style = "bg:red fg:crust"
+format = '[ $symbol ]($style)'
+
+[os.symbols]
+Windows = ""
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = false
+style_user = "bg:red fg:crust"
+style_root = "bg:red fg:crust"
+format = '[ $user ]($style)'
+
+[directory]
+style = "bg:orange fg:crust"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = ""
+style = "bg:yellow"
+format = '[[ $symbol $branch ](fg:crust bg:yellow)]($style)'
+
+[git_status]
+style = "bg:green"
+format = '[[ $all_status$ahead_behind ](fg:crust bg:green)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[java]
+symbol = " "
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[python]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:blue)]($style)'
+
+[dotnet]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[c]
+symbol = " "
+style = "bg:blue"
+format = '[[ $symbol( $version) ](fg:crust bg:blue)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:blue"
+format = '[[ $symbol( $context) ](fg:crust bg:blue)]($style)'
+
+[cmd_duration]
+show_milliseconds = false
+format = '[[ $duration ](fg:crust bg:purple)]($style)'
+style = "bg:purple"
+disabled = false
+
+[line_break]
+disabled = true
+
+[character]
+disabled = false
+success_symbol = '[❯](bold fg:green)'
+error_symbol = '[❯](bold fg:red)'
+vimcmd_symbol = '[❮](bold fg:green)'
+vimcmd_replace_one_symbol = '[❮](bold fg:purple)'
+vimcmd_replace_symbol = '[❮](bold fg:purple)'
+vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+
+[palettes.companero_claudio]
+red = "#FE5250"
+orange = "#FF8449"
+yellow = "#FFC147"
+green = "#80CA7A"
+blue = "#77ABE1"
+purple = "#A081CD"
+crust = "#11111b"
