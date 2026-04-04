@@ -2795,7 +2795,7 @@ The `maven` module indicates the presence of a Maven project in the current dire
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml` file.
+- Текущий каталог содержит файл `pom.xml`.
 - The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
 
 If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
