@@ -355,7 +355,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | symbol    |                     | 對應 `symbol` 選項的設定值                    |
 | style\* |                     | 對應 <0>style</0> 選項的設定值                |
 
-\*: This variable can only be used as a part of a style string
+\*: 此變數僅能用於 style 字串的一部分
 
 #### 範例
 
@@ -438,7 +438,7 @@ style = "bold red"
 | symbol                       |         | 對應 `symbol` 選項的設定值                                    |
 | style\*                    |         | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: 此變數僅能用於 style 字串的一部分
 
 #### 範例
 
@@ -547,7 +547,7 @@ style = "bold red"
 | symbol        |          | 對應 `symbol` 選項的設定值                                    |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
-\*: This variable can only be used as a part of a style string
+\*: 此變數僅能用於 style 字串的一部分
 
 #### 範例
 
