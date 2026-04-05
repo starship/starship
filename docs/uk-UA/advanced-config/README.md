@@ -424,25 +424,25 @@ style = "bold red"
 
 #### Змінні
 
-| Змінна                       | Приклад | Опис                                                      |
-| ---------------------------- | ------- | --------------------------------------------------------- |
-| gauge                        | `██▒░░` | Візуальне представлення використання контексту            |
-| percentage                   | `65%`   | Використання контексту у відсотках                        |
-| input_tokens                 | `45.2k` | Загальна кількість input-токенів, використаних у розмові  |
-| output_tokens                | `12.3k` | Загальна кількість output-токенів, використаних у розмові |
-| curr_input_tokens          | `5.1k`  | Кількість input-токенів в останньому API-виклику          |
-| curr_output_tokens         | `1.2k`  | Кількість output-токенів в останньому API-виклику         |
-| curr_cache_creation_tokens | `1.5k`  | Кеш з токенів створення з останнього виклику API          |
-| curr_cache_read_tokens     | `23.4k` | Кеш з токенів читання з останнього виклику API            |
-| total_tokens                 | `200k`  | Загальний розмір контекстного вікна                       |
-| symbol                       |         | Віддзеркалює значення параметра `symbol`                  |
-| style\*                    |         | Mirrors the style from the matching display threshold     |
+| Змінна                       | Приклад | Опис                                                                      |
+| ---------------------------- | ------- | ------------------------------------------------------------------------- |
+| gauge                        | `██▒░░` | Візуальне представлення використання контексту                            |
+| percentage                   | `65%`   | Використання контексту у відсотках                                        |
+| input_tokens                 | `45.2k` | Загальна кількість input-токенів, використаних у розмові                  |
+| output_tokens                | `12.3k` | Загальна кількість output-токенів, використаних у розмові                 |
+| curr_input_tokens          | `5.1k`  | Кількість input-токенів в останньому API-виклику                          |
+| curr_output_tokens         | `1.2k`  | Кількість output-токенів в останньому API-виклику                         |
+| curr_cache_creation_tokens | `1.5k`  | Кеш з токенів створення з останнього виклику API                          |
+| curr_cache_read_tokens     | `23.4k` | Кеш з токенів читання з останнього виклику API                            |
+| total_tokens                 | `200k`  | Загальний розмір контекстного вікна                                       |
+| symbol                       |         | Віддзеркалює значення параметра `symbol`                                  |
+| style\*                    |         | Повторює стиль, що збігається з відповідним пороговим значення для показу |
 
 \*: Ця змінна може бути використана лише як частина стилю рядка
 
 #### Приклади
 
-**Minimal gauge-only display**
+**Тільки індикатор**
 
 ```toml
 # ~/.config/starship.toml
@@ -452,7 +452,7 @@ format = "[$gauge]($style) "
 gauge_width = 10
 ```
 
-**Detailed token information**
+**Докладні відомості про використання токенів**
 
 ```toml
 # ~/.config/starship.toml
@@ -461,7 +461,7 @@ gauge_width = 10
 format = "[$percentage ($input_tokens in / $output_tokens out)]($style) "
 ```
 
-**Custom gauge symbols**
+**Власні символи для індикатора**
 
 ```toml
 # ~/.config/starship.toml
@@ -474,7 +474,7 @@ gauge_width = 10
 format = "[$gauge]($style) "
 ```
 
-**Custom thresholds**
+**Власні порогові значення**
 
 ```toml
 # ~/.config/starship.toml
@@ -498,28 +498,28 @@ style = "bold red"
 
 ### Claude Cost
 
-The `claude_cost` module displays the total cost of the current Claude Code session in USD. Like `claude_context`, it supports threshold-based styling.
+Модуль `claude_cost` показує загальну вартість поточної сесії Claude Code в доларах США. Як і `claude_context`, він підтримує стилізацію на основі порогових значень.
 
 #### Параметри
 
-| Параметр   | Стандартно                         | Опис                               |
-| ---------- | ---------------------------------- | ---------------------------------- |
-| `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                     |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.  |
-| `display`  | [дивіться нижче](#display-1)       | Налаштування порогів та стилів.    |
-| `disabled` | `false`                            | Disables the `claude_cost` module. |
+| Параметр   | Стандартно                         | Опис                                         |
+| ---------- | ---------------------------------- | -------------------------------------------- |
+| `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                               |
+| `symbol`   | `'💰 '`                             | Символ, який показується перед сумою витрат. |
+| `display`  | [дивіться нижче](#display-1)       | Налаштування порогів та стилів.              |
+| `disabled` | `false`                            | Вимикає модуль `claude_cost`.                |
 
 ##### Display
 
-The `display` option is an array of objects that define cost thresholds and styles. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
+Параметр `display` — це масив об’єктів, які визначають порогові значення та стилі для порогових значень витрат. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
 
 | Параметр    | Стандартно   | Опис                                                         |
 | ----------- | ------------ | ------------------------------------------------------------ |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration          |
+| `threshold` | `0.0`        | Мінімальна вартість у доларах США для такої конфігурації     |
 | `style`     | `bold green` | Значення `style`, якщо ця конфігурація візуалізації має збіг |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.           |
+| `hidden`    | `false`      | Приховати цей модуль, якщо він збігається з конфігурацією.   |
 
-**Default configuration:**
+**Стандартні налаштування:**
 
 ```toml
 [[claude_cost.display]]
@@ -537,15 +537,15 @@ style = "bold red"
 
 #### Змінні
 
-| Змінна        | Приклад  | Опис                                                  |
-| ------------- | -------- | ----------------------------------------------------- |
-| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
-| duration      | `1m 30s` | Total session duration                                |
-| api_duration  | `45s`    | Total API call duration                               |
-| lines_added   | `1.2k`   | Total lines of code added                             |
-| lines_removed | `500`    | Total lines of code removed                           |
-| symbol        |          | Віддзеркалює значення параметра `symbol`              |
-| style\*     |          | Mirrors the style from the matching display threshold |
+| Змінна        | Приклад  | Опис                                                                      |
+| ------------- | -------- | ------------------------------------------------------------------------- |
+| cost          | `1.23`   | Загальна вартість сесії у доларах (з центами)                             |
+| duration      | `1m 30s` | Загальна тривалість сеансу                                                |
+| api_duration  | `45s`    | Загальна тривалість API-виклику                                           |
+| lines_added   | `1.2k`   | Загальна кількість доданих рядків коду                                    |
+| lines_removed | `500`    | Загальна кількість вилучених рядків коду                                  |
+| symbol        |          | Віддзеркалює значення параметра `symbol`                                  |
+| style\*     |          | Повторює стиль, що збігається з відповідним пороговим значення для показу |
 
 \*: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -554,11 +554,11 @@ style = "bold red"
 ```toml
 # ~/.config/starship.toml
 
-# Cost with code change statistics
+# Витрати зі статистикою змін у коді
 [claude_cost]
 format = "[$symbol$cost (+$lines_added -$lines_removed)]($style) "
 
-# Hide module until cost exceeds $0.10
+# Приховати модуль, доки вартість не перевищить $0,10
 [[claude_cost.display]]
 threshold = 0.0
 hidden = true
@@ -571,7 +571,7 @@ style = "bold yellow"
 threshold = 2.0
 style = "bold red"
 
-# Show duration information
+# Показувати інформацію про тривалість роботи
 [claude_cost]
 format = "[$symbol$cost ($duration)]($style) "
 ```
