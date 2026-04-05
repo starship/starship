@@ -2089,6 +2089,8 @@ current directory.
 | `renamed`              | `'»'`                                         | The format shown when a renamed file has been added to the staging area.                                    |
 | `deleted`              | `'✘'`                                         | The format shown when a file's deletion has been added to the staging area.                                 |
 | `typechanged`          | `""`                                          | The format shown when a file's type has been changed in the staging area.                                   |
+| `clean`                | `""`                                          | The format shown when there are no changes to the repository.                                               |
+| `dirty`                | `""`                                          | The format shown when there are changes to the repository.                                                  |
 | `style`                | `'bold red'`                                  | The style for the module.                                                                                   |
 | `ignore_submodules`    | `false`                                       | Ignore changes to submodules.                                                                               |
 | `worktree_added`       | `""`                                          | The format shown when a new file has been added in the working directory.                                   |
@@ -2119,6 +2121,8 @@ The following variables can be used in `format`:
 | `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `clean`                | Displays `clean` when there are no changes to the repository.                                                 |
+| `dirty`                | Displays `dirty` when there are changes to the repository.                                                    |
 | `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
 | `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
 | `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |

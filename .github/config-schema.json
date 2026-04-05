@@ -750,6 +750,8 @@
         "staged": "+",
         "untracked": "?",
         "typechanged": "",
+        "clean": "",
+        "dirty": "",
         "worktree_added": "",
         "worktree_deleted": "",
         "worktree_modified": "",
@@ -3838,6 +3840,14 @@
           "default": "?"
         },
         "typechanged": {
+          "type": "string",
+          "default": ""
+        },
+        "clean": {
+          "type": "string",
+          "default": ""
+        },
+        "dirty": {
           "type": "string",
           "default": ""
         },

@@ -166,6 +166,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             count,
                         )
                     }),
+                    "clean" => info.get_is_clean().and_then(|is_clean| {
+                        if is_clean {
+                            format_symbol(config.clean, "git_status.clean", context)
+                        } else {
+                            None
+                        }
+                    }),
+                    "dirty" => info.get_is_clean().and_then(|is_clean| {
+                        if !is_clean {
+                            format_symbol(config.dirty, "git_status.dirty", context)
+                        } else {
+                            None
+                        }
+                    }),
                     _ => None,
                 };
                 segments.map(Ok)
@@ -294,6 +308,18 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_index_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.index_typechanged)
+    }
+
+    pub fn get_is_clean(&self) -> Option<bool> {
+        self.get_repo_status().map(|data| {
+            data.conflicted == 0
+                && data.deleted == 0
+                && data.renamed == 0
+                && data.modified == 0
+                && data.staged == 0
+                && data.untracked == 0
+                && data.typechanged == 0
+        })
     }
 }
 
@@ -1076,6 +1102,94 @@ pub(crate) mod tests {
                 .path(repo_dir.path())
                 .collect();
             let expected = format_output("✓");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_clean_on_clean_repo() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$clean\]]($style) )"
+                    clean = "✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✓");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_clean_when_dirty() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_modified(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$clean\]]($style) )"
+                    clean = "✓"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_dirty_when_dirty() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_modified(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$dirty\]]($style) )"
+                    dirty = "✗"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = format_output("✗");
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn doesnt_show_dirty_on_clean_repo() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let repo_dir = fixture_repo(mode)?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = r"([\[$dirty\]]($style) )"
+                    dirty = "✗"
+                })
+                .path(repo_dir.path())
+                .collect();
+            let expected = None;
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -2032,25 +2146,32 @@ pub(crate) mod tests {
     }
 
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
+        // Make conflicting changes and merge them locally
         create_command("git")?
-            .args(["reset", "--hard", "HEAD^"])
+            .args(["checkout", "-b", "branch1"])
             .current_dir(repo_dir)
             .output()?;
 
-        fs::write(repo_dir.join("readme.md"), "# goodbye")?;
-
+        fs::write(repo_dir.join("readme.md"), "# branch1")?;
         create_command("git")?
-            .args(["add", "."])
-            .current_dir(repo_dir)
-            .output()?;
-
-        create_command("git")?
-            .args(["commit", "-m", "Change readme", "--no-gpg-sign"])
+            .args(["commit", "-am", "Branch1 change", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(["pull", "--rebase"])
+            .args(["checkout", "-b", "branch2", "HEAD~1"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        fs::write(repo_dir.join("readme.md"), "# branch2")?;
+        create_command("git")?
+            .args(["commit", "-am", "Branch2 change", "--no-gpg-sign"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        // Merge to create conflict
+        let _ = create_command("git")?
+            .args(["merge", "branch1", "--no-edit"])
             .current_dir(repo_dir)
             .output()?;
 
