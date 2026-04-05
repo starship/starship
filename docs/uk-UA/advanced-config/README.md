@@ -266,17 +266,17 @@ right_format = """$all"""
 continuation_prompt = '▶▶ '
 ```
 
-## Statusline for Claude Code
+## Рядок стану для Claude Code
 
-Starship supports displaying a custom statusline when running inside Claude Code, Anthropic's CLI tool for interactive coding with Claude. This statusline provides real-time information about your Claude session, including the model being used, context window usage, and session costs.
+Starship підтримує показ власного рядка стану під час роботи в Claude Code — інструменті командного рядка від Anthropic, призначеному для інтерактивного програмування за допомогою Claude. Ця рядок стану надає інформацію в режимі реального часу про вашу сесію Claude, зокрема про використовувану модель, використання вікна контексту та вартість сесії.
 
-For more information about the Claude Code statusline feature, see the [Claude Code statusline documentation](https://code.claude.com/docs/en/statusline).
+Докладнішу інформацію про функцію рядка стану Claude Code див. у [документації щодо рядка стану Claude Code](https://code.claude.com/docs/en/statusline).
 
-### Setup
+### Встановлення
 
-To use Starship as your Claude Code statusline:
+Щоб використовувати Starship як рядок стану Claude Code:
 
-1. Run `/statusline` in Claude Code and ask it to configure Starship, or manually add the following to your `.claude/settings.json`:
+1. Запустіть `/statusline` в Claude Code і попросіть його налаштувати Starship, або вручну додати наступне на Ваш `.claude/settings.json`:
 
 ```json
 {
@@ -287,19 +287,19 @@ To use Starship as your Claude Code statusline:
 }
 ```
 
-2. Customize the statusline appearance in your `~/.config/starship.toml` (see [Configuration](#configuration) below)
+2. Налаштуйте вигляд рядка стану у файлі `~/.config/starship.toml` (див. розділ [Налаштування](#configuration) нижче)
 
-### Overview
+### Огляд
 
-When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
+При запуску з параметром `starship statusline claude-code` Starship отримує дані сеансу Claude Code через стандартний ввід (stdin) і показує рядок стану, використовуючи спеціальний профіль з назвою `claude-code`.
 
-The profile includes three specialized modules:
+Профіль містить три спеціалізовані модулі:
 
-- `claude_model`: Displays the current Claude model being used
-- `claude_context`: Shows context window usage with a visual gauge
-- `claude_cost`: Displays session cost and statistics
+- `claude_model`: Показує поточну модель, яка використовується в Claude
+- `claude_context`: Показує використання контекстного вікна за допомогою візуального індикатора
+- `claude_cost`: Показує вартість сеансу та статистичні дані
 
-The default profile format is:
+Типовий формат профілю:
 
 ```toml
 [profiles]
@@ -308,7 +308,7 @@ claude-code = "$claude_model$git_branch$claude_context$claude_cost"
 
 ### Налаштування
 
-You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
+Ви можете налаштувати рядок стану коду Claude Code змінивши профіль `claude-code` і окремі конфігурації модулів в `~/.config/starship.toml`:
 
 ```toml
 # ~/.config/starship.toml
@@ -334,24 +334,24 @@ symbol = "💰 "
 
 ### Claude Model
 
-The `claude_model` module displays the current Claude model being used in the session.
+Модуль `claude_model` показує поточну модель Claude, яка використовується в сесії.
 
 #### Параметри
 
-| Параметр        | Стандартно                   | Опис                                                                                      |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`        | `'[$symbol$model]($style) '` | Формат модуля.                                                                            |
-| `symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | Стиль модуля.                                                                             |
-| `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| Параметр        | Стандартно                   | Опис                                                                                                                       |
+| --------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | Формат модуля.                                                                                                             |
+| `symbol`        | `'🤖 '`                       | Симовл, який показується перед назвою моделі.                                                                              |
+| `style`         | `'bold blue'`                | Стиль модуля.                                                                                                              |
+| `model_aliases` | `{}`                         | Звʼязує ідентифікатори моделей або їхні назви з коротшими псевдонімами. Спочатку перевіряється ідентифікатор, потім назва. |
+| `disabled`      | `false`                      | Вимикає модуль `claude_model`.                                                                                             |
 
 #### Змінні
 
 | Змінна    | Приклад             | Опис                                     |
 | --------- | ------------------- | ---------------------------------------- |
-| model     | `Claude 3.5 Sonnet` | The display name of the current model    |
-| model_id  | `claude-3-5-sonnet` | The model ID                             |
+| model     | `Claude 3.5 Sonnet` | Імʼя поточної моделі                     |
+| model_id  | `claude-3-5-sonnet` | ID моделі                                |
 | symbol    |                     | Віддзеркалює значення параметра `symbol` |
 | style\* |                     | Віддзеркалює значення параметра `style`  |
 
@@ -362,47 +362,47 @@ The `claude_model` module displays the current Claude model being used in the se
 ```toml
 # ~/.config/starship.toml
 
-# Basic customization
+# Базові налаштування
 [claude_model]
 format = "on [$symbol$model]($style) "
 symbol = "🧠 "
 style = "bold cyan"
 
-# Using model aliases for vendor-specific model names
-# You can alias by model ID or display name
+# Використання псевдонімів для моделей із власними назвами постачальників
+# Аліаси можна створити за ідентифікатором моделі або за її назвою
 [claude_model.model_aliases]
-# Alias by vendor model ID (e.g. AWS Bedrock)
+# Аліас за ID моделі від постачальника (напр. AWS Bedrock)
 "global.anthropic.claude-sonnet-4-5-20250929-v1:0" = "Sonnet 4.5"
-# Alias by display name
+# Аліас за назвою
 "Claude Sonnet 4.5 (Vendor Proxy)" = "Sonnet"
 ```
 
 ### Claude Context
 
-The `claude_context` module displays context window usage as a percentage and visual gauge. The style automatically changes based on configurable thresholds.
+Модуль `claude_context` показує використання контекстного вікна у вигляді відсотка і візуального індикатора. Стиль автоматично змінюється на основі налаштованих порогів.
 
 #### Параметри
 
-| Параметр               | Стандартно                        | Опис                                               |
-| ---------------------- | --------------------------------- | -------------------------------------------------- |
-| `format`               | `'[$gauge $percentage]($style) '` | Формат модуля.                                     |
-| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
-| `gauge_width`          | `5`                               | The width of the gauge in characters.              |
-| `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
-| `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
-| `gauge_empty_symbol`   | `'░'`                             | The symbol used for empty segments of the gauge.   |
-| `display`              | [дивіться нижче](#display)        | Threshold and style configurations.                |
-| `disabled`             | `false`                           | Disables the `claude_context` module.              |
+| Параметр               | Стандартно                        | Опис                                                                        |
+| ---------------------- | --------------------------------- | --------------------------------------------------------------------------- |
+| `format`               | `'[$gauge $percentage]($style) '` | Формат модуля.                                                              |
+| `symbol`               | `''`                              | Символ, який показується перед індикатором.                                 |
+| `gauge_width`          | `5`                               | Ширина індикатора в символах.                                               |
+| `gauge_full_symbol`    | `'█'`                             | Символ, який використовується для заповнених сегментів індикатора.          |
+| `gauge_partial_symbol` | `'▒'`                             | Символ, який використовується для частково заповнених сегментів індикатора. |
+| `gauge_empty_symbol`   | `'░'`                             | Символ, який використовується для не заповнених сегментів індикатора.       |
+| `display`              | [дивіться нижче](#display)        | Налаштування порогів та стилів.                                             |
+| `disabled`             | `false`                           | Вимикає модуль `claude_context`.                                            |
 
 ##### Display
 
-The `display` option is an array of objects that define thresholds and styles for different usage levels. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+Параметр `display` — це масив об’єктів, які визначають порогові значення та стилі для різних рівнів використання. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
 
-| Параметр    | Стандартно   | Опис                                                                     |
-| ----------- | ------------ | ------------------------------------------------------------------------ |
-| `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched            |
-| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+| Параметр    | Стандартно   | Опис                                                                                |
+| ----------- | ------------ | ----------------------------------------------------------------------------------- |
+| `threshold` | `0.0`        | Мінімальний відсоток використання контекстних вікон, що відповідає цій конфігурації |
+| `style`     | `bold green` | Значення `style`, якщо ця конфігурація візуалізації має збіг                        |
+| `hidden`    | `false`      | Приховати цей модуль, якщо він збігається з конфігурацією.                          |
 
 ```toml
 [[claude_context.display]]
@@ -424,19 +424,19 @@ style = "bold red"
 
 #### Змінні
 
-| Змінна                       | Приклад | Опис                                                  |
-| ---------------------------- | ------- | ----------------------------------------------------- |
-| gauge                        | `██▒░░` | Visual representation of context usage                |
-| percentage                   | `65%`   | Context usage as a percentage                         |
-| input_tokens                 | `45.2k` | Total input tokens in conversation                    |
-| output_tokens                | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
-| curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
-| curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens                 | `200k`  | Total context window size                             |
-| symbol                       |         | Віддзеркалює значення параметра `symbol`              |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| Змінна                       | Приклад | Опис                                                      |
+| ---------------------------- | ------- | --------------------------------------------------------- |
+| gauge                        | `██▒░░` | Візуальне представлення використання контексту            |
+| percentage                   | `65%`   | Використання контексту у відсотках                        |
+| input_tokens                 | `45.2k` | Загальна кількість input-токенів, використаних у розмові  |
+| output_tokens                | `12.3k` | Загальна кількість output-токенів, використаних у розмові |
+| curr_input_tokens          | `5.1k`  | Кількість input-токенів в останньому API-виклику          |
+| curr_output_tokens         | `1.2k`  | Кількість output-токенів в останньому API-виклику         |
+| curr_cache_creation_tokens | `1.5k`  | Кеш з токенів створення з останнього виклику API          |
+| curr_cache_read_tokens     | `23.4k` | Кеш з токенів читання з останнього виклику API            |
+| total_tokens                 | `200k`  | Загальний розмір контекстного вікна                       |
+| symbol                       |         | Віддзеркалює значення параметра `symbol`                  |
+| style\*                    |         | Mirrors the style from the matching display threshold     |
 
 \*: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -502,22 +502,22 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 #### Параметри
 
-| Параметр   | Стандартно                         | Опис                                |
-| ---------- | ---------------------------------- | ----------------------------------- |
-| `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                      |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
-| `display`  | [дивіться нижче](#display-1)       | Threshold and style configurations. |
-| `disabled` | `false`                            | Disables the `claude_cost` module.  |
+| Параметр   | Стандартно                         | Опис                               |
+| ---------- | ---------------------------------- | ---------------------------------- |
+| `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                     |
+| `symbol`   | `'💰 '`                             | The symbol shown before the cost.  |
+| `display`  | [дивіться нижче](#display-1)       | Налаштування порогів та стилів.    |
+| `disabled` | `false`                            | Disables the `claude_cost` module. |
 
 ##### Display
 
-The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+The `display` option is an array of objects that define cost thresholds and styles. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
 
-| Параметр    | Стандартно   | Опис                                                          |
-| ----------- | ------------ | ------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+| Параметр    | Стандартно   | Опис                                                         |
+| ----------- | ------------ | ------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration          |
+| `style`     | `bold green` | Значення `style`, якщо ця конфігурація візуалізації має збіг |
+| `hidden`    | `false`      | Hide this module if this configuration is matched.           |
 
 **Default configuration:**
 
