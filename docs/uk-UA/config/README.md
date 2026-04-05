@@ -245,7 +245,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є еквівалентом до
 format = """
 $username\
 $hostname\
@@ -1962,28 +1962,28 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | Параметр               | Стандартно                                      | Опис                                                                                                                    |
 | ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                                  |
-| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                                 |
-| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                                   |
-| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                                           |
-| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                                          |
-| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                               |
-| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                                          |
-| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                            |
-| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                                    |
-| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                                |
-| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                             |
-| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
+| `conflicted`           | `'='`                                           | Формат, що показується, коли у цій гілці виникають конфлікти злиття.                                                    |
+| `ahead`                | `'⇡'`                                           | Формат, що показується, коли ця гілка випереджає гілку, що відстежується.                                               |
+| `behind`               | `'⇣'`                                           | Формат, що показується, коли ця гілка позаду гілки, що відстежується.                                                   |
+| `diverged`             | `'⇕'`                                           | Формат, що показується, коли ця гілка відхиляється гілки, що відстежується.                                             |
+| `up_to_date`           | `''`                                            | Формат, що показується, коли ця гілка відповідає гілці, що відстежується.                                               |
+| `untracked`            | `'?'`                                           | Формат, що показується, коли в робочій теці є невідстежувані файли.                                                     |
+| `stashed`              | `'\$'`                                         | Формат, що показується, коли для локального репозиторію існує stash.                                                    |
+| `modified`             | `'!'`                                           | Формат, що показується при змінах у файлах у робочій теці.                                                              |
+| `staged`               | `'+'`                                           | Формат, що показується, коли до stage додано новий файл.                                                                |
+| `renamed`              | `'»'`                                           | Формат, що показується, коли до stage додано перейменований файл.                                                       |
+| `deleted`              | `'✘'`                                           | Формат, що показується, коли до stage додано вилучений файл.                                                            |
+| `typechanged`          | `""`                                            | Формат, що показується, коли до stage додано файл зі зміненим типом.                                                    |
 | `style`                | `'bold red'`                                    | Стиль модуля.                                                                                                           |
 | `ignore_submodules`    | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                               |
-| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                                 |
-| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                                |
-| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                                          |
-| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                                    |
-| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                                    |
-| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                                     |
-| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                               |
+| `worktree_added`       | `""`                                            | Формат, що показується при додаванні нового файлу до робочої теки.                                                      |
+| `worktree_deleted`     | `""`                                            | Формат, що показується при вилученні файлу з робочої теки.                                                              |
+| `worktree_modified`    | `""`                                            | Формат, що показується при зміні файлу в робочій теці.                                                                  |
+| `worktree_typechanged` | `""`                                            | Формат, що показується, коли в робочій теці файлу було змінено тип.                                                     |
+| `index_added`          | `""`                                            | Формат, що показується, коли до stage додано новий файл.                                                                |
+| `index_deleted`        | `""`                                            | Формат, що показується, коли файл було вилучено з stage.                                                                |
+| `index_modified`       | `""`                                            | Формат, що показується, коли файл в stage було змінено.                                                                 |
+| `index_typechanged`    | `""`                                            | Формат, що показується, коли до stage додано файл зі зміненим типом.                                                    |
 | `disabled`             | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
 | `windows_starship`     |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
 | `use_git_executable`   | `false`                                         | Не використовуйте `gitoxide` для обчислення статусу, натомість використовуйте виконуваний файл `git`.                   |
@@ -1994,7 +1994,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 | Змінна                 | Опис                                                                                                |
 | ---------------------- | --------------------------------------------------------------------------------------------------- |
-| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.           |
+| `all_status`           | Скорочення для  `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.        |
 | `ahead_behind`         | Показує `diverged`, `ahead`, `behind` чи `up_to_date` в залежності від поточного стану репозиторію. |
 | `conflicted`           | Показує `conflicted`, коли поточна гілка має конфлікт злиття.                                       |
 | `untracked`            | Показує `untracked` коли в робочій теці є файли що ще не включені до відстеження у репозиторії.     |
@@ -2009,9 +2009,9 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `worktree_modified`    | Показує `worktree_modified `, коли фал було змінено в робочій теці.                                 |
 | `worktree_typechanged` | Показує `worktree_typechanged`, коли тип файлу було змінено в робочій теці.                         |
 | `index_added`          | Показує `index_added`, коли новий файл було додано до простору staging.                             |
-| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                        |
-| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                        |
-| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.               |
+| `index_deleted`        | Показує `index_deleted`, коли файл було вилучено з stage.                                           |
+| `index_modified`       | Показує `index_modified`, коли файл було змінено в stage.                                           |
+| `index_typechanged`    | Показує `index_typechanged`, коли тип файлу було змінено в stage.                                   |
 | style\*              | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
