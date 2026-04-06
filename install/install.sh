@@ -18,7 +18,8 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   arm-unknown-linux-musleabihf x86_64-apple-darwin \
                   aarch64-apple-darwin x86_64-pc-windows-msvc \
                   i686-pc-windows-msvc aarch64-pc-windows-msvc \
-                  x86_64-unknown-freebsd"
+                  x86_64-unknown-freebsd \
+                  riscv64gc-unknown-linux-musl"
 
 info() {
 	printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -73,9 +74,9 @@ get_tmpfile() {
 	fi
 }
 
-# Test if a location is writeable by trying to write to it. Windows does not let
+# Test if a location is writable by trying to write to it. Windows does not let
 # you test writeability other than by writing: https://stackoverflow.com/q/1999988
-test_writeable() {
+test_writable() {
 	path="${1:-}/test.txt"
 	if touch "${path}" 2>/dev/null; then
 		rm "${path}"
@@ -187,7 +188,7 @@ elevate_priv() {
 install() {
 	ext="$1"
 
-	if test_writeable "${BIN_DIR}"; then
+	if test_writable "${BIN_DIR}"; then
 		sudo=""
 		msg="Installing Starship, please wait…"
 	else
@@ -242,6 +243,7 @@ detect_arch() {
 	amd64) arch="x86_64" ;;
 	armv*) arch="arm" ;;
 	arm64) arch="aarch64" ;;
+	riscv64) arch="riscv64gc" ;;
 	esac
 
 	# `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check

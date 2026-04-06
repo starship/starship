@@ -30,14 +30,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // the `--json` flag is silently ignored for direnv versions <2.33.0
     let direnv_status = &context.exec_cmd("direnv", &["status", "--json"])?.stdout;
-    let state = match DirenvState::from_str(direnv_status) {
-        Ok(s) => s,
-        Err(e) => {
-            log::warn!("{e}");
-
-            return None;
-        }
-    };
+    let state = serde_json::from_str::<RawDirenvState>(direnv_status).map_or_else(
+        |_| {
+            DirenvState::from_lines(direnv_status)
+                .inspect_err(|e| log::warn!("{e}"))
+                .ok()
+        },
+        |raw| {
+            raw.into_direnv_state()
+                .inspect_err(|e| log::warn!("{e}"))
+                .ok()
+                .flatten()
+        },
+    )?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -87,14 +92,9 @@ impl FromStr for DirenvState {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match serde_json::from_str::<RawDirenvState>(s) {
-            Ok(raw) => Ok(Self {
-                rc_path: raw.state.found_rc.path,
-                allowed: raw.state.found_rc.allowed.try_into()?,
-                loaded: matches!(
-                    raw.state.loaded_rc.allowed.try_into()?,
-                    AllowStatus::Allowed
-                ),
-            }),
+            Ok(raw) => raw
+                .into_direnv_state()?
+                .ok_or_else(|| Cow::from("unknown direnv state")),
             Err(_) => Self::from_lines(s),
         }
     }
@@ -128,7 +128,7 @@ impl DirenvState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 enum AllowStatus {
     Allowed,
     NotAllowed,
@@ -166,12 +166,31 @@ struct RawDirenvState {
     pub state: State,
 }
 
+impl RawDirenvState {
+    fn into_direnv_state(self) -> Result<Option<DirenvState>, Cow<'static, str>> {
+        match (self.state.found_rc, self.state.loaded_rc) {
+            (None, None) => Ok(None),
+            (Some(found_rc), None) => Ok(Some(DirenvState {
+                rc_path: found_rc.path,
+                allowed: found_rc.allowed.try_into()?,
+                loaded: false,
+            })),
+            (Some(found_rc), Some(loaded_rc)) => Ok(Some(DirenvState {
+                rc_path: found_rc.path,
+                allowed: found_rc.allowed.try_into()?,
+                loaded: matches!(loaded_rc.allowed.try_into()?, AllowStatus::Allowed),
+            })),
+            (None, Some(_)) => Err(Cow::from("unknown direnv state")),
+        }
+    }
+}
+
 #[derive(Debug, Deserialize)]
 struct State {
     #[serde(rename = "foundRC")]
-    pub found_rc: RCStatus,
+    pub found_rc: Option<RCStatus>,
     #[serde(rename = "loadedRC")]
-    pub loaded_rc: RCStatus,
+    pub loaded_rc: Option<RCStatus>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -182,13 +201,52 @@ struct RCStatus {
 
 #[cfg(test)]
 mod tests {
-    use serde_json::json;
+    use super::{AllowStatus, RawDirenvState};
+    use serde_json::{Value, json};
 
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::io;
     use std::path::Path;
+
+    #[test]
+    fn parses_found_but_unloaded_rc_json_state() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+        let state = serde_json::from_str::<RawDirenvState>(&status_cmd_output_with_rc_json(
+            dir.path(),
+            Some(0),
+            None,
+        ))
+        .expect("direnv JSON state should deserialize")
+        .into_direnv_state()
+        .expect("direnv JSON state should parse")
+        .expect("direnv state should be present");
+
+        assert_eq!(state.rc_path, rc_path);
+        assert_eq!(state.allowed, AllowStatus::Allowed);
+        assert!(!state.loaded);
+
+        dir.close()
+    }
+
+    #[test]
+    fn rejects_loaded_rc_without_found_rc_json_state() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let result = serde_json::from_str::<RawDirenvState>(&status_cmd_output_with_rc_json(
+            dir.path(),
+            None,
+            Some(0),
+        ))
+        .expect("direnv JSON state should deserialize")
+        .into_direnv_state();
+
+        assert!(result.is_err());
+
+        dir.close()
+    }
+
     #[test]
     fn folder_without_rc_files_pre_2_33() {
         let renderer = ModuleRenderer::new("direnv")
@@ -268,7 +326,7 @@ mod tests {
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc_json(dir.path(), 1, 0),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(0), None),
                     stderr: String::default(),
                 }),
             )
@@ -276,6 +334,66 @@ mod tests {
         let expected = Some(format!(
             "{} ",
             Color::LightYellow.bold().paint("direnv not loaded/allowed")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+    #[test]
+    fn folder_with_unloaded_and_not_allowed_rc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(rc_path)?.sync_all()?;
+
+        let actual = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(1), None),
+                    stderr: String::default(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow
+                .bold()
+                .paint("direnv not loaded/not allowed")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+    #[test]
+    fn folder_with_unloaded_and_denied_rc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(rc_path)?.sync_all()?;
+
+        let actual = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(2), None),
+                    stderr: String::default(),
+                }),
+            )
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::LightYellow.bold().paint("direnv not loaded/denied")
         ));
 
         assert_eq!(expected, actual);
@@ -326,7 +444,7 @@ mod tests {
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(0), Some(0)),
                     stderr: String::default(),
                 }),
             )
@@ -360,7 +478,7 @@ mod tests {
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(0), Some(0)),
                     stderr: String::default(),
                 }),
             )
@@ -418,7 +536,7 @@ mod tests {
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 1),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(1), Some(0)),
                     stderr: String::default(),
                 }),
             )
@@ -447,7 +565,7 @@ mod tests {
             .cmd(
                 "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 2),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), Some(2), Some(0)),
                     stderr: String::default(),
                 }),
             )
@@ -536,7 +654,11 @@ Found RC allowPath /home/test/.local/share/direnv/allow/abcd
 "#
         )
     }
-    fn status_cmd_output_with_rc_json(dir: impl AsRef<Path>, loaded: u8, allowed: u8) -> String {
+    fn status_cmd_output_with_rc_json(
+        dir: impl AsRef<Path>,
+        found_allowed: Option<u8>,
+        loaded_allowed: Option<u8>,
+    ) -> String {
         let rc_path = dir.as_ref().join(".envrc");
         let rc_path = rc_path.to_string_lossy();
 
@@ -546,17 +668,21 @@ Found RC allowPath /home/test/.local/share/direnv/allow/abcd
                 "SelfPath": self_path(),
             },
             "state": {
-                "foundRC": {
-                    "allowed": allowed,
-                    "path": rc_path,
-                },
-                "loadedRC": {
-                    "allowed": loaded,
-                    "path": rc_path,
-                }
+                "foundRC": rc_status_json(&rc_path, found_allowed),
+                "loadedRC": rc_status_json(&rc_path, loaded_allowed),
             }
         })
         .to_string()
+    }
+
+    fn rc_status_json(rc_path: &str, allowed: Option<u8>) -> Value {
+        match allowed {
+            Some(allowed) => json!({
+                "allowed": allowed,
+                "path": rc_path,
+            }),
+            None => Value::Null,
+        }
     }
     #[cfg(windows)]
     fn config_dir() -> &'static str {

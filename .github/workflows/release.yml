@@ -55,6 +55,10 @@ jobs:
             os: ubuntu-latest
             name: starship-arm-unknown-linux-musleabihf.tar.gz
 
+          - target: riscv64gc-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-riscv64gc-unknown-linux-musl.tar.gz
+
           - target: x86_64-apple-darwin
             os: macos-latest
             name: starship-x86_64-apple-darwin.tar.gz
@@ -240,7 +244,7 @@ jobs:
       - name: Setup | Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24.14.0
+          node-version: 24.14.1
 
       - name: Notarize | Build docs
         run: |
@@ -333,7 +337,7 @@ jobs:
     needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v3.6
+      - uses: mislav/bump-homebrew-formula-action@v4.1
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
