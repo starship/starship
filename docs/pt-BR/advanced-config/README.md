@@ -2,7 +2,7 @@
 
 Embora o Starship seja um shell versátil, às vezes é necessário fazer mais do que editar o `starship.toml` para que ele realize certas funções. Esta página detalha algumas das técnicas de configuração avançadas utilizadas no starship.
 
-> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
+> [!AVISO] As configurações desta seção estão sujeitas a mudanças em futuras versões do Starship.
 
 ## TransientPrompt no PowerShell
 
@@ -266,9 +266,9 @@ Nota: os prompts de continuação estão disponíveis apenas nos seguintes shell
 continuation_prompt = '▶▶ '
 ```
 
-## Statusline for Claude Code
+## Linha de estado para Claude Code
 
-Starship supports displaying a custom statusline when running inside Claude Code, Anthropic's CLI tool for interactive coding with Claude. This statusline provides real-time information about your Claude session, including the model being used, context window usage, and session costs.
+Starship suporta a exibição de uma linha de estado personalizada quando executando dentro do Claude Code, a linha de comando da Anthropic's para programação interativa com Claude. Essa linha de estado fornece informação em tempo real sobre sua sessão Claude, incluindo o modelo sendo usado, o uso da janela de contexto e custos da sessão.
 
 For more information about the Claude Code statusline feature, see the [Claude Code statusline documentation](https://code.claude.com/docs/en/statusline).
 
