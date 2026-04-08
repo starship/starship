@@ -2369,9 +2369,9 @@ checksum = "9737e026353e5cd0736f98eddae28665118eb6f6600902a7f50db585621fecb6"
 
 [[package]]
 name = "notify-rust"
-version = "4.13.1"
+version = "4.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d782ebad628d1a24303e9a0aac4656115ceb482ba56c66c4af3d85530852d9a"
+checksum = "1b2c9bc1689653cfbc04400b8719f2562638ff9c545bbd48cc58c657a14526df"
 dependencies = [
  "futures-lite",
  "log",
