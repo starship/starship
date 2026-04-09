@@ -2,9 +2,9 @@
 
 # Pure Voreinstellung
 
-Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://github.com/sindresorhus/pure).
+Diese Voreinstellung emuliert das Aussehen und Verhalten von [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot der Pure Voreinstellung](/presets/img/pure-preset.png)
+![Screenshot - Voreinstellung Pure](/presets/img/pure-preset.png)
 
 ### Konfiguration
 
@@ -12,6 +12,6 @@ Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://
 starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pure-preset.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/pure-preset.toml){download}
 
 <<< @/public/presets/toml/pure-preset.toml
