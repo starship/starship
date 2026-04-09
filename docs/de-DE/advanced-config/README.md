@@ -28,7 +28,7 @@ Clink allows you to replace the previous-printed prompt with custom strings. Das
 - `same_dir`: replace the previous prompt only if the working directory is same
 - `off`: do not replace the prompt (i.e. turn off transience)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Sie müssen dies nur einmal tun. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
 
 - By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
 
@@ -341,7 +341,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | Option          | Standartwert                 | Beschreibung                                                                              |
 | --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
 | `format`        | `'[$symbol$model]($style) '` | Das Format für das Modul.                                                                 |
-| `symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
+| `Symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
 | `style`         | `'bold blue'`                | Stil für dieses Modul.                                                                    |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
 | `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
@@ -352,7 +352,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | --------- | ------------------- | ------------------------------------- |
 | model     | `Claude 3.5 Sonnet` | The display name of the current model |
 | model_id  | `claude-3-5-sonnet` | The model ID                          |
-| symbol    |                     | Spiegelt den Wert der Option `symbol` |
+| Symbol    |                     | Spiegelt den Wert der Option `symbol` |
 | style\* |                     | Spiegelt den Wert der Option `style`  |
 
 \*: This variable can only be used as a part of a style string
@@ -386,7 +386,7 @@ The `claude_context` module displays context window usage as a percentage and vi
 | Option                 | Standartwert                      | Beschreibung                                       |
 | ---------------------- | --------------------------------- | -------------------------------------------------- |
 | `format`               | `'[$gauge $percentage]($style) '` | Das Format für das Modul.                          |
-| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
+| `Symbol`               | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
 | `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
 | `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
@@ -435,7 +435,7 @@ style = "bold red"
 | curr_cache_creation_tokens | `1.5k`   | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k`  | Cache read tokens from most recent API call           |
 | total_tokens                 | `200k`   | Total context window size                             |
-| symbol                       |          | Spiegelt den Wert der Option `symbol`                 |
+| Symbol                       |          | Spiegelt den Wert der Option `symbol`                 |
 | style\*                    |          | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
@@ -505,7 +505,7 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | Option     | Standartwert                       | Beschreibung                        |
 | ---------- | ---------------------------------- | ----------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | Das Format für das Modul.           |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
+| `Symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
 | `display`  | [siehe unten](#display-1)          | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
@@ -544,7 +544,7 @@ style = "bold red"
 | api_duration  | `45s`    | Total API call duration                               |
 | lines_added   | `1.2k`   | Total lines of code added                             |
 | lines_removed | `500`    | Total lines of code removed                           |
-| symbol        |          | Spiegelt den Wert der Option `symbol`                 |
+| Symbol        |          | Spiegelt den Wert der Option `symbol`                 |
 | style\*     |          | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
