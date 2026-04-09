@@ -48,7 +48,7 @@ Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://
 
 [![Screenshot der Pure Voreinstellung](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
 
-## [Pastel Powerline](./pastel-powerline.md)
+## [Pastell Powerline](./pastel-powerline.md)
 
 This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
 
@@ -64,7 +64,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
-[![Screenshot von Gruvbox Regenbogen](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Screenshot von Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
 
 ## [Jetpack](./jetpack.md)
 
