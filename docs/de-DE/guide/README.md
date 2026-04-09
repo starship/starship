@@ -189,7 +189,7 @@ Wähle dein Betriebssystem aus der Liste für detaillierte Installationsanweisun
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -200,7 +200,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -265,7 +265,7 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
 | Repository                                                                                   | Instructions                            |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
