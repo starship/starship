@@ -191,7 +191,7 @@ Wähle dein Betriebssystem aus der Liste für detaillierte Installationsanweisun
 
 Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
-| Repository                                                                        | Instructions           |
+| Repository                                                                        | Anweisungen            |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -202,7 +202,7 @@ Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
 Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
-| Distribution | Repository                                               | Instructions                      |
+| Distribution | Repository                                               | Anweisungen                       |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -221,7 +221,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Distribution       | Repository                                                                                      | Anweisungen                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -251,7 +251,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository                                               | Instructions                            |
+| Repository                                               | Anweisungen                             |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -267,7 +267,7 @@ Install the latest version for your system with the MSI-installers from the [rel
 
 Starship unter Verwendung einer der folgenden Paketmanager installieren:
 
-| Repository                                                                                   | Instructions                            |
+| Repository                                                                                   | Anweisungen                             |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
