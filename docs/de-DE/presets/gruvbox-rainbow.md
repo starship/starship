@@ -4,7 +4,7 @@
 
 Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
-![Screenshot von Gruvbox Regenbogen](/presets/img/gruvbox-rainbow.png)
+![Screenshot von Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png)
 
 ### Voraussetzungen
 
