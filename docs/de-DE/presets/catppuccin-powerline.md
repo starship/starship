@@ -4,11 +4,11 @@
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
-![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png)
+![Screenshot - Voreinstellung Catppuccin Powerline](/presets/img/catppuccin-powerline.png)
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in Ihrem Terminal
 
 ### Konfiguration
 
@@ -23,6 +23,6 @@ By default this preset uses the Mocha flavour of Catppucin, but you can specify 
 - `catppuccin_macchiato`
 - `catppuccin_latte`
 
-[Click to download TOML](/presets/toml/catppuccin-powerline.toml)
+[Klicken, um TOML herunterzuladen](/presets/toml/catppuccin-powerline.toml)
 
 <<< @/public/presets/toml/catppuccin-powerline.toml
