@@ -4,7 +4,7 @@
 
 Diese Voreinstellung ändert die Symbole für jedes Modul, um Nerd-Font-Symbole zu verwenden.
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Screenshot - Voreinstellung für Nerd Font-Symbole](/presets/img/nerd-font-symbols.png)
 
 ### Voraussetzungen
 
