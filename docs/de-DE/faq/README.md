@@ -86,7 +86,7 @@ Finally if you find a bug you can use the `bug-report` command to create a GitHu
 starship bug-report
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## Warum sehe ich in meiner Eingabeaufforderung kein Glyphe-Symbol?
 
 The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. Sie müssen sicherstellen, dass:
 
