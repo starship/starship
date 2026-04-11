@@ -86,7 +86,7 @@ Die folgende Starship Syntax Symbole haben eine spezielle Rolle in einem String,
 | `'''`  | multi-line literal string | less escaping                                          |
 | `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
 
-Hier sind ein paar Beispiele:
+Zum Beispiel:
 
 ```toml
 # literal string
@@ -137,7 +137,7 @@ Formatierte Strings sind das Format, mit dem ein Modul all seine Variablen ausgi
 
 Eine Variable besteht aus dem `$` Symbol und dem Namen der Variable. The name of a variable can only contain letters, numbers and `_`.
 
-Hier sind ein paar Beispiele:
+Zum Beispiel:
 
 - `'$version'` is a format string with a variable named `version`.
 - `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
