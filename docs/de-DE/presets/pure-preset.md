@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#pure-prompt)
+[Zurück zu Presets](./#pure-prompt)
 
-# Pure Voreinstellung
+# Preset - Pure
 
-Diese Voreinstellung emuliert das Aussehen und Verhalten von [Pure](https://github.com/sindresorhus/pure).
+Dieses Preset emuliert das Aussehen und Verhalten von [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot - Voreinstellung Pure](/presets/img/pure-preset.png)
+![Screenshot für Preset Pure](/presets/img/pure-preset.png)
 
 ### Konfiguration
 
