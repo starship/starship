@@ -20,7 +20,7 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Dieses Preset ändert das Format aller integrierten Module, um deren Segment in Klammern zu zeigen, anstatt der Verwendung der Standardformulierung ("via", "on", etc.) von Starship.
 
 [![Screenshot für Preset Bracketed Segments](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
@@ -68,7 +68,7 @@ Dieses Preset ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md)
 
 ## [Jetpack](./jetpack.md)
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+Dies ist ein pseudo-minimalistisches Preset, inspiriert von den Prompts  [geometry](https://github.com/geometry-zsh/geometry) und [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
 [![Screenshot für Preset Jetpack](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
