@@ -190,6 +190,9 @@
         "format": "[$gauge $percentage]($style) ",
         "symbol": "",
         "gauge_width": 5,
+        "gauge_full_symbol": "█",
+        "gauge_partial_symbol": "▒",
+        "gauge_empty_symbol": "░",
         "display": [
           {
             "threshold": 0.0,
@@ -2318,6 +2321,18 @@
           "minimum": 0,
           "maximum": 255,
           "default": 5
+        },
+        "gauge_full_symbol": {
+          "type": "string",
+          "default": "█"
+        },
+        "gauge_partial_symbol": {
+          "type": "string",
+          "default": "▒"
+        },
+        "gauge_empty_symbol": {
+          "type": "string",
+          "default": "░"
         },
         "display": {
           "type": "array",

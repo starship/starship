@@ -42,7 +42,7 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
-            import { execSync } from 'node:child_process';
+            const { execSync } = require('child_process');
             const pattern = /^docs\/[a-z][a-z][a-z]?-[A-Z][A-Z]?\/.*$/;
             const base = context.payload.pull_request.base.sha;
             const head = context.payload.pull_request.head.sha;
