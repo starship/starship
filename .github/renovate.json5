@@ -1,18 +1,18 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        // stripped-down config:base
-        ":prHourlyLimit2",
-        ":prConcurrentLimit10",
-        "group:monorepos",
-        "group:recommended",
-        "workarounds:all",
-        "replacements:all",
+        "config:best-practices",
+        "security:openssf-scorecard",
         // automerge minor updates
         ":automergeMinor",
         ":automergeBranch"
     ],
+    "ignorePresets": [
+        ":dependencyDashboard",
+        ":semanticPrefixFixDepsChoreOthers"
+    ],
     "labels": ["📦 dependencies"],
+    "minimumReleaseAge": "4 days",
     "semanticCommits": "enabled",
     "semanticCommitType": "build",
     "rangeStrategy": "bump",
@@ -50,6 +50,7 @@
             "matchDatasources": ["crate"],
             "matchPackagePrefixes": ["unicode"]
         },
+        // Prevent too many PRs by grouping certain updates together and only updating them weekly
         {
             "groupName": "dprint plugins",
             "matchPackagePrefixes": ["dprint"],
@@ -58,6 +59,11 @@
         {
             "groupName": "npm",
             "matchDatasources": ["npm"],
+            "extends": ["schedule:weekly"]
+        },
+        // Avoid frequent updates due to pinned digest values in GitHub Actions
+        {
+            "matchDepTypes": ["action"],
             "extends": ["schedule:weekly"]
         }
     ],
@@ -71,6 +77,11 @@
         {
             "fileMatch": ["^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$"],
             "matchStrings": ["cargo install.*--version (?<currentValue>\\S+).*\\s(?<depName>\\S+)"],
+            "datasourceTemplate": "crate"
+        },
+        {
+            "fileMatch": ["^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$"],
+            "matchStrings": ["^\\s+tool: (?<depName>[\\w-]+)@(?<currentValue>[^\\s]+)"],
             "datasourceTemplate": "crate"
         }
     ]
