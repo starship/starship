@@ -151,7 +151,7 @@ Der erste Teil, welcher innerhalb eckiger Klammern `[]` ist, ist ein [formatiert
 
 Der zweite Teil ist innerhalb normaler Klammern `()` und ist ein[style string](#style-strings). Dies kann verwendet werden, um den ersten Teil zu gestalten.
 
-Hier sind ein paar Beispiele:
+Zum Beispiel:
 
 - `'[on](red bold)'` will print a string `on` with bold text colored red.
 - `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -174,7 +174,7 @@ Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. E
 
 Ein Formatierungszeichenkette (string) in `(` and `)` eingeklammert wird nicht ausgewertet wenn alle darin benutzten Variablen leer oder undefiniert sind.
 
-Hier sind ein paar Beispiele:
+Zum Beispiel:
 
 - `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
