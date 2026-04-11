@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#catppuccin-powerline)
+[Zurück zu Presets](./#catppuccin-powerline)
 
-# Catppuccin Powerline Preset
+# Preset - Catppuccin Powerline
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+Dieses Preset ist eine minimal modifizierte Version von [Gruvbox Rainbow](./gruvbox-rainbow.md) unter Verwendung der Theme-Palette [Catppuccin](https://github.com/catppuccin/catppuccin).
 
-![Screenshot - Voreinstellung Catppuccin Powerline](/presets/img/catppuccin-powerline.png)
+![Screenshot für Preset Catppuccin Powerline](/presets/img/catppuccin-powerline.png)
 
 ### Voraussetzungen
 
@@ -16,7 +16,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 starship preset catppuccin-powerline -o ~/.config/starship.toml
 ```
 
-By default this preset uses the Mocha flavour of Catppucin, but you can specify any of the flavours by modifying the value of `palette`:
+Standardmäßig verwendet dieses Preset die Note „Mocha“ von Catppucin, aber Sie können jede beliebige Note festlegen, indem Sie den Wert von `palette` modifizieren:
 
 - `catppuccin_mocha`
 - `catppuccin_frappe`
