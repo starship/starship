@@ -2,7 +2,7 @@
 
 Auch wenn Starship eine vielseitige Shell ist, reichen manche Konfigurationen in der `starship.toml` nicht aus, um manche Sachen zu erreichen. Diese Seite beschreibt einige fortgeschrittene Konfigurationen für Starship.
 
-> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
+> [!WARNING] Die Konfigurationen in diesem Abschnitt können in zukünftigen Releases von Starship Änderungen unterliegen.
 
 ## TransientPrompt in PowerShell
 
@@ -124,7 +124,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 Die Bash Shell hat, im Gegensatz zu vielen anderen Shells, kein konventionelles preexec/precmd Framework. Daher gestaltet es sich schwierig, vollständig anpassbare Hooks für `bash` anzubieten. Starship bietet daher die begrenzte Möglichkeit, eigene Funktionen in das prompt rendering Verfahren einzufügen:
 
-- Um eine benutzerdefinierte Funktion kurz vor Anzeige der Eingabeaufforderung auszuführen, definiere eine neue Funktion und weise den Namen `starship_precmd_user_func` zu. Um beispielsweise eine Rakete anzuzeigen, bevor die Eingabeaufforderung erscheint, würde man folgendes tun
+- Um eine benutzerdefinierte Funktion kurz vor Anzeige der Eingabeaufforderung auszuführen, definiere eine neue Funktion und weise den Namen `starship_precmd_user_func` zu. Zum Beispiel, um vor der Eingabeaufforderung eine Rakete zu zeichnen, würden Sie Folgendes tun
 
 ```bash
 function blastoff(){
@@ -185,7 +185,7 @@ precmd_functions+=(set_win_title)
 
 If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Zum Beispiel, wenn sie ihr aktuelles Verzeichnis als Terminal Title anzeigen wollen, fügen Sie folgenden Code-Schnipsel zu ihrer `~/.bashrc` oder `~/.zshrc` hinzu:
+Zum Beispiel, wenn Sie ihr aktuelles Verzeichnis im Titel Ihrer Terminal-Registerkarte anzeigen möchten, fügen Sie folgenden Code-Schnipsel zu Ihrer `~/.bashrc` oder `~/.zshrc` hinzu:
 
 ```bash
 function set_win_title(){
