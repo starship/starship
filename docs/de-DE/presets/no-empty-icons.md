@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#no-empty-icons)
+[Zurück zu Presets](./#no-empty-icons)
 
-# No Empty Icons Preset
+# Preset - No Empty Icons
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. Diese Voreinstellung ändert das Verhalten zum Anzeigen des Icons nur, wenn die Informationen des Werkzeugsatzes bestimmt werden können.
+Wenn Toolset-Dateien identifiziert werden, wird das Toolset-Icon angezeigt. Wenn das Toolset nicht gefunden wird, um dessen Versionsnummer zu bestimmen, wird dies nicht angezeigt. Dieses Preset ändert das Verhalten zum Anzeigen des Icons nur, wenn die Informationen des Toolsets bestimmt werden können.
 
-![Screenshot - Voreinstellung für keine leeren Icons](/presets/img/no-empty-icons.png)
+![Screenshot für Preset No Empty Icons](/presets/img/no-empty-icons.png)
 
 ### Konfiguration
 
