@@ -1,12 +1,12 @@
-[Zurück zu den Voreinstellungen](./#no-nerd-fonts)
+[Zurück zu Presets](./#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# Preset - No Nerd Fonts
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+Dieses Preset beschränkt die Verwendung von Symbolen auf solche aus den Emoji- und Powerline-Sets.
 
 Dies bedeutet, dass Sie auch ohne einen installierten Nerd-Font in der Lage sein sollten, alle Modulsymbole anzusehen.
 
-This preset will become the default preset in a future release of starship.
+Dieses Preset wird in einem zukünftigen Release von Starship zu einem per Default vorgegebenen Preset.
 
 ### Konfiguration
 
