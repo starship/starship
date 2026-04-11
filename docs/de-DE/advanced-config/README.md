@@ -41,7 +41,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- Standardmäßig ist die rechte Seite de Eingabe leer. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -66,7 +66,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- Standardmäßig ist die rechte Seite de Eingabe leer. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
 
 ```fish
 function starship_transient_rprompt_func
@@ -76,7 +76,7 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## „TransientPrompt“ und „TransientRightPrompt“ in Bash
 
 The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
