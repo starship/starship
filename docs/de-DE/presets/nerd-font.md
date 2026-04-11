@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#nerd-font-symbols)
+[Zurück zu Presets](./#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Preset - Nerd Font Symbols
 
-Diese Voreinstellung ändert die Symbole für jedes Modul, um Nerd-Font-Symbole zu verwenden.
+Dieses Preset ändert die Symbole für jedes Modul, um Nerd-Font-Symbole zu verwenden.
 
-![Screenshot - Voreinstellung für Nerd Font-Symbole](/presets/img/nerd-font-symbols.png)
+![Screenshot für Preset Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
 ### Voraussetzungen
 
