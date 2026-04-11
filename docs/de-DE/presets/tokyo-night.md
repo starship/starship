@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#tokyo-night)
+[Zurück zu Presets](./#tokyo-night)
 
-# Tokyo Night Preset
+# Preset - Tokyo Night
 
-Diese Voreinstellung ist inspiriert von [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Dieses Preset ist inspiriert von [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot - Voreinstellung Tokyo Night](/presets/img/tokyo-night.png)
+![Screenshot für Preset Tokyo Night](/presets/img/tokyo-night.png)
 
 ### Voraussetzungen
 
