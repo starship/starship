@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#plain-text-symbols)
+[Zurück zu Presets](./#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Preset - Plain Text Symbols
 
-Diese Voreinstellung ändert die Symbole für jedes Modul in Plain Text. Großartig, wenn Sie keinen Zugriff auf Unicode haben.
+Dieses Preset ändert die Symbole für jedes Modul in Plain Text. Großartig, wenn Sie keinen Zugriff auf Unicode haben.
 
-![Screenshot - Voreinstellung für Plain Text-Symbole](/presets/img/plain-text-symbols.png)
+![Screenshot für Preset Plain Text Symbols](/presets/img/plain-text-symbols.png)
 
 ### Konfiguration
 
