@@ -497,8 +497,7 @@ impl RustupSettings {
 
 #[cfg(test)]
 mod tests {
-    use crate::context::{Properties, Shell, Target};
-    use crate::context_env::Env;
+    use crate::context::{Env, Properties, Shell, Target};
     use std::io;
     use std::process::{ExitStatus, Output};
     use std::sync::LazyLock;

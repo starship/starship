@@ -1,3 +1,7 @@
+pub mod env;
+pub mod serde;
+pub mod statusline;
+
 use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
@@ -738,6 +742,34 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     }
 }
 
+/// Formats an integer into a human-readable string using SI prefixes (k, M, G, T)
+pub fn humanize_int(n: u64) -> String {
+    if n < 1000 {
+        return n.to_string();
+    }
+
+    let n = n as f64;
+    let units = ["k", "M", "G", "T", "P", "E"];
+    let mut unit_idx = 0;
+    let mut val = n / 1000.0;
+
+    while val >= 1000.0 && unit_idx < units.len() - 1 {
+        val /= 1000.0;
+        unit_idx += 1;
+    }
+
+    if val < 10.0 {
+        let s = format!("{:.1}{}", val, units[unit_idx]);
+        if s.contains(".0") {
+            s.replace(".0", "")
+        } else {
+            s
+        }
+    } else {
+        format!("{:.0}{}", val, units[unit_idx])
+    }
+}
+
 pub fn home_dir() -> Option<PathBuf> {
     dirs::home_dir()
 }
@@ -820,6 +852,18 @@ mod tests {
     #[test]
     fn render_time_test_1d() {
         assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s");
+    }
+
+    #[test]
+    fn test_humanize_int() {
+        assert_eq!(humanize_int(0), "0");
+        assert_eq!(humanize_int(999), "999");
+        assert_eq!(humanize_int(1000), "1k");
+        assert_eq!(humanize_int(1200), "1.2k");
+        assert_eq!(humanize_int(10000), "10k");
+        assert_eq!(humanize_int(100000), "100k");
+        assert_eq!(humanize_int(1000000), "1M");
+        assert_eq!(humanize_int(1500000), "1.5M");
     }
 
     #[test]

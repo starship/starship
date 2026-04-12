@@ -9,6 +9,9 @@ pub mod bun;
 pub mod c;
 pub mod cc;
 pub mod character;
+pub mod claude_context;
+pub mod claude_cost;
+pub mod claude_model;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -57,6 +60,7 @@ pub mod kubernetes;
 pub mod line_break;
 pub mod localip;
 pub mod lua;
+pub mod maven;
 pub mod memory_usage;
 pub mod meson;
 pub mod mise;
@@ -137,6 +141,12 @@ pub struct FullConfig<'a> {
     c: c::CConfig<'a>,
     #[serde(borrow)]
     character: character::CharacterConfig<'a>,
+    #[serde(borrow)]
+    claude_context: claude_context::ClaudeContextConfig<'a>,
+    #[serde(borrow)]
+    claude_cost: claude_cost::ClaudeCostConfig<'a>,
+    #[serde(borrow)]
+    claude_model: claude_model::ClaudeModelConfig<'a>,
     #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
     #[serde(borrow)]
@@ -230,6 +240,8 @@ pub struct FullConfig<'a> {
     localip: localip::LocalipConfig<'a>,
     #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
+    #[serde(borrow)]
+    maven: maven::MavenConfig<'a>,
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]

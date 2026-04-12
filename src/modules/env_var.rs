@@ -330,6 +330,23 @@ mod test {
         assert_eq!(expected, actual);
     }
 
+    #[test]
+    fn default_format_includes_symbol() {
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                symbol = "★ "
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(format!("★ {TEST_VAR_VALUE}"))
+        ));
+        assert_eq!(expected, actual);
+    }
+
     fn style() -> Style {
         // default style
         Color::Black.bold().dimmed()
