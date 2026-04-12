@@ -231,4 +231,22 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn nix_shell_level() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .env(
+                "NIX_SHELL_LEVEL",
+                "3"
+            )
+            .config(toml::toml! {
+                [nix_shell]
+                format = "via [$symbol$state( \\($name\\)) $level]($style) "
+            })
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure 3")));
+
+        assert_eq!(expected, actual);
+    }
 }
