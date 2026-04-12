@@ -236,10 +236,7 @@ mod tests {
     fn nix_shell_level() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
-            .env(
-                "NIX_SHELL_LEVEL",
-                "3"
-            )
+            .env("NIX_SHELL_LEVEL", "3")
             .config(toml::toml! {
                 [nix_shell]
                 format = "via [$symbol$state( \\($name\\)) $level]($style) "
