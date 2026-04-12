@@ -45,6 +45,7 @@ impl NixShellType {
 /// The module will use the `$IN_NIX_SHELL` and `$name` environment variable to
 /// determine if it's inside a nix-shell and the name of it.
 ///
+///
 /// The following options are available:
 ///     - `impure_msg` (string)  // change the impure msg
 ///     - `pure_msg` (string)    // change the pure msg
@@ -57,6 +58,8 @@ impl NixShellType {
 ///     - impure         // $name == "" in an impure nix-shell
 ///     - unknown (name) // $name == "name" in an unknown nix-shell
 ///     - unknown        // $name == "" in an unknown nix-shell
+///
+///  When using Lix 2.95+, will also have $level from `$NIX_SHELL_LEVEL`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
@@ -68,6 +71,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         NixShellType::Impure => config.impure_msg,
         NixShellType::Unknown => config.unknown_msg,
     };
+    let shell_level = context.get_env("NIX_SHELL_LEVEL");
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -82,6 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "name" => shell_name.as_ref().map(Ok),
+                "level" => shell_level.as_ref().map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
