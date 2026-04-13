@@ -3343,13 +3343,13 @@ The module will be shown when inside a nix-shell environment.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| state    | `pure`  | The state of the nix-shell           |
-| name     | `lorri` | The name of the nix-shell            |
+| Variable | Example | Description                                                                   |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| state    | `pure`  | The state of the nix-shell                                                    |
+| name     | `lorri` | The name of the nix-shell                                                     |
 | level    | `1`     | The depth level of the nix-shell (Only when using [Lix](https://lix.systems)) |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| symbol   |         | Mirrors the value of option `symbol`                                          |
+| style\*  |         | Mirrors the value of option `style`                                           |
 
 *: This variable can only be used as a part of a style string
 
