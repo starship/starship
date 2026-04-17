@@ -26,11 +26,37 @@ struct StarshipPath {
 impl StarshipPath {
     fn init() -> io::Result<Self> {
         let exe_name = option_env!("CARGO_PKG_NAME").unwrap_or("starship");
-
-        let native_path = which(exe_name).or_else(|_| env::current_exe())?;
+        let native_path = Self::resolve_native_path(
+            env::args_os().next().as_deref(),
+            || which(exe_name).map_err(io::Error::other),
+            env::current_exe,
+        )?;
 
         Ok(Self { native_path })
     }
+
+    fn resolve_native_path<LookupPath, CurrentExe>(
+        argv0: Option<&OsStr>,
+        lookup_path: LookupPath,
+        current_exe: CurrentExe,
+    ) -> io::Result<PathBuf>
+    where
+        LookupPath: FnOnce() -> io::Result<PathBuf>,
+        CurrentExe: FnOnce() -> io::Result<PathBuf>,
+    {
+        // If starship was invoked via an explicit path, preserve the exact
+        // executable that is currently running instead of re-resolving via PATH.
+        if argv0.is_some_and(Self::invoked_with_path) {
+            current_exe()
+        } else {
+            lookup_path().or_else(|_| current_exe())
+        }
+    }
+
+    fn invoked_with_path(argv0: &OsStr) -> bool {
+        Path::new(argv0).components().count() > 1
+    }
+
     fn str_path(&self) -> io::Result<&str> {
         let current_exe = self
             .native_path
@@ -308,6 +334,57 @@ mod tests {
             starship_path.sprint_cmdexe()?,
             r#""C:\Cool Tools\starship.exe""#
         );
+        Ok(())
+    }
+
+    #[test]
+    fn init_uses_current_exe_when_invoked_via_explicit_relative_path() -> io::Result<()> {
+        let current_exe = PathBuf::from("/tmp/current/starship");
+        let resolved = StarshipPath::resolve_native_path(
+            Some(OsStr::new("./target/debug/starship")),
+            || Ok(PathBuf::from("/usr/local/bin/starship")),
+            || Ok(current_exe.clone()),
+        )?;
+
+        assert_eq!(resolved, current_exe);
+        Ok(())
+    }
+
+    #[test]
+    fn init_uses_current_exe_when_invoked_via_explicit_absolute_path() -> io::Result<()> {
+        let current_exe = PathBuf::from("/tmp/current/starship");
+        let resolved = StarshipPath::resolve_native_path(
+            Some(OsStr::new("/tmp/current/starship")),
+            || Ok(PathBuf::from("/usr/local/bin/starship")),
+            || Ok(current_exe.clone()),
+        )?;
+
+        assert_eq!(resolved, current_exe);
+        Ok(())
+    }
+
+    #[test]
+    fn init_prefers_path_lookup_for_bare_invocation_name() -> io::Result<()> {
+        let resolved = StarshipPath::resolve_native_path(
+            Some(OsStr::new("starship")),
+            || Ok(PathBuf::from("/usr/local/bin/starship")),
+            || Ok(PathBuf::from("/tmp/current/starship")),
+        )?;
+
+        assert_eq!(resolved, PathBuf::from("/usr/local/bin/starship"));
+        Ok(())
+    }
+
+    #[test]
+    fn init_falls_back_to_current_exe_when_path_lookup_fails() -> io::Result<()> {
+        let current_exe = PathBuf::from("/tmp/current/starship");
+        let resolved = StarshipPath::resolve_native_path(
+            Some(OsStr::new("starship")),
+            || Err(io::Error::new(io::ErrorKind::NotFound, "missing from PATH")),
+            || Ok(current_exe.clone()),
+        )?;
+
+        assert_eq!(resolved, current_exe);
         Ok(())
     }
 }
