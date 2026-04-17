@@ -343,6 +343,24 @@ mod tests {
     }
 
     #[test]
+    fn success_symbol_is_mirrored_in_conditional_format() {
+        let expected = Some("aa ".to_string());
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "$symbol($symbol) "
+                success_symbol = "a"
+                map_symbol = true
+                disabled = false
+            })
+            .status(0)
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn not_enabled() {
         let expected = None;
 

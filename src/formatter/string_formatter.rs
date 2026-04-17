@@ -346,6 +346,8 @@ impl<'a> StringFormatter<'a> {
                             fn should_show_elements<'a>(
                                 format_elements: &[FormatElement],
                                 variables: &'a VariableMapType<'a>,
+                                style_variables: &'a StyleVariableMapType<'a>,
+                                context: Option<&Context>,
                             ) -> bool {
                                 format_elements.get_variables().iter().any(|var| {
                                     variables
@@ -359,14 +361,23 @@ impl<'a> StringFormatter<'a> {
                                                 // that shouldn't show
                                                 .is_some_and(|result| match result {
                                                     // If the variable is a meta variable, also
-                                                    // check the format string inside it.
+                                                    // check the rendered output inside it.
                                                     VariableValue::Meta(meta_elements) => {
                                                         let meta_variables =
                                                             clone_without_meta(variables);
-                                                        should_show_elements(
-                                                            meta_elements,
+                                                        parse_format(
+                                                            meta_elements.clone(),
+                                                            None,
                                                             &meta_variables,
+                                                            style_variables,
+                                                            context,
                                                         )
+                                                        .map(|segments| {
+                                                            segments.iter().any(|segment| {
+                                                                !segment.value().is_empty()
+                                                            })
+                                                        })
+                                                        .unwrap_or(false)
                                                     }
                                                     VariableValue::Plain(plain_value) => {
                                                         !plain_value.is_empty()
@@ -382,7 +393,8 @@ impl<'a> StringFormatter<'a> {
                                 })
                             }
 
-                            let should_show: bool = should_show_elements(&format, variables);
+                            let should_show: bool =
+                                should_show_elements(&format, variables, style_variables, context);
 
                             if should_show {
                                 parse_format(format, style, variables, style_variables, context)
@@ -797,6 +809,36 @@ mod tests {
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, " ", None);
+    }
+
+    #[test]
+    fn test_conditional_meta_variable_literal_text() {
+        const FORMAT_STR: &str = r"($all)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_meta(|var, _| match var {
+                "all" => Some("a"),
+                _ => None,
+            });
+        let result = formatter.parse(None, None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "a", None);
+    }
+
+    #[test]
+    fn test_conditional_meta_variable_styled_text() {
+        const FORMAT_STR: &str = r"($all)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map_meta(|var, _| match var {
+                "all" => Some("[a](bold red)"),
+                _ => None,
+            });
+        let result = formatter.parse(None, None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "a", Some(Color::Red.bold()));
     }
 
     #[test]
