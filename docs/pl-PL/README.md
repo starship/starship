@@ -138,7 +138,7 @@ onMounted(() => {
 
    > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Dodaj następujący fragment na końcu pliku <0>~/.config/elvish/rc.elv</0> (<0>%AppData%\elvish\rc.elv</0> w systemie Windows):
+   Dodaj następujący fragment na końcu pliku `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` w systemie Windows):
 
    ```sh
    # ~/.elvish/rc.elv
@@ -163,7 +163,7 @@ onMounted(() => {
 
    > [!WARNING] This will change in the future. Działa tylko na Nushell v0.96+.
 
-   Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie <0>$nu.config-path</0> w Nushell):
+   Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie `$nu.config-path` w Nushell):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")

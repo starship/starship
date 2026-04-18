@@ -1721,7 +1721,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 `gcloud` モジュールは、 [`gcloud`](https://cloud.google.com/sdk/gcloud) CLIの現在の設定が表示されます。 これは `~/.config/gcloud/active_config` ファイルと `~/.config/gcloud/configurations/config_{CONFIG NAME}` ファイルと `CLOUDSDK_CONFIG` 環境変数に基づきます。
 
-`detect_env_vars` が設定されていない限り、モジュールが有効になっているときは常に活性化します。<0>detect_env_vars</0> が設定されている場合、何れかの環境変数が設定されているときにのみ活性化します。
+`detect_env_vars` が設定されていない限り、モジュールが有効になっているときは常に活性化します。`detect_env_vars` が設定されている場合、何れかの環境変数が設定されているときにのみ活性化します。
 
 ### オプション
 

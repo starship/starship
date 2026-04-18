@@ -353,7 +353,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | model     | `Claude 3.5 Sonnet` | The display name of the current model |
 | model_id  | `claude-3-5-sonnet` | The model ID                          |
 | symbol    |                     | 對應 `symbol` 選項的設定值                    |
-| style\* |                     | 對應 <0>style</0> 選項的設定值                |
+| style\* |                     | 對應 `style` 選項的設定值                |
 
 \*: 此變數僅能用於 style 字串的一部分
 

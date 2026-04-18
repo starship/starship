@@ -306,7 +306,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Dodaj następujący fragment na końcu pliku <0>~/.config/elvish/rc.elv</0> (<0>%AppData%\elvish\rc.elv</0> w systemie Windows):
+Dodaj następujący fragment na końcu pliku `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` w systemie Windows):
 
 ```sh
 eval (starship init elvish)
@@ -341,7 +341,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie <0>$nu.config-path</0> w Nushell):
+Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie `$nu.config-path` w Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
@@ -430,7 +430,7 @@ Wspomóż ten projekt [stając się sponsorem](https://github.com/sponsors/stars
 
 ## 🔒 Polityka Podpisywania Kodu
 
-Bezpłatne podpisywanie kodu zapewnione przez <0>SignPath.io</0>, certyfikat wydany przez <1>SignPath Foundation</1>.
+Bezpłatne podpisywanie kodu zapewnione przez `SignPath.io`, certyfikat wydany przez `SignPath Foundation`.
 
 Role podpisywania kodu:
 

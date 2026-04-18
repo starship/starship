@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-Al usar saltos de línea, se pueden utilizar declaraciones multilínea. Por ejemplo, si quieres imprimir un símbolo <0>$</0> en una línea nueva, los siguientes valores para <0>format</0> son equivalentes:
+Al usar saltos de línea, se pueden utilizar declaraciones multilínea. Por ejemplo, si quieres imprimir un símbolo `$` en una línea nueva, los siguientes valores para `format` son equivalentes:
 
 ```toml
 # con cadena literal
@@ -136,7 +136,7 @@ Una variable contiene un símbolo `$` seguido por el nombre de la variable. El n
 Por ejemplo:
 
 - `'$version'` es una cadena de formato con una variable llamada `version`.
-- `'gitb​ranchgit_commit'` es una cadena de formato con dos variables llamadas <0>git_branch</0> y <0>git_commit</0>.
+- `'gitb​ranchgit_commit'` es una cadena de formato con dos variables llamadas `git_branch` y `git_commit`.
 - `'$git_branch $git_commit'` tiene las dos variables separadas por un espacio.
 
 #### Grupo de Texto
@@ -192,13 +192,22 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 Esta es la lista de opciones de configuración del prompt.
 
-### OpcionesVer Habilitar el Prompt Derecho</</td> </tr> 
+### Opciones
 
-</tbody> </table> 
+| Opción              | Por defecto                    | Descripción                                                                                                                                                                         |
+| ------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | [enlace](#formato-del-prompt-por-defecto) | Configura el formato del prompt.                                                                                                                                                    |
+| `right_format`      | `''`                           | Ver [Habilitar el Prompt Derecho](../advanced-config/#habilitar-el-prompt-derecho)                                                                                                |
+| `scan_timeout`      | `30`                           | Tiempo de espera para que starship escanee archivos (en milisegundos).                                                                                                             |
+| `command_timeout`   | `500`                          | Tiempo de espera para comandos ejecutados por starship (en milisegundos).                                                                                                          |
+| `add_newline`       | `true`                         | Inserta una línea en blanco entre prompts de shell.                                                                                                                                |
+| `palette`           | `''`                           | Establece qué paleta de color de `palettes` se usa.                                                                                                                                |
+| `palettes`          | `{}`                           | Colección de paletas de color que asignan [colores](../advanced-config/#cadenas-de-estilo) a nombres definidos por el usuario. Ten en cuenta que una paleta no puede referenciarse a sí misma. |
+| `follow_symlinks`   | `true`                         | Sigue enlaces simbólicos para comprobar si son directorios; usado en módulos como git.                                                                                            |
 
 
 
-> [!TIP] Si tienes enlaces simbólicos a sistemas de archivos en red, considera establecer <0>follow_symlinks</0> en <0>false</0>.
+> [!TIP] Si tienes enlaces simbólicos a sistemas de archivos en red, considera establecer `follow_symlinks` en `false`.
 
 
 
@@ -375,7 +384,7 @@ Cuando se utiliza [AWSume](https://awsu.me), el perfil se obtiene de la variable
 
 Al usar [saml2aws](https://github.com/Versent/saml2aws), la información de expiración obtenida de `~/.aws/credentials` recurre a la clave `x_security_token_expires`.
 
-Al usar <0>aws-sso-cli</0>, el perfil se lee de la variable de entorno <1>AWS_SSO_PROFILE</1>.
+Al usar `aws-sso-cli`, el perfil se lee de la variable de entorno `AWS_SSO_PROFILE`.
 
 
 
@@ -609,7 +618,7 @@ La opción `display` es un arreglo de la siguiente tabla.
 | Opción               | Predeterminado | Descripción                                                                                                                             |
 | -------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`           | El umbral para la opción de visualización.                                                                                              |
-| `style`              | `'red bold'`   | El estilo usado cuando si la opción <0>display</0> está activa.                                                                         |
+| `style`              | `'red bold'`   | El estilo usado cuando si la opción `display` está activa.                                                                         |
 | `charging_symbol`    |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `charging_symbol` de la batería.    |
 | `discharging_symbol` |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `discharging_symbol` de la batería. |
 
