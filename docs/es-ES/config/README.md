@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-Al usar saltos de línea, se pueden utilizar declaraciones multilínea. Por ejemplo, si quieres imprimir un símbolo <0>$</0> en una línea nueva, los siguientes valores para <0>format</0> son equivalentes:
+Al usar saltos de línea, se pueden utilizar declaraciones multilínea. Por ejemplo, si quieres imprimir un símbolo `$` en una línea nueva, los siguientes valores para `format` son equivalentes:
 
 ```toml
 # con cadena literal
