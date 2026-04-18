@@ -15,6 +15,10 @@ use crate::{
     module::Module,
 };
 
+/// Well-known empty tree object id for SHA1 repos.
+/// SHA256 cannot be discovered via gix, so cannot be handled yet.
+const EMPTY_TREE_SHA1: &str = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+
 /// Creates a module with the current added/deleted lines in the git repository at the
 /// current directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -44,8 +48,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
         }
+        // `git diff --shortstat HEAD` fails on an unborn HEAD
+        // Fall back to a well-known empty tree SHA1 if HEAD is unborn.
         if matches!(config.mode, GitMetricsMode::All) {
-            git_args.push("HEAD");
+            if gix_repo.head().is_ok_and(|h| h.is_unborn()) {
+                git_args.push(EMPTY_TREE_SHA1);
+            } else {
+                git_args.push("HEAD");
+            }
         }
 
         let diff = repo.exec_git(context, &git_args)?.stdout;
@@ -418,7 +428,7 @@ mod tests {
     use std::process::Stdio;
 
     use crate::modules::git_status::tests::make_sparse;
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{FixtureProvider, ModuleRenderer, config_git_repo_for_tests, fixture_repo};
     use nu_ansi_term::Color;
 
     // This also ensures both the gitoxide and git implementations are tested:
@@ -878,6 +888,63 @@ mod tests {
         }
     }
 
+    fn create_unborn_repo() -> io::Result<tempfile::TempDir> {
+        let repo_dir = tempfile::tempdir()?;
+        let path = repo_dir.path();
+
+        run_git_cmd(
+            [
+                "init",
+                "--quiet",
+                path.to_str().expect("Path was not UTF-8"),
+            ],
+            None,
+            true,
+        )?;
+        config_git_repo_for_tests(path)?;
+        run_git_cmd(["checkout", "-b", "master"], Some(path), false)?;
+        Ok(repo_dir)
+    }
+
+    #[test]
+    fn shows_staged_addition_on_unborn_head() -> io::Result<()> {
+        let repo_dir = create_unborn_repo()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("new-file"), "new line\n")?;
+        run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+        let actual = render_metrics_with_staged(path);
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_addition_on_unborn_head_with_git_executable() -> io::Result<()> {
+        let repo_dir = create_unborn_repo()?;
+        let path = repo_dir.path();
+
+        std::fs::write(path.join("new-file"), "new line\n")?;
+        run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_status]
+                use_git_executable = true
+                [git_metrics]
+                disabled = false
+                mode = "all"
+            })
+            .path(path)
+            .collect();
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
     fn create_repo_with_commit(provider: FixtureProvider) -> io::Result<tempfile::TempDir> {
         let repo_dir = tempfile::tempdir()?;
         let path = repo_dir.path();
@@ -896,17 +963,7 @@ mod tests {
             true,
         )?;
 
-        // Set local author info
-        run_git_cmd(
-            ["config", "--local", "user.email", "starship@example.com"],
-            Some(path),
-            true,
-        )?;
-        run_git_cmd(
-            ["config", "--local", "user.name", "starship"],
-            Some(path),
-            true,
-        )?;
+        config_git_repo_for_tests(path)?;
 
         // Ensure on the expected branch.
         // If build environment has `init.defaultBranch` global set
