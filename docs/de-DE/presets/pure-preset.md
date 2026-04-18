@@ -1,4 +1,4 @@
-[Zurück zu den Voreinstellungen](./#pure)
+[Zurück zu den Voreinstellungen](./#pure-prompt)
 
 # Pure Voreinstellung
 

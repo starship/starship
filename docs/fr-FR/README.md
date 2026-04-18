@@ -18,7 +18,7 @@ features:
     details: Profitez de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes la plus rapide et fiable possible.
   - 
     title: Personnalisable
-    details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre invite de commandes aussi légère ou complète que le vous souhaitez.
+    details: Tous les petits détails sont personnalisables à votre goût, pour rendre votre invite de commandes aussi légère ou complète que vous le souhaitez.
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
@@ -46,7 +46,7 @@ onMounted(() => {
 
 ### Pré-requis
 
-- Une [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal.
+- Une police d'écriture [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal.
 
 ### Installation
 
@@ -72,7 +72,7 @@ onMounted(() => {
    brew install starship
    ```
 
-   With [Winget](https://github.com/microsoft/winget-cli):
+   Avec [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
@@ -136,19 +136,16 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Seul elvish v0.18 ou supérieur est pris en charge.
-
-   :::
-
-   Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 
    #### Tcsh
@@ -164,13 +161,9 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
+   > [!WARNING] This will change in the future. Seul Nushell v0.96+ est supporté.
 
-   Ceci va changer dans le futur. Seul Nushell v0.96+ est supporté.
-
-   :::
-
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Ajoutez la ligne suivante à la fin de votre configuration Nushell (trouvable en exécutant `$nu.config-path` dans Nushell) :
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")

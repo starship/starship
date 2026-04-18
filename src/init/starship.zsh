@@ -50,7 +50,7 @@ prompt_starship_precmd() {
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
-    STARSHIP_JOBS_COUNT=${#jobstates}
+    STARSHIP_JOBS_COUNT="${#jobstates[*]}"
 }
 
 # Runs after the user submits the command line, but before it is executed and

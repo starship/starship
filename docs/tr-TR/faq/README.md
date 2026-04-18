@@ -1,18 +1,18 @@
-# Frequently Asked Questions
+# Sıkça Sorulan Sorular
 
-## What is the configuration used in the demo GIF?
+## Demo görselinde kullanılan konfigürasyon nedir?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **Terminal Emülatorü**: [iTerm2](https://iterm2.com/)
+  - **Tema**: Minimal
+  - **Renk Şeması**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Yazı Tipi**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Konfigürasyon**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Demo görselinde gösterilen kod tamamlamasını nasıl elde ederim?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Tamamlama desteği ya da otomatik tamamlama seçtiğiniz shell tarafından sağlanır. Demo, [Fish Shell](https://fishshell.com/) ile gerçekleştirildiğinden otomatik tamamlama bu shell tarafından varsayılan olarak sağlanmaktadır. Eğer Z Shell (zsh) kullanılıyorsa, [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) adresine bakabilirsiniz.
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 

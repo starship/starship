@@ -28,10 +28,11 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if let Some(os) = config.os {
-        if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
-            return None;
-        }
+    if let Some(os) = config.os
+        && os != env::consts::OS
+        && !(os == "unix" && cfg!(unix))
+    {
+        return None;
     }
 
     if config.require_repo && context.get_repo().is_err() {
@@ -279,7 +280,7 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
 
 /// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
 /// given command.
-/// Returns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
+/// Returns `false` if the shell expects scripts as arguments, `true` if as `stdin`.
 fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
     let shell_exe = Path::new(shell).file_stem();
     let no_args = shell_args.is_empty();

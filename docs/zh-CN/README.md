@@ -136,19 +136,16 @@ onMounted(() => {
 
    #### Elvish
 
-   ::: warning
+   > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   仅支持 elvish 0.18 及更高的版本。
-
-   :::
-
-   在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 
    #### Tcsh
@@ -164,11 +161,7 @@ onMounted(() => {
 
    #### Nushell
 
-   ::: warning
-
-   这部分今后可能会改变。 仅支持 Nushell v0.96+。
-
-   :::
+   > [!WARNING] This will change in the future. 仅支持 Nushell v0.96+。
 
    将以下内容添加到你的 Nushell 配置文件的末尾(在 Nushell 中运行  `$nu.config-path`  可以找到该文件)：
 

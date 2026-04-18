@@ -1,4 +1,4 @@
-[返回全部预设](./#pastel-powerline)
+[返回全部预设](./#tokyo-night)
 
 # Tokyo Night Preset
 

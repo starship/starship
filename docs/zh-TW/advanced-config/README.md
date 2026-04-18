@@ -2,15 +2,11 @@
 
 正因為 Starship 是一個多才多藝的 shell，有時候你必須要做比修改 `starship.toml` 更多事情來讓它完成特定工作。 這個頁面說明了一些用於 Starship 的進階設定技巧。
 
-::: warning
-
-這個章節內的設定可能會隨著未來 Starship 的版本發行而變動。
-
-:::
+> [!WARNING] 本章節中的設定檔在未來的 Starship 版本發行時可能會有所變動。
 
 ## TransientPrompt in PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+It is possible to replace the previous-printed prompt with a custom string. 這在並非所有提示訊息都需要的情況下會很有用。 To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
 By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
 
@@ -26,7 +22,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. 這在並非所有提示訊息都需要的情況下會很有用。 To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -56,7 +52,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+It is possible to replace the previous-printed prompt with a custom string. 這在並非所有提示訊息都需要的情況下會很有用。 如果要啟用這項功能，請在 Shell 工作階段中執行 `enable_transience` 指令。 若要使其永久啟用 ，請將上述指令加入到 `~/.config/fish/config.fish` 中。 你也可以隨時用 `disable_transience` 來臨時關閉這個功能。
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 

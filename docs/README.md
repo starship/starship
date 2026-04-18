@@ -105,7 +105,7 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-   #### Powershell
+   #### PowerShell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
@@ -127,13 +127,14 @@ onMounted(() => {
    > [!WARNING]
    > Only elvish v0.18 or higher is supported.
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 

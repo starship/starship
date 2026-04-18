@@ -93,10 +93,9 @@ fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<Str
         .try_begin_scan()?
         .set_folders(&["gradle"])
         .is_match()
+        && let Some(properties) = read_wrapper_properties(&context.current_dir)
     {
-        if let Some(properties) = read_wrapper_properties(&context.current_dir) {
-            return Some(properties);
-        }
+        return Some(properties);
     }
 
     // Try parent directories if recursive

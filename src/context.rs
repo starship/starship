@@ -1,6 +1,5 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
-use crate::context_env::Env;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
@@ -9,7 +8,6 @@ use crate::utils;
 use clap::Parser;
 use gix::{
     Repository, ThreadSafeRepository,
-    repository::Kind,
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state,
 };
@@ -29,6 +27,11 @@ use std::sync::{Arc, OnceLock, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
+
+pub use crate::utils::env::Env;
+pub use crate::utils::statusline::{
+    ClaudeCodeData, ContextWindow, CostInfo, CurrentUsage, ModelInfo, Workspace,
+};
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -79,6 +82,9 @@ pub struct Context<'a> {
 
     /// Starship root config
     pub root_config: StarshipRootConfig,
+
+    /// Claude Code session data (when running as statusline)
+    pub claude_code_data: Option<Box<ClaudeCodeData>>,
 
     /// Avoid issues with unused lifetimes when features are disabled
     _marker: PhantomData<&'a ()>,
@@ -181,6 +187,7 @@ impl<'a> Context<'a> {
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             root_config,
+            claude_code_data: None,
             _marker: PhantomData,
         }
     }
@@ -191,6 +198,12 @@ impl<'a> Context<'a> {
         self.config = StarshipConfig {
             config: Some(config),
         };
+        self
+    }
+
+    /// Sets the Claude Code session data
+    pub fn with_claude_code_data(mut self, data: ClaudeCodeData) -> Self {
+        self.claude_code_data = Some(Box::new(data));
         self
     }
 
@@ -381,7 +394,6 @@ impl<'a> Context<'a> {
                     state: repository.state(),
                     remote,
                     fs_monitor_value_is_true,
-                    kind: repository.kind(),
                 })
             })
             .as_ref()
@@ -498,10 +510,10 @@ pub enum Detected {
 }
 
 fn home_dir(env: &Env) -> Option<PathBuf> {
-    if cfg!(test) {
-        if let Some(home) = env.get_env("HOME") {
-            return Some(PathBuf::from(home));
-        }
+    if cfg!(test)
+        && let Some(home) = env.get_env("HOME")
+    {
+        return Some(PathBuf::from(home));
     }
     utils::home_dir()
 }
@@ -552,10 +564,10 @@ impl DirContents {
 
         {
             let worker = move || {
-                let enumerated_dir = fs::read_dir(base).unwrap().enumerate();
-                let _ = enumerated_dir
-                    .filter_map(|(_, entry)| entry.ok())
-                    .try_for_each(|entry| tx.send(entry));
+                let dir_iter = fs::read_dir(base).unwrap();
+                let _ = dir_iter
+                    .filter_map(|entry| entry.ok())
+                    .try_for_each(|entry| tx.send(entry).map_err(Box::new));
             };
 
             let _ = thread::Builder::new()
@@ -615,7 +627,10 @@ impl DirContents {
 
                     if remaining_time <= Duration::from_millis(0) && rx.try_recv().is_err() {
                         // Timed-out, and rx has been drained.
-                        log::warn!("from_path_with_timeout has timed-out!");
+                        log::warn!("Scanning current directory timed out.");
+                        log::warn!(
+                            "You can set scan_timeout in your config to a higher value to allow longer-running scans to keep executing."
+                        );
                         break;
                     }
 
@@ -724,9 +739,6 @@ pub struct Repo {
     /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
     /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
     pub(crate) fs_monitor_value_is_true: bool,
-
-    // Kind of repository, work tree or bare
-    pub kind: Kind,
 }
 
 impl Repo {

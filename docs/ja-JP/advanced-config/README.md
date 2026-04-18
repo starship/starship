@@ -2,11 +2,7 @@
 
 Starship は汎用性の高いシェルですが、時には特定の処理を行うために `starship.toml` を編集する以上のことをする必要があります。 このページでは starship で使用される、より高度な設定の一部を詳しく説明していきます。
 
-::: warning
-
-ここに載せられた設定は、Starship の将来のリリースで変更される可能性があります。
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## PowerShell の TransientPrompt
 
@@ -251,7 +247,7 @@ right_format = """$all"""
 
 一部のシェルは、通常のプロンプトの他に継続プロンプトをサポートしています。 このプロンプトは、ユーザーが不完全な文 (単一の左括弧や引用符など) を確定したときに通常のプロンプトの代わりに表示されます。
 
-Starship では、 `contination_prompt` オプションを使用して継続プロンプトを設定できます。 既定の継続プロンプトは `'[・](bright-black) '` です。
+Starship では、 `contination_prompt` オプションを使用して継続プロンプトを設定できます。 既定の継続プロンプトは `'[∙](bright-black) '` です。
 
 注意: `contination_prompt` には変数を含まないそのまま文字列を設定する必要があります。
 

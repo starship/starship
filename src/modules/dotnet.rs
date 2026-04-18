@@ -117,10 +117,8 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
                 }
             }
             // unescape and decode the text event using the reader encoding
-            Ok(Event::Text(e)) => {
-                if in_tfm {
-                    return e.decode().ok().map(std::borrow::Cow::into_owned);
-                }
+            Ok(Event::Text(e)) if in_tfm => {
+                return e.decode().ok().map(std::borrow::Cow::into_owned);
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
             Err(e) => {
@@ -306,8 +304,7 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
             .stdout
             .lines()
             .map(str::trim)
-            .filter(|l| !l.is_empty())
-            .next_back()
+            .rfind(|l| !l.is_empty())
             .or_else(parse_failed)?;
         let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
         if take_until > 1 {

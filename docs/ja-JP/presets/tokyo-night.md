@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./#pastel-powerline)
+[プリセット一覧に戻る](./#tokyo-night)
 
 # Tokyo Night プリセット
 

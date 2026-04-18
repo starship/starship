@@ -22,7 +22,7 @@ pub enum FormatElement<'a> {
     Text(Cow<'a, str>),
     Variable(Cow<'a, str>),
     TextGroup(TextGroup<'a>),
-    Conditional(Vec<FormatElement<'a>>),
+    Conditional(Vec<Self>),
 }
 
 #[derive(Clone)]

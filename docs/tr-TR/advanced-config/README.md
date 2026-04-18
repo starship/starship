@@ -2,11 +2,7 @@
 
 Starship çok yönlü bir kabuk olsa da, yine de belirli şeyleri yapması için `starship.toml`'u düzenlemek gerekebilir. Bu sayfa, Starship'i daha fazla yapılandırma tekniklerini anlatır.
 
-::: uyarı
-
-Bu bölümdeki yapılandırmalar, Starship'in gelecekteki sürümlerinde değişiklik gösterebilir.
-
-:::
+> [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## PowerShell'de TransientPrompt
 

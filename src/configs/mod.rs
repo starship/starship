@@ -9,6 +9,9 @@ pub mod bun;
 pub mod c;
 pub mod cc;
 pub mod character;
+pub mod claude_context;
+pub mod claude_cost;
+pub mod claude_model;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -30,6 +33,7 @@ pub mod env_var;
 pub mod erlang;
 pub mod fennel;
 pub mod fill;
+pub mod fortran;
 pub mod fossil_branch;
 pub mod fossil_metrics;
 pub mod gcloud;
@@ -56,6 +60,7 @@ pub mod kubernetes;
 pub mod line_break;
 pub mod localip;
 pub mod lua;
+pub mod maven;
 pub mod memory_usage;
 pub mod meson;
 pub mod mise;
@@ -100,6 +105,7 @@ pub mod typst;
 pub mod username;
 pub mod v;
 pub mod vagrant;
+pub mod vcs;
 pub mod vcsh;
 pub mod xmake;
 pub mod zig;
@@ -135,6 +141,12 @@ pub struct FullConfig<'a> {
     c: c::CConfig<'a>,
     #[serde(borrow)]
     character: character::CharacterConfig<'a>,
+    #[serde(borrow)]
+    claude_context: claude_context::ClaudeContextConfig<'a>,
+    #[serde(borrow)]
+    claude_cost: claude_cost::ClaudeCostConfig<'a>,
+    #[serde(borrow)]
+    claude_model: claude_model::ClaudeModelConfig<'a>,
     #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
     #[serde(borrow)]
@@ -175,6 +187,8 @@ pub struct FullConfig<'a> {
     fennel: fennel::FennelConfig<'a>,
     #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    fortran: fortran::FortranConfig<'a>,
     #[serde(borrow)]
     fossil_branch: fossil_branch::FossilBranchConfig<'a>,
     #[serde(borrow)]
@@ -226,6 +240,8 @@ pub struct FullConfig<'a> {
     localip: localip::LocalipConfig<'a>,
     #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
+    #[serde(borrow)]
+    maven: maven::MavenConfig<'a>,
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
@@ -310,6 +326,8 @@ pub struct FullConfig<'a> {
     username: username::UsernameConfig<'a>,
     #[serde(borrow)]
     vagrant: vagrant::VagrantConfig<'a>,
+    #[serde(borrow)]
+    vcs: vcs::VcsConfig<'a>,
     #[serde(borrow)]
     vcsh: vcsh::VcshConfig<'a>,
     #[serde(borrow)]

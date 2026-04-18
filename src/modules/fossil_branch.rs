@@ -1,4 +1,4 @@
-use super::{Context, Module, ModuleConfig};
+use super::{Context, Module, ModuleConfig, vcs};
 
 use crate::configs::fossil_branch::FossilBranchConfig;
 use crate::formatter::StringFormatter;
@@ -17,16 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let checkout_db = if cfg!(windows) {
-        "_FOSSIL_"
-    } else {
-        ".fslckout"
-    };
-    // See if we're in a check-out by scanning upwards for a directory containing the checkout_db file
-    context
-        .begin_ancestor_scan()
-        .set_files(&[checkout_db])
-        .scan()?;
+    vcs::discover_repo_root(context, vcs::Vcs::Fossil)?;
 
     let len = if config.truncation_length <= 0 {
         log::warn!(

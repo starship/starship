@@ -1,5 +1,4 @@
-use crate::context::{Context, Properties, Shell, Target};
-use crate::context_env::Env;
+use crate::context::{Context, Env, Properties, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -148,6 +147,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn claude_code_data(mut self, data: crate::context::ClaudeCodeData) -> Self {
+        self.context.claude_code_data = Some(Box::new(data));
+        self
+    }
+
     #[cfg(feature = "battery")]
     pub fn battery_info_provider(
         mut self,
@@ -188,7 +192,9 @@ impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
+    GitReftable,
     GitBare,
+    GitBareReftable,
     Hg,
     Pijul,
 }
@@ -211,12 +217,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .sync_all()?;
             Ok(path)
         }
-        FixtureProvider::Git => {
+        FixtureProvider::Git | FixtureProvider::GitReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;
@@ -253,12 +264,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             Ok(path)
         }
-        FixtureProvider::GitBare => {
+        FixtureProvider::GitBare | FixtureProvider::GitBareReftable => {
             let path = tempfile::tempdir()?;
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(["clone", "-b", "master", "--bare"])
+                .arg("clone")
+                .args(
+                    matches!(provider, FixtureProvider::GitBareReftable)
+                        .then(|| "--ref-format=reftable"),
+                )
+                .args(["-b", "master", "--bare"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;

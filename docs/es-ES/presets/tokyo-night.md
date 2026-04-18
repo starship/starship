@@ -1,4 +1,4 @@
-[Volver a Preajustes](./#pastel-powerline)
+[Volver a Preajustes](./#tokyo-night)
 
 # Tokyo Night Preset
 

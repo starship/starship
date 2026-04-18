@@ -1,8 +1,8 @@
 use crate::configs::Palette;
 use crate::context::Context;
 
-use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
+use crate::utils::serde::{ValueDeserializer, ValueRef};
 use nu_ansi_term::Color;
 use serde::{
     Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
@@ -625,9 +625,10 @@ mod tests {
             pub switch_c: Switch,
         }
 
-        #[derive(Debug, PartialEq, Clone)]
+        #[derive(Debug, PartialEq, Clone, Default)]
         enum Switch {
             On,
+            #[default]
             Off,
         }
 
@@ -641,12 +642,6 @@ mod tests {
                     "on" => Ok(Self::On),
                     _ => Ok(Self::Off),
                 }
-            }
-        }
-
-        impl Default for Switch {
-            fn default() -> Self {
-                Self::Off
             }
         }
 

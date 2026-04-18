@@ -14,11 +14,7 @@
 
 Этот пресет изменяет символы для нескольких модулей таким образом, чтобы в приглашении командной строки нигде не использовались символы Nerd Font.
 
-::: tip
-
-Этот пресет станет пресетом по умолчанию [в будущем релизе starship](https://github.com/starship/starship/pull/3544).
-
-:::
+> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
 
 [Нажмите, чтобы просмотреть пресет No Nerd Font](./no-nerd-font)
 

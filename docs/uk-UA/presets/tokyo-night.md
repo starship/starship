@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./#pastel-powerline)
+[Повернутися до Шаблонів](./#tokyo-night)
 
 # Tokyo Night
 
