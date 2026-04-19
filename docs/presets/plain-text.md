@@ -1,6 +1,6 @@
 [Return to Presets](./#plain-text-symbols)
 
-## Plain Text Symbols Preset
+# Plain Text Symbols Preset
 
 This preset changes the symbols for each module into plain text. Great if you
 don't have access to Unicode.

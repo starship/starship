@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import llmstxt from "vitepress-plugin-llms";
 
 const sidebar = (lang: string | undefined, override = {}) =>
     [
@@ -384,7 +385,38 @@ export default defineConfig({
     vite: {
         resolve: {
             preserveSymlinks: true
-        }
+        },
+        plugins: [
+            llmstxt({
+                domain: "https://starship.rs",
+                // We don't want to include language specific pages
+                // Since english files are not in a en-US folder we can't use workDir to only include them
+                ignoreFiles: [
+                    "index.md",
+                    "ar-SA/**",
+                    "bn-BD/**",
+                    "ckb-IR/**",
+                    "de-DE/**",
+                    "es-ES/**",
+                    "fr-FR/**",
+                    "id-ID/**",
+                    "it-IT/**",
+                    "ja-JP/**",
+                    "ko-KR/**",
+                    "nl-NL/**",
+                    "no-NO/**",
+                    "pl-PL/**",
+                    "pt-BR/**",
+                    "pt-PT/**",
+                    "ru-RU/**",
+                    "tr-TR/**",
+                    "uk-UA/**",
+                    "vi-VN/**",
+                    "zh-CN/**",
+                    "zh-TW/**",
+                ],
+            }),
+        ]
     },
     cleanUrls: true,
     markdown: {
@@ -414,5 +446,5 @@ export default defineConfig({
             indexName: "starship",
             appId: "M3XUO3SQOR",
         },
-    }
+    },
 });

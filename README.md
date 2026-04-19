@@ -1,3 +1,7 @@
+---
+title: Guide
+---
+
 <p align="center">
   <img
     width="400"
