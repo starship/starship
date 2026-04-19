@@ -1230,6 +1230,48 @@ pub(crate) mod tests {
         Ok(())
     }
 
+    // Regression test for https://github.com/starship/starship/issues/7400
+    // `info/exclude` lives in the common git directory, not in a linked
+    // worktree's per-worktree git directory. Make sure patterns recorded
+    // there are honored when rendering `git_status` from inside a linked
+    // worktree.
+    #[test]
+    fn respects_common_dir_info_exclude_in_linked_worktree() -> io::Result<()> {
+        let main_dir = fixture_repo(FixtureProvider::Git)?;
+
+        // Add an ignore rule to the common-dir `info/exclude`.
+        let info_exclude = main_dir.path().join(".git").join("info").join("exclude");
+        let mut f = OpenOptions::new().append(true).open(&info_exclude)?;
+        writeln!(f, "ignored-dir/")?;
+        f.sync_all()?;
+        drop(f);
+
+        // Create a linked worktree next to the primary repo.
+        let worktree_parent = tempfile::tempdir()?;
+        let worktree_path = worktree_parent.path().join("linked");
+        create_command("git")?
+            .args(["worktree", "add", "-b", "linked-branch"])
+            .arg(&worktree_path)
+            .current_dir(main_dir.path())
+            .output()?;
+
+        // Drop files matching the ignore rule inside the linked worktree.
+        let ignored_dir = worktree_path.join("ignored-dir");
+        std::fs::create_dir(&ignored_dir)?;
+        File::create(ignored_dir.join("file1.txt"))?.sync_all()?;
+        File::create(ignored_dir.join("file2.txt"))?.sync_all()?;
+
+        // The excluded files must not surface as untracked.
+        let actual = ModuleRenderer::new("git_status")
+            .path(&worktree_path)
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        main_dir.close()?;
+        worktree_parent.close()
+    }
+
     #[test]
     #[cfg(unix)]
     fn doesnt_run_fsmonitor() -> io::Result<()> {
