@@ -154,6 +154,17 @@
 
 <h1></h1>
 
+> [!WARNING]
+> **The default branch has been renamed from `master` to `main`.**
+> If you have a local clone, update it by running:
+>
+> ```sh
+> git branch -m master main
+> git fetch origin
+> git branch -u origin/main main
+> git remote set-head origin -a
+> ```
+
 <img
   src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
   alt="Starship with iTerm2 and the Snazzy theme"
