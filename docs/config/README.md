@@ -4036,7 +4036,7 @@ By default, the module will be shown if any of the following conditions are met:
 > - a string (e.g. `'python3'`),
 > - a list of strings (e.g. `['python', 'python3']`)
 > - a list of lists of strings, representing commands with optional arguments (e.g.
->   `[['uv', 'run', 'python'], 'python3']`)
+>   `[['uv', 'run', 'python'], ['python3']]`)
 >
 > Starship will try executing each configured command until it gets a result.
 > Note you can only change the binary that Starship executes to get the version
