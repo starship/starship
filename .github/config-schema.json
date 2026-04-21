@@ -5832,7 +5832,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/Either4",
           "default": [
             [
               "python"
@@ -7220,6 +7220,28 @@
         },
         {
           "type": "string"
+        }
+      ]
+    },
+    "Either4": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       ]
     }
