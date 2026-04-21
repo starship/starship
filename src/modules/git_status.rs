@@ -35,8 +35,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
-    if repo.open().is_bare() {
-        log::debug!("This is a bare repository, git_status is not applicable");
+    if repo.workdir.is_none() {
+        log::debug!("No working tree present, git_status is not applicable");
         return None;
     }
 
@@ -1957,6 +1957,44 @@ pub(crate) mod tests {
             repo_dir.close()?;
         }
         Ok(())
+    }
+
+    #[test]
+    fn generates_git_status_inside_worktree_of_bare_repo() -> io::Result<()> {
+        let src = fixture_repo(FixtureProvider::Git)?;
+        let tmp = tempfile::tempdir()?;
+        let bare = tmp.path().join(".bare");
+        let wt = tmp.path().join("wt");
+
+        create_command("git")?
+            .arg("clone")
+            .args(["--bare", "-b", "master"])
+            .arg(src.path())
+            .arg(&bare)
+            .output()?;
+
+        create_command("git")?
+            .arg("-C")
+            .arg(&bare)
+            .args(["worktree", "add"])
+            .arg(&wt)
+            .arg("master")
+            .output()?;
+
+        create_untracked(&wt)?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                untracked = "U"
+            })
+            .path(&wt)
+            .collect();
+
+        assert_eq!(format_output("U"), actual);
+
+        src.close()?;
+        tmp.close()
     }
 
     fn ahead(repo_dir: &Path) -> io::Result<()> {
