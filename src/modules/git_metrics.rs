@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
-    if gix_repo.is_bare() {
+    if repo.workdir.is_none() {
         return None;
     }
     let status_module = context.new_module("git_status");
@@ -724,6 +724,46 @@ mod tests {
     }
 
     #[test]
+    fn generates_git_metrics_inside_worktree_of_bare_repo() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLES {
+            let src = create_repo_with_commit(mode)?;
+            let tmp = tempfile::tempdir()?;
+            let bare = tmp.path().join(".bare");
+            let wt = tmp.path().join("wt");
+
+            create_command("git")?
+                .arg("clone")
+                .args(maybe_reftable_format(mode))
+                .args(["--bare", "-b", "master"])
+                .arg(src.path())
+                .arg(&bare)
+                .output()?;
+
+            create_command("git")?
+                .arg("-C")
+                .arg(&bare)
+                .args(["worktree", "add"])
+                .arg(&wt)
+                .arg("master")
+                .output()?;
+
+            let the_file = wt.join("the_file");
+            let mut the_file = OpenOptions::new().append(true).open(the_file)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
+
+            let actual = render_metrics(&wt);
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+
+            assert_eq!(expected, actual);
+
+            src.close()?;
+            tmp.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
     fn shows_all_changes_with_ignored_submodules() -> io::Result<()> {
         for mode in NORMAL_AND_REFTABLES {
             let repo_dir = create_repo_with_commit(mode)?;
@@ -869,5 +909,9 @@ mod tests {
         )?;
 
         Ok(repo_dir)
+    }
+
+    fn maybe_reftable_format(provider: FixtureProvider) -> Option<&'static str> {
+        matches!(provider, FixtureProvider::GitReftable).then(|| "--ref-format=reftable")
     }
 }

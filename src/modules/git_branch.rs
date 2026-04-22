@@ -30,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
 
     let gix_repo = repo.open();
-    if config.ignore_bare_repo && gix_repo.is_bare() {
+    if config.ignore_bare_repo && repo.workdir.is_none() {
         return None;
     }
 
@@ -540,6 +540,51 @@ mod tests {
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_ignore_bare_repo_still_renders_in_attached_worktree() -> io::Result<()> {
+        for mode in NORMAL_AND_REFTABLE {
+            let src = fixture_repo(mode)?;
+            let tmp = tempfile::tempdir()?;
+            let bare = tmp.path().join(".bare");
+            let wt = tmp.path().join("wt");
+
+            create_command("git")?
+                .arg("clone")
+                .args(maybe_reftable_format(mode))
+                .args(["--bare", "-b", "master"])
+                .arg(src.path())
+                .arg(&bare)
+                .output()?;
+
+            create_command("git")?
+                .arg("-C")
+                .arg(&bare)
+                .args(["worktree", "add"])
+                .arg(&wt)
+                .arg("master")
+                .output()?;
+
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_bare_repo = true
+                })
+                .path(&wt)
+                .collect();
+
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+            ));
+
+            assert_eq!(expected, actual);
+
+            src.close()?;
+            tmp.close()?;
         }
         Ok(())
     }
