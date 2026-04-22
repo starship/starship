@@ -108,11 +108,7 @@ where
     }
 
     fn schema_id() -> Cow<'static, str> {
-        Cow::Owned(format!(
-            "{}::VecOr<{}>",
-            module_path!(),
-            T::schema_id()
-        ))
+        Cow::Owned(format!("{}::VecOr<{}>", module_path!(), T::schema_id()))
     }
 
     fn json_schema(generator: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
