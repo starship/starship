@@ -614,6 +614,7 @@ mod tests {
             let actual = ModuleRenderer::new("git_branch")
                 .path(repo_dir.path())
                 .config(toml::toml! {
+                    command_timeout = 2_000
                     [git_branch]
                     format = "$branch(:$remote_name/$remote_branch)"
                 })
