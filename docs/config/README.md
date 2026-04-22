@@ -4036,7 +4036,7 @@ By default, the module will be shown if any of the following conditions are met:
 > - a string (e.g. `'python3'`),
 > - a list of strings (e.g. `['python', 'python3']`)
 > - a list of lists of strings, representing commands with optional arguments (e.g.
->   `[['uv', 'run', 'python'], ['python3']]`)
+>   `[['mise', 'exec', '--', 'python'], ['python3']]`)
 >
 > Starship will try executing each configured command until it gets a result.
 > Note you can only change the binary that Starship executes to get the version
@@ -4083,7 +4083,15 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Use `uv` to get the version.
+# Use `mise` to get the version.
+python_binary = [['mise', 'exec', '--', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Potentially dangerous: `uv` can run any binary at `.venv/bin/python` without interaction
 python_binary = [['uv', 'run', '--no-python-downloads', '--no-project', 'python']]
 ```
 
