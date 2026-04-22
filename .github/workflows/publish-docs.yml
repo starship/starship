@@ -23,6 +23,9 @@ jobs:
       - name: Build | Build docs site
         run: npm run build
         working-directory: docs
+        env:
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
 
       - name: Publish
         run: npx netlify-cli deploy --no-build --prod --dir=docs/.vitepress/dist

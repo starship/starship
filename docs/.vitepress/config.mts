@@ -409,10 +409,10 @@ export default defineConfig({
         ],
 
         // enables Algolia DocSearch
-        algolia: {
-            apiKey: "44118471f56286dcda7db941a043370d",
-            indexName: "starship",
-            appId: "M3XUO3SQOR",
-        },
+        algolia: process.env.ALGOLIA_API_KEY ? {
+            apiKey: process.env.ALGOLIA_API_KEY,
+            indexName: process.env.ALGOLIA_INDEX_NAME ?? "starship",
+            appId: process.env.ALGOLIA_APP_ID ?? "M3XUO3SQOR",
+        } : undefined,
     }
 });
