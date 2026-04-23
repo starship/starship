@@ -64,14 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
-    let shell_name = context.get_env("name");
     let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
     let shell_type_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
         NixShellType::Impure => config.impure_msg,
         NixShellType::Unknown => config.unknown_msg,
     };
-    let shell_level = context.get_env("NIX_SHELL_LEVEL");
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -85,8 +83,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "name" => shell_name.as_ref().map(Ok),
-                "level" => shell_level.as_ref().map(Ok),
+                "name" => context.get_env("name").map(Ok),
+                "level" => context.get_env("NIX_SHELL_LEVEL").map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
