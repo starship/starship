@@ -238,11 +238,7 @@ fn has_defined_credentials(
     Some(section.contains_key("aws_access_key_id"))
 }
 
-// True when the active profile declares SSO (either `sso_session` referencing a
-// `[sso-session <name>]` block, or the legacy direct `sso_start_url`).
-// Used by the `require_active_sso` gate to narrow its scope: profiles that
-// authenticate via other mechanisms (env vars, static keys, credential_process)
-// are intentionally left untouched.
+// True when the active profile declares SSO (`sso_session` or `sso_start_url`).
 fn profile_uses_sso(
     context: &Context,
     aws_profile: Option<&Profile>,
@@ -300,11 +296,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    // Opt-in SSO-specific gate: if the active profile authenticates via SSO and
-    // no unexpired token is cached on disk, hide the module. Env vars, static
-    // keys in the credentials file, and `credential_process` profiles are left
-    // alone — they remain authorized by the general activation chain above.
-    // `force_display` overrides (documented override semantics preserved).
+    // Opt-in SSO gate: hide SSO-based profiles when no cached token is valid.
     if !config.force_display
         && config.sso.require_active
         && profile_uses_sso(context, aws_profile.as_ref(), &aws_config)
@@ -312,8 +304,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     {
         let duration =
             get_credentials_duration(context, aws_profile.as_ref(), &aws_config, &aws_creds);
-        // `None` covers the never-logged-in case (cache file missing); `<= 0`
-        // covers expired. Both should hide the module.
         if duration.is_none_or(|d| d <= 0) {
             return None;
         }
