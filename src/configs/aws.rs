@@ -47,6 +47,8 @@ pub struct AwsConfig<'a> {
     pub expiration_symbol: &'a str,
     /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
+    /// SSO-specific options. See [`AwsSsoConfig`].
+    pub sso: AwsSsoConfig,
 }
 
 impl Default for AwsConfig<'_> {
@@ -60,6 +62,30 @@ impl Default for AwsConfig<'_> {
             profile_aliases: HashMap::new(),
             expiration_symbol: "X",
             force_display: false,
+            sso: AwsSsoConfig::default(),
         }
     }
+}
+
+#[derive(Clone, Default, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+/// SSO-specific configuration for the `aws` module.
+///
+/// Grouped under `[aws.sso]` in `starship.toml`. Currently a single option;
+/// future SSO-specific knobs (expiry-warning thresholds, custom cache paths,
+/// etc.) should live here.
+pub struct AwsSsoConfig {
+    /// If true, the module hides for SSO-based profiles when no unexpired token
+    /// is cached in `~/.aws/sso/cache/`. The default activation triggers on SSO
+    /// *configuration* presence (e.g. `sso_session` in `~/.aws/config`), which
+    /// produces a stale indicator when the user hasn't run `aws sso login` or
+    /// the token has expired. This option only narrows the SSO path — env vars,
+    /// static keys, and `credential_process` profiles activate as before. No
+    /// network is performed; the SSO token's `expiresAt` is read from disk.
+    pub require_active: bool,
 }
