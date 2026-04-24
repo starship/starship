@@ -1,58 +1,3 @@
-   Compiling thiserror v2.0.18
-   Compiling serde_json v1.0.149
-   Compiling serde v1.0.228
-   Compiling clap v4.6.1
-   Compiling ref-cast v1.0.25
-   Compiling futures-core v0.3.32
-   Compiling starship v1.25.0 (/Users/brunomoreira/Workspaces/Personal/OpenSource/starship)
-   Compiling pest_generator v2.8.6
-   Compiling clap_complete v4.6.2
-   Compiling gix-path v0.11.2
-   Compiling gix-packetline v0.21.2
-   Compiling futures-lite v2.6.1
-   Compiling gix-features v0.46.2
-   Compiling gix-config-value v0.17.1
-   Compiling gix-command v0.8.0
-   Compiling gix-url v0.35.2
-   Compiling clap_complete_nushell v4.6.0
-   Compiling jsonc-parser v0.32.3
-   Compiling gix-hash v0.23.0
-   Compiling gix-fs v0.19.2
-   Compiling gix-glob v0.24.0
-   Compiling gix-transport v0.55.1
-   Compiling pest_derive v2.8.6
-   Compiling notify-rust v4.16.0
-   Compiling gix-tempfile v21.0.2
-   Compiling gix-hashtable v0.13.0
-   Compiling gix-commitgraph v0.35.0
-   Compiling gix-object v0.58.0
-   Compiling gix-attributes v0.31.0
-   Compiling gix-ignore v0.19.1
-   Compiling gix-lock v21.0.2
-   Compiling gix-shallow v0.10.0
-   Compiling gix-pathspec v0.16.1
-   Compiling schemars v1.2.1
-   Compiling gix-revwalk v0.29.0
-   Compiling gix-ref v0.61.0
-   Compiling gix-filter v0.28.0
-   Compiling gix-pack v0.68.0
-   Compiling gix-traverse v0.55.0
-   Compiling gix-revision v0.43.0
-   Compiling os_info v3.14.0
-   Compiling gix-index v0.49.0
-   Compiling gix-refspec v0.39.0
-   Compiling gix-discover v0.49.0
-   Compiling gix-config v0.54.0
-   Compiling gix-protocol v0.59.0
-   Compiling gix-odb v0.78.0
-   Compiling gix-worktree v0.50.0
-   Compiling gix-diff v0.61.0
-   Compiling gix-dir v0.23.0
-   Compiling gix-status v0.28.0
-   Compiling gix-submodule v0.28.0
-   Compiling gix v0.81.0
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 14.96s
-     Running `target/debug/starship config-schema`
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FullConfig",
@@ -2051,11 +1996,11 @@
       "additionalProperties": false
     },
     "AwsSsoConfig": {
-      "description": "SSO-specific configuration for the `aws` module.\n\nGrouped under `[aws.sso]` in `starship.toml`. Currently a single option;\nfuture SSO-specific knobs (expiry-warning thresholds, custom cache paths,\netc.) should live here.",
+      "description": "SSO-specific configuration for the `aws` module (grouped under `[aws.sso]`).",
       "type": "object",
       "properties": {
         "require_active": {
-          "description": "If true, the module hides for SSO-based profiles when no unexpired token\nis cached in `~/.aws/sso/cache/`. The default activation triggers on SSO\n*configuration* presence (e.g. `sso_session` in `~/.aws/config`), which\nproduces a stale indicator when the user hasn't run `aws sso login` or\nthe token has expired. This option only narrows the SSO path — env vars,\nstatic keys, and `credential_process` profiles activate as before. No\nnetwork is performed; the SSO token's `expiresAt` is read from disk.",
+          "description": "If `true`, hides the module for SSO-based profiles when no unexpired token is cached in `~/.aws/sso/cache/`.",
           "type": "boolean",
           "default": false
         }
