@@ -74,18 +74,8 @@ impl Default for AwsConfig<'_> {
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-/// SSO-specific configuration for the `aws` module.
-///
-/// Grouped under `[aws.sso]` in `starship.toml`. Currently a single option;
-/// future SSO-specific knobs (expiry-warning thresholds, custom cache paths,
-/// etc.) should live here.
+/// SSO-specific configuration for the `aws` module (grouped under `[aws.sso]`).
 pub struct AwsSsoConfig {
-    /// If true, the module hides for SSO-based profiles when no unexpired token
-    /// is cached in `~/.aws/sso/cache/`. The default activation triggers on SSO
-    /// *configuration* presence (e.g. `sso_session` in `~/.aws/config`), which
-    /// produces a stale indicator when the user hasn't run `aws sso login` or
-    /// the token has expired. This option only narrows the SSO path — env vars,
-    /// static keys, and `credential_process` profiles activate as before. No
-    /// network is performed; the SSO token's `expiresAt` is read from disk.
+    /// If `true`, hides the module for SSO-based profiles when no unexpired token is cached in `~/.aws/sso/cache/`.
     pub require_active: bool,
 }
