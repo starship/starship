@@ -238,6 +238,22 @@ fn has_defined_credentials(
     Some(section.contains_key("aws_access_key_id"))
 }
 
+// True when the active profile declares SSO (either `sso_session` referencing a
+// `[sso-session <name>]` block, or the legacy direct `sso_start_url`).
+// Used by the `require_active_sso` gate to narrow its scope: profiles that
+// authenticate via other mechanisms (env vars, static keys, credential_process)
+// are intentionally left untouched.
+fn profile_uses_sso(
+    context: &Context,
+    aws_profile: Option<&Profile>,
+    aws_config: &AwsConfigFile,
+) -> bool {
+    get_config(context, aws_config)
+        .and_then(|config| get_profile_config(config, aws_profile))
+        .map(|section| section.contains_key("sso_session") || section.contains_key("sso_start_url"))
+        .unwrap_or(false)
+}
+
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-settings
 fn has_source_profile(
     context: &Context,
@@ -282,6 +298,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         && !has_defined_credentials(context, aws_profile.as_ref(), &aws_creds).unwrap_or(false)
     {
         return None;
+    }
+
+    // Opt-in SSO-specific gate: if the active profile authenticates via SSO and
+    // no unexpired token is cached on disk, hide the module. Env vars, static
+    // keys in the credentials file, and `credential_process` profiles are left
+    // alone — they remain authorized by the general activation chain above.
+    // `force_display` overrides (documented override semantics preserved).
+    if !config.force_display
+        && config.sso.require_active
+        && profile_uses_sso(context, aws_profile.as_ref(), &aws_config)
+        && !has_defined_credentials(context, aws_profile.as_ref(), &aws_creds).unwrap_or(false)
+    {
+        let duration =
+            get_credentials_duration(context, aws_profile.as_ref(), &aws_config, &aws_creds);
+        // `None` covers the never-logged-in case (cache file missing); `<= 0`
+        // covers expired. Both should hide the module.
+        if duration.is_none_or(|d| d <= 0) {
+            return None;
+        }
     }
 
     let duration = {
@@ -1290,6 +1325,247 @@ source_profile = starship
         ));
 
         assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    // ---- require_active_sso (opt-in activation gate) -----------------------
+
+    #[test]
+    fn require_active_sso_hides_when_only_sso_config_present() -> io::Result<()> {
+        // SSO configured in ~/.aws/config but no token cache → hides when
+        // `require_active_sso` is enabled. This is the regression this option
+        // is designed to fix.
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws"))?;
+
+        let mut file = File::create(dir.path().join(".aws/config"))?;
+        file.write_all(
+            "[default]
+region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_region = us-east-1
+sso_account_id = 123456789012
+sso_role_name = ReadOnly
+"
+            .as_bytes(),
+        )?;
+        file.sync_all()?;
+
+        let actual = module_renderer
+            .config(toml::toml! {
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn require_active_sso_shows_with_credential_env_var() -> io::Result<()> {
+        // AWS_ACCESS_KEY_ID env var → always authenticated.
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn require_active_sso_shows_with_static_credentials_file() -> io::Result<()> {
+        // Static access key in ~/.aws/credentials (no expiration) → authenticated.
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws"))?;
+
+        let mut creds = File::create(dir.path().join(".aws/credentials"))?;
+        creds.write_all(
+            "[default]
+aws_access_key_id = AKIATEST
+aws_secret_access_key = secret
+"
+            .as_bytes(),
+        )?;
+        creds.sync_all()?;
+
+        let mut config = File::create(dir.path().join(".aws/config"))?;
+        config.write_all(
+            "[default]
+region = us-east-1
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        let actual = module_renderer
+            .config(toml::toml! {
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn require_active_sso_shows_with_unexpired_sso_token() -> io::Result<()> {
+        use chrono::{DateTime, SecondsFormat, Utc};
+
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let mut config = File::create(dir.path().join(".aws/config"))?;
+        config.write_all(
+            "[default]
+region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_region = us-east-1
+sso_account_id = 123456789012
+sso_role_name = ReadOnly
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        // SHA-1 of "https://starship.rs/sso"
+        let mut cache = File::create(
+            dir.path()
+                .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
+        )?;
+        let one_hour_ahead: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() + 3600, 0).unwrap();
+        cache.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                one_hour_ahead.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        cache.sync_all()?;
+
+        let actual = module_renderer
+            .config(toml::toml! {
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+
+        // Exact duration text ("1h", "59m59s", …) depends on wall-clock at test
+        // time; verify activation instead of the precise rendered string.
+        assert!(
+            actual.is_some(),
+            "module should render when SSO token is unexpired, got None"
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn require_active_sso_hides_with_expired_sso_token() -> io::Result<()> {
+        use chrono::{DateTime, SecondsFormat, Utc};
+
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let mut config = File::create(dir.path().join(".aws/config"))?;
+        config.write_all(
+            "[default]
+region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_region = us-east-1
+sso_account_id = 123456789012
+sso_role_name = ReadOnly
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        let mut cache = File::create(
+            dir.path()
+                .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
+        )?;
+        let one_second_ago: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1, 0).unwrap();
+        cache.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                one_second_ago.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        cache.sync_all()?;
+
+        let actual = module_renderer
+            .config(toml::toml! {
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn require_active_sso_force_display_still_wins() -> io::Result<()> {
+        // force_display=true overrides require_active_sso (documented override
+        // semantics preserved).
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        let actual = module_renderer
+            .env("AWS_REGION", "us-east-1")
+            .config(toml::toml! {
+                [aws]
+                force_display = true
+                [aws.sso]
+                require_active = true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn backward_compat_sso_config_without_token_still_shows_by_default() -> io::Result<()> {
+        // Default (require_active_sso=false) must keep activating the module on
+        // SSO config presence alone — existing behavior, guard against regression.
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws"))?;
+
+        let mut file = File::create(dir.path().join(".aws/config"))?;
+        file.write_all(
+            "[default]
+region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_region = us-east-1
+sso_account_id = 123456789012
+sso_role_name = ReadOnly
+"
+            .as_bytes(),
+        )?;
+        file.sync_all()?;
+
+        let actual = module_renderer.collect();
+        assert!(
+            actual.is_some(),
+            "default (require_active_sso=false) must keep activating on SSO config"
+        );
         dir.close()
     }
 }

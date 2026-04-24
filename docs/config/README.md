@@ -381,6 +381,8 @@ The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_P
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
+If the option `sso.require_active` is set to `true`, the module hides when the active profile authenticates via SSO and no unexpired token is cached under `~/.aws/sso/cache/`. Env vars, static access keys, and `credential_process` profiles activate as before. See [SSO Options](#sso-options).
+
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
 is read from the `AWS_SESSION_EXPIRATION` env var.
@@ -410,6 +412,14 @@ is read from the `AWS_SSO_PROFILE` env var.
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+
+### SSO Options
+
+SSO-specific settings, configured under `[aws.sso]`. Grouping them here keeps the top-level `aws` options focused and leaves room for future SSO-specific knobs.
+
+| Option           | Default | Description                                                                                                                                                                                                                                                                                                                  |
+| ---------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `require_active` | `false` | If `true`, the module hides when the active profile authenticates via SSO and no unexpired token is cached under `~/.aws/sso/cache/`. The check is purely local — no network request. Env vars, static access keys, and `credential_process` profiles continue to activate the module via the top-level activation chain. |
 
 ### Variables
 
@@ -466,6 +476,17 @@ style = 'bold blue'
 symbol = '🅰 '
 [aws.profile_aliases]
 Enterprise_Naming_Scheme-voidstars = 'void**'
+```
+
+#### Hide AWS when SSO session is inactive
+
+Useful when `~/.aws/config` defines SSO profiles — the module would normally display based on the config being present, regardless of whether you have actually run `aws sso login`. With `require_active`, the module only shows when a cached SSO token is still valid (checked locally via `~/.aws/sso/cache/`).
+
+```toml
+# ~/.config/starship.toml
+
+[aws.sso]
+require_active = true
 ```
 
 ## Azure
