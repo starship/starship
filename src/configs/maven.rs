@@ -30,7 +30,7 @@ impl Default for MavenConfig<'_> {
             recursive: false,
             detect_extensions: vec![],
             detect_files: vec!["pom.xml"],
-            detect_folders: vec![".mvn"],
+            detect_folders: vec![],
         }
     }
 }
