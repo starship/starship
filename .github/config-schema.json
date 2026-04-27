@@ -1076,9 +1076,7 @@
         "detect_files": [
           "pom.xml"
         ],
-        "detect_folders": [
-          ".mvn"
-        ]
+        "detect_folders": []
       }
     },
     "memory_usage": {
@@ -4846,9 +4844,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            ".mvn"
-          ]
+          "default": []
         }
       },
       "additionalProperties": false
