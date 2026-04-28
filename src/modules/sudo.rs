@@ -26,8 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
+            .map(|variable| match variable {
+                "symbol" => Some(Ok(config.symbol)),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -85,6 +85,30 @@ mod tests {
             })
             .collect();
         let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙 ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_sudo_cached_conditional_format_with_symbol() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd(
+                "sudo -n true",
+                Some(CommandOutput {
+                    stdout: String::new(),
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = true
+                symbol = "sudo"
+                style = "197"
+                format = "([$symbol]($style) )"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Fixed(197).paint("sudo")));
 
         assert_eq!(expected, actual);
     }
