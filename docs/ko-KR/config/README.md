@@ -26,19 +26,19 @@ disabled = true
 
 ### 설정 파일 경로
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+환경 변수 `STARSHIP_CONFIG`를 사용하여 기본 설정 파일의 위치를 ​​변경할 수 있습니다.
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+PowerShell(Windows)에서는 `$PROFILE`에 다음 줄을 추가하는 것과 동일한 작업을 수행합니다.
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+또는 Cmd(Windows)를 사용하는 경우 `starship.lua` 파일에 다음 줄을 추가하면 됩니다.
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -46,19 +46,19 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### 로그
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+기본적으로 Starship은 경고 및 오류를 `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`라는 파일에 기록합니다. 여기서 세션 키는 터미널 인스턴스에 해당합니다. 하지만 이는 `STARSHIP_CACHE` 환경 변수를 사용하여 변경할 수 있습니다.
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+PowerShell(Windows)에서는 `$PROFILE`에 다음 줄을 추가하는 것과 동일한 작업을 수행합니다.
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+또는 Cmd(Windows)를 사용하는 경우 `starship.lua` 파일에 다음 줄을 추가하면 됩니다.
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -68,20 +68,20 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 **모듈**: OS의 배경 정보를 기반으로 정보를 제공하는 프롬프트의 구성 요소입니다. 예를 들어, "nodejs" 모듈은 현재 디렉토리가 Node.js 프로젝트 디렉토리라면 컴퓨터에 현재 설치되어 있는 Node.js 버전을 보여줍니다.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**변수**: 모듈에서 제공하는 정보를 담고 있는 더 작은 하위 구성 요소입니다. 예를 들어, "nodejs" 모듈의 "version" 변수에는 Node.js의 현재 버전이 저장됩니다.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+관례적으로 대부분의 모듈은 기본 터미널 색상 접두사(예: "nodejs"의 `via`)와 빈 공백을 접미사로 사용합니다.
 
 ### 문자열
 
 TOML 문법에서는 [텍스트 값](https://toml.io/en/v1.0.0#string)을 `'`, `"`, `'''`, 그리고 `"""`으로 지정합니다.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+다음 Starship 구문 기호는 형식 문자열에서 특별한 용도로 사용되며 해당 문자로 표시하려면 이스케이프해야 합니다. `$ [ ] ( )`.
 
 | 기호    | 종류                        | 비고                                                     |
 | ----- | ------------------------- | ------------------------------------------------------ |
 | `'`   | 리터럴 문자열                   | less escaping                                          |
-| `"`   | string                    | more escaping                                          |
+| `"`   | 문자열                       | more escaping                                          |
 | `'''` | multi-line literal string | less escaping                                          |
 | `"""` | multi-line string         | more escaping, newlines in declarations can be ignored |
 
@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+줄 바꿈을 사용할 때는 여러 줄로 된 선언을 사용할 수 있습니다. 예를 들어, `$` 기호를 새 줄에 출력하려면 `format`에 다음 값들을 사용하면 동일한 효과를 얻을 수 있습니다:
 
 ```toml
 # with literal string
@@ -115,7 +115,7 @@ format = """
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+여러 줄로 된 기본 문자열에서 줄 바꿈 문자는 이스케이프 처리를 통해 값 자체에는 포함되지 않고 서식 지정에 사용할 수 있습니다.
 
 ```toml
 format = """
@@ -128,11 +128,11 @@ line2
 """
 ```
 
-### Format Strings
+### 포멧 문자열
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+포맷 문자열은 모듈이 모든 변수를 출력하는 데 사용하는 형식입니다. 대부분의 모듈에는 모듈의 표시 형식을 구성하는 `format`이라는 항목이 있습니다. 형식 문자열에서 텍스트, 변수 및 텍스트 그룹을 사용할 수 있습니다.
 
-#### Variable
+####
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
@@ -253,6 +253,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$nats\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -267,9 +268,11 @@ $hg_state\
 $pijul_channel\
 $docker_context\
 $package\
+$bun\
 $c\
 $cmake\
 $cobol\
+$cpp\
 $daml\
 $dart\
 $deno\
@@ -281,18 +284,20 @@ $fennel\
 $fortran\
 $gleam\
 $golang\
-$guix_shell\
+$gradle\
 $haskell\
 $haxe\
 $helm\
 $java\
 $julia\
 $kotlin\
-$gradle\
 $lua\
+$maven\
+$mojo\
 $nim\
 $nodejs\
 $ocaml\
+$odin\
 $opa\
 $perl\
 $php\
@@ -312,10 +317,13 @@ $terraform\
 $typst\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
+$guix_shell\
 $nix_shell\
 $conda\
+$pixi\
 $meson\
 $spack\
 $memory_usage\
@@ -323,7 +331,6 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
-$nats\
 $direnv\
 $env_var\
 $mise\
@@ -336,9 +343,9 @@ $jobs\
 $battery\
 $time\
 $status\
-$os\
 $container\
 $netns\
+$os\
 $shell\
 $character"""
 ```
@@ -381,7 +388,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 
 ### Variables
 
-| Variable  | 예시               | Description                                 |
+|           | 예시               | Description                                 |
 | --------- | ---------------- | ------------------------------------------- |
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
@@ -444,7 +451,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Options
 
-| Variable               | Default                                  | Description                                                                           |
+|                        | Default                                  | Description                                                                           |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
 | `기호`                   | `'󰠅 '`                                   | The symbol used in the format.                                                        |
@@ -498,7 +505,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
 | `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
 | `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰁽 '`                            | The symbol shown when the battery state is unknown. |
+| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
@@ -566,13 +573,13 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `기호`                | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this module.             |
 | `style`             | `'bold blue'`                                   | The style for the module.                             |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | `version` | `v1.0.0` | The version of `buf`                 |
 | `기호`      |          | Mirrors the value of option `symbol` |
@@ -612,7 +619,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.1.4` | The version of `bun`                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -651,12 +658,12 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### Variables
 
-| Variable | 예시     | Description                          |
-| -------- | ------ | ------------------------------------ |
-| name     | clang  | The name of the compiler             |
-| version  | 13.0.0 | The version of the compiler          |
-| 기호       |        | Mirrors the value of option `symbol` |
-| style    |        | Mirrors the value of option `style`  |
+|         | 예시     | Description                          |
+| ------- | ------ | ------------------------------------ |
+| name    | clang  | The name of the compiler             |
+| version | 13.0.0 | The version of the compiler          |
+| 기호      |        | Mirrors the value of option `symbol` |
+| style   |        | Mirrors the value of option `style`  |
 
 ### Commands
 
@@ -697,12 +704,12 @@ The `cpp` module shows some information about your `C++` compiler. By default, t
 
 ### Variables
 
-| Variable | 예시      | Description                          |
-| -------- | ------- | ------------------------------------ |
-| name     | clang++ | The name of the compiler             |
-| version  | 13.0.0  | The version of the compiler          |
-| 기호       |         | Mirrors the value of option `symbol` |
-| style    |         | Mirrors the value of option `style`  |
+|         | 예시      | Description                          |
+| ------- | ------- | ------------------------------------ |
+| name    | clang++ | The name of the compiler             |
+| version | 13.0.0  | The version of the compiler          |
+| 기호      |         | Mirrors the value of option `symbol` |
+| style   |         | Mirrors the value of option `style`  |
 
 ### Commands
 
@@ -750,9 +757,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| Variable | 예시 | Description                                                                                              |
-| -------- | -- | -------------------------------------------------------------------------------------------------------- |
-| 기호       |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+|    | 예시 | Description                                                                                              |
+| -- | -- | -------------------------------------------------------------------------------------------------------- |
+| 기호 |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### 예시
 
@@ -807,7 +814,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -837,7 +844,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### Variables
 
-| Variable  | 예시         | Description                          |
+|           | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v3.1.2.0` | The version of `cobol`               |
 | 기호        |            | Mirrors the value of option `symbol` |
@@ -870,7 +877,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Variables
 
-| Variable  | 예시       | Description                             |
+|           | 예시       | Description                             |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
@@ -907,7 +914,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ### Variables
 
-| Variable    | 예시           | Description                          |
+|             | 예시           | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | 기호          |              | Mirrors the value of option `symbol` |
@@ -939,7 +946,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Variables
 
-| Variable  | 예시                  | Description                          |
+|           | 예시                  | Description                          |
 | --------- | ------------------- | ------------------------------------ |
 | name      | `fedora-toolbox:35` | The name of the container            |
 | 기호        |                     | Mirrors the value of option `symbol` |
@@ -978,7 +985,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -1016,7 +1023,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.2.0` | The version of `daml`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -1056,7 +1063,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -1094,7 +1101,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -1140,11 +1147,31 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Advanced Option             | Default | Description                                                                                                                                                            |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
+| `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
+
+| Value   | 종류      | Description                              |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1158,7 +1185,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | 예시                    | Description                         |
+|           | 예시                    | Description                         |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `'D:/Projects'`       | The current directory path          |
 | style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
@@ -1170,7 +1197,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Variable           | 예시                    | Description                             |
+|                    | 예시                    | Description                             |
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
@@ -1216,7 +1243,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Variables
 
-| Variable  | 예시                  | Description                             |
+|           | 예시                  | Description                             |
 | --------- | ------------------- | --------------------------------------- |
 | loaded    | `loaded`            | Whether the current rc file is loaded.  |
 | allowed   | `denied`            | Whether the current rc file is allowed. |
@@ -1254,7 +1281,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | 예시             | Description                          |
+|           | 예시             | Description                          |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | 기호        |                | Mirrors the value of option `symbol` |
@@ -1302,13 +1329,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this module.                                 |
 | `style`             | `'bold blue'`                                                                                           | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
 ### Variables
 
-| Variable  | 예시               | Description                                                        |
+|           | 예시               | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -1343,13 +1370,13 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `기호`                | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
 | `detect_files`      | `['mix.exs']`                                               | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this module.                                 |
 | `style`             | `'bold purple'`                                             | The style for the module.                                                 |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
 ### Variables
 
-| Variable    | 예시      | Description                          |
+|             | 예시      | Description                          |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -1386,13 +1413,13 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `기호`                | `'🌳 '`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this module.                                 |
 | `style`             | `'cyan bold'`                                      | The style for the module.                                                 |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -1430,22 +1457,23 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Options
 
-| Option        | Default                        | Description                                                                  |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `기호`          | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable`    |                                | The environment variable to be displayed.                                    |
-| `default`     |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Option        | Default                               | Description                                                                  |
+| ------------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `기호`          | `""`                                  | The symbol used before displaying the variable value.                        |
+| `variable`    |                                       | The environment variable to be displayed.                                    |
+| `default`     |                                       | The default value to be displayed when the selected variable is not defined. |
+| `format`      | `"with [$symbol$env_value]($style) "` | The format for the module.                                                   |
+| `description` | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`. |
+| `disabled`    | `false`                               | Disables the `env_var` module.                                               |
+| `style`       | `"black bold dimmed"`                 | The style for the module.                                                    |
 
 ### Variables
 
-| Variable  | 예시                                          | Description                                |
+|           | 예시                                          | Description                                |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | 기호        |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| style\* |                                             | Mirrors the value of option `style`        |
 
 *: This variable can only be used as a part of a style string
 
@@ -1488,12 +1516,12 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `'bold red'`                         | The style for the module.                                                 |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -1526,12 +1554,12 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `style`             | `'bold green'`                       | The style for the module.                                                 |
 | `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.1` | The version of `fennel`              |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -1597,7 +1625,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | name      | gfortran | The name of the compiler             |
 | version   | `14.2.0` | The version of the Fortran compiler  |
@@ -1633,7 +1661,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 ### Variables
 
-| Variable  | 예시      | Description                          |
+|           | 예시      | Description                          |
 | --------- | ------- | ------------------------------------ |
 | branch    | `trunk` | The active Fossil branch             |
 | 기호        |         | Mirrors the value of option `symbol` |
@@ -1670,7 +1698,7 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 
 ### Variables
 
-| Variable          | 예시  | Description                                 |
+|                   | 예시  | Description                                 |
 | ----------------- | --- | ------------------------------------------- |
 | added             | `1` | The current number of added lines           |
 | deleted           | `2` | The current number of deleted lines         |
@@ -1709,7 +1737,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 ### Variables
 
-| Variable  | 예시            | Description                                                        |
+|           | 예시            | Description                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
@@ -1786,7 +1814,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | 예시       | Description                                                                                            |
+|               | 예시       | Description                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1827,7 +1855,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | 예시        | Description                                  |
+|           | 예시        | Description                                  |
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
@@ -1866,7 +1894,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | 예시         | Description                         |
+|                  | 예시         | Description                         |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1904,7 +1932,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ### Variables
 
-| Variable          | 예시  | Description                                 |
+|                   | 예시  | Description                                 |
 | ----------------- | --- | ------------------------------------------- |
 | added             | `1` | The current number of added lines           |
 | deleted           | `2` | The current number of deleted lines         |
@@ -1931,59 +1959,75 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option               | Default                                         | Description                                                                                                 |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | This branch has merge conflicts.                                                                            |
-| `ahead`              | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`            | `'\$'`                                         | The format of `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`             | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`            | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | The style for the module.                                                                                   |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | Disables the `git_status` module.                                                                           |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| Option                 | Default                                         | Description                                                                                                 |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
+| `style`                | `'bold red'`                                    | The style for the module.                                                                                   |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
+| `disabled`             | `false`                                         | Disables the `git_status` module.                                                                           |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Variables
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Mirrors the value of option `style`                                                                           |
+|                        | Description                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`              | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`             | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`               | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
+| style\*              | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
-| Variable       | Description                                    |
+|                | Description                                    |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
-| Variable | Description              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+|         | Description              |
+| ------- | ------------------------ |
+| `count` | Show the number of files |
 
 ### 예시
 
@@ -2045,7 +2089,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of `gleam`               |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2092,7 +2136,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Variables
 
-| Variable    | 예시        | Description                                                                                                                                 |
+|             | 예시        | Description                                                                                                                                 |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | version     | `v1.12.1` | The version of `go`                                                                                                                         |
 | mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
@@ -2134,7 +2178,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 ### Variables
 
-| Variable  | 예시 | Description                          |
+|           | 예시 | Description                          |
 | --------- | -- | ------------------------------------ |
 | 기호        |    | Mirrors the value of option `symbol` |
 | style\* |    | Mirrors the value of option `style`  |
@@ -2178,11 +2222,11 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Variables
 
-| Variable | 예시       | Description                          |
-| -------- | -------- | ------------------------------------ |
-| version  | `v7.5.1` | The version of `gradle`              |
-| 기호       |          | Mirrors the value of option `symbol` |
-| style*   |          | Mirrors the value of option `style`  |
+|         | 예시       | Description                          |
+| ------- | -------- | ------------------------------------ |
+| version | `v7.5.1` | The version of `gradle`              |
+| 기호      |          | Mirrors the value of option `symbol` |
+| style*  |          | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
@@ -2209,7 +2253,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable       | 예시          | Description                                                                             |
+|                | 예시          | Description                                                                             |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
@@ -2235,14 +2279,14 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this module.                                 |
 | `기호`                | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v4.2.5` | The version of `haxe`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2274,14 +2318,14 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `기호`                | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `'bold white'`                       | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2317,7 +2361,7 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable   | 예시         | Description                                           |
+|            | 예시         | Description                                           |
 | ---------- | ---------- | ----------------------------------------------------- |
 | 호스트 이름     | `computer` | The hostname of the computer                          |
 | style\*  |            | Mirrors the value of option `style`                   |
@@ -2373,14 +2417,14 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this module.                                 |
 | `기호`                | `'☕ '`                                                                                                                | A format string representing the symbol of Java                           |
 | `style`             | `'red dimmed'`                                                                                                        | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                               | Disables the `java` module.                                               |
 
 ### Variables
 
-| Variable  | 예시    | Description                          |
+|           | 예시    | Description                          |
 | --------- | ----- | ------------------------------------ |
 | version   | `v14` | The version of `java`                |
 | 기호        |       | Mirrors the value of option `symbol` |
@@ -2427,7 +2471,7 @@ The default functionality is:
 
 ### Variables
 
-| Variable  | 예시  | Description                          |
+|           | 예시  | Description                          |
 | --------- | --- | ------------------------------------ |
 | number    | `1` | The number of jobs                   |
 | 기호        |     | Mirrors the value of option `symbol` |
@@ -2470,14 +2514,14 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `기호`                | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `'bold purple'`                      | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2508,7 +2552,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                     |
 | `기호`                | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `'bold blue'`                        | The style for the module.                                                     |
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -2516,7 +2560,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -2562,7 +2606,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 | `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
-| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this module.                             |
 | `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
@@ -2571,7 +2615,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
 
-| Variable          | Description                                                                              |
+|                   | Description                                                                              |
 | ----------------- | ---------------------------------------------------------------------------------------- |
 | `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
 | `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
@@ -2584,7 +2628,7 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 
 ### Variables
 
-| Variable  | 예시                   | Description                              |
+|           | 예시                   | Description                              |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -2686,7 +2730,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Variables
 
-| Variable  | 예시           | Description                         |
+|           | 예시           | Description                         |
 | --------- | ------------ | ----------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
 | style\* |              | Mirrors the value of option `style` |
@@ -2728,7 +2772,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2744,6 +2788,41 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `기호`                | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
+| `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `maven` module.                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+
+### Variables
+
+|         | 예시       | Description                          |
+| ------- | -------- | ------------------------------------ |
+| version | `v3.2.0` | The version of `maven`               |
+| 기호      |          | Mirrors the value of option `symbol` |
+| style*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
 
 ## Memory Usage
 
@@ -2765,7 +2844,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Variables
 
-| Variable         | 예시            | Description                                                        |
+|                  | 예시            | Description                                                        |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -2807,7 +2886,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### Variables
 
-| Variable  | 예시         | Description                          |
+|           | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | project   | `starship` | The current Meson project name       |
 | 기호        | `🐏`        | Mirrors the value of option `symbol` |
@@ -2846,7 +2925,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | branch    | `master`  | The active mercurial branch          |
 | topic     | `feature` | The active mercurial topic           |
@@ -2890,7 +2969,7 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 
 ### Variables
 
-| Variable         | 예시         | Description                         |
+|                  | 예시         | Description                         |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -2921,7 +3000,7 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | health    | `healthy` | The health of _mise_                 |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -2956,7 +3035,7 @@ The `mojo` module shows the current version of [Mojo programming language](https
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `24.4.0` | The version of `mojo`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -2988,7 +3067,7 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 
 ### Variables
 
-| Variable  | 예시          | Description                          |
+|           | 예시          | Description                          |
 | --------- | ----------- | ------------------------------------ |
 | name      | `localhost` | The name of the NATS context         |
 | 기호        |             | Mirrors the value of option `symbol` |
@@ -3017,7 +3096,7 @@ The `netns` module shows the current network namespace. This uses `ip netns iden
 
 ### Variables
 
-| Variable  | 예시         | Description                               |
+|           | 예시         | Description                               |
 | --------- | ---------- | ----------------------------------------- |
 | name      | `my-netns` | The name of the current network namespace |
 | 기호        |            | Mirrors the value of option `symbol`      |
@@ -3057,7 +3136,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -3094,7 +3173,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Variable  | 예시      | Description                          |
+|           | 예시      | Description                          |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -3145,7 +3224,7 @@ Additionally, the module will be hidden by default if the directory contains a `
 
 ### Variables
 
-| Variable        | 예시            | Description                                                                                                                                               |
+|                 | 예시            | Description                                                                                                                                               |
 | --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
 | engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
@@ -3191,7 +3270,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Variable         | 예시           | Description                                                       |
+|                  | 예시           | Description                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -3229,7 +3308,7 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 
 ### Variables
 
-| Variable  | 예시            | Description                          |
+|           | 예시            | Description                          |
 | --------- | ------------- | ------------------------------------ |
 | version   | `dev-2024-03` | The version of `odin`                |
 | 기호        |               | Mirrors the value of option `symbol` |
@@ -3266,7 +3345,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.44.0` | The version of `opa`                 |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -3298,7 +3377,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | 예시     | Description                          |
+|           | 예시     | Description                          |
 | --------- | ------ | ------------------------------------ |
 | cloud     | `corp` | The current OpenStack cloud          |
 | project   | `dev`  | The current OpenStack project        |
@@ -3402,7 +3481,7 @@ Zorin = "🔹 "
 
 ### Variables
 
-| Variable  | 예시           | Description                                                        |
+|           | 예시           | Description                                                        |
 | --------- | ------------ | ------------------------------------------------------------------ |
 | 기호        | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
@@ -3468,7 +3547,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -3510,7 +3589,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -3548,7 +3627,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -3605,7 +3684,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ### Variables
 
-| Variable    | 예시        | Description                          |
+|             | 예시        | Description                          |
 | ----------- | --------- | ------------------------------------ |
 | version     | `v0.33.0` | The version of `pixi`                |
 | environment | `py311`   | The current pixi environment         |
@@ -3645,7 +3724,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | 예시         | Description                          |
+|           | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
@@ -3699,7 +3778,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -3749,6 +3828,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3837,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable     | 예시              | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| 기호           | `'🐍 '`          | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+|              | 예시              | Description                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| 기호           | `'🐍 '`          | Mirrors the value of option `symbol`                                        |
+| style        | `'yellow bold'` | Mirrors the value of option `style`                                         |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### 예시
 
@@ -3815,7 +3895,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | 예시        | Description                          |
+|           | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `1.4.549` | The version of `quarto`              |
 | 기호        |           | Mirrors the value of option `symbol` |
@@ -3850,11 +3930,11 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Variables
 
-| Variable | 예시            | Description                          |
-| -------- | ------------- | ------------------------------------ |
-| version  | `v4.0.5`      | The version of `R`                   |
-| 기호       |               | Mirrors the value of option `symbol` |
-| style    | `'blue bold'` | Mirrors the value of option `style`  |
+|         | 예시            | Description                          |
+| ------- | ------------- | ------------------------------------ |
+| version | `v4.0.5`      | The version of `R`                   |
+| 기호      |               | Mirrors the value of option `symbol` |
+| style   | `'blue bold'` | Mirrors the value of option `style`  |
 
 ### 예시
 
@@ -3887,7 +3967,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Variables
 
-| Variable   | 예시     | Description                          |
+|            | 예시     | Description                          |
 | ---------- | ------ | ------------------------------------ |
 | version    | `v6.d` | The version of `raku`                |
 | vm_version | `moar` | The version of VM `raku` is built on |
@@ -3924,7 +4004,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -3968,7 +4048,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable  | 예시       | Description                                 |
+|           | 예시       | Description                                 |
 | --------- | -------- | ------------------------------------------- |
 | version   | `v2.5.1` | The version of `ruby`                       |
 | 기호        |          | Mirrors the value of option `symbol`        |
@@ -4008,7 +4088,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Variable  | 예시                | Description                                  |
+|           | 예시                | Description                                  |
 | --------- | ----------------- | -------------------------------------------- |
 | version   | `v1.43.0-nightly` | The version of `rustc`                       |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
@@ -4043,14 +4123,14 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.metals']`                            | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.metals']`                            | Which folders should trigger this module.                                 |
 | `기호`                | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `'red dimmed'`                           | The style for the module.                                                 |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -4095,7 +4175,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ### Variables
 
-| Variable  | Default | Description                                                |
+|           | Default | Description                                                |
 | --------- | ------- | ---------------------------------------------------------- |
 | indicator |         | Mirrors the value of `indicator` for currently used shell. |
 | style\* |         | Mirrors the value of option `style`.                       |
@@ -4135,7 +4215,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Variables
 
-| Variable  | 예시  | Description                          |
+|           | 예시  | Description                          |
 | --------- | --- | ------------------------------------ |
 | shlvl     | `3` | The current value of `SHLVL`         |
 | 기호        |     | Mirrors the value of option `symbol` |
@@ -4182,7 +4262,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Variable  | 예시           | Description                          |
+|           | 예시           | Description                          |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | 기호        |              | Mirrors the value of option `symbol` |
@@ -4221,7 +4301,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.8.1` | The version of `solidity`            |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -4253,7 +4333,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### Variables
 
-| Variable    | 예시           | Description                          |
+|             | 예시           | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current spack environment        |
 | 기호          |              | Mirrors the value of option `symbol` |
@@ -4300,7 +4380,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### Variables
 
-| Variable       | 예시      | Description                                                                                  |
+|                | 예시      | Description                                                                                  |
 | -------------- | ------- | -------------------------------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                                            |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                     |
@@ -4347,7 +4427,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ### Variables
 
-| Variable  | 예시 | Description                          |
+|           | 예시 | Description                          |
 | --------- | -- | ------------------------------------ |
 | 기호        |    | Mirrors the value of option `symbol` |
 | style\* |    | Mirrors the value of option `style`  |
@@ -4396,7 +4476,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -4440,7 +4520,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | 예시         | Description                          |
+|           | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
 | workspace | `default`  | The current Terraform workspace      |
@@ -4491,7 +4571,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### Variables
 
-| Variable  | 예시         | Description                         |
+|           | 예시         | Description                         |
 | --------- | ---------- | ----------------------------------- |
 | 시간        | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
@@ -4535,7 +4615,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable      | 예시        | Description                                     |
+|               | 예시        | Description                                     |
 | ------------- | --------- | ----------------------------------------------- |
 | version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
 | typst_version | `default` | The current Typst version                       |
@@ -4570,10 +4650,10 @@ The `username` module shows active user's username. The module will be shown if 
 
 ### Variables
 
-| Variable | 예시           | Description                                                                                 |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
+|         | 예시           | Description                                                                                 |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style` | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`  | `'matchai'`  | The currently logged-in user ID.                                                            |
 
 ### 예시
 
@@ -4612,7 +4692,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Variable  | 예시               | Description                          |
+|           | 예시               | Description                          |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | 기호        |                  | Mirrors the value of option `symbol` |
@@ -4651,7 +4731,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Variables
 
-| Variable  | 예시     | Description                          |
+|           | 예시     | Description                          |
 | --------- | ------ | ------------------------------------ |
 | version   | `v0.2` | The version of `v`                   |
 | 기호        |        | Mirrors the value of option `symbol` |
@@ -4663,6 +4743,45 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### Options
+
+| Option           | Default                                                     | Description                                           |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### 예시
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH
@@ -4680,7 +4799,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | 예시                                          | Description                          |
+|           | 예시                                          | Description                          |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | 기호        |                                             | Mirrors the value of option `symbol` |
@@ -4718,7 +4837,7 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.9.5` | The version of xmake                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -4747,7 +4866,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Variables
 
-| Variable  | 예시       | Description                          |
+|           | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | 기호        |          | Mirrors the value of option `symbol` |
@@ -4811,7 +4930,7 @@ These modules will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Description                            |
+|           | Description                            |
 | --------- | -------------------------------------- |
 | output    | The output of `command` run in `shell` |
 | 기호        | Mirrors the value of option `symbol`   |

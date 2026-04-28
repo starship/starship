@@ -20,7 +20,7 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -244,7 +244,7 @@ jobs:
       - name: Setup | Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24.14.1
+          node-version: 24.15.0
 
       - name: Notarize | Build docs
         run: |
@@ -304,7 +304,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build | Add Artifacts to Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: starship-*/starship-*
           tag_name: ${{ needs.release_please.outputs.tag_name }}

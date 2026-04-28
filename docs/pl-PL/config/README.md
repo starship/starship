@@ -1,6 +1,6 @@
 # Konfiguracja
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Aby rozpocząć konfigurację starship, utwórz następujący plik: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -9,22 +9,22 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Cała konfiguracja starship jest wykonywana w tym pliku [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
+# Uzyskaj uzupełnienia edytora na podstawie schematu konfiguracyjnego
+"$schema" = 'https://starship.rs/config-schema. son'
 
-# Inserts a blank line between shell prompts
+# Wstawia pustą linię między monitami
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Zastąp symbol '<unk> ' w monicie symbolem '<unk> '
+[character] # Nazwa modułu, który konfigurujemy to 'character'
+success_symbol = '[<unk> ](bold green)' # Segment 'success_symbol' jest ustawiony na '<unk> ' w kolorze 'bold green'  (pogrubiony zielony)
 
-# Disable the package module, hiding it from the prompt completely
+# Wyłącz moduł paczki, ukrywając go całkowicie
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Lokalizacja pliku konfiguracyjnego
 
 Możesz zmienić domyślną lokalizację pliku konfiguracyjnego za pomocą zmiennej środowiskowej `STARSHIP_CONFIG`:
 
@@ -38,7 +38,7 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Lub dla Cmd (Windows) byłoby dodanie tej linii w twoim `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logi
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
+Domyślnie, logi ostrzerzenia i błędy starship trafiają do pliku `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowida instancji twojego terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -58,7 +58,7 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Lub dla Cmd (Windows) byłoby dodanie tej linii w twoim `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -74,11 +74,11 @@ W ramach konwencji większość modułów posiada przedrostek w domyślnym kolor
 
 ### Strings
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+W składni TOML [wartości tekstowe](https://toml.io/en/v1.0.0#string) są deklarowane z `'`, `"`, `'''`lub `"""`.
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
+| Symbol | Typ                       | Notatka                                                |
 | ------ | ------------------------- | ------------------------------------------------------ |
 | `'`    | literal string            | less escaping                                          |
 | `"`    | string                    | more escaping                                          |
@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+When using line breaks, multi-line declarations can be used. Dla przykładu, jeżeli chcesz wyświetlić symbol `$` na osobnej linii, następujące wartości `format` są równoważne:
 
 ```toml
 # with literal string
@@ -134,7 +134,7 @@ Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większoś
 
 #### Zmienne
 
-Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. The name of a variable can only contain letters, numbers and `_`.
+Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. Nazwa zmiennej może zawierać jedynie litery, cyfry, i `_`.
 
 Na przykład:
 
@@ -253,6 +253,7 @@ $localip\
 $shlvl\
 $singularity\
 $kubernetes\
+$nats\
 $directory\
 $vcsh\
 $fossil_branch\
@@ -267,9 +268,11 @@ $hg_state\
 $pijul_channel\
 $docker_context\
 $package\
+$bun\
 $c\
 $cmake\
 $cobol\
+$cpp\
 $daml\
 $dart\
 $deno\
@@ -281,18 +284,20 @@ $fennel\
 $fortran\
 $gleam\
 $golang\
-$guix_shell\
+$gradle\
 $haskell\
 $haxe\
 $helm\
 $java\
 $julia\
 $kotlin\
-$gradle\
 $lua\
+$maven\
+$mojo\
 $nim\
 $nodejs\
 $ocaml\
+$odin\
 $opa\
 $perl\
 $php\
@@ -312,10 +317,13 @@ $terraform\
 $typst\
 $vlang\
 $vagrant\
+$xmake\
 $zig\
 $buf\
+$guix_shell\
 $nix_shell\
 $conda\
+$pixi\
 $meson\
 $spack\
 $memory_usage\
@@ -323,7 +331,6 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
-$nats\
 $direnv\
 $env_var\
 $mise\
@@ -336,9 +343,9 @@ $jobs\
 $battery\
 $time\
 $status\
-$os\
 $container\
 $netns\
+$os\
 $shell\
 $character"""
 ```
@@ -498,7 +505,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
 | `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
 | `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰁽 '`                            | The symbol shown when the battery state is unknown. |
+| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
@@ -566,7 +573,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `symbol`            | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this module.             |
 | `style`             | `'bold blue'`                                   | The style for the module.                             |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
@@ -1140,11 +1147,31 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Advanced Option             | Default | Description                                                                                                                                                            |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
+| `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following key/value pairs:
+
+| Value   | Typ     | Description                              |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`. For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
 
 ```toml
 [directory.substitutions]
@@ -1302,7 +1329,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this module.                                 |
 | `style`             | `'bold blue'`                                                                                           | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
@@ -1343,7 +1370,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
 | `detect_files`      | `['mix.exs']`                                               | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this module.                                 |
 | `style`             | `'bold purple'`                                             | The style for the module.                                                 |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
@@ -1386,7 +1413,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this module.                                 |
 | `style`             | `'cyan bold'`                                      | The style for the module.                                                 |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
@@ -1430,14 +1457,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Options
 
-| Option        | Default                        | Description                                                                  |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | The symbol used before displaying the variable value.                        |
-| `zmienne`     |                                | The environment variable to be displayed.                                    |
-| `default`     |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Option        | Default                               | Description                                                                  |
+| ------------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`      | `""`                                  | The symbol used before displaying the variable value.                        |
+| `zmienne`     |                                       | The environment variable to be displayed.                                    |
+| `default`     |                                       | The default value to be displayed when the selected variable is not defined. |
+| `format`      | `"with [$symbol$env_value]($style) "` | The format for the module.                                                   |
+| `description` | `"<env_var module>"`            | The description of the module that is shown when running `starship explain`. |
+| `disabled`    | `false`                               | Disables the `env_var` module.                                               |
+| `style`       | `"black bold dimmed"`                 | The style for the module.                                                    |
 
 ### Variables
 
@@ -1445,7 +1473,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| style\* |                                             | Mirrors the value of option `style`        |
 
 *: This variable can only be used as a part of a style string
 
@@ -1488,7 +1516,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `'bold red'`                         | The style for the module.                                                 |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Variables
@@ -1526,7 +1554,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `style`             | `'bold green'`                       | The style for the module.                                                 |
 | `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
 
 ### Variables
@@ -1931,44 +1959,60 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option               | Default                                         | Description                                                                                                 |
-| -------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`             | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`         | `'='`                                           | This branch has merge conflicts.                                                                            |
-| `ahead`              | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`             | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`           | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`         | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`          | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`            | `'\$'`                                         | The format of `stashed`                                                                                     |
-| `modified`           | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`             | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`            | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`            | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`        | `""`                                            | The format of `typechanged`                                                                                 |
-| `style`              | `'bold red'`                                    | The style for the module.                                                                                   |
-| `ignore_submodules`  | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`           | `false`                                         | Disables the `git_status` module.                                                                           |
-| `windows_starship`   |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
-| `use_git_executable` | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+| Option                 | Default                                         | Description                                                                                                 |
+| ---------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                           | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                           | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                           | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                           | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                            | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                           | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                         | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                           | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                           | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                           | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                           | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
+| `style`                | `'bold red'`                                    | The style for the module.                                                                                   |
+| `ignore_submodules`    | `false`                                         | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                            | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                            | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                            | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                            | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                            | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                            | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                            | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                            | The format shown when a file's type has been changed in the staging area.                                   |
+| `disabled`             | `false`                                         | Disables the `git_status` module.                                                                           |
+| `windows_starship`     |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                         | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
 
 ### Variables
 
 The following variables can be used in `format`:
 
-| Zmienne        | Description                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`                       |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| `typechanged`  | Displays `typechanged` when a file's type has been changed in the staging area.                               |
-| style\*      | Mirrors the value of option `style`                                                                           |
+| Zmienne                | Description                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`              | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`             | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`               | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
+| style\*              | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -1979,7 +2023,7 @@ The following variables can be used in `diverged`:
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
 
 | Zmienne | Description              |
 | ------- | ------------------------ |
@@ -2235,7 +2279,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this module.                                 |
 | `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
 | `style`             | `'bold fg:202'`                                                                                 | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
@@ -2274,7 +2318,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `'bold white'`                       | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
@@ -2373,7 +2417,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this module.                                 |
 | `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                           |
 | `style`             | `'red dimmed'`                                                                                                        | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                               | Disables the `java` module.                                               |
@@ -2470,7 +2514,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `'bold purple'`                      | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
@@ -2508,7 +2552,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                     |
 | `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `'bold blue'`                        | The style for the module.                                                     |
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -2562,7 +2606,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 | `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
-| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this module.                             |
 | `detect_env_vars`   | `[]`                                                 | Which environmental variables should trigger this module              |
 | `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
@@ -2744,6 +2788,41 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 [lua]
 format = 'via [🌕 $version](bold blue) '
 ```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `pom.xml` file.
+- The current directory contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
+| `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `maven` module.                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+
+### Variables
+
+| Zmienne | Example  | Description                          |
+| ------- | -------- | ------------------------------------ |
+| version | `v3.2.0` | The version of `maven`               |
+| symbol  |          | Mirrors the value of option `symbol` |
+| style*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
 
 ## Memory Usage
 
@@ -3406,7 +3485,7 @@ Zorin = "🔹 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| typ       | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
@@ -3749,6 +3828,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP] The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
@@ -3757,13 +3837,13 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Zmienne      | Example         | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | Mirrors the value of option `symbol`       |
-| style        | `'yellow bold'` | Mirrors the value of option `style`        |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| Zmienne      | Example         | Description                                                                 |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | The version of `python`                                                     |
+| symbol       | `'🐍 '`          | Mirrors the value of option `symbol`                                        |
+| style        | `'yellow bold'` | Mirrors the value of option `style`                                         |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
 ### Example
 
@@ -4043,7 +4123,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.metals']`                            | Which folders should trigger this modules.                                |
+| `detect_folders`    | `['.metals']`                            | Which folders should trigger this module.                                 |
 | `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `'red dimmed'`                           | The style for the module.                                                 |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
@@ -4663,6 +4743,45 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 # ~/.config/starship.toml
 [vlang]
 format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change. Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS). The module will be shown only if a configured VCS is currently in use.
+
+### Options
+
+| Option           | Default                                                     | Description                                           |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
 ```
 
 ## VCSH

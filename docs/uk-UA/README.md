@@ -114,7 +114,7 @@ onMounted(() => {
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    Додайте наступний рядок в кінець `Microsoft.PowerShell_profile.ps1`. Ви можете перевірити розташування цього файлу, звернувшись до змінної `$PROFILE` у PowerShell. Зазвичай це `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` або `~/.config/powershell/Microsoft.PowerShell_profile.ps1` у -Nix.
 
