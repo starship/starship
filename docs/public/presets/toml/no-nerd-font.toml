@@ -1,5 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+[azure]
+symbol = "☁️ "
+
 [battery]
 full_symbol = "• "
 charging_symbol = "⇡ "
@@ -10,17 +13,20 @@ empty_symbol = "❗ "
 [erlang]
 symbol = "ⓔ "
 
-[fortran]
-symbol = "F "
+[fossil_branch]
+symbol = "⎇ "
+
+[git_branch]
+symbol = "⎇ "
+
+[hg_branch]
+symbol = "⎇ "
 
 [nodejs]
 symbol = "[⬢](bold green) "
 
-[bun]
-symbol = "bun "
+[pijul_channel]
+symbol = "⎇ "
 
 [pulumi]
 symbol = "🧊 "
-
-[typst]
-symbol = "t "
