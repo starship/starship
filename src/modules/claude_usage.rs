@@ -40,18 +40,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or_default()
         .as_secs();
 
-    let five_hour_reset = format_duration(
-        rate_limits
-            .five_hour
-            .resets_at
-            .saturating_sub(now_secs),
-    );
-    let seven_day_reset = format_duration(
-        rate_limits
-            .seven_day
-            .resets_at
-            .saturating_sub(now_secs),
-    );
+    let five_hour_reset = format_duration(rate_limits.five_hour.resets_at.saturating_sub(now_secs));
+    let seven_day_reset = format_duration(rate_limits.seven_day.resets_at.saturating_sub(now_secs));
 
     let five_hour_pct_str = format!("{:.0}", five_hour_pct);
     let seven_day_pct_str = format!("{:.0}", seven_day_pct);
@@ -181,10 +171,7 @@ mod tests {
             })
             .claude_code_data(data)
             .collect();
-        assert_eq!(
-            actual,
-            Some(format!("{} ", Color::Red.bold().paint("92%")))
-        );
+        assert_eq!(actual, Some(format!("{} ", Color::Red.bold().paint("92%"))));
     }
 
     #[test]
@@ -206,10 +193,7 @@ mod tests {
             })
             .claude_code_data(data)
             .collect();
-        assert_eq!(
-            actual,
-            Some(format!("{} ", Color::Red.bold().paint("95%")))
-        );
+        assert_eq!(actual, Some(format!("{} ", Color::Red.bold().paint("95%"))));
     }
 
     #[test]
