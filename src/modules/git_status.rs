@@ -625,6 +625,16 @@ pub(crate) struct RepoStatus {
 }
 
 impl RepoStatus {
+    pub(crate) fn is_dirty(&self) -> bool {
+        self.staged
+            + self.modified
+            + self.deleted
+            + self.renamed
+            + self.typechanged
+            + self.conflicted
+            > 0
+    }
+
     fn is_index_typechanged(short_status: &str) -> bool {
         short_status.starts_with('T')
     }

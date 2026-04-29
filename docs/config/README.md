@@ -5001,16 +5001,26 @@ The module will be shown only if a configured VCS is currently in use.
 
 ### Options
 
-| Option           | Default                                                     | Description                                           |
-| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
-| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
-| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
-| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
-| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
-| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+| Option           | Default                                                     | Description                                                 |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                         |
+| `style_clean`    | `'bold green'`                                              | The style used when the VCS repository is in a clean state. |
+| `style_dirty`    | `'bold yellow'`                                             | The style used when the VCS repository is in a dirty state. |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.          |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.             |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found.       |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.           |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                                  |
 
 ### Example
+
+### Variables
+
+| Variable | Description                                                                                   |
+| -------- | --------------------------------------------------------------------------------------------- |
+| style\*  | Mirrors the value of option `style_dirty` when the VCS is dirty, and `style_clean` otherwise. |
+
+*: This variable can only be used as a part of a style string
 
 ```toml
 # ~/.config/starship.toml
