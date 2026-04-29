@@ -19,7 +19,7 @@ pub struct ClaudeUsageConfig<'a> {
 impl Default for ClaudeUsageConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "[$five_hour_pct%↺$five_hour_reset  $seven_day_pct%↺$seven_day_reset]($style) ",
+            format: "[$five_hour_pct% \\(resets in $five_hour_reset\\)  $seven_day_pct% \\(resets in $seven_day_reset\\)]($style) ",
             display: vec![
                 ClaudeDisplayConfig {
                     threshold: 0.0,
