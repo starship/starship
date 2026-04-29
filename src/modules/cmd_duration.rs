@@ -35,6 +35,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration_in_milliseconds" => Some(Ok(format!("{elapsed}"))),
+                "duration_modulo_milliseconds" => Some(Ok(format!("{}", elapsed % 1000))),
+                "duration_in_seconds" => {
+                    let seconds = elapsed / 1000;
+                    (seconds > 0 || config.show_leading_zeros).then(|| Ok(format!("{seconds}")))
+                }
+                "duration_modulo_seconds" => {
+                    let seconds = elapsed / 1000;
+                    (seconds > 0 || config.show_leading_zeros)
+                        .then(|| Ok(format!("{}", seconds % 60)))
+                }
+                "duration_in_minutes" => {
+                    let minutes = elapsed / 60_000;
+                    (minutes > 0 || config.show_leading_zeros).then(|| Ok(format!("{minutes}")))
+                }
+                "duration_modulo_minutes" => {
+                    let minutes = elapsed / 60_000;
+                    (minutes > 0 || config.show_leading_zeros)
+                        .then(|| Ok(format!("{}", minutes % 60)))
+                }
+                "duration_in_hours" => {
+                    let hours = elapsed / 3_600_000;
+                    (hours > 0 || config.show_leading_zeros).then(|| Ok(format!("{hours}")))
+                }
+                "duration_modulo_hours" => {
+                    let hours = elapsed / 3_600_000;
+                    (hours > 0 || config.show_leading_zeros).then(|| Ok(format!("{}", hours % 24)))
+                }
+                "duration_in_days" => {
+                    let days = elapsed / 86_400_000;
+                    (days > 0 || config.show_leading_zeros).then(|| Ok(format!("{days}")))
+                }
                 _ => None,
             })
             .parse(None, Some(context))
@@ -191,6 +223,123 @@ mod tests {
             .collect();
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_milliseconds() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_milliseconds)ms)]($style)"
+                min_time = 0
+            })
+            .cmd_duration(600)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("600ms")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_seconds() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_seconds)s)]($style)"
+            })
+            .cmd_duration(5000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_minutes() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_minutes)m)]($style)"
+            })
+            .cmd_duration(5 * 60 * 1000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("5m")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_hours() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_hours)h)]($style)"
+            })
+            .cmd_duration(5 * 60 * 60 * 1000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("5h")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_days() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_days)d)]($style)"
+            })
+            .cmd_duration(5 * 24 * 60 * 60 * 1000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("5d")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_with_spaces() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_days)d )(($duration_modulo_hours)h )(($duration_modulo_minutes)m )(($duration_modulo_seconds)s )(($duration_modulo_milliseconds)ms)]($style)"
+            })
+            .cmd_duration(100_000_600)
+            .collect();
+
+        let expected = Some(format!(
+            "{}",
+            Color::Yellow.bold().paint("1d 3h 46m 40s 600ms")
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_hours_with_zero_minutes() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_days)d )(($duration_modulo_hours)h )(($duration_modulo_minutes)m )(($duration_modulo_seconds)s)]($style)"
+            })
+            .cmd_duration(10_840_000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("3h 0m 40s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_show_leading_zeros() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                format = "[(($duration_in_days)d )(($duration_modulo_hours)h )(($duration_modulo_minutes)m )(($duration_modulo_seconds)s)]($style)"
+                show_leading_zeros = true
+            })
+            .cmd_duration(5000)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Yellow.bold().paint("0d 0h 0m 5s")));
         assert_eq!(expected, actual);
     }
 }

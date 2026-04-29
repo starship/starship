@@ -914,23 +914,33 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Option                 | Default                       | Description                                                                                                                                                       |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
-| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
-| `format`               | `'took [$duration]($style) '` | The format for the module.                                                                                                                                        |
-| `style`                | `'bold yellow'`               | The style for the module.                                                                                                                                         |
-| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
-| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
-| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Option                 | Default                       | Description                                                                                                                                                               |
+| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                                     |
+| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                                |
+| `show_leading_zeros`   | `false`                       | If the value of `duration_in_{seconds,minutes,hours,days}` would be 0, leave the variable blank instead (the corresponding `duration_modulo_*` field is also left blank). |
+| `format`               | `'took [$duration]($style) '` | The format for the module.                                                                                                                                                |
+| `style`                | `'bold yellow'`               | The style for the module.                                                                                                                                                 |
+| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                                       |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                        |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                                     |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option.         |
 
 ### Variables
 
-| Variable | Example  | Description                             |
-| -------- | -------- | --------------------------------------- |
-| duration | `16m40s` | The time it took to execute the command |
-| style\*  |          | Mirrors the value of option `style`     |
+| Variable                     | Example  | Description                                                                                                                                                    |
+| ---------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| duration                     | `16m40s` | The time it took to execute the command, formatted as `{days}d{hours}h{minutes}m{seconds}s`, omitting any leading zeros and optionally including milliseconds. |
+| duration_in_milliseconds     |          | The total command execution time in milliseconds.                                                                                                              |
+| duration_in_seconds          |          | The total command execution time, rounded down to the nearest second.                                                                                          |
+| duration_in_minutes          |          | The total command execution time, rounded down to the nearest minute.                                                                                          |
+| duration_in_hours            |          | The total command execution time, rounded down to the nearest hour.                                                                                            |
+| duration_in_days             |          | The total command execution time, rounded down to the nearest number of days.                                                                                  |
+| duration_modulo_milliseconds |          | The milliseconds portion of the command execution time, in the range 0-1000.                                                                                   |
+| duration_modulo_seconds      |          | The seconds portion of the command execution time, in the range 0-60.                                                                                          |
+| duration_modulo_minutes      |          | The minutes portion of the command execution time, in the range 0-60.                                                                                          |
+| duration_modulo_hours        |          | The hours portion of the command execution time, in the range 0-24.                                                                                            |
+| style\*                      |          | Mirrors the value of option `style`                                                                                                                            |
 
 *: This variable can only be used as a part of a style string
 
