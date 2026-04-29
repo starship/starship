@@ -10,6 +10,7 @@ pub struct ClaudeCodeData {
     pub context_window: ContextWindow,
     pub cost: Option<CostInfo>,
     pub workspace: Option<Workspace>,
+    pub rate_limits: Option<RateLimits>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -55,4 +56,18 @@ pub struct CostInfo {
 pub struct Workspace {
     pub current_dir: String,
     pub project_dir: String,
+}
+
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct RateLimitWindow {
+    pub used_percentage: f32,
+    pub resets_at: u64,
+}
+
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct RateLimits {
+    pub five_hour: RateLimitWindow,
+    pub seven_day: RateLimitWindow,
 }

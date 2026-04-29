@@ -76,6 +76,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            rate_limits: None,
         };
         let actual = ModuleRenderer::new("claude_model")
             .config(toml::toml! {
@@ -98,6 +99,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -125,6 +127,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -153,6 +156,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")

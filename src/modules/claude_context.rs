@@ -212,6 +212,7 @@ mod tests {
             },
             cost: None,
             workspace: None,
+            rate_limits: None,
         }
     }
 
