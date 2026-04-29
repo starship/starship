@@ -13,6 +13,18 @@ symbol = "ⓔ "
 [fortran]
 symbol = "F "
 
+[git_remote]
+symbol = "remote "
+no_remote_symbol = "no-remote "
+
+[git_remote.providers]
+"github.com" = "gh "
+"gitlab.com" = "gl "
+"bitbucket.org" = "bb "
+"codeberg.org" = "cb "
+"sr.ht" = "srht "
+"dev.azure.com" = "az "
+
 [nodejs]
 symbol = "[⬢](bold green) "
 
