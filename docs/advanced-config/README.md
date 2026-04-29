@@ -365,17 +365,18 @@ To use Starship as your Claude Code statusline:
 
 When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
 
-The profile includes three specialized modules:
+The profile includes four specialized modules:
 
 - `claude_model`: Displays the current Claude model being used
 - `claude_context`: Shows context window usage with a visual gauge
 - `claude_cost`: Displays session cost and statistics
+- `claude_usage`: Shows 5-hour and 7-day rate limit usage
 
 The default profile format is:
 
 ```toml
 [profiles]
-claude-code = "$claude_model$git_branch$claude_context$claude_cost"
+claude-code = "$claude_model$git_branch$claude_context$claude_cost$claude_usage"
 ```
 
 ### Configuration
@@ -646,6 +647,79 @@ style = "bold red"
 # Show duration information
 [claude_cost]
 format = "[$symbol$cost ($duration)]($style) "
+```
+
+### Claude Usage
+
+The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usage. The style automatically changes based on the highest window usage percentage.
+
+#### Options
+
+| Option     | Default                                                                           | Description                         |
+| ---------- | --------------------------------------------------------------------------------- | ----------------------------------- |
+| `format`   | `'[$five_hour_pct%↺$five_hour_reset  $seven_day_pct%↺$seven_day_reset]($style) '` | The format for the module.          |
+| `display`  | [see below](#display-2)                                                           | Threshold and style configurations. |
+| `disabled` | `false`                                                                           | Disables the `claude_usage` module. |
+
+##### Display
+
+The `display` option is an array of objects that define usage percentage thresholds and styles. The module is hidden unless the highest window's percentage meets or exceeds a threshold with `hidden = false`. The style from the highest matching threshold is used.
+
+| Option      | Default      | Description                                                        |
+| ----------- | ------------ | ------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum usage percentage (0–100) to match this configuration   |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched      |
+| `hidden`    | `false`      | Hide the module if this configuration is matched                   |
+
+**Default configuration:**
+
+```toml
+[[claude_usage.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_usage.display]]
+threshold = 70.0
+style = "bold yellow"
+
+[[claude_usage.display]]
+threshold = 90.0
+style = "bold red"
+```
+
+#### Variables
+
+| Variable         | Example  | Description                                            |
+| ---------------- | -------- | ------------------------------------------------------ |
+| five_hour_pct    | `65`     | Percentage of 5-hour window used                       |
+| five_hour_reset  | `1h23m`  | Time until 5-hour window resets                        |
+| seven_day_pct    | `7`      | Percentage of 7-day window used                        |
+| seven_day_reset  | `2d14h`  | Time until 7-day window resets                         |
+| style\*          |          | Mirrors the style from the matching display threshold  |
+
+\*: This variable can only be used as a part of a style string
+
+#### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Show only the 5-hour window
+[claude_usage]
+format = "[$five_hour_pct%↺$five_hour_reset]($style) "
+
+# Custom thresholds
+[[claude_usage.display]]
+threshold = 0.0
+hidden = true
+
+[[claude_usage.display]]
+threshold = 50.0
+style = "bold yellow"
+
+[[claude_usage.display]]
+threshold = 85.0
+style = "bold red"
 ```
 
 ## Style Strings
