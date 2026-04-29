@@ -78,6 +78,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         };
         let actual = ModuleRenderer::new("claude_model")
             .config(toml::toml! {
@@ -101,6 +102,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -129,6 +131,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -214,6 +217,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
