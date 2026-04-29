@@ -657,7 +657,7 @@ The `claude_usage` module displays Claude Code's 5-hour and 7-day rate limit usa
 
 | Option     | Default                                                                           | Description                         |
 | ---------- | --------------------------------------------------------------------------------- | ----------------------------------- |
-| `format`   | `'[$five_hour_pct%↺$five_hour_reset  $seven_day_pct%↺$seven_day_reset]($style) '` | The format for the module.          |
+| `format`   | `'[$five_hour_pct% \(resets in $five_hour_reset\)  $seven_day_pct% \(resets in $seven_day_reset\)]($style) '` | The format for the module.          |
 | `display`  | [see below](#display-2)                                                           | Threshold and style configurations. |
 | `disabled` | `false`                                                                           | Disables the `claude_usage` module. |
 
@@ -706,7 +706,7 @@ style = "bold red"
 
 # Show only the 5-hour window
 [claude_usage]
-format = "[$five_hour_pct%↺$five_hour_reset]($style) "
+format = "[$five_hour_pct% \(resets in $five_hour_reset\)]($style) "
 
 # Custom thresholds
 [[claude_usage.display]]
