@@ -13,14 +13,6 @@ empty_symbol = "❗ "
 [erlang]
 symbol = "ⓔ "
 
-[fossil_branch]
-symbol = "⎇ "
-
-[git_branch]
-symbol = "⎇ "
-
-[hg_branch]
-symbol = "⎇ "
 
 [nodejs]
 symbol = "[⬢](bold green) "
