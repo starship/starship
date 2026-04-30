@@ -3,6 +3,7 @@
     extends: [
         'config:best-practices',
         'security:openssf-scorecard',
+        // automerge minor updates
         ':automergeMinor',
         ':automergeBranch',
     ],
@@ -27,6 +28,7 @@
         automerge: true,
     },
     packageRules: [
+        // group updates to related packages
         {
             groupName: 'clap crates',
             matchDatasources: [
@@ -72,6 +74,7 @@
                 'unicode{/,}**',
             ],
         },
+        // Prevent too many PRs by grouping certain updates together and only updating them weekly
         {
             groupName: 'dprint plugins',
             extends: [
@@ -90,6 +93,7 @@
                 'schedule:weekly',
             ],
         },
+        // Avoid frequent updates due to pinned digest values in GitHub Actions
         {
             matchDepTypes: [
                 'action',
@@ -99,6 +103,7 @@
             ],
         },
     ],
+    // custom regex update managers
     customManagers: [
         {
             customType: 'regex',
