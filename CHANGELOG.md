@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.25.1](https://github.com/starship/starship/compare/v1.25.0...v1.25.1) (2026-04-30)
+
+
+### Bug Fixes
+
+* **git:** improve bare repository detection ([#7421](https://github.com/starship/starship/issues/7421)) ([27079d7](https://github.com/starship/starship/commit/27079d7669b3072a944d3610f5dd5fec65321841))
+* **presets:** Update no-nerd-font to be up-to-date ([#7440](https://github.com/starship/starship/issues/7440)) ([65fb647](https://github.com/starship/starship/commit/65fb647bc38da09fe5d140f055c9f67d740bfa67))
+* **python:** align `python_binary` schema with argument support ([#7415](https://github.com/starship/starship/issues/7415)) ([3ec9b5c](https://github.com/starship/starship/commit/3ec9b5c54caa828164c710500a25ccd43ef26a64))
+
 ## [1.25.0](https://github.com/starship/starship/compare/v1.24.2...v1.25.0) (2026-04-18)
 
 
