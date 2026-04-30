@@ -13,10 +13,8 @@ empty_symbol = "❗ "
 [erlang]
 symbol = "ⓔ "
 
-
 [nodejs]
 symbol = "[⬢](bold green) "
-
 
 [pulumi]
 symbol = "🧊 "
