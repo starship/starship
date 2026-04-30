@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - main
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -207,7 +207,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           # Required to include the recently merged Crowdin PR
-          ref: master
+          ref: main
 
       - name: Notarize | Set up secrets
         env:
