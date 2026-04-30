@@ -1,79 +1,79 @@
-# Presets
+# Presets (Voreinstellungen)
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Hier eine Sammlung von Konfigurations-Presets für Starship, die von der Community eingereicht wurden. Wenn Sie ein Preset zum Teilen haben, bitte [reichen Sie einen PR ein](https://github.com/starship/starship/edit/master/docs/presets/README.md), um diese Datei zu aktualisieren! 😊
 
-To get details on how to use a preset, simply click on the image.
+Um weitere Details zur Verwendung eines Presets zu erhalten, klicken Sie einfach auf das Bild.
 
-## [Nerd Font Symbole](./nerd-font.md)
+## [Nerd Font-Symbole](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Dieses Preset ändert die Symbole für jedes Modul, um Nerd Font-Symbole zu verwenden.
 
-[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
+[![Screenshot für Preset Nerd Font-Symbole](/presets/img/nerd-font-symbols.png "Klicken Sie hier, um das Preset „Nerd Font Symbols“ anzusehen")](./nerd-font)
 
-## [No Nerd Fonts](./no-nerd-font.md)
+## [Keine Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+Dieses Preset ändert die Symbole für mehrere Module, sodass überall im Prompt No Nerd Font-Symbole verwendet werden.
 
-> [!TIP] This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+> [!TIPP] Dieses Preset wird in einem zukünftigen Release von Starship zu einem per Default vorgegebenem Preset [werden](https://github.com/starship/starship/pull/3544).
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[Klicken Sie hier, um das Preset „No Nerd Font“ anzusehen](./no-nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Dieses Preset ändert das Format aller integrierten Module, um deren Segment in Klammern zu zeigen, anstatt der Verwendung der Standardformulierung ("via", "on", etc.) von Starship.
 
-[![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Screenshot für Preset Bracketed Segments](/presets/img/bracketed-segments.png "Klicken Sie hier, um das Preset „Bracketed Segments“ anzusehen")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text.md)
+## [Plain Text-Symbols](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Dieses Preset ändert die Symbole für jedes Modul in Plain Text. Großartig, wenn Sie keinen Zugriff auf Unicode haben.
 
-[![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[![Screenshot für Preset Plain Text-Symbole](/presets/img/plain-text-symbols.png "Klicken Sie hier, um das Preset „Plain Text Symbols“ anzusehen")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Dieses Preset blendet die Version der Sprachlaufzeiten aus. Wenn Sie in Containern oder virtualisierten Umgebungen arbeiten, dann ist dies für Sie!
 
-[![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
+[![Screenshot für Preset Hide Runtime Versions](/presets/img/no-runtime-versions.png "Klicken Sie hier, um das Preset „No Runtime Versions“ anzusehen")](./no-runtimes)
 
-## [No Empty Icons](./no-empty-icons.md)
+## [Keine leeren Icons](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+Dieses Preset zeigt keine Icons, wenn das Toolset nicht gefunden wird.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Screenshot für Preset Keine leeren Icons](/presets/img/no-empty-icons.png "Klicken Sie hier, um das Preset „No Runtime Versions“ anzusehen")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
-Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://github.com/sindresorhus/pure).
+Dieses Preset emuliert das Aussehen und Verhalten von [Pure](https://github.com/sindresorhus/pure).
 
-[![Screenshot der Pure Voreinstellung](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+[![Screenshot für Preset Pure](/presets/img/pure-preset.png "Klicken Sie hier, um das Preset „Pure Prompt“ anzusehen")](./pure-preset)
 
-## [Pastel Powerline](./pastel-powerline.md)
+## [Pastell Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Screenshot für Preset Pastel Powerline](/presets/img/pastel-powerline.png "Klicken Sie hier, um das Preset „Pure Prompt“ anzusehen")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Dieses Preset ist inspiriert von [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Screenshot für Preset Tokyo Night](/presets/img/tokyo-night.png "Klicken Sie hier, um das Preset „Tokyo Night“ anzusehen")](./tokyo-night)
 
 ## [Gruvbox Rainbow](./gruvbox-rainbow.md)
 
-Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Dieses Preset ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md) und [Tokyo Night](./tokyo-night.md).
 
-[![Screenshot von Gruvbox Regenbogen](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Screenshot für Preset Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Klicken Sie hier, um das Preset „Gruvbox Rainbow“ anzusehen")](./gruvbox-rainbow)
 
 ## [Jetpack](./jetpack.md)
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+Dies ist ein pseudo-minimalistisches Preset, inspiriert von den Prompts  [geometry](https://github.com/geometry-zsh/geometry) und [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
+[![Screenshot für Preset Jetpack](/presets/img/jetpack.png "Klicken Sie hier, um das Preset „Jetpack“ anzusehen")](./jetpack)
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+Dieses Preset ist eine minimal modifizierte Version von [Gruvbox Rainbow](./gruvbox-rainbow.md) unter Verwendung der Theme-Palette [Catppuccin](https://github.com/catppuccin/catppuccin).
 
-[![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+[![Screenshot für Preset Catppuccin Powerline](/presets/img/catppuccin-powerline.png "Klicken Sie hier, um das Preset „Catppuccin Powerline“ anzusehen")](./catppuccin-powerline)

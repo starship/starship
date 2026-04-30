@@ -1,14 +1,14 @@
-[Zurück zu den Voreinstellungen](./#pastel-powerline)
+[Zurück zu Presets](./#pastel-powerline)
 
-# Pastel Powerline Preset
+# Preset - Pastel Powerline
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
 
-![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png)
+![Screenshot für Preset Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in Ihrem Terminal (das Beispiel verwendet die Caskaydia Cove Nerd Font)
 
 ### Konfiguration
 
@@ -16,6 +16,6 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml

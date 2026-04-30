@@ -408,7 +408,7 @@ eval "$(starship init zsh)"
 
 ## 🤝 貢獻
 
-我們歡迎具有**各式各樣能力**的貢獻者！ If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+我們歡迎具有**各式各樣能力**的貢獻者！ If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
 
 如果您精通非英語語言，並能協助我們在文檔上的翻譯保持最新狀態，我們會非常感謝！ 如果你想要提供翻譯，可以到 [Starship Crowdin](https://translate.starship.rs/) 上提交您的翻譯。
 

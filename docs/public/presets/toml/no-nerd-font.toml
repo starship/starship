@@ -16,6 +16,9 @@ symbol = "F "
 [nodejs]
 symbol = "[⬢](bold green) "
 
+[bun]
+symbol = "bun "
+
 [pulumi]
 symbol = "🧊 "
 

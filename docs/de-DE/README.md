@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: Home
 hero:
   image: /logo.svg
   text:
@@ -114,7 +114,7 @@ onMounted(() => {
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    Füge das Folgende ans Ende von `Microsoft.PowerShell_profile.ps1` an. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
@@ -136,7 +136,7 @@ onMounted(() => {
 
    #### Elvish
 
-   > [!WARNING] Only elvish v0.18 or higher is supported.
+   > [!WARNUNG] Nur elvish v0.18 oder höher wird unterstützt.
 
    Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
@@ -161,7 +161,7 @@ onMounted(() => {
 
    #### Nushell
 
-   > [!WARNING] This will change in the future. Nur Nushell v0.96+ wird unterstützt.
+   > [!WARNUNG] Dies wird sich in Zukunft ändern. Nur Nushell v0.96+ wird unterstützt.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 

@@ -1,14 +1,14 @@
-[Zurück zu den Voreinstellungen](./#gruvbox-rainbow)
+[Zurück zu Presets](./#gruvbox-rainbow)
 
-# Gruvbox Regenbogen
+# Preset - Gruvbox Rainbow
 
-Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Dieses Preset ist stark inspiriert von [Pastel Powerline](./pastel-powerline.md) und [Tokyo Night](./tokyo-night.md).
 
-![Screenshot von Gruvbox Regenbogen](/presets/img/gruvbox-rainbow.png)
+![Screenshot für Preset Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png)
 
 ### Voraussetzungen
 
-- Eine [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal
+- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in Ihrem Terminal
 
 ### Konfiguration
 
@@ -16,6 +16,6 @@ Diese Voreinstellung ist stark inspiriert von [Pastel Powerline](./pastel-powerl
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-rainbow.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/gruvbox-rainbow.toml){download}
 
 <<< @/public/presets/toml/gruvbox-rainbow.toml
