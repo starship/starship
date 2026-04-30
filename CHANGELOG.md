@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.25.0](https://github.com/starship/starship/compare/v1.24.2...v1.25.0) (2026-04-18)
+
+
+### Features
+
+* add Maven module ([#7189](https://github.com/starship/starship/issues/7189)) ([70b0f73](https://github.com/starship/starship/commit/70b0f7355497715a0e9d480326dc7b721b5314fb))
+* add statusline subcommand for Claude Code integration ([#7234](https://github.com/starship/starship/issues/7234)) ([b8ee821](https://github.com/starship/starship/commit/b8ee82167c5b49c7e9fd70e5542fad0e56810b39))
+* **battery:** Update default `unknown_symbol` ([#7278](https://github.com/starship/starship/issues/7278)) ([88d384f](https://github.com/starship/starship/commit/88d384f582de7c49b201bc30739c9ad6620fa174))
+* **directory:** add support for regexes in substitutions  ([#7145](https://github.com/starship/starship/issues/7145)) ([2e8f26e](https://github.com/starship/starship/commit/2e8f26e44846cd52d06563aef98e22b89965dd25))
+* **env_var:** include $symbol in default format ([#7262](https://github.com/starship/starship/issues/7262)) ([3885e81](https://github.com/starship/starship/commit/3885e81357b04c244c19c0c8b05ccbbd4f797d62))
+* **git_status:** add variables to track worktree and index changes ([#5655](https://github.com/starship/starship/issues/5655)) ([0110bf5](https://github.com/starship/starship/commit/0110bf59c86f6f0f33f95dc614c231acc19547b8))
+* **python:** add option to replace generic venv-names with parent dir ([#7112](https://github.com/starship/starship/issues/7112)) ([083ab00](https://github.com/starship/starship/commit/083ab008fc77b982a223af8f4f18020c7a64fec6))
+* **vcs:** Introduce the VCS module ([#6388](https://github.com/starship/starship/issues/6388)) ([0dd5a4f](https://github.com/starship/starship/commit/0dd5a4f402c8d94524aaaa5632b2d0cba7fe1630))
+
+
+### Bug Fixes
+
+* **aws:** isolate tests from host AWS config files ([#7196](https://github.com/starship/starship/issues/7196)) ([e910f47](https://github.com/starship/starship/commit/e910f47597f3acec36c1c21bf4204af1a3265b92))
+* **aws:** support `$duration` for `sso_session` ([#7100](https://github.com/starship/starship/issues/7100)) ([8108cc9](https://github.com/starship/starship/commit/8108cc95cf1b1182f239a3a4cc399d3fcd912187))
+* **direnv:** accept null loadedRC state ([#7317](https://github.com/starship/starship/issues/7317)) ([56b8901](https://github.com/starship/starship/commit/56b8901f6feaa841de1f38054db7b3ae495a457b))
+* **docs:** Re-add `style` option to `env_var` module ([#7298](https://github.com/starship/starship/issues/7298)) ([e2277e5](https://github.com/starship/starship/commit/e2277e5958c62a5bb1cc1f4ad76ccd051e22d1c5))
+* enable std feature for whoami crate ([#7211](https://github.com/starship/starship/issues/7211)) ([9931ab2](https://github.com/starship/starship/commit/9931ab25b28b91b502dae93fc3826fd9a18a01b0))
+* **format:** allow empty textgroups to set prev_fg/prev_bg ([#7201](https://github.com/starship/starship/issues/7201)) ([9186188](https://github.com/starship/starship/commit/91861886a779805cd8265a85c629e579d513aa75))
+* **helm:** remove deprecated --client flag from helm version command ([#7193](https://github.com/starship/starship/issues/7193)) ([8a69666](https://github.com/starship/starship/commit/8a69666084d248b8fd76b6c54f38aea12abce6e3))
+* **hg_state:** avoid false-positive MERGING state ([#7329](https://github.com/starship/starship/issues/7329)) ([7a27475](https://github.com/starship/starship/commit/7a274752d0803960ae25259c8641f6e676f9c7b2))
+* **install:** improve UX for version option ([#7197](https://github.com/starship/starship/issues/7197)) ([c576625](https://github.com/starship/starship/commit/c576625343a8353ed2e99157d86065c2e713048e))
+
 ## [1.24.2](https://github.com/starship/starship/compare/v1.24.1...v1.24.2) (2025-12-30)
 
 
