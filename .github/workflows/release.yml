@@ -58,6 +58,7 @@ jobs:
           - target: riscv64gc-unknown-linux-musl
             os: ubuntu-latest
             name: starship-riscv64gc-unknown-linux-musl.tar.gz
+            use_zigbuild: true
 
           - target: x86_64-apple-darwin
             os: macos-latest
@@ -106,18 +107,34 @@ jobs:
           RUSTFLAGS: ""
 
       - name: Setup | Install cross [Linux]
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && !matrix.use_zigbuild
         uses: taiki-e/install-action@cca35edeb1d01366c2843b68fc3ca441446d73d3 # v2.77.1
         with:
           tool: cross@0.2.5
+
+      - name: Setup | Install Zig [riscv64]
+        if: matrix.use_zigbuild
+        uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
+        with:
+          version: 0.13.0
+
+      - name: Setup | Install cargo-zigbuild [riscv64]
+        if: matrix.use_zigbuild
+        uses: taiki-e/install-action@cca35edeb1d01366c2843b68fc3ca441446d73d3 # v2.77.1
+        with:
+          tool: cargo-zigbuild
 
       - name: Build | Build [Cargo]
         if: matrix.os != 'ubuntu-latest'
         run: cargo build --release --locked --target ${{ matrix.target }}
 
       - name: Build | Build [Cross]
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && !matrix.use_zigbuild
         run: cross build --release --locked --target ${{ matrix.target }}
+
+      - name: Build | Build [Zigbuild]
+        if: matrix.use_zigbuild
+        run: cargo zigbuild --release --locked --target ${{ matrix.target }}
 
       - name: Build | Installer [Windows]
         continue-on-error: true
