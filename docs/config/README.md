@@ -4902,6 +4902,15 @@ The module will be shown if any of the following conditions are met:
 > `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
 > these variables, one workaround is to set one of them with a dummy value.
 
+> [!TIP]
+> `style_root` only changes how the `username` module renders when Starship is
+> already running. Elevation commands like `su`, `sudo -i`, and `doas` start a
+> new shell process that loads the target user's init scripts (e.g.
+> `/root/.bashrc`), so Starship must be initialized there as well. Otherwise
+> the prompt falls back to the target user's default. Add the `starship init`
+> line for your shell to the target user's rc file to keep the prompt across
+> elevation.
+
 ### Options
 
 | Option            | Default                 | Description                                               |
