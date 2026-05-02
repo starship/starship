@@ -69,14 +69,24 @@ starship_precmd() {
         eval "$STARSHIP_PROMPT_COMMAND"
     fi
 
-    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
-    # Prepare the timer data, if needed.
+    local reported_status="${STARSHIP_CMD_STATUS}"
+    local -a reported_pipe_status=("${STARSHIP_PIPE_STATUS[@]}")
+    local -a ARGS=(--terminal-width="${COLUMNS}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
+    # STARSHIP_START_TIME is set by starship_preexec / PS0 only when an actual
+    # command runs, so an empty value here means the user just pressed ENTER
+    # on an empty line. In that case, drop the status/pipestatus so the prompt
+    # doesn't keep echoing the previous command's failure indicator (#7450).
+    # Matches the zsh init's behavior.
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
+    else
+        reported_status=""
+        reported_pipe_status=()
     fi
+    ARGS+=(--status="${reported_status}" --pipestatus="${reported_pipe_status[*]}")
     PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     if [[ ${BLE_ATTACHED-} ]]; then
         local nlns=${PS1//[!$'\n']}
