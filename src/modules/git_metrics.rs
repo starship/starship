@@ -1,3 +1,5 @@
+use std::num::Saturating;
+
 use gix::bstr::{BStr, ByteSlice};
 use gix::diff::blob::ResourceKind;
 use gix::diff::blob::pipeline::WorktreeRoots;
@@ -26,9 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
-    if gix_repo.is_bare() {
-        return None;
-    }
+    gix_repo.workdir()?;
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
@@ -48,14 +48,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         #[derive(Default)]
         struct Diff {
-            added: usize,
-            deleted: usize,
+            added: Saturating<u32>,
+            deleted: Saturating<u32>,
         }
         impl Diff {
-            fn add(&mut self, c: Option<gix::diff::blob::sink::Counter<()>>) {
+            fn add(&mut self, c: Option<gix::diff::blob::DiffLineStats>) {
                 let Some(c) = c else { return };
-                self.added += c.insertions as usize;
-                self.deleted += c.removals as usize;
+                self.added += c.insertions;
+                self.deleted += c.removals;
             }
         }
         let status = super::git_status::get_static_repo_status(context, repo, &status_config)?;
@@ -295,7 +295,7 @@ fn diff_two_opt(
     rhs_kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
-) -> Option<gix::diff::blob::sink::Counter<()>> {
+) -> Option<gix::diff::blob::DiffLineStats> {
     cache
         .set_resource(
             lhs_id,
@@ -314,7 +314,10 @@ fn diff_two_opt(
             find,
         )
         .ok()?;
-    count_diff_lines(cache.prepare_diff().ok()?)
+    let mut diff_platform = gix::object::blob::diff::Platform {
+        resource_cache: cache,
+    };
+    diff_platform.line_counts().ok().flatten()
 }
 
 fn count_lines(
@@ -323,7 +326,7 @@ fn count_lines(
     kind: gix::index::entry::Mode,
     cache: &mut gix::diff::blob::Platform,
     find: &impl gix::objs::FindObjectOrHeader,
-) -> usize {
+) -> u32 {
     diff_two_opt(
         location,
         id.kind().null(),
@@ -334,28 +337,7 @@ fn count_lines(
         cache,
         find,
     )
-    .map_or(0, |diff| diff.insertions as usize)
-}
-
-fn count_diff_lines(
-    prep: gix::diff::blob::platform::prepare_diff::Outcome<'_>,
-) -> Option<gix::diff::blob::sink::Counter<()>> {
-    use gix::diff::blob::platform::prepare_diff::Operation;
-    match prep.operation {
-        Operation::InternalDiff { algorithm } => {
-            let tokens = prep.interned_input();
-            let counter = gix::diff::blob::diff(
-                algorithm,
-                &tokens,
-                gix::diff::blob::sink::Counter::default(),
-            );
-            Some(counter)
-        }
-        Operation::ExternalCommand { .. } => {
-            unreachable!("we disabled that")
-        }
-        Operation::SourceOrDestinationIsBinary => None,
-    }
+    .map_or(0, |diff| diff.insertions)
 }
 
 /// Represents the parsed output from a git diff.
@@ -718,6 +700,34 @@ mod tests {
             let actual = render_metrics(repo_dir.path());
             assert_eq!(None, actual);
 
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn does_generate_git_metrics_for_worktree_backed_by_bare_repo() -> io::Result<()> {
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
+            let worktree_dir = tempfile::tempdir()?;
+
+            create_command("git")?
+                .args(["worktree", "add"])
+                .arg(worktree_dir.path())
+                .args(["-b", "metrics-worktree"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let file_path = worktree_dir.path().join("readme.md");
+            let mut the_file = OpenOptions::new().append(true).open(&file_path)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
+
+            let actual = render_metrics(worktree_dir.path());
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
             repo_dir.close()?;
         }
         Ok(())

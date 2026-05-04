@@ -80,7 +80,7 @@ fn get_state_description<'a>(
         Some(StateDescription {
             label: config.histedit,
         })
-    } else if is_merge_state(hg_root).is_ok() {
+    } else if is_merge_state(hg_root).unwrap_or(false) {
         Some(StateDescription {
             label: config.merge,
         })
@@ -259,6 +259,36 @@ mod tests {
             .current_dir(repo_dir)
             .output()?;
         Ok(())
+    }
+
+    #[test]
+    fn test_is_merge_state_false_for_non_merge() -> io::Result<()> {
+        use std::io::Write;
+        let tempdir = tempfile::tempdir()?;
+        let hg_dir = tempdir.path().join(".hg");
+        create_dir_all(&hg_dir)?;
+        // Write 40 bytes: 20 non-zero for p1, 20 zero for p2 (no merge)
+        let mut file = File::create(hg_dir.join("dirstate"))?;
+        file.write_all(&[0xAB; 20])?; // p1
+        file.write_all(&[0x00; 20])?; // p2 = null = not merging
+        drop(file);
+        assert!(!super::is_merge_state(tempdir.path()).unwrap());
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_is_merge_state_true_for_merge() -> io::Result<()> {
+        use std::io::Write;
+        let tempdir = tempfile::tempdir()?;
+        let hg_dir = tempdir.path().join(".hg");
+        create_dir_all(&hg_dir)?;
+        // Write 40 bytes: 20 for p1, 20 non-zero for p2 (merge in progress)
+        let mut file = File::create(hg_dir.join("dirstate"))?;
+        file.write_all(&[0xAB; 20])?; // p1
+        file.write_all(&[0xCD; 20])?; // p2 = non-null = merging
+        drop(file);
+        assert!(super::is_merge_state(tempdir.path()).unwrap());
+        tempdir.close()
     }
 
     fn expect_hg_state_with_config(repo_dir: &Path, expected: Option<String>) {

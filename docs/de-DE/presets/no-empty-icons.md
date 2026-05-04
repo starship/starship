@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#no-empty-icons)
+[Zurück zu Presets](./#no-empty-icons)
 
-# No Empty Icons Preset
+# Preset - No Empty Icons
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Wenn Toolset-Dateien identifiziert werden, wird das Toolset-Icon angezeigt. Wenn das Toolset nicht gefunden wird, um dessen Versionsnummer zu bestimmen, wird dies nicht angezeigt. Dieses Preset ändert das Verhalten zum Anzeigen des Icons nur, wenn die Informationen des Toolsets bestimmt werden können.
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![Screenshot für Preset No Empty Icons](/presets/img/no-empty-icons.png)
 
 ### Konfiguration
 
@@ -12,6 +12,6 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-empty-icons.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/no-empty-icons.toml){download}
 
 <<< @/public/presets/toml/no-empty-icons.toml

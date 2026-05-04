@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+Thêm các dòng sau vào cuối tệp `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` trên Windows):
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Note: Only Elvish v0.18+ is supported. Đối với các phiên bản elvish trước v0.21.0 tệp cấu hình có thể là `~/.elvish/rc.elv`
 
 </details>
 
@@ -341,7 +341,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Thêm những dòng sau vào cuối tệp cấu hình Nushell (tìm bằng cách chạy `$nu.config-path` trong Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
@@ -408,7 +408,7 @@ Nếu bạn muốn tùy chỉnh Starship nhiều hơn nữa:
 
 ## 🤝 Đóng góp
 
-Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
 
 Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
 
