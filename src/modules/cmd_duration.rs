@@ -88,9 +88,21 @@ fn undistract_me<'a>(
         #[cfg(target_os = "macos")]
         let _ = notify_rust::set_application("com.apple.Terminal");
 
+        let unstyled = unstyle(&AnsiStrings(&module.ansi_strings()));
+        // Strip Unicode Private Use Area characters (e.g., Nerd Font icons) that
+        // cannot be rendered by system notification fonts like SF Pro on macOS.
         let body = format!(
             "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
+            unstyled
+                .chars()
+                .filter(|c| {
+                    let cp = *c as u32;
+                    !(0xE000..=0xF8FF).contains(&cp)
+                        && !(0xF0000..=0xFFFFD).contains(&cp)
+                        && !(0x100000..=0x10FFFD).contains(&cp)
+                })
+                .collect::<String>()
+                .trim()
         );
 
         let timeout = match config.notification_timeout {
