@@ -81,7 +81,7 @@ fn get_jsr_package_version(context: &Context, config: &PackageConfig) -> Option<
         })?;
 
     let json_content: json::Value = if filename.ends_with(".jsonc") {
-        jsonc_parser::parse_to_serde_value(&contents, &ParseOptions::default()).ok()??
+        jsonc_parser::parse_to_serde_value(&contents, &ParseOptions::default()).ok()?
     } else {
         json::from_str(&contents).ok()?
     };

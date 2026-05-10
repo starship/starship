@@ -1,6 +1,6 @@
 # Migration auf v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 ist ein Release mit bahnbrechenden Änderungen in Vorbereitung auf das große v1.0.0. Wir haben einige wichtige Änderungen vorgenommen, wie die Konfiguration auf der Eingabeaufforderung durchgeführt wird, um einen höheren Grad an Individualisierung zu ermöglichen.
 
 This guide is intended to walk you through the breaking changes.
 
@@ -10,7 +10,7 @@ Previously to v0.45.0, `prompt_order` would accept an array of module names in t
 
 Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
 
-**Example pre-v0.45.0 configuration**
+**Beispiel für Pre-v0.45.0 Konfiguration**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Beispiel für v0.45.0 Konfiguration**
 
 ```toml
 format = """\
@@ -58,14 +58,14 @@ Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in ord
 
 Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
-**Example pre-v0.45.0 configuration**
+**Beispiel für Pre-v0.45.0 Konfiguration**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Beispiel für v0.45.0 Konfiguration**
 
 ```toml
 [cmd_duration]
@@ -74,13 +74,13 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Betroffene Module
 
 #### Zeichen
 
-| Removed Property        | Replacement      |
+| Entfernte Eigenschaft   | Ersetzung        |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `Symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
@@ -113,9 +113,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Befehlsdauer
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -127,9 +127,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Verzeichnis
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -141,10 +141,10 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Umgebungsvariablen
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -155,12 +155,12 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Git-Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -173,11 +173,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git-Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
+| `show_sync_count`     | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -204,10 +204,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -218,13 +218,13 @@ behind = "⇣${count}"
 ++ format = "[$hostname]($style) in "
 ```
 
-#### Singularity
+#### Singularität
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `Label`               | `format`  |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -237,9 +237,9 @@ behind = "⇣${count}"
 
 #### Uhrzeit
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Entfernte Eigenschaft | Ersetzung     |
+| --------------------- | ------------- |
+| `format`              | `time_format` |
 
 **Änderungen an der Standardkonfiguration**
 
@@ -250,12 +250,12 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Benutzerdefinierte Befehle
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Entfernte Eigenschaft | Ersetzung |
+| --------------------- | --------- |
+| `prefix`              | `format`  |
+| `suffix`              | `format`  |
 
 **Änderungen an der Standardkonfiguration**
 

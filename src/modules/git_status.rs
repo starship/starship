@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
-    if repo.open().is_bare() {
+    if repo.open().workdir().is_none() {
         log::debug!("This is a bare repository, git_status is not applicable");
         return None;
     }
@@ -1954,6 +1954,38 @@ pub(crate) mod tests {
 
             assert_eq!(None, actual);
 
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn does_generate_git_status_for_worktree_backed_by_bare_repo() -> io::Result<()> {
+        for mode in BARE_AND_REFTABLE {
+            let worktree_dir = tempfile::tempdir()?;
+            let repo_dir = fixture_repo(mode)?;
+
+            create_command("git")?
+                .args([
+                    OsStr::new("worktree"),
+                    OsStr::new("add"),
+                    worktree_dir.path().as_os_str(),
+                    OsStr::new("HEAD"),
+                ])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let mut the_file = std::fs::File::create(worktree_dir.path().join("test_file"))?;
+            writeln!(the_file, "content")?;
+            the_file.sync_all()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(worktree_dir.path())
+                .collect();
+            let expected = format_output("?");
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
             repo_dir.close()?;
         }
         Ok(())

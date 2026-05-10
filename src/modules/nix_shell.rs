@@ -45,6 +45,7 @@ impl NixShellType {
 /// The module will use the `$IN_NIX_SHELL` and `$name` environment variable to
 /// determine if it's inside a nix-shell and the name of it.
 ///
+///
 /// The following options are available:
 ///     - `impure_msg` (string)  // change the impure msg
 ///     - `pure_msg` (string)    // change the pure msg
@@ -57,11 +58,12 @@ impl NixShellType {
 ///     - impure         // $name == "" in an impure nix-shell
 ///     - unknown (name) // $name == "name" in an unknown nix-shell
 ///     - unknown        // $name == "" in an unknown nix-shell
+///
+///  When using Lix 2.95+, will also have $level from `$NIX_SHELL_LEVEL`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
-    let shell_name = context.get_env("name");
     let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
     let shell_type_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
@@ -81,7 +83,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "name" => shell_name.as_ref().map(Ok),
+                "name" => context.get_env("name").map(Ok),
+                "level" => context.get_env("NIX_SHELL_LEVEL").map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -223,6 +226,21 @@ mod tests {
             )
             .collect();
         let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn nix_shell_level() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .env("NIX_SHELL_LEVEL", "3")
+            .config(toml::toml! {
+                [nix_shell]
+                format = "via [$symbol$state( \\($name\\)) $level]($style) "
+            })
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure 3")));
 
         assert_eq!(expected, actual);
     }

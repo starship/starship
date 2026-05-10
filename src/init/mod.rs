@@ -50,6 +50,16 @@ impl StarshipPath {
             .map(|s| s.replace('\'', "''"))
             .map(|s| format!("'{s}'"))
     }
+
+    /// `Elvish` specific path escaping
+    fn sprint_elv(&self) -> io::Result<String> {
+        // Prefix with `e:` to force elvish to interpret it as an executable path
+        // also avoids issues with paths starting with `E:` like `E:\path\to\starship.exe`
+        self.str_path()
+            .map(|s| format!("e:{s}"))
+            .map(|s| shell_words::quote(&s).into_owned())
+    }
+
     /// Command Shell specific path escaping
     fn sprint_cmdexe(&self) -> io::Result<String> {
         self.str_path().map(|s| format!("\"{s}\""))
@@ -168,7 +178,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r"eval ({} init elvish --print-full-init | slurp)",
-            starship.sprint()?
+            starship.sprint_elv()?
         ),
         "tcsh" => print!(
             r"eval `({} init tcsh --print-full-init)`",
@@ -215,7 +225,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
-        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint()?),
+        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_elv()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
         _ => {

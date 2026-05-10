@@ -124,7 +124,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
-      alt="Українська"
+      alt=""
  /></a>
   &nbsp;
   <a
@@ -306,13 +306,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
 </details>
 
@@ -409,7 +409,7 @@ Si estás buscando personalizar Starship:
 
 ## 🤝 Contribuir
 
-¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si buscas avanzar gradualmente en el proyecto, prueba con un [buen primer número](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
 
 Si habla con fluidez en un idioma que no es inglés, agradecemos mucho cualquier ayuda para mantener nuestros documentos traducidos y actualizados en otros idiomas. Si quieres ayudar, puedes contribuir con las traducciones en el [Crowdin de Starship](https://translate.starship.rs/).
 

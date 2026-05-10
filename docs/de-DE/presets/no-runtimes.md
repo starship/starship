@@ -1,10 +1,10 @@
-[Zurück zu den Voreinstellungen](./#no-runtime-versions)
+[Zurück zu Presets](./#no-runtime-versions)
 
-# No Runtime Versions Preset
+# Preset - No Runtime Versions
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Dieses Preset blendet die Version der Sprachlaufzeiten aus. Wenn Sie in Containern oder virtualisierten Umgebungen arbeiten, dann ist dies für Sie!
 
-![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png)
+![Screenshot für Preset Hide Runtime Versions](/presets/img/no-runtime-versions.png)
 
 ### Konfiguration
 
@@ -12,6 +12,6 @@ This preset hides the version of language runtimes. If you work in containers or
 starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/no-runtime-versions.toml){download}
 
 <<< @/public/presets/toml/no-runtime-versions.toml
