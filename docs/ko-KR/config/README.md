@@ -58,7 +58,7 @@ PowerShell(Windows)에서는 `$PROFILE`에 다음 줄을 추가하는 것과 동
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-또는 Cmd(Windows)를 사용하는 경우 <0>starship.lua</0> 파일에 다음 줄을 추가하면 됩니다.
+또는 Cmd(Windows)를 사용하는 경우 `starship.lua` 파일에 다음 줄을 추가하면 됩니다.
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')

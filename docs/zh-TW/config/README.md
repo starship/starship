@@ -205,7 +205,7 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `command_timeout` | `500`                        | starship 執行指令時的超時（以毫秒為單位）。                                                     |
 | `add_newline`     | `true`                       | 在 shell 提示字元之間插入空行。                                                            |
 | `palette`         | `''`                         | 指定要從 `palettes` 中使用的 palette。                                                  |
-| `palettes`        | `{}`                         | palettes 的集合，用來將 <0>colors</0> 指派給使用者自訂的名稱。 請注意 palettes 不能引用自己定義的顏色。          |
+| `palettes`        | `{}`                         | palettes 的集合，用來將 `colors` 指派給使用者自訂的名稱。 請注意 palettes 不能引用自己定義的顏色。          |
 | `follow_symlinks` | `true`                       | Follows symlinks to check if they're directories; used in modules such as git. |
 
 > [!TIP] If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
@@ -394,7 +394,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | profile   | `astronauts`     | The current AWS profile                     |
 | duration  | `2h27m20s`       | The temporary credentials validity duration |
 | symbol    |                  | 對應 `symbol` 選項的設定值                          |
-| style\* |                  | 對應 <0>style</0> 選項的設定值                      |
+| style\* |                  | 對應 `style` 選項的設定值                      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -583,7 +583,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | --------- | -------- | ---------------------- |
 | `version` | `v1.0.0` | `buf` 的版本              |
 | `symbol`  |          | 對應 `symbol` 選項的設定值     |
-| `style`*  |          | 對應 <0>style</0> 選項的設定值 |
+| `style`*  |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -623,7 +623,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | --------- | -------- | ---------------------- |
 | version   | `v0.1.4` | `bun` 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -663,7 +663,7 @@ format = 'via [🍔 $version](bold green) '
 | name    | clang  | 編譯器的名稱                 |
 | version | 13.0.0 | 編譯器的版本                 |
 | symbol  |        | 對應 `symbol` 選項的設定值     |
-| style   |        | 對應 <0>style</0> 選項的設定值 |
+| style   |        | 對應 `style` 選項的設定值 |
 
 ### Commands
 
@@ -709,7 +709,7 @@ format = 'via [$name $version]($style)'
 | name    | clang++ | 編譯器的名稱                 |
 | version | 13.0.0  | 編譯器的版本                 |
 | symbol  |         | 對應 `symbol` 選項的設定值     |
-| style   |         | 對應 <0>style</0> 選項的設定值 |
+| style   |         | 對應 `style` 選項的設定值 |
 
 ### Commands
 
@@ -818,7 +818,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | --------- | --------- | ---------------------- |
 | version   | `v3.17.3` | cmake 的版本              |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -848,7 +848,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | --------- | ---------- | ---------------------- |
 | version   | `v3.1.2.0` | `cobol` 的版本            |
 | symbol    |            | 對應 `symbol` 選項的設定值     |
-| style\* |            | 對應 <0>style</0> 選項的設定值 |
+| style\* |            | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -880,7 +880,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | 變數        | 範例       | 說明                                      |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | 對應 <0>style</0> 選項的設定值                  |
+| style\* |          | 對應 `style` 選項的設定值                  |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -918,7 +918,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | ----------- | ------------ | ---------------------- |
 | environment | `astronauts` | 目前的 conda 環境           |
 | symbol      |              | 對應 `symbol` 選項的設定值     |
-| style\*   |              | 對應 <0>style</0> 選項的設定值 |
+| style\*   |              | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -950,7 +950,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | --------- | ------------------- | ---------------------- |
 | name      | `fedora-toolbox:35` | 容器的名稱                  |
 | symbol    |                     | 對應 `symbol` 選項的設定值     |
-| style\* |                     | 對應 <0>style</0> 選項的設定值 |
+| style\* |                     | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -987,9 +987,9 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v0.32.1` | <0>crystal</0> 的版本     |
+| version   | `v0.32.1` | `crystal` 的版本     |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1019,7 +1019,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                               |
 | `detect_files`      | `['daml.yaml']`                      | 應觸發此模組的檔案名稱。                                                              |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                             |
-| `disabled`          | `false`                              | 停用 <0>daml</0> 模組。                                                        |
+| `disabled`          | `false`                              | 停用 `daml` 模組。                                                        |
 
 ### 變數
 
@@ -1027,7 +1027,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | --------- | -------- | ---------------------- |
 | version   | `v2.2.0` | `daml` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1067,7 +1067,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | --------- | -------- | ---------------------- |
 | version   | `v2.8.4` | `dart` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1105,7 +1105,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | --------- | -------- | ---------------------- |
 | version   | `v1.8.3` | `deno` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 ### 範例
 
@@ -1188,7 +1188,7 @@ The old syntax still works, although it doesn't support regular expressions:
 | 變數        | 範例                    | 說明                     |
 | --------- | --------------------- | ---------------------- |
 | path      | `'D:/Projects'`       | 目前目錄的路徑                |
-| style\* | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值 |
+| style\* | `'black bold dimmed'` | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1202,7 +1202,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
 | path               | `'/src/lib'`          | The remaining path                      |
-| style              | `'black bold dimmed'` | 對應 <0>style</0> 選項的設定值                  |
+| style              | `'black bold dimmed'` | 對應 `style` 選項的設定值                  |
 | repo_root_style  | `'underline white'`   | Style for git root directory name       |
 
 </details>
@@ -1249,7 +1249,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | allowed   | `denied`            | Whether the current rc file is allowed. |
 | rc_path   | `/home/test/.envrc` | The current rc file path.               |
 | symbol    |                     | Mirrors the value of option `symbol`.   |
-| style\* | `red bold`          | 對應 <0>style</0> 選項的設定值.                 |
+| style\* | `red bold`          | 對應 `style` 選項的設定值.                 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1285,7 +1285,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | --------- | -------------- | -------------------------- |
 | context   | `test_context` | The current docker context |
 | symbol    |                | 對應 `symbol` 選項的設定值         |
-| style\* |                | 對應 <0>style</0> 選項的設定值     |
+| style\* |                | 對應 `style` 選項的設定值     |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1340,7 +1340,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | version   | `v3.1.201`       | `dotnet` sdk 的版本                                                   |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | 對應 `symbol` 選項的設定值                                                 |
-| style\* |                  | 對應 <0>style</0> 選項的設定值                                             |
+| style\* |                  | 對應 `style` 選項的設定值                                             |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1381,7 +1381,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | version     | `v1.10` | `elixir` 的版本           |
 | otp_version |         | `elixir` 的 otp 版本      |
 | symbol      |         | 對應 `symbol` 選項的設定值     |
-| style\*   |         | 對應 <0>style</0> 選項的設定值 |
+| style\*   |         | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1423,7 +1423,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | --------- | --------- | ---------------------- |
 | version   | `v0.19.1` | `elm` 的版本              |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1473,7 +1473,7 @@ The `env_var` module displays the current value of a selected environment variab
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | 對應 `symbol` 選項的設定值                         |
-| style\* |                                             | 對應 <0>style</0> 選項的設定值                     |
+| style\* |                                             | 對應 `style` 選項的設定值                     |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1523,9 +1523,9 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v22.1.3` | <0>erlang</0> 的版本      |
+| version   | `v22.1.3` | `erlang` 的版本      |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1563,7 +1563,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | --------- | -------- | ---------------------- |
 | version   | `v1.2.1` | `fennel` 的版本           |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1586,7 +1586,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `'.'`          | The symbol used to fill the line. |
 | `style`    | `'bold black'` | 這個模組的風格。                          |
-| `disabled` | `false`        | 停用 <0>fill</0> 模組。                |
+| `disabled` | `false`        | 停用 `fill` 模組。                |
 
 ### 範例
 
@@ -1630,7 +1630,7 @@ The `fortran` module shows the current compiler version of Fortran.
 | name      | gfortran | 編譯器的名稱                              |
 | version   | `14.2.0` | The version of the Fortran compiler |
 | symbol    |          | 對應 `symbol` 選項的設定值                  |
-| style\* |          | 對應 <0>style</0> 選項的設定值              |
+| style\* |          | 對應 `style` 選項的設定值              |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1665,7 +1665,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | --------- | ------- | ------------------------ |
 | branch    | `trunk` | The active Fossil branch |
 | symbol    |         | 對應 `symbol` 選項的設定值       |
-| style\* |         | 對應 <0>style</0> 選項的設定值   |
+| style\* |         | 對應 `style` 選項的設定值   |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1745,7 +1745,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | project   |               | The current GCP project                                            |
 | active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | 對應 `symbol` 選項的設定值                                                 |
-| style\* |               | 對應 <0>style</0> 選項的設定值                                             |
+| style\* |               | 對應 `style` 選項的設定值                                             |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1820,7 +1820,7 @@ very-long-project-name = 'vlpn'
 | remote_name   | `origin` | The remote name.                                                                                       |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
 | symbol        |          | 對應 `symbol` 選項的設定值                                                                                     |
-| style\*     |          | 對應 <0>style</0> 選項的設定值                                                                                 |
+| style\*     |          | 對應 `style` 選項的設定值                                                                                 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1859,7 +1859,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
-| style\* |           | 對應 <0>style</0> 選項的設定值                       |
+| style\* |           | 對應 `style` 選項的設定值                       |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -1899,7 +1899,7 @@ tag_symbol = '🔖 '
 | state            | `REBASING` | The current state of the repo  |
 | progress_current | `1`        | The current operation progress |
 | progress_total   | `2`        | The total operation progress   |
-| style\*        |            | 對應 <0>style</0> 選項的設定值         |
+| style\*        |            | 對應 `style` 選項的設定值         |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2012,7 +2012,7 @@ The following variables can be used in `format`:
 | `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
 | `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
 | `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
-| style\*              | 對應 <0>style</0> 選項的設定值                                                                                        |
+| style\*              | 對應 `style` 選項的設定值                                                                                        |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2093,7 +2093,7 @@ The `gleam` module shows the currently installed version of [Gleam](https://glea
 | --------- | -------- | ---------------------- |
 | version   | `v1.0.0` | `gleam` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2141,7 +2141,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | version     | `v1.12.1` | `go` 的版本                                                                                                                                    |
 | mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
 | symbol      |           | 對應 `symbol` 選項的設定值                                                                                                                          |
-| style\*   |           | 對應 <0>style</0> 選項的設定值                                                                                                                      |
+| style\*   |           | 對應 `style` 選項的設定值                                                                                                                      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2181,7 +2181,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | 變數        | 範例 | 說明                     |
 | --------- | -- | ---------------------- |
 | symbol    |    | 對應 `symbol` 選項的設定值     |
-| style\* |    | 對應 <0>style</0> 選項的設定值 |
+| style\* |    | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2226,7 +2226,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------- | -------- | ----------------------- |
 | version | `v7.5.1` | The version of `gradle` |
 | symbol  |          | 對應 `symbol` 選項的設定值      |
-| style*  |          | 對應 <0>style</0> 選項的設定值  |
+| style*  |          | 對應 `style` 選項的設定值  |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2259,7 +2259,7 @@ By default the module will be shown if any of the following conditions are met:
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
 | ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
 | symbol         |             | 對應 `symbol` 選項的設定值                                                                      |
-| style\*      |             | 對應 <0>style</0> 選項的設定值                                                                  |
+| style\*      |             | 對應 `style` 選項的設定值                                                                  |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2290,7 +2290,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | --------- | -------- | ---------------------- |
 | version   | `v4.2.5` | `haxe` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2329,7 +2329,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | --------- | -------- | ---------------------- |
 | version   | `v3.1.1` | `helm` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2364,7 +2364,7 @@ format = 'via [⎈ $version](bold white) '
 | 變數         | 範例         | 說明                                                    |
 | ---------- | ---------- | ----------------------------------------------------- |
 | 主機名稱       | `computer` | The hostname of the computer                          |
-| style\*  |            | 對應 <0>style</0> 選項的設定值                                |
+| style\*  |            | 對應 `style` 選項的設定值                                |
 | ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
 
 *: 此變數僅能用於 style 字串的一部分
@@ -2428,7 +2428,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | --------- | ----- | ---------------------- |
 | version   | `v14` | `java` 的版本             |
 | symbol    |       | 對應 `symbol` 選項的設定值     |
-| style\* |       | 對應 <0>style</0> 選項的設定值 |
+| style\* |       | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2475,7 +2475,7 @@ The default functionality is:
 | --------- | --- | ---------------------- |
 | number    | `1` | The number of jobs     |
 | symbol    |     | 對應 `symbol` 選項的設定值     |
-| style\* |     | 對應 <0>style</0> 選項的設定值 |
+| style\* |     | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2525,7 +2525,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | --------- | -------- | ---------------------- |
 | version   | `v1.4.0` | `julia` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2562,9 +2562,9 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v1.4.21` | <0>kotlin</0> 的版本      |
+| version   | `v1.4.21` | `kotlin` 的版本      |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2635,7 +2635,7 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 | user      | `starship-user`      | If set, the current kubernetes user      |
 | cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
 | symbol    |                      | 對應 `symbol` 選項的設定值                       |
-| style\* |                      | 對應 <0>style</0> 選項的設定值                   |
+| style\* |                      | 對應 `style` 選項的設定值                   |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2733,7 +2733,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | 變數        | 範例           | 說明                                |
 | --------- | ------------ | --------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | 對應 <0>style</0> 選項的設定值            |
+| style\* |              | 對應 `style` 選項的設定值            |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2776,7 +2776,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | --------- | -------- | ---------------------- |
 | version   | `v5.4.0` | `lua` 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2820,7 +2820,7 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | ------- | -------- | ---------------------- |
 | version | `v3.2.0` | The version of `maven` |
 | symbol  |          | 對應 `symbol` 選項的設定值     |
-| style*  |          | 對應 <0>style</0> 選項的設定值 |
+| style*  |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2851,7 +2851,7 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
 | symbol           | `🐏`           | 對應 `symbol` 選項的設定值                                                 |
-| style\*        |               | 對應 <0>style</0> 選項的設定值                                             |
+| style\*        |               | 對應 `style` 選項的設定值                                             |
 
 *: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
@@ -2890,7 +2890,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | --------- | ---------- | ------------------------------ |
 | project   | `starship` | The current Meson project name |
 | symbol    | `🐏`        | 對應 `symbol` 選項的設定值             |
-| style\* |            | 對應 <0>style</0> 選項的設定值         |
+| style\* |            | 對應 `style` 選項的設定值         |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2930,7 +2930,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | branch    | `master`  | The active mercurial branch |
 | topic     | `feature` | The active mercurial topic  |
 | symbol    |           | 對應 `symbol` 選項的設定值          |
-| style\* |           | 對應 <0>style</0> 選項的設定值      |
+| style\* |           | 對應 `style` 選項的設定值      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -2974,7 +2974,7 @@ The `hg_state` module will show in directories which are part of a mercurial rep
 | state            | `REBASING` | The current state of the repo  |
 | progress_current | `1`        | The current operation progress |
 | progress_total   | `2`        | The total operation progress   |
-| style\*        |            | 對應 <0>style</0> 選項的設定值         |
+| style\*        |            | 對應 `style` 選項的設定值         |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3004,7 +3004,7 @@ The `mise` module shows the current mise health as reported by running `mise doc
 | --------- | --------- | ---------------------- |
 | health    | `healthy` | The health of _mise_   |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3039,7 +3039,7 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | --------- | -------- | ---------------------- |
 | version   | `24.4.0` | `mojo` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3071,7 +3071,7 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 | --------- | ----------- | ---------------------------- |
 | name      | `localhost` | The name of the NATS context |
 | symbol    |             | 對應 `symbol` 選項的設定值           |
-| style\* |             | 對應 <0>style</0> 選項的設定值       |
+| style\* |             | 對應 `style` 選項的設定值       |
 
 ### 範例
 
@@ -3100,7 +3100,7 @@ The `netns` module shows the current network namespace. This uses `ip netns iden
 | --------- | ---------- | ----------------------------------------- |
 | name      | `my-netns` | The name of the current network namespace |
 | symbol    |            | 對應 `symbol` 選項的設定值                        |
-| style\* |            | 對應 <0>style</0> 選項的設定值                    |
+| style\* |            | 對應 `style` 選項的設定值                    |
 
 ### 範例
 
@@ -3140,7 +3140,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | --------- | -------- | ---------------------- |
 | version   | `v1.2.0` | `nimc` 的版本             |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3178,7 +3178,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | state     | `pure`  | nix-shell 的狀態          |
 | name      | `lorri` | nix-shell 的名稱          |
 | symbol    |         | 對應 `symbol` 選項的設定值     |
-| style\* |         | 對應 <0>style</0> 選項的設定值 |
+| style\* |         | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3229,7 +3229,7 @@ Additionally, the module will be hidden by default if the directory contains a `
 | version         | `v13.12.0`    | `node` 的版本                                                                                                                                                |
 | engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
 | symbol          |               | 對應 `symbol` 選項的設定值                                                                                                                                        |
-| style\*       |               | 對應 <0>style</0> 選項的設定值                                                                                                                                    |
+| style\*       |               | 對應 `style` 選項的設定值                                                                                                                                    |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3276,7 +3276,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
 | symbol           |              | 對應 `symbol` 選項的設定值                                                |
-| style\*        |              | 對應 <0>style</0> 選項的設定值                                            |
+| style\*        |              | 對應 `style` 選項的設定值                                            |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3312,7 +3312,7 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 | --------- | ------------- | ---------------------- |
 | version   | `dev-2024-03` | `odin` 的版本             |
 | symbol    |               | 對應 `symbol` 選項的設定值     |
-| style\* |               | 對應 <0>style</0> 選項的設定值 |
+| style\* |               | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3349,7 +3349,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | --------- | --------- | ---------------------- |
 | version   | `v0.44.0` | `opa` 的版本              |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3382,7 +3382,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | cloud     | `corp` | The current OpenStack cloud   |
 | project   | `dev`  | The current OpenStack project |
 | symbol    |        | 對應 `symbol` 選項的設定值            |
-| style\* |        | 對應 <0>style</0> 選項的設定值        |
+| style\* |        | 對應 `style` 選項的設定值        |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3489,7 +3489,7 @@ Zorin = "🔹 "
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
-| style\* |              | 對應 <0>style</0> 選項的設定值                                             |
+| style\* |              | 對應 `style` 選項的設定值                                             |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3551,7 +3551,7 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 | --------- | -------- | --------------------------- |
 | version   | `v1.0.0` | The version of your package |
 | symbol    |          | 對應 `symbol` 選項的設定值          |
-| style\* |          | 對應 <0>style</0> 選項的設定值      |
+| style\* |          | 對應 `style` 選項的設定值      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3591,9 +3591,9 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | 變數        | 範例        | 說明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v5.26.1` | <0>perl</0> 的版本        |
+| version   | `v5.26.1` | `perl` 的版本        |
 | symbol    |           | 對應 `symbol` 選項的設定值     |
-| style\* |           | 對應 <0>style</0> 選項的設定值 |
+| style\* |           | 對應 `style` 選項的設定值 |
 
 ### 範例
 
@@ -3631,7 +3631,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | --------- | -------- | ---------------------- |
 | version   | `v7.3.8` | `php` 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3689,7 +3689,7 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 | version     | `v0.33.0` | `pixi` 的版本             |
 | environment | `py311`   | 目前的 pixi 環境            |
 | symbol      |           | 對應 `symbol` 選項的設定值     |
-| style       |           | 對應 <0>style</0> 選項的設定值 |
+| style       |           | 對應 `style` 選項的設定值 |
 
 ### 範例
 
@@ -3730,7 +3730,7 @@ By default the module will be shown if any of the following conditions are met:
 | stack     | `dev`      | The current Pulumi stack    |
 | 使用者名稱     | `alice`    | The current Pulumi username |
 | symbol    |            | 對應 `symbol` 選項的設定值          |
-| style\* |            | 對應 <0>style</0> 選項的設定值      |
+| style\* |            | 對應 `style` 選項的設定值      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3782,7 +3782,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | --------- | -------- | --------------------------- |
 | version   | `0.13.5` | The version of `purescript` |
 | symbol    |          | 對應 `symbol` 選項的設定值          |
-| style\* |          | 對應 <0>style</0> 選項的設定值      |
+| style\* |          | 對應 `style` 選項的設定值      |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3841,7 +3841,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------ | --------------- | --------------------------------------------------------------------------- |
 | version      | `'v3.8.1'`      | The version of `python`                                                     |
 | symbol       | `'🐍 '`          | 對應 `symbol` 選項的設定值                                                          |
-| style        | `'yellow bold'` | 對應 <0>style</0> 選項的設定值                                                      |
+| style        | `'yellow bold'` | 對應 `style` 選項的設定值                                                      |
 | pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
 | virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
 
@@ -3899,7 +3899,7 @@ By default, the module will be shown if any of the following conditions are met:
 | --------- | --------- | ----------------------- |
 | version   | `1.4.549` | The version of `quarto` |
 | symbol    |           | 對應 `symbol` 選項的設定值      |
-| style\* |           | 對應 <0>style</0> 選項的設定值  |
+| style\* |           | 對應 `style` 選項的設定值  |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -3934,7 +3934,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | ------- | ------------- | ---------------------- |
 | version | `v4.0.5`      | The version of `R`     |
 | symbol  |               | 對應 `symbol` 選項的設定值     |
-| style   | `'blue bold'` | 對應 <0>style</0> 選項的設定值 |
+| style   | `'blue bold'` | 對應 `style` 選項的設定值 |
 
 ### 範例
 
@@ -3972,7 +3972,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | version    | `v6.d` | The version of `raku`                |
 | vm_version | `moar` | The version of VM `raku` is built on |
 | symbol     |        | 對應 `symbol` 選項的設定值                   |
-| style\*  |        | 對應 <0>style</0> 選項的設定值               |
+| style\*  |        | 對應 `style` 選項的設定值               |
 
 ### 範例
 
@@ -4008,7 +4008,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | --------- | -------- | ---------------------- |
 | version   | `v2.5.1` | The version of `red`   |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4052,7 +4052,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | --------- | -------- | ------------------------------------------- |
 | version   | `v2.5.1` | The version of `ruby`                       |
 | symbol    |          | 對應 `symbol` 選項的設定值                          |
-| style\* |          | 對應 <0>style</0> 選項的設定值                      |
+| style\* |          | 對應 `style` 選項的設定值                      |
 | gemset    | `test`   | Optional, gets the current RVM gemset name. |
 
 *: 此變數僅能用於 style 字串的一部分
@@ -4094,7 +4094,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
 | toolchain | `beta`            | The toolchain version                        |
 | symbol    |                   | 對應 `symbol` 選項的設定值                           |
-| style\* |                   | 對應 <0>style</0> 選項的設定值                       |
+| style\* |                   | 對應 `style` 選項的設定值                       |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4134,7 +4134,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | --------- | -------- | ---------------------- |
 | version   | `2.13.5` | `scala` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4178,7 +4178,7 @@ The `shell` module shows an indicator for currently used shell.
 | 變數        | 預設 | 說明                                                         |
 | --------- | -- | ---------------------------------------------------------- |
 | indicator |    | Mirrors the value of `indicator` for currently used shell. |
-| style\* |    | 對應 <0>style</0> 選項的設定值.                                    |
+| style\* |    | 對應 `style` 選項的設定值.                                    |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4219,7 +4219,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | --------- | --- | ---------------------------- |
 | shlvl     | `3` | The current value of `SHLVL` |
 | symbol    |     | 對應 `symbol` 選項的設定值           |
-| style\* |     | 對應 <0>style</0> 選項的設定值       |
+| style\* |     | 對應 `style` 選項的設定值       |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4258,7 +4258,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `format`   | `'[$symbol\[$env\]]($style) '` | 此模組的格式。                                          |
 | `symbol`   | `''`                             | A format string displayed before the image name. |
 | `style`    | `'bold dimmed blue'`             | 這個模組的風格。                                         |
-| `disabled` | `false`                          | 停用 <0>singularity</0> 模組。                        |
+| `disabled` | `false`                          | 停用 `singularity` 模組。                        |
 
 ### 變數
 
@@ -4266,7 +4266,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | --------- | ------------ | ----------------------------- |
 | env       | `centos.img` | The current Singularity image |
 | symbol    |              | 對應 `symbol` 選項的設定值            |
-| style\* |              | 對應 <0>style</0> 選項的設定值        |
+| style\* |              | 對應 `style` 選項的設定值        |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4305,7 +4305,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | --------- | -------- | ---------------------- |
 | version   | `v0.8.1` | `solidity` 的版本         |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4337,7 +4337,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | ----------- | ------------ | ---------------------- |
 | environment | `astronauts` | 目前的 spack 環境           |
 | symbol      |              | 對應 `symbol` 選項的設定值     |
-| style\*   |              | 對應 <0>style</0> 選項的設定值 |
+| style\*   |              | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4430,7 +4430,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 | 變數        | 範例 | 說明                     |
 | --------- | -- | ---------------------- |
 | symbol    |    | 對應 `symbol` 選項的設定值     |
-| style\* |    | 對應 <0>style</0> 選項的設定值 |
+| style\* |    | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4480,7 +4480,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | --------- | -------- | ---------------------- |
 | version   | `v5.2.4` | `swift` 的版本            |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4525,7 +4525,7 @@ By default the module will be shown if any of the following conditions are met:
 | version   | `v0.12.24` | The version of `terraform`      |
 | workspace | `default`  | The current Terraform workspace |
 | symbol    |            | 對應 `symbol` 選項的設定值              |
-| style\* |            | 對應 <0>style</0> 選項的設定值          |
+| style\* |            | 對應 `style` 選項的設定值          |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4574,7 +4574,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 | 變數        | 範例         | 說明                     |
 | --------- | ---------- | ---------------------- |
 | 時間        | `13:08:10` | 目前時間。                  |
-| style\* |            | 對應 <0>style</0> 選項的設定值 |
+| style\* |            | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4620,7 +4620,7 @@ By default, the module will be shown if any of the following conditions are met:
 | version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
 | typst_version | `default` | The current Typst version                       |
 | symbol        |           | 對應 `symbol` 選項的設定值                              |
-| style\*     |           | 對應 <0>style</0> 選項的設定值                          |
+| style\*     |           | 對應 `style` 選項的設定值                          |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4696,7 +4696,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | --------- | ---------------- | ------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant` |
 | symbol    |                  | 對應 `symbol` 選項的設定值       |
-| style\* |                  | 對應 <0>style</0> 選項的設定值   |
+| style\* |                  | 對應 `style` 選項的設定值   |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4733,9 +4733,9 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | 變數        | 範例     | 說明                     |
 | --------- | ------ | ---------------------- |
-| version   | `v0.2` | <0>v</0> 的版本           |
+| version   | `v0.2` | `v` 的版本           |
 | symbol    |        | 對應 `symbol` 選項的設定值     |
-| style\* |        | 對應 <0>style</0> 選項的設定值 |
+| style\* |        | 對應 `style` 選項的設定值 |
 
 ### 範例
 
@@ -4803,7 +4803,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | --------- | ------------------------------------------- | -------------------------- |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name |
 | symbol    |                                             | 對應 `symbol` 選項的設定值         |
-| style\* | `black bold dimmed`                         | 對應 <0>style</0> 選項的設定值     |
+| style\* | `black bold dimmed`                         | 對應 `style` 選項的設定值     |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4841,7 +4841,7 @@ The `xmake` module shows the currently installed version of [XMake](https://xmak
 | --------- | -------- | ---------------------- |
 | version   | `v2.9.5` | xmake 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4870,7 +4870,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | --------- | -------- | ---------------------- |
 | version   | `v0.6.0` | `zig` 的版本              |
 | symbol    |          | 對應 `symbol` 選項的設定值     |
-| style\* |          | 對應 <0>style</0> 選項的設定值 |
+| style\* |          | 對應 `style` 選項的設定值 |
 
 *: 此變數僅能用於 style 字串的一部分
 
@@ -4934,7 +4934,7 @@ These modules will be shown if any of the following conditions are met:
 | --------- | -------------------------------------- |
 | output    | The output of `command` run in `shell` |
 | symbol    | 對應 `symbol` 選項的設定值                     |
-| style\* | 對應 <0>style</0> 選項的設定值                 |
+| style\* | 對應 `style` 選項的設定值                 |
 
 *: 此變數僅能用於 style 字串的一部分
 

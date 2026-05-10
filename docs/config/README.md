@@ -4031,10 +4031,16 @@ By default, the module will be shown if any of the following conditions are met:
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP]
-> The `python_binary` variable accepts either a string or a list of strings.
-> Starship will try executing each binary until it gets a result. Note you can
-> only change the binary that Starship executes to get the version of Python not
-> the arguments that are used.
+> The `python_binary` variable accepts either:
+>
+> - a string (e.g. `'python3'`),
+> - a list of strings (e.g. `['python', 'python3']`)
+> - a list of lists of strings, representing commands with optional arguments (e.g.
+>   `[['mise', 'exec', '--', 'python'], ['python3']]`)
+>
+> Starship will try executing each configured command until it gets a result.
+> Note you can only change the binary that Starship executes to get the version
+> of Python not the arguments that are used.
 >
 > The default values and order for `python_binary` was chosen to first identify
 > the Python version in a virtualenv/conda environments (which currently still
@@ -4071,6 +4077,22 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = 'python3'
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Use `mise` to get the version.
+python_binary = [['mise', 'exec', '--', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Potentially dangerous: `uv` can run any binary at `.venv/bin/python` without interaction
+python_binary = [['uv', 'run', '--no-python-downloads', '--no-project', 'python']]
 ```
 
 ```toml
