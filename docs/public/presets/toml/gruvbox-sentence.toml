@@ -28,9 +28,6 @@ $character"""
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
 color_blue = '#458588'
 color_aqua = '#689d6a'
 color_green = '#98971a'
@@ -76,7 +73,7 @@ format = '[$user ]($style)'
 
 [directory]
 style = "fg:color_yellow bold"
-format = '[in ](fg:color_fg0)[$path ]($style)'
+format = 'in [$path ]($style)'
 truncation_length = 3
 truncation_symbol = "…/"
 
@@ -90,7 +87,7 @@ truncation_symbol = "…/"
 [git_branch]
 symbol = ""
 style = "fg:color_aqua"
-format = '[on ](fg:color_fg0)[$symbol $branch ]($style)'
+format = 'on [$symbol $branch ]($style)'
 
 [git_status]
 style = "fg:color_red"
@@ -99,71 +96,71 @@ format = '[($all_status$ahead_behind )]($style)'
 [nodejs]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [c]
 symbol = " "
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol$version ]($style)'
+format = 'via [$symbol$version ]($style)'
 
 [cpp]
 symbol = " "
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol$version ]($style)'
+format = 'via [$symbol$version ]($style)'
 
 [rust]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [golang]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [php]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [java]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [kotlin]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [haskell]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [python]
 symbol = ""
 style = "fg:color_blue"
-format = '[via ](fg:color_fg0)[$symbol $version ]($style)'
+format = 'via [$symbol $version ]($style)'
 
 [docker_context]
 symbol = ""
 style = "fg:color_purple"
-format = '[via ](fg:color_fg0)[$symbol $context ]($style)'
+format = 'via [$symbol $context ]($style)'
 
 [conda]
 style = "fg:color_purple"
-format = '[via ](fg:color_fg0)[$symbol $environment ]($style)'
+format = 'via [$symbol $environment ]($style)'
 
 [pixi]
 style = "fg:color_purple"
-format = '[via ](fg:color_fg0)[$symbol$version( $environment) ]($style)'
+format = 'via [$symbol$version( $environment) ]($style)'
 
 [time]
 disabled = false
 time_format = "%R"
-style = "fg:color_fg0"
-format = '[at ](fg:color_fg0)[  $time ]($style)'
+style = "bold"
+format = 'at [  $time ]($style)'
 
 [line_break]
 disabled = false
