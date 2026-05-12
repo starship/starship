@@ -584,8 +584,13 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
 /// Many shells cannot deal with raw unprintable characters and miscompute the
 /// cursor position, leading to strange visual bugs like duplicated/missing
 /// chars. This function wraps ANSI escape sequences in shell-specific markers
-/// to avoid these problems. Handles all CSI sequences (\x1b[...X), not just
-/// SGR (\x1b[...m).
+/// to avoid these problems.
+///
+/// Handles:
+/// - CSI sequences: `\x1b[...<final>` (terminated by final byte 0x40–0x7E)
+/// - String-terminated sequences (OSC/DCS/SOS/PM/APC): `\x1b]...<term>` etc.,
+///   terminated by BEL (0x07) or the two-byte String Terminator ST (ESC \)
+/// - Other two-byte ESC sequences: `\x1b<X>` (single char after ESC)
 pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     let (beg, end) = match shell {
         // \[ and \]
@@ -595,28 +600,85 @@ pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
         _ => return ansi,
     };
 
-    // ANSI escape codes cannot be nested, so when we hit \x1b we can just
-    // consume characters until the sequence ends.
-    let mut result = String::new();
+    let mut result = String::with_capacity(ansi.len());
     let mut chars = ansi.chars().peekable();
+    let mut state = EscapeState::Ground;
+
     while let Some(c) = chars.next() {
-        if c == '\x1b' {
-            result.push_str(beg);
-            result.push('\x1b');
-            while let Some(&next) = chars.peek() {
-                chars.next();
-                result.push(next);
-                // '[' is the CSI introducer, not a final byte
-                if next != '[' && ('@'..='~').contains(&next) {
-                    break;
+        match state {
+            EscapeState::Ground => {
+                if c == '\x1b' {
+                    result.push_str(beg);
+                    result.push('\x1b');
+                    state = EscapeState::Escape;
+                } else {
+                    result.push(c);
                 }
             }
-            result.push_str(end);
-        } else {
-            result.push(c);
+            EscapeState::Escape => {
+                result.push(c);
+                match c {
+                    // CSI: Control Sequence Introducer
+                    '[' => state = EscapeState::Csi,
+                    // String-terminated sequences per ECMA-48:
+                    // ] = OSC, P = DCS, X = SOS, ^ = PM, _ = APC
+                    ']' | 'P' | 'X' | '^' | '_' => state = EscapeState::String,
+                    // All other two-byte ESC sequences (e.g. ESC M, ESC 7)
+                    _ => {
+                        result.push_str(end);
+                        state = EscapeState::Ground;
+                    }
+                }
+            }
+            EscapeState::Csi => {
+                result.push(c);
+                // CSI parameters are 0x30–0x3F, intermediate bytes 0x20–0x2F.
+                // A final byte in 0x40–0x7E terminates the sequence (ECMA-48 §5.4).
+                if ('@'..='~').contains(&c) {
+                    result.push_str(end);
+                    state = EscapeState::Ground;
+                }
+            }
+            EscapeState::String => {
+                result.push(c);
+                // String-terminated sequences end with BEL (0x07) or
+                // ST (ESC \, i.e. \x1b followed by '\\').
+                if c == '\x07' {
+                    result.push_str(end);
+                    state = EscapeState::Ground;
+                } else if c == '\x1b' {
+                    // Peek at next char: if it's '\\', this is ST
+                    if let Some(&'\\') = chars.peek() {
+                        chars.next();
+                        result.push('\\');
+                        result.push_str(end);
+                        state = EscapeState::Ground;
+                    }
+                    // Otherwise the ESC is just part of the string payload.
+                }
+            }
         }
     }
+
+    // If still inside an escape at end-of-string, close the shell wrapper
+    // so the markers stay balanced even for truncated sequences.
+    if !matches!(state, EscapeState::Ground) {
+        result.push_str(end);
+    }
+
     result
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum EscapeState {
+    /// Not inside any escape sequence
+    Ground,
+    /// Just saw ESC, waiting for type byte
+    Escape,
+    /// Inside a CSI sequence (\x1b[)
+    Csi,
+    /// Inside a string-terminated sequence (OSC/DCS/SOS/PM/APC)
+    String,
 }
 
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
@@ -974,6 +1036,8 @@ mod tests {
         let sgr = "\x1b[31mhello\x1b[0m";
         // Non-SGR CSI sequence (erase line)
         let csi_k = "\x1b[49m\x1b[K";
+        // DEC private CSI sequence (cursor show)
+        let csi_dec = "\x1b[?25h";
         // Two-char escape
         let two_char = "\x1bM";
         // No escape sequences
@@ -981,7 +1045,24 @@ mod tests {
         // Empty string
         let empty = "";
 
-        // Zsh wrapping
+        // OSC 8 hyperlink (ST-terminated)
+        let osc8 = "\x1b]8;;https://example.com\x1b\\link\x1b]8;;\x1b\\";
+        // OSC 133 semantic prompt (BEL-terminated)
+        let osc133 = "\x1b]133;A\x07";
+        // OSC window title (BEL-terminated)
+        let title = "\x1b]0;my title\x07";
+
+        // DCS sequence (ST-terminated)
+        let dcs = "\x1bP1$p\x1b\\";
+
+        // Truncated CSI at end of string
+        let truncated_csi = "\x1b[31";
+        // Truncated string sequence at end of string
+        let truncated_osc = "\x1b]8;;url";
+
+        // --- Zsh wrapping ---
+
+        // CSI sequences
         assert_eq!(
             wrap_colorseq_for_shell(sgr.to_string(), Shell::Zsh),
             "%{\x1b[31m%}hello%{\x1b[0m%}"
@@ -991,16 +1072,36 @@ mod tests {
             "%{\x1b[49m%}%{\x1b[K%}"
         );
         assert_eq!(
+            wrap_colorseq_for_shell(csi_dec.to_string(), Shell::Zsh),
+            "%{\x1b[?25h%}"
+        );
+        assert_eq!(
             wrap_colorseq_for_shell(two_char.to_string(), Shell::Zsh),
             "%{\x1bM%}"
         );
-        assert_eq!(
-            wrap_colorseq_for_shell(plain.to_string(), Shell::Zsh),
-            "herpaderp"
-        );
-        assert_eq!(wrap_colorseq_for_shell(empty.to_string(), Shell::Zsh), "");
 
-        // Bash wrapping
+        // OSC sequences
+        assert_eq!(
+            wrap_colorseq_for_shell(osc8.to_string(), Shell::Zsh),
+            "%{\x1b]8;;https://example.com\x1b\\\\%}link%{\x1b]8;;\x1b\\\\%}"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(osc133.to_string(), Shell::Zsh),
+            "%{\x1b]133;A\x07%}"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(title.to_string(), Shell::Zsh),
+            "%{\x1b]0;my title\x07%}"
+        );
+
+        // DCS
+        assert_eq!(
+            wrap_colorseq_for_shell(dcs.to_string(), Shell::Zsh),
+            "%{\x1bP1$p\x1b\\\\%}"
+        );
+
+        // --- Bash wrapping ---
+
         assert_eq!(
             wrap_colorseq_for_shell(sgr.to_string(), Shell::Bash),
             "\\[\x1b[31m\\]hello\\[\x1b[0m\\]"
@@ -1010,14 +1111,54 @@ mod tests {
             "\\[\x1b[49m\\]\\[\x1b[K\\]"
         );
         assert_eq!(
+            wrap_colorseq_for_shell(csi_dec.to_string(), Shell::Bash),
+            "\\[\x1b[?25h\\]"
+        );
+        assert_eq!(
             wrap_colorseq_for_shell(two_char.to_string(), Shell::Bash),
             "\\[\x1bM\\]"
         );
+
+        assert_eq!(
+            wrap_colorseq_for_shell(osc8.to_string(), Shell::Bash),
+            "\\[\x1b]8;;https://example.com\x1b\\\\\\]link\\[\x1b]8;;\x1b\\\\\\]"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(osc133.to_string(), Shell::Bash),
+            "\\[\x1b]133;A\x07\\]"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(title.to_string(), Shell::Bash),
+            "\\[\x1b]0;my title\x07\\]"
+        );
+
+        assert_eq!(
+            wrap_colorseq_for_shell(dcs.to_string(), Shell::Bash),
+            "\\[\x1bP1$p\x1b\\\\\\]"
+        );
+
+        // --- Plain / empty ---
+
+        assert_eq!(
+            wrap_colorseq_for_shell(plain.to_string(), Shell::Zsh),
+            "herpaderp"
+        );
+        assert_eq!(wrap_colorseq_for_shell(empty.to_string(), Shell::Zsh), "");
         assert_eq!(
             wrap_colorseq_for_shell(plain.to_string(), Shell::Bash),
             "herpaderp"
         );
         assert_eq!(wrap_colorseq_for_shell(empty.to_string(), Shell::Bash), "");
+
+        // --- Truncated sequences (wrapper should still be balanced) ---
+
+        let wrapped = wrap_colorseq_for_shell(truncated_csi.to_string(), Shell::Bash);
+        assert!(wrapped.starts_with("\\["));
+        assert!(wrapped.ends_with("\\]"));
+
+        let wrapped = wrap_colorseq_for_shell(truncated_osc.to_string(), Shell::Zsh);
+        assert!(wrapped.starts_with("%{"));
+        assert!(wrapped.ends_with("%}"));
     }
 
     #[test]
