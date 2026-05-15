@@ -28,9 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
-    if gix_repo.is_bare() {
-        return None;
-    }
+    gix_repo.workdir()?;
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
@@ -702,6 +700,34 @@ mod tests {
             let actual = render_metrics(repo_dir.path());
             assert_eq!(None, actual);
 
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn does_generate_git_metrics_for_worktree_backed_by_bare_repo() -> io::Result<()> {
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
+            let worktree_dir = tempfile::tempdir()?;
+
+            create_command("git")?
+                .args(["worktree", "add"])
+                .arg(worktree_dir.path())
+                .args(["-b", "metrics-worktree"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let file_path = worktree_dir.path().join("readme.md");
+            let mut the_file = OpenOptions::new().append(true).open(&file_path)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
+
+            let actual = render_metrics(worktree_dir.path());
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
             repo_dir.close()?;
         }
         Ok(())

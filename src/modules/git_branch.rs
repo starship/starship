@@ -30,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
 
     let gix_repo = repo.open();
-    if config.ignore_bare_repo && gix_repo.is_bare() {
+    if config.ignore_bare_repo && gix_repo.workdir().is_none() {
         return None;
     }
 
@@ -228,6 +228,7 @@ fn get_first_grapheme(text: &str) -> &str {
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
+    use std::ffi::OsStr;
     use std::io;
 
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
@@ -539,6 +540,46 @@ mod tests {
             let expected = None;
 
             assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_works_in_worktree_backed_by_bare_repo_with_ignore_bare() -> io::Result<()> {
+        for mode in BARE_AND_REFTABLE {
+            let repo_dir = fixture_repo(mode)?;
+            let worktree_dir = tempfile::tempdir()?;
+
+            create_command("git")?
+                .args([
+                    OsStr::new("worktree"),
+                    OsStr::new("add"),
+                    worktree_dir.path().as_os_str(),
+                    OsStr::new("-b"),
+                    OsStr::new("my-worktree-feature"),
+                ])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let actual = ModuleRenderer::new("git_branch")
+                .config(toml::toml! {
+                    [git_branch]
+                    ignore_bare_repo = true
+
+                })
+                .path(worktree_dir.path())
+                .collect();
+
+            let expected = Some(format!(
+                "on {} ",
+                Color::Purple
+                    .bold()
+                    .paint(format!("\u{e0a0} {}", "my-worktree-feature")),
+            ));
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
             repo_dir.close()?;
         }
         Ok(())

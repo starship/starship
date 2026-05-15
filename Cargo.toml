@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.25.0"
+version = "1.25.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -48,7 +48,7 @@ jsonc-parser = { version = "0.32.3", features = ["serde"] }
 log = { version = "0.4.29", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.16.0", optional = true }
+notify-rust = { version = "4.17.0", optional = true }
 nu-ansi-term = "0.50.3"
 open = "5.3.4"
 # update os module config and tests when upgrading os_info
@@ -59,7 +59,7 @@ path-slash = "0.2.1"
 pest = "2.8.6"
 pest_derive = "2.8.6"
 process_control = "5.2.0"
-quick-xml = "0.39.2"
+quick-xml = "0.39.3"
 rand = "0.10.1"
 rayon = "1.12.0"
 regex = { version = "1.12.3", default-features = false, features = ["perf", "std", "unicode-perl"] }

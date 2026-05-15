@@ -1824,6 +1824,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+The `CLOUDSDK_CORE_PROJECT` and `CLOUDSDK_COMPUTE_REGION` environment variables, when set, override the `project` and `region` values from the active configuration, mirroring the behavior of `gcloud` itself.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has
 been set in which case the module will only be active when one of the
@@ -3343,12 +3344,13 @@ The module will be shown when inside a nix-shell environment.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| state    | `pure`  | The state of the nix-shell           |
-| name     | `lorri` | The name of the nix-shell            |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                                                                   |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| state    | `pure`  | The state of the nix-shell                                                    |
+| name     | `lorri` | The name of the nix-shell                                                     |
+| level    | `1`     | The depth level of the nix-shell (Only when using [Lix](https://lix.systems)) |
+| symbol   |         | Mirrors the value of option `symbol`                                          |
+| style\*  |         | Mirrors the value of option `style`                                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -4031,10 +4033,16 @@ By default, the module will be shown if any of the following conditions are met:
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP]
-> The `python_binary` variable accepts either a string or a list of strings.
-> Starship will try executing each binary until it gets a result. Note you can
-> only change the binary that Starship executes to get the version of Python not
-> the arguments that are used.
+> The `python_binary` variable accepts either:
+>
+> - a string (e.g. `'python3'`),
+> - a list of strings (e.g. `['python', 'python3']`)
+> - a list of lists of strings, representing commands with optional arguments (e.g.
+>   `[['mise', 'exec', '--', 'python'], ['python3']]`)
+>
+> Starship will try executing each configured command until it gets a result.
+> Note you can only change the binary that Starship executes to get the version
+> of Python not the arguments that are used.
 >
 > The default values and order for `python_binary` was chosen to first identify
 > the Python version in a virtualenv/conda environments (which currently still
@@ -4071,6 +4079,22 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = 'python3'
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Use `mise` to get the version.
+python_binary = [['mise', 'exec', '--', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Potentially dangerous: `uv` can run any binary at `.venv/bin/python` without interaction
+python_binary = [['uv', 'run', '--no-python-downloads', '--no-project', 'python']]
 ```
 
 ```toml
