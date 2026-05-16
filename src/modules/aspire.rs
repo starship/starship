@@ -3,7 +3,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::aspire::AspireConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
-use crate::utils::get_command_string_output;
 
 /// Creates a module with the current Aspire CLI version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -58,10 +57,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_aspire_version(context: &Context) -> Option<String> {
-    context
-        .exec_cmd("aspire", &["--version"])
-        .map(get_command_string_output)
-        .map(|s| parse_aspire_version(&s))
+    // Run from a neutral working directory so the Aspire CLI doesn't try to
+    // parse the project's `aspire.config.json` just to print its version. That
+    // keeps the version readable even when the config is missing or invalid.
+    #[cfg(not(test))]
+    {
+        use crate::utils::{create_command, exec_timeout};
+        use std::time::Duration;
+
+        let mut cmd = create_command("aspire").ok()?;
+        cmd.arg("--version").current_dir(std::env::temp_dir());
+        let output = exec_timeout(
+            &mut cmd,
+            Duration::from_millis(context.root_config.command_timeout),
+        )?;
+        Some(parse_aspire_version(&output.stdout))
+    }
+    #[cfg(test)]
+    {
+        context
+            .exec_cmd("aspire", &["--version"])
+            .map(crate::utils::get_command_string_output)
+            .map(|s| parse_aspire_version(&s))
+    }
 }
 
 fn parse_aspire_version(aspire_version: &str) -> String {
