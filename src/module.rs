@@ -7,6 +7,7 @@ use std::time::Duration;
 // List of all modules
 // Default ordering is handled in configs/starship_root.rs
 pub const ALL_MODULES: &[&str] = &[
+    "aspire",
     "aws",
     "azure",
     #[cfg(feature = "battery")]

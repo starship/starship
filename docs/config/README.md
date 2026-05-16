@@ -373,6 +373,45 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Aspire
+
+The `aspire` module shows the currently installed version of the [.NET Aspire](https://github.com/dotnet/aspire) CLI.
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains an `aspire.config.json` file
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'▲ '`                               | A format string representing the symbol of Aspire.                        |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['aspire.config.json']`             | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold purple'`                      | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `aspire` module.                                             |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v13.4.0` | The version of `aspire`              |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[aspire]
+format = 'via [▲ $version](bold purple) '
+```
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
