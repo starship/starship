@@ -1,7 +1,9 @@
+use crate::config::StyleRefs;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
 use std::fmt;
+use std::iter::Peekable;
 use std::time::Duration;
 
 // List of all modules
@@ -200,7 +202,7 @@ impl fmt::Display for Module<'_> {
     }
 }
 
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
+fn ansi_line<'a, I>(segments: &mut Peekable<I>, term_width: Option<usize>) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
 {
@@ -209,7 +211,7 @@ where
     let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
     let mut prev_style: Option<AnsiStyle> = None;
 
-    for segment in segments {
+    while let Some(segment) = segments.next() {
         match segment {
             Segment::Fill(fs) => {
                 chunks.push((current, fs));
@@ -218,7 +220,10 @@ where
             }
             _ => {
                 used += segment.width_graphemes();
-                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+                let next_style = segments.peek().and_then(|s| s.style());
+
+                let style_refs = StyleRefs::new(prev_style, next_style);
+                let current_segment_string = segment.ansi_string(Some(style_refs));
 
                 prev_style = Some(*current_segment_string.style_ref());
                 current.push(current_segment_string);
@@ -231,28 +236,50 @@ where
     }
 
     if chunks.is_empty() {
-        current
-    } else {
-        let fill_size = term_width
-            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
-            .map(|remaining| remaining / chunks.len());
-        chunks
-            .into_iter()
-            .flat_map(|(strs, fill)| {
-                let fill_string = fill.ansi_string(
-                    fill_size,
-                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
-                );
-                strs.into_iter().chain(std::iter::once(fill_string))
-            })
-            .chain(current)
-            .collect::<Vec<AnsiString>>()
+        return current;
     }
+
+    let (fill_size, mut fill_remainder) = term_width
+        .and_then(|tw| if tw > used { Some(tw - used) } else { None })
+        .map(|remaining| (Some(remaining / chunks.len()), remaining % chunks.len()))
+        .unwrap_or((None, 0));
+    let mut fill_slack = 0usize;
+
+    let mut chunk_iter = chunks.iter_mut().peekable();
+    let mut output = Vec::new();
+
+    while let Some((strs, fill)) = chunk_iter.next() {
+        if fill_remainder > 0 {
+            fill_remainder -= 1;
+            fill_slack += 1;
+        }
+
+        let wanted_len = fill_size.map(|s| s + fill_slack);
+        prev_style = strs.last().map(|s| *s.style_ref());
+        let next_style = chunk_iter
+            .peek()
+            .and_then(|(s, _)| s.first().map(|s| *s.style_ref()))
+            // For the last fill there is no next chunk; the trailing text is in `current`.
+            .or_else(|| current.first().map(|s| *s.style_ref()));
+        let style_refs = StyleRefs::new(prev_style, next_style);
+
+        let (fill_string, actual_len) = fill.ansi_string_with_width(wanted_len, Some(style_refs));
+        output.extend_from_slice(strs);
+        output.extend_from_slice(&fill_string);
+
+        fill_slack = wanted_len.map_or(0, |w| w.saturating_sub(actual_len));
+    }
+    // `current` stores the non-fill tail after the last fill segment.
+    output.extend(current);
+    output
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::config::parse_style_string;
+    use crate::print::UnicodeWidthGraphemes;
+    use nu_ansi_term::Color;
 
     #[test]
     fn test_all_modules_is_in_alphabetical_order() {
@@ -319,5 +346,73 @@ mod tests {
         };
 
         assert!(!module.is_empty());
+    }
+
+    #[test]
+    fn test_fill_segment_resolves_next_style_from_trailing_text() {
+        let mut module = Module::new("unit_test", "This is a unit test", None);
+        module.set_segments(vec![
+            Segment::from_text(parse_style_string("fg:red", None), "A")
+                .into_iter()
+                .next()
+                .unwrap(),
+            Segment::fill(parse_style_string("fg:next_bg", None), "."),
+            Segment::from_text(parse_style_string("bg:blue", None), "B")
+                .into_iter()
+                .next()
+                .unwrap(),
+        ]);
+
+        // width=6, "A"(1)+"B"(1)=2 used, fill gets 4 dots.
+        // fill uses fg:next_bg; next segment has bg:blue → fill renders in blue fg.
+        let rendered = module.ansi_strings_for_width(Some(6));
+        let combined = AnsiStrings(&rendered).to_string();
+        let expected = AnsiStrings(&[
+            Color::Red.paint("A"),
+            Color::Blue.paint("...."),
+            nu_ansi_term::Style::new().on(Color::Blue).paint("B"),
+        ])
+        .to_string();
+        assert_eq!(combined, expected);
+    }
+
+    #[test]
+    fn test_fill_remainder_is_distributed_to_leading_fills() {
+        let mut module = Module::new("unit_test", "This is a unit test", None);
+        module.set_segments(vec![
+            Segment::from_text(None, "L").into_iter().next().unwrap(),
+            Segment::fill(None, "."),
+            Segment::from_text(None, "M").into_iter().next().unwrap(),
+            Segment::fill(None, "."),
+            Segment::from_text(None, "R").into_iter().next().unwrap(),
+        ]);
+
+        // width=12, used=3, remaining=9, two fills → base_size=4, remainder=1.
+        // fill1 gets the extra cell first: 5; fill2 gets 4.
+        let rendered = module.ansi_strings_for_width(Some(12));
+        let combined = AnsiStrings(&rendered).to_string();
+        assert_eq!(combined, "L.....M....R");
+        assert_eq!(combined.width_graphemes(), 12);
+    }
+
+    #[test]
+    fn test_fill_slack_is_carried_to_following_fill_segments() {
+        let mut module = Module::new("unit_test", "This is a unit test", None);
+        module.set_segments(vec![
+            Segment::from_text(None, "L").into_iter().next().unwrap(),
+            Segment::fill(None, "🟦"),
+            Segment::from_text(None, "M").into_iter().next().unwrap(),
+            Segment::fill(None, "🟦"),
+            Segment::from_text(None, "R").into_iter().next().unwrap(),
+        ]);
+
+        // width=10, "L"+"M"+"R"=3 used, remaining=7, two fills → fill_size=3, fill_remainder=1.
+        // fill1 gets the extra remainder cell: wants 4 → 🟦🟦 (4).
+        // fill2 gets base only: wants 3 → 🟦 (2 used, 1 wasted at end).
+        // Result: "L🟦🟦M🟦R" with total width 9.
+        let rendered = module.ansi_strings_for_width(Some(10));
+        let combined = AnsiStrings(&rendered).to_string();
+        assert_eq!(combined, "L🟦🟦M🟦R");
+        assert_eq!(combined.width_graphemes(), 9);
     }
 }

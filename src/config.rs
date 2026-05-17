@@ -3,7 +3,7 @@ use crate::context::Context;
 
 use crate::utils;
 use crate::utils::serde::{ValueDeserializer, ValueRef};
-use nu_ansi_term::Color;
+use nu_ansi_term::{Color, Style as AnsiStyle};
 use serde::{
     Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
 };
@@ -268,39 +268,82 @@ where
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-enum PrevColor {
-    Fg,
-    Bg,
+pub enum RefColor {
+    PrevFg,
+    PrevBg,
+    NextFg,
+    NextBg,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 /// Wrapper for `nu_ansi_term::Style` that supports referencing the previous style's foreground/background color.
 pub struct Style {
     style: nu_ansi_term::Style,
-    bg: Option<PrevColor>,
-    fg: Option<PrevColor>,
+    bg: Option<RefColor>,
+    fg: Option<RefColor>,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct StyleRefs {
+    prev: Option<AnsiStyle>,
+    next: Option<AnsiStyle>,
+}
+
+impl StyleRefs {
+    pub fn new(prev: Option<AnsiStyle>, next: Option<AnsiStyle>) -> Self {
+        Self { prev, next }
+    }
+
+    pub fn prev(&self) -> Option<AnsiStyle> {
+        self.prev
+    }
+
+    pub fn next(&self) -> Option<AnsiStyle> {
+        self.next
+    }
+
+    pub fn with_prev(&self, prev: Option<AnsiStyle>) -> Self {
+        Self {
+            prev,
+            next: self.next,
+        }
+    }
+
+    pub fn with_next(&self, next: Option<AnsiStyle>) -> Self {
+        Self {
+            prev: self.prev,
+            next,
+        }
+    }
+
+    pub fn to_ansi_style(&self, ref_color: RefColor) -> Option<nu_ansi_term::Color> {
+        match ref_color {
+            RefColor::PrevFg => self.prev.and_then(|s| s.foreground),
+            RefColor::PrevBg => self.prev.and_then(|s| s.background),
+            RefColor::NextFg => self.next.and_then(|s| s.foreground),
+            RefColor::NextBg => self.next.and_then(|s| s.background),
+        }
+    }
 }
 
 impl Style {
-    pub fn to_ansi_style(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
-        let Some(prev_style) = prev else {
-            return self.style;
-        };
+    pub fn has_ref_color(&self) -> bool {
+        self.fg.is_some() || self.bg.is_some()
+    }
 
+    pub fn to_ansi_style(&self, ref_styles: Option<StyleRefs>) -> AnsiStyle {
         let mut current = self.style;
 
-        if let Some(prev_color) = self.bg {
-            match prev_color {
-                PrevColor::Fg => current.background = prev_style.foreground,
-                PrevColor::Bg => current.background = prev_style.background,
-            }
+        if let Some(prev_color) = self.bg
+            && let Some(s) = ref_styles
+        {
+            current.background = s.to_ansi_style(prev_color);
         }
 
-        if let Some(prev_color) = self.fg {
-            match prev_color {
-                PrevColor::Fg => current.foreground = prev_style.foreground,
-                PrevColor::Bg => current.foreground = prev_style.background,
-            }
+        if let Some(prev_color) = self.fg
+            && let Some(s) = ref_styles
+        {
+            current.foreground = s.to_ansi_style(prev_color);
         }
 
         current
@@ -316,14 +359,14 @@ impl Style {
         }
     }
 
-    fn fg(&self, prev_color: PrevColor) -> Self {
+    fn fg(&self, prev_color: RefColor) -> Self {
         Self {
             fg: Some(prev_color),
             ..*self
         }
     }
 
-    fn bg(&self, prev_color: PrevColor) -> Self {
+    fn bg(&self, prev_color: RefColor) -> Self {
         Self {
             bg: Some(prev_color),
             ..*self
@@ -360,6 +403,8 @@ impl From<nu_ansi_term::Color> for Style {
  - 'blink'
  - '`prev_fg`'        (specifies the color should be the previous foreground color)
  - '`prev_bg`'        (specifies the color should be the previous background color)
+ - '`next_fg`'        (specifies the color should be the next foreground color)
+ - '`next_bg`'        (specifies the color should be the next background color)
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<Style> {
@@ -388,11 +433,17 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
                 "hidden" => Some(style.map_style(nu_ansi_term::Style::hidden)),
                 "strikethrough" => Some(style.map_style(nu_ansi_term::Style::strikethrough)),
 
-                "prev_fg" if col_fg => Some(style.fg(PrevColor::Fg)),
-                "prev_fg" => Some(style.bg(PrevColor::Fg)),
+                "prev_fg" if col_fg => Some(style.fg(RefColor::PrevFg)),
+                "prev_fg" => Some(style.bg(RefColor::PrevFg)),
 
-                "prev_bg" if col_fg => Some(style.fg(PrevColor::Bg)),
-                "prev_bg" => Some(style.bg(PrevColor::Bg)),
+                "prev_bg" if col_fg => Some(style.fg(RefColor::PrevBg)),
+                "prev_bg" => Some(style.bg(RefColor::PrevBg)),
+
+                "next_fg" if col_fg => Some(style.fg(RefColor::NextFg)),
+                "next_fg" => Some(style.bg(RefColor::NextFg)),
+
+                "next_bg" if col_fg => Some(style.fg(RefColor::NextBg)),
+                "next_bg" => Some(style.bg(RefColor::NextBg)),
 
                 // When the string is supposed to be a color:
                 // Decide if we yield none, reset background or set color.
@@ -915,7 +966,7 @@ mod tests {
             .on(Color::Red);
 
         assert_eq!(
-            both_prevfg.to_ansi_style(Some(&prev_style)),
+            both_prevfg.to_ansi_style(Some(StyleRefs::new(Some(prev_style), None))),
             AnsiStyle::new()
                 .fg(Color::Red)
                 .on(Color::Yellow)
@@ -928,7 +979,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_fg.to_ansi_style(Some(&prev_style)),
+            fg_prev_fg.to_ansi_style(Some(StyleRefs::new(Some(prev_style), None))),
             AnsiStyle::new().fg(Color::Yellow)
         );
 
@@ -936,7 +987,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_bg.to_ansi_style(Some(&prev_style)),
+            fg_prev_bg.to_ansi_style(Some(StyleRefs::new(Some(prev_style), None))),
             AnsiStyle::new().fg(Color::Red)
         );
 
@@ -944,7 +995,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_fg.to_ansi_style(Some(&prev_style)),
+            bg_prev_fg.to_ansi_style(Some(StyleRefs::new(Some(prev_style), None))),
             AnsiStyle::new().on(Color::Yellow)
         );
 
@@ -952,8 +1003,68 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_bg.to_ansi_style(Some(&prev_style)),
+            bg_prev_bg.to_ansi_style(Some(StyleRefs::new(Some(prev_style), None))),
             AnsiStyle::new().on(Color::Red)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_next() {
+        // Test that next has no effect when there is no next style
+        let both_next = <StyleWrapper>::from_config(&Value::from(
+            "bold fg:black fg:next_bg bg:next_fg underline",
+        ))
+        .unwrap()
+        .0;
+
+        assert_eq!(
+            both_next.to_ansi_style(None),
+            AnsiStyle::default().fg(Color::Black).bold().underline()
+        );
+
+        // But if there is a style on the next string, then use that
+        let next_style = AnsiStyle::new().underline().fg(Color::Blue).on(Color::Cyan);
+
+        assert_eq!(
+            both_next.to_ansi_style(Some(StyleRefs::new(None, Some(next_style)))),
+            AnsiStyle::new()
+                .fg(Color::Cyan)
+                .on(Color::Blue)
+                .bold()
+                .underline()
+        );
+
+        // Test that all the combinations of next colors work
+        let fg_next_fg = <StyleWrapper>::from_config(&Value::from("fg:next_fg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_next_fg.to_ansi_style(Some(StyleRefs::new(None, Some(next_style)))),
+            AnsiStyle::new().fg(Color::Blue)
+        );
+
+        let fg_next_bg = <StyleWrapper>::from_config(&Value::from("fg:next_bg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_next_bg.to_ansi_style(Some(StyleRefs::new(None, Some(next_style)))),
+            AnsiStyle::new().fg(Color::Cyan)
+        );
+
+        let bg_next_fg = <StyleWrapper>::from_config(&Value::from("bg:next_fg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_next_fg.to_ansi_style(Some(StyleRefs::new(None, Some(next_style)))),
+            AnsiStyle::new().on(Color::Blue)
+        );
+
+        let bg_next_bg = <StyleWrapper>::from_config(&Value::from("bg:next_bg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_next_bg.to_ansi_style(Some(StyleRefs::new(None, Some(next_style)))),
+            AnsiStyle::new().on(Color::Cyan)
         );
     }
 
