@@ -334,16 +334,27 @@ impl Style {
     pub fn to_ansi_style(&self, ref_styles: Option<StyleRefs>) -> AnsiStyle {
         let mut current = self.style;
 
-        if let Some(prev_color) = self.bg
+        if let Some(ref_color) = self.bg
             && let Some(s) = ref_styles
         {
-            current.background = s.to_ansi_style(prev_color);
+            let should_apply = match ref_color {
+                RefColor::PrevFg | RefColor::PrevBg => s.prev().is_some(),
+                RefColor::NextFg | RefColor::NextBg => s.next().is_some(),
+            };
+            if should_apply {
+                current.background = s.to_ansi_style(ref_color);
+            }
         }
-
-        if let Some(prev_color) = self.fg
+        if let Some(ref_color) = self.fg
             && let Some(s) = ref_styles
         {
-            current.foreground = s.to_ansi_style(prev_color);
+            let should_apply = match ref_color {
+                RefColor::PrevFg | RefColor::PrevBg => s.prev().is_some(),
+                RefColor::NextFg | RefColor::NextBg => s.next().is_some(),
+            };
+            if should_apply {
+                current.foreground = s.to_ansi_style(ref_color);
+            }
         }
 
         current
