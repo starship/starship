@@ -256,11 +256,12 @@ where
 
         let wanted_len = fill_size.map(|s| s + fill_slack);
         prev_style = strs.last().map(|s| *s.style_ref());
-        let next_style = chunk_iter
-            .peek()
-            .and_then(|(s, _)| s.first().map(|s| *s.style_ref()))
+        let next_style = if let Some((s, _)) = chunk_iter.peek() {
+            s.first().map(|s| *s.style_ref())
+        } else {
             // For the last fill there is no next chunk; the trailing text is in `current`.
-            .or_else(|| current.first().map(|s| *s.style_ref()));
+            current.first().map(|s| *s.style_ref())
+        };
         let style_refs = StyleRefs::new(prev_style, next_style);
 
         let (fill_string, actual_len) = fill.ansi_string_with_width(wanted_len, Some(style_refs));
