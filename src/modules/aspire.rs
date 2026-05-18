@@ -118,9 +118,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Purple
-                .bold()
-                .paint("▲ v13.4.0-pr.17161.g80e4a73e ")
+            Color::Purple.bold().paint("▲ v13.4.0-pr.17161.g80e4a73e ")
         ));
         assert_eq!(expected, actual);
         dir.close()

@@ -64,6 +64,21 @@
         "claude-code": "$claude_model$git_branch$claude_context$claude_cost"
       }
     },
+    "aspire": {
+      "$ref": "#/$defs/AspireConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": "▲ ",
+        "style": "bold purple",
+        "disabled": false,
+        "detect_extensions": [],
+        "detect_files": [
+          "aspire.config.json"
+        ],
+        "detect_folders": []
+      }
+    },
     "aws": {
       "$ref": "#/$defs/AwsConfig",
       "default": {
@@ -1929,6 +1944,55 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "AspireConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "▲ "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold purple"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "aspire.config.json"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
     "AwsConfig": {
       "title": "AWS",
       "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\nThe output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\nIf the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile\nis read from the `AWS_VAULT` env var and the credentials expiration date\nis read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\nvar.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile\nis read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile\nis read from the `AWSUME_PROFILE` env var and the credentials expiration\ndate is read from the `AWSUME_EXPIRATION` env var.\n\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\nis read from the `AWS_SSO_PROFILE` env var.",
