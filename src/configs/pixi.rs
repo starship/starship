@@ -12,6 +12,7 @@ use crate::config::VecOr;
 pub struct PixiConfig<'a> {
     pub pixi_binary: VecOr<&'a str>,
     pub show_default_environment: bool,
+    pub show_default_project: bool,
     pub format: &'a str,
     pub version_format: &'a str,
     pub symbol: &'a str,
@@ -27,7 +28,8 @@ impl Default for PixiConfig<'_> {
         Self {
             pixi_binary: VecOr(vec!["pixi"]),
             show_default_environment: true,
-            format: "via [$symbol($version )(\\($environment\\) )]($style)",
+            show_default_project: true,
+            format: "via [$symbol($version )(\\($project\\) )(\\($environment\\) )]($style)",
             version_format: "v${raw}",
             symbol: "🧚 ",
             style: "yellow bold",

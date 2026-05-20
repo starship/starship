@@ -13,7 +13,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: PixiConfig = PixiConfig::try_load(module.config);
 
     let pixi_environment_name = context.get_env("PIXI_ENVIRONMENT_NAME");
+    let pixi_project_name = context.get_env("PIXI_PROJECT_NAME");
     let is_pixi_project = pixi_environment_name.is_some()
+        || pixi_project_name.is_some()
         || context
             .try_begin_scan()?
             .set_files(&config.detect_files)
@@ -32,6 +34,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         pixi_environment_name
     };
 
+    let pixi_project_name = if !config.show_default_project
+        && pixi_project_name == Some("default".to_string())
+    {
+        None
+    } else {
+        pixi_project_name
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -43,6 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
+                "project" => pixi_project_name.clone().map(Ok),
                 "environment" => pixi_environment_name.clone().map(Ok),
                 "version" => {
                     let pixi_version = get_pixi_version(context, &config)?;
