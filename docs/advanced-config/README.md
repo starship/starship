@@ -1,4 +1,4 @@
-# Advanced Configuration
+﻿# Advanced Configuration
 
 While Starship is a versatile shell, sometimes you need to do more than edit
 `starship.toml` to get it to do certain things. This page details some of the more
@@ -313,6 +313,16 @@ Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+### Zsh Right Prompt Alignment Gap
+
+In zsh, the right prompt may appear with a small gap from the right edge of the terminal. This is
+caused by zsh's default `ZLE_RPROMPT_INDENT=1` setting, which reserves one character of padding.
+To remove the gap, add the following to your shell configuration (`~/.zshrc`):
+
+```sh
+ZLE_RPROMPT_INDENT=0
 ```
 
 ## Continuation Prompt
