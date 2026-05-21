@@ -1,0 +1,75 @@
+# "Catppuccin Split Pill" Preset
+# A professional, dual-tone split-pill design using Catppuccin Macchiato.
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$os\
+$username\
+$directory\
+$git_branch\
+$git_status\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$docker_context\
+$time\
+$character"""
+
+[os]
+disabled = false
+format = '[](fg:#ffffff)[SO ](bg:#ffffff fg:#24273a)[$symbol](bg:#c6a0f6 fg:#24273a)[](fg:#c6a0f6) '
+
+[username]
+show_always = true
+format = '[](fg:#ffffff)[USR ](bg:#ffffff fg:#24273a)[$user](bg:#c6a0f6 fg:#24273a)[](fg:#c6a0f6) '
+
+[directory]
+style = "bg:#ee99a0 fg:#24273a"
+format = '[](fg:#ffffff)[DIR ](bg:#ffffff fg:#24273a)[ $path ]($style)[](fg:#ee99a0) '
+truncation_length = 3
+
+[git_branch]
+symbol = " "
+style = "bg:#f5a97f fg:#24273a"
+format = '[](fg:#ffffff)[GIT ](bg:#ffffff fg:#24273a)[ $symbol$branch ]($style)[](fg:#f5a97f) '
+
+[git_status]
+style = "bg:#f5a97f fg:#24273a"
+format = '[](fg:#ffffff)[STS ](bg:#ffffff fg:#24273a)[ $all_status$ahead_behind ]($style)[](fg:#f5a97f) '
+
+[nodejs]
+symbol = " "
+style = "bg:#7dc4e4 fg:#24273a"
+format = '[](fg:#ffffff)[NODE ](bg:#ffffff fg:#24273a)[ $symbol($version) ]($style)[](fg:#7dc4e4) '
+
+[rust]
+symbol = " "
+style = "bg:#7dc4e4 fg:#24273a"
+format = '[](fg:#ffffff)[RUST ](bg:#ffffff fg:#24273a)[ $symbol($version) ]($style)[](fg:#7dc4e4) '
+
+[golang]
+symbol = " "
+style = "bg:#7dc4e4 fg:#24273a"
+format = '[](fg:#ffffff)[GO ](bg:#ffffff fg:#24273a)[ $symbol($version) ]($style)[](fg:#7dc4e4) '
+
+[docker_context]
+symbol = " "
+style = "bg:#8aadf4 fg:#24273a"
+format = '[](fg:#ffffff)[DOCK ](bg:#ffffff fg:#24273a)[ $symbol$context ]($style)[](fg:#8aadf4) '
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:#b8c0e0 fg:#24273a"
+format = '[](fg:#ffffff)[TIME ](bg:#ffffff fg:#24273a)[ 󱑎 $time ]($style)[](fg:#b8c0e0) '
+
+[character]
+success_symbol = "[ 󰄾](bold #a6da95) "
+error_symbol = "[ 󰄾](bold #ed8796) "
