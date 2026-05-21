@@ -24,7 +24,7 @@ $character"""
 
 [os]
 disabled = false
-format = '[](fg:#ffffff)[SO ](bg:#ffffff fg:#24273a)[$symbol](bg:#c6a0f6 fg:#24273a)[](fg:#c6a0f6) '
+format = '[](fg:#ffffff)[OS ](bg:#ffffff fg:#24273a)[$symbol](bg:#c6a0f6 fg:#24273a)[](fg:#c6a0f6) '
 
 [username]
 show_always = true
