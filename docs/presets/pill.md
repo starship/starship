@@ -2,7 +2,7 @@
 
 # Catppuccin Split Pill Preset
 
-This preset features a professional "split-pill" design with perfectly rounded corners. 
+This preset features a professional "split-pill" design with perfectly rounded corners.
 Each module is divided into two parts: a white left section for labels/context and a colorful right section using the [Catppuccin Macchiato](https://github.com/catppuccin/catppuccin) palette for the actual information.
 
 ![Screenshot of Catppuccin Split Pill preset](/presets/img/pill.png)

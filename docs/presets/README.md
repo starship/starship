@@ -89,4 +89,3 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 This preset features a professional "split-pill" design with perfectly rounded corners and a dual-tone white/accent color scheme.
 
 [![Screenshot of Catppuccin Split Pill preset](/presets/img/pill.png "Click to view Catppuccin Split Pill preset")](./pill)
-
