@@ -837,6 +837,26 @@ mod tests {
     }
 
     #[test]
+    fn test_parse_error_display_includes_context() {
+        // Bare `$` at end of format — common user mistake (cf. issue #7491).
+        // The Display impl forwards to pest's renderer, which should mention
+        // both a position indicator and the rules it expected to see. We
+        // don't lock the exact rendering (pest may evolve), but any
+        // diagnostic worth showing the user must name a `variable_*` rule.
+        // (We avoid `unwrap_err`/`expect_err` because they require `Debug`
+        // on `StringFormatter`, which is not derived.)
+        let rendered = match StringFormatter::new(" ${count}$") {
+            Ok(_) => panic!("bare trailing `$` should fail to parse"),
+            Err(error) => format!("{error}"),
+        };
+        assert!(!rendered.is_empty(), "error display should not be empty");
+        assert!(
+            rendered.contains("variable_name") || rendered.contains("variable_scope"),
+            "expected pest error to name an expected rule, got:\n{rendered}"
+        );
+    }
+
+    #[test]
     fn test_variable_error() {
         const FORMAT_STR: &str = "$never$some";
         let never_error = StringFormatterError::Custom("NEVER".to_owned());
