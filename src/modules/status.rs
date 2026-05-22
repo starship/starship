@@ -81,7 +81,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 match formatted {
                     Ok(segments) => Some(segments),
                     Err(e) => {
-                        log::warn!("Error parsing format string in `status.pipestatus_segment_format`: {e:?}");
+                        log::warn!(
+                            "Error parsing format string in `status.pipestatus_segment_format`:\n{e}"
+                        );
                         None
                     }
                 }
@@ -99,8 +101,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
-        Err(_error) => {
-            log::warn!("Error parsing format string in `status.format`");
+        Err(error) => {
+            log::warn!("Error parsing format string in `status.format`:\n{error}");
             return None;
         }
     });
