@@ -1670,6 +1670,7 @@
       "$ref": "#/$defs/ShLvlConfig",
       "default": {
         "threshold": 2,
+        "number_offset": 0,
         "format": "[$symbol$shlvl]($style) ",
         "symbol": "↕️  ",
         "repeat": false,
@@ -6382,6 +6383,11 @@
           "type": "integer",
           "format": "int64",
           "default": 2
+        },
+        "number_offset": {
+          "type": "integer",
+          "format": "int64",
+          "default": 0
         },
         "format": {
           "type": "string",

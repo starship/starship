@@ -4451,6 +4451,7 @@ set to a number and meets or exceeds the specified threshold.
 | Option          | Default                      | Description                                                         |
 | --------------- | ---------------------------- | ------------------------------------------------------------------- |
 | `threshold`     | `2`                          | Display threshold.                                                  |
+| `number_offset` | `0`                          | Offset applied to the displayed `SHLVL` value.                      |
 | `format`        | `'[$symbol$shlvl]($style) '` | The format for the module.                                          |
 | `symbol`        | `'↕️  '`                      | The symbol used to represent the `SHLVL`.                           |
 | `repeat`        | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount.       |
@@ -4460,11 +4461,11 @@ set to a number and meets or exceeds the specified threshold.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| shlvl    | `3`     | The current value of `SHLVL`         |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                                             |
+| -------- | ------- | ------------------------------------------------------- |
+| shlvl    | `3`     | The current value of `SHLVL`, including `number_offset` |
+| symbol   |         | Mirrors the value of option `symbol`                    |
+| style\*  |         | Mirrors the value of option `style`                     |
 
 *: This variable can only be used as a part of a style string
 

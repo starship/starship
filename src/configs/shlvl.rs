@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct ShLvlConfig<'a> {
     pub threshold: i64,
+    pub number_offset: i64,
     pub format: &'a str,
     pub symbol: &'a str,
     pub repeat: bool,
@@ -21,6 +22,7 @@ impl Default for ShLvlConfig<'_> {
     fn default() -> Self {
         Self {
             threshold: 2,
+            number_offset: 0,
             format: "[$symbol$shlvl]($style) ",
             symbol: "↕️  ", // extra space for emoji
             repeat: false,

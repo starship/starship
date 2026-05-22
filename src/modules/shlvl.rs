@@ -16,17 +16,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("shlvl");
     let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
+    let display_shlvl = shlvl.saturating_add(config.number_offset);
 
     // As we default to disabled=true, we have to check here after loading our config module,
     // before it was only checking against whatever is in the config starship.toml
-    if config.disabled || shlvl < config.threshold {
+    if config.disabled || display_shlvl < config.threshold {
         return None;
     }
 
-    let shlvl_str = &shlvl.to_string();
+    let shlvl_str = &display_shlvl.to_string();
 
     let mut repeat_count: usize = if config.repeat {
-        shlvl.try_into().unwrap_or(1)
+        display_shlvl.try_into().unwrap_or(1)
     } else {
         1
     };
@@ -196,6 +197,40 @@ mod tests {
             .env(SHLVL_ENV_VAR, "2")
             .collect();
         let expected = Some(format!("{} ", style().paint("shlvl is 2")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn number_offset() {
+        let actual = ModuleRenderer::new("shlvl")
+            .config(toml::toml! {
+                [shlvl]
+                disabled = false
+                number_offset = -1
+                threshold = 1
+            })
+            .env(SHLVL_ENV_VAR, "2")
+            .collect();
+        let expected = Some(format!("{} ", style().paint("↕️  1")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn number_offset_applies_to_repeat() {
+        let actual = ModuleRenderer::new("shlvl")
+            .config(toml::toml! {
+                [shlvl]
+                disabled = false
+                format = "[$symbol]($style)"
+                number_offset = -1
+                repeat = true
+                symbol = "~"
+            })
+            .env(SHLVL_ENV_VAR, "3")
+            .collect();
+        let expected = Some(format!("{}", style().paint("~~")));
 
         assert_eq!(expected, actual);
     }
