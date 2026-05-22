@@ -857,6 +857,14 @@ mod tests {
     }
 
     #[test]
+    fn test_custom_error_display_passes_message_through() {
+        // The other variant log sites might encounter: a Custom error built
+        // from a String. Display should round-trip the message verbatim.
+        let error = StringFormatterError::Custom("boom".to_owned());
+        assert_eq!(format!("{error}"), "boom");
+    }
+
+    #[test]
     fn test_variable_error() {
         const FORMAT_STR: &str = "$never$some";
         let never_error = StringFormatterError::Custom("NEVER".to_owned());
