@@ -61,16 +61,16 @@ onMounted(() => {
 
    #### Install via Package Manager
 
-   With [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh):
 
    ```sh
    brew install starship
    ```
 
-   With [Winget](https://github.com/microsoft/winget-cli):
+   With [Scoop](https://scoop.sh):
 
    ```powershell
-   winget install starship
+   scoop install starship
    ```
 
 1. Add the init script to your shell's config file:
