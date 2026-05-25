@@ -4,5 +4,5 @@ pub mod string_formatter;
 mod version;
 
 pub use model::{StyleVariableHolder, VariableHolder};
-pub use string_formatter::StringFormatter;
+pub use string_formatter::{StringFormatter, StringFormatterError};
 pub use version::VersionFormatter;

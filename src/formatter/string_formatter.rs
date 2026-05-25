@@ -48,6 +48,49 @@ impl fmt::Display for StringFormatterError {
 
 impl Error for StringFormatterError {}
 
+impl StringFormatterError {
+    /// Log a user-facing warning when a module format string fails to parse.
+    pub fn log_parse_error(config_path: &str, format: &str, error: &Self) {
+        log::warn!("Error parsing format string `{config_path}`: {error}");
+        if contains_unescaped_dollar(format) {
+            log::warn!("  Hint: use `\\$` to display a literal `$` character.");
+        }
+    }
+}
+
+fn contains_unescaped_dollar(format: &str) -> bool {
+    let mut chars = format.chars().peekable();
+    while let Some(ch) = chars.next() {
+        if ch == '\\' {
+            chars.next();
+            continue;
+        }
+        if ch == '$' {
+            match chars.peek() {
+                Some('{') => {
+                    chars.next();
+                    for c in chars.by_ref() {
+                        if c == '}' {
+                            break;
+                        }
+                    }
+                }
+                Some(c) if c.is_ascii_alphabetic() || *c == '_' => {
+                    let _ = chars.next();
+                    while matches!(
+                        chars.peek(),
+                        Some(c) if c.is_ascii_alphanumeric() || *c == '_' || *c == ':'
+                    ) {
+                        chars.next();
+                    }
+                }
+                _ => return true,
+            }
+        }
+    }
+    false
+}
+
 impl From<String> for StringFormatterError {
     fn from(error: String) -> Self {
         Self::Custom(error)
@@ -834,6 +877,15 @@ mod tests {
             const FORMAT_STR: &str = "$ ";
             assert!(StringFormatter::new(FORMAT_STR).is_err());
         }
+    }
+
+    #[test]
+    fn test_contains_unescaped_dollar() {
+        assert!(contains_unescaped_dollar(" ${count}$"));
+        assert!(!contains_unescaped_dollar(r" ${count}\$"));
+        assert!(!contains_unescaped_dollar("plain text"));
+        assert!(!contains_unescaped_dollar("$count"));
+        assert!(contains_unescaped_dollar("$count literal$"));
     }
 
     #[test]

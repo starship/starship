@@ -1,6 +1,6 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, StringFormatterError};
 use crate::segment::Segment;
 use crate::{context, num_configured_starship_threads, num_rayon_threads};
 use gix::bstr::ByteVec;
@@ -761,14 +761,15 @@ fn format_text<F>(
 where
     F: Fn(&str) -> Option<String> + Send + Sync,
 {
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
+    match StringFormatter::new(format_str) {
+        Ok(formatter) => formatter
             .map(|variable| mapper(variable).map(Ok))
             .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{}`", &config_path);
-        None
+            .ok(),
+        Err(error) => {
+            StringFormatterError::log_parse_error(config_path, format_str, &error);
+            None
+        }
     }
 }
 
