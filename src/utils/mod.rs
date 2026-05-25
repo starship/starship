@@ -583,14 +583,67 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
 
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
-    const ESCAPE_BEGIN: char = '\u{1b}';
-    const ESCAPE_END: char = 'm';
-    wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
+    let (beg, end) = match shell {
+        Shell::Bash => ("\\[", "\\]"),
+        Shell::Tcsh | Shell::Zsh => ("%{", "%}"),
+        _ => return ansi,
+    };
+
+    let mut out = String::new();
+    let mut chars = ansi.chars().peekable();
+
+    while let Some(c) = chars.next() {
+        if c == '\u{1b}' {
+            if chars.peek() == Some(&'[') {
+                let mut sequence = String::from(c);
+                sequence.push(chars.next().unwrap());
+                for ch in chars.by_ref() {
+                    sequence.push(ch);
+                    if is_csi_final_byte(ch) {
+                        break;
+                    }
+                }
+                out.push_str(beg);
+                out.push_str(&sequence);
+                out.push_str(end);
+                continue;
+            }
+
+            // Legacy two-character SGR sequences like ESC + "2m" (no '[' prefix).
+            let mut sequence = String::from(c);
+            let mut escaped = true;
+            while escaped {
+                match chars.next() {
+                    Some(ch) if ch == 'm' => {
+                        sequence.push(ch);
+                        escaped = false;
+                    }
+                    Some(ch) => sequence.push(ch),
+                    None => escaped = false,
+                }
+            }
+            if sequence.len() > 1 {
+                out.push_str(beg);
+                out.push_str(&sequence);
+                out.push_str(end);
+                continue;
+            }
+        }
+
+        out.push(c);
+    }
+
+    out
+}
+
+const fn is_csi_final_byte(c: char) -> bool {
+    matches!(c, '\u{0040}'..='\u{007E}')
 }
 
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
 /// leading to strange visual bugs like duplicated/missing chars. This function wraps a specified
 /// sequence in shell-specific escapes to avoid these problems.
+#[allow(dead_code)] // exercised by unit tests; superseded by `wrap_colorseq_for_shell` in production
 pub fn wrap_seq_for_shell(
     ansi: String,
     shell: Shell,
@@ -972,6 +1025,15 @@ mod tests {
         let expected = None;
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_wrap_colorseq_for_shell_csi_erase() {
+        let input = "\x1b[49m\x1b[Kprompt";
+        let expected_zsh = ["%{", "\x1b[49m", "%}", "%{", "\x1b[K", "%}", "prompt"].concat();
+        let expected_bash = ["\\[", "\x1b[49m", "\\]", "\\[", "\x1b[K", "\\]", "prompt"].concat();
+        assert_eq!(wrap_colorseq_for_shell(input.to_string(), Shell::Zsh), expected_zsh);
+        assert_eq!(wrap_colorseq_for_shell(input.to_string(), Shell::Bash), expected_bash);
     }
 
     #[test]
