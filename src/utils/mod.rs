@@ -817,9 +817,41 @@ impl PathExt for Path {
     }
 }
 
+/// Removes Unicode Private Use Area characters that system notification fonts
+/// typically cannot render (e.g. Nerd Font icons).
+pub fn strip_private_use_characters(text: &str) -> String {
+    text.chars().filter(|&c| !is_private_use(c)).collect()
+}
+
+const fn is_private_use(c: char) -> bool {
+    matches!(
+        c,
+        '\u{E000}'..='\u{F8FF}'
+            | '\u{F0000}'..='\u{FFFFD}'
+            | '\u{100000}'..='\u{10FFFD}'
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn strip_private_use_characters_removes_nerd_font_icons() {
+        let icon = '\u{EAF4}';
+        assert_eq!(
+            strip_private_use_characters(&format!("{icon} in 5s")),
+            " in 5s"
+        );
+    }
+
+    #[test]
+    fn strip_private_use_characters_preserves_regular_text() {
+        assert_eq!(
+            strip_private_use_characters("Command in 5s"),
+            "Command in 5s"
+        );
+    }
 
     #[test]
     fn render_time_test_0ms() {

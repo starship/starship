@@ -71,6 +71,8 @@ fn undistract_me<'a>(
     use notify_rust::{Notification, Timeout};
     use nu_ansi_term::{AnsiStrings, unstyle};
 
+    use crate::utils::strip_private_use_characters;
+
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
         if cfg!(target_os = "linux") {
             let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
@@ -90,7 +92,7 @@ fn undistract_me<'a>(
 
         let body = format!(
             "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
+            strip_private_use_characters(&unstyle(&AnsiStrings(&module.ansi_strings())))
         );
 
         let timeout = match config.notification_timeout {
