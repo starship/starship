@@ -27,7 +27,7 @@ impl Default for NixShellConfig<'_> {
             format: "via [$symbol$state( \\($name\\))]($style) ",
             symbol: "❄️  ",
             style: "bold blue",
-            impure_msg: "impure",
+            impure_msg: "",
             pure_msg: "pure",
             unknown_msg: "",
             disabled: false,

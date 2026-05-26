@@ -83,7 +83,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "name" => context.get_env("name").map(Ok),
+                "name" => context.get_env("name").and_then(|name| {
+                    if name == "nix-shell-env" {
+                        None
+                    } else {
+                        Some(Ok(name))
+                    }
+                }),
                 "level" => context.get_env("NIX_SHELL_LEVEL").map(Ok),
                 _ => None,
             })
@@ -139,7 +145,7 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
 
         assert_eq!(expected, actual);
     }
@@ -166,8 +172,19 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("❄️  impure (starship)")
+            Color::Blue.bold().paint("❄️   (starship)")
         ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn impure_shell_hides_default_flake_name() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("IN_NIX_SHELL", "impure")
+            .env("name", "nix-shell-env")
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
 
         assert_eq!(expected, actual);
     }
@@ -240,7 +257,7 @@ mod tests {
                 format = "via [$symbol$state( \\($name\\)) $level]($style) "
             })
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure 3")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️   3")));
 
         assert_eq!(expected, actual);
     }
