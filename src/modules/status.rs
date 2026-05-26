@@ -3,7 +3,7 @@ use std::string::ToString;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::status::StatusConfig;
-use crate::formatter::{StringFormatter, string_formatter::StringFormatterError};
+use crate::formatter::{StringFormatter, StringFormatterError};
 use crate::segment::Segment;
 
 type ExitCode = i32;
@@ -67,13 +67,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .iter()
             .enumerate()
             .filter_map(|(i, ec)| {
+                let segment_format_str = if i == ps.len() - 1 {
+                    segment_format
+                } else {
+                    &segment_format_with_separator
+                };
                 let formatted = format_exit_code(
                     ec.as_str(),
-                    if i == ps.len() - 1 {
-                        segment_format
-                    } else {
-                        &segment_format_with_separator
-                    },
+                    segment_format_str,
                     None,
                     &config,
                     context,
@@ -81,7 +82,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 match formatted {
                     Ok(segments) => Some(segments),
                     Err(e) => {
-                        log::warn!("Error parsing format string in `status.pipestatus_segment_format`: {e:?}");
+                        StringFormatterError::log_parse_error(
+                            "status.pipestatus_segment_format",
+                            segment_format_str,
+                            &e,
+                        );
                         None
                     }
                 }
@@ -99,8 +104,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
-        Err(_error) => {
-            log::warn!("Error parsing format string in `status.format`");
+        Err(error) => {
+            StringFormatterError::log_parse_error("status.format", main_format, &error);
             return None;
         }
     });
