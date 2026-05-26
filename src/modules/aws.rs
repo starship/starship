@@ -129,8 +129,22 @@ fn get_aws_profile_and_region(
 fn get_sso_cache_key_input(profile_section: &ini::Properties) -> Option<String> {
     profile_section
         .get("sso_session")
+        .or_else(|| profile_section.get("granted_sso_session"))
         .map(|s| s.to_string())
-        .or_else(|| profile_section.get("sso_start_url").map(|s| s.to_string()))
+        .or_else(|| {
+            profile_section
+                .get("sso_start_url")
+                .or_else(|| profile_section.get("granted_sso_start_url"))
+                .map(|s| s.to_string())
+        })
+}
+
+fn profile_has_credential_process_or_sso(section: &ini::Properties) -> bool {
+    section.contains_key("credential_process")
+        || section.contains_key("sso_session")
+        || section.contains_key("sso_start_url")
+        || section.contains_key("granted_sso_session")
+        || section.contains_key("granted_sso_start_url")
 }
 
 fn get_credentials_duration(
@@ -200,17 +214,13 @@ fn has_credential_process_or_sso(
     // to look up "[profile default]" which doesn't exist
     let config_section = get_profile_config(config, aws_profile).or(Some(&empty_section))?;
 
-    let credential_section = match credentials {
-        Some(credentials) => get_profile_creds(credentials, aws_profile),
-        None => None,
-    };
+    let credential_section = credentials.and_then(|c| get_profile_creds(c, aws_profile));
 
     Some(
-        config_section.contains_key("credential_process")
-            || config_section.contains_key("sso_session")
-            || config_section.contains_key("sso_start_url")
-            || credential_section?.contains_key("credential_process")
-            || credential_section?.contains_key("sso_start_url"),
+        profile_has_credential_process_or_sso(config_section)
+            || credential_section
+                .map(profile_has_credential_process_or_sso)
+                .unwrap_or(false),
     )
 }
 
@@ -1010,6 +1020,45 @@ credential_process = /opt/bin/awscreds-retriever
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn granted_profile_with_slash_name() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let credentials_path = dir.path().join("credentials");
+        File::create(&credentials_path)?;
+
+        let mut file = File::create(&config_path)?;
+        file.write_all(
+            "[profile account1/role1]
+granted_sso_start_url = https://example.awsapps.com/start
+granted_sso_region = us-east-1
+granted_sso_account_id = 000000000001
+granted_sso_role_name = role1
+credential_process = granted credential-process --profile account1/role1
+region = us-east-1
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "account1/role1")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env(
+                "AWS_SHARED_CREDENTIALS_FILE",
+                credentials_path.to_string_lossy().as_ref(),
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  account1/role1 (us-east-1) ")
         ));
 
         assert_eq!(expected, actual);
