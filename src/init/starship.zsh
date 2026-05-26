@@ -9,6 +9,25 @@
 
 zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
 
+# Bash enables `checkwinsize` so $COLUMNS stays in sync with the terminal. Zsh does
+# not always have a correct $COLUMNS value on the first prompt, which breaks $fill.
+__starship_update_columns() {
+    if (( ${+commands[stty]} )); then
+        local -a _starship_size=("${(@)$(stty size 2>/dev/null)}")
+        if (( ${#_starship_size} >= 2 && _starship_size[2] > 0 )); then
+            COLUMNS=$_starship_size[2]
+            return
+        fi
+    fi
+
+    if (( ! ${+COLUMNS} || COLUMNS == 0 )); then
+        if (( ${+commands[tput]} )); then
+            COLUMNS=$(tput cols 2>/dev/null)
+        fi
+        (( ${+COLUMNS} && COLUMNS > 0 )) || COLUMNS=80
+    fi
+}
+
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
     # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
@@ -29,6 +48,8 @@ fi
 
 # Runs before each new command line.
 prompt_starship_precmd() {
+    __starship_update_columns
+
     # Save the status, because subsequent commands in this function will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
