@@ -40,8 +40,20 @@ pub trait UnicodeWidthGraphemes {
 
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
 
+/// Sequences stripped before measuring [`UnicodeWidthGraphemes::width_graphemes`]:
+/// CSI SGR color/style (`ESC [ … m`), and OSC operating-system commands terminated with
+/// BEL (`ASCII 7`) or ST (`ESC \`), since they occupy no terminal columns but would
+/// otherwise break `$fill` / `right_format` alignment (see e.g. shell integration OSC 133
+/// or hyperlinks OSC 8).
 fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+    ANSI_REGEX.get_or_init(|| {
+        Regex::new(concat!(
+            r"(?:\x1B\[[0-9;]*m",               // SGR/select graphic rendition
+            r"|\x1B\][^\x07]*?(?:\x07|\x1B\\)", // OSC … BEL | OSC … ST
+            r")",
+        ))
+        .unwrap()
+    })
 }
 
 impl<T> UnicodeWidthGraphemes for T
@@ -67,6 +79,27 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+}
+
+#[test]
+fn test_strip_osc_shell_integration_for_width() {
+    assert_eq!(
+        "~/src".width_graphemes(),
+        "\x1B]133;A\x07\x1B[34m~/src".width_graphemes()
+    );
+}
+
+#[test]
+fn test_strip_osc_string_terminator_for_width() {
+    assert_eq!(
+        "hello".width_graphemes(),
+        "\x1B]133;B\x1B\\\x1B[32mhello".width_graphemes()
+    );
+}
+
+#[test]
+fn test_zwj_profession_emoji_width() {
+    assert_eq!(2, "🧑🏻‍🔬".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {
