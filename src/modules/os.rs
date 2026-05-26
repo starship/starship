@@ -374,6 +374,7 @@ mod tests {
             Type::openEuler => "🦉 ",
             Type::openSUSE => "🦎 ",
             Type::OracleLinux => "🦴 ",
+            Type::Parrot => "🦜 ",
             Type::PikaOS => "🐤 ",
             Type::Pop => "🍭 ",
             Type::Raspbian => "🍓 ",
