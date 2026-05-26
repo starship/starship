@@ -10,7 +10,7 @@
 zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
-if [[ $ZSH_VERSION == ([1-4]*) ]]; then
+if (( ${ZSH_VERSION%%.*} <= 4 )); then
     # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
     __starship_get_time() {
         STARSHIP_CAPTURED_TIME=$(::STARSHIP:: time)
