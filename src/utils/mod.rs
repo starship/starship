@@ -11,6 +11,9 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use unicode_segmentation::UnicodeSegmentation;
+use unicode_width::UnicodeWidthChar;
+
 use crate::context::Context;
 use crate::context::Shell;
 
@@ -625,6 +628,104 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
+/// Wraps printable graphemes with zsh explicit-width sequences (`%N{...%}`).
+///
+/// zsh can miscount the display width of Unicode symbols (see #6923, #7467), which
+/// shifts the command line after tab completion. Explicit width hints keep the cursor
+/// aligned with the terminal.
+pub fn wrap_glyphs_for_zsh(prompt: String) -> String {
+    let mut output = String::with_capacity(prompt.len() + prompt.len() / 4);
+    let mut rest = prompt.as_str();
+
+    while !rest.is_empty() {
+        if let Some(tail) = rest.strip_prefix("%%") {
+            output.push_str("%%");
+            rest = tail;
+            continue;
+        }
+
+        if let Some(tail) = rest.strip_prefix("%{") {
+            output.push_str("%{");
+            rest = copy_zsh_delimited_block(tail, &mut output);
+            continue;
+        }
+
+        if let Some((digit, tail)) = parse_zsh_width_prefix(rest) {
+            output.push('%');
+            output.push(digit);
+            output.push('{');
+            rest = copy_zsh_delimited_block(tail, &mut output);
+            continue;
+        }
+
+        let grapheme = rest.graphemes(true).next().unwrap_or(rest);
+        let width = grapheme_display_width(grapheme);
+        if should_wrap_grapheme_for_zsh(grapheme, width) {
+            push_zsh_width_wrapped_grapheme(&mut output, grapheme, width);
+        } else {
+            output.push_str(grapheme);
+        }
+        rest = &rest[grapheme.len()..];
+    }
+
+    output
+}
+
+fn parse_zsh_width_prefix(text: &str) -> Option<(char, &str)> {
+    let bytes = text.as_bytes();
+    if bytes.len() >= 3 && bytes[0] == b'%' && bytes[1].is_ascii_digit() && bytes[2] == b'{' {
+        Some((bytes[1] as char, &text[3..]))
+    } else {
+        None
+    }
+}
+
+fn copy_zsh_delimited_block<'a>(text: &'a str, output: &mut String) -> &'a str {
+    let mut rest = text;
+    while !rest.is_empty() {
+        if let Some(tail) = rest.strip_prefix("%%") {
+            output.push_str("%%");
+            rest = tail;
+            continue;
+        }
+        if let Some(tail) = rest.strip_prefix("%}") {
+            output.push_str("%}");
+            return tail;
+        }
+
+        let grapheme = rest.graphemes(true).next().unwrap_or(rest);
+        output.push_str(grapheme);
+        rest = &rest[grapheme.len()..];
+    }
+    rest
+}
+
+fn grapheme_display_width(grapheme: &str) -> usize {
+    grapheme
+        .chars()
+        .filter_map(UnicodeWidthChar::width)
+        .max()
+        .unwrap_or(0)
+}
+
+fn should_wrap_grapheme_for_zsh(grapheme: &str, width: usize) -> bool {
+    width > 0 && (width > 1 || grapheme.chars().any(|ch| !ch.is_ascii()))
+}
+
+fn push_zsh_width_wrapped_grapheme(output: &mut String, grapheme: &str, width: usize) {
+    if (1..=9).contains(&width) {
+        output.push('%');
+        output.push(char::from_digit(width as u32, 10).unwrap());
+        output.push('{');
+        output.push_str(grapheme);
+        output.push_str("%}");
+    } else {
+        output.push_str("%0{");
+        output.push_str(grapheme);
+        output.push_str("%}");
+    }
+}
+
 fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     cmd: T,
     args: &[U],
@@ -1010,6 +1111,19 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+    }
+
+    #[test]
+    fn test_wrap_glyphs_for_zsh_character_symbol() {
+        let input = format!("%{{\x1b[1;32m%}}❯%{{\x1b[0m%}} ");
+        let expected = format!("%{{\x1b[1;32m%}}%1{{❯%}}%{{\x1b[0m%}} ");
+        assert_eq!(wrap_glyphs_for_zsh(input), expected);
+    }
+
+    #[test]
+    fn test_wrap_glyphs_for_zsh_preserves_existing_width_sequences() {
+        let input = "%1{❯%} normal %%percent".to_string();
+        assert_eq!(wrap_glyphs_for_zsh(input.clone()), input);
     }
 
     #[test]

@@ -20,7 +20,7 @@ use crate::module::Module;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
+use crate::utils::{wrap_colorseq_for_shell, wrap_glyphs_for_zsh};
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -151,6 +151,11 @@ pub fn get_prompt(context: &Context) -> String {
     // color sequences for this specific shell
     let shell_wrapped_output =
         wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    let shell_wrapped_output = if context.shell == Shell::Zsh {
+        wrap_glyphs_for_zsh(shell_wrapped_output)
+    } else {
+        shell_wrapped_output
+    };
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
