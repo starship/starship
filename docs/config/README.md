@@ -4040,9 +4040,9 @@ By default, the module will be shown if any of the following conditions are met:
 > - a list of lists of strings, representing commands with optional arguments (e.g.
 >   `[['mise', 'exec', '--', 'python'], ['python3']]`)
 >
-> Starship will try executing each configured command until it gets a result.
-> Note you can only change the binary that Starship executes to get the version
-> of Python not the arguments that are used.
+> Starship tries each configured command in order until one returns a version.
+> Each entry can be a command name (e.g. `'python3'`) or an argv prefix array
+> (e.g. `['mise', 'exec', '--', 'python']`).
 >
 > The default values and order for `python_binary` was chosen to first identify
 > the Python version in a virtualenv/conda environments (which currently still
