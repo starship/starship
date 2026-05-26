@@ -139,6 +139,11 @@ fi
 # Ensure that $COLUMNS gets set
 shopt -s checkwinsize
 
+# When a command's output does not end with a newline, bash draws the prompt on the
+# same line. Dynamic prompts set via PROMPT_COMMAND can then be mis-rendered by
+# readline (notably with git modules), see #7226.
+PROMPT_EOL_MARK=$'\n'
+
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
