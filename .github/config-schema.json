@@ -5834,6 +5834,7 @@
           "default": "pyenv "
         },
         "python_binary": {
+          "description": "Ordered list of Python executables to probe, tried in order until one responds. Each item is a command name (e.g. \"python3\") or an argv prefix array (e.g. [\"python\", \"-3\"]).",
           "$ref": "#/$defs/VecOr_VecOr_string",
           "default": [
             [

@@ -12,6 +12,12 @@ use serde::{Deserialize, Serialize};
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(
+            description = "Ordered list of Python executables to probe, tried in order until one responds. Each item is a command name (e.g. \"python3\") or an argv prefix array (e.g. [\"python\", \"-3\"])."
+        )
+    )]
     pub python_binary: VecOr<VecOr<&'a str>>,
     pub format: &'a str,
     pub version_format: &'a str,
