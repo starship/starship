@@ -1,3 +1,6 @@
+   Compiling starship v1.25.1 (/private/tmp/oss-contrib/starship)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.10s
+     Running `target/debug/starship config-schema`
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FullConfig",
@@ -2887,6 +2890,7 @@
           "default": 3
         },
         "truncate_to_repo": {
+          "description": "When true, shorten the displayed path to start at the git repository root. Set to false to show the full path while still highlighting the repo root via repo_root_style.",
           "type": "boolean",
           "default": true
         },
@@ -2916,6 +2920,7 @@
           "default": "cyan bold"
         },
         "repo_root_style": {
+          "description": "Style for the repository root directory name when inside a git repo. Works with truncate_to_repo = false to highlight the repo folder in a full path.",
           "type": [
             "string",
             "null"
@@ -2923,6 +2928,7 @@
           "default": null
         },
         "before_repo_root_style": {
+          "description": "Style for the path before the repository root (e.g. /home/user/src/ before repo/). Used with repo_root_style when truncate_to_repo = false.",
           "type": [
             "string",
             "null"

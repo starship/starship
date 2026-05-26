@@ -24,6 +24,12 @@ pub struct SubstitutionConfig<'a> {
 #[serde(default)]
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(
+            description = "When true, shorten the displayed path to start at the git repository root. Set to false to show the full path while still highlighting the repo root via repo_root_style."
+        )
+    )]
     pub truncate_to_repo: bool,
     pub substitutions: Either<Vec<SubstitutionConfig<'a>>, IndexMap<String, &'a str>>,
     pub fish_style_pwd_dir_length: i64,
@@ -31,7 +37,19 @@ pub struct DirectoryConfig<'a> {
     pub format: &'a str,
     pub repo_root_format: &'a str,
     pub style: &'a str,
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(
+            description = "Style for the repository root directory name when inside a git repo. Works with truncate_to_repo = false to highlight the repo folder in a full path."
+        )
+    )]
     pub repo_root_style: Option<&'a str>,
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(
+            description = "Style for the path before the repository root (e.g. /home/user/src/ before repo/). Used with repo_root_style when truncate_to_repo = false."
+        )
+    )]
     pub before_repo_root_style: Option<&'a str>,
     pub disabled: bool,
     pub read_only: &'a str,
