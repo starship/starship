@@ -114,17 +114,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-            let num_segments_after_root = after_repo_root.split('/').count();
+            let root = repo_path_vec[0];
+            let after_repo_root = contracted_path.replacen(root, "", 1);
 
-            if config.truncation_length == 0
-                || ((num_segments_after_root - 1) as i64) < config.truncation_length
-            {
-                let root = repo_path_vec[0];
+            if dir_string.contains(root) {
                 let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
+                let after = dir_string
+                    .rsplit_once(root)
+                    .map(|(_, suffix)| suffix.to_string())
+                    .unwrap_or_else(|| after_repo_root.to_string());
+                [prefix + before, root.to_string(), after]
             } else {
-                [String::new(), String::new(), prefix + dir_string.as_str()]
+                // The repo root name may be truncated out of the display string; still
+                // highlight it and treat the visible suffix as the in-repo path.
+                let after = if after_repo_root.is_empty() || dir_string.starts_with('/') {
+                    dir_string.clone()
+                } else {
+                    format!("/{dir_string}")
+                };
+                [prefix.clone(), root.to_string(), after]
             }
         }
         _ => [String::new(), String::new(), prefix + dir_string.as_str()],
@@ -1790,6 +1798,34 @@ mod tests {
             convert_path_sep("…/above/"),
             Color::Green.prefix(),
             Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_when_path_truncated() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 1
+                truncate_to_repo = false
+                repo_root_style = "green"
+                before_repo_root_style = "blue"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Blue.prefix(),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
