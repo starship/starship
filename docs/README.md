@@ -85,6 +85,14 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
+   #### Brush
+
+   [Brush](https://github.com/reubeno/brush) is a bash-compatible shell. Add the following to the end of `~/.bashrc` or `~/.brushrc`:
+
+   ```sh
+   eval "$(starship init brush)"
+   ```
+
    #### Fish
 
    Add the following to the end of `~/.config/fish/config.fish`:

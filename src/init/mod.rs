@@ -115,7 +115,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
     let starship = StarshipPath::init()?;
 
     match shell_basename {
-        "bash" => print!(
+        "bash" | "brush" => print!(
             /* We now use the following bootstrap:
              *      `eval -- "$(starship init bash --print-full-init)"`
              * which works in any version of Bash from 3.2 to the latest
@@ -162,8 +162,9 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
              * https://github.com/starship/starship/pull/5020
              * https://github.com/starship/starship/issues/5382
              */
-            r#"eval -- "$({0} init bash --print-full-init)""#,
-            starship.sprint_posix()?
+            r#"eval -- "$({0} init {1} --print-full-init)""#,
+            starship.sprint_posix()?,
+            shell_basename
         ),
         "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?),
         "fish" => print!(
@@ -195,6 +196,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                 "{shell_basename} is not yet supported by starship.\n\
                  For the time being, we support the following shells:\n\
                  * bash\n\
+                 * brush\n\
                  * elvish\n\
                  * fish\n\
                  * ion\n\
@@ -220,7 +222,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     let starship_path = StarshipPath::init()?;
 
     match shell_name {
-        "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
+        "bash" | "brush" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
         "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
