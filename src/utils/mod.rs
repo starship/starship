@@ -277,6 +277,10 @@ Default target: x86_64-apple-macosx\n",
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
         }),
+        "elixir --short-version" => Some(CommandOutput {
+            stdout: String::from("1.13.4\n"),
+            stderr: String::default(),
+        }),
         "elixir --version" => Some(CommandOutput {
             stdout: String::from(
                 "\

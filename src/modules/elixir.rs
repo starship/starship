@@ -51,8 +51,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "otp_version" => versions
                     .deref()
                     .as_ref()
-                    .map(|(otp_version, _)| otp_version.to_string())
-                    .map(Ok),
+                    .and_then(|(otp_version, _)| otp_version.as_deref())
+                    .map(|otp| Ok(otp.to_string())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -69,10 +69,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version(context: &Context) -> Option<(String, String)> {
-    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
+fn get_elixir_version(context: &Context) -> Option<(Option<String>, String)> {
+    // Try --short-version first (Elixir 1.13+): handled by the shell wrapper,
+    // so it never starts the BEAM VM and returns in ~9 ms instead of ~370 ms.
+    if let Some(output) = context.exec_cmd("elixir", &["--short-version"]) {
+        if let Some(version) = parse_elixir_short_version(&output.stdout) {
+            return Some((None, version));
+        }
+    }
 
-    parse_elixir_version(&output)
+    // Fall back to --version for older Elixir or when --short-version is absent.
+    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
+    parse_elixir_version(&output).map(|(otp, ver)| (Some(otp), ver))
+}
+
+fn parse_elixir_short_version(output: &str) -> Option<String> {
+    let version = output.trim();
+    // Guard: must start with a digit to be a bare version string like "1.14.0".
+    // An unrecognised flag on pre-1.13 Elixir starts the VM and prints the full
+    // --version banner instead, which begins with "Erlang".
+    if version.starts_with(|c: char| c.is_ascii_digit()) {
+        Some(version.to_string())
+    } else {
+        None
+    }
 }
 
 fn parse_elixir_version(version: &str) -> Option<(String, String)> {
@@ -140,6 +160,26 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
 
     #[test]
     fn test_with_mix_file() -> io::Result<()> {
+        // The global mock returns "1.13.4\n" for `elixir --short-version`,
+        // so the fast path is taken and OTP is not shown.
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("mix.exs"))?.sync_all()?;
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Purple.bold().paint("💧 v1.13.4 ")
+        ));
+        let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
+
+        assert_eq!(output, expected);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_with_mix_file_version_fallback() -> io::Result<()> {
+        // Simulate pre-1.13 Elixir where --short-version is unavailable.
+        // The module should fall back to --version and show both versions.
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mix.exs"))?.sync_all()?;
 
@@ -147,10 +187,33 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
             "via {}",
             Color::Purple.bold().paint("💧 v1.10 (OTP 22) ")
         ));
-        let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
+        let output = ModuleRenderer::new("elixir")
+            .path(dir.path())
+            .cmd("elixir --short-version", None) // simulate absent flag
+            .collect();
 
         assert_eq!(output, expected);
 
         dir.close()
+    }
+
+    #[test]
+    fn test_parse_elixir_short_version() {
+        assert_eq!(
+            parse_elixir_short_version("1.13.4\n"),
+            Some("1.13.4".to_string())
+        );
+        assert_eq!(
+            parse_elixir_short_version("1.14.0-rc.0\n"),
+            Some("1.14.0-rc.0".to_string())
+        );
+        // Should reject the full --version banner (pre-1.13 fallback output)
+        assert_eq!(
+            parse_elixir_short_version(
+                "Erlang/OTP 22 [erts-10.6.4]\n\nElixir 1.12.0 (compiled with Erlang/OTP 22)\n"
+            ),
+            None
+        );
+        assert_eq!(parse_elixir_short_version(""), None);
     }
 }
