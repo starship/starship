@@ -75,24 +75,16 @@ fn get_state_description<'a>(
             current: None,
             total: None,
         }),
-        InProgress::ApplyMailbox => Some(StateDescription {
-            label: config.am,
-            current: None,
-            total: None,
-        }),
-        InProgress::ApplyMailboxRebase => Some(StateDescription {
-            label: config.am_or_rebase,
-            current: None,
-            total: None,
-        }),
+        InProgress::ApplyMailbox => Some(describe_rebase_apply(repo, config.am)),
+        InProgress::ApplyMailboxRebase => Some(describe_rebase_apply(repo, config.am_or_rebase)),
         InProgress::Rebase | InProgress::RebaseInteractive => {
-            Some(describe_rebase(repo, config.rebase))
+            Some(describe_rebase_apply(repo, config.rebase))
         }
     }
 }
 
 // TODO: Use future gitoxide API to get the state of the rebase
-fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescription<'a> {
+fn describe_rebase_apply<'a>(repo: &'a Repo, state_label: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files
@@ -134,7 +126,7 @@ fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescripti
     };
 
     StateDescription {
-        label: rebase_config,
+        label: state_label,
         current,
         total,
     }
@@ -181,6 +173,33 @@ mod tests {
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_applying_mailbox_progress() -> io::Result<()> {
+        let repo_dir = create_repo_with_conflict()?;
+        let path = repo_dir.path();
+        let patch_path = path.join("other-branch.patch");
+        let patch =
+            run_git_cmd_with_output(["format-patch", "-1", "other-branch", "--stdout"], path)?;
+        write_file(
+            &patch_path,
+            String::from_utf8(patch.stdout)
+                .map_err(|error| Error::new(ErrorKind::InvalidData, error))?,
+        )?;
+
+        run_git_cmd(
+            ["am", patch_path.to_str().expect("Path was not UTF-8")],
+            Some(path),
+            false,
+        )?;
+
+        let actual = ModuleRenderer::new("git_state").path(path).collect();
+
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("AM 1/1")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -271,6 +290,24 @@ mod tests {
             Err(Error::from(ErrorKind::Other))
         } else {
             Ok(())
+        }
+    }
+
+    fn run_git_cmd_with_output<A, S>(args: A, dir: &Path) -> io::Result<std::process::Output>
+    where
+        A: IntoIterator<Item = S>,
+        S: AsRef<OsStr>,
+    {
+        let output = create_command("git")?
+            .args(args)
+            .current_dir(dir)
+            .stderr(Stdio::null())
+            .output()?;
+
+        if output.status.success() {
+            Ok(output)
+        } else {
+            Err(Error::from(ErrorKind::Other))
         }
     }
 
