@@ -27,6 +27,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let display_duration = if config.show_milliseconds {
+        elapsed
+    } else {
+        // Round to the nearest second before hiding milliseconds.
+        elapsed.saturating_add(500)
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
@@ -34,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration" => Some(Ok(render_time(display_duration, config.show_milliseconds))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -163,6 +170,16 @@ mod tests {
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn rounds_duration_to_nearest_second_when_milliseconds_are_hidden() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(12807)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("13s")));
         assert_eq!(expected, actual);
     }
 
