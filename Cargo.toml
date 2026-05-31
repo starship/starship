@@ -77,7 +77,7 @@ systemstat = "=0.2.6"
 tempfile = "3.27.0"
 terminal_size = "0.4.4"
 toml = { version = "1.1.2", features = ["preserve_order"] }
-toml_edit = "0.25.11"
+toml_edit = "0.25.12"
 unicode-segmentation = "1.13.2"
 unicode-width = "0.2.2"
 urlencoding = "2.1.3"
