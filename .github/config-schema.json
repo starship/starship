@@ -1209,7 +1209,10 @@
           ".nvmrc",
           "!bunfig.toml",
           "!bun.lock",
-          "!bun.lockb"
+          "!bun.lockb",
+          "!deno.json",
+          "!deno.jsonc",
+          "!deno.lock"
         ],
         "detect_folders": [
           "node_modules"
@@ -5199,7 +5202,10 @@
             ".nvmrc",
             "!bunfig.toml",
             "!bun.lock",
-            "!bun.lockb"
+            "!bun.lockb",
+            "!deno.json",
+            "!deno.jsonc",
+            "!deno.lock"
           ]
         },
         "detect_folders": {
