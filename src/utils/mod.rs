@@ -581,6 +581,17 @@ Version: 0.8.16+commit.07a7930e.Linux.g++",
             stdout: String::from("0.8.15+commit.e14f2714.Emscripten.clang"),
             stderr: String::default(),
         }),
+        "sudo -V" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Sudo version 1.9.17p2
+Sudoers policy plugin version 1.9.17p2
+Sudoers file grammar version 50
+Sudoers I/O plugin version 1.9.17p2
+Sudoers audit plugin version 1.9.17p2",
+            ),
+            stderr: String::default(),
+        }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
