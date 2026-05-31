@@ -119,7 +119,7 @@ dunce = "1.0.5"
 winres = "0.1.12"
 
 [dev-dependencies]
-mockall = "0.14.0"
+mockall = "=0.14.0"
 
 [profile.release]
 codegen-units = 1
