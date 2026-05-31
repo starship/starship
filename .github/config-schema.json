@@ -60,7 +60,9 @@
       "additionalProperties": {
         "type": "string"
       },
-      "default": {}
+      "default": {
+        "claude-code": "$claude_model$git_branch$claude_context$claude_cost"
+      }
     },
     "aws": {
       "$ref": "#/$defs/AwsConfig",
@@ -91,7 +93,7 @@
         "full_symbol": "󰁹 ",
         "charging_symbol": "󰂄 ",
         "discharging_symbol": "󰂃 ",
-        "unknown_symbol": "󰁽 ",
+        "unknown_symbol": "󰂑 ",
         "empty_symbol": "󰂎 ",
         "display": [
           {
@@ -179,6 +181,75 @@
         "vimcmd_visual_symbol": "[❮](bold yellow)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
+        "disabled": false
+      }
+    },
+    "claude_context": {
+      "$ref": "#/$defs/ClaudeContextConfig",
+      "default": {
+        "format": "[$gauge $percentage]($style) ",
+        "symbol": "",
+        "gauge_width": 5,
+        "gauge_full_symbol": "█",
+        "gauge_partial_symbol": "▒",
+        "gauge_empty_symbol": "░",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 30.0,
+            "style": "bold green",
+            "hidden": false
+          },
+          {
+            "threshold": 60.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 80.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_cost": {
+      "$ref": "#/$defs/ClaudeCostConfig",
+      "default": {
+        "format": "[$symbol(\\$$cost)]($style) ",
+        "symbol": "💰 ",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 1.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 5.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_model": {
+      "$ref": "#/$defs/ClaudeModelConfig",
+      "default": {
+        "format": "[$symbol$model]($style) ",
+        "symbol": "🤖 ",
+        "style": "bold blue",
+        "model_aliases": {},
         "disabled": false
       }
     },
@@ -367,7 +438,7 @@
       "default": {
         "truncation_length": 3,
         "truncate_to_repo": true,
-        "substitutions": {},
+        "substitutions": [],
         "fish_style_pwd_dir_length": 0,
         "use_logical_path": true,
         "format": "[$path]($style)[$read_only]($read_only_style) ",
@@ -992,6 +1063,22 @@
         ]
       }
     },
+    "maven": {
+      "$ref": "#/$defs/MavenConfig",
+      "default": {
+        "format": "via [$symbol($version )]($style)",
+        "version_format": "v${raw}",
+        "symbol": "🅼 ",
+        "style": "bold bright-cyan",
+        "disabled": false,
+        "recursive": false,
+        "detect_extensions": [],
+        "detect_files": [
+          "pom.xml"
+        ],
+        "detect_folders": []
+      }
+    },
     "memory_usage": {
       "$ref": "#/$defs/MemoryConfig",
       "default": {
@@ -1418,7 +1505,8 @@
         "detect_folders": [],
         "detect_env_vars": [
           "VIRTUAL_ENV"
-        ]
+        ],
+        "generic_venv_names": []
       }
     },
     "quarto": {
@@ -1941,7 +2029,7 @@
         },
         "unknown_symbol": {
           "type": "string",
-          "default": "󰁽 "
+          "default": "󰂑 "
         },
         "empty_symbol": {
           "type": "string",
@@ -2206,6 +2294,160 @@
         "vimcmd_replace_one_symbol": {
           "type": "string",
           "default": "[❮](bold purple)"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeContextConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$gauge $percentage]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": ""
+        },
+        "gauge_width": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 5
+        },
+        "gauge_full_symbol": {
+          "type": "string",
+          "default": "█"
+        },
+        "gauge_partial_symbol": {
+          "type": "string",
+          "default": "▒"
+        },
+        "gauge_empty_symbol": {
+          "type": "string",
+          "default": "░"
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 30.0,
+              "style": "bold green",
+              "hidden": false
+            },
+            {
+              "threshold": 60.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 80.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "format": "float",
+          "default": 0.0
+        },
+        "style": {
+          "type": "string",
+          "default": "bold green"
+        },
+        "hidden": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeCostConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol(\\$$cost)]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "💰 "
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 1.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 5.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeModelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol$model]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🤖 "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold blue"
+        },
+        "model_aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
         },
         "disabled": {
           "type": "boolean",
@@ -2646,11 +2888,8 @@
           "default": true
         },
         "substitutions": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "default": {}
+          "$ref": "#/$defs/Either",
+          "default": []
         },
         "fish_style_pwd_dir_length": {
           "type": "integer",
@@ -2713,6 +2952,42 @@
         }
       },
       "additionalProperties": false
+    },
+    "Either": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubstitutionConfig"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SubstitutionConfig": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
     },
     "DirenvConfig": {
       "type": "object",
@@ -3031,7 +3306,7 @@
         },
         "format": {
           "type": "string",
-          "default": "with [$env_value]($style) "
+          "default": "with [$symbol$env_value]($style) "
         },
         "disabled": {
           "type": "boolean",
@@ -4521,6 +4796,59 @@
       },
       "additionalProperties": false
     },
+    "MavenConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "via [$symbol($version )]($style)"
+        },
+        "version_format": {
+          "type": "string",
+          "default": "v${raw}"
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🅼 "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold bright-cyan"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "recursive": {
+          "type": "boolean",
+          "default": false
+        },
+        "detect_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "detect_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "pom.xml"
+          ]
+        },
+        "detect_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
     "MemoryConfig": {
       "type": "object",
       "properties": {
@@ -5336,7 +5664,7 @@
       "type": "object",
       "properties": {
         "pixi_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "pixi"
           ]
@@ -5392,7 +5720,7 @@
       },
       "additionalProperties": false
     },
-    "Either": {
+    "VecOr_string": {
       "anyOf": [
         {
           "type": "string"
@@ -5500,7 +5828,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/VecOr_VecOr_string",
           "default": [
             [
               "python"
@@ -5573,9 +5901,29 @@
           "default": [
             "VIRTUAL_ENV"
           ]
+        },
+        "generic_venv_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         }
       },
       "additionalProperties": false
+    },
+    "VecOr_VecOr_string": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VecOr_string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VecOr_string"
+          }
+        }
+      ]
     },
     "QuartoConfig": {
       "type": "object",
@@ -6110,7 +6458,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "solc"
           ]
@@ -6815,7 +7163,7 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either",
+          "$ref": "#/$defs/VecOr_string",
           "default": []
         },
         "description": {

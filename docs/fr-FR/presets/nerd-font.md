@@ -16,6 +16,6 @@ Ce préréglage change les symboles de chaque module pour utiliser les symboles 
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml){download}
+[Cliquez pour télécharger TOML](/presets/toml/nerd-font-symbols.toml){download}
 
 <<< @/public/presets/toml/nerd-font-symbols.toml

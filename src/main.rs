@@ -7,7 +7,7 @@ use std::time::SystemTime;
 
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
-use rand::Rng;
+use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
@@ -55,6 +55,12 @@ fn generate_completions(shell: CompletionShell) {
         CompletionShell::Zsh => generate_shell(clap_complete::Shell::Zsh),
         CompletionShell::Nushell => generate_shell(clap_complete_nushell::Nushell),
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum Statuslines {
+    #[clap(alias = "claude")]
+    ClaudeCode,
 }
 
 #[derive(Subcommand, Debug)]
@@ -129,6 +135,15 @@ enum Commands {
     },
     /// Generate random session key
     Session,
+    /// Prints the statusline with a specific profile
+    Statusline {
+        /// The statusline provider to use
+        provider: Statuslines,
+        #[clap(long)]
+        profile: Option<String>,
+        #[clap(flatten)]
+        properties: Properties,
+    },
     /// Prints time in milliseconds
     #[clap(hide = true)]
     Time,
@@ -275,6 +290,18 @@ fn main() {
                 .map(char::from)
                 .collect::<String>()
         ),
+        Commands::Statusline {
+            provider,
+            profile,
+            properties,
+        } => {
+            let profile = profile.unwrap_or_else(|| match provider {
+                Statuslines::ClaudeCode => "claude-code".to_string(),
+            });
+
+            let target = Target::Profile(profile);
+            print::prompt_with_claude_code(properties, target);
+        }
         #[cfg(feature = "config-schema")]
         Commands::ConfigSchema => print::print_schema(),
     }

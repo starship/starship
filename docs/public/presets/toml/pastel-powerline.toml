@@ -18,7 +18,9 @@ $gradle\
 $haskell\
 $java\
 $julia\
+$maven\
 $nodejs\
+$bun\
 $nim\
 $rust\
 $scala\
@@ -124,8 +126,17 @@ symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
+[maven]
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
 [nodejs]
 symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[bun]
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
