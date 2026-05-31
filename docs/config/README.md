@@ -1824,6 +1824,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+The `CLOUDSDK_CORE_PROJECT` and `CLOUDSDK_COMPUTE_REGION` environment variables, when set, override the `project` and `region` values from the active configuration, mirroring the behavior of `gcloud` itself.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has
 been set in which case the module will only be active when one of the
@@ -3343,12 +3344,13 @@ The module will be shown when inside a nix-shell environment.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| state    | `pure`  | The state of the nix-shell           |
-| name     | `lorri` | The name of the nix-shell            |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                                                                   |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| state    | `pure`  | The state of the nix-shell                                                    |
+| name     | `lorri` | The name of the nix-shell                                                     |
+| level    | `1`     | The depth level of the nix-shell (Only when using [Lix](https://lix.systems)) |
+| symbol   |         | Mirrors the value of option `symbol`                                          |
+| style\*  |         | Mirrors the value of option `style`                                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -3377,7 +3379,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
-Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+Additionally, the module will be hidden by default if the directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Options
 
@@ -3856,7 +3858,8 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 ## Pixi
 
-The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated
+environment and project name, if `$PIXI_ENVIRONMENT_NAME` is set.
 
 > [!TIP]
 > This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
@@ -3878,12 +3881,13 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ### Variables
 
-| Variable    | Example   | Description                          |
-| ----------- | --------- | ------------------------------------ |
-| version     | `v0.33.0` | The version of `pixi`                |
-| environment | `py311`   | The current pixi environment         |
-| symbol      |           | Mirrors the value of option `symbol` |
-| style       |           | Mirrors the value of option `style`  |
+| Variable     | Example      | Description                          |
+| ------------ | ------------ | ------------------------------------ |
+| version      | `v0.33.0`    | The version of `pixi`                |
+| environment  | `py311`      | The current pixi environment         |
+| project_name | `my-project` | The current pixi project name        |
+| symbol       |              | Mirrors the value of option `symbol` |
+| style        |              | Mirrors the value of option `style`  |
 
 ### Example
 
