@@ -61,7 +61,7 @@
         "type": "string"
       },
       "default": {
-        "claude-code": "$claude_model$git_branch$claude_context$claude_cost"
+        "claude-code": "$claude_model$git_branch$claude_context$claude_cost$claude_usage"
       }
     },
     "aws": {
@@ -250,6 +250,30 @@
         "symbol": "🤖 ",
         "style": "bold blue",
         "model_aliases": {},
+        "disabled": false
+      }
+    },
+    "claude_usage": {
+      "$ref": "#/$defs/ClaudeUsageConfig",
+      "default": {
+        "format": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\)]($style) )",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 70.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 90.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
         "disabled": false
       }
     },
@@ -2450,6 +2474,43 @@
             "type": "string"
           },
           "default": {}
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeUsageConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\)]($style) )"
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 70.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 90.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
         },
         "disabled": {
           "type": "boolean",
