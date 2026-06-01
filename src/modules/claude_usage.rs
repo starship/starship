@@ -82,6 +82,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use std::time::{SystemTime, UNIX_EPOCH};
+
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -190,6 +192,26 @@ mod tests {
             .claude_code_data(data)
             .collect();
         assert_eq!(actual, Some(format!("{} ", Color::Red.bold().paint("95%"))));
+    }
+
+    #[test]
+    fn test_default_format_renders() {
+        // Regression test: the default `format` string must be a valid
+        // format string. A malformed default caused module() to log a parse
+        // error and silently return None, so the module never rendered.
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
+        let data = make_data(75.0, 10.0, now + 3600, now + 86400);
+        let actual = ModuleRenderer::new("claude_usage")
+            .claude_code_data(data)
+            .collect()
+            .expect("claude_usage should render with the default format");
+        assert!(
+            actual.contains("75%"),
+            "rendered output should contain the 5h percentage: {actual}",
+        );
     }
 
     fn make_data(

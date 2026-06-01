@@ -256,7 +256,7 @@
     "claude_usage": {
       "$ref": "#/$defs/ClaudeUsageConfig",
       "default": {
-        "format": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\)]($style) )",
+        "format": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\))]($style) ",
         "display": [
           {
             "threshold": 0.0,
@@ -2487,7 +2487,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\)]($style) )"
+          "default": "[($five_hour_pct% \\(resets in $five_hour_reset\\)  )($seven_day_pct% \\(resets in $seven_day_reset\\))]($style) "
         },
         "display": {
           "type": "array",
