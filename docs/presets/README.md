@@ -78,6 +78,12 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 [![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view Jetpack preset")](./jetpack)
 
+## [Muted Moss](./muted-moss.md)
+
+This preset is inspired by Tokyo Night, Gruvbox Rainbow, & a strong desire for something a little more polished that blends nicely into the background.
+
+[![Screenshot of Muted Moss preset](/presets/img/muted-moss.png "Click to view Muted Moss preset")](./muted-moss)
+
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
