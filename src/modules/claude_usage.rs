@@ -3,6 +3,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use super::{Context, Module, ModuleConfig};
 use crate::configs::claude_usage::ClaudeUsageConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::render_time;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("claude_usage");
@@ -40,8 +41,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .unwrap_or_default()
         .as_secs();
 
-    let five_hour_reset = format_duration(rate_limits.five_hour.resets_at.saturating_sub(now_secs));
-    let seven_day_reset = format_duration(rate_limits.seven_day.resets_at.saturating_sub(now_secs));
+    let five_hour_reset = render_time(
+        (rate_limits.five_hour.resets_at.saturating_sub(now_secs) as u128) * 1000,
+        false,
+    );
+    let seven_day_reset = render_time(
+        (rate_limits.seven_day.resets_at.saturating_sub(now_secs) as u128) * 1000,
+        false,
+    );
 
     let five_hour_pct_str = format!("{:.0}", five_hour_pct);
     let seven_day_pct_str = format!("{:.0}", seven_day_pct);
@@ -73,19 +80,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_duration(secs: u64) -> String {
-    if secs >= 86400 {
-        format!("{}d{}h", secs / 86400, (secs % 86400) / 3600)
-    } else if secs >= 3600 {
-        format!("{}h{}m", secs / 3600, (secs % 3600) / 60)
-    } else {
-        format!("{}m", secs / 60)
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::format_duration;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -194,18 +190,6 @@ mod tests {
             .claude_code_data(data)
             .collect();
         assert_eq!(actual, Some(format!("{} ", Color::Red.bold().paint("95%"))));
-    }
-
-    #[test]
-    fn test_format_duration() {
-        assert_eq!(format_duration(0), "0m");
-        assert_eq!(format_duration(59), "0m");
-        assert_eq!(format_duration(60), "1m");
-        assert_eq!(format_duration(3599), "59m");
-        assert_eq!(format_duration(3600), "1h0m");
-        assert_eq!(format_duration(5025), "1h23m");
-        assert_eq!(format_duration(86400), "1d0h");
-        assert_eq!(format_duration(100000), "1d3h");
     }
 
     fn make_data(
