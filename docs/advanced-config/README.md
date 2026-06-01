@@ -365,7 +365,7 @@ To use Starship as your Claude Code statusline:
 
 When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
 
-The profile includes four specialized modules:
+The profile includes some specialized modules:
 
 - `claude_model`: Displays the current Claude model being used
 - `claude_context`: Shows context window usage with a visual gauge
