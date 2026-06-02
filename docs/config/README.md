@@ -2468,11 +2468,16 @@ format = 'via [⎈ $version](bold white) '
 
 The `hostname` module shows the system hostname.
 
+> [!TIP]
+> SSH connection is detected by checking environment variables
+> `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
+> these variables, one workaround is to set one of them with a dummy value.
+
 ### Options
 
 | Option            | Default                                | Description                                                                                                                           |
 | ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session (`SSH_CONNECTION`, `SSH_CLIENT`, or `SSH_TTY`).                                   |
+| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
 | `ssh_symbol`      | `'🌐 '`                                | A format string representing the symbol when connected to SSH session.                                                                |
 | `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |

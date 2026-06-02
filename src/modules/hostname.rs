@@ -1,3 +1,4 @@
+use super::username::is_ssh_session;
 use super::{Context, Module};
 
 use crate::config::ModuleConfig;
@@ -64,12 +65,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn is_ssh_session(context: &Context) -> bool {
-    ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"]
-        .iter()
-        .any(|env| context.get_env_os(env).is_some())
 }
 
 #[cfg(test)]
