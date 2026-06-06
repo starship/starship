@@ -160,19 +160,30 @@ fn get_credentials_duration(
             .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     } else {
-        // get expiration from cached SSO credentials
         let config = get_config(context, aws_config)?;
         let section = get_profile_config(config, aws_profile)?;
-        let cache_key_input = get_sso_cache_key_input(section)?;
-        // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
-        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
-        // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
-        let mut sso_cred_path = context.get_home()?;
-        sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
-        let sso_cred_json: json::Value =
-            json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
-        let expires_at = sso_cred_json.get("expiresAt")?.as_str();
-        DateTime::parse_from_rfc3339(expires_at?).ok()
+
+        if let Some(session_name) = section.get("login_session") {
+            // get expiration from the aws login session cache (~/.aws/login/cache/<session>.json)
+            let mut login_cache_path = context.get_home()?;
+            login_cache_path.push(format!(".aws/login/cache/{session_name}.json"));
+            let login_cred_json: json::Value =
+                json::from_str(&crate::utils::read_file(&login_cache_path).ok()?).ok()?;
+            let expires_at = login_cred_json.get("expiresAt")?.as_str();
+            DateTime::parse_from_rfc3339(expires_at?).ok()
+        } else {
+            // get expiration from cached SSO credentials
+            let cache_key_input = get_sso_cache_key_input(section)?;
+            // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
+            let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
+            // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
+            let mut sso_cred_path = context.get_home()?;
+            sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
+            let sso_cred_json: json::Value =
+                json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
+            let expires_at = sso_cred_json.get("expiresAt")?.as_str();
+            DateTime::parse_from_rfc3339(expires_at?).ok()
+        }
     }?;
 
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
@@ -209,9 +220,20 @@ fn has_credential_process_or_sso(
         config_section.contains_key("credential_process")
             || config_section.contains_key("sso_session")
             || config_section.contains_key("sso_start_url")
+            || config_section.contains_key("login_session")
             || credential_section?.contains_key("credential_process")
             || credential_section?.contains_key("sso_start_url"),
     )
+}
+
+fn has_login_session(
+    context: &Context,
+    aws_profile: Option<&Profile>,
+    aws_config: &AwsConfigFile,
+) -> Option<bool> {
+    let config = get_config(context, aws_config)?;
+    let section = get_profile_config(config, aws_profile)?;
+    Some(section.contains_key("login_session"))
 }
 
 fn has_defined_credentials(
@@ -269,7 +291,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let aws_creds = OnceCell::new();
 
     let (aws_profile, aws_region) = get_aws_profile_and_region(context, &aws_config);
-    if aws_profile.is_none() && aws_region.is_none() {
+    if aws_profile.is_none()
+        && aws_region.is_none()
+        && !has_login_session(context, None, &aws_config).unwrap_or(false)
+    {
         return None;
     }
 
@@ -1287,6 +1312,185 @@ source_profile = starship
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn login_session_set_with_profile_and_region() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[profile astronauts]
+region = us-east-2
+login_session = my-login-session
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (us-east-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn login_session_set_no_credentials() -> io::Result<()> {
+        // Without force_display and no other credentials, login_session alone is sufficient
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = us-west-2
+login_session = my-login-session
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-west-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn login_session_force_display_no_region() -> io::Result<()> {
+        // When force_display = true and login_session is present but no region,
+        // the module should still display (bypassing both early exits)
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+login_session = my-login-session
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                force_display = true
+            })
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        // With no profile or region, only the symbol renders
+        let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  ")));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn login_session_expiration_from_cache() -> io::Result<()> {
+        use chrono::{DateTime, SecondsFormat, Utc};
+
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/login/cache"))?;
+
+        let mut config_file = File::create(dir.path().join(".aws/config"))?;
+        config_file.write_all(
+            "[profile astronauts]
+region = us-east-1
+login_session = my-session
+"
+            .as_bytes(),
+        )?;
+        config_file.sync_all()?;
+
+        let now_plus_half_hour: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
+
+        let mut cache_file =
+            File::create(dir.path().join(".aws/login/cache/my-session.json"))?;
+        cache_file.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+
+        let possible_values = [
+            "30m2s", "30m1s", "30m0s", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+        ];
+        let possible_values = possible_values.map(|duration| {
+            let segment_colored = format!("☁️  astronauts (us-east-1) [{duration}] ");
+            Some(format!("on {}", Color::Yellow.bold().paint(segment_colored)))
+        });
+        assert!(
+            possible_values.contains(&actual),
+            "time is not in range: {actual:?}"
+        );
+
+        dir.close()
+    }
+
+    #[test]
+    fn login_session_expiration_expired() -> io::Result<()> {
+        use chrono::{DateTime, SecondsFormat, Utc};
+
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/login/cache"))?;
+
+        let mut config_file = File::create(dir.path().join(".aws/config"))?;
+        config_file.write_all(
+            "[profile astronauts]
+region = us-east-1
+login_session = my-session
+"
+            .as_bytes(),
+        )?;
+        config_file.sync_all()?;
+
+        let one_hour_ago: DateTime<Utc> =
+            DateTime::from_timestamp(chrono::Local::now().timestamp() - 3600, 0).unwrap();
+
+        let mut cache_file =
+            File::create(dir.path().join(".aws/login/cache/my-session.json"))?;
+        cache_file.write_all(
+            format!(
+                r#"{{"expiresAt": "{}"}}"#,
+                one_hour_ago.to_rfc3339_opts(SecondsFormat::Secs, true)
+            )
+            .as_bytes(),
+        )?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (us-east-1) [X] ")
         ));
 
         assert_eq!(expected, actual);
