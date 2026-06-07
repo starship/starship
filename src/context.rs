@@ -428,7 +428,7 @@ impl<'a> Context<'a> {
             "xonsh" => Shell::Xonsh,
             "cmd" => Shell::Cmd,
             "brush" => Shell::Brush,
-        _ => Shell::Unknown,
+            _ => Shell::Unknown,
         }
     }
 

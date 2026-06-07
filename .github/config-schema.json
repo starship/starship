@@ -1664,6 +1664,7 @@
         "nu_indicator": "nu",
         "xonsh_indicator": "xsh",
         "cmd_indicator": "cmd",
+        "brush_indicator": "bsh",
         "unknown_indicator": "",
         "style": "white bold",
         "disabled": true
@@ -6365,6 +6366,10 @@
         "cmd_indicator": {
           "type": "string",
           "default": "cmd"
+        },
+        "brush_indicator": {
+          "type": "string",
+          "default": "bsh"
         },
         "unknown_indicator": {
           "type": "string",
