@@ -293,7 +293,7 @@ not explicitly used in either `format` or `right_format`.
 Note: The right prompt is a single line following the input location. To right align modules above
 the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash, brush.
 
 Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 

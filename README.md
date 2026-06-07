@@ -304,6 +304,17 @@ eval "$(starship init bash)"
 </details>
 
 <details>
+<summary>Brush</summary>
+
+Add the following to the end of `~/.brushrc`:
+
+```sh
+eval "$(starship init brush)"
+```
+
+</details>
+
+<details>
 <summary>Cmd</summary>
 
 You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.

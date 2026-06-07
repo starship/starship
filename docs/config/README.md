@@ -4411,6 +4411,7 @@ The `shell` module shows an indicator for currently used shell.
 | `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                                                |
 | `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                                                               |
 | `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                                                 |
+| `brush_indicator`      | `'bsh'`                   | A format string used to represent brush.                                                               |
 | `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                                                  |
 | `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                                           |
 | `format`               | `'[$indicator]($style) '` | The format for the module.                                                                             |

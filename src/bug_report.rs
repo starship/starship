@@ -229,6 +229,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "tcsh" => Some(".tcshrc"),
             "xonsh" => Some(".xonshrc"),
             "cmd" => Some("AppData/Local/clink/starship.lua"),
+            "brush" => Some(".brushrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))

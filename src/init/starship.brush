@@ -1,0 +1,76 @@
+# Brush is a bash-compatible shell, but it does not support all bash-specific
+# features used in the bash init script. Notably, brush does not have ble.sh
+# integration, bash-preexec, BASH_VERSINFO arrays, or shopt. It does support
+# PROMPT_COMMAND, PS0, and PIPESTATUS.
+
+# A way to set '$?', since brush does not allow assigning to '$?' directly
+function _starship_set_return() { return "${1:-0}"; }
+
+# Will be run before the prompt is drawn
+starship_precmd() {
+    # Save the status, because commands in this pipeline will change $?
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
+
+    jobs &>/dev/null
+
+    local job NUM_JOBS=0 IFS=$' \t\n'
+    # Evaluate the number of jobs before running the preserved prompt command, so that tools
+    # like z/autojump, which background certain jobs, do not cause spurious background jobs
+    # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
+    for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
+
+    # Run the precmd function, if it's set. If not set, evaluates to no-op
+    "${starship_precmd_user_func-:}"
+
+    # Set $? to the preserved value before running additional parts of the prompt
+    # command pipeline, which may rely on it.
+    _starship_set_return "$STARSHIP_CMD_STATUS"
+
+    if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
+        eval "$STARSHIP_PROMPT_COMMAND"
+    fi
+
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
+    # Prepare the timer data, if needed.
+    if [[ -n "${STARSHIP_START_TIME-}" ]]; then
+        STARSHIP_END_TIME=$(::STARSHIP:: time)
+        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
+        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
+        STARSHIP_START_TIME=""
+    fi
+    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
+    BRUSH_PS_ALT="$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+    STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+}
+
+# Use PS0 for timing (brush supports PS0)
+starship_preexec_ps0() {
+    ::STARSHIP:: time
+}
+
+# Use PS0-based timing (supported in brush)
+PS0='${STARSHIP_START_TIME:$((STARSHIP_START_TIME="$(starship_preexec_ps0)",STARSHIP_PREEXEC_READY=0,0)):0}'"${PS0-}"
+
+# Set up PROMPT_COMMAND, avoiding duplicates
+if [[ -z "${PROMPT_COMMAND-}" ]]; then
+    PROMPT_COMMAND="starship_precmd"
+elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
+    # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
+    # Prepending to PROMPT_COMMAND breaks "command duration" module.
+    # So, we are preserving the existing PROMPT_COMMAND
+    # which will be executed later in the starship_precmd function
+    STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
+    PROMPT_COMMAND="starship_precmd"
+fi
+
+# Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
+STARSHIP_START_TIME=$(::STARSHIP:: time)
+export STARSHIP_SHELL="brush"
+
+# Set up the session key that will be used to store logs
+STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
+STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
+export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
+
+# Set the continuation prompt
+PS2="$(::STARSHIP:: prompt --continuation)"
