@@ -275,7 +275,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
             let path = tempfile::tempdir()?;
 
             // Randomly choose between SHA256 and SHA1 fixtures to test both
-            let sha256 = true;
+            let sha256 = rand::random();
             let fixture = if sha256 {
                 &GIT_SHA256_FIXTURE
             } else {
