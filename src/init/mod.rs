@@ -328,4 +328,33 @@ mod tests {
         );
         Ok(())
     }
+
+    #[test]
+    fn brush_init_sets_starship_shell() {
+        assert!(BRUSH_INIT.contains("STARSHIP_SHELL"));
+        assert!(BRUSH_INIT.contains("brush"));
+    }
+
+    #[test]
+    fn brush_init_has_prompt_command() {
+        assert!(BRUSH_INIT.contains("PROMPT_COMMAND"));
+        assert!(BRUSH_INIT.contains("starship_precmd"));
+    }
+
+    #[test]
+    fn brush_init_has_right_prompt() {
+        assert!(BRUSH_INIT.contains("--right"));
+        assert!(BRUSH_INIT.contains("BRUSH_PS_ALT"));
+    }
+
+    #[test]
+    fn brush_init_has_continuation_prompt() {
+        assert!(BRUSH_INIT.contains("--continuation"));
+    }
+
+    #[test]
+    fn brush_init_has_ps0_timing() {
+        assert!(BRUSH_INIT.contains("PS0"));
+        assert!(BRUSH_INIT.contains("starship_preexec_ps0"));
+    }
 }

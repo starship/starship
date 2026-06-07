@@ -309,4 +309,14 @@ mod tests {
             config_path.unwrap()
         );
     }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn test_get_config_path_brush() {
+        let config_path = get_config_path("brush");
+        assert_eq!(
+            utils::home_dir().unwrap().join(".brushrc"),
+            config_path.unwrap()
+        );
+    }
 }

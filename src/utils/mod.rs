@@ -1077,6 +1077,13 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+
+        // Brush uses the same \[...\] wrappers as Bash
+        let brresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Brush, '\x1b', 'm');
+        let brresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Brush, '\x1b', 'm');
+
+        assert_eq!(&brresult0, "\\[\x1b2m\\]hellomynamekeyes\\[\x1b2m\\]");
+        assert_eq!(&brresult4, "herpaderp");
     }
 
     #[test]
