@@ -74,7 +74,10 @@
         "region_aliases": {},
         "profile_aliases": {},
         "expiration_symbol": "X",
-        "force_display": false
+        "force_display": false,
+        "sso": {
+          "require_active": false
+        }
       }
     },
     "azure": {
@@ -1980,6 +1983,25 @@
         },
         "force_display": {
           "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
+          "type": "boolean",
+          "default": false
+        },
+        "sso": {
+          "description": "SSO-specific options. See [`AwsSsoConfig`].",
+          "$ref": "#/$defs/AwsSsoConfig",
+          "default": {
+            "require_active": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "AwsSsoConfig": {
+      "description": "SSO-specific configuration for the `aws` module (grouped under `[aws.sso]`).",
+      "type": "object",
+      "properties": {
+        "require_active": {
+          "description": "If `true`, hides the module for SSO-based profiles when no unexpired token is cached in `~/.aws/sso/cache/`.",
           "type": "boolean",
           "default": false
         }
