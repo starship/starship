@@ -50,8 +50,10 @@ impl Default for KubernetesConfig<'_> {
 pub struct KubernetesContextConfig<'a> {
     pub context_pattern: &'a str,
     pub user_pattern: Option<&'a str>,
+    pub namespace_pattern: Option<&'a str>,
     pub symbol: Option<&'a str>,
     pub style: Option<&'a str>,
     pub context_alias: Option<&'a str>,
     pub user_alias: Option<&'a str>,
+    pub namespace_alias: Option<&'a str>,
 }
