@@ -48,3 +48,15 @@ format = "[$virtualenv]($style) "
 style = "bright-black"
 detect_extensions = []
 detect_files = []
+
+[username]
+show_always = false
+format = "[$user]($style)"
+style_user = "bright-black"
+style_root = "bright-black"
+
+[hostname]
+ssh_only = true
+format = "[@$hostname]($style) "
+ssh_symbol = ""
+style = "bright-black"
