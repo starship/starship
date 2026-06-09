@@ -129,6 +129,9 @@ format = '(via [$symbol($version )]($style))'
 [vagrant]
 format = '(via [$symbol($version )]($style))'
 
+[vault]
+format = '(via [$symbol($version )]($style))'
+
 [vlang]
 format = '(via [$symbol($version )]($style))'
 
