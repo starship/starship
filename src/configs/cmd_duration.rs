@@ -36,3 +36,19 @@ impl Default for CmdDurationConfig<'_> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn default_notifications_transient_is_false() {
+        assert!(!CmdDurationConfig::default().notifications_transient);
+    }
+
+    #[test]
+    fn notifications_transient_deserializes() {
+        let config: CmdDurationConfig = toml::from_str("notifications_transient = true").unwrap();
+        assert!(config.notifications_transient);
+    }
+}
