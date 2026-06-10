@@ -81,7 +81,7 @@
       "$ref": "#/$defs/AzureConfig",
       "default": {
         "format": "on [$symbol($subscription)]($style) ",
-        "symbol": "󰠅 ",
+        "symbol": "🅰 ",
         "style": "blue bold",
         "disabled": true,
         "subscription_aliases": {}
@@ -90,11 +90,11 @@
     "battery": {
       "$ref": "#/$defs/BatteryConfig",
       "default": {
-        "full_symbol": "󰁹 ",
-        "charging_symbol": "󰂄 ",
-        "discharging_symbol": "󰂃 ",
-        "unknown_symbol": "󰂑 ",
-        "empty_symbol": "󰂎 ",
+        "full_symbol": "• ",
+        "charging_symbol": "⇡ ",
+        "discharging_symbol": "⇣ ",
+        "unknown_symbol": "? ",
+        "empty_symbol": "! ",
         "display": [
           {
             "threshold": 10,
@@ -567,7 +567,7 @@
       "default": {
         "format": "via [$symbol($version )]($style)",
         "version_format": "v${raw}",
-        "symbol": " ",
+        "symbol": "e ",
         "style": "bold red",
         "disabled": false,
         "detect_extensions": [],
@@ -653,7 +653,7 @@
       "$ref": "#/$defs/FossilBranchConfig",
       "default": {
         "format": "on [$symbol$branch]($style) ",
-        "symbol": " ",
+        "symbol": "⎇ ",
         "style": "bold purple",
         "truncation_length": 9223372036854775807,
         "truncation_symbol": "…",
@@ -686,7 +686,7 @@
       "$ref": "#/$defs/GitBranchConfig",
       "default": {
         "format": "on [$symbol$branch(:$remote_branch)]($style) ",
-        "symbol": " ",
+        "symbol": "⎇ ",
         "style": "bold purple",
         "truncation_length": 9223372036854775807,
         "truncation_symbol": "…",
@@ -899,7 +899,7 @@
     "hg_branch": {
       "$ref": "#/$defs/HgBranchConfig",
       "default": {
-        "symbol": " ",
+        "symbol": "⎇ ",
         "style": "bold purple",
         "format": "on [$symbol$branch(:$topic)]($style) ",
         "truncation_length": 9223372036854775807,
@@ -1191,7 +1191,7 @@
       "default": {
         "format": "via [$symbol($version )]($style)",
         "version_format": "v${raw}",
-        "symbol": " ",
+        "symbol": "⬢ ",
         "style": "bold green",
         "disabled": false,
         "not_capable_style": "bold red",
@@ -1349,7 +1349,7 @@
           "Ultramarine": "🔷 ",
           "Unknown": "❓ ",
           "Uos": "🐲 ",
-          "Void": " ",
+          "Void": "⊚ ",
           "Windows": "🪟 ",
           "Zorin": "🔹 "
         },
@@ -1413,7 +1413,7 @@
     "pijul_channel": {
       "$ref": "#/$defs/PijulConfig",
       "default": {
-        "symbol": " ",
+        "symbol": "⎇ ",
         "style": "bold purple",
         "format": "on [$symbol$channel]($style) ",
         "truncation_length": 9223372036854775807,
@@ -1446,7 +1446,7 @@
       "default": {
         "format": "via [$symbol($username@)$stack]($style) ",
         "version_format": "v${raw}",
-        "symbol": " ",
+        "symbol": "⠿ ",
         "style": "bold 5",
         "disabled": false,
         "search_upwards": true
@@ -1995,7 +1995,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": "󰠅 "
+          "default": "🅰 "
         },
         "style": {
           "type": "string",
@@ -2020,23 +2020,23 @@
       "properties": {
         "full_symbol": {
           "type": "string",
-          "default": "󰁹 "
+          "default": "• "
         },
         "charging_symbol": {
           "type": "string",
-          "default": "󰂄 "
+          "default": "⇡ "
         },
         "discharging_symbol": {
           "type": "string",
-          "default": "󰂃 "
+          "default": "⇣ "
         },
         "unknown_symbol": {
           "type": "string",
-          "default": "󰂑 "
+          "default": "? "
         },
         "empty_symbol": {
           "type": "string",
-          "default": "󰂎 "
+          "default": "! "
         },
         "display": {
           "type": "array",
@@ -3335,7 +3335,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "e "
         },
         "style": {
           "type": "string",
@@ -3539,7 +3539,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⎇ "
         },
         "style": {
           "type": "string",
@@ -3639,7 +3639,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⎇ "
         },
         "style": {
           "type": "string",
@@ -4268,7 +4268,7 @@
       "properties": {
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⎇ "
         },
         "style": {
           "type": "string",
@@ -5163,7 +5163,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⬢ "
         },
         "style": {
           "type": "string",
@@ -5482,7 +5482,7 @@
             "Ultramarine": "🔷 ",
             "Unknown": "❓ ",
             "Uos": "🐲 ",
-            "Void": " ",
+            "Void": "⊚ ",
             "Windows": "🪟 ",
             "Zorin": "🔹 "
           }
@@ -5640,7 +5640,7 @@
       "properties": {
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⎇ "
         },
         "style": {
           "type": "string",
@@ -5752,7 +5752,7 @@
         },
         "symbol": {
           "type": "string",
-          "default": " "
+          "default": "⠿ "
         },
         "style": {
           "type": "string",
