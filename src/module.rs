@@ -218,7 +218,7 @@ where
             }
             Segment::LineTerm { max_width } => {
                 // max_width specified by [line_break] config
-                if used <= *max_width {
+                if *max_width > 0 && used <= *max_width {
                     continue; // skip newline
                 }
 
