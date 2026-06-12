@@ -8,7 +8,7 @@ Nonostante Starship sia una shell versatile, a volte devi fare qualche modifica 
 
 È possibile rimpiazzare il prompt precedente con una stringa di testo personalizzata. È utile nei casi in cui alcune informazioni sulla shell non ci servono. Per attivarlo, esegui `Enable-TransientPrompt` sulla shell. Per mantenerlo permanente, metti questa dichiarazione nel tuo `$PROFILE`. Può essere disattivata al volo con `Disable-TransientPrompt`.
 
-Per impostazione predefinita, il simbolo predefinito prima dell'input sarà rimpiazzato con `>`. Per personalizzarlo, definisci una nuova funzione chiamata `Invoke-Starship-TransientFunction`. Ad esempio, per mostrare il modulo dei `character`, dovresti fare
+By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Ad esempio, per mostrare il modulo dei `character`, dovresti fare
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -56,7 +56,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Ad esempio, per mostrare il modulo dei `character`, dovresti fare
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
 
 ```fish
 function starship_transient_prompt_func
@@ -66,7 +66,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- Per impostazione predefinita, il simbolo predefinito prima dell'input sarà rimpiazzato con `>`. Per personalizzarlo, definisci una nuova funzione chiamata `Invoke-Starship-TransientFunction`. Ad esempio, per mostrare il modulo dei `character`, dovresti fare
 
 ```fish
 function starship_transient_rprompt_func
@@ -80,7 +80,9 @@ enable_transience
 
 The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`.
+When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line.
+If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
 
 Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
@@ -122,7 +124,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Comandi personalizzati di pre-prompt e pre-esecuzione per Bash
 
-Bash non ha un framework preexec/precmd formale come la maggior parte delle altre shell. Per questo motivo, è difficile fornire hook completamente personalizzabile in `bash`. Tuttavia, Starship dà la limitata possibilità di inserire le tue funzioni nella procedura prompt-rendering:
+Bash non ha un framework preexec/precmd formale come la maggior parte delle altre shell.
+Per questo motivo, è difficile fornire hook completamente personalizzabile in `bash`.
+Tuttavia, Starship dà la limitata possibilità di inserire le tue funzioni nella procedura prompt-rendering:
 
 - Per eseguire una funzione personalizzata a destra del prompt prima che venga disegnato, definisci una nuova funzione e assegna il suo nome a `starship_precmd_user_func`. Per esempio, per visualizzare l'icona di un razzo prima del prompt, si può usare il codice seguente
 
@@ -133,7 +137,9 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Per eseguire una funzione personalizzata prima dell'esecuzione di un comando, è possibile utilizzare il meccanismo trappola [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuttavia, **devi** intrappolare il segnale DEBUG _prima di_ inizializzare Starship! Starship può preservare il valore trappola di DEBUG, ma se la trappola viene sovrascritta dopo l'avvio di Starship, alcune funzionalità non funzioneranno.
+- Per eseguire una funzione personalizzata prima dell'esecuzione di un comando, è possibile utilizzare il meccanismo trappola [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
+  Tuttavia, **devi** intrappolare il segnale DEBUG _prima di_ inizializzare Starship!
+  Starship può preservare il valore trappola di DEBUG, ma se la trappola viene sovrascritta dopo l'avvio di Starship, alcune funzionalità non funzioneranno.
 
 ```bash
 function blastoff(){
@@ -147,7 +153,9 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Tuttavia, Starship dà la limitata possibilità di inserire le tue funzioni nella procedura prompt-rendering:
+PowerShell does not have a formal preexec/precmd framework like most other shells.
+Because of this, it is difficult to provide fully customizable hooks in `powershell`.
+Tuttavia, Starship dà la limitata possibilità di inserire le tue funzioni nella procedura prompt-rendering:
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -159,7 +167,8 @@ function Invoke-Starship-PreCommand {
 
 ## Cambia il titolo della finestra
 
-Alcune shell prompt cambieranno automaticamente il titolo della finestra (ad esempio per riflettere la directory di lavoro). Fish lo fa per impostazione predefinita. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Alcune shell prompt cambieranno automaticamente il titolo della finestra (ad esempio per riflettere la directory di lavoro). Fish lo fa per impostazione predefinita.
+Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 Innanzitutto, bisogna definire una funzione per il cambio del titolo della finestra (identica sia per bash che zsh):
 
@@ -241,6 +250,12 @@ Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+When using `zsh` (v5.0.5+), the shell adds a default trailing space to the right prompt. This can cause alignment issues specifically when using the Starship `$fill` module. To remove this gap, add the following to your `.zshrc`:
+
+```zsh
+ZLE_RPROMPT_INDENT=0
 ```
 
 ## Continuation Prompt
@@ -338,22 +353,22 @@ The `claude_model` module displays the current Claude model being used in the se
 
 #### Opzioni
 
-| Opzione         | Default                      | Descrizione                                                                               |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                |
-| `symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | Lo stile per il modulo.                                                                   |
+| Opzione         | Default                      | Descrizione                                                                                                               |
+| --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                                |
+| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `style`         | `'bold blue'`                | Lo stile per il modulo.                                                                                   |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
 
 #### Variables
 
-| Variable  | Esempio             | Descrizione                           |
-| --------- | ------------------- | ------------------------------------- |
-| model     | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id  | `claude-3-5-sonnet` | The model ID                          |
-| symbol    |                     | Mirrors the value of option `symbol`  |
-| style\* |                     | Mirrors the value of option `style`   |
+| Variable                      | Esempio             | Descrizione                           |
+| ----------------------------- | ------------------- | ------------------------------------- |
+| model                         | `Claude 3.5 Sonnet` | The display name of the current model |
+| model_id | `claude-3-5-sonnet` | The model ID                          |
+| symbol                        |                     | Mirrors the value of option `symbol`  |
+| style\*                       |                     | Mirrors the value of option `style`   |
 
 \*: This variable can only be used as a part of a style string
 
@@ -383,8 +398,8 @@ The `claude_context` module displays context window usage as a percentage and vi
 
 #### Opzioni
 
-| Opzione                | Default                           | Descrizione                                        |
-| ---------------------- | --------------------------------- | -------------------------------------------------- |
+| Opzione                | Default                           | Descrizione                                                        |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | `format`               | `'[$gauge $percentage]($style) '` | The format for the module.                         |
 | `symbol`               | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
@@ -402,7 +417,7 @@ The `display` option is an array of objects that define thresholds and styles fo
 | ----------- | ------------ | ------------------------------------------------------------------------ |
 | `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
 | `style`     | `bold green` | The value of `style` if this display configuration is matched            |
-| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+| `hidden`    | `false`      | Hide this module if this the configuration is matched.   |
 
 ```toml
 [[claude_context.display]]
@@ -424,19 +439,19 @@ style = "bold red"
 
 #### Variables
 
-| Variable                     | Esempio | Descrizione                                           |
-| ---------------------------- | ------- | ----------------------------------------------------- |
-| gauge                        | `██▒░░` | Visual representation of context usage                |
-| percentage                   | `65%`   | Context usage as a percentage                         |
-| input_tokens                 | `45.2k` | Total input tokens in conversation                    |
-| output_tokens                | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
+| Variable                                                                                  | Esempio | Descrizione                                           |
+| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------- |
+| gauge                                                                                     | `██▒░░` | Visual representation of context usage                |
+| percentage                                                                                | `65%`   | Context usage as a percentage                         |
+| input_tokens                                                         | `45.2k` | Total input tokens in conversation                    |
+| output_tokens                                                        | `12.3k` | Total output tokens in conversation                   |
+| curr_input_tokens                               | `5.1k`  | Input tokens from most recent API call                |
+| curr_output_tokens                              | `1.2k`  | Output tokens from most recent API call               |
 | curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens                 | `200k`  | Total context window size                             |
-| symbol                       |         | Mirrors the value of option `symbol`                  |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| total_tokens                                                         | `200k`  | Total context window size                             |
+| symbol                                                                                    |         | Mirrors the value of option `symbol`                  |
+| style\*                                                                                   |         | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
 
@@ -502,10 +517,10 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 #### Opzioni
 
-| Opzione    | Default                            | Descrizione                         |
-| ---------- | ---------------------------------- | ----------------------------------- |
+| Opzione    | Default                            | Descrizione                                         |
+| ---------- | ---------------------------------- | --------------------------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | The format for the module.          |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
+| `symbol`   | `'💰 '`                            | The symbol shown before the cost.   |
 | `display`  | [see below](#display-1)            | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
@@ -513,11 +528,11 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
-| Opzione     | Default      | Descrizione                                                   |
-| ----------- | ------------ | ------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+| Opzione     | Default      | Descrizione                                                        |
+| ----------- | ------------ | ------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration                |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched      |
+| `hidden`    | `false`      | Hide this module if this configuration is matched. |
 
 **Default configuration:**
 
@@ -537,15 +552,15 @@ style = "bold red"
 
 #### Variables
 
-| Variable      | Esempio  | Descrizione                                           |
-| ------------- | -------- | ----------------------------------------------------- |
-| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
-| duration      | `1m 30s` | Total session duration                                |
-| api_duration  | `45s`    | Total API call duration                               |
-| lines_added   | `1.2k`   | Total lines of code added                             |
-| lines_removed | `500`    | Total lines of code removed                           |
-| symbol        |          | Mirrors the value of option `symbol`                  |
-| style\*     |          | Mirrors the style from the matching display threshold |
+| Variable                           | Esempio  | Descrizione                                                            |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------- |
+| cost                               | `1.23`   | Total session cost in USD (formatted to 2 decimals) |
+| duration                           | `1m 30s` | Total session duration                                                 |
+| api_duration  | `45s`    | Total API call duration                                                |
+| lines_added   | `1.2k`   | Total lines of code added                                              |
+| lines_removed | `500`    | Total lines of code removed                                            |
+| symbol                             |          | Mirrors the value of option `symbol`                                   |
+| style\*                            |          | Mirrors the style from the matching display threshold                  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -593,7 +608,9 @@ Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le par
 - `<color>`
 - `none`
 
-dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
+dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro.
+`<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise.
+`inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
 
 Il token `none` sovrascrive tutti gli altri token in una stringa se non fa parte di uno specificatore `bg:`, così ad esempio `fg:red none fg:blue` creerà una stringa senza stile. `bg:none` imposta come colore di sfondo quello predefinito così `fg:red bg:none` è equivalente a `red` o `fg:red` e `bg:green fg:red bg:none` è equivalente a `fg:red` o `red`. Potrà diventare un errore usare `none` in combinazione con altri token in futuro.
 
