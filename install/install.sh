@@ -185,8 +185,39 @@ elevate_priv() {
 	fi
 }
 
+## Resolve the latest release tag via HTTP redirect
+## Prints the tag (e.g. "v1.22.1") to stdout
+get_latest_version() (
+	url="${BASE_URL}/latest"
+	if has curl; then
+		location=$(curl -sI "$url" | grep -i '^location:' | tr -d '\r')
+	elif has wget; then
+		## wget --spider -S writes headers to stderr; last Location is the
+		## final redirect target after any intermediate 302s
+		location=$(wget --spider -S "$url" 2>&1 | grep -i '^ *location:' | tail -1 | tr -d '\r')
+	else
+		error "No HTTP program found to resolve latest version"
+		return 1
+	fi
+	printf '%s\n' "${location##*/}"
+)
+
 install() {
 	ext="$1"
+
+	# Skip if the installed version already matches the target
+	if [ ! "${FORCE-}" ] && has starship; then
+		installed="v$(starship --version | head -1 | cut -d' ' -f2)"
+		if [ "$VERSION" = "latest" ]; then
+			target=$(get_latest_version)
+		else
+			target=$VERSION
+		fi
+		if [ "$installed" = "$target" ]; then
+			completed "Starship $target already installed"
+			exit 0
+		fi
+	fi
 
 	if test_writable "${BIN_DIR}"; then
 		sudo=""
