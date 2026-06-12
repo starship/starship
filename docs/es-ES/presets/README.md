@@ -1,6 +1,7 @@
 # Preajustes
 
-Aqui tienes una colección de preajustes creados por la comunidad de Starship. ¡Si quieres compartir un preajuste, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
+Aqui tienes una colección de preajustes creados por la comunidad de Starship.
+¡Si quieres compartir un preajuste, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
 
 Para obtener detalles sobre cómo utilizar un preajuste, simplemente haga clic en la imagen.
 
@@ -50,7 +51,8 @@ Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). También muestra cómo funciona la sustitución de rutas en Starship.
+Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+También muestra cómo funciona la sustitución de rutas en Starship.
 
 [![Captura de pantalla del preajuste de Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
 
