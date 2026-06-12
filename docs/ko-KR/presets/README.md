@@ -1,6 +1,7 @@
 # 프리셋
 
-커뮤니티가 제공한 Starship 설정 프리셋의 모음집입니다. 공유할 프리셋이 있다면 이 파일을 [수정하는 PR을 제출](https://github.com/starship/starship/edit/master/docs/presets/README.md)해 주세요! 😊
+커뮤니티가 제공한 Starship 설정 프리셋의 모음집입니다.
+공유할 프리셋이 있다면 이 파일을 [수정하는 PR을 제출](https://github.com/starship/starship/edit/master/docs/presets/README.md)해 주세요! 😊
 
 프리셋 사용 방법에 대한 자세한 내용을 보려면 이미지를 클릭하기만 하면 됩니다.
 
@@ -50,7 +51,8 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
@@ -74,6 +76,6 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+이 프리셋은 [Catppuccin](https://github.com/catppuccin/catppuccin) 테마 팔레트를 사용하여 [Gruvbox Rainbow](./gruvbox-rainbow.md)를 최소한으로 수정한 버전입니다.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
