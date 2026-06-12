@@ -185,8 +185,40 @@ elevate_priv() {
 	fi
 }
 
+## Check if installed version matches target; returns 0 if match
+installed_version() (
+	if [ "${FORCE-}" ] || ! has starship; then
+		return 1
+	fi
+
+	installed="v$(starship --version | head -1 | cut -d' ' -f2)"
+	if [ "$VERSION" = "latest" ]; then
+		url="${BASE_URL}/latest"
+		if has curl; then
+			# -L follows redirects, printing headers for each hop
+			headers=$(curl -sIL "$url")
+		elif has wget; then
+			# --spider -S writes headers to stderr for each hop
+			headers=$(wget --spider -S "$url" 2>&1)
+		else
+			# No program available to extract headers; skip version check
+			return 1
+		fi
+		target=$(printf '%s\n' "$headers" | grep -i 'location:' | tail -1 | tr -d '\r' | sed 's|.*/||')
+	else
+		target=$VERSION
+	fi
+
+	[ "$installed" = "$target" ]
+)
+
 install() {
 	ext="$1"
+
+	if installed_version; then
+		completed "Already installed Starship $VERSION"
+		exit 0
+	fi
 
 	if test_writable "${BIN_DIR}"; then
 		sudo=""
