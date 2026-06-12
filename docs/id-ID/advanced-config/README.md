@@ -1,14 +1,21 @@
 # Konfigurasi Lanjutan
 
-Walaupun Starship adalah shell yang serbaguna, terkadang kita butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya menjalankan beberapa hal tertentu. Halaman ini merincikan beberapa teknik konfigurasi lanjutan yang digunakan starship.
+While Starship is a versatile shell, sometimes you need to do more than edit
+`starship.toml` to get it to do certain things. Halaman ini merincikan beberapa teknik konfigurasi lanjutan yang digunakan starship.
 
 > [!WARNING] The configurations in this section are subject to change in future releases of Starship.
 
 ## TransientPrompt in PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+It is possible to replace the previous-printed prompt with a custom string. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put
+this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
+`Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+By default, the left side of input gets replaced with `>`. To customize this,
+define a new function called `Invoke-Starship-TransientFunction`. For example, to
+display Starship's `character` module here, you would do
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -22,15 +29,21 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
 - `off`: do not replace the prompt (i.e. turn off transience)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+You need to do this only once. Make the following changes to your `starship.lua`
+to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with `>`. To customize this,
+  define a new function called `starship_transient_prompt_func`. This function
+  receives the current prompt as a string that you can utilize. For example, to
+  display Starship's `character` module here, you would do
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -41,7 +54,10 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- By default, the right side of input is empty. To customize this, define a new
+  function called `starship_transient_rprompt_func`. This function receives the
+  current prompt as a string that you can utilize. For example, to display
+  the time at which the last command was started here, you would do
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -52,11 +68,17 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+It is possible to replace the previous-printed prompt with a custom string. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `enable_transience` in the shell session. To make it permanent, put
+this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with
+`disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
+  define a new function called `starship_transient_prompt_func`. For example, to
+  display Starship's `character` module here, you would do
 
 ```fish
 function starship_transient_prompt_func
@@ -66,7 +88,9 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- By default, the right side of input is empty. To customize this, define a new
+  function called `starship_transient_rprompt_func`. For example, to display
+  the time at which the last command was started here, you would do
 
 ```fish
 function starship_transient_rprompt_func
@@ -78,19 +102,33 @@ enable_transience
 
 ## TransientPrompt and TransientRightPrompt in Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace
+the previous-printed prompt with custom strings. This is useful in cases where all
+the prompt information is not always needed. To enable this, put this in `~/.bashrc`
+`bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>, the prompt specified by `PS1` is erased on leaving the current command line. If \<value\> contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in \<value\> and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`.
+When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>,
+the prompt specified by `PS1` is erased on leaving the current command line.
+If \<value\> contains a field `trim`, only the last line of multiline `PS1` is
+preserved and the other lines are erased. Otherwise, the command line will be
+redrawn as if `PS1=` is specified. When a field `same-dir` is contained in
+\<value\> and the current working directory is different from the final directory of
+the previous command line, this option `prompt_ps1_transient` is ignored.
 
 Make the following changes to your `~/.blerc` (or in `~/.config/blesh/init.sh`) to customize what gets displayed on the left and on the right:
 
-- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+- To customize what the left side of input gets replaced with, configure the
+  `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character`
+  module here, you would do
 
 ```bash
 bleopt prompt_ps1_final='$(starship module character)'
 ```
 
-- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. For example, to display the time at which the last command was started here, you would do
+- To customize what the right side of input gets replaced with, configure the
+  `prompt_rps1_final` Ble.sh option. For example, to display
+  the time at which the last command was started here, you would do
 
 ```bash
 bleopt prompt_rps1_final='$(starship module time)'
@@ -98,9 +136,13 @@ bleopt prompt_rps1_final='$(starship module time)'
 
 ## Kustomisasi Perintah pre-prompt dan pre-execution Pada Cmd
 
-Clink menyediakan APIs yang sangat fleksibel untuk menjalankan perintah pre-prompt dan pre-exec di Cmd shell. Caranya sangat mudah dengan Starship. Ubahlah file `starship.lua` sesuai kebutuhanmu:
+Clink menyediakan APIs yang sangat fleksibel untuk menjalankan perintah pre-prompt dan pre-exec di Cmd shell. Caranya sangat mudah dengan Starship. Make the following changes
+to your `starship.lua` file as per your requirements:
 
-- Untuk menjalankan custom function sebelum prompt muncul, definisikan function baru dengan nama `starship_preprompt_user_func`. Function ini menerima prompt yang berjalan sebagai string yang mampu kamu gunakan. Sebagai contoh, untuk menampilkan roket sebelum prompt, kamu bisa
+- To run a custom function right before the prompt is drawn, define a new
+  function called `starship_preprompt_user_func`. This function receives
+  the current prompt as a string that you can utilize. For example, to
+  draw a rocket before the prompt, you would do
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -110,7 +152,10 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- Untuk menjalankan custom function tepat sebelum perintah dieksekusi, definisikan function baru dengan nama `starship_precmd_user_func`. Function ini menerima prompt yang berjalan sebagai string yang mampu kamu gunakan. Sebagai contoh, untuk menampilkan perintah yang akan dieksekusi, kamu bisa
+- To run a custom function right before a command is executed, define a new
+  function called `starship_precmd_user_func`. This function receives
+  the current commandline as a string that you can utilize. For example, to
+  print the command that's about to be executed, you would do
 
 ```lua
 function starship_precmd_user_func(line)
@@ -122,9 +167,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Kustomisasi Perintah pre-prompt dan pre-execution Pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberimu sedikit kemampuan untuk bisa menambahkan function milikmu ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya.
+Because of this, it is difficult to provide fully customizable hooks in `bash`.
+Namun, Starship memberimu sedikit kemampuan untuk bisa menambahkan function milikmu ke dalam prosedur prompt-rendering:
 
-- Untuk menjalankan custom function tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan roket sebelum prompt, kamu bisa
+- To run a custom function right before the prompt is drawn, define a new
+  function and then assign its name to `starship_precmd_user_func`. For example,
+  to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -133,7 +182,11 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan custom function tepat sebelum perintah berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal _sebelum_ menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
+- To run a custom function right before a command runs, you can use the
+  [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
+  However, you **must** trap the DEBUG signal _before_ initializing Starship!
+  Starship can preserve the value of the DEBUG trap, but if the trap is overwritten
+  after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
@@ -147,7 +200,9 @@ set +o functrace
 
 ## Perintah Custom pre-promt dan pre-execution di PowerShell
 
-PowerShell tidak memiliki framework preecex/precmd seperti kebanyak shells pada umumnya. Karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `powershell`. Namun, Starship memberimu sedikit kemampuan untuk bisa menambahkan function milikmu ke dalam prosedur prompt-rendering:
+PowerShell tidak memiliki framework preecex/precmd seperti kebanyak shells pada umumnya.
+Because of this, it is difficult to provide fully customizable hooks in `powershell`.
+Namun, Starship memberimu sedikit kemampuan untuk bisa menambahkan function milikmu ke dalam prosedur prompt-rendering:
 
 Buatlah sebuah funciton dengan nama `Invoke-Starship-PreCommand`
 
@@ -159,7 +214,9 @@ function Invoke-Starship-PreCommand {
 
 ## Mengubah Judul Window
 
-Beberapa prompt shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Di dalam Starship tidak bisa, namun mudah halnya untuk menambahkan fungsionalitas tersebut ke dalam `bash`, `zsh`, `cmd` ataupun `powershell`.
+Beberapa prompt shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan.
+Starship does not do this, but it's fairly straightforward to add this
+functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 Pertama, buatlah function untuk mengubah judul window (pada bash dan zsh):
 
@@ -217,9 +274,13 @@ Invoke-Expression (&starship init powershell)
 
 ## Mengaktifkan Right Prompt
 
-Sebagian shells mendukung right prompt yang mana dirender di baris yang sama sesuai dengan masukannya. Starship mampu mengatur konten right prompt dengan menggunakan opsi `right_format`. Semua modul yang bisa digunakan di dalam `format` juga dapat digunakan di dalam `right_format`. Variabel `$all` hanya akan memuat modul yang tidak digunakan secara eksplisit di dalam `format` ataupun `right_format`.
+Sebagian shells mendukung right prompt yang mana dirender di baris yang sama sesuai dengan masukannya. Starship can
+set the content of the right prompt using the `right_format` option. Any module that can be used
+in `format` is also supported in `right_format`. The `$all` variable will only contain modules
+not explicitly used in either `format` or `right_format`.
 
-Catatan: Right propmt merupakan sebuah baris yang mengikuti lokasi baris inputan. To right align modules above the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
+Catatan: Right propmt merupakan sebuah baris yang mengikuti lokasi baris inputan. To right align modules above
+the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
@@ -243,13 +304,19 @@ Menghasilkan prompt seperti berikut:
 starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+When using `zsh` (v5.0.5+), the shell adds a default trailing space to the right prompt. This can cause alignment issues specifically when using the Starship `$fill` module. To remove this gap, add the following to your `.zshrc`:
+
+```zsh
+ZLE_RPROMPT_INDENT=0
+```
+
 ## Prompt Berkelanjutan
 
 Beberapa shells mendukung continuation prompt bersamaan dengan prompt biasa. Prompt tersebutlah yang akan dirender daripada prompt biasa ketika pengguna memasukkan perintah yang kurang lengkap (seperti tanda kurung atau tanda kutipan tunggal).
 
-Starship dapat mengatur continuation prompt dengan opsi `continuation_prompt`. The default prompt is `'[∙](bright-black) '`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
-Catatan: `continuation_prompt` harus diubah menjadi string literal tanpa variabel apapun.
+Note: `continuation_prompt` should be set to a literal string without any variables.
 
 Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 
@@ -336,24 +403,24 @@ symbol = "💰 "
 
 The `claude_model` module displays the current Claude model being used in the session.
 
-#### Opsi
+#### Variabel
 
-| Opsi            | Bawaan                       | Deskripsi                                                                                 |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `fromat`        | `'[$symbol$model]($style) '` | Format dari modul.                                                                        |
-| `symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | Gaya penataan untuk modul.                                                                |
+| Variabel        | Contoh                       | Deskripsi                                                                                                                 |
+| --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | Format dari modul.                                                                                        |
+| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `style`         | `'bold blue'`                | Menyalin nilai dari opsi `symbol`                                                                                         |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
 
 #### Variabel
 
-| Variabel  | Contoh              | Deskripsi                             |
-| --------- | ------------------- | ------------------------------------- |
-| model     | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id  | `claude-3-5-sonnet` | The model ID                          |
-| symbol    |                     | Menyalin nilai dari opsi `symbol`     |
-| style\* |                     | Menyalin nilai dari opsi `style`      |
+| Variabel                      | Contoh              | Deskripsi                             |
+| ----------------------------- | ------------------- | ------------------------------------- |
+| model                         | `Claude 3.5 Sonnet` | The display name of the current model |
+| model_id | `claude-3-5-sonnet` | The model ID                          |
+| symbol                        |                     | Mirrors the value of option `symbol`  |
+| style\*                       |                     | Mirrors the value of option `style`   |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -383,9 +450,9 @@ The `claude_context` module displays context window usage as a percentage and vi
 
 #### Opsi
 
-| Opsi                   | Bawaan                            | Deskripsi                                          |
-| ---------------------- | --------------------------------- | -------------------------------------------------- |
-| `fromat`               | `'[$gauge $percentage]($style) '` | Format dari modul.                                 |
+| Opsi                   | Bawaan                            | Deskripsi                                                          |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| `format`               | `'[$gauge $percentage]($style) '` | Format dari modul.                                 |
 | `symbol`               | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
 | `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
@@ -402,7 +469,7 @@ The `display` option is an array of objects that define thresholds and styles fo
 | ----------- | ------------ | ------------------------------------------------------------------------ |
 | `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
 | `style`     | `bold green` | The value of `style` if this display configuration is matched            |
-| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+| `hidden`    | `false`      | Hide this module if this the configuration is matched.   |
 
 ```toml
 [[claude_context.display]]
@@ -424,19 +491,19 @@ style = "bold red"
 
 #### Variabel
 
-| Variabel                     | Contoh  | Deskripsi                                             |
-| ---------------------------- | ------- | ----------------------------------------------------- |
-| gauge                        | `██▒░░` | Visual representation of context usage                |
-| percentage                   | `65%`   | Context usage as a percentage                         |
-| input_tokens                 | `45.2k` | Total input tokens in conversation                    |
-| output_tokens                | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
+| Variabel                                                                                  | Contoh  | Deskripsi                                             |
+| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------- |
+| gauge                                                                                     | `██▒░░` | Visual representation of context usage                |
+| percentage                                                                                | `65%`   | Context usage as a percentage                         |
+| input_tokens                                                         | `45.2k` | Total input tokens in conversation                    |
+| output_tokens                                                        | `12.3k` | Total output tokens in conversation                   |
+| curr_input_tokens                               | `5.1k`  | Input tokens from most recent API call                |
+| curr_output_tokens                              | `1.2k`  | Output tokens from most recent API call               |
 | curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens                 | `200k`  | Total context window size                             |
-| symbol                       |         | Menyalin nilai dari opsi `symbol`                     |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| total_tokens                                                         | `200k`  | Total context window size                             |
+| symbol                                                                                    |         | Mirrors the value of option `symbol`                  |
+| style\*                                                                                   |         | Mirrors the style from the matching display threshold |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -502,10 +569,10 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 #### Opsi
 
-| Opsi       | Bawaan                             | Deskripsi                           |
-| ---------- | ---------------------------------- | ----------------------------------- |
-| `fromat`   | `'[$symbol(\\$$cost)]($style) '` | Format dari modul.                  |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
+| Opsi       | Bawaan                             | Deskripsi                                           |
+| ---------- | ---------------------------------- | --------------------------------------------------- |
+| `format`   | `'[$symbol(\\$$cost)]($style) '` | Format dari modul.                  |
+| `symbol`   | `'💰 '`                            | The symbol shown before the cost.   |
 | `display`  | [see below](#display-1)            | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
@@ -513,11 +580,11 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 
 The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
-| Opsi        | Bawaan       | Deskripsi                                                     |
-| ----------- | ------------ | ------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+| Opsi        | Bawaan       | Deskripsi                                                          |
+| ----------- | ------------ | ------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration                |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched      |
+| `hidden`    | `false`      | Hide this module if this configuration is matched. |
 
 **Default configuration:**
 
@@ -537,19 +604,19 @@ style = "bold red"
 
 #### Variabel
 
-| Variabel      | Contoh   | Deskripsi                                             |
-| ------------- | -------- | ----------------------------------------------------- |
-| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
-| duration      | `1m 30s` | Total session duration                                |
-| api_duration  | `45s`    | Total API call duration                               |
-| lines_added   | `1.2k`   | Total lines of code added                             |
-| lines_removed | `500`    | Total lines of code removed                           |
-| symbol        |          | Menyalin nilai dari opsi `symbol`                     |
-| style\*     |          | Mirrors the style from the matching display threshold |
+| Variabel                           | Contoh   | Deskripsi                                                              |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------- |
+| cost                               | `1.23`   | Total session cost in USD (formatted to 2 decimals) |
+| duration                           | `1m 30s` | Total session duration                                                 |
+| api_duration  | `45s`    | Total API call duration                                                |
+| lines_added   | `1.2k`   | Total lines of code added                                              |
+| lines_removed | `500`    | Total lines of code removed                                            |
+| symbol                             |          | Mirrors the value of option `symbol`                                   |
+| style\*                            |          | Mirrors the style from the matching display threshold                  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-#### Contoh
+#### Penataan String
 
 ```toml
 # ~/.config/starship.toml
@@ -578,7 +645,7 @@ format = "[$symbol$cost ($duration)]($style) "
 
 ## Penataan String
 
-Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Kumpulannya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
+Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Tiap-tiap kata berikut adalah opsinya:
 
 - `bold`
 - `italic`
@@ -593,15 +660,20 @@ Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Ku
 - `<color>`
 - `none`
 
-yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). `fg:<color>` dan `<color>` untuk saat ini memiliki fungsi yang sama, meskipun bisa berubah di kemudian hari. `<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise. `inverted` menggantikan warna pada latar depan dan belakang. Urutan kata pada string tidak jadi masalah.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future.
+`<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise.
+`inverted` swaps the background and foreground colors. Urutan kata pada string tidak jadi masalah.
 
-`none` bisa menimpa nilai token lainnya di dalam string jika Ia tidak termaksud dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. `bg:none` menjadikan warna pada latar belakang sebagai warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Mungkin akan jadi masalah untuk menggunakan `none` dengan token lainnya di kemudian hari.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Penentuan warna bisa dilakukan dengan salah satu cara berikut:
+Jika warna yang dipakai pada latar depan/latar belakang banyak, maka warna yang terbaru pada string yang akan diprioritaskan.
 
-- Warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Secar opsional kamu bisa menambahkannya dengan `bright-` untuk mendapatkan versi yang lebih terang (mis. `bright-white`).
-- Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [kode heksadesimal pada warna RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- Menggunakan bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
+- One of the standard terminal colors: `black`, `red`, `green`, `blue`,
+  `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these
+  with `bright-` to get the bright version (e.g. `bright-white`).
+- A `#` followed by a six-digit hexadecimal number. This specifies an
+  [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+- Menggunakan bilangan antara 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 Jika warna yang dipakai pada latar depan/latar belakang banyak, maka warna yang terbaru pada string yang akan diprioritaskan.
 
