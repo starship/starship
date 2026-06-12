@@ -460,6 +460,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::config::StyleRefs;
     use nu_ansi_term::Color;
 
     // match_next(result: IterMut<Segment>, value, style)
@@ -758,9 +759,26 @@ mod tests {
         let prev_style = first_ansi.style_ref();
 
         // Second segment: should inherit bg from first
-        let second_ansi = result[1].ansi_string(Some(prev_style));
+        let second_ansi = result[1].ansi_string(Some(StyleRefs::new(Some(*prev_style), None)));
         assert_eq!(
             second_ansi.style_ref().background,
+            Some(nu_ansi_term::Color::Rgb(154, 52, 142))
+        );
+    }
+
+    #[test]
+    fn test_empty_textgroup_propagates_next_bg() {
+        const FORMAT_STR: &str = "[X](bg:next_bg)[](bg:#9A348E)";
+
+        let formatter = StringFormatter::new(FORMAT_STR).unwrap();
+        let result = formatter.parse(None, None).unwrap();
+
+        assert_eq!(result.len(), 2);
+
+        let next_style = result[1].style();
+        let first_ansi = result[0].ansi_string(Some(StyleRefs::new(None, next_style)));
+        assert_eq!(
+            first_ansi.style_ref().background,
             Some(nu_ansi_term::Color::Rgb(154, 52, 142))
         );
     }
