@@ -1,6 +1,7 @@
 # پێش ڕێکخستنەکان
 
-ئەمە کۆکراوەیەکە لەو پێش ڕێکخستنانەی کە لەلایەن کۆمەڵگاوە نێردراون بۆ Starship. ئەگەر پێش ڕێکخستنێکت هەیە بۆ هاوبەشکردن، تکایە [PRـێک بنێرە](https://github.com/starship/starship/edit/master/docs/presets/README.md) کە ئەم پەڕگەیە نوێبکاتەوە! 😊
+ئەمە کۆکراوەیەکە لەو پێش ڕێکخستنانەی کە لەلایەن کۆمەڵگاوە نێردراون بۆ Starship.
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
 To get details on how to use a preset, simply click on the image.
 
@@ -26,7 +27,8 @@ This preset changes the format of all the built-in modules to show their segment
 
 ## [هێما نووسینەکییە ئاساییەکان](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+This preset changes the symbols for each module into plain text. Great if you
+don't have access to Unicode.
 
 [![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
 
@@ -50,7 +52,8 @@ This preset does not show icons if the toolset is not found.
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
