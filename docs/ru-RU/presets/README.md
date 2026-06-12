@@ -1,6 +1,7 @@
 # Пресеты
 
-Ниже представлена коллекция пресетов для Starship, созданных сообществом. Если у вас есть пресет, которым вы хотите поделиться, пожалуйста, [отправьте PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) для обновления этого файла! 😊
+Ниже представлена коллекция пресетов для Starship, созданных сообществом.
+Если у вас есть пресет, которым вы хотите поделиться, пожалуйста, [отправьте PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) для обновления этого файла! 😊
 
 Чтобы получить подробную информацию о том, как использовать тот или иной пресет, просто щелкните на его изображение.
 
@@ -50,7 +51,8 @@
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Эта пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). В нем также показано, как работает замена пути в starship.
+Эта пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+В нем также показано, как работает замена пути в starship.
 
 [![Скриншот пресета Pastel Powerline](/presets/img/pastel-powerline.png "Нажмите, чтобы просмотреть пресет Pure Prompt")](./pastel-powerline)
 
