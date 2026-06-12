@@ -1031,7 +1031,8 @@
     "line_break": {
       "$ref": "#/$defs/LineBreakConfig",
       "default": {
-        "disabled": false
+        "disabled": false,
+        "max_width": 0
       }
     },
     "localip": {
@@ -4716,6 +4717,12 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "max_width": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 0
         }
       },
       "additionalProperties": false
