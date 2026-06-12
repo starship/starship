@@ -1,6 +1,7 @@
 # Prasetel (Presets)
 
-Berikut ini adalah koleksi konfigurasi prasetel dari kumpulan komunita Starship. Jika kamu punya konfigurasi prasetel untuk dibagikan, silakan [kirim PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) untuk memperbarui file ini! 😊
+Berikut ini adalah koleksi konfigurasi prasetel dari kumpulan komunita Starship.
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
 To get details on how to use a preset, simply click on the image.
 
@@ -26,7 +27,8 @@ Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk men
 
 ## [Simbol Teks Sederhana](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+This preset changes the symbols for each module into plain text. Great if you
+don't have access to Unicode.
 
 [![Tangkapan Layar dari preset Simbol Teks Sederhana](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
 
@@ -50,7 +52,8 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
