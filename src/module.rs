@@ -46,6 +46,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_metrics",
     "git_state",
     "git_status",
+    "git_tags",
     "gleam",
     "golang",
     "gradle",
