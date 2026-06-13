@@ -1490,7 +1490,7 @@ The module will be shown only if any of the following conditions are met:
 | -------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `Symbol`       | `""`                                  | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
 | `variable`     |                                       | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`      |                                       | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `standartwert` |                                       | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
 | `format`       | `"with [$symbol$env_value]($style) "` | Das Format für das Modul.                                                                |
 | `beschreibung` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`.             |
 | `disabled`     | `false`                               | Deaktiviert das `env_var`-Modul.                                                         |
@@ -1772,15 +1772,15 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 ### Variables
 
-| Variable | Beispiel      | Beschreibung                                                       |
-| -------- | ------------- | ------------------------------------------------------------------ |
-| region   | `us-central1` | The current GCP region                                             |
-| account  | `foo`         | The current GCP profile                                            |
-| domain   | `example.com` | The current GCP profile domain                                     |
-| project  |               | The current GCP project                                            |
-| active   | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| Symbol   |               | Spiegelt den Wert der Option `symbol`                              |
-| style\*  |               | Spiegelt den Wert der Option `style`                               |
+| Variable | Beispiel       | Beschreibung                                                       |
+| -------- | -------------- | ------------------------------------------------------------------ |
+| region   | `us-central1`  | The current GCP region                                             |
+| account  | `foo`          | The current GCP profile                                            |
+| domain   | `example.com`  | The current GCP profile domain                                     |
+| project  |                | The current GCP project                                            |
+| active   | `standartwert` | The active config name written in `~/.config/gcloud/active_config` |
+| Symbol   |                | Spiegelt den Wert der Option `symbol`                              |
+| style\*  |                | Spiegelt den Wert der Option `style`                               |
 
 \*: This variable can only be used as a part of a style string
 
@@ -4636,12 +4636,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Beispiel   | Beschreibung                          |
-| --------- | ---------- | ------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`            |
-| workspace | `default`  | The current Terraform workspace       |
-| Symbol    |            | Spiegelt den Wert der Option `symbol` |
-| style\*   |            | Spiegelt den Wert der Option `style`  |
+| Variable  | Beispiel       | Beschreibung                          |
+| --------- | -------------- | ------------------------------------- |
+| version   | `v0.12.24`     | The version of `terraform`            |
+| workspace | `standartwert` | The current Terraform workspace       |
+| Symbol    |                | Spiegelt den Wert der Option `symbol` |
+| style\*   |                | Spiegelt den Wert der Option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -4747,12 +4747,12 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable                           | Beispiel  | Beschreibung                                                         |
-| ---------------------------------- | --------- | -------------------------------------------------------------------- |
-| version                            | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                                            |
-| Symbol                             |           | Spiegelt den Wert der Option `symbol`                                |
-| style\*                            |           | Spiegelt den Wert der Option `style`                                 |
+| Variable                           | Beispiel       | Beschreibung                                                         |
+| ---------------------------------- | -------------- | -------------------------------------------------------------------- |
+| version                            | `v0.9.0`       | The version of `typst`, alias for typst_version |
+| typst_version | `standartwert` | The current Typst version                                            |
+| Symbol                             |                | Spiegelt den Wert der Option `symbol`                                |
+| style\*                            |                | Spiegelt den Wert der Option `style`                                 |
 
 \*: This variable can only be used as a part of a style string
 
@@ -5057,7 +5057,7 @@ These modules will be shown if any of the following conditions are met:
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                                                    |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                                                                                               |
+| `shell`             |                                 | [Siehe unten](#custom-command-shell)                                                                                                                                                                                                                                                                                                                             |
 | `beschreibung`      | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                                                                     |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                                    |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                            |
