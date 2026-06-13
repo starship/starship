@@ -689,6 +689,35 @@ mod tests {
     }
 
     #[test]
+    fn worktrunk_compacts_repo_root_when_truncate_to_repo_false() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        let src_dir = repo_dir.join("src");
+        fs::create_dir_all(&src_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncate_to_repo = false
+                truncation_length = 0
+            })
+            .path(&src_dir)
+            .collect();
+        let expected_path = tmp_dir.path().join("starship").join("src");
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep(&expected_path.to_slash_lossy()))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
     fn worktrunk_compacts_slash_branch_name() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("starship.feature-foo");
