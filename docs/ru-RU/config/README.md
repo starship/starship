@@ -1485,15 +1485,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Опции
 
-| Параметр   | По умолчанию                          | Описание                                                                                     |
-| ---------- | ------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`   | `""`                                  | Символ, используемый перед отображением значения переменной.                 |
-| `variable` |                                       | Отображаемая переменная окружения.                                           |
-| `default`  |                                       | Значение отображаемое, когда выбранная переменная не определена.             |
-| `format`   | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                               |
-| `описание` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                               | Отключает модуль `env_var`.                                                  |
-| `style`    | `"black bold dimmed"`                 | Стиль модуля.                                                                |
+| Параметр       | По умолчанию                          | Описание                                                                                     |
+| -------------- | ------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`       | `""`                                  | Символ, используемый перед отображением значения переменной.                 |
+| `переменная`   |                                       | Отображаемая переменная окружения.                                           |
+| `по умолчанию` |                                       | Значение отображаемое, когда выбранная переменная не определена.             |
+| `format`       | `"with [$symbol$env_value]($style) "` | Формат модуля.                                                               |
+| `описание`     | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
+| `disabled`     | `false`                               | Отключает модуль `env_var`.                                                  |
+| `style`        | `"black bold dimmed"`                 | Стиль модуля.                                                                |
 
 ### Переменные
 
@@ -1771,15 +1771,15 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 ### Переменные
 
-| Переменная | Пример        | Описание                                                           |
-| ---------- | ------------- | ------------------------------------------------------------------ |
-| регион     | `us-central1` | The current GCP region                                             |
-| account    | `foo`         | The current GCP profile                                            |
-| domain     | `example.com` | The current GCP profile domain                                     |
-| project    |               | The current GCP project                                            |
-| active     | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol     |               | Отражает значение параметра `symbol`                               |
-| style\*    |               | Отражает значение параметра `style`                                |
+| Переменная | Пример         | Описание                                                           |
+| ---------- | -------------- | ------------------------------------------------------------------ |
+| регион     | `us-central1`  | The current GCP region                                             |
+| account    | `foo`          | The current GCP profile                                            |
+| domain     | `example.com`  | The current GCP profile domain                                     |
+| project    |                | The current GCP project                                            |
+| active     | `по умолчанию` | The active config name written in `~/.config/gcloud/active_config` |
+| symbol     |                | Отражает значение параметра `symbol`                               |
+| style\*    |                | Отражает значение параметра `style`                                |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -4635,12 +4635,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Переменные
 
-| Переменная | Пример     | Описание                             |
-| ---------- | ---------- | ------------------------------------ |
-| version    | `v0.12.24` | The version of `terraform`           |
-| workspace  | `default`  | The current Terraform workspace      |
-| symbol     |            | Отражает значение параметра `symbol` |
-| style\*    |            | Отражает значение параметра `style`  |
+| Переменная | Пример         | Описание                             |
+| ---------- | -------------- | ------------------------------------ |
+| version    | `v0.12.24`     | The version of `terraform`           |
+| workspace  | `по умолчанию` | The current Terraform workspace      |
+| symbol     |                | Отражает значение параметра `symbol` |
+| style\*    |                | Отражает значение параметра `style`  |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -4746,12 +4746,12 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### Переменные
 
-| Переменная                         | Пример    | Описание                                                             |
-| ---------------------------------- | --------- | -------------------------------------------------------------------- |
-| version                            | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                                            |
-| symbol                             |           | Отражает значение параметра `symbol`                                 |
-| style\*                            |           | Отражает значение параметра `style`                                  |
+| Переменная                         | Пример         | Описание                                                             |
+| ---------------------------------- | -------------- | -------------------------------------------------------------------- |
+| version                            | `v0.9.0`       | The version of `typst`, alias for typst_version |
+| typst_version | `по умолчанию` | The current Typst version                                            |
+| symbol                             |                | Отражает значение параметра `symbol`                                 |
+| style\*                            |                | Отражает значение параметра `style`                                  |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -5056,7 +5056,7 @@ These modules will be shown if any of the following conditions are met:
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                                                    |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                                                                                               |
+| `shell`             |                                 | [См. ниже](#custom-command-shell)                                                                                                                                                                                                                                                                                                                |
 | `описание`          | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                                                                     |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                                    |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                            |
