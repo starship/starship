@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-13)
+
+
+### Features
+
+* **git_state:** show git am progress ([#7500](https://github.com/starship/starship/issues/7500)) ([26ce2cc](https://github.com/starship/starship/commit/26ce2ccf4c850e8ce050ab79a86e70ad97de76c3))
+* **nix-shell:** Add level variable to show nix shell depth ([#7394](https://github.com/starship/starship/issues/7394)) ([b85b7b9](https://github.com/starship/starship/commit/b85b7b9c52852220313dc1b44f34694c00dcd914))
+* **pixi:** expose PIXI_PROJECT_NAME as format placeholder ([#7346](https://github.com/starship/starship/issues/7346)) ([cfd5e76](https://github.com/starship/starship/commit/cfd5e7619ebfa4f5832acaafe94333e7d141d515))
+* **time:** improve timezone handling by switching to jiff ([#7222](https://github.com/starship/starship/issues/7222)) ([3dd8c14](https://github.com/starship/starship/commit/3dd8c1414476b139a7e5a73e27fb6e1402ed4c79))
+
+
+### Bug Fixes
+
+* **gcloud:** honor CLOUDSDK_COMPUTE_REGION env variable ([#7451](https://github.com/starship/starship/issues/7451)) ([d0e2468](https://github.com/starship/starship/commit/d0e246802c85d5aa956f536f9ab7ead282dbab7a))
+* improve reliability of config-file writing ([#5426](https://github.com/starship/starship/issues/5426)) ([57bb99b](https://github.com/starship/starship/commit/57bb99bd0d498fd7bc554ac04c738d3bc279b504))
+* **maven:** avoid detecting user .mvn config as project ([#7426](https://github.com/starship/starship/issues/7426)) ([d455255](https://github.com/starship/starship/commit/d455255e7bc5ae5e96ac5a3e2610458a9f213b49))
+* **nodejs:** avoid deno project files ([#7478](https://github.com/starship/starship/issues/7478)) ([96c1f90](https://github.com/starship/starship/commit/96c1f90eeb9acd255ec28c2a00918dba2a474997))
+* use cargo-zigbuild for riscv64gc-unknown-linux-musl release builds ([#7449](https://github.com/starship/starship/issues/7449)) ([166d7bb](https://github.com/starship/starship/commit/166d7bb30a92f983e740cb5071448887ccad4d7c))
+
 ## [1.25.1](https://github.com/starship/starship/compare/v1.25.0...v1.25.1) (2026-04-30)
 
 
