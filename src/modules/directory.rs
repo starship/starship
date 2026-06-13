@@ -310,12 +310,8 @@ fn compact_worktrunk_path(
         return path.to_string();
     };
 
-    if path == contracted_repo_path {
-        return compacted_path;
-    }
-
-    match path.rsplit_once(contracted_repo_path) {
-        Some((before, _)) => format!("{before}{compacted_path}"),
+    match path.strip_suffix(contracted_repo_path) {
+        Some(before) => format!("{before}{compacted_path}"),
         None => path.to_string(),
     }
 }
@@ -653,6 +649,14 @@ mod tests {
     }
 
     #[test]
+    fn worktrunk_compacts_nested_path_with_similar_component() {
+        let path = "starship.worktrunk-support/src/starship.worktrunk-support-backup";
+        let actual = compact_worktrunk_path(path, Some(path), Some("worktrunk-support"));
+
+        assert_eq!("starship/src/starship.worktrunk-support-backup", actual);
+    }
+
+    #[test]
     fn worktrunk_compacts_repo_root() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
@@ -766,6 +770,30 @@ mod tests {
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("starship.worktrunk-support")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_does_not_compact_branch_name_prefix() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support-extra");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("starship.worktrunk-support-extra")
         ));
 
         assert_eq!(expected, actual);
