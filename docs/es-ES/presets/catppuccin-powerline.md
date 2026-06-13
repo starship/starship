@@ -1,4 +1,4 @@
-[Return to Presets](./#catppuccin-powerline)
+[Volver a Preajustes](./#catppuccin-powerline)
 
 # Catppuccin Powerline Preset
 
@@ -8,7 +8,7 @@ This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainb
 
 ### Prerequisitos
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- Una [Nerd Font](https://www.nerdfonts.com/) instalada y habilitada en tu terminal
 
 ### Configuración
 
