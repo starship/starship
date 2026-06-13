@@ -79,12 +79,12 @@ In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared wit
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| Symbole | Type                      | Notes                                                  |
+| ------- | ------------------------- | ------------------------------------------------------ |
+| `'`     | literal string            | less escaping                                          |
+| `"`     | string                    | more escaping                                          |
+| `'''`   | multi-line literal string | less escaping                                          |
+| `"""`   | multi-line string         | more escaping, newlines in declarations can be ignored |
 
 Par exemple :
 
@@ -139,7 +139,7 @@ Vous pouvez utiliser des textes, des variables et des groupes de texte dans une 
 #### Variable
 
 A variable contains a `$` symbol followed by the name of the variable.
-The name of a variable can only contain letters, numbers and `_`.
+Le nom d’une variable peut seulement container des lettres, des nombres et `_`.
 
 Par exemple :
 
@@ -684,7 +684,7 @@ file.
 | `detect_extensions` | `['c', 'h']`                                                                  | Les extensions qui déclenchent ce module.                                                          |
 | `detect_files`      | `[]`                                                                          | Les fichiers qui activent ce module.                                                               |
 | `detect_folders`    | `[]`                                                                          | Les dossiers qui activent ce module.                                                               |
-| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | Comment détecter quel est le compilateur                                                                           |
+| `commandes`         | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | Comment détecter quel est le compilateur                                                                           |
 | `style`             | `'bold 149'`                                                                  | Le style pour le module.                                                                           |
 | `disabled`          | `false`                                                                       | Disables the `c` module.                                                                           |
 
@@ -733,7 +733,7 @@ the module will be shown if the current directory contains a `.cpp`, `.hpp`, or 
 | `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Les extensions qui déclenchent ce module.                                                          |
 | `detect_files`      | `[]`                                                                             | Les fichiers qui activent ce module.                                                               |
 | `detect_folders`    | `[]`                                                                             | Les dossiers qui activent ce module.                                                               |
-| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Comment détecter quel est le compilateur                                                                           |
+| `commandes`         | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | Comment détecter quel est le compilateur                                                                           |
 | `style`             | `'bold 149'`                                                                     | Le style pour le module.                                                                           |
 | `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                                         |
 
@@ -1317,8 +1317,8 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | loaded                       | `loaded`            | Whether the current rc file is loaded.  |
 | allowed                      | `denied`            | Whether the current rc file is allowed. |
 | rc_path | `/home/test/.envrc` | The current rc file path.               |
-| symbole                      |                     | Mirrors the value of option `symbol`.   |
-| style\*                      | `red bold`          | Mirrors the value of option `style`.    |
+| symbole                      |                     | Reflète la valeur de l'option `symbol`. |
+| style\*                      | `red bold`          | Reflète la valeur de l'option `style`.  |
 
 \*: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1548,7 +1548,7 @@ Le module sera affiché si l'une de ces conditions est remplie:
 | ------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | `symbole`     | `""`                                  | Le symbole utilisé avant d'afficher la valeur de la variable.                       |
 | `variable`    |                                       | La variable d'environnement à afficher.                                             |
-| `default`     |                                       | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
+| `défaut`      |                                       | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
 | `format`      | `"with [$symbol$env_value]($style) "` | Format du module.                                                                   |
 | `description` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`.        |
 | `disabled`    | `false`                               | Disables the `env_var` module.                                                      |
@@ -1710,7 +1710,7 @@ The `fortran` module shows the current compiler version of Fortran.
 | `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Les extensions qui déclenchent ce module.                                                          |
 | `detect_files`      | `['fpm.toml']`                                                                                                              | Les fichiers qui activent ce module.                                                               |
 | `detect_folders`    | `[]`                                                                                                                        | Les dossiers qui activent ce module.                                                               |
-| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | Comment détecter quel est le compilateur                                                                           |
+| `commandes`         | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | Comment détecter quel est le compilateur                                                                           |
 | `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                                                     |
 
 ### Variables
@@ -1839,9 +1839,9 @@ environment variables has been set.
 | -------- | ------------- | ------------------------------------------------------------------ |
 | region   | `us-central1` | La région GCP actuelle                                             |
 | account  | `foo`         | Le profil GCP actuel                                               |
-| domain   | `example.com` | Le domaine du profil GCP actuel                                    |
+| domain   | `exemple.com` | Le domaine du profil GCP actuel                                    |
 | project  |               | Le projet GCP actuel                                               |
-| active   | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| active   | `défaut`      | The active config name written in `~/.config/gcloud/active_config` |
 | symbole  |               | Reflète la valeur de l'option `symbol`                             |
 | style\*  |               | Reflète la valeur de l'option `style`                              |
 
@@ -4411,7 +4411,7 @@ The `shell` module shows an indicator for currently used shell.
 | Variable  | Défaut | Description                                                                |
 | --------- | ------ | -------------------------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\*   |        | Mirrors the value of option `style`.                       |
+| style\*   |        | Reflète la valeur de l'option `style`.                     |
 
 \*: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -4767,14 +4767,14 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `detect_folders`    | `['.terraform']`                                        | Les dossiers qui activent ce module.                                                               |
 | `style`             | `'bold 105'`                                            | Le style pour le module.                                                                           |
 | `disabled`          | `false`                                                 | Disables the `terraform` module.                                                                   |
-| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                                       |
+| `commandes`         | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                                                       |
 
 ### Variables
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`             |
-| workspace | `default`  | L’espace de travail Terraform courant  |
+| workspace | `défaut`   | L’espace de travail Terraform courant  |
 | symbole   |            | Reflète la valeur de l'option `symbol` |
 | style\*   |            | Reflète la valeur de l'option `style`  |
 
@@ -4883,12 +4883,12 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Variables
 
-| Variable                           | Exemple   | Description                                                          |
-| ---------------------------------- | --------- | -------------------------------------------------------------------- |
-| version                            | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                                            |
-| symbole                            |           | Reflète la valeur de l'option `symbol`                               |
-| style\*                            |           | Reflète la valeur de l'option `style`                                |
+| Variable                           | Exemple  | Description                                                          |
+| ---------------------------------- | -------- | -------------------------------------------------------------------- |
+| version                            | `v0.9.0` | The version of `typst`, alias for typst_version |
+| typst_version | `défaut` | The current Typst version                                            |
+| symbole                            |          | Reflète la valeur de l'option `symbol`                               |
+| style\*                            |          | Reflète la valeur de l'option `style`                                |
 
 \*: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -5205,7 +5205,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 | `command`           | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                                                        |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                                                                                               |
+| `shell`             |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                                                                                           |
 | `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                                                                     |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                                    |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                            |
