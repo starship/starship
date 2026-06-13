@@ -80,7 +80,7 @@ format = "took [$duration]($style) "
 
 | 削除されたプロパティ              | 置換後              |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `記号`                    | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
