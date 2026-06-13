@@ -403,7 +403,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 | 選項                  | 預設                                                                    | 說明                                                                                                                          |
 | ------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | 此模組的格式。                                                                                                                     |
-| `symbol`            | `'☁️ '`                                                               | 顯示在目前 AWS 配置之前的符號。                                                                                                          |
+| `符號`                | `'☁️ '`                                                               | 顯示在目前 AWS 配置之前的符號。                                                                                                          |
 | `region_aliases`    | `{}`                                                                  | 除了AWS名稱外，顯示區域別名表                                                                                                            |
 | `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                       | 這個模組的風格。                                                                                                                    |
@@ -481,7 +481,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | 變數                     | 預設                                       | 說明                                                                                                    |
 | ---------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'󰠅 '`                                  | The symbol used in the format.                                                        |
+| `符號`                   | `'󰠅 '`                                  | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | format 內所使用的風格。                                                                                       |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -599,7 +599,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | ------------------- | ----------------------------------------------- | --------------------------------------------------------------------- |
 | `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
 | `version_format`    | `'v${raw}'`                                     | The version format.                                   |
-| `symbol`            | `'🐃 '`                                         | The symbol used before displaying the version of Buf. |
+| `符號`                | `'🐃 '`                                         | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | 應觸發此模組的副檔名。                                                           |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | 應觸發此模組的檔案名稱。                                                          |
 | `detect_folders`    | `[]`                                            | 應觸發此模組的資料夾名稱。                                                         |
@@ -611,7 +611,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | 變數        | 範例       | 說明                   |
 | --------- | -------- | -------------------- |
 | `version` | `v1.0.0` | The version of `buf` |
-| `symbol`  |          | 對應 `symbol` 選項的設定值   |
+| `符號`      |          | 對應 `symbol` 選項的設定值   |
 | `style`\* |          | 對應 `style` 選項的設定值    |
 
 \*: 此變數僅能用於 style 字串的一部分
@@ -640,7 +640,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`       | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🥟 '`                                    | 用來表示 Bun 符號的格式化字串                                                                                             |
+| `符號`                | `'🥟 '`                                    | 用來表示 Bun 符號的格式化字串                                                                                             |
 | `detect_extensions` | `[]`                                       | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                       | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -680,7 +680,7 @@ file.
 | ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                                                        |
+| `符號`                | `'C '`                                                                        | The symbol used before displaying the compiler details                                                        |
 | `detect_extensions` | `['c', 'h']`                                                                  | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                                                          | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                                          | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -729,7 +729,7 @@ the module will be shown if the current directory contains a `.cpp`, `.hpp`, or 
 | ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                                                        |
+| `符號`                | `'C++ '`                                                                         | The symbol used before displaying the compiler details                                                        |
 | `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                                                             | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                                             | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -847,7 +847,7 @@ the module will be activated if any of the following conditions are met:
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`   | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                                 | 顯示在 Cmake 版本之前的符號。                                                                                            |
+| `符號`                | `'△ '`                                 | 顯示在 Cmake 版本之前的符號。                                                                                            |
 | `detect_extensions` | `[]`                                   | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                   | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -876,7 +876,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 | 選項                  | 預設                                   | 說明                                                                                                            |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `symbol`            | `'⚙️ '`                              | 顯示在 COBOL 版本之前的符號。                                                                                            |
+| `符號`                | `'⚙️ '`                              | 顯示在 COBOL 版本之前的符號。                                                                                            |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                                                      |
@@ -957,7 +957,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | 選項                  | 預設                                     | 說明                                                                                                                                                                                                                                                          |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅒 '`                                | 環境名稱前使用的符號。                                                                                                                                                                                                                                                 |
+| `符號`                | `'🅒 '`                                | 環境名稱前使用的符號。                                                                                                                                                                                                                                                 |
 | `style`             | `'bold green'`                         | 這個模組的風格。                                                                                                                                                                                                                                                    |
 | `format`            | `'via [$symbol$environment]($style) '` | 此模組的格式。                                                                                                                                                                                                                                                     |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                                                  |
@@ -991,7 +991,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 | 選項         | 預設                                 | 說明                                               |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
-| `symbol`   | `'⬢'`                              | 在容器內所顯示的符號                                       |
+| `符號`       | `'⬢'`                              | 在容器內所顯示的符號                                       |
 | `style`    | `'bold red dimmed'`                | 這個模組的風格。                                         |
 | `format`   | `'[$symbol \[$name\]]($style) '` | 此模組的格式。                                          |
 | `disabled` | `false`                            | Disables the `container` module. |
@@ -1027,7 +1027,7 @@ By default the module will be shown if any of the following conditions are met:
 
 | 選項                  | 預設                                   | 說明                                                                                                            |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `symbol`            | `'🔮 '`                              | 顯示在 Crystal 版本之前的符號。                                                                                          |
+| `符號`                | `'🔮 '`                              | 顯示在 Crystal 版本之前的符號。                                                                                          |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                                                      |
@@ -1071,7 +1071,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                                                               |
+| `符號`                | `'Λ '`                               | A format string representing the symbol of Daml                                                               |
 | `style`             | `'bold cyan'`                        | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['daml.yaml']`                      | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -1112,7 +1112,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`              | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🎯 '`                                           | A format string representing the symbol of Dart                                                               |
+| `符號`                | `'🎯 '`                                           | A format string representing the symbol of Dart                                                               |
 | `detect_extensions` | `['dart']`                                        | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['.dart_tool']`                                  | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -1151,7 +1151,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                                 | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦕 '`                                                                              | 用來表示 Deno 符號的格式化字串                                                                                            |
+| `符號`                | `'🦕 '`                                                                              | 用來表示 Deno 符號的格式化字串                                                                                            |
 | `detect_extensions` | `[]`                                                                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -1299,7 +1299,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | 選項                  | 預設                                     | 說明                                                                                         |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `'[$symbol$loaded/$allowed]($style) '` | 此模組的格式。                                                                                    |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.                      |
+| `符號`                | `'direnv '`                            | The symbol used before displaying the direnv context.                      |
 | `style`             | `'bold orange'`                        | 這個模組的風格。                                                                                   |
 | `disabled`          | `true`                                 | Disables the `direnv` module.                                              |
 | `detect_extensions` | `[]`                                   | 應觸發此模組的副檔名。                                                                                |
@@ -1346,7 +1346,7 @@ the context in use).
 | 選項                  | 預設                                                                                           | 說明                                                                                                                   |
 | ------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol$context]($style) '`                                                           | 此模組的格式。                                                                                                              |
-| `symbol`            | `'🐳 '`                                                                                      | The symbol used before displaying the Docker context.                                                |
+| `符號`                | `'🐳 '`                                                                                      | The symbol used before displaying the Docker context.                                                |
 | `only_with_files`   | `true`                                                                                       | Only show when there's a match                                                                                       |
 | `detect_extensions` | `[]`                                                                                         | Which extensions should trigger this module (needs `only_with_files` to be true). |
 | `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
@@ -1406,7 +1406,7 @@ when there is a `.csproj` file in the current directory.
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                          | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'.NET '`                                                                                               | 在顯示 dotnet 版本之前用的符號。                                                                                          |
+| `符號`                | `'.NET '`                                                                                               | 在顯示 dotnet 版本之前用的符號。                                                                                          |
 | `heuristic`         | `true`                                                                                                  | 使用更快速的版本偵測法來保持 starship 的速度。                                                                                  |
 | `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -1449,7 +1449,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                                             |
 | `version_format`    | `'v${raw}'`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💧 '`                                                     | 顯示在 Elixir/Erlang 版本之前的符號。                                                                                    |
+| `符號`                | `'💧 '`                                                     | 顯示在 Elixir/Erlang 版本之前的符號。                                                                                    |
 | `detect_extensions` | `[]`                                                        | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['mix.exs']`                                               | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                        | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -1493,7 +1493,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`               | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🌳 '`                                            | A format string representing the symbol of Elm.                                               |
+| `符號`                | `'🌳 '`                                            | A format string representing the symbol of Elm.                                               |
 | `detect_extensions` | `['elm']`                                          | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['elm-stuff']`                                    | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -1547,15 +1547,15 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### 選項
 
-| 選項            | 預設                                    | 說明                                                                                           |
-| ------------- | ------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`      | `""`                                  | 顯示在變數數值之前的符號。                                                                                |
-| `variable`    |                                       | 要顯示的環境變數。                                                                                    |
-| `default`     |                                       | 在選擇的變數值沒有定義時，顯示的預設值。                                                                         |
-| `format`      | `"with [$symbol$env_value]($style) "` | 此模組的格式。                                                                                      |
-| `description` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                               | Disables the `env_var` module.                                               |
-| `style`       | `"black bold dimmed"`                 | 這個模組的風格。                                                                                     |
+| 選項         | 預設                                    | 說明                                                                                           |
+| ---------- | ------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `符號`       | `""`                                  | 顯示在變數數值之前的符號。                                                                                |
+| `變數`       |                                       | 要顯示的環境變數。                                                                                    |
+| `預設`       |                                       | 在選擇的變數值沒有定義時，顯示的預設值。                                                                         |
+| `format`   | `"with [$symbol$env_value]($style) "` | 此模組的格式。                                                                                      |
+| `說明`       | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                               | Disables the `env_var` module.                                               |
+| `style`    | `"black bold dimmed"`                 | 這個模組的風格。                                                                                     |
 
 ### 變數
 
@@ -1603,7 +1603,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `' '`                               | 顯示在 Erlang 版本之前的符號。                                                                                           |
+| `符號`                | `' '`                               | 顯示在 Erlang 版本之前的符號。                                                                                           |
 | `style`             | `'bold red'`                         | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -1642,7 +1642,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🧅 '`                              | The symbol used before displaying the version of fennel.                                      |
+| `符號`                | `'🧅 '`                              | The symbol used before displaying the version of fennel.                                      |
 | `style`             | `'bold green'`                       | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `['fnl']`                            | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -1678,7 +1678,7 @@ other modules.
 
 | 選項         | 預設             | 說明                                                |
 | ---------- | -------------- | ------------------------------------------------- |
-| `symbol`   | `'.'`          | The symbol used to fill the line. |
+| `符號`       | `'.'`          | The symbol used to fill the line. |
 | `style`    | `'bold black'` | 這個模組的風格。                                          |
 | `disabled` | `false`        | Disables the `fill` module                        |
 
@@ -1707,7 +1707,7 @@ The `fortran` module shows the current compiler version of Fortran.
 
 | 選項                  | 預設                                                                                                                          | 說明                                                                                                            |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                                     |
+| `符號`                | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                                     |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                                        | 此模組的格式。                                                                                                       |
 | `version_format`    | `'${raw}'`                                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold purple'`                                                                                                             | 這個模組的風格。                                                                                                      |
@@ -1749,7 +1749,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | 選項                  | 預設                               | 說明                                                                                                 |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol$branch]($style) '` | 此模組的格式。 Use `'$branch'` to refer to the current branch name.                       |
-| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory. |
+| `符號`                | `' '`                           | The symbol used before the branch name of the check-out in your current directory. |
 | `style`             | `'bold purple'`                  | 這個模組的風格。                                                                                           |
 | `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                                    |
 | `truncation_symbol` | `'…'`                            | 用來指示分支名稱被縮減的符號。 You can use `''` for no symbol.                                    |
@@ -1830,7 +1830,7 @@ environment variables has been set.
 | 選項                | 預設                                                         | 說明                                                                               |
 | ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | 此模組的格式。                                                                          |
-| `symbol`          | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
+| `符號`              | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
 | `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module                         |
@@ -1845,7 +1845,7 @@ environment variables has been set.
 | account | `foo`         | The current GCP profile                                            |
 | domain  | `example.com` | The current GCP profile domain                                     |
 | project |               | The current GCP project                                            |
-| active  | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| active  | `預設`          | The active config name written in `~/.config/gcloud/active_config` |
 | symbol  |               | 對應 `symbol` 選項的設定值                                                 |
 | style\* |               | 對應 `style` 選項的設定值                                                  |
 
@@ -1905,7 +1905,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
 | `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | 此模組的格式。 Use `'$branch'` to refer to the current branch name.                         |
-| `symbol`             | `' '`                                            | A format string representing the symbol of git branch.                               |
+| `符號`                 | `' '`                                            | A format string representing the symbol of git branch.                               |
 | `style`              | `'bold purple'`                                   | 這個模組的風格。                                                                                             |
 | `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
 | `truncation_symbol`  | `'…'`                                             | 用來指示分支名稱被縮減的符號。 You can use `''` for no symbol.                                      |
@@ -2192,7 +2192,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⭐ '`                               | 用來表示 Gleam 符號的格式化字串                                                                                           |
+| `符號`                | `'⭐ '`                               | 用來表示 Gleam 符號的格式化字串                                                                                           |
 | `detect_extensions` | `['gleam']`                          | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['gleam.toml']`                     | 應觸發此模組的檔案名稱。                                                                                                  |
 | `style`             | `'bold #FFAFF3'`                     | 這個模組的風格。                                                                                                      |
@@ -2238,7 +2238,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'`                                                      | 此模組的格式。                                                                                                                                    |
 | `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                              |
-| `symbol`            | `'🐹 '`                                                                                   | A format string representing the symbol of Go.                                                                             |
+| `符號`                | `'🐹 '`                                                                                   | A format string representing the symbol of Go.                                                                             |
 | `detect_extensions` | `['go']`                                                                                  | 應觸發此模組的副檔名。                                                                                                                                |
 | `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | 應觸發此模組的檔案名稱。                                                                                                                               |
 | `detect_folders`    | `['Godeps']`                                                                              | 應觸發此模組的資料夾名稱。                                                                                                                              |
@@ -2285,7 +2285,7 @@ The module will be shown when inside a guix-shell environment.
 | 選項         | 預設                         | 說明                                                                     |
 | ---------- | -------------------------- | ---------------------------------------------------------------------- |
 | `format`   | `'via [$symbol]($style) '` | 此模組的格式。                                                                |
-| `symbol`   | `'🐃 '`                    | A format string representing the symbol of guix-shell. |
+| `符號`       | `'🐃 '`                    | A format string representing the symbol of guix-shell. |
 | `style`    | `'yellow bold'`            | 這個模組的風格。                                                               |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
@@ -2326,7 +2326,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🅶 '`                              | A format string representing the symbol of Gradle.                                            |
+| `符號`                | `'🅶 '`                              | A format string representing the symbol of Gradle.                                            |
 | `detect_extensions` | `['gradle', 'gradle.kts']`           | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['gradle']`                         | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -2358,7 +2358,7 @@ By default the module will be shown if any of the following conditions are met:
 | 選項                  | 預設                                   | 說明                                                 |
 | ------------------- | ------------------------------------ | -------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                            |
-| `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell |
+| `符號`                | `'λ '`                               | A format string representing the symbol of Haskell |
 | `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | 應觸發此模組的副檔名。                                        |
 | `detect_files`      | `['stack.yaml', 'cabal.project']`    | 應觸發此模組的檔案名稱。                                       |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                      |
@@ -2395,7 +2395,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['hx', 'hxml']`                                                                                | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'⌘ '`                                                                                          | 用來表示 Haxe 符號的格式化字串。                                                                                           |
+| `符號`                | `'⌘ '`                                                                                          | 用來表示 Haxe 符號的格式化字串。                                                                                           |
 | `style`             | `'bold fg:202'`                                                                                 | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                                   |
 
@@ -2435,7 +2435,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'⎈ '`                               | 用來表示 Helm 符號的格式化字串。                                                                                           |
+| `符號`                | `'⎈ '`                               | 用來表示 Helm 符號的格式化字串。                                                                                           |
 | `style`             | `'bold white'`                       | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                              | Disables the `helm` module.                                                                   |
 
@@ -2535,7 +2535,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                                                                                  | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'☕ '`                                                                                                                | 用來表示 Java 符號的格式化字串                                                                                            |
+| `符號`                | `'☕ '`                                                                                                                | 用來表示 Java 符號的格式化字串                                                                                            |
 | `style`             | `'red dimmed'`                                                                                                        | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                                                                                                               | Disables the `java` module.                                                                   |
 
@@ -2592,7 +2592,7 @@ The default functionality is:
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
 | `format`           | `'[$symbol$number]($style) '` | 此模組的格式。                                                                                  |
-| `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
+| `符號`               | `'✦'`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `'bold blue'`                 | 這個模組的風格。                                                                                 |
 | `disabled`         | `false`                       | Disables the `jobs` module.                                              |
 
@@ -2645,7 +2645,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['jl']`                             | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Project.toml', 'Manifest.toml']`  | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'ஃ '`                               | 用來表示 Julia 符號的格式化字串。                                                                                          |
+| `符號`                | `'ஃ '`                               | 用來表示 Julia 符號的格式化字串。                                                                                          |
 | `style`             | `'bold purple'`                      | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                              | Disables the `julia` module.                                                                  |
 
@@ -2684,7 +2684,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['kt', 'kts']`                      | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'🅺 '`                              | 用來表示 Kotlin 符號的格式化字串。                                                                                         |
+| `符號`                | `'🅺 '`                              | 用來表示 Kotlin 符號的格式化字串。                                                                                         |
 | `style`             | `'bold blue'`                        | 這個模組的風格。                                                                                                      |
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version.                 |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                                 |
@@ -2742,7 +2742,7 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 
 | 選項                  | 預設                                                   | 說明                                                                                    |
 | ------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
+| `符號`                | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | 此模組的格式。                                                                               |
 | `style`             | `'cyan bold'`                                        | 這個模組的風格。                                                                              |
 | `context_aliases`\* | `{}`                                                 | Table of context aliases to display.                                  |
@@ -2766,7 +2766,7 @@ part of the `contexts` list:
 | `context_alias`   | Context alias to display instead of the full context name.                                               |
 | `user_alias`      | User alias to display instead of the full user name.                                                     |
 | `style`           | The style for the module when using this context. If not set, will use module's style.   |
-| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+| `符號`              | The symbol for the module when using this context. If not set, will use module's symbol. |
 
 Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
 regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
@@ -2913,7 +2913,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🌙 '`                              | 用來表示 Lua 符號的格式化字串。                                                                                            |
+| `符號`                | `'🌙 '`                              | 用來表示 Lua 符號的格式化字串。                                                                                            |
 | `detect_extensions` | `['lua']`                            | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['.lua-version']`                   | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['lua']`                            | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -2957,7 +2957,7 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🅼 '`                              | A format string representing the symbol of Maven.                                             |
+| `符號`                | `'🅼 '`                              | A format string representing the symbol of Maven.                                             |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['pom.xml']`                        | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['.mvn']`                           | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -2991,7 +2991,7 @@ The `memory_usage` module shows current system memory and swap usage.
 | ----------- | ---------------------------------------------- | --------------------------------------------------- |
 | `threshold` | `75`                                           | 將記憶體使用量隱藏，除非使用量超過指定值。                               |
 | `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | 此模組的格式。                                             |
-| `symbol`    | `'🐏'`                                         | 顯示在記憶體使用量之前的符號。                                     |
+| `符號`        | `'🐏'`                                         | 顯示在記憶體使用量之前的符號。                                     |
 | `style`     | `'bold dimmed white'`                          | 這個模組的風格。                                            |
 | `disabled`  | `true`                                         | Disables the `memory_usage` module. |
 
@@ -3034,7 +3034,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                                                |
 | `truncation_symbol` | `'…'`                              | The symbol used to indicate a project name was truncated. You can use `''` for no symbol. |
 | `format`            | `'via [$symbol$project]($style) '` | 此模組的格式。                                                                                                                   |
-| `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                                                       |
+| `符號`                | `'⬢ '`                             | The symbol used before displaying the project name.                                                       |
 | `style`             | `'blue bold'`                      | 這個模組的風格。                                                                                                                  |
 | `disabled`          | `false`                            | Disables the `meson` module.                                                                              |
 
@@ -3072,7 +3072,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 | 選項                  | 預設                                        | 說明                                                                                                           |
 | ------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `符號`                | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `'bold purple'`                           | 這個模組的風格。                                                                                                     |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | 此模組的格式。                                                                                                      |
 | `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                                        |
@@ -3150,7 +3150,7 @@ The `mise` module shows the current mise health as reported by running `mise doc
 
 | 選項                  | 預設                                                                   | 說明                                                               |
 | ------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
+| `符號`                | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
 | `style`             | `'bold purple'`                                                      | 這個模組的風格。                                                         |
 | `format`            | `'on [$symbol$health]($style) '`                                     | 此模組的格式。                                                          |
 | `detect_extensions` | `[]`                                                                 | 應觸發此模組的副檔名。                                                      |
@@ -3188,7 +3188,7 @@ The `mojo` module shows the current version of [Mojo programming language](https
 | 選項                  | 預設                                    | 說明                                          |
 | ------------------- | ------------------------------------- | ------------------------------------------- |
 | `format`            | `'with [$symbol($version )]($style)'` | 此模組的格式。                                     |
-| `symbol`            | `'🔥 '`                               | 顯示在 Mojo 版本之前的符號。                           |
+| `符號`                | `'🔥 '`                               | 顯示在 Mojo 版本之前的符號。                           |
 | `style`             | `'bold 208'`                          | 這個模組的風格。                                    |
 | `disabled`          | `false`                               | Disables the `mojo` module. |
 | `detect_extensions` | `['mojo', '🔥']`                      | 應觸發此模組的副檔名。                                 |
@@ -3222,7 +3222,7 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 
 | 選項         | 預設                         | 說明                                                                                              |
 | ---------- | -------------------------- | ----------------------------------------------------------------------------------------------- |
-| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
+| `符號`       | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
 | `style`    | `'bold purple'`            | 這個模組的風格。                                                                                        |
 | `format`   | `'[$symbol$name]($style)'` | 此模組的格式。                                                                                         |
 | `disabled` | `false`                    | Disables the `nats` module.                                                     |
@@ -3253,7 +3253,7 @@ This uses `ip netns identify` to get the network namespace, so only network name
 | 選項         | 預設                                | 說明                                                                                                   |
 | ---------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `format`   | `'[$symbol \[$name\]]($style)'` | 此模組的格式。                                                                                              |
-| `symbol`   | `'🛜 '`                           | The symbol used before the network namespace (defaults to empty). |
+| `符號`       | `'🛜 '`                           | The symbol used before the network namespace (defaults to empty). |
 | `style`    | `'blue bold dimmed'`              | 這個模組的風格。                                                                                             |
 | `disabled` | `false`                           | Disables the `netns` module.                                                         |
 
@@ -3291,7 +3291,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'👑 '`                              | 顯示在 Nim 版本之前的符號。                                                                                              |
+| `符號`                | `'👑 '`                              | 顯示在 Nim 版本之前的符號。                                                                                              |
 | `detect_extensions` | `['nim', 'nims', 'nimble']`          | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['nim.cfg']`                        | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -3328,7 +3328,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | 選項            | 預設                                             | 說明                                                                                    |
 | ------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`      | `'via [$symbol$state( \($name\))]($style) '` | 此模組的格式。                                                                               |
-| `symbol`      | `'❄️ '`                                        | 用來表示 nix-shell 符號的格式化字串。                                                              |
+| `符號`          | `'❄️ '`                                        | 用來表示 nix-shell 符號的格式化字串。                                                              |
 | `style`       | `'bold blue'`                                  | 這個模組的風格。                                                                              |
 | `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
 | `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
@@ -3381,7 +3381,7 @@ Additionally, the module will be hidden by default if the directory contains a `
 | ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`          | 此模組的格式。                                                                                                                                               |
 | `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                         |
-| `symbol`            | `' '`                                        | 用來表示 Node.js 符號的格式化字串。                                                                                                                |
+| `符號`                | `' '`                                        | 用來表示 Node.js 符號的格式化字串。                                                                                                                |
 | `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | 應觸發此模組的副檔名。                                                                                                                                           |
 | `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | 應觸發此模組的檔案名稱。                                                                                                                                          |
 | `detect_folders`    | `['node_modules']`                            | 應觸發此模組的資料夾名稱。                                                                                                                                         |
@@ -3427,7 +3427,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`          | `'v${raw}'`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`                  | `'🐫 '`                                                                    | The symbol used before displaying the version of OCaml.                                       |
+| `符號`                      | `'🐫 '`                                                                    | The symbol used before displaying the version of OCaml.                                       |
 | `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.                                       |
 | `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.                                        |
 | `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | 應觸發此模組的副檔名。                                                                                                   |
@@ -3467,7 +3467,7 @@ The `odin` module shows the currently installed version of [Odin](https://odin-l
 | ------------------- | ------------------------------------ | ---------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                |
 | `show_commit`       | `false`                              | Shows the commit as part of the version.               |
-| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `符號`                | `'Ø '`                               | The symbol used before displaying the version of Odin. |
 | `style`             | `'bold bright-blue'`                 | 這個模組的風格。                                                               |
 | `disabled`          | `false`                              | Disables the `odin` module.                            |
 | `detect_extensions` | `['odin']`                           | 應觸發此模組的副檔名。                                                            |
@@ -3505,7 +3505,7 @@ By default the module will be shown if the current directory contains a `.rego` 
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🪖  '`                             | 用來表示 OPA 符號的格式化字串。                                                                                            |
+| `符號`                | `'🪖  '`                             | 用來表示 OPA 符號的格式化字串。                                                                                            |
 | `detect_extensions` | `['rego']`                           | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -3543,7 +3543,7 @@ to fetch the current project in use.
 | 選項         | 預設                                              | 說明                                                                             |
 | ---------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
 | `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | 此模組的格式。                                                                        |
-| `symbol`   | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
+| `符號`       | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                                 | 這個模組的風格。                                                                       |
 | `disabled` | `false`                                         | Disables the `openstack` module.                               |
 
@@ -3724,7 +3724,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 | 選項                | 預設                                | 說明                                                                                                            |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`          | `'is [$symbol$version]($style) '` | 此模組的格式。                                                                                                       |
-| `symbol`          | `'📦 '`                           | 顯示在套件的版本之前的符號。                                                                                                |
+| `符號`              | `'📦 '`                           | 顯示在套件的版本之前的符號。                                                                                                |
 | `version_format`  | `'v${raw}'`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`           | `'bold 208'`                      | 這個模組的風格。                                                                                                      |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                                     |
@@ -3766,7 +3766,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                     | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐪 '`                                                                                                  | 顯示在 Perl 版本之前的符號                                                                                              |
+| `符號`                | `'🐪 '`                                                                                                  | 顯示在 Perl 版本之前的符號                                                                                              |
 | `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                                                                                     | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -3805,7 +3805,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐘 '`                              | 顯示在 PHP 版本之前的符號。                                                                                              |
+| `符號`                | `'🐘 '`                              | 顯示在 PHP 版本之前的符號。                                                                                              |
 | `detect_extensions` | `['php']`                            | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['composer.json', '.php-version']`  | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -3843,7 +3843,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 | 選項                  | 預設                                | 說明                                                                                                   |
 | ------------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `符號`                | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
 | `style`             | `'bold purple'`                   | 這個模組的風格。                                                                                             |
 | `format`            | `'on [$symbol$channel]($style) '` | 此模組的格式。                                                                                              |
 | `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                                    |
@@ -3864,7 +3864,7 @@ environment and project name, if `$PIXI_ENVIRONMENT_NAME` is set.
 | -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | 此模組的格式。                                                                                                                        |
 | `version_format`           | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`. |
-| `symbol`                   | `'🧚 '`                                                   | 環境名稱前使用的符號。                                                                                                                    |
+| `符號`                       | `'🧚 '`                                                   | 環境名稱前使用的符號。                                                                                                                    |
 | `style`                    | `'yellow bold'`                                           | 這個模組的風格。                                                                                                                       |
 | `show_default_environment` | `true`                                                    | Whether to indicate that the `default` environment of your project is activated.                               |
 | `pixi_binary`              | `['pixi']`                                                | Configures the pixi binary that Starship should execute when getting the version.                              |
@@ -3911,7 +3911,7 @@ By default the module will be shown if any of the following conditions are met:
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`         | `'via [$symbol($username@)$stack]($style) '` | 此模組的格式。                                                                                                       |
 | `version_format` | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                                                |
+| `符號`             | `' '`                                       | A format string shown before the Pulumi stack.                                                |
 | `style`          | `'bold 5'`                                   | 這個模組的風格。                                                                                                      |
 | `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                                |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                                                 |
@@ -3964,7 +3964,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`          | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                                      | The symbol used before displaying the version of PureScript.                                  |
+| `符號`                | `'<=> '`                                      | The symbol used before displaying the version of PureScript.                                  |
 | `detect_extensions` | `['purs']`                                    | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                          | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4017,7 +4017,7 @@ By default, the module will be shown if any of the following conditions are met:
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | 此模組的格式。                                                                                                       |
 | `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`             | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                                             |
+| `符號`                 | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                                             |
 | `style`              | `'yellow bold'`                                                                                              | 這個模組的風格。                                                                                                      |
 | `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 取得 Python 的版本。                                                                                       |
 | `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                                               |
@@ -4116,7 +4116,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                                                             |
+| `符號`                | `'⨁ '`                               | A format string representing the symbol of Quarto                                                             |
 | `style`             | `'bold #75AADB'`                     | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `['.qmd']`                           | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['_quarto.yml']`                    | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -4152,7 +4152,7 @@ any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'📐'`                               | A format string representing the symbol of R.                                                 |
+| `符號`                | `'📐'`                               | A format string representing the symbol of R.                                                 |
 | `style`             | `'blue bold'`                        | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['.Rprofile']`                      | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -4190,7 +4190,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version-$vm_version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦋 '`                                          | The symbol used before displaying the version of Raku                                                         |
+| `符號`                | `'🦋 '`                                          | The symbol used before displaying the version of Raku                                                         |
 | `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['META6.json']`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                             | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4228,7 +4228,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🔺 '`                              | A format string representing the symbol of Red.                                               |
+| `符號`                | `'🔺 '`                              | A format string representing the symbol of Red.                                               |
 | `detect_extensions` | `['red']`                            | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                 | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4272,7 +4272,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💎 '`                              | A format string representing the symbol of Ruby.                                              |
+| `符號`                | `'💎 '`                              | A format string representing the symbol of Ruby.                                              |
 | `detect_extensions` | `['rb']`                             | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Gemfile', '.ruby-version']`       | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4314,7 +4314,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦀 '`                              | A format string representing the symbol of Rust                                                               |
+| `符號`                | `'🦀 '`                              | A format string representing the symbol of Rust                                                               |
 | `detect_extensions` | `['rs']`                             | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Cargo.toml']`                     | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4360,7 +4360,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `['sbt', 'scala']`                       | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['.metals']`                            | 應觸發此模組的資料夾名稱。                                                                                                 |
-| `symbol`            | `'🆂 '`                                  | 用來表示 Scala 符號的格式化字串。                                                                                          |
+| `符號`                | `'🆂 '`                                  | 用來表示 Scala 符號的格式化字串。                                                                                          |
 | `style`             | `'red dimmed'`                           | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                                                  |
 
@@ -4448,7 +4448,7 @@ set to a number and meets or exceeds the specified threshold.
 | --------------- | ---------------------------- | ----------------------------------------------------------------------------- |
 | `threshold`     | `2`                          | Display threshold.                                            |
 | `format`        | `'[$symbol$shlvl]($style) '` | 此模組的格式。                                                                       |
-| `symbol`        | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                     |
+| `符號`            | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`        | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value           |
 | `style`         | `'bold yellow'`              | 這個模組的風格。                                                                      |
@@ -4500,7 +4500,7 @@ and `$SINGULARITY_NAME` is set.
 | 選項         | 預設                               | 說明                                                               |
 | ---------- | -------------------------------- | ---------------------------------------------------------------- |
 | `format`   | `'[$symbol\[$env\]]($style) '` | 此模組的格式。                                                          |
-| `symbol`   | `''`                             | A format string displayed before the image name. |
+| `符號`       | `''`                             | A format string displayed before the image name. |
 | `style`    | `'bold dimmed blue'`             | 這個模組的風格。                                                         |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
@@ -4536,7 +4536,7 @@ The module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                         | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${major}.${minor}.${patch}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'S '`                                                       | 用來表示 Solidity 符號的格式化字串。                                                                                       |
+| `符號`                | `'S '`                                                       | 用來表示 Solidity 符號的格式化字串。                                                                                       |
 | \`compiler          | ['solc'] | Solidity 的預設編譯器。                                                                                              |
 | `detect_extensions` | `['sol']`                                                    | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                                         | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -4571,7 +4571,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | 選項                  | 預設                                     | 說明                                                                                                                                                                                             |
 | ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅢  '`                               | 環境名稱前使用的符號。                                                                                                                                                                                    |
+| `符號`                | `'🅢  '`                               | 環境名稱前使用的符號。                                                                                                                                                                                    |
 | `style`             | `'bold blue'`                          | 這個模組的風格。                                                                                                                                                                                       |
 | `format`            | `'via [$symbol$environment]($style) '` | 此模組的格式。                                                                                                                                                                                        |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                                                   |
@@ -4610,7 +4610,7 @@ The status code will cast to a signed 32-bit integer.
 | 選項                          | 預設                                                                               | 說明                                                                                                   |
 | --------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `format`                    | `'[$symbol$status]($style) '`                                                    | 此模組的格式                                                                                               |
-| `symbol`                    | `'❌'`                                                                            | The symbol displayed on program error                                                                |
+| `符號`                        | `'❌'`                                                                            | The symbol displayed on program error                                                                |
 | `success_symbol`            | `''`                                                                             | The symbol displayed on program success                                                              |
 | `not_executable_symbol`     | `'🚫'`                                                                           | The symbol displayed when file isn't executable                                                      |
 | `not_found_symbol`          | `'🔍'`                                                                           | The symbol displayed when the command can't be found                                                 |
@@ -4672,7 +4672,7 @@ The module will only be shown if credentials are cached.
 | 選項              | 預設                       | 說明                                                                      |
 | --------------- | ------------------------ | ----------------------------------------------------------------------- |
 | `format`        | `'[as $symbol]($style)'` | 此模組的格式                                                                  |
-| `symbol`        | `'🧙 '`                  | The symbol displayed when credentials are cached                        |
+| `符號`            | `'🧙 '`                  | The symbol displayed when credentials are cached                        |
 | `style`         | `'bold blue'`            | 這個模組的風格。                                                                |
 | `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
 | `disabled`      | `true`                   | Disables the `sudo` module.                             |
@@ -4720,7 +4720,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐦 '`                              | A format string representing the symbol of Swift                                                              |
+| `符號`                | `'🐦 '`                              | A format string representing the symbol of Swift                                                              |
 | `detect_extensions` | `['swift']`                          | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Package.swift']`                  | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4766,7 +4766,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '`                    | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                                         |
+| `符號`                | `'💠'`                                                  | A format string shown before the terraform workspace.                                         |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `[]`                                                    | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `['.terraform']`                                        | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -4779,7 +4779,7 @@ By default the module will be shown if any of the following conditions are met:
 | 變數        | 範例         | 說明                              |
 | --------- | ---------- | ------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`      |
-| workspace | `default`  | The current Terraform workspace |
+| workspace | `預設`       | The current Terraform workspace |
 | symbol    |            | 對應 `symbol` 選項的設定值              |
 | style\*   |            | 對應 `style` 選項的設定值               |
 
@@ -4879,7 +4879,7 @@ By default, the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                                                              |
+| `符號`                | `'t '`                               | A format string representing the symbol of Typst                                                              |
 | `style`             | `'bold #0093A7'`                     | 這個模組的風格。                                                                                                      |
 | `detect_extensions` | `['.typ']`                           | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['template.typ']`                   | 應觸發此模組的檔案名稱。                                                                                                  |
@@ -4888,12 +4888,12 @@ By default, the module will be shown if any of the following conditions are met:
 
 ### 變數
 
-| 變數                                 | 範例        | 說明                                                                   |
-| ---------------------------------- | --------- | -------------------------------------------------------------------- |
-| version                            | `v0.9.0`  | The version of `typst`, alias for typst_version |
-| typst_version | `default` | The current Typst version                                            |
-| symbol                             |           | 對應 `symbol` 選項的設定值                                                   |
-| style\*                            |           | 對應 `style` 選項的設定值                                                    |
+| 變數                                 | 範例       | 說明                                                                   |
+| ---------------------------------- | -------- | -------------------------------------------------------------------- |
+| version                            | `v0.9.0` | The version of `typst`, alias for typst_version |
+| typst_version | `預設`     | The current Typst version                                            |
+| symbol                             |          | 對應 `symbol` 選項的設定值                                                   |
+| style\*                            |          | 對應 `style` 選項的設定值                                                    |
 
 \*: 此變數僅能用於 style 字串的一部分
 
@@ -4961,7 +4961,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.                                           |
+| `符號`                | `'⍱ '`                               | A format string representing the symbol of Vagrant.                                           |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['Vagrantfile']`                    | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -5001,7 +5001,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | 用來表示 V 符號的格式化字串。                                                                                              |
+| `符號`                | `'V '`                                       | 用來表示 V 符號的格式化字串。                                                                                              |
 | `detect_extensions` | `['v']`                                      | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                         | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -5074,7 +5074,7 @@ The module will be shown only if a repository is currently in use.
 
 | 選項         | 預設                               | 說明                                                                     |
 | ---------- | -------------------------------- | ---------------------------------------------------------------------- |
-| `symbol`   | `''`                             | The symbol used before displaying the repository name. |
+| `符號`       | `''`                             | The symbol used before displaying the repository name. |
 | `style`    | `'bold yellow'`                  | 這個模組的風格。                                                               |
 | `format`   | `'vcsh [$symbol$repo]($style) '` | 此模組的格式。                                                                |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
@@ -5111,7 +5111,7 @@ the module will be activated if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                               | 顯示在 Cmake 版本之前的符號。                                                                                            |
+| `符號`                | `'△ '`                               | 顯示在 Cmake 版本之前的符號。                                                                                            |
 | `detect_extensions` | `[]`                                 | 應觸發此模組的副檔名。                                                                                                   |
 | `detect_files`      | `['xmake.lua']`                      | 應觸發此模組的檔案名稱。                                                                                                  |
 | `detect_folders`    | `[]`                                 | 應觸發此模組的資料夾名稱。                                                                                                 |
@@ -5141,7 +5141,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | 此模組的格式。                                                                                                       |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'↯ '`                               | 顯示在 Zig 版本之前的符號。                                                                                              |
+| `符號`                | `'↯ '`                               | 顯示在 Zig 版本之前的符號。                                                                                              |
 | `style`             | `'bold yellow'`                      | 這個模組的風格。                                                                                                      |
 | `disabled`          | `false`                              | Disables the `zig` module.                                                                    |
 | `detect_extensions` | `['zig']`                            | 應觸發此模組的副檔名。                                                                                                   |
@@ -5211,13 +5211,13 @@ These modules will be shown if any of the following conditions are met:
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                                                    |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                                        |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                                                                                               |
-| `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                                                                     |
+| `shell`             |                                 | [請看下列](#custom-command-shell)                                                                                                                                                                                                                                                                                                                                    |
+| `說明`                | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                                                                     |
 | `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                                                                    |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                            |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                      |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                                                                       |
-| `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                                                                            |
+| `符號`                | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                                                                            |
 | `style`             | `'bold green'`                  | 這個模組的風格。                                                                                                                                                                                                                                                                                                                                                         |
 | `format`            | `'[$symbol($output )]($style)'` | 此模組的格式。                                                                                                                                                                                                                                                                                                                                                          |
 | `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                                                                   |
