@@ -368,7 +368,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | model                         | `Claude 3.5 Sonnet` | The display name of the current model |
 | model_id | `claude-3-5-sonnet` | The model ID                          |
 | symbol                        |                     | Mirrors the value of option `symbol`  |
-| style\*                       |                     | Mirrors the value of option `style`   |
+| stil\*                        |                     | Mirrors the value of option `style`   |
 
 \*: This variable can only be used as a part of a style string
 
@@ -451,7 +451,7 @@ style = "bold red"
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
 | total_tokens                                                         | `200k`  | Total context window size                             |
 | symbol                                                                                    |         | Mirrors the value of option `symbol`                  |
-| style\*                                                                                   |         | Mirrors the style from the matching display threshold |
+| stil\*                                                                                    |         | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
 
@@ -560,7 +560,7 @@ style = "bold red"
 | lines_added   | `1.2k`   | Total lines of code added                                              |
 | lines_removed | `500`    | Total lines of code removed                                            |
 | symbol                             |          | Mirrors the value of option `symbol`                                   |
-| style\*                            |          | Mirrors the style from the matching display threshold                  |
+| stil\*                             |          | Mirrors the style from the matching display threshold                  |
 
 \*: This variable can only be used as a part of a style string
 
