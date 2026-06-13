@@ -150,7 +150,7 @@ onMounted(() => {
    #### Nushell
 
    > [!WARNING]> This will change in the future.
-   > > Only Nushell v0.96+ is supported.
+   > > Chỉ hỗ trợ nushell từ phiên bản 0.96 trở lên.
 
    Thêm những dòng sau vào cuối tệp cấu hình Nushell (tìm bằng cách chạy `$nu.config-path` trong Nushell):
 
