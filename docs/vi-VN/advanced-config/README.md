@@ -420,8 +420,8 @@ The `claude_model` module displays the current Claude model being used in the se
 | ----------------------------- | ------------------- | ------------------------------------- |
 | model                         | `Claude 3.5 Sonnet` | The display name of the current model |
 | model_id | `claude-3-5-sonnet` | The model ID                          |
-| symbol                        |                     | Mirrors the value of option `symbol`  |
-| style\*                       |                     | Mirrors the value of option `style`   |
+| symbol                        |                     | Giá trị ghi đè của `style`            |
+| style\*                       |                     | Giá trị ghi đè của `style`            |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -503,7 +503,7 @@ style = "bold red"
 | curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
 | total_tokens                                                         | `200k`  | Total context window size                             |
-| symbol                                                                                    |         | Mirrors the value of option `symbol`                  |
+| symbol                                                                                    |         | Giá trị ghi đè của `style`                            |
 | style\*                                                                                   |         | Mirrors the style from the matching display threshold |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -612,7 +612,7 @@ style = "bold red"
 | api_duration  | `45s`    | Total API call duration                                                |
 | lines_added   | `1.2k`   | Total lines of code added                                              |
 | lines_removed | `500`    | Total lines of code removed                                            |
-| symbol                             |          | Mirrors the value of option `symbol`                                   |
+| symbol                             |          | Giá trị ghi đè của `style`                                             |
 | style\*                            |          | Mirrors the style from the matching display threshold                  |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
