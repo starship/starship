@@ -80,7 +80,7 @@ format = "took [$duration]($style) "
 
 | 已移除的屬性                  | 取代屬性             |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `符號`                    | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
