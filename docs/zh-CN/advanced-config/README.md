@@ -52,8 +52,7 @@ load(io.popen('starship init cmd'):read("*a"))
 
 - 默认情况下，输入的右侧为空。 To customize this, define a new
   function called `starship_transient_rprompt_func`. This function receives the
-  current prompt as a string that you can utilize. For example, to display
-  the time at which the last command was started here, you would do
+  current prompt as a string that you can utilize. 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -84,8 +83,7 @@ enable_transience
 ```
 
 - 默认情况下，输入的右侧为空。 To customize this, define a new
-  function called `starship_transient_rprompt_func`. For example, to display
-  the time at which the last command was started here, you would do
+  function called `starship_transient_rprompt_func`. 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
 
 ```fish
 function starship_transent_rmpt_func
@@ -387,7 +385,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | 选项              | 默认值                          | 描述                                                                                                                        |
 | --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `format`        | `'[$symbol$model]($style) '` | 组件格式化模板。                                                                                                                  |
-| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `符号`            | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
 | `style`         | `'bold blue'`                | 此组件的样式。                                                                                                                   |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
 | `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
@@ -432,7 +430,7 @@ The `claude_context` module displays context window usage as a percentage and vi
 | 选项                     | 默认值                               | 描述                                                                 |
 | ---------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | `format`               | `'[$gauge $percentage]($style) '` | 组件格式化模板。                                                           |
-| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
+| `符号`                   | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
 | `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
 | `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
@@ -551,7 +549,7 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | 选项         | 默认值                                | 描述                                                  |
 | ---------- | ---------------------------------- | --------------------------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | 组件格式化模板。                                            |
-| `symbol`   | `'💰 '`                            | The symbol shown before the cost.   |
+| `符号`       | `'💰 '`                            | The symbol shown before the cost.   |
 | `display`  | [见下文解释](#display-1)                | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
