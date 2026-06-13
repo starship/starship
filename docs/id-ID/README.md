@@ -150,7 +150,7 @@ onMounted(() => {
    #### Nushell
 
    > [!WARNING]> This will change in the future.
-   > > Only Nushell v0.96+ is supported.
+   > > Hanya Nushell v0.96+ yang menerima dukungan.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
