@@ -273,6 +273,9 @@ format = '\[[$symbol($version)]($style)\]'
 [vcsh]
 format = '\[vcsh [$symbol$repo]($style)\]'
 
+[yadm]
+format = '\[yadm [$symbol]($style)\]'
+
 [vlang]
 format = '\[[$symbol($version)]($style)\]'
 

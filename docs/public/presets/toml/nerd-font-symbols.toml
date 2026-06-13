@@ -304,5 +304,8 @@ symbol = " "
 [xmake]
 symbol = " "
 
+[yadm]
+symbol = " "
+
 [zig]
 symbol = " "
