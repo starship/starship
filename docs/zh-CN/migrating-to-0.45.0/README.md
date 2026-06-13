@@ -80,7 +80,7 @@ format = "took [$duration]($style) "
 
 | 被移除的属性                  | 取而代之的是           |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `符号`                    | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
