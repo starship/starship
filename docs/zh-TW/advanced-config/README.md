@@ -366,7 +366,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | 選項              | 預設                           | 說明                                                                                                                        |
 | --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `format`        | `'[$symbol$model]($style) '` | 此模組的格式。                                                                                                                   |
-| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `符號`            | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
 | `style`         | `'bold blue'`                | 這個模組的風格。                                                                                                                  |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
 | `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
@@ -411,7 +411,7 @@ The `claude_context` module displays context window usage as a percentage and vi
 | 選項                     | 預設                                | 說明                                                                 |
 | ---------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | `format`               | `'[$gauge $percentage]($style) '` | 此模組的格式。                                                            |
-| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
+| `符號`                   | `''`                              | The symbol shown before the gauge.                 |
 | `gauge_width`          | `5`                               | The width of the gauge in characters.              |
 | `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
 | `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
@@ -530,7 +530,7 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | 選項         | 預設                                 | 說明                                                  |
 | ---------- | ---------------------------------- | --------------------------------------------------- |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | 此模組的格式。                                             |
-| `symbol`   | `'💰 '`                            | The symbol shown before the cost.   |
+| `符號`       | `'💰 '`                            | The symbol shown before the cost.   |
 | `display`  | [請看下列](#display-1)                 | Threshold and style configurations. |
 | `disabled` | `false`                            | Disables the `claude_cost` module.  |
 
