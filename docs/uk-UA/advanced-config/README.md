@@ -13,7 +13,7 @@ this, run `Enable-TransientPrompt` in the shell session. To make it permanent, p
 this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
 `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this,
+Типово, ліва частина вводу буде замінена на `>`. To customize this,
 define a new function called `Invoke-Starship-TransientFunction`. For example, to
 display Starship's `character` module here, you would do
 
@@ -39,7 +39,7 @@ this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 Це треба зробити лише один раз. Make the following changes to your `starship.lua`
 to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this,
+- Типово, ліва частина вводу буде замінена на `>`. To customize this,
   define a new function called `starship_transient_prompt_func`. This function
   receives the current prompt as a string that you can utilize. For example, to
   display Starship's `character` module here, you would do
@@ -74,7 +74,7 @@ this statement in your `~/.config/fish/config.fish`. Transience can be disabled 
 
 Зверніть увагу, що у випадку Fish, перехідний командний рядок буде надруковано лише тоді, коли командний рядок не порожній та синтаксично правильний.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
+- Типово, ліва частина вводу буде замінена на зелений символ `❯`. To customize this,
   define a new function called `starship_transient_prompt_func`. For example, to
   display Starship's `character` module here, you would do
 
@@ -405,19 +405,19 @@ The `claude_model` module displays the current Claude model being used in the se
 | Змінна          | Приклад                      | Опис                                                                                                                                                       |
 | --------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`        | `'[$symbol$model]($style) '` | Імʼя поточної моделі                                                                                                                                       |
-| `symbol`        | `'🤖 '`                      | ID моделі                                                                                                                                                  |
+| `символ`        | `'🤖 '`                      | ID моделі                                                                                                                                                  |
 | `style`         | `'bold blue'`                | Віддзеркалює значення параметра `symbol`                                                                                                                   |
 | `model_aliases` | `{}`                         | Звʼязує ідентифікатори моделей або їхні назви з коротшими псевдонімами. Спочатку перевіряється ідентифікатор, потім назва. |
 | `disabled`      | `false`                      | Disables the `claude_model` module.                                                                                                        |
 
 #### Змінні
 
-| Змінна                        | Приклад             | Опис                                 |
-| ----------------------------- | ------------------- | ------------------------------------ |
-| model                         | `Claude 3.5 Sonnet` | Імʼя поточної моделі                 |
-| model_id | `claude-3-5-sonnet` | ID моделі                            |
-| symbol                        |                     | Mirrors the value of option `symbol` |
-| style\*                       |                     | Mirrors the value of option `style`  |
+| Змінна                        | Приклад             | Опис                                    |
+| ----------------------------- | ------------------- | --------------------------------------- |
+| model                         | `Claude 3.5 Sonnet` | Імʼя поточної моделі                    |
+| model_id | `claude-3-5-sonnet` | ID моделі                               |
+| symbol                        |                     | Віддзеркалює значення параметра `style` |
+| style\*                       |                     | Віддзеркалює значення параметра `style` |
 
 \*: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -450,7 +450,7 @@ The `claude_context` module displays context window usage as a percentage and vi
 | Параметр               | Стандартно                        | Опис                                                                                        |
 | ---------------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`               | `'[$gauge $percentage]($style) '` | Формат модуля.                                                              |
-| `symbol`               | `''`                              | Символ, який показується перед індикатором.                                 |
+| `символ`               | `''`                              | Символ, який показується перед індикатором.                                 |
 | `gauge_width`          | `5`                               | Ширина індикатора в символах.                                               |
 | `gauge_full_symbol`    | `'█'`                             | Символ, який використовується для заповнених сегментів індикатора.          |
 | `gauge_partial_symbol` | `'▒'`                             | Символ, який використовується для частково заповнених сегментів індикатора. |
@@ -499,7 +499,7 @@ style = "bold red"
 | curr_cache_creation_tokens | `1.5k`  | Кеш з токенів створення з останнього виклику API                          |
 | curr_cache_read_tokens     | `23.4k` | Кеш з токенів читання з останнього виклику API                            |
 | total_tokens                                                         | `200k`  | Загальний розмір контекстного вікна                                       |
-| symbol                                                                                    |         | Mirrors the value of option `symbol`                                      |
+| symbol                                                                                    |         | Віддзеркалює значення параметра `style`                                   |
 | style\*                                                                                   |         | Повторює стиль, що збігається з відповідним пороговим значення для показу |
 
 **Тільки індикатор**
@@ -538,7 +538,7 @@ gauge_width = 10
 format = "[$gauge]($style) "
 ```
 
-**Custom thresholds**
+**Власні порогові значення**
 
 ```toml
 # ~/.config/starship.toml
@@ -569,7 +569,7 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | Параметр   | Стандартно                         | Опис                                                         |
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                               |
-| `symbol`   | `'💰 '`                            | Символ, який показується перед сумою витрат. |
+| `символ`   | `'💰 '`                            | Символ, який показується перед сумою витрат. |
 | `display`  | [see below](#display-1)            | Налаштування порогів та стилів.              |
 | `disabled` | `false`                            | Disables the `claude_cost` module.           |
 
@@ -583,7 +583,7 @@ The `display` option is an array of objects that define cost thresholds and styl
 | `style`     | `bold green` | The value of `style` if this display configuration is matched              |
 | `hidden`    | `false`      | Приховати цей модуль, якщо він збігається з конфігурацією. |
 
-**Default configuration:**
+**Стандартні налаштування:**
 
 ```toml
 [[claude_cost.display]]
@@ -608,7 +608,7 @@ style = "bold red"
 | api_duration  | `45s`    | Загальна тривалість API-виклику                                           |
 | lines_added   | `1.2k`   | Загальна кількість доданих рядків коду                                    |
 | lines_removed | `500`    | Загальна кількість вилучених рядків коду                                  |
-| symbol                             |          | Mirrors the value of option `symbol`                                      |
+| symbol                             |          | Віддзеркалює значення параметра `style`                                   |
 | style\*                            |          | Повторює стиль, що збігається з відповідним пороговим значення для показу |
 
 \*: Ця змінна може бути використана лише як частина стилю рядка
