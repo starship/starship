@@ -457,6 +457,7 @@ mod tests {
     #[cfg(target_os = "windows")]
     use std::os::windows::fs::symlink_dir as symlink;
     use std::path::Path;
+    use std::process::Command;
     use std::{fs, io};
     use tempfile::TempDir;
 
@@ -601,21 +602,30 @@ mod tests {
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 
+    fn checked_output(command: &mut Command) -> io::Result<()> {
+        let output = command.output()?;
+        if output.status.success() {
+            return Ok(());
+        }
+
+        Err(io::Error::other(format!(
+            "command failed with status {}: {}",
+            output.status,
+            String::from_utf8_lossy(&output.stderr).trim()
+        )))
+    }
+
     fn init_repo(path: &Path) -> io::Result<()> {
-        create_command("git")?
-            .args(["init"])
-            .current_dir(path)
-            .output()
-            .map(|_| ())
+        checked_output(create_command("git")?.args(["init"]).current_dir(path))
     }
 
     fn init_repo_on_branch(path: &Path, branch: &str) -> io::Result<()> {
         init_repo(path)?;
-        create_command("git")?
-            .args(["checkout", "-b", branch])
-            .current_dir(path)
-            .output()
-            .map(|_| ())
+        checked_output(
+            create_command("git")?
+                .args(["checkout", "-b", branch])
+                .current_dir(path),
+        )
     }
 
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
@@ -780,6 +790,35 @@ mod tests {
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("starship.worktrunk-support")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_compacts_repo_root_with_repo_root_style() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        let src_dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&src_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+            })
+            .path(src_dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}starship{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint(convert_path_sep("/src/sub/path"))
         ));
 
         assert_eq!(expected, actual);
