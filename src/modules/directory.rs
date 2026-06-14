@@ -52,15 +52,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() || config.worktrunk {
         context.get_repo().ok()
     } else {
         None
     };
+    let contracted_repo_path = repo
+        .and_then(|r| r.workdir.as_ref())
+        .filter(|&root| root != &home_dir)
+        .and_then(|root| contract_repo_path(display_dir, root));
     let dir_string = if config.truncate_to_repo {
-        repo.and_then(|r| r.workdir.as_ref())
-            .filter(|&root| root != &home_dir)
-            .and_then(|root| contract_repo_path(display_dir, root))
+        contracted_repo_path.clone()
     } else {
         None
     };
@@ -68,8 +70,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut is_truncated = dir_string.is_some();
 
     // the home directory if required.
-    let dir_string = dir_string
+    let mut dir_string = dir_string
         .unwrap_or_else(|| contract_path(display_dir, &home_dir, config.home_symbol).to_string());
+
+    if config.worktrunk {
+        dir_string = compact_worktrunk_path(
+            &dir_string,
+            contracted_repo_path.as_deref(),
+            repo.and_then(|r| r.branch.as_deref()),
+        );
+    }
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -113,6 +123,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            let contracted_path = if config.worktrunk {
+                compact_worktrunk_path(
+                    &contracted_path,
+                    Some(&contracted_path),
+                    repo.and_then(|r| r.branch.as_deref()),
+                )
+            } else {
+                contracted_path
+            };
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
@@ -276,6 +295,50 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
     None
 }
 
+/// Apply Worktrunk repo-root compaction to a rendered path when the current repo
+/// root has the default `.<sanitized-branch>` suffix.
+fn compact_worktrunk_path(
+    path: &str,
+    contracted_repo_path: Option<&str>,
+    branch: Option<&str>,
+) -> String {
+    let (Some(contracted_repo_path), Some(branch)) = (contracted_repo_path, branch) else {
+        return path.to_string();
+    };
+    let Some(compacted_path) = compact_worktrunk_repo_component(contracted_repo_path, branch)
+    else {
+        return path.to_string();
+    };
+
+    match path.strip_suffix(contracted_repo_path) {
+        Some(before) => format!("{before}{compacted_path}"),
+        None => path.to_string(),
+    }
+}
+
+/// Remove a Worktrunk branch suffix from the first path component, preserving any
+/// remaining path after the repo root.
+fn compact_worktrunk_repo_component(path: &str, branch: &str) -> Option<String> {
+    let (repo_root, after_repo_root) = path.split_once('/').unwrap_or((path, ""));
+    let suffix = format!(".{}", sanitize_worktrunk_branch_name(branch));
+    let compacted_repo_root = repo_root.strip_suffix(&suffix)?;
+
+    if compacted_repo_root.is_empty() {
+        return None;
+    }
+
+    if after_repo_root.is_empty() {
+        Some(compacted_repo_root.to_string())
+    } else {
+        Some(format!("{compacted_repo_root}/{after_repo_root}"))
+    }
+}
+
+/// Match Worktrunk's `sanitize` template filter for branch names in paths.
+fn sanitize_worktrunk_branch_name(branch: &str) -> String {
+    branch.replace(['/', '\\'], "-")
+}
+
 fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
     let path = path.as_ref();
     let mut buf = PathBuf::new();
@@ -390,6 +453,7 @@ mod tests {
     #[cfg(target_os = "windows")]
     use std::os::windows::fs::symlink_dir as symlink;
     use std::path::Path;
+    use std::process::Command;
     use std::{fs, io};
     use tempfile::TempDir;
 
@@ -534,12 +598,30 @@ mod tests {
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 
+    fn checked_output(command: &mut Command) -> io::Result<()> {
+        let output = command.output()?;
+        if output.status.success() {
+            return Ok(());
+        }
+
+        Err(io::Error::other(format!(
+            "command failed with status {}: {}",
+            output.status,
+            String::from_utf8_lossy(&output.stderr).trim()
+        )))
+    }
+
     fn init_repo(path: &Path) -> io::Result<()> {
-        create_command("git")?
-            .args(["init"])
-            .current_dir(path)
-            .output()
-            .map(|_| ())
+        checked_output(create_command("git")?.args(["init"]).current_dir(path))
+    }
+
+    fn init_repo_on_branch(path: &Path, branch: &str) -> io::Result<()> {
+        init_repo(path)?;
+        checked_output(
+            create_command("git")?
+                .args(["checkout", "-b", branch])
+                .current_dir(path),
+        )
     }
 
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
@@ -554,6 +636,221 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
+    }
+
+    #[test]
+    fn worktrunk_sanitizes_branch_name() {
+        assert_eq!(sanitize_worktrunk_branch_name("feature/foo"), "feature-foo");
+        assert_eq!(
+            sanitize_worktrunk_branch_name(r"feature\foo"),
+            "feature-foo"
+        );
+        assert_eq!(sanitize_worktrunk_branch_name("bug.fix_123"), "bug.fix_123");
+    }
+
+    #[test]
+    fn worktrunk_compacts_nested_path_with_similar_component() {
+        let path = "starship.worktrunk-support/src/starship.worktrunk-support-backup";
+        let actual = compact_worktrunk_path(path, Some(path), Some("worktrunk-support"));
+
+        assert_eq!("starship/src/starship.worktrunk-support-backup", actual);
+    }
+
+    #[test]
+    fn worktrunk_compacts_repo_root() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("starship")));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_compacts_repo_root_for_nested_path() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        let src_dir = repo_dir.join("src");
+        fs::create_dir_all(&src_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(src_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("starship/src"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_compacts_repo_root_when_truncate_to_repo_false() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        let src_dir = repo_dir.join("src");
+        fs::create_dir_all(&src_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncate_to_repo = false
+                truncation_length = 0
+            })
+            .path(&src_dir)
+            .collect();
+        let expected_path = tmp_dir.path().join("starship").join("src");
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep(&expected_path.to_slash_lossy()))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_compacts_slash_branch_name() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.feature-foo");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "feature/foo")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("starship")));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_does_not_compact_non_matching_suffix() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "other-branch")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("starship.worktrunk-support")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_does_not_compact_branch_name_prefix() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support-extra");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("starship.worktrunk-support-extra")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_false_keeps_repo_root() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        fs::create_dir(&repo_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = false
+                truncation_length = 5
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("starship.worktrunk-support")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn worktrunk_compacts_repo_root_with_repo_root_style() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("starship.worktrunk-support");
+        let src_dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&src_dir)?;
+        init_repo_on_branch(&repo_dir, "worktrunk-support")?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                worktrunk = true
+                truncation_length = 5
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+            })
+            .path(src_dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}starship{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint(convert_path_sep("/src/sub/path"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 
     #[cfg(not(target_os = "windows"))]

@@ -25,6 +25,7 @@ pub struct SubstitutionConfig<'a> {
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
+    pub worktrunk: bool,
     pub substitutions: Either<Vec<SubstitutionConfig<'a>>, IndexMap<String, &'a str>>,
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
@@ -55,6 +56,7 @@ impl Default for DirectoryConfig<'_> {
         Self {
             truncation_length: 3,
             truncate_to_repo: true,
+            worktrunk: false,
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
             substitutions: Either::First(vec![]),

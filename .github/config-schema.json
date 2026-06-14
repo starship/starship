@@ -438,6 +438,7 @@
       "default": {
         "truncation_length": 3,
         "truncate_to_repo": true,
+        "worktrunk": false,
         "substitutions": [],
         "fish_style_pwd_dir_length": 0,
         "use_logical_path": true,
@@ -2889,6 +2890,10 @@
         "truncate_to_repo": {
           "type": "boolean",
           "default": true
+        },
+        "worktrunk": {
+          "type": "boolean",
+          "default": false
         },
         "substitutions": {
           "$ref": "#/$defs/Either",
