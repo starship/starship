@@ -229,6 +229,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "tcsh" => Some(".tcshrc"),
             "xonsh" => Some(".xonshrc"),
             "cmd" => Some("AppData/Local/clink/starship.lua"),
+            "brush" => Some(".brushrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
@@ -305,6 +306,16 @@ mod tests {
         let config_path = get_config_path("bash");
         assert_eq!(
             utils::home_dir().unwrap().join(".bashrc"),
+            config_path.unwrap()
+        );
+    }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn test_get_config_path_brush() {
+        let config_path = get_config_path("brush");
+        assert_eq!(
+            utils::home_dir().unwrap().join(".brushrc"),
             config_path.unwrap()
         );
     }

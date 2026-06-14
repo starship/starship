@@ -28,6 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Nu => Some(config.nu_indicator),
                     Shell::Xonsh => Some(config.xonsh_indicator),
                     Shell::Cmd => Some(config.cmd_indicator),
+                    Shell::Brush => Some(config.brush_indicator),
                     Shell::Unknown => Some(config.unknown_indicator),
                 },
                 _ => None,
@@ -47,6 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
                 "xonsh_indicator" => Some(Ok(config.xonsh_indicator)),
                 "cmd_indicator" => Some(Ok(config.cmd_indicator)),
+                "brush_indicator" => Some(Ok(config.brush_indicator)),
                 "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
@@ -384,6 +386,35 @@ mod tests {
             .config(toml::toml! {
                 [shell]
                 cmd_indicator = "[cmd](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_brush_default_format() {
+        let expected = Some(format!("{} ", Color::White.bold().paint("bsh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Brush)
+            .config(toml::toml! {
+                [shell]
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_brush_custom_format() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("brush")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Brush)
+            .config(toml::toml! {
+                [shell]
+                brush_indicator = "[brush](bold cyan)"
                 disabled = false
             })
             .collect();

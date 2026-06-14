@@ -664,7 +664,7 @@ pub fn wrap_seq_for_shell(
 ) -> String {
     let (beg, end) = match shell {
         // \[ and \]
-        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        Shell::Bash | Shell::Brush => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
         // %{ and %}
         Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
         _ => return ansi,
@@ -1077,6 +1077,13 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+
+        // Brush uses the same \[...\] wrappers as Bash
+        let brresult0 = wrap_seq_for_shell(test0.to_string(), Shell::Brush, '\x1b', 'm');
+        let brresult4 = wrap_seq_for_shell(test4.to_string(), Shell::Brush, '\x1b', 'm');
+
+        assert_eq!(&brresult0, "\\[\x1b2m\\]hellomynamekeyes\\[\x1b2m\\]");
+        assert_eq!(&brresult4, "herpaderp");
     }
 
     #[test]

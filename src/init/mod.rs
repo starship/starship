@@ -190,6 +190,10 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
+        "brush" => print!(
+            r#"eval -- "$({} init brush --print-full-init)""#,
+            starship.sprint_posix()?
+        ),
         _ => {
             eprintln!(
                 "{shell_basename} is not yet supported by starship.\n\
@@ -204,7 +208,8 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * nu\n\
                  * xonsh\n\
                  * cmd\n\
-                 \n\
+                 * brush\n\
+                  \n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {shell_basename}:\n\
                  https://github.com/starship/starship/issues/new\n"
@@ -228,6 +233,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_elv()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "brush" => print_script(BRUSH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -279,6 +285,8 @@ const XONSH_INIT: &str = include_str!("starship.xsh");
 
 const CMDEXE_INIT: &str = include_str!("starship.lua");
 
+const BRUSH_INIT: &str = include_str!("starship.brush");
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -319,5 +327,34 @@ mod tests {
             r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
+    }
+
+    #[test]
+    fn brush_init_sets_starship_shell() {
+        assert!(BRUSH_INIT.contains("STARSHIP_SHELL"));
+        assert!(BRUSH_INIT.contains("brush"));
+    }
+
+    #[test]
+    fn brush_init_has_prompt_command() {
+        assert!(BRUSH_INIT.contains("PROMPT_COMMAND"));
+        assert!(BRUSH_INIT.contains("starship_precmd"));
+    }
+
+    #[test]
+    fn brush_init_has_right_prompt() {
+        assert!(BRUSH_INIT.contains("--right"));
+        assert!(BRUSH_INIT.contains("BRUSH_PS_ALT"));
+    }
+
+    #[test]
+    fn brush_init_has_continuation_prompt() {
+        assert!(BRUSH_INIT.contains("--continuation"));
+    }
+
+    #[test]
+    fn brush_init_has_ps0_timing() {
+        assert!(BRUSH_INIT.contains("PS0"));
+        assert!(BRUSH_INIT.contains("starship_preexec_ps0"));
     }
 }
