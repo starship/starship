@@ -1,3 +1,4 @@
+use super::utils::user::is_root_user;
 use super::{Context, Module, ModuleConfig, Shell};
 use crate::configs::character::CharacterConfig;
 use crate::formatter::StringFormatter;
@@ -10,6 +11,8 @@ use crate::formatter::StringFormatter;
 ///   (green arrow by default)
 /// - If the exit-code was anything else, it will be formatted with
 ///   `error_symbol` (red arrow by default)
+/// - Root users can have different symbols configured via `success_symbol_root`
+///   and `error_symbol_root`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
@@ -28,6 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let exit_code = props.status_code.as_deref().unwrap_or("0");
     let keymap = props.keymap.as_str();
     let exit_success = exit_code == "0";
+    let is_root = is_root_user();
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -51,9 +55,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         ShellEditMode::ReplaceOne => config.vimcmd_replace_one_symbol,
         ShellEditMode::Insert => {
             if exit_success {
-                config.success_symbol
+                if is_root {
+                    config.success_symbol_root
+                } else {
+                    config.success_symbol
+                }
             } else {
-                config.error_symbol
+                if is_root {
+                    config.error_symbol_root
+                } else {
+                    config.error_symbol
+                }
             }
         }
     };
