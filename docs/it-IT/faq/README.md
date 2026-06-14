@@ -14,7 +14,7 @@
 
 Il supporto di completamento, o autocompletamento, è fornito dalla vostra shell di scelta. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Il formato di primo livello `` e `<module>.disabled` fanno la stessa cosa?
+## Il formato di primo livello \`\` e `<module>.disabled` fanno la stessa cosa?
 
 Sì, entrambi possono essere utilizzati per disabilitare i moduli nel prompt. Se tutto quello che pensi di fare è disabilitare i moduli, `<module>.disabled` è il modo preferito per per queste ragioni:
 
@@ -103,14 +103,15 @@ echo -e "\xee\x82\xa0"
 
 La prima riga dovrebbe riprodurre una [emoji di un serpente](https://emojipedia.org/snake/), mentre la seconda dovrebbe riprodurre il [simbolo powerline di ramo (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-Se uno dei due simboli non viene visualizzato correttamente, il sistema è ancora mal configurato. Sfortunatamente, ottenere la configurazione dei caratteri corretta a volte è difficile. Gli utenti su Discord potrebbero essere in grado di aiutarti. Se entrambi i simboli vengono visualizzati correttamente, ma non li vedi ancora in starship, [segnala un bug!](https://github.com/starship/starship/issues/new/choose)
+Se uno dei due simboli non viene visualizzato correttamente, il sistema è ancora mal configurato.
+Sfortunatamente, ottenere la configurazione dei caratteri corretta a volte è difficile. Gli utenti su Discord potrebbero essere in grado di aiutarti. Se entrambi i simboli vengono visualizzati correttamente, ma non li vedi ancora in starship, [segnala un bug!](https://github.com/starship/starship/issues/new/choose)
 
 ## Come posso disinstallare Starship?
 
 Starship è altrettanto facile da disinstallare come lo è da installare.
 
 1. Rimuovi qualsiasi riga utilizzata per inizializzare Starship nella configurazione della tua shell (ad es. `~/.bashrc`).
-1. Elimina il binario di Starship.
+2. Elimina il binario di Starship.
 
 Se Starship è stato installato utilizzando un gestore di pacchetti, fai riferimento alla documentazione per le istruzioni di disinstallazione.
 

@@ -1,6 +1,7 @@
 # 預設樣式
 
-這裡蒐集了社群提交的 Starship 預設樣式。 如果你也想要分享你的樣式，請[提交一個 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 來更新這個檔案！ 😊
+這裡蒐集了社群提交的 Starship 預設樣式。
+這裡蒐集了社群提交的 Starship 預設樣式。 如果你也想要分享你的樣式，請[提交一個 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 來更新這個檔案！ 😊 😊
 
 To get details on how to use a preset, simply click on the image.
 
@@ -50,7 +51,8 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 

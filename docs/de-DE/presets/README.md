@@ -1,6 +1,7 @@
 # Presets (Voreinstellungen)
 
-Hier eine Sammlung von Konfigurations-Presets für Starship, die von der Community eingereicht wurden. Wenn Sie ein Preset zum Teilen haben, bitte [reichen Sie einen PR ein](https://github.com/starship/starship/edit/master/docs/presets/README.md), um diese Datei zu aktualisieren! 😊
+Hier eine Sammlung von Konfigurations-Presets für Starship, die von der Community eingereicht wurden.
+Wenn Sie ein Preset zum Teilen haben, bitte [reichen Sie einen PR ein](https://github.com/starship/starship/edit/master/docs/presets/README.md), um diese Datei zu aktualisieren! 😊
 
 Um weitere Details zur Verwendung eines Presets zu erhalten, klicken Sie einfach auf das Bild.
 
@@ -50,7 +51,8 @@ Dieses Preset emuliert das Aussehen und Verhalten von [Pure](https://github.com/
 
 ## [Pastell Powerline](./pastel-powerline.md)
 
-Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
+Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
 
 [![Screenshot für Preset Pastel Powerline](/presets/img/pastel-powerline.png "Klicken Sie hier, um das Preset „Pure Prompt“ anzusehen")](./pastel-powerline)
 

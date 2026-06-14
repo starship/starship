@@ -1,6 +1,7 @@
 # Personalizações
 
-Aqui tem uma coleção de personalizações desenvolvidas pela comunidade para usar com Starship. Se você tem uma personalização para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
+Aqui tem uma coleção de personalizações desenvolvidas pela comunidade para usar com Starship.
+Se você tem uma personalização para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
 
 Para mais detalhes sobre como usar uma personalização, clique na imagem.
 
@@ -50,7 +51,8 @@ Essa personalização simula a aparência e o comportamento do [Pure](https://gi
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
+Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
 [![Capture de tela das personalizações com Pastel Powerline](/presets/img/pastel-powerline.png "Clique para ver as personalização para usar no prompt do terminal com Pure")](./pastel-powerline)
 
