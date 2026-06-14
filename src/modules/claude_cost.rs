@@ -176,6 +176,7 @@ mod tests {
                 total_lines_removed: 500,
             }),
             workspace: None,
+            rate_limits: None,
         }
     }
 
