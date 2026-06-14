@@ -24,7 +24,7 @@ impl Default for GitBranchConfig<'_> {
     fn default() -> Self {
         Self {
             format: "on [$symbol$branch(:$remote_branch)]($style) ",
-            symbol: " ",
+            symbol: "⎇ ",
             style: "bold purple",
             truncation_length: i64::MAX,
             truncation_symbol: "…",

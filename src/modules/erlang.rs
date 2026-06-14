@@ -94,7 +94,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" v22.1.3 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("e v22.1.3 ")));
         let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);
