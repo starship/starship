@@ -322,3 +322,27 @@ fn init_global_threadpool() {
         .build_global()
         .expect("Failed to initialize worker thread pool");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn parsed_prompt_status(args: &[&str]) -> Option<String> {
+        let cli = Cli::try_parse_from(args).expect("valid prompt arguments");
+        match cli.command {
+            Commands::Prompt { properties, .. } => properties.status_code,
+            _ => panic!("expected prompt command"),
+        }
+    }
+
+    #[test]
+    fn prompt_accepts_negative_status_code() {
+        for args in [
+            ["starship", "prompt", "-s", "-1"].as_slice(),
+            ["starship", "prompt", "--status", "-1"].as_slice(),
+            ["starship", "prompt", "--status=-1"].as_slice(),
+        ] {
+            assert_eq!(parsed_prompt_status(args).as_deref(), Some("-1"));
+        }
+    }
+}
