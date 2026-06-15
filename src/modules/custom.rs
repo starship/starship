@@ -309,7 +309,7 @@ fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
     let args = if shell.0.is_empty() {
         default_args.iter().map(|&s| s.to_string()).collect()
     } else {
-        shell.0.iter().map(|&s| s.to_string()).collect()
+        shell.0[1..].iter().map(|&s| s.to_string()).collect()
     };
 
     log::trace!(
@@ -343,8 +343,8 @@ fn inject_status_subshell(cmd: &str, shell_invoc: &ShellInvocation, context: &Co
     let cmd_with_status = match shell_invoc.subshell {
         Subshell::Parens => format!("(exit {}); {}", exit_code, cmd),
         Subshell::ShellInvoc => format!(
-            "{} \"exit {}\"; {}",
-            shell_invoc.shell.clone() + &*shell_invoc.args.join(" "),
+            "{} {} \"exit {}\"; {}",
+            shell_invoc.shell.clone(), &*shell_invoc.args.join(" "),
             exit_code,
             cmd
         ),
@@ -373,7 +373,7 @@ mod tests {
     use super::*;
 
     use crate::context::Shell;
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
