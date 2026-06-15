@@ -12,7 +12,9 @@ use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
 use std::ffi::OsStr;
+use std::fs;
 use std::io::ErrorKind;
+use std::path::{Path, PathBuf};
 
 use toml::Value;
 
@@ -122,6 +124,95 @@ pub struct StarshipConfig {
     pub config: Option<toml::Table>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+/// Resolved locations that may contribute to the effective Starship configuration.
+///
+/// The values are derived from Starship-specific environment variables and the
+/// XDG Base Directory Specification at https://specifications.freedesktop.org/basedir/latest/.
+/// For example, `XDG_CONFIG_HOME=/home/alice/.config` resolves the user config
+/// file to `/home/alice/.config/starship/starship.toml`.
+pub struct ConfigSources {
+    /// Explicit config file from `STARSHIP_CONFIG`, for example `/tmp/starship.toml`.
+    pub explicit_config: Option<PathBuf>,
+    /// User config directory from `STARSHIP_CONFIG_HOME` or the XDG/platform default.
+    pub user_config_home: Option<PathBuf>,
+    /// Main user config file, for example `$STARSHIP_CONFIG_HOME/starship.toml`.
+    pub user_config_file: Option<PathBuf>,
+    /// User drop-in config directory, for example `$STARSHIP_CONFIG_HOME/conf.d`.
+    pub user_conf_d: Option<PathBuf>,
+    /// System drop-in config directories, for example `/etc/xdg/starship/conf.d`.
+    pub system_conf_dirs: Vec<PathBuf>,
+    /// Legacy config file used only for migration detection, for example `~/.config/starship.toml`.
+    pub legacy_config_file: Option<PathBuf>,
+}
+
+impl ConfigSources {
+    /// Resolve config sources from the provided environment.
+    ///
+    /// `STARSHIP_CONFIG` points to one explicit config file and disables automatic
+    /// `conf.d` loading. Without it, `STARSHIP_CONFIG_HOME` controls the user
+    /// config directory, falling back to the XDG/platform config directory.
+    pub fn from_env(env: &crate::utils::env::Env<'_>) -> Self {
+        let explicit_config = env.get_env_os("STARSHIP_CONFIG").map(PathBuf::from);
+        let home_dir = home_dir(env);
+        let user_config_home = env
+            .get_env_os("STARSHIP_CONFIG_HOME")
+            .map(PathBuf::from)
+            .or_else(|| default_user_config_home(env));
+        let user_config_file = user_config_home
+            .as_ref()
+            .map(|config_home| config_home.join("starship.toml"));
+        let user_conf_d = user_config_home
+            .as_ref()
+            .map(|config_home| config_home.join("conf.d"));
+        let legacy_config_file = home_dir.map(|home| home.join(".config").join("starship.toml"));
+
+        Self {
+            explicit_config,
+            user_config_home,
+            user_config_file,
+            user_conf_d,
+            system_conf_dirs: system_conf_dirs(env),
+            legacy_config_file,
+        }
+    }
+
+    /// Return the single file edited by `starship config` commands.
+    ///
+    /// This is `STARSHIP_CONFIG` when set, otherwise the main user config file,
+    /// for example `$STARSHIP_CONFIG_HOME/starship.toml`.
+    pub fn primary_edit_path(&self) -> Option<PathBuf> {
+        self.explicit_config
+            .clone()
+            .or_else(|| self.user_config_file.clone())
+    }
+
+    /// Return concrete TOML files in the order they should be merged.
+    ///
+    /// With no `STARSHIP_CONFIG`, system `conf.d` files are loaded first, then
+    /// `starship.toml`, then user `conf.d` files such as `00-base.toml` before
+    /// `90-local.toml`.
+    fn ordered_config_files(&self) -> Vec<PathBuf> {
+        if let Some(config) = &self.explicit_config {
+            return vec![config.clone()];
+        }
+
+        handle_legacy_config(self);
+
+        let mut config_files = Vec::new();
+        for dir in &self.system_conf_dirs {
+            config_files.extend(sorted_toml_files(dir));
+        }
+        if let Some(config_file) = &self.user_config_file {
+            config_files.push(config_file.clone());
+        }
+        if let Some(conf_d) = &self.user_conf_d {
+            config_files.extend(sorted_toml_files(conf_d));
+        }
+        config_files
+    }
+}
+
 impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize(config_file_path: Option<&OsStr>) -> Self {
@@ -130,6 +221,46 @@ impl StarshipConfig {
                 config: Some(config),
             })
             .unwrap_or_default()
+    }
+
+    pub fn initialize_from_sources(config_sources: &ConfigSources) -> Self {
+        Self::config_from_sources(config_sources)
+            .map(|config| Self {
+                config: Some(config),
+            })
+            .unwrap_or_default()
+    }
+
+    /// Build a config table by reading and merging all files from `ConfigSources`.
+    ///
+    /// Later files override earlier files. For example, `conf.d/10-work.toml`
+    /// can override values from `starship.toml` while preserving unrelated keys.
+    fn config_from_sources(config_sources: &ConfigSources) -> Option<toml::Table> {
+        let mut config = toml::Value::Table(toml::Table::new());
+        let mut loaded = false;
+
+        for config_file_path in config_sources.ordered_config_files() {
+            let Some(toml_content) =
+                Self::read_config_content_as_str(Some(config_file_path.as_os_str()))
+            else {
+                continue;
+            };
+
+            match toml::from_str::<toml::Value>(&toml_content) {
+                Ok(parsed) => {
+                    merge_toml(&mut config, parsed);
+                    loaded = true;
+                }
+                Err(error) => {
+                    log::error!(
+                        "Unable to parse config file {}: {error}",
+                        config_file_path.display()
+                    );
+                }
+            }
+        }
+
+        loaded.then(|| config.as_table().cloned().unwrap_or_default())
     }
 
     /// Create a config from a starship configuration file
@@ -246,6 +377,180 @@ impl StarshipConfig {
     /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
+    }
+}
+
+/// Return the current user's home directory, using the test environment when available.
+///
+/// In tests, `HOME=/tmp/home` resolves to `/tmp/home`; in normal builds this
+/// delegates to the platform home directory lookup.
+fn home_dir(env: &crate::utils::env::Env<'_>) -> Option<PathBuf> {
+    if cfg!(test)
+        && let Some(home) = env.get_env("HOME")
+    {
+        return Some(PathBuf::from(home));
+    }
+    utils::home_dir()
+}
+
+/// Resolve the default user config directory.
+///
+/// This follows the XDG Base Directory Specification at
+/// https://specifications.freedesktop.org/basedir/latest/ when `XDG_CONFIG_HOME`
+/// is set. For example, `XDG_CONFIG_HOME=/home/alice/.config` resolves to
+/// `/home/alice/.config/starship`. Platforms without XDG use their standard
+/// config directory with `starship` appended.
+fn default_user_config_home(env: &crate::utils::env::Env<'_>) -> Option<PathBuf> {
+    env.get_env_os("XDG_CONFIG_HOME")
+        .map(PathBuf::from)
+        .map(|path| path.join("starship"))
+        .or_else(|| dirs::config_dir().map(|path| path.join("starship")))
+}
+
+/// Resolve system-level drop-in directories.
+///
+/// On XDG systems, each `XDG_CONFIG_DIRS` entry contributes
+/// `starship/conf.d`; for example `/etc/xdg` becomes
+/// `/etc/xdg/starship/conf.d`. If XDG is not configured, Unix defaults to
+/// `/etc/xdg/starship/conf.d`, macOS uses `/Library/Application Support/starship/conf.d`,
+/// and Windows uses `%PROGRAMDATA%\starship\conf.d` when available.
+fn system_conf_dirs(env: &crate::utils::env::Env<'_>) -> Vec<PathBuf> {
+    if let Some(config_dirs) = env.get_env("XDG_CONFIG_DIRS") {
+        let dirs: Vec<_> = config_dirs
+            .split(':')
+            .filter(|dir| !dir.is_empty())
+            .map(|dir| PathBuf::from(dir).join("starship").join("conf.d"))
+            .collect();
+        if !dirs.is_empty() {
+            return dirs;
+        }
+    }
+
+    if cfg!(windows) {
+        env.get_env_os("PROGRAMDATA")
+            .map(PathBuf::from)
+            .map(|path| path.join("starship").join("conf.d"))
+            .into_iter()
+            .collect()
+    } else if cfg!(target_os = "macos") {
+        vec![PathBuf::from(
+            "/Library/Application Support/starship/conf.d",
+        )]
+    } else {
+        vec![PathBuf::from("/etc/xdg/starship/conf.d")]
+    }
+}
+
+/// Return `.toml` files from a directory in ascending path order.
+///
+/// Non-TOML files are ignored, so `README.md` is skipped while `00-base.toml`
+/// is loaded before `10-local.toml`.
+fn sorted_toml_files(dir: &Path) -> Vec<PathBuf> {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return Vec::new();
+    };
+
+    let mut files: Vec<_> = entries
+        .flatten()
+        .map(|entry| entry.path())
+        .filter(|path| {
+            path.extension()
+                .is_some_and(|extension| extension == "toml")
+        })
+        .filter(|path| path.is_file())
+        .collect();
+    files.sort();
+    files
+}
+
+/// Copy the legacy config to the new location when migration is safe.
+///
+/// This only applies when `STARSHIP_CONFIG` is not set. The legacy file, for
+/// example `~/.config/starship.toml`, is never removed and is not used after a
+/// failed migration.
+fn handle_legacy_config(config_sources: &ConfigSources) {
+    let Some(legacy_config_file) = &config_sources.legacy_config_file else {
+        return;
+    };
+    if !legacy_config_file.exists() {
+        return;
+    }
+    let Some(user_config_file) = &config_sources.user_config_file else {
+        log::warn!(
+            "Ignoring legacy config at {} because the new config location could not be determined",
+            legacy_config_file.display()
+        );
+        return;
+    };
+    if user_config_file.exists() {
+        log::warn!(
+            "Ignoring legacy config at {} because {} is used. Remove the legacy file to silence this warning.",
+            legacy_config_file.display(),
+            user_config_file.display()
+        );
+        return;
+    }
+
+    if let Err(error) = copy_and_validate_legacy_config(legacy_config_file, user_config_file) {
+        log::warn!(
+            "Failed to migrate legacy config from {} to {}: {error}. The legacy file is not used.",
+            legacy_config_file.display(),
+            user_config_file.display()
+        );
+    } else {
+        log::warn!(
+            "Copied legacy config from {} to {}. The legacy file is no longer used and can be removed.",
+            legacy_config_file.display(),
+            user_config_file.display()
+        );
+    }
+}
+
+/// Copy a legacy config file and verify the copied TOML parses to the same value.
+///
+/// Validation keeps migration non-destructive: if the copied file cannot be read
+/// or does not parse to the same TOML value, callers can warn and leave the
+/// original file untouched.
+fn copy_and_validate_legacy_config(
+    legacy_config_file: &Path,
+    user_config_file: &Path,
+) -> Result<(), String> {
+    if let Some(parent) = user_config_file.parent() {
+        fs::create_dir_all(parent).map_err(|error| error.to_string())?;
+    }
+    fs::copy(legacy_config_file, user_config_file).map_err(|error| error.to_string())?;
+
+    let legacy_config =
+        fs::read_to_string(legacy_config_file).map_err(|error| error.to_string())?;
+    let user_config = fs::read_to_string(user_config_file).map_err(|error| error.to_string())?;
+    let legacy_config: toml::Value =
+        toml::from_str(&legacy_config).map_err(|error| error.to_string())?;
+    let user_config: toml::Value =
+        toml::from_str(&user_config).map_err(|error| error.to_string())?;
+
+    if legacy_config == user_config {
+        Ok(())
+    } else {
+        Err("copied config does not match legacy config".to_string())
+    }
+}
+
+/// Recursively merge two TOML values, with `overlay` taking precedence.
+///
+/// Tables are merged key-by-key. Other values replace the previous value, so a
+/// later `disabled = true` overrides an earlier `disabled = false`.
+fn merge_toml(base: &mut toml::Value, overlay: toml::Value) {
+    match (base, overlay) {
+        (toml::Value::Table(base), toml::Value::Table(overlay)) => {
+            for (key, value) in overlay {
+                if let Some(base_value) = base.get_mut(&key) {
+                    merge_toml(base_value, value);
+                } else {
+                    base.insert(key, value);
+                }
+            }
+        }
+        (base, overlay) => *base = overlay,
     }
 }
 
@@ -511,6 +816,270 @@ fn get_palette<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::context::Env;
+    use std::fs::{self, File};
+    use std::io::Write;
+    use tempfile::TempDir;
+
+    fn env_with_home(home: &Path) -> Env<'static> {
+        let mut env = Env::default();
+        env.insert("HOME", home.to_string_lossy().to_string());
+        env
+    }
+
+    fn write_file(path: &Path, content: &str) {
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent).unwrap();
+        }
+        let mut file = File::create(path).unwrap();
+        file.write_all(content.as_bytes()).unwrap();
+    }
+
+    #[test]
+    fn config_sources_explicit_config_wins() {
+        let dir = TempDir::new().unwrap();
+        let mut env = env_with_home(dir.path());
+        env.insert(
+            "STARSHIP_CONFIG",
+            dir.path().join("custom.toml").to_string_lossy().to_string(),
+        );
+        env.insert(
+            "STARSHIP_CONFIG_HOME",
+            dir.path()
+                .join("starship-home")
+                .to_string_lossy()
+                .to_string(),
+        );
+
+        let sources = ConfigSources::from_env(&env);
+
+        assert_eq!(
+            sources.primary_edit_path(),
+            Some(dir.path().join("custom.toml"))
+        );
+        assert_eq!(
+            sources.ordered_config_files(),
+            vec![dir.path().join("custom.toml")]
+        );
+    }
+
+    #[test]
+    fn config_sources_use_starship_config_home() {
+        let dir = TempDir::new().unwrap();
+        let mut env = env_with_home(dir.path());
+        env.insert(
+            "STARSHIP_CONFIG_HOME",
+            dir.path()
+                .join("starship-home")
+                .to_string_lossy()
+                .to_string(),
+        );
+
+        let sources = ConfigSources::from_env(&env);
+
+        assert_eq!(
+            sources.user_config_home,
+            Some(dir.path().join("starship-home"))
+        );
+        assert_eq!(
+            sources.user_config_file,
+            Some(dir.path().join("starship-home/starship.toml"))
+        );
+        assert_eq!(
+            sources.user_conf_d,
+            Some(dir.path().join("starship-home/conf.d"))
+        );
+    }
+
+    #[test]
+    fn config_sources_use_xdg_config_home() {
+        let dir = TempDir::new().unwrap();
+        let mut env = env_with_home(dir.path());
+        env.insert(
+            "XDG_CONFIG_HOME",
+            dir.path().join("xdg-config").to_string_lossy().to_string(),
+        );
+
+        let sources = ConfigSources::from_env(&env);
+
+        assert_eq!(
+            sources.user_config_home,
+            Some(dir.path().join("xdg-config/starship"))
+        );
+    }
+
+    #[test]
+    fn config_sources_use_xdg_config_dirs() {
+        let dir = TempDir::new().unwrap();
+        let mut env = env_with_home(dir.path());
+        env.insert(
+            "XDG_CONFIG_DIRS",
+            format!(
+                "{}:{}",
+                dir.path().join("xdg-a").display(),
+                dir.path().join("xdg-b").display()
+            ),
+        );
+
+        let sources = ConfigSources::from_env(&env);
+
+        assert_eq!(
+            sources.system_conf_dirs,
+            vec![
+                dir.path().join("xdg-a/starship/conf.d"),
+                dir.path().join("xdg-b/starship/conf.d"),
+            ]
+        );
+    }
+
+    #[test]
+    fn config_from_sources_merges_in_expected_order() {
+        let dir = TempDir::new().unwrap();
+        let system_conf_d = dir.path().join("system/starship/conf.d");
+        let user_config_home = dir.path().join("user-starship");
+
+        write_file(
+            &system_conf_d.join("50-cli.toml"),
+            r#"
+[custom.tweet]
+symbol = "bird"
+disabled = false
+"#,
+        );
+        write_file(
+            &user_config_home.join("starship.toml"),
+            r#"
+[custom.tweet]
+disabled = true
+"#,
+        );
+        write_file(
+            &user_config_home.join("conf.d/90-local.toml"),
+            r#"
+[custom.tweet]
+format = "local"
+"#,
+        );
+
+        let sources = ConfigSources {
+            explicit_config: None,
+            user_config_home: Some(user_config_home.clone()),
+            user_config_file: Some(user_config_home.join("starship.toml")),
+            user_conf_d: Some(user_config_home.join("conf.d")),
+            system_conf_dirs: vec![system_conf_d],
+            legacy_config_file: None,
+        };
+
+        let config = StarshipConfig::initialize_from_sources(&sources);
+        let tweet = config
+            .config
+            .as_ref()
+            .unwrap()
+            .get("custom")
+            .unwrap()
+            .get("tweet")
+            .unwrap()
+            .as_table()
+            .unwrap();
+
+        assert_eq!(tweet.get("symbol").unwrap().as_str(), Some("bird"));
+        assert_eq!(tweet.get("disabled").unwrap().as_bool(), Some(true));
+        assert_eq!(tweet.get("format").unwrap().as_str(), Some("local"));
+    }
+
+    #[test]
+    fn config_from_sources_sorts_conf_d_files() {
+        let dir = TempDir::new().unwrap();
+        let user_config_home = dir.path().join("user-starship");
+
+        write_file(
+            &user_config_home.join("starship.toml"),
+            "[custom.order]\nvalue = 'main'\n",
+        );
+        write_file(
+            &user_config_home.join("conf.d/10-last.toml"),
+            "[custom.order]\nvalue = 'last'\n",
+        );
+        write_file(
+            &user_config_home.join("conf.d/00-first.toml"),
+            "[custom.order]\nvalue = 'first'\n",
+        );
+
+        let sources = ConfigSources {
+            explicit_config: None,
+            user_config_home: Some(user_config_home.clone()),
+            user_config_file: Some(user_config_home.join("starship.toml")),
+            user_conf_d: Some(user_config_home.join("conf.d")),
+            system_conf_dirs: Vec::new(),
+            legacy_config_file: None,
+        };
+
+        let config = StarshipConfig::initialize_from_sources(&sources);
+
+        assert_eq!(
+            config
+                .config
+                .as_ref()
+                .unwrap()
+                .get("custom")
+                .unwrap()
+                .get("order")
+                .unwrap()
+                .get("value")
+                .unwrap()
+                .as_str(),
+            Some("last")
+        );
+    }
+
+    #[test]
+    fn legacy_config_is_copied_and_not_removed() {
+        let dir = TempDir::new().unwrap();
+        let legacy_config = dir.path().join(".config/starship.toml");
+        let user_config_home = dir.path().join("xdg/starship");
+        let user_config_file = user_config_home.join("starship.toml");
+        write_file(&legacy_config, "[custom.legacy]\ncommand = 'true'\n");
+
+        let sources = ConfigSources {
+            explicit_config: None,
+            user_config_home: Some(user_config_home.clone()),
+            user_config_file: Some(user_config_file.clone()),
+            user_conf_d: Some(user_config_home.join("conf.d")),
+            system_conf_dirs: Vec::new(),
+            legacy_config_file: Some(legacy_config.clone()),
+        };
+
+        let config = StarshipConfig::initialize_from_sources(&sources);
+
+        assert!(legacy_config.exists());
+        assert!(user_config_file.exists());
+        assert!(config.config.unwrap().get("custom").is_some());
+    }
+
+    #[test]
+    fn legacy_config_is_ignored_when_new_config_exists() {
+        let dir = TempDir::new().unwrap();
+        let legacy_config = dir.path().join(".config/starship.toml");
+        let user_config_home = dir.path().join("xdg/starship");
+        let user_config_file = user_config_home.join("starship.toml");
+        write_file(&legacy_config, "[custom.legacy]\ncommand = 'true'\n");
+        write_file(&user_config_file, "[custom.new]\ncommand = 'true'\n");
+
+        let sources = ConfigSources {
+            explicit_config: None,
+            user_config_home: Some(user_config_home.clone()),
+            user_config_file: Some(user_config_file),
+            user_conf_d: Some(user_config_home.join("conf.d")),
+            system_conf_dirs: Vec::new(),
+            legacy_config_file: Some(legacy_config),
+        };
+
+        let config = StarshipConfig::initialize_from_sources(&sources);
+
+        let custom = config.config.unwrap().remove("custom").unwrap();
+        assert!(custom.get("new").is_some());
+        assert!(custom.get("legacy").is_none());
+    }
     use nu_ansi_term::Style as AnsiStyle;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
