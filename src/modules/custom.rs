@@ -1,4 +1,5 @@
 use std::env;
+use std::ffi::OsStr;
 use std::fmt::{self, Debug};
 use std::io::Write;
 use std::path::Path;
@@ -9,10 +10,27 @@ use process_control::{ChildExt, Control, Output};
 
 use super::{Context, Module, ModuleConfig};
 
+use crate::config::VecOr;
 use crate::{
     config::Either, configs::custom::CustomConfig, formatter::StringFormatter,
     utils::create_command,
 };
+
+/// This struct is used to store the shell invocation information. It exists
+/// as a lightweight interface that holds the shell cmd, args. It also holds
+/// uses_stdin, which is used to determine whether the invocation expects
+/// scripts.
+struct ShellInvocation {
+    shell: String,
+    args: Vec<String>,
+    subshell: Subshell,
+    uses_stdin: bool,
+}
+
+enum Subshell {
+    Parens,
+    ShellInvoc,
+}
 
 /// Creates a custom module with some configuration
 ///
@@ -130,48 +148,27 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
     None
 }
 
-/// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
-fn get_shell<'a, 'b>(
-    shell_args: &'b [&'a str],
-    context: &Context,
-) -> (std::borrow::Cow<'a, str>, &'b [&'a str]) {
-    if !shell_args.is_empty() {
-        (shell_args[0].into(), &shell_args[1..])
-    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
-        (env_shell.into(), &[] as &[&str])
-    } else if cfg!(windows) {
-        // `/C` is added by `handle_shell`
-        ("cmd".into(), &[] as &[&str])
-    } else {
-        ("sh".into(), &[] as &[&str])
-    }
-}
-
-/// Attempt to run the given command in a shell by passing it as either `stdin` or an argument to `get_shell()`,
-/// depending on the configuration or by invoking a platform-specific fallback shell if `shell` is empty.
+/// Attempt to run the given command in a shell by passing it as either
+/// `stdin` or an argument to `get_shell_invoc`, depending on the
+/// configuration or by invoking a platform-specific fallback shell if
+/// `shell` is empty.
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
-    let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
-    let mut use_stdin = config.use_stdin;
+    log::trace!("shell_command run with the following command: {}", cmd);
 
-    let mut command = match create_command(shell.as_ref()) {
+    let shell_invoc: &ShellInvocation = &get_shell_invoc(&config.shell, context);
+    let cmd_with_status = inject_status_subshell(cmd, shell_invoc, context);
+
+    let mut command = match create_command(shell_invoc.shell.as_str()) {
         Ok(command) => command,
-        // Don't attempt to use fallback shell if the user specified a shell
-        Err(error) if !shell_args.is_empty() => {
+        Err(error) if !shell_invoc.args.is_empty() => {
             log::debug!(
                 "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {error}"
             );
 
-            // Skip `handle_shell` and just set the shell and command
-            use_stdin = Some(!cfg!(windows));
-
             if cfg!(windows) {
-                let mut c = create_command("cmd").ok()?;
-                c.arg("/C");
-                c
+                create_command("cmd").ok()?
             } else {
-                let mut c = create_command("/usr/bin/env").ok()?;
-                c.arg("sh");
-                c
+                create_command("/usr/bin/env").ok()?
             }
         }
         _ => return None,
@@ -179,15 +176,16 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
     command
         .current_dir(&context.current_dir)
-        .args(shell_args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
 
-    let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
+    let use_stdin = config
+        .use_stdin
+        .unwrap_or_else(|| handle_shell(&mut command, shell_invoc));
 
     if !use_stdin {
-        command.arg(cmd);
+        command.arg(cmd_with_status);
     }
 
     let mut child = match command.spawn() {
@@ -278,34 +276,96 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
     }
 }
 
-/// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
-/// given command.
-/// Returns `false` if the shell expects scripts as arguments, `true` if as `stdin`.
-fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
-    let shell_exe = Path::new(shell).file_stem();
-    let no_args = shell_args.is_empty();
+/// Determines the appropriate shell invocation strategy by matching the shell
+/// name against known shells and returning defaults for args, subshell support,
+/// and stdin handling.
+///
+/// If the user provided custom shell args, those take precedence; otherwise,
+/// we use hardcoded defaults per shell (bash, zsh, sh, fish, nushell, powershell, cmd).
+fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
+    let shell_with_fallback = if !shell.0.is_empty() {
+        shell.0[0].to_string()
+    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
+        env_shell
+    } else if cfg!(windows) {
+        "cmd".to_string()
+    } else {
+        "sh".to_string()
+    };
 
-    match shell_exe.and_then(std::ffi::OsStr::to_str) {
+    let shell_name = Path::new(&shell_with_fallback)
+        .file_stem()
+        .and_then(OsStr::to_str);
+
+    let (default_args, subshell, uses_stdin): (&[&str], _, _) = match shell_name {
         Some("pwsh" | "powershell") => {
-            if no_args {
-                command.arg("-NoProfile").arg("-Command").arg("-");
-            }
-            true
+            (&["-NoProfile", "-Command", "-"], Subshell::ShellInvoc, true)
         }
-        Some("cmd") => {
-            if no_args {
-                command.arg("/C");
-            }
-            false
-        }
-        Some("nu") => {
-            if no_args {
-                command.arg("-c");
-            }
-            false
-        }
-        _ => true,
+        Some("cmd") => (&["/C"], Subshell::ShellInvoc, false),
+        Some("bash" | "zsh" | "sh" | "ksh" | "csh" | "tcsh") => (&["-c"], Subshell::Parens, false),
+        _ => (&["-c"], Subshell::ShellInvoc, false),
+    };
+
+    let args = if shell.0.is_empty() {
+        default_args.iter().map(|&s| s.to_string()).collect()
+    } else {
+        shell.0.iter().map(|&s| s.to_string()).collect()
+    };
+
+    log::trace!(
+        "shell={}, args={:?}, uses_stdin={}",
+        shell_with_fallback,
+        args,
+        uses_stdin
+    );
+
+    ShellInvocation {
+        shell: shell_with_fallback,
+        args,
+        subshell,
+        uses_stdin,
     }
+}
+
+/// Prepends exit-code injection so the command can access the previous
+/// command's actual exit status via `$?` or `$status`, rather than always `0`.
+///
+/// Uses shell-appropriate syntax:
+/// - subshells for POSIX,
+/// - nested shell invocation otherwise.
+fn inject_status_subshell(cmd: &str, shell_invoc: &ShellInvocation, context: &Context) -> String {
+    let exit_code: i64 = context
+        .properties
+        .status_code
+        .as_deref()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(0);
+    let cmd_with_status = match shell_invoc.subshell {
+        Subshell::Parens => format!("(exit {}); {}", exit_code, cmd),
+        Subshell::ShellInvoc => format!(
+            "{} \"exit {}\"; {}",
+            shell_invoc.shell.clone() + &*shell_invoc.args.join(" "),
+            exit_code,
+            cmd
+        ),
+    };
+
+    log::trace!(
+        "The final command was built, including status subshell: {}",
+        cmd_with_status
+    );
+
+    cmd_with_status
+}
+
+/// Applies the shell invocation settings to the given Command: sets the
+/// executable, adds any configured args, and returns whether stdin should be
+/// enabled for this shell's subprocess.
+fn handle_shell(command: &mut Command, shell_invoc: &ShellInvocation) -> bool {
+    for arg in &shell_invoc.args {
+        command.arg(arg);
+    }
+    shell_invoc.uses_stdin
 }
 
 #[cfg(test)]
@@ -333,10 +393,7 @@ mod tests {
     fn render_cmd(cmd: &str) -> io::Result<Option<String>> {
         let dir = tempfile::tempdir()?;
         let cmd = cmd.to_owned();
-        let shell = SHELL
-            .iter()
-            .map(std::borrow::ToOwned::to_owned)
-            .collect::<Vec<_>>();
+        let shell = SHELL.iter().map(ToOwned::to_owned).collect::<Vec<_>>();
         let out = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
@@ -355,10 +412,7 @@ mod tests {
     fn render_when(cmd: &str) -> io::Result<bool> {
         let dir = tempfile::tempdir()?;
         let cmd = cmd.to_owned();
-        let shell = SHELL
-            .iter()
-            .map(std::borrow::ToOwned::to_owned)
-            .collect::<Vec<_>>();
+        let shell = SHELL.iter().map(ToOwned::to_owned).collect::<Vec<_>>();
         let out = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
@@ -546,7 +600,7 @@ mod tests {
 
     #[test]
     #[cfg(not(windows))]
-    fn when_true_with_string() -> std::io::Result<()> {
+    fn when_true_with_string() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -567,7 +621,7 @@ mod tests {
 
     #[test]
     #[cfg(not(windows))]
-    fn when_false_with_string() -> std::io::Result<()> {
+    fn when_false_with_string() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -587,7 +641,7 @@ mod tests {
     }
 
     #[test]
-    fn when_true_with_bool() -> std::io::Result<()> {
+    fn when_true_with_bool() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -606,7 +660,7 @@ mod tests {
 
     #[test]
     #[cfg(not(windows))]
-    fn when_false_with_bool() -> std::io::Result<()> {
+    fn when_false_with_bool() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -624,7 +678,7 @@ mod tests {
     }
 
     #[test]
-    fn timeout_short_cmd() -> std::io::Result<()> {
+    fn timeout_short_cmd() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let shell = if cfg!(windows) {
@@ -658,7 +712,7 @@ mod tests {
     }
 
     #[test]
-    fn timeout_cmd() -> std::io::Result<()> {
+    fn timeout_cmd() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let shell = if cfg!(windows) {
@@ -685,7 +739,7 @@ mod tests {
     }
 
     #[test]
-    fn config_aliases_work() -> std::io::Result<()> {
+    fn config_aliases_work() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         File::create(dir.path().join("a.txt"))?;
@@ -816,6 +870,59 @@ mod tests {
             .collect();
         let expected = Some("`to_be_escaped`".to_string());
         assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn command_can_check_exit_status() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .status(42)
+            .config(toml::toml! {
+                [custom.test]
+                format = "$output"
+                command = "[ $? -eq 42 ] && echo true || echo false"
+                when = true
+                shell = ["sh"]
+                ignore_timeout = true
+            })
+            .shell(Shell::Bash)
+            .collect();
+
+        assert_eq!(
+            "true",
+            actual
+                .as_ref()
+                .expect("command should output true or false."),
+            "command returned {}",
+            actual.as_ref().unwrap_or(&"no output".to_string())
+        );
+        dir.close()
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn command_can_check_exit_status() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        // PowerShell uses $LASTEXITCODE to check the previous command's status
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                format = "$output"
+                command = "if ($LASTEXITCODE -eq 0) { 'success' } else { 'failure' }"
+                when = true
+                shell = ["powershell", "-NoProfile", "-Command", "-"]
+                ignore_timeout = true
+            })
+            .collect();
+
+        assert!(actual.is_some());
 
         dir.close()
     }
