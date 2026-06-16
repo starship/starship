@@ -29,6 +29,7 @@ struct ShellInvocation {
 
 enum Subshell {
     Parens,
+    CurlyBraces,
     ShellInvoc,
 }
 
@@ -305,9 +306,11 @@ fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
         .and_then(OsStr::to_str);
 
     let (default_args, subshell, uses_stdin): (&[&str], _, _) = match shell_name {
-        Some("pwsh" | "powershell") => {
-            (&["-NoProfile", "-Command", "-"], Subshell::ShellInvoc, true)
-        }
+        Some("pwsh" | "powershell") => (
+            &["-NoProfile", "-Command", "-"],
+            Subshell::CurlyBraces,
+            true,
+        ),
         Some("cmd") => (&["/C"], Subshell::ShellInvoc, false),
         Some("bash" | "zsh" | "sh" | "ksh" | "csh" | "tcsh") => (&["-c"], Subshell::Parens, false),
         _ => (&["-c"], Subshell::ShellInvoc, false),
@@ -349,15 +352,13 @@ fn inject_status_subshell(cmd: &str, shell_invoc: &ShellInvocation, context: &Co
         .unwrap_or(0);
     let cmd_with_status = match shell_invoc.subshell {
         Subshell::Parens => format!("(exit {}); {}", exit_code, cmd),
+        Subshell::CurlyBraces => format!("{{exit {}; {}}}", exit_code, cmd),
         Subshell::ShellInvoc => {
-            let quote = if cfg!(windows) { "" } else { "\"" };
             format!(
-                "{} {} {}exit {}{}; {}",
+                "{} {} \"exit {}\"; {}",
                 shell_invoc.shell.clone(),
                 shell_invoc.args.join(" "),
-                quote,
                 exit_code,
-                quote,
                 cmd
             )
         }
