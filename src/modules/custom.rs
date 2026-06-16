@@ -349,13 +349,18 @@ fn inject_status_subshell(cmd: &str, shell_invoc: &ShellInvocation, context: &Co
         .unwrap_or(0);
     let cmd_with_status = match shell_invoc.subshell {
         Subshell::Parens => format!("(exit {}); {}", exit_code, cmd),
-        Subshell::ShellInvoc => format!(
-            "{} {} \"exit {}\"; {}",
-            shell_invoc.shell.clone(),
-            shell_invoc.args.join(" "),
-            exit_code,
-            cmd
-        ),
+        Subshell::ShellInvoc => {
+            let quote = if cfg!(windows) { "" } else { "\"" };
+            format!(
+                "{} {} {}exit {}{}; {}",
+                shell_invoc.shell.clone(),
+                shell_invoc.args.join(" "),
+                quote,
+                exit_code,
+                quote,
+                cmd
+            )
+        }
     };
 
     log::trace!(
