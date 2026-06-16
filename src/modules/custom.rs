@@ -653,9 +653,11 @@ mod tests {
     #[test]
     fn command_ignores_stderr() -> io::Result<()> {
         let fixture = TestFixture::new()?;
+
+        let sep = if cfg!(windows) { "&" } else { ";" };
         let config = CustomConfigBuilder::new()
             .format("$output")
-            .command("echo foo 1>&2; echo bar")
+            .command(format!("echo foo 1>&2 {} echo bar", sep))
             .when("true")
             .ignore_timeout(true)
             .build();
@@ -671,7 +673,7 @@ mod tests {
 
         let config = CustomConfigBuilder::new()
             .format("$output")
-            .command("echo foo; echo bar 1>&2")
+            .command(format!("echo foo {} echo bar 1>&2", sep))
             .when("true")
             .ignore_timeout(true)
             .build();
@@ -1146,15 +1148,16 @@ mod tests {
     fn command_can_check_exit_status() -> io::Result<()> {
         let fixture = TestFixture::new()?;
 
-        let (command, shell_val) = if cfg!(windows) {
-            ("Write-Host $STARSHIP_PREV_STATUS_CODE", Shell::PowerShell)
+        let (echo_cmd, shell_str, shell_shell) = if cfg!(windows) {
+            ("Write-Host", "pwsh", Shell::PowerShell)
         } else {
-            ("echo $STARSHIP_PREV_STATUS_CODE", Shell::Bash)
+            ("echo", "bash", Shell::Bash)
         };
 
         let config = CustomConfigBuilder::new()
             .format("$output")
-            .command(command)
+            .command(format!("{} $STARSHIP_PREV_STATUS_CODE", echo_cmd))
+            .shell(shell_str)
             .when("true")
             .ignore_timeout(true)
             .build();
@@ -1164,7 +1167,7 @@ mod tests {
                 .renderer()
                 .status(42)
                 .config(config)
-                .shell(shell_val)
+                .shell(shell_shell)
                 .collect()
                 .expect("command_can_check_exit_status should not be None")
                 .as_str(),

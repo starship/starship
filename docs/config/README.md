@@ -5293,7 +5293,7 @@ The following environment variables are available when executing `command` and
 `when`:
 
 | Variable                    | Description                                                                                                                                                                                              |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `STARSHIP_PREV_STATUS_CODE` | (Set by Starship) The exit code of the last command executed in the shell. Useful for displaying status-dependent output in custom modules.                                                              |
 | `STARSHIP_SHELL`            | (Set by user) When custom.module.shell is unset, this will override which shell interpreter to use for executing `command` and `when`. If unset, defaults to `sh` on Linux/macOS or `cmd /C` on Windows. |
 
@@ -5328,7 +5328,7 @@ detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 
-# This is an example that uses `$STARSHIP_PREV_STATUS_CODE` to show dynamic 
+# This is an example that uses `$STARSHIP_PREV_STATUS_CODE` to show dynamic
 # responses
 [custom.h2g2]
 command = '''
