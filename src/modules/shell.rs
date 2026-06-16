@@ -40,15 +40,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|var| match var {
                 "bash_indicator" => Some(Ok(config.bash_indicator)),
+                "cmd_indicator" => Some(Ok(config.cmd_indicator)),
+                "csh_indicator" => Some(Ok(config.csh_indicator)),
+                "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "fish_indicator" => Some(Ok(config.fish_indicator)),
-                "zsh_indicator" => Some(Ok(config.zsh_indicator)),
+                "ion_indicator" => Some(Ok(config.ion_indicator)),
+                "ksh_indicator" => Some(Ok(config.ksh_indicator)),
                 "powershell_indicator" => Some(Ok(config.powershell_indicator)),
                 "pwsh_indicator" => config.pwsh_indicator.map(Ok),
-                "ion_indicator" => Some(Ok(config.ion_indicator)),
-                "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
                 "xonsh_indicator" => Some(Ok(config.xonsh_indicator)),
-                "cmd_indicator" => Some(Ok(config.cmd_indicator)),
+                "zsh_indicator" => Some(Ok(config.zsh_indicator)),
                 "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
