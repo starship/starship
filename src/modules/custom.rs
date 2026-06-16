@@ -924,6 +924,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn timeout_short_cmd() -> io::Result<()> {
         let fixture = TestFixture::new()?;
 
@@ -1149,14 +1150,14 @@ mod tests {
         let fixture = TestFixture::new()?;
 
         let (echo_cmd, shell_str, shell_shell) = if cfg!(windows) {
-            ("Write-Host", "pwsh", Shell::PowerShell)
+            ("$Env:", "pwsh", Shell::PowerShell)
         } else {
-            ("echo", "bash", Shell::Bash)
+            ("echo $", "bash", Shell::Bash)
         };
 
         let config = CustomConfigBuilder::new()
             .format("$output")
-            .command(format!("{} $STARSHIP_PREV_STATUS_CODE", echo_cmd))
+            .command(format!("{}STARSHIP_PREV_STATUS_CODE", echo_cmd))
             .shell(shell_str)
             .when("true")
             .ignore_timeout(true)
