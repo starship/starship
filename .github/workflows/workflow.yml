@@ -187,6 +187,15 @@ jobs:
           winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
+      # Install Fish (not compatible with Windows)
+      - name: Setup | Fish (macos)
+        if: matrix.os == 'macOS-latest'
+        run: brew install fish
+
+      - name: Setup | Fish (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y fish
+
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: "cargo llvm-cov
