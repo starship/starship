@@ -1215,14 +1215,16 @@ mod tests {
     }
 
     #[test]
+    #[ignore] // requires fish shell to be installed; please run with `--include-ignored`
     #[cfg(not(windows))] // is fish available on win?   
     fn command_can_check_exit_status_fish() -> io::Result<()> {
         let fixture = TestFixture::new()?;
-        let command = "[ $status -eq 42 ] && echo true || echo false";
+        let command = "test $status -eq 42 && echo true || echo false";
 
         let config = CustomConfigBuilder::new()
             .format("$output")
             .command(command)
+            .shell(vec!["fish".to_owned(), "-c".to_owned()])
             .when("true")
             .ignore_timeout(true)
             .build();
