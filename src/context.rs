@@ -417,16 +417,18 @@ impl<'a> Context<'a> {
         let shell = env::var("STARSHIP_SHELL").unwrap_or_default();
         match shell.as_str() {
             "bash" => Shell::Bash,
+            "cmd" => Shell::Cmd,
+            "csh" => Shell::Csh,
+            "elvish" => Shell::Elvish,
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
-            "pwsh" => Shell::Pwsh,
-            "powershell" => Shell::PowerShell,
-            "zsh" => Shell::Zsh,
-            "elvish" => Shell::Elvish,
-            "tcsh" => Shell::Tcsh,
+            "ksh" => Shell::Ksh,
             "nu" => Shell::Nu,
+            "powershell" => Shell::PowerShell,
+            "pwsh" => Shell::Pwsh,
+            "tcsh" => Shell::Tcsh,
             "xonsh" => Shell::Xonsh,
-            "cmd" => Shell::Cmd,
+            "zsh" => Shell::Zsh,
             _ => Shell::Unknown,
         }
     }
@@ -938,16 +940,18 @@ fn get_remote_repository_info(
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Shell {
     Bash,
+    Cmd,
+    Csh,
+    Elvish,
     Fish,
     Ion,
-    Pwsh,
-    PowerShell,
-    Zsh,
-    Elvish,
-    Tcsh,
+    Ksh,
     Nu,
+    PowerShell,
+    Pwsh,
+    Tcsh,
     Xonsh,
-    Cmd,
+    Zsh,
     Unknown,
 }
 
