@@ -1655,15 +1655,17 @@
       "default": {
         "format": "[$indicator]($style) ",
         "bash_indicator": "bsh",
+        "cmd_indicator": "cmd",
+        "csh_indicator": "csh",
+        "elvish_indicator": "esh",
         "fish_indicator": "fsh",
-        "zsh_indicator": "zsh",
+        "ksh_indicator": "ksh",
         "powershell_indicator": "psh",
         "ion_indicator": "ion",
-        "elvish_indicator": "esh",
-        "tcsh_indicator": "tsh",
         "nu_indicator": "nu",
+        "tcsh_indicator": "tsh",
         "xonsh_indicator": "xsh",
-        "cmd_indicator": "cmd",
+        "zsh_indicator": "zsh",
         "unknown_indicator": "",
         "style": "white bold",
         "disabled": true
@@ -6324,13 +6326,25 @@
           "type": "string",
           "default": "bsh"
         },
+        "cmd_indicator": {
+          "type": "string",
+          "default": "cmd"
+        },
+        "csh_indicator": {
+          "type": "string",
+          "default": "csh"
+        },
+        "elvish_indicator": {
+          "type": "string",
+          "default": "esh"
+        },
         "fish_indicator": {
           "type": "string",
           "default": "fsh"
         },
-        "zsh_indicator": {
+        "ksh_indicator": {
           "type": "string",
-          "default": "zsh"
+          "default": "ksh"
         },
         "powershell_indicator": {
           "type": "string",
@@ -6346,25 +6360,21 @@
           "type": "string",
           "default": "ion"
         },
-        "elvish_indicator": {
+        "nu_indicator": {
           "type": "string",
-          "default": "esh"
+          "default": "nu"
         },
         "tcsh_indicator": {
           "type": "string",
           "default": "tsh"
         },
-        "nu_indicator": {
-          "type": "string",
-          "default": "nu"
-        },
         "xonsh_indicator": {
           "type": "string",
           "default": "xsh"
         },
-        "cmd_indicator": {
+        "zsh_indicator": {
           "type": "string",
-          "default": "cmd"
+          "default": "zsh"
         },
         "unknown_indicator": {
           "type": "string",
