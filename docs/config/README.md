@@ -5333,7 +5333,7 @@ use_stdin = false
 [custom.h2g2]
 command = '''
 if [ "$STARSHIP_PREV_STATUS_CODE" = "42" ]; then
-    echo "woah, that's the answer to life, the universe and everything!"
++    echo "whoa, that's the answer to life, the universe and everything!"
 else
     echo "maybe next time we'll get the answer... ($STARSHIP_PREV_STATUS_CODE)"
 fi
