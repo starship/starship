@@ -23,14 +23,7 @@ use crate::{
 struct ShellInvocation {
     shell: String,
     args: Vec<String>,
-    subshell: Subshell,
     uses_stdin: bool,
-}
-
-enum Subshell {
-    Parens,
-    CurlyBraces,
-    ShellInvoc,
 }
 
 /// Creates a custom module with some configuration
@@ -157,7 +150,6 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     log::trace!("shell_command run with the following command: {}", cmd);
 
     let shell_invoc: &ShellInvocation = &get_shell_invoc(&config.shell, context);
-    let cmd_with_status = inject_status_subshell(cmd, shell_invoc, context);
 
     let mut command = match create_command(shell_invoc.shell.as_str()) {
         Ok(command) => command,
@@ -187,8 +179,13 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
         command.arg(arg);
     }
 
+    command.env(
+        "STARSHIP_PREV_STATUS_CODE",
+        context.properties.status_code.as_deref().unwrap_or("0"),
+    );
+
     if !use_stdin {
-        command.arg(cmd_with_status);
+        command.arg(cmd);
     }
 
     let mut child = match command.spawn() {
@@ -305,15 +302,11 @@ fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
         .file_stem()
         .and_then(OsStr::to_str);
 
-    let (default_args, subshell, uses_stdin): (&[&str], _, _) = match shell_name {
-        Some("pwsh" | "powershell") => (
-            &["-NoProfile", "-Command", "-"],
-            Subshell::CurlyBraces,
-            true,
-        ),
-        Some("cmd") => (&["/C"], Subshell::ShellInvoc, false),
-        Some("bash" | "zsh" | "sh" | "ksh" | "csh" | "tcsh") => (&["-c"], Subshell::Parens, false),
-        _ => (&["-c"], Subshell::ShellInvoc, false),
+    let (default_args, uses_stdin): (&[&str], _) = match shell_name {
+        Some("pwsh" | "powershell") => (&["-NoProfile", "-Command", "-"], true),
+        Some("cmd") => (&["/C"], false),
+        Some("bash" | "zsh" | "sh" | "ksh" | "csh" | "tcsh") => (&["-c"], false),
+        _ => (&["-c"], false),
     };
 
     let args = if shell.0.len() <= 1 {
@@ -332,44 +325,8 @@ fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
     ShellInvocation {
         shell: shell_with_fallback,
         args,
-        subshell,
         uses_stdin,
     }
-}
-
-/// Prepends exit-code injection so the command can access the previous
-/// command's actual exit status via `$?` or `$status`, rather than always `0`.
-///
-/// Uses shell-appropriate syntax:
-/// - subshells for POSIX,
-/// - nested shell invocation otherwise.
-fn inject_status_subshell(cmd: &str, shell_invoc: &ShellInvocation, context: &Context) -> String {
-    let exit_code: i64 = context
-        .properties
-        .status_code
-        .as_deref()
-        .and_then(|s| s.parse().ok())
-        .unwrap_or(0);
-    let cmd_with_status = match shell_invoc.subshell {
-        Subshell::Parens => format!("(exit {}); {}", exit_code, cmd),
-        Subshell::CurlyBraces => format!("{{exit {}; {}}}", exit_code, cmd),
-        Subshell::ShellInvoc => {
-            format!(
-                "{} {} \"exit {}\"; {}",
-                shell_invoc.shell.clone(),
-                shell_invoc.args.join(" "),
-                exit_code,
-                cmd
-            )
-        }
-    };
-
-    log::trace!(
-        "The final command was built, including status subshell: {}",
-        cmd_with_status
-    );
-
-    cmd_with_status
 }
 
 #[cfg(test)]
@@ -1190,12 +1147,9 @@ mod tests {
         let fixture = TestFixture::new()?;
 
         let (command, shell_val) = if cfg!(windows) {
-            (
-                "if ($LASTEXITCODE -eq 42) { 'true' } else { 'false' }",
-                Shell::PowerShell,
-            )
+            ("Write-Host $STARSHIP_PREV_STATUS_CODE", Shell::PowerShell)
         } else {
-            ("[ $? -eq 42 ] && echo true || echo false", Shell::Bash)
+            ("echo $STARSHIP_PREV_STATUS_CODE", Shell::Bash)
         };
 
         let config = CustomConfigBuilder::new()
@@ -1214,37 +1168,7 @@ mod tests {
                 .collect()
                 .expect("command_can_check_exit_status should not be None")
                 .as_str(),
-            "true"
-        );
-
-        fixture.close()
-    }
-
-    #[test]
-    #[ignore] // requires fish shell to be installed; please run with `--include-ignored`
-    #[cfg(not(windows))] // is fish available on win?   
-    fn command_can_check_exit_status_fish() -> io::Result<()> {
-        let fixture = TestFixture::new()?;
-        let command = "test $status -eq 42 && echo true || echo false";
-
-        let config = CustomConfigBuilder::new()
-            .format("$output")
-            .command(command)
-            .shell(vec!["fish".to_owned(), "-c".to_owned()])
-            .when("true")
-            .ignore_timeout(true)
-            .build();
-
-        assert_eq!(
-            fixture
-                .renderer()
-                .status(42)
-                .config(config)
-                .shell(Shell::Fish)
-                .collect()
-                .expect("fish test should not be None")
-                .as_str(),
-            "true"
+            "42"
         );
 
         fixture.close()
