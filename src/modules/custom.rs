@@ -286,7 +286,7 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
 /// and stdin handling.
 ///
 /// If the user provided custom shell args, those take precedence; otherwise,
-/// we use hardcoded defaults per shell (bash, zsh, sh, fish, nushell, powershell, cmd).
+/// we use hardcoded defaults per supported shell.
 fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
     let shell_with_fallback = if !shell.0.is_empty() {
         shell.0[0].to_string()
