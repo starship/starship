@@ -90,6 +90,9 @@ guess_host_triple = "0.1.5"
 home = "0.5.12"
 shell-words = "1.1.1"
 
+[dev-dependencies]
+mockall = "=0.14.0"
+
 [dependencies.schemars]
 version = "1.2.1"
 optional = true
@@ -108,18 +111,15 @@ features = [
   "Win32_Storage_FileSystem",
 ]
 
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
+
 [target.'cfg(not(windows))'.dependencies]
 nix = { version = "0.31.3", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] }
 dunce = "1.0.5"
-
-[target.'cfg(windows)'.build-dependencies]
-winres = "0.1.12"
-
-[dev-dependencies]
-mockall = "=0.14.0"
 
 [profile.release]
 codegen-units = 1
