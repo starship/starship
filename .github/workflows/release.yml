@@ -108,7 +108,7 @@ jobs:
 
       - name: Setup | Install cross [Linux]
         if: matrix.os == 'ubuntu-latest' && !matrix.use_zigbuild
-        uses: taiki-e/install-action@7a79fe8c3a13344501c80d99cae481c1c9085912 # v2.81.10
+        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5 # v2.82.0
         with:
           tool: cross@0.2.5
 
@@ -118,7 +118,7 @@ jobs:
 
       - name: Setup | Install cargo-zigbuild [riscv64]
         if: matrix.use_zigbuild
-        uses: taiki-e/install-action@7a79fe8c3a13344501c80d99cae481c1c9085912 # v2.81.10
+        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5 # v2.82.0
         with:
           tool: cargo-zigbuild
 
