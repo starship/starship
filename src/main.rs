@@ -107,6 +107,9 @@ enum Commands {
         /// Output the preset to a file instead of stdout
         #[clap(short, long, conflicts_with = "list")]
         output: Option<PathBuf>,
+        /// Forcibly overwrite the output file if it already exists
+        #[clap(short, long, requires = "output")]
+        force: bool,
         /// List out all preset names
         #[clap(short, long)]
         list: bool,
@@ -251,7 +254,12 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
-        Commands::Preset { name, list, output } => print::preset_command(name, output, list),
+        Commands::Preset {
+            name,
+            list,
+            output,
+            force,
+        } => print::preset_command(name, output, force, list),
         Commands::Config { name, value } => {
             let context = Context::default();
             if let Some(name) = name {
