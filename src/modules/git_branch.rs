@@ -233,6 +233,7 @@ mod tests {
 
     use crate::test::{
         BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo,
+        fixture_repo_sha1,
     };
     use crate::utils::create_command;
 
@@ -585,8 +586,9 @@ mod tests {
     #[test]
     fn test_remote() -> io::Result<()> {
         for &mode in COMMON_GIT_PROVIDERS {
-            let remote_dir = fixture_repo(mode)?;
-            let repo_dir = fixture_repo(mode)?;
+            // Both repos must use the same hash format; SHA1/SHA256 repos can't fetch from each other.
+            let remote_dir = fixture_repo_sha1(mode)?;
+            let repo_dir = fixture_repo_sha1(mode)?;
 
             create_command("git")?
                 .args(["checkout", "-b", "test_branch"])
