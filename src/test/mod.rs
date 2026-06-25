@@ -254,16 +254,10 @@ pub fn config_git_repo_for_tests(path: &Path) -> io::Result<()> {
 }
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
-    fixture_repo_inner(provider, rand::random())
+    fixture_repo_with_hash(provider, rand::random())
 }
 
-/// Like [`fixture_repo`] but always uses the SHA1 fixture.
-/// Use this when two repos must be compatible (e.g. one fetches from the other).
-pub fn fixture_repo_sha1(provider: FixtureProvider) -> io::Result<TempDir> {
-    fixture_repo_inner(provider, false)
-}
-
-fn fixture_repo_inner(provider: FixtureProvider, sha256: bool) -> io::Result<TempDir> {
+pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
             let checkout_db = if cfg!(windows) {
