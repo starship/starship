@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let git_head = git_repo.head().ok()?;
 
     let is_detached = git_head.is_detached();
-    if config.only_detached && !is_detached {
+    if config.tag_disabled && config.only_detached && !is_detached {
         return None;
     }
 
@@ -28,7 +28,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
+                "hash" if config.only_detached && is_detached => {
+                    Some(Ok(git_hash(context.get_repo().ok()?, &config)?))
+                }
+                "hash" if !config.only_detached => {
+                    Some(Ok(git_hash(context.get_repo().ok()?, &config)?))
+                }
                 "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
