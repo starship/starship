@@ -768,6 +768,16 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+    // When milliseconds are hidden the smallest displayed unit is the second,
+    // so round to the nearest second instead of truncating the sub-second part
+    // (e.g. 12807ms is closer to 13s than to 12s). When milliseconds are shown
+    // the value is rendered in full, so no rounding is needed.
+    let raw_millis = if show_millis {
+        raw_millis
+    } else {
+        (raw_millis + 500) / 1000 * 1000
+    };
+
     // Fast returns for zero cases to render something
     match (raw_millis, show_millis) {
         (0, true) => return "0ms".into(),
@@ -901,8 +911,30 @@ mod tests {
         assert_eq!(render_time(500_u128, true), "500ms");
     }
     #[test]
+    fn render_time_test_499ms_no_millis() {
+        // Below the half-second boundary rounds down to zero.
+        assert_eq!(render_time(499_u128, false), "0s");
+    }
+    #[test]
     fn render_time_test_500ms_no_millis() {
-        assert_eq!(render_time(500_u128, false), "0s");
+        // At/above the half-second boundary rounds up to one second.
+        assert_eq!(render_time(500_u128, false), "1s");
+    }
+    #[test]
+    fn render_time_test_round_to_nearest_second() {
+        // 12.807s is closer to 13s than to 12s (issue #7479).
+        assert_eq!(render_time(12_807_u128, false), "13s");
+        // 12.499s stays at 12s.
+        assert_eq!(render_time(12_499_u128, false), "12s");
+        // Rounding still shows the exact value when millis are displayed.
+        assert_eq!(render_time(12_807_u128, true), "12s807ms");
+    }
+    #[test]
+    fn render_time_test_round_carries_into_larger_units() {
+        // 59.5s rounds up to a full minute, carrying through the breakdown.
+        assert_eq!(render_time(59_500_u128, false), "1m0s");
+        // 23h59m59.5s rounds up to a full day.
+        assert_eq!(render_time(86_399_500_u128, false), "1d0h0m0s");
     }
     #[test]
     fn render_time_test_10s() {
