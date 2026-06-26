@@ -1,0 +1,107 @@
+format = """
+[](#cad2c5)\
+$os\
+[](bg:#354f52 fg:#cad2c5)\
+$directory\
+[](fg:#354f52)\
+$fill\
+[](fg:#cad2c5)\
+$git_branch\
+$git_status\
+[](fg:#52796f bg:#cad2c5)\
+$nodejs\
+$rust\
+$golang\
+$php\
+[](fg:#2f3e46 bg:#52796f)\
+$time\
+[ ](fg:#2f3e46)\
+\n$character\
+"""
+
+[character]
+success_symbol = '[❯](bold #82c283)'
+error_symbol = '[❯](bold #e63946)'
+
+[fill]
+symbol = ' '
+
+[status]
+format = '[$symbol ](bg:#18202f fg:#e3e5e5)'
+success_symbol = '[✓](bold fg:green bg:#18202f)'
+symbol = '[X](bold fg:red bg:#18202f)'
+disabled = true
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+style = "bg:#cad2c5 fg:#2f3e46"
+disabled = false
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = ""
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[directory]
+style = "fg:#e3e5e5 bg:#354f52"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:#cad2c5"
+format = '[[ $symbol $branch ](fg:#2f3e46 bg:#cad2c5)]($style)'
+
+[git_status]
+style = "bg:#cad2c5"
+format = '[[($all_status$ahead_behind )](fg:#2f3e46 bg:#cad2c5)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:#52796f"
+format = '[[ $symbol ($version) ](fg:#e3e5e5 bg:#52796f)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#52796f"
+format = '[[ $symbol ($version) ](fg:#e3e5e5 bg:#52796f)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:#52796f"
+format = '[[ $symbol ($version) ](fg:#e3e5e5 bg:#52796f)]($style)'
+
+[php]
+symbol = ""
+style = "bg:#52796f"
+format = '[[ $symbol ($version) ](fg:#e3e5e5 bg:#52796f)]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#2f3e46"
+format = '[[ $time ](fg:#cad2c5 bg:#2f3e46)]($style)'
