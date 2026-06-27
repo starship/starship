@@ -5834,6 +5834,7 @@
           "default": "pyenv "
         },
         "python_binary": {
+          "description": "Python commands used to get the Python version. Each entry can be a\nbinary name or a command with arguments.",
           "$ref": "#/$defs/VecOr_VecOr_string",
           "default": [
             [

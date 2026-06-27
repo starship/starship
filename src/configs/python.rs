@@ -12,6 +12,8 @@ use serde::{Deserialize, Serialize};
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,
+    /// Python commands used to get the Python version. Each entry can be a
+    /// binary name or a command with arguments.
     pub python_binary: VecOr<VecOr<&'a str>>,
     pub format: &'a str,
     pub version_format: &'a str,
