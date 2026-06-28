@@ -3372,7 +3372,7 @@ checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
 name = "starship"
-version = "1.25.1"
+version = "1.26.0"
 dependencies = [
  "clap",
  "clap_complete",
