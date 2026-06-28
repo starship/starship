@@ -146,7 +146,7 @@ mod tests {
     use std::path::Path;
     use std::process::Stdio;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::{ModuleRenderer, config_git_repo_for_tests};
     use crate::utils::{create_command, write_file};
 
     #[test]
@@ -327,17 +327,8 @@ mod tests {
             true,
         )?;
 
-        // Set local author info
-        run_git_cmd(
-            ["config", "--local", "user.email", "starship@example.com"],
-            Some(path),
-            true,
-        )?;
-        run_git_cmd(
-            ["config", "--local", "user.name", "starship"],
-            Some(path),
-            true,
-        )?;
+        // Set local author and repo info
+        config_git_repo_for_tests(path)?;
 
         // Ensure on the expected branch.
         // If build environment has `init.defaultBranch` global set

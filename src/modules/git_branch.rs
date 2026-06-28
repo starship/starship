@@ -231,13 +231,11 @@ mod tests {
     use std::ffi::OsStr;
     use std::io;
 
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{
+        BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo,
+        fixture_repo_with_hash,
+    };
     use crate::utils::create_command;
-
-    const NORMAL_AND_REFTABLE: [FixtureProvider; 2] =
-        [FixtureProvider::Git, FixtureProvider::GitReftable];
-    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
-        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -379,7 +377,7 @@ mod tests {
 
     #[test]
     fn test_works_with_unborn_default_branch() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = tempfile::tempdir()?;
 
             create_command("git")?
@@ -410,7 +408,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -441,7 +439,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -467,7 +465,7 @@ mod tests {
 
     #[test]
     fn test_works_in_bare_repo() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = tempfile::tempdir()?;
 
             create_command("git")?
@@ -499,7 +497,7 @@ mod tests {
 
     #[test]
     fn test_ignore_branches() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -525,7 +523,7 @@ mod tests {
 
     #[test]
     fn test_ignore_bare_repo() -> io::Result<()> {
-        for mode in BARE_AND_REFTABLE {
+        for &mode in BARE_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             let actual = ModuleRenderer::new("git_branch")
@@ -547,7 +545,7 @@ mod tests {
 
     #[test]
     fn test_works_in_worktree_backed_by_bare_repo_with_ignore_bare() -> io::Result<()> {
-        for mode in BARE_AND_REFTABLE {
+        for &mode in BARE_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
             let worktree_dir = tempfile::tempdir()?;
 
@@ -587,9 +585,11 @@ mod tests {
 
     #[test]
     fn test_remote() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
-            let remote_dir = fixture_repo(mode)?;
-            let repo_dir = fixture_repo(mode)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            // Both repos must use the same hash format; SHA1/SHA256 repos can't fetch from each other.
+            let sha256 = rand::random();
+            let remote_dir = fixture_repo_with_hash(mode, sha256)?;
+            let repo_dir = fixture_repo_with_hash(mode, sha256)?;
 
             create_command("git")?
                 .args(["checkout", "-b", "test_branch"])
@@ -626,7 +626,7 @@ mod tests {
 
     #[test]
     fn test_branch_fallback_on_detached() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -701,7 +701,7 @@ mod tests {
         truncation_symbol: &str,
         config_options: &str,
     ) -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -743,7 +743,7 @@ mod tests {
         expected: T,
     ) -> io::Result<()> {
         let expected = expected.into();
-        for mode in NORMAL_AND_REFTABLE {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             create_command("git")?
@@ -772,6 +772,9 @@ mod tests {
     }
 
     fn maybe_reftable_format(provider: FixtureProvider) -> Option<&'static str> {
-        matches!(provider, FixtureProvider::GitReftable).then(|| "--ref-format=reftable")
+        match provider {
+            FixtureProvider::Git { reftable: true, .. } => Some("--ref-format=reftable"),
+            _ => None,
+        }
     }
 }

@@ -100,7 +100,7 @@ mod tests {
 
     use nu_ansi_term::Color;
 
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo};
 
     #[test]
     fn empty_order_disables() {
@@ -158,11 +158,14 @@ mod tests {
 
     #[test]
     fn detect_git() -> io::Result<()> {
-        with_marker(
-            "git",
-            FixtureProvider::Git,
-            Some(format!("{}", Color::Green.bold().paint("test "))),
-        )
+        for &mode in COMMON_GIT_PROVIDERS {
+            with_marker(
+                "git",
+                mode,
+                Some(format!("{}", Color::Green.bold().paint("test "))),
+            )?;
+        }
+        Ok(())
     }
 
     #[test]
