@@ -199,6 +199,35 @@ pub enum FixtureProvider {
     Pijul,
 }
 
+pub fn config_git_repo_for_tests(path: &Path) -> io::Result<&Path> {
+    create_command("git")?
+        .args(["config", "--local", "user.email", "starship@example.com"])
+        .current_dir(path)
+        .output()?;
+
+    create_command("git")?
+        .args(["config", "--local", "user.name", "starship"])
+        .current_dir(path)
+        .output()?;
+
+    // Prevent intermittent test failures and ensure that the result of git commands
+    // are available during I/O-contentious tests, by having git run `fsync`.
+    // This is especially important on Windows.
+    // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
+    create_command("git")?
+        .args(["config", "--local", "core.fsync", "all"])
+        .current_dir(path)
+        .output()?;
+
+    // Older git setting for `fsync` for compatibility with older git versions:
+    create_command("git")?
+        .args(["config", "--local", "core.fsyncObjectFiles", "true"])
+        .current_dir(path)
+        .output()?;
+
+    Ok(path)
+}
+
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
@@ -232,30 +261,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .arg(path.path())
                 .output()?;
 
-            create_command("git")?
-                .args(["config", "--local", "user.email", "starship@example.com"])
-                .current_dir(path.path())
-                .output()?;
-
-            create_command("git")?
-                .args(["config", "--local", "user.name", "starship"])
-                .current_dir(path.path())
-                .output()?;
-
-            // Prevent intermittent test failures and ensure that the result of git commands
-            // are available during I/O-contentious tests, by having git run `fsync`.
-            // This is especially important on Windows.
-            // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
-            create_command("git")?
-                .args(["config", "--local", "core.fsync", "all"])
-                .current_dir(path.path())
-                .output()?;
-
-            // Older git setting for `fsync` for compatibility with older git versions:
-            create_command("git")?
-                .args(["config", "--local", "core.fsyncObjectFiles", "true"])
-                .current_dir(path.path())
-                .output()?;
+            config_git_repo_for_tests(path.path())?;
 
             create_command("git")?
                 .args(["reset", "--hard", "HEAD"])
@@ -278,6 +284,9 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(path.path())
                 .output()?;
+
+            config_git_repo_for_tests(path.path())?;
+
             Ok(path)
         }
         FixtureProvider::Hg => {
