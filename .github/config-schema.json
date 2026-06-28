@@ -35,6 +35,10 @@
       "type": "boolean",
       "default": true
     },
+    "osc_133": {
+      "type": "boolean",
+      "default": false
+    },
     "follow_symlinks": {
       "type": "boolean",
       "default": true
