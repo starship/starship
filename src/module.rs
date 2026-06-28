@@ -216,6 +216,16 @@ where
                 current = Vec::new();
                 prev_style = None;
             }
+            Segment::LineTerm { max_width } => {
+                // max_width specified by [line_break] config
+                if *max_width > 0 && used <= *max_width {
+                    continue; // skip newline
+                }
+
+                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+                current.push(current_segment_string);
+                break;
+            }
             _ => {
                 used += segment.width_graphemes();
                 let current_segment_string = segment.ansi_string(prev_style.as_ref());
@@ -223,10 +233,6 @@ where
                 prev_style = Some(*current_segment_string.style_ref());
                 current.push(current_segment_string);
             }
-        }
-
-        if matches!(segment, Segment::LineTerm) {
-            break;
         }
     }
 
