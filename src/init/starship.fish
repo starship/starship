@@ -1,13 +1,13 @@
-function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish job groups (or legacy PIDs if toggled)'
+function __starship_set_job_count --description 'Set STARSHIP_JOB_COUNT using fish job groups (or legacy PIDs if toggled)'
     # To force legacy behavior (process PIDs), set this variable to "false":
     #   set -g __starship_fish_use_job_groups "false"
     if test "$__starship_fish_use_job_groups" = "false"
         # Legacy behavior: counts PIDs (may overcount pipelines with terminated producers)
-        set -g STARSHIP_JOBS (jobs -p 2>/dev/null | count)
+        set -gx STARSHIP_JOB_COUNT (jobs -p 2>/dev/null | count)
     else
         # Default behavior: count job groups
-        set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
-    end    
+        set -gx STARSHIP_JOB_COUNT (jobs -g 2>/dev/null | count)
+    end
 end
 
 function fish_prompt
@@ -33,12 +33,12 @@ function fish_prompt
             printf \e\[0J
         end
         if type -q starship_transient_prompt_func
-            starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+            starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOB_COUNT
         else
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOB_COUNT
     end
 end
 
@@ -61,12 +61,12 @@ function fish_right_prompt
     if contains -- --final-rendering $argv; or test "$RIGHT_TRANSIENT" = "1"
         set -g RIGHT_TRANSIENT 0
         if type -q starship_transient_rprompt_func
-            starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+            starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOB_COUNT
         else
             printf ""
         end
     else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOB_COUNT
     end
 end
 
