@@ -84,8 +84,11 @@ format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 [git_branch]
 format = '\[[$symbol$branch]($style)\]'
 
+[git_tags]
+format = '\[[\($symbol$tags\)]($style)\]'
+
 [git_commit]
-format = '\[[\($hash$tag\)]($style)\]'
+format = '\[[\($hash\)]($style)\]'
 
 [git_metrics]
 format = '\[[+$added]($added_style)\]\[[-$deleted]($deleted_style)\]'

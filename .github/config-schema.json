@@ -701,13 +701,20 @@
       "$ref": "#/$defs/GitCommitConfig",
       "default": {
         "commit_hash_length": 7,
-        "format": "[\\($hash$tag\\)]($style) ",
+        "format": "[\\($hash\\)]($style) ",
         "style": "green bold",
         "only_detached": true,
-        "disabled": false,
-        "tag_symbol": " 🏷  ",
-        "tag_disabled": true,
-        "tag_max_candidates": 0
+        "disabled": false
+      }
+    },
+    "git_tags": {
+      "$ref": "#/$defs/GitTagsConfig",
+      "default": {
+        "format": "[\\($symbol$tags\\)]($style) ",
+        "symbol": "🏷 ",
+        "separator": " ",
+        "style": "yellow bold",
+        "disabled": false
       }
     },
     "git_metrics": {
@@ -1859,7 +1866,7 @@
         ],
         "disabled": false,
         "fossil_modules": "$fossil_branch$fossil_metrics",
-        "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
+        "git_modules": "$git_branch$git_tags$git_commit$git_state$git_metrics$git_status",
         "hg_modules": "$hg_branch$hg_state",
         "pijul_modules": "$pijul_channel"
       }
@@ -3691,7 +3698,7 @@
         },
         "format": {
           "type": "string",
-          "default": "[\\($hash$tag\\)]($style) "
+          "default": "[\\($hash\\)]($style) "
         },
         "style": {
           "type": "string",
@@ -3704,20 +3711,32 @@
         "disabled": {
           "type": "boolean",
           "default": false
-        },
-        "tag_symbol": {
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitTagsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
           "type": "string",
-          "default": " 🏷  "
+          "default": "[\\($symbol$tags\\)]($style) "
         },
-        "tag_disabled": {
+        "symbol": {
+          "type": "string",
+          "default": "🏷 "
+        },
+        "separator": {
+          "type": "string",
+          "default": " "
+        },
+        "style": {
+          "type": "string",
+          "default": "yellow bold"
+        },
+        "disabled": {
           "type": "boolean",
-          "default": true
-        },
-        "tag_max_candidates": {
-          "type": "integer",
-          "format": "uint",
-          "minimum": 0,
-          "default": 0
+          "default": false
         }
       },
       "additionalProperties": false
@@ -6957,7 +6976,7 @@
         "git_modules": {
           "description": "Modules to use when Git is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
-          "default": "$git_branch$git_commit$git_state$git_metrics$git_status"
+          "default": "$git_branch$git_tags$git_commit$git_state$git_metrics$git_status"
         },
         "hg_modules": {
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",

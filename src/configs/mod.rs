@@ -42,6 +42,7 @@ pub mod git_commit;
 pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
+pub mod git_tags;
 pub mod gleam;
 pub mod go;
 pub mod gradle;
@@ -199,6 +200,8 @@ pub struct FullConfig<'a> {
     git_branch: git_branch::GitBranchConfig<'a>,
     #[serde(borrow)]
     git_commit: git_commit::GitCommitConfig<'a>,
+    #[serde(borrow)]
+    git_tags: git_tags::GitTagsConfig<'a>,
     #[serde(borrow)]
     git_metrics: git_metrics::GitMetricsConfig<'a>,
     #[serde(borrow)]
