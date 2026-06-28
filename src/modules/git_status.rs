@@ -602,6 +602,34 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
     }
 }
 
+/// Scans `git status --porcelain=2 [--branch]` output and returns `true` when
+/// the repository has any local change on tracked files (modified, staged,
+/// deleted, renamed, typechanged, conflicted) or the current branch is ahead
+/// of its upstream.
+///
+/// Untracked entries and stash state are intentionally ignored. Intended to be
+/// shared with modules that only need a coarse "dirty or ahead" signal (e.g.
+/// `yadm`) rather than the full per-category breakdown produced by `git_status`.
+pub(crate) fn is_dirty_or_ahead(porcelain_v2_stdout: &str) -> bool {
+    let mut status = RepoStatus::default();
+    for line in porcelain_v2_stdout.lines() {
+        if line.starts_with("# branch.ab ") {
+            status.set_ahead_behind(line);
+        } else if !line.is_empty() && !line.starts_with('#') {
+            status.add(line);
+        }
+    }
+
+    status.ahead.unwrap_or(0) > 0
+        || status.conflicted
+            + status.deleted
+            + status.renamed
+            + status.modified
+            + status.staged
+            + status.typechanged
+            > 0
+}
+
 #[derive(Default, Debug, Clone)]
 pub(crate) struct RepoStatus {
     ahead: Option<usize>,
@@ -926,6 +954,51 @@ pub(crate) mod tests {
             "{} ",
             Color::Red.bold().paint(format!("[{symbols}]"))
         ))
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_clean_repo_returns_false() {
+        let stdout = "# branch.oid abc\n# branch.head master\n# branch.upstream origin/master\n# branch.ab +0 -0\n";
+        assert!(!super::is_dirty_or_ahead(stdout));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_empty_output_returns_false() {
+        assert!(!super::is_dirty_or_ahead(""));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_detects_worktree_modification() {
+        // `1 .M N...` = tracked file with unstaged modification.
+        let stdout = "# branch.ab +0 -0\n1 .M N... 100644 100644 100644 aaa bbb .config/foo.toml\n";
+        assert!(super::is_dirty_or_ahead(stdout));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_detects_staged_addition() {
+        // `1 A. N...` = new file added to the index.
+        let stdout = "# branch.ab +0 -0\n1 A. N... 000000 100644 100644 000 abc new.txt\n";
+        assert!(super::is_dirty_or_ahead(stdout));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_detects_ahead_counter() {
+        let stdout = "# branch.oid abc\n# branch.head master\n# branch.upstream origin/master\n# branch.ab +2 -0\n";
+        assert!(super::is_dirty_or_ahead(stdout));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_ignores_behind_only() {
+        // Behind is not a signal we want to report; only ahead matters.
+        let stdout = "# branch.ab +0 -3\n";
+        assert!(!super::is_dirty_or_ahead(stdout));
+    }
+
+    #[test]
+    fn is_dirty_or_ahead_ignores_untracked() {
+        // `?` lines are untracked files; they must not trigger the dirty signal.
+        let stdout = "# branch.ab +0 -0\n? some/untracked/file.txt\n";
+        assert!(!super::is_dirty_or_ahead(stdout));
     }
 
     #[test]

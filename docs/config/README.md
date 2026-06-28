@@ -271,6 +271,7 @@ $kubernetes\
 $nats\
 $directory\
 $vcsh\
+$yadm\
 $fossil_branch\
 $fossil_metrics\
 $git_branch\
@@ -5102,6 +5103,50 @@ The module will be shown only if a repository is currently in use.
 
 [vcsh]
 format = '[🆅 $repo](bold blue) '
+```
+
+## YADM
+
+The `yadm` module shows when your [YADM](https://yadm.io/) dotfiles Git repository has **uncommitted changes** on tracked files (staged or unstaged) or when the current branch is **ahead of its upstream** (unpushed commits).
+
+The module uses `$HOME` as the worktree and resolves the bare repository path in this order:
+
+1. The `repo_path` option, if set in `[yadm]`
+2. The `YADM_REPO` environment variable
+3. `$XDG_DATA_HOME/yadm/repo.git` (with `XDG_DATA_HOME` defaulting to `$HOME/.local/share` when unset)
+4. `$HOME/.yadm/repo.git`
+
+For the default paths (3–4), Starship only treats the directory as a candidate when it looks like a Git directory (`HEAD` and `config` are present). The module is hidden when the repository is clean and not ahead of upstream, or when disabled.
+
+The module runs `git status` against the resolved bare repository (with `--work-tree` set to `$HOME`), so Git must be installed and available on `PATH`. The global parameter `command_timeout` limits how long that command may run.
+
+### Options
+
+| Option      | Default               | Description                                                                               |
+| ----------- | --------------------- | ----------------------------------------------------------------------------------------- |
+| `format`    | `'[$symbol]($style)'` | The format for the module.                                                                |
+| `symbol`    | `' '`                | The symbol shown when the module is displayed.                                            |
+| `style`     | `'red'`               | The style for the module.                                                                 |
+| `repo_path` | `unset`               | Path to the YADM bare repository; when unset, `YADM_REPO` and the default paths are used. |
+| `disabled`  | `false`               | Disables the `yadm` module.                                                               |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| `symbol` |         | Mirrors the value of option `symbol` |
+| `style`* |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[yadm]
+symbol = "⚙ "
+format = '[$symbol yadm]($style) '
 ```
 
 ## XMake

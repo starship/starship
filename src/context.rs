@@ -747,6 +747,36 @@ impl Repo {
         self.repo.to_thread_local()
     }
 
+    /// Builds a `Repo` for an explicit `git_dir` + `work_tree`, bypassing the
+    /// usual `discover` flow used by [`Context::get_repo`].
+    ///
+    /// This is intended for modules that target a repository unrelated to the
+    /// current working directory (e.g. `yadm`, whose bare repo typically lives
+    /// in `~/.local/share/yadm/repo.git` with `$HOME` as the work tree).
+    ///
+    /// Returns `None` if `git_dir` cannot be opened as a git repository.
+    pub fn open_bare(git_dir: PathBuf, work_tree: PathBuf) -> Option<Self> {
+        let shared = ThreadSafeRepository::open_opts(&git_dir, gix::open::Options::isolated())
+            .map_err(|e| log::debug!("Failed to open git repo at {}: {e}", git_dir.display()))
+            .ok()?;
+        let repository = shared.to_thread_local();
+        let fs_monitor_value_is_true = repository
+            .config_snapshot()
+            .boolean("core.fsmonitor")
+            .unwrap_or(false);
+        let state = repository.state();
+
+        Some(Self {
+            repo: shared,
+            branch: None,
+            workdir: Some(work_tree),
+            path: git_dir,
+            state,
+            remote: None,
+            fs_monitor_value_is_true,
+        })
+    }
+
     /// Wrapper to execute external git commands.
     /// Handles adding the appropriate `--git-dir` and `--work-tree` flags to the command.
     /// Also handles additional features required for security, such as disabling `fsmonitor`.

@@ -111,6 +111,7 @@ pub const ALL_MODULES: &[&str] = &[
     "vcsh",
     "vlang",
     "xmake",
+    "yadm",
     "zig",
 ];
 

@@ -108,6 +108,7 @@ pub mod vagrant;
 pub mod vcs;
 pub mod vcsh;
 pub mod xmake;
+pub mod yadm;
 pub mod zig;
 
 pub use starship_root::*;
@@ -334,6 +335,8 @@ pub struct FullConfig<'a> {
     vlang: v::VConfig<'a>,
     #[serde(borrow)]
     xmake: xmake::XMakeConfig<'a>,
+    #[serde(borrow)]
+    yadm: yadm::YadmConfig<'a>,
     #[serde(borrow)]
     zig: zig::ZigConfig<'a>,
     #[serde(borrow)]
