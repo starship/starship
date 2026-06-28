@@ -12,6 +12,7 @@ pub struct GitTagsConfig<'a> {
     pub symbol: &'a str,
     pub separator: &'a str,
     pub style: &'a str,
+    pub only_detached: bool,
     pub disabled: bool,
 }
 
@@ -22,6 +23,7 @@ impl<'a> Default for GitTagsConfig<'a> {
             symbol: "🏷 ",
             separator: " ",
             style: "yellow bold",
+            only_detached: false,
             disabled: false,
         }
     }

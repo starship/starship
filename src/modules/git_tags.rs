@@ -2,7 +2,6 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_tags::GitTagsConfig;
 use crate::formatter::StringFormatter;
-use gix::Repository;
 
 /// Creates a module with the Git tag in the current directory
 ///
@@ -11,8 +10,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_tags");
     let config: GitTagsConfig = GitTagsConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
-    let tag_names = all_tags(repo.open())?;
+    let repo = context.get_repo().ok()?.open();
+    let git_head = repo.head().ok()?;
+
+    let is_detached = git_head.is_detached();
+    if config.only_detached && !is_detached {
+        return None;
+    }
+
+    let tag_names = all_tags(repo)?;
 
     if tag_names.is_empty() {
         return None;
@@ -49,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 /// Returns both annotated and lightweight tags of the current commit.
-fn all_tags(mut repo: Repository) -> Option<Vec<String>> {
+fn all_tags(mut repo: gix::Repository) -> Option<Vec<String>> {
     // Increase the default object cache size to speed up operation for some repos
     repo.object_cache_size_if_unset(4 * 1024 * 1024);
     let commit = repo.head_commit().ok()?;
