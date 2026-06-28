@@ -12,6 +12,7 @@ pub mod character;
 pub mod claude_context;
 pub mod claude_cost;
 pub mod claude_model;
+pub mod claude_usage;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -147,6 +148,8 @@ pub struct FullConfig<'a> {
     claude_cost: claude_cost::ClaudeCostConfig<'a>,
     #[serde(borrow)]
     claude_model: claude_model::ClaudeModelConfig<'a>,
+    #[serde(borrow)]
+    claude_usage: claude_usage::ClaudeUsageConfig<'a>,
     #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
     #[serde(borrow)]
