@@ -408,7 +408,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Merge | Merge Crowdin PR
-        run: gh pr merge i18n_master --squash --repo=starship/starship
+        run: gh pr merge l10n_main --squash --repo=starship/starship
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
