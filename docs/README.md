@@ -136,14 +136,23 @@ onMounted(() => {
    ```
    For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
-   #### Tcsh
+   #### Ksh
 
-   Add the following to the end of `~/.tcshrc`:
+   Add the following to the end of `~/.kshrc`:
 
    ```sh
-   # ~/.tcshrc
+   # ~/.kshrc
+   eval "$(starship init ksh)"
+   ```
 
-   eval `starship init tcsh`
+   #### Csh/Tcsh
+
+   Add the following to the end of `~/.(t)cshrc`:
+
+   ```sh
+   # ~/.(t)cshrc
+
+   eval `starship init (t)csh`
    ```
 
    #### Nushell

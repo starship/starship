@@ -5248,7 +5248,8 @@ These modules will be shown if any of the following conditions are met:
 - The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+If unset, it will fallback to `STARSHIP_SHELL` and then to `sh` on Linux, and
+`cmd /C` on Windows.
 
 The `command` (and `when`, if applicable) will be passed in on stdin.
 
@@ -5286,6 +5287,25 @@ shell = ['pwsh', '-Command', '-']
 > [Please open an issue](https://github.com/starship/starship/issues/new/choose)
 > with shell details and starship configuration if you hit such scenario.
 
+#### Environment variables available to commands
+
+The following environment variables are available when executing `command` and
+`when`:
+
+| Variable                    | Description                                                                                                                                                                                              |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `STARSHIP_PREV_STATUS_CODE` | (Set by Starship) The exit code of the last command executed in the shell. Useful for displaying status-dependent output in custom modules.                                                              |
+| `STARSHIP_SHELL`            | (Set by user) When custom.module.shell is unset, this will override which shell interpreter to use for executing `command` and `when`. If unset, defaults to `sh` on Linux/macOS or `cmd /C` on Windows. |
+
+`STARSHIP_PREV_STATUS_CODE` lets you access the previous command's exit status
+without relying on shell-specific variables like `$?` or `%ERRORLEVEL%`,
+avoiding shell-specific bugs.
+
+`STARSHIP_SHELL` is user-facing: you set it to enforce a specific shell
+interpreter (e.g., `bash`, `zsh`, `pwsh`) if you want to override the
+defaults. Note: this will not be respected if you have also set the `shell`
+option.
+
 ### Example
 
 ```toml
@@ -5293,7 +5313,7 @@ shell = ['pwsh', '-Command', '-']
 
 [custom.foo]
 command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+detect_files = ['foo'] # can specify filters, but wildcards are not supported
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
@@ -5307,4 +5327,18 @@ command = 'time /T'
 detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
+
+# This is an example that uses `$STARSHIP_PREV_STATUS_CODE` to show dynamic
+# responses
+[custom.h2g2]
+command = '''
+if [ "$STARSHIP_PREV_STATUS_CODE" = "42" ]; then
++    echo "whoa, that's the answer to life, the universe and everything!"
+else
+    echo "maybe next time we'll get the answer... ($STARSHIP_PREV_STATUS_CODE)"
+fi
+'''
+shell = ['bash', '-c']
+when = true
+format = ' [$output]($style)'
 ```

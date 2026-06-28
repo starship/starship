@@ -7,3 +7,4 @@ set STARSHIP_POSTCMD = 'set STARSHIP_START_TIME = `::STARSHIP:: time`';
 alias precmd "$STARSHIP_PRECMD;$USER_PRECMD";
 alias postcmd "$STARSHIP_POSTCMD;$USER_POSTCMD";
 set STARSHIP_START_TIME = `::STARSHIP:: time`;
+set prompt2 = "`::STARSHIP:: prompt --continuation`"

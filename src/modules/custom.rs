@@ -1,18 +1,30 @@
 use std::env;
+use std::ffi::OsStr;
 use std::fmt::{self, Debug};
 use std::io::Write;
 use std::path::Path;
-use std::process::{Command, Stdio};
+use std::process::Stdio;
 use std::time::Duration;
 
 use process_control::{ChildExt, Control, Output};
 
 use super::{Context, Module, ModuleConfig};
 
+use crate::config::VecOr;
 use crate::{
     config::Either, configs::custom::CustomConfig, formatter::StringFormatter,
     utils::create_command,
 };
+
+/// This struct is used to store the shell invocation information. It exists
+/// as a lightweight interface that holds the shell cmd, args. It also holds
+/// uses_stdin, which is used to determine whether the invocation expects
+/// scripts.
+struct ShellInvocation {
+    shell: String,
+    args: Vec<String>,
+    uses_stdin: bool,
+}
 
 /// Creates a custom module with some configuration
 ///
@@ -130,48 +142,26 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
     None
 }
 
-/// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
-fn get_shell<'a, 'b>(
-    shell_args: &'b [&'a str],
-    context: &Context,
-) -> (std::borrow::Cow<'a, str>, &'b [&'a str]) {
-    if !shell_args.is_empty() {
-        (shell_args[0].into(), &shell_args[1..])
-    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
-        (env_shell.into(), &[] as &[&str])
-    } else if cfg!(windows) {
-        // `/C` is added by `handle_shell`
-        ("cmd".into(), &[] as &[&str])
-    } else {
-        ("sh".into(), &[] as &[&str])
-    }
-}
-
-/// Attempt to run the given command in a shell by passing it as either `stdin` or an argument to `get_shell()`,
-/// depending on the configuration or by invoking a platform-specific fallback shell if `shell` is empty.
+/// Attempt to run the given command in a shell by passing it as either
+/// `stdin` or an argument to `get_shell_invoc`, depending on the
+/// configuration or by invoking a platform-specific fallback shell if
+/// `shell` is empty.
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
-    let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
-    let mut use_stdin = config.use_stdin;
+    log::trace!("shell_command run with the following command: {}", cmd);
 
-    let mut command = match create_command(shell.as_ref()) {
+    let shell_invoc: &ShellInvocation = &get_shell_invoc(&config.shell, context);
+
+    let mut command = match create_command(shell_invoc.shell.as_str()) {
         Ok(command) => command,
-        // Don't attempt to use fallback shell if the user specified a shell
-        Err(error) if !shell_args.is_empty() => {
+        Err(error) if !shell_invoc.args.is_empty() => {
             log::debug!(
                 "Error creating command with STARSHIP_SHELL, falling back to fallback shell: {error}"
             );
 
-            // Skip `handle_shell` and just set the shell and command
-            use_stdin = Some(!cfg!(windows));
-
             if cfg!(windows) {
-                let mut c = create_command("cmd").ok()?;
-                c.arg("/C");
-                c
+                create_command("cmd").ok()?
             } else {
-                let mut c = create_command("/usr/bin/env").ok()?;
-                c.arg("sh");
-                c
+                create_command("/usr/bin/env").ok()?
             }
         }
         _ => return None,
@@ -179,12 +169,20 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
     command
         .current_dir(&context.current_dir)
-        .args(shell_args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
 
-    let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
+    let use_stdin = config.use_stdin.unwrap_or(shell_invoc.uses_stdin);
+
+    for arg in &shell_invoc.args {
+        command.arg(arg);
+    }
+
+    command.env(
+        "STARSHIP_PREV_STATUS_CODE",
+        context.properties.status_code.as_deref().unwrap_or("0"),
+    );
 
     if !use_stdin {
         command.arg(cmd);
@@ -203,6 +201,11 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     if use_stdin {
         child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
     }
+
+    log::trace!("Final command:");
+    log::trace!("  program={:?}", command.get_program());
+    log::trace!("  args={:?}", command.get_args().collect::<Vec<_>>());
+    log::trace!("  use_stdin={}", use_stdin);
 
     let mut output = child.controlled_with_output();
 
@@ -278,209 +281,501 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
     }
 }
 
-/// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
-/// given command.
-/// Returns `false` if the shell expects scripts as arguments, `true` if as `stdin`.
-fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
-    let shell_exe = Path::new(shell).file_stem();
-    let no_args = shell_args.is_empty();
+/// Determines the appropriate shell invocation strategy by matching the shell
+/// name against known shells and returning defaults for args, subshell support,
+/// and stdin handling.
+///
+/// If the user provided custom shell args, those take precedence; otherwise,
+/// we use hardcoded defaults per supported shell.
+fn get_shell_invoc(shell: &VecOr<&str>, context: &Context) -> ShellInvocation {
+    let shell_with_fallback = if !shell.0.is_empty() {
+        shell.0[0].to_string()
+    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
+        env_shell
+    } else if cfg!(windows) {
+        "cmd".to_string()
+    } else {
+        "sh".to_string()
+    };
 
-    match shell_exe.and_then(std::ffi::OsStr::to_str) {
-        Some("pwsh" | "powershell") => {
-            if no_args {
-                command.arg("-NoProfile").arg("-Command").arg("-");
-            }
-            true
-        }
-        Some("cmd") => {
-            if no_args {
-                command.arg("/C");
-            }
-            false
-        }
-        Some("nu") => {
-            if no_args {
-                command.arg("-c");
-            }
-            false
-        }
-        _ => true,
+    let shell_name = Path::new(&shell_with_fallback)
+        .file_stem()
+        .and_then(OsStr::to_str);
+
+    let (default_args, uses_stdin): (&[&str], _) = match shell_name {
+        Some("pwsh" | "powershell") => (&["-NoProfile", "-Command", "-"], true),
+        Some("cmd") => (&["/C"], false),
+        Some("bash" | "zsh" | "sh" | "ksh" | "csh" | "tcsh") => (&["-c"], false),
+        _ => (&["-c"], false),
+    };
+
+    let args = if shell.0.len() <= 1 {
+        default_args.iter().map(|&s| s.to_string()).collect()
+    } else {
+        shell.0[1..].iter().map(|&s| s.to_string()).collect()
+    };
+
+    log::trace!(
+        "shell={}, args={:?}, uses_stdin={}",
+        shell_with_fallback,
+        args,
+        uses_stdin
+    );
+
+    ShellInvocation {
+        shell: shell_with_fallback,
+        args,
+        uses_stdin,
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
     use crate::context::Shell;
     use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
+    use std::path::Path;
+    use std::sync::OnceLock;
 
     #[cfg(not(windows))]
-    const SHELL: &[&str] = &["/bin/sh"];
-    #[cfg(windows)]
-    const SHELL: &[&str] = &["cmd"];
-
-    #[cfg(not(windows))]
-    const FAILING_COMMAND: &str = "false";
-    #[cfg(windows)]
-    const FAILING_COMMAND: &str = "color 00";
-
-    const UNKNOWN_COMMAND: &str = "ydelsyiedsieudleylse dyesdesl";
-
-    fn render_cmd(cmd: &str) -> io::Result<Option<String>> {
-        let dir = tempfile::tempdir()?;
-        let cmd = cmd.to_owned();
-        let shell = SHELL
-            .iter()
-            .map(std::borrow::ToOwned::to_owned)
-            .collect::<Vec<_>>();
-        let out = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "$output"
-                command = cmd
-                shell = shell
-                when = true
-                ignore_timeout = true
-            })
-            .collect();
-        dir.close()?;
-        Ok(out)
+    mod shell {
+        pub const SHELL: &[&str] = &["/bin/sh"];
+        pub const FAILING_COMMAND: &str = "false";
+        pub const UNKNOWN_COMMAND: &str = "ydelsyiedsieudleylse dyesdesl";
     }
 
-    fn render_when(cmd: &str) -> io::Result<bool> {
-        let dir = tempfile::tempdir()?;
-        let cmd = cmd.to_owned();
-        let shell = SHELL
-            .iter()
-            .map(std::borrow::ToOwned::to_owned)
-            .collect::<Vec<_>>();
-        let out = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                when = cmd
-                shell = shell
-                ignore_timeout = true
+    #[cfg(windows)]
+    mod shell {
+        pub const SHELL: &[&str] = &["cmd"];
+        pub const FAILING_COMMAND: &str = "color 00";
+        pub const UNKNOWN_COMMAND: &str = "ydelsyiedsieudleylse dyesdesl";
+    }
+
+    use shell::*;
+
+    fn shell_value() -> ShellValue {
+        static DEFAULT_SHELL: OnceLock<ShellValue> = OnceLock::new();
+        DEFAULT_SHELL
+            .get_or_init(|| ShellValue::Array(SHELL.iter().map(|s| s.to_string()).collect()))
+            .clone()
+    }
+
+    #[derive(Clone)]
+    pub enum ShellValue {
+        String(String),
+        Array(Vec<String>),
+    }
+
+    pub struct CustomConfigBuilder {
+        command: Option<String>,
+        format: Option<String>,
+        when: Option<String>,
+        shell: Option<ShellValue>,
+        disabled: Option<bool>,
+        require_repo: Option<bool>,
+        use_stdin: Option<bool>,
+        ignore_timeout: Option<bool>,
+        unsafe_no_escape: Option<bool>,
+    }
+
+    pub trait IntoWhen {
+        fn into_when(self) -> String;
+    }
+
+    impl IntoWhen for bool {
+        fn into_when(self) -> String {
+            self.to_string()
+        }
+    }
+
+    impl IntoWhen for &str {
+        fn into_when(self) -> String {
+            self.to_string()
+        }
+    }
+
+    impl IntoWhen for String {
+        fn into_when(self) -> String {
+            self
+        }
+    }
+
+    pub trait IntoShell {
+        fn into_shell(self) -> ShellValue;
+    }
+
+    impl IntoShell for &str {
+        fn into_shell(self) -> ShellValue {
+            ShellValue::String(self.to_string())
+        }
+    }
+
+    impl IntoShell for String {
+        fn into_shell(self) -> ShellValue {
+            ShellValue::String(self)
+        }
+    }
+
+    impl IntoShell for Vec<String> {
+        fn into_shell(self) -> ShellValue {
+            ShellValue::Array(self)
+        }
+    }
+
+    impl IntoShell for &[&str] {
+        fn into_shell(self) -> ShellValue {
+            ShellValue::Array(self.iter().map(|s| s.to_string()).collect())
+        }
+    }
+
+    impl IntoShell for Vec<&str> {
+        fn into_shell(self) -> ShellValue {
+            ShellValue::Array(self.iter().map(|s| s.to_string()).collect())
+        }
+    }
+
+    impl CustomConfigBuilder {
+        pub fn new() -> Self {
+            Self {
+                command: None,
+                format: None,
+                when: None,
+                shell: None,
+                disabled: None,
+                require_repo: None,
+                use_stdin: None,
+                ignore_timeout: None,
+                unsafe_no_escape: None,
+            }
+        }
+
+        pub fn command(mut self, cmd: impl Into<String>) -> Self {
+            self.command = Some(cmd.into());
+            self
+        }
+
+        pub fn format(mut self, fmt: impl Into<String>) -> Self {
+            self.format = Some(fmt.into());
+            self
+        }
+
+        pub fn when(mut self, w: impl IntoWhen) -> Self {
+            self.when = Some(w.into_when());
+            self
+        }
+
+        pub fn shell(mut self, s: impl IntoShell) -> Self {
+            self.shell = Some(s.into_shell());
+            self
+        }
+
+        pub fn disabled(mut self, d: bool) -> Self {
+            self.disabled = Some(d);
+            self
+        }
+
+        pub fn require_repo(mut self, r: bool) -> Self {
+            self.require_repo = Some(r);
+            self
+        }
+
+        pub fn use_stdin(mut self, u: bool) -> Self {
+            self.use_stdin = Some(u);
+            self
+        }
+
+        pub fn ignore_timeout(mut self, i: bool) -> Self {
+            self.ignore_timeout = Some(i);
+            self
+        }
+
+        pub fn unsafe_no_escape(mut self, u: bool) -> Self {
+            self.unsafe_no_escape = Some(u);
+            self
+        }
+
+        fn build(self) -> toml::Table {
+            let mut test_table = toml::map::Map::new();
+
+            if let Some(cmd) = self.command {
+                test_table.insert("command".to_string(), toml::Value::String(cmd));
+            }
+            if let Some(fmt) = self.format {
+                test_table.insert("format".to_string(), toml::Value::String(fmt));
+            }
+            if let Some(w) = self.when {
+                test_table.insert("when".to_string(), toml::Value::String(w));
+            }
+            if let Some(d) = self.disabled {
+                test_table.insert("disabled".to_string(), toml::Value::Boolean(d));
+            }
+            if let Some(r) = self.require_repo {
+                test_table.insert("require_repo".to_string(), toml::Value::Boolean(r));
+            }
+
+            match self.shell {
+                Some(ShellValue::String(s)) => {
+                    test_table.insert("shell".to_string(), toml::Value::String(s));
+                }
+                Some(ShellValue::Array(arr)) => {
+                    test_table.insert(
+                        "shell".to_string(),
+                        toml::Value::Array(arr.into_iter().map(toml::Value::String).collect()),
+                    );
+                }
+                None => {
+                    let default = shell_value();
+                    match default {
+                        ShellValue::Array(arr) => {
+                            test_table.insert(
+                                "shell".to_string(),
+                                toml::Value::Array(
+                                    arr.into_iter().map(toml::Value::String).collect(),
+                                ),
+                            );
+                        }
+                        ShellValue::String(s) => {
+                            test_table.insert("shell".to_string(), toml::Value::String(s));
+                        }
+                    }
+                }
+            }
+
+            if let Some(val) = self.use_stdin {
+                test_table.insert("use_stdin".to_string(), toml::Value::Boolean(val));
+            }
+            if let Some(val) = self.ignore_timeout {
+                test_table.insert("ignore_timeout".to_string(), toml::Value::Boolean(val));
+            }
+            if let Some(val) = self.unsafe_no_escape {
+                test_table.insert("unsafe_no_escape".to_string(), toml::Value::Boolean(val));
+            }
+
+            let mut custom_table = toml::map::Map::new();
+            custom_table.insert("test".to_string(), toml::Value::Table(test_table));
+
+            let mut config = toml::map::Map::new();
+            config.insert("custom".to_string(), toml::Value::Table(custom_table));
+
+            config
+        }
+    }
+
+    struct TestFixture {
+        dir: tempfile::TempDir,
+    }
+
+    impl TestFixture {
+        fn new() -> io::Result<Self> {
+            Ok(Self {
+                dir: tempfile::tempdir()?,
             })
-            .collect()
-            .is_some();
-        dir.close()?;
-        Ok(out)
+        }
+
+        fn renderer(&self) -> ModuleRenderer<'_> {
+            ModuleRenderer::new("custom.test").path(self.dir.path())
+        }
+
+        fn path(&self) -> &Path {
+            self.dir.path()
+        }
+
+        fn close(self) -> io::Result<()> {
+            self.dir.close()
+        }
     }
 
     #[test]
     fn when_returns_right_value() -> io::Result<()> {
-        assert!(render_cmd("echo hello")?.is_some());
-        assert!(render_cmd(FAILING_COMMAND)?.is_none());
-        Ok(())
+        let fixture = TestFixture::new()?;
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command("echo hello")
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert!(fixture.renderer().config(config).collect().is_some());
+        fixture.close()
     }
 
     #[test]
     fn when_returns_false_if_invalid_command() -> io::Result<()> {
-        assert!(!render_when(UNKNOWN_COMMAND)?);
-        Ok(())
+        let fixture = TestFixture::new()?;
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when(UNKNOWN_COMMAND)
+            .ignore_timeout(true)
+            .build();
+        assert!(fixture.renderer().config(config).collect().is_none());
+        fixture.close()
     }
 
     #[test]
-    #[cfg(not(windows))]
     fn command_returns_right_string() -> io::Result<()> {
-        assert_eq!(render_cmd("echo hello")?, Some("hello".into()));
-        assert_eq!(render_cmd("echo 강남스타일")?, Some("강남스타일".into()));
-        Ok(())
+        let fixture = TestFixture::new()?;
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command("echo hello")
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("command_returns_right_string should not be None")
+                .as_str(),
+            "hello"
+        );
+
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command("echo 강남스타일")
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("command_returns_right_string should not be None")
+                .as_str(),
+            "강남스타일"
+        );
+        fixture.close()
     }
 
     #[test]
-    #[cfg(windows)]
-    fn command_returns_right_string() -> io::Result<()> {
-        assert_eq!(render_cmd("echo hello")?, Some("hello".into()));
-        assert_eq!(render_cmd("echo 강남스타일")?, Some("강남스타일".into()));
-        Ok(())
-    }
-
-    #[test]
-    #[cfg(not(windows))]
     fn command_ignores_stderr() -> io::Result<()> {
-        assert_eq!(render_cmd("echo foo 1>&2; echo bar")?, Some("bar".into()));
-        assert_eq!(render_cmd("echo foo; echo bar 1>&2")?, Some("foo".into()));
-        Ok(())
-    }
+        let fixture = TestFixture::new()?;
 
-    #[test]
-    #[cfg(windows)]
-    fn command_ignores_stderr() -> io::Result<()> {
-        assert_eq!(render_cmd("echo foo 1>&2 & echo bar")?, Some("bar".into()));
-        assert_eq!(render_cmd("echo foo& echo bar 1>&2")?, Some("foo".into()));
-        Ok(())
+        let sep = if cfg!(windows) { "&" } else { ";" };
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command(format!("echo foo 1>&2 {} echo bar", sep))
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("command_ignores_stderr should not be None")
+                .as_str(),
+            "bar"
+        );
+
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command(format!("echo foo {} echo bar 1>&2", sep))
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("command_ignores_stderr should not be None")
+                .as_str(),
+            "foo"
+        );
+        fixture.close()
     }
 
     #[test]
     fn command_can_fail() -> io::Result<()> {
-        assert_eq!(render_cmd(FAILING_COMMAND)?, None);
-        assert_eq!(render_cmd(UNKNOWN_COMMAND)?, None);
-        Ok(())
+        let fixture = TestFixture::new()?;
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command(FAILING_COMMAND)
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert!(fixture.renderer().config(config).collect().is_none());
+
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command(UNKNOWN_COMMAND)
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+        assert!(fixture.renderer().config(config).collect().is_none());
+        fixture.close()
     }
 
     #[test]
     fn cwd_command() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
 
-        let mut f = File::create(dir.path().join("a.txt"))?;
+        let mut f = File::create(fixture.path().join("a.txt"))?;
         write!(f, "hello")?;
         f.sync_all()?;
 
         let cat = if cfg!(windows) { "type" } else { "cat" };
         let cmd = format!("{cat} a.txt");
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                command = cmd
-                when = true
-                ignore_timeout = true
-            })
-            .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("hello ")));
+        let config = CustomConfigBuilder::new()
+            .command(cmd)
+            .when("true")
+            .ignore_timeout(true)
+            .build();
 
-        assert_eq!(expected, actual);
-
-        dir.close()
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("cwd_command should not be None"),
+            format!("{}", Color::Green.bold().paint("hello "))
+        );
+        fixture.close()
     }
 
     #[test]
     fn cwd_when() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
 
-        File::create(dir.path().join("a.txt"))?.sync_all()?;
+        File::create(fixture.path().join("a.txt"))?.sync_all()?;
 
         let cat = if cfg!(windows) { "type" } else { "cat" };
         let cmd = format!("{cat} a.txt");
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                when = cmd
-                ignore_timeout = true
-            })
-            .collect();
-        let expected = Some("test".to_owned());
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when(cmd)
+            .ignore_timeout(true)
+            .build();
 
-        assert_eq!(expected, actual);
-
-        dir.close()
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("cwd_when should not be None")
+                .as_str(),
+            "test"
+        );
+        fixture.close()
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn use_stdin_false() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        // TODO: PowerShell on Windows mangles non-ASCII characters when
+        //     commands are passed as arguments (e.g., Korean text fails to
+        //     escape properly). Stdin mode works around this.
+        //   A proper fix would use `-EncodedCommand` with UTF-16LE base64
+        //     encoding when arg-mode is requested on Windows.
+        //   Until then, we'll just skip this test case on Windows.
+
+        let fixture = TestFixture::new()?;
 
         let shell = if cfg!(windows) {
             vec![
@@ -492,28 +787,30 @@ mod tests {
             vec!["sh".to_owned(), "-c".to_owned()]
         };
 
-        // `use_stdin = false` doesn't like Korean on Windows
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                command = "echo test"
-                when = true
-                use_stdin = false
-                shell = shell
-                ignore_timeout = true
-            })
-            .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("test ")));
+        let shell_refs: Vec<&str> = shell.iter().map(|s| s.as_str()).collect();
 
-        assert_eq!(expected, actual);
+        let config = CustomConfigBuilder::new()
+            .command("echo test")
+            .when("true")
+            .use_stdin(false)
+            .ignore_timeout(true)
+            .shell(shell_refs)
+            .build();
 
-        dir.close()
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("use_stdin_false should not be None"),
+            format!("{}", Color::Green.bold().paint("test "))
+        );
+        fixture.close()
     }
 
     #[test]
     fn use_stdin_true() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
 
         let shell = if cfg!(windows) {
             vec![
@@ -523,115 +820,113 @@ mod tests {
                 "-".to_owned(),
             ]
         } else {
-            vec!["sh".to_owned()]
+            vec!["sh".to_owned(), "-".to_owned()]
         };
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                command = "echo 강남스타일"
-                when = true
-                use_stdin = true
-                ignore_timeout = true
-                shell = shell
-            })
-            .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("강남스타일 ")));
+        let shell_refs: Vec<&str> = shell.iter().map(|s| s.as_str()).collect();
 
-        assert_eq!(expected, actual);
+        let config = CustomConfigBuilder::new()
+            .command("echo 강남스타일")
+            .when("true")
+            .use_stdin(true)
+            .ignore_timeout(true)
+            .shell(shell_refs)
+            .build();
 
-        dir.close()
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("use_stdin_true should not be None"),
+            format!("{}", Color::Green.bold().paint("강남스타일 "))
+        );
+        fixture.close()
+    }
+
+    #[test]
+    fn when_true_with_string() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
+
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("when_true_with_string should not be None")
+                .as_str(),
+            "test"
+        );
+
+        fixture.close()
+    }
+
+    #[test]
+    fn when_false_with_string() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
+
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when("false")
+            .ignore_timeout(true)
+            .build();
+
+        assert!(fixture.renderer().config(config).collect().is_none());
+
+        fixture.close()
+    }
+
+    #[test]
+    fn when_true_with_bool() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
+
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(toml::toml! {
+                    [custom.test]
+                    format = "test"
+                    when = true
+                })
+                .collect()
+                .expect("when_true_with_bool should not be None")
+                .as_str(),
+            "test"
+        );
+
+        fixture.close()
     }
 
     #[test]
     #[cfg(not(windows))]
-    fn when_true_with_string() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
+    fn when_false_with_bool() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                shell = ["sh"]
-                when = "true"
-                ignore_timeout = true
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
+        assert!(
+            fixture
+                .renderer()
+                .config(toml::toml! {
+                    [custom.test]
+                    format = "test"
+                    when = false
+                })
+                .collect()
+                .is_none()
+        );
 
-        dir.close()
+        fixture.close()
     }
 
     #[test]
     #[cfg(not(windows))]
-    fn when_false_with_string() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                shell = ["sh"]
-                when = "false"
-                ignore_timeout = true
-            })
-            .collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-
-        dir.close()
-    }
-
-    #[test]
-    fn when_true_with_bool() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                when = true
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
-
-        dir.close()
-    }
-
-    #[test]
-    #[cfg(not(windows))]
-    fn when_false_with_bool() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                when = false
-            })
-            .collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-
-        dir.close()
-    }
-
-    #[test]
-    fn timeout_short_cmd() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let shell = if cfg!(windows) {
-            "powershell".to_owned()
-        } else {
-            "sh".to_owned()
-        };
+    fn timeout_short_cmd() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
 
         let when = if cfg!(windows) {
             "$true".to_owned()
@@ -639,27 +934,35 @@ mod tests {
             "true".to_owned()
         };
 
-        // Use a long timeout to ensure that the test doesn't fail
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                command_timeout = 100_000
-                [custom.test]
-                format = "test"
-                when = when
-                shell = shell
-                ignore_timeout = false
-            })
-            .collect();
-        let expected = Some("test".to_owned());
-        assert_eq!(expected, actual);
+        let shell = if cfg!(windows) {
+            "powershell".to_owned()
+        } else {
+            "sh".to_owned()
+        };
 
-        dir.close()
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when(when)
+            .ignore_timeout(false)
+            .shell(shell)
+            .build();
+
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(config)
+                .collect()
+                .expect("timeout_short_cmd should not be None")
+                .as_str(),
+            "test"
+        );
+
+        fixture.close()
     }
 
     #[test]
-    fn timeout_cmd() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
+    fn timeout_cmd() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
 
         let shell = if cfg!(windows) {
             "powershell".to_owned()
@@ -668,155 +971,210 @@ mod tests {
         };
 
         // Use a long timeout to ensure that the test doesn't fail
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                when = "sleep 3"
-                shell = shell
-                ignore_timeout = false
-            })
-            .collect();
-        let expected = None;
-        assert_eq!(expected, actual);
+        let config = CustomConfigBuilder::new()
+            .format("test")
+            .when("sleep 3")
+            .ignore_timeout(false)
+            .shell(shell)
+            .build();
 
-        dir.close()
+        assert!(fixture.renderer().config(config).collect().is_none());
+
+        fixture.close()
     }
 
     #[test]
-    fn config_aliases_work() -> std::io::Result<()> {
-        let dir = tempfile::tempdir()?;
+    fn config_aliases_work() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
 
-        File::create(dir.path().join("a.txt"))?;
-        std::fs::create_dir(dir.path().join("dir"))?;
+        File::create(fixture.path().join("a.txt"))?;
+        std::fs::create_dir(fixture.path().join("dir"))?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                files = ["a.txt"]
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(toml::toml! {
+                    [custom.test]
+                    format = "test"
+                    files = ["a.txt"]
+                })
+                .collect()
+                .expect("config_aliases_work: files a.txt should not return None")
+                .as_str(),
+            "test"
+        );
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                extensions = ["txt"]
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(toml::toml! {
+                    [custom.test]
+                    format = "test"
+                    extensions = ["txt"]
+                })
+                .collect()
+                .expect("config_aliases_work: extensions txt should not return None")
+                .as_str(),
+            "test"
+        );
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "test"
-                directories = ["dir"]
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(toml::toml! {
+                    [custom.test]
+                    format = "test"
+                    directories = ["dir"]
+                })
+                .collect()
+                .expect("config_aliases_work: directories dir should not return None")
+                .as_str(),
+            "test"
+        );
 
-        dir.close()
+        fixture.close()
     }
 
     #[test]
     fn disabled() {
-        let actual = ModuleRenderer::new("custom.test")
-            .config(toml::toml! {
-                [custom.test]
-                disabled = true
-                when = true
-                format = "test"
-            })
-            .collect();
-        let expected = None;
-        assert_eq!(expected, actual);
+        assert!(
+            ModuleRenderer::new("custom.test")
+                .config(
+                    CustomConfigBuilder::new()
+                        .disabled(true)
+                        .when(true)
+                        .format("test")
+                        .build()
+                )
+                .collect()
+                .is_none()
+        );
     }
 
     #[test]
     fn test_render_require_repo_not_in() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                when = true
-                require_repo = true
-                format = "test"
-            })
-            .collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-        repo_dir.close()
+        assert!(
+            fixture
+                .renderer()
+                .config(
+                    CustomConfigBuilder::new()
+                        .when(true)
+                        .require_repo(true)
+                        .format("test")
+                        .build()
+                )
+                .collect()
+                .is_none()
+        );
+
+        fixture.close()
     }
 
     #[test]
     fn test_render_require_repo_in() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                when = true
-                require_repo = true
-                format = "test"
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
+        assert_eq!(
+            ModuleRenderer::new("custom.test")
+                .path(repo_dir.path())
+                .config(
+                    CustomConfigBuilder::new()
+                        .when(true)
+                        .require_repo(true)
+                        .format("test")
+                        .build()
+                )
+                .collect()
+                .expect("test_render_require_repo_in should not be None")
+                .as_str(),
+            "test"
+        );
+
         repo_dir.close()
     }
 
     #[test]
     fn output_is_escaped() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(
+                    CustomConfigBuilder::new()
+                        .format("$output")
+                        .command("__starship_to_be_escaped")
+                        .when(true)
+                        .ignore_timeout(true)
+                        .build()
+                )
+                .shell(Shell::Bash)
+                .collect()
+                .expect("output_is_escaped should not be None")
+                .as_str(),
+            "\\`to_be_escaped\\`"
+        );
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "$output"
-                command = "__starship_to_be_escaped"
-                when = true
-                ignore_timeout = true
-            })
-            .shell(Shell::Bash)
-            .collect();
-        let expected = Some("\\`to_be_escaped\\`".to_string());
-        assert_eq!(expected, actual);
-
-        dir.close()
+        fixture.close()
     }
 
     #[test]
     fn unsafe_no_escape() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
+        let fixture = TestFixture::new()?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                format = "$output"
-                command = "__starship_to_be_escaped"
-                when = true
-                ignore_timeout = true
-                unsafe_no_escape = true
-            })
-            .shell(Shell::Bash)
-            .collect();
-        let expected = Some("`to_be_escaped`".to_string());
-        assert_eq!(expected, actual);
+        assert_eq!(
+            fixture
+                .renderer()
+                .config(
+                    CustomConfigBuilder::new()
+                        .format("$output")
+                        .command("__starship_to_be_escaped")
+                        .when(true)
+                        .ignore_timeout(true)
+                        .unsafe_no_escape(true)
+                        .build()
+                )
+                .shell(Shell::Bash)
+                .collect()
+                .expect("unsafe_no_escape should not be None")
+                .as_str(),
+            "`to_be_escaped`"
+        );
 
-        dir.close()
+        fixture.close()
+    }
+
+    #[test]
+    fn command_can_check_exit_status() -> io::Result<()> {
+        let fixture = TestFixture::new()?;
+
+        let (echo_cmd, shell_str, shell_shell) = if cfg!(windows) {
+            ("$Env:", "pwsh", Shell::PowerShell)
+        } else {
+            ("echo $", "bash", Shell::Bash)
+        };
+
+        let config = CustomConfigBuilder::new()
+            .format("$output")
+            .command(format!("{}STARSHIP_PREV_STATUS_CODE", echo_cmd))
+            .shell(shell_str)
+            .when("true")
+            .ignore_timeout(true)
+            .build();
+
+        assert_eq!(
+            fixture
+                .renderer()
+                .status(42)
+                .config(config)
+                .shell(shell_shell)
+                .collect()
+                .expect("command_can_check_exit_status should not be None")
+                .as_str(),
+            "42"
+        );
+
+        fixture.close()
     }
 }
