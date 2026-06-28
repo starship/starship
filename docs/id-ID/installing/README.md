@@ -3,11 +3,14 @@
 Untuk memasang starship, ada dua hal yang perlu anda lakukan:
 
 1. Dapatkan binary **starship** di komputer anda
-1. Atur shell anda untuk menggunakan binary tersebut sebagai prompt dengan mengedit init scripts nya
+2. Atur shell anda untuk menggunakan binary tersebut sebagai prompt dengan mengedit init scripts nya
 
-Untuk kebayakan pengguna, instruksi pada [halaman utama](../guide/#🚀-installation) akan berjalan lancar. Namun, untuk sebagian platfrom khusus, instruksi khusus diperlukan.
+For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. Namun, untuk sebagian platfrom khusus, instruksi khusus diperlukan.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+There are so many platforms out there that they didn't fit into the main
+README.md file, so here are some installation instructions for other platforms
+from the community. Is yours not here? Please do add it here if you figure it
+out!
 
 ## [Chocolatey](https://chocolatey.org)
 

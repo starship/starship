@@ -11,7 +11,7 @@
 ### 先决条件
 
 - 需要一个 支持[`右提示词`](https://starship.rs/advanced-config/#enable-right-prompt)的shell。
-- 推荐[Jetbrains Mono](https://www.jetbrains.com/lp/mono/)字体。
+- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
 
 ### 配置
 

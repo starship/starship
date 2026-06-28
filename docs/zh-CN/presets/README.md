@@ -1,6 +1,7 @@
 # 预设
 
-这里有一系列社区提供的 Starship 预设。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊
+这里有一系列社区提供的 Starship 预设。
+这里有一系列社区提供的 Starship 预设。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊 😊
 
 单击图像以获取使用预设的详细方法。
 
@@ -32,7 +33,7 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-此预设隐藏语言运行时版本。 如果你在容器或虚拟环境中使用，这个适合你！
+此预设隐藏语言运行时版本。 如果你在容器或虚拟环境中使用，这个适合你！ 如果你在容器或虚拟环境中使用，这个适合你！
 
 [![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
@@ -51,6 +52,7 @@ This preset does not show icons if the toolset is not found.
 ## [Pastel Powerline](./pastel-powerline.md)
 
 此预设的灵感来自于 [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)。 它同时也演示了 Starship 的路径替换功能。
+它同时也演示了 Starship 的路径替换功能。
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
@@ -74,6 +76,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
-This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+该预设是在 [Gruvbox Rainbow](./gruvbox-rainbow.md) 的基础上进行最小修改，并使用了 [Catppuccin](https://github.com/catppuccin/catppuccin) 主题配色方案。
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
