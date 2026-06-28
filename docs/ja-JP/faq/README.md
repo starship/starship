@@ -12,18 +12,18 @@
 
 ## デモのGIFのようにコマンド補完はどうしたら使用できますか？
 
-補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を参照してください。
+補完サポート、または自動補完は選択したシェルによって提供されます。 In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. 補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を参照してください。
 
 ## トップレベルの`format`と`<module>.disabled`は同じように動作しますか？
 
-はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
+はい、両方ともプロンプトでモジュールを無効にするために使用できます。 If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
 - モジュールを無効化することは、トップレベルの`format`を削除するよりも明示的です。
 - Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
-## Starshipはcross-shellとのことです。 私の好みのshellはサポートしていないようですが。
+## Starshipはcross-shellとのことです。 私の好みのshellはサポートしていないようですが。 私の好みのshellはサポートしていないようですが。
 
-Starshipの構築方法は、事実上すべてのシェルのサポートを追加できるはずです。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。
+Starshipの構築方法は、事実上すべてのシェルのサポートを追加できるはずです。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。
 
 Starshipをbashで動作させる例を次に示します。
 
@@ -58,7 +58,8 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## どうして`Executing command "..." timed out.`という警告が出てくるのでしょうか?
 
-Starship は、プロンプトに表示する情報 (例えば、プログラムのバージョンや現在の git ステータス) を取得するために、異なるコマンドを実行します。 これらのコマンドの実行中に Starship の応答がなくなるのを防ぐためにタイムリミットが設定されています。コマンド実行にタイムリミットよりも長い時間がかかった時、コマンド実行がキャンセルされ上記の警告が表示されます。これは意図的な動作です。 タイムリミットは [`command_timeout`key](../config/#prompt) を用いて変更可能ですので、お望みであればタイムリミットを長くできます。 更に以下のデバッグ手順によって、どのコマンドの実行に時間がかかっているかや、それを高速化できるかについて確認できます。 最終手段として、環境変数 `STARSHIP_LOG` に `error` を設定することでこれらの警告を非表示にできます。
+Starship は、プロンプトに表示する情報 (例えば、プログラムのバージョンや現在の git ステータス) を取得するために、異なるコマンドを実行します。 これらのコマンドの実行中に Starship の応答がなくなるのを防ぐためにタイムリミットが設定されています。コマンド実行にタイムリミットよりも長い時間がかかった時、コマンド実行がキャンセルされ上記の警告が表示されます。これは意図的な動作です。 This time limit is configurable using the [`command_timeout`key](../config/#prompt) so if you want you can increase the time limit. 更に以下のデバッグ手順によって、どのコマンドの実行に時間がかかっているかや、それを高速化できるかについて確認できます。 Finally you can set the `STARSHIP_LOG` env var to
+`error` to hide these warnings.
 
 ## よくわからない記号を見つけました。これはどういった意味ですか？
 
@@ -66,7 +67,11 @@ Starship は、プロンプトに表示する情報 (例えば、プログラム
 
 ## Starshipがなにか想定外の挙動をしているとき、どのようにデバッグすればよいですか？
 
-環境変数 `STARSHIP_LOG` を使用してデバッグログを有効にできます。 特定のモジュールをデバグしようとしているとき、デバッグログが過度に冗長になることがありますが、その場合は `module` コマンドが役立ちます。例えば、`rust` モジュールをデバグしようとしているとき、以下のコマンドを用いてこのモジュールからのログと出力を取得できます。
+環境変数 `STARSHIP_LOG` を使用してデバッグログを有効にできます。 特定のモジュールをデバグしようとしているとき、デバッグログが過度に冗長になることがありますが、その場合は `module` コマンドが役立ちます。例えば、`rust` モジュールをデバグしようとしているとき、以下のコマンドを用いてこのモジュールからのログと出力を取得できます。 These logs
+can be very verbose so it is often useful to use the `module` command if you are
+trying to debug a particular module, for example, if you are trying to debug
+the `rust` module you could run the following command to get the trace
+logs and output from the module.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
@@ -88,10 +93,11 @@ starship bug-report
 
 ## 私のプロンプトで記号のグリフがないのはなぜですか？
 
-よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。
+よくある原因はシステム上での設定ミスです。 よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。 次のことを確認してください。
 
-- ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
-- 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
+- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 絵文字フォントがインストールされている。 Most systems come with an emoji font by default, but
+  some (notably Arch Linux) do not. 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
 - [Nerd Font](https://www.nerdfonts.com/)を使用している。
 
 ターミナルで以下のコマンドを実行することでテストできます。
@@ -103,14 +109,15 @@ echo -e "\xee\x82\xa0"
 
 一行目は[蛇の絵文字](https://emojipedia.org/snake/)、二行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)が表示されるはずです。
 
-もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
+もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。
+不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
 
 ## Starshipをアンインストールしたい
 
 Starshipのアンインストールはインストールと同じぐらい簡単です。
 
 1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
-1. Starshipのバイナリを削除します。
+2. Starshipのバイナリを削除します。
 
 パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
@@ -123,8 +130,8 @@ sh -c 'rm "$(command -v 'starship')"'
 
 ## `sudo` を使わずに Starship をインストールするにはどうすればいいですか?
 
-インストールシェルスクリプト (`https://starship.rs/install.sh`) はインストール先のディレクトリが現在のユーザによって書き込みできない時に限り `sudo` の使用を試みます。 既定のインストールディレクトリは、 `$BIN_DIR` 環境変数の値、または`$BIN_DIR` が設定されていない場合は `/usr/local/bin` です。 インストールディレクトリを現在のユーザが書き込みできるディレクトリに設定すれば、 `sudo` なしで Starship をインストールできます。 例えば `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` は、インストールスクリプトにコマンドラインオプション `-b` を指定してインストールディレクトリを `~/.local/bin` に設定します。
+The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation directory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. インストールシェルスクリプト (`https://starship.rs/install.sh`) はインストール先のディレクトリが現在のユーザによって書き込みできない時に限り `sudo` の使用を試みます。 既定のインストールディレクトリは、 `$BIN_DIR` 環境変数の値、または`$BIN_DIR` が設定されていない場合は `/usr/local/bin` です。 インストールディレクトリを現在のユーザが書き込みできるディレクトリに設定すれば、 `sudo` なしで Starship をインストールできます。 例えば `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` は、インストールスクリプトにコマンドラインオプション `-b` を指定してインストールディレクトリを `~/.local/bin` に設定します。 For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
 
-Starship の非対話形式でのインストールでは、確認をスキップするために `-y` オプションを追加することを忘れないでください。 対応しているオプションの一覧についてはインストールスクリプトのソースをご確認ください。
+Starship の非対話形式でのインストールでは、確認をスキップするために `-y` オプションを追加することを忘れないでください。 対応しているオプションの一覧についてはインストールスクリプトのソースをご確認ください。 対応しているオプションの一覧についてはインストールスクリプトのソースをご確認ください。
 
 パッケージマネージャーを使う時は、 `sudo` を使ったまたは使わないインストールに関して、パッケージマネージャーのドキュメントを参照してください。

@@ -103,14 +103,15 @@ echo -e "\xee\x82\xa0"
 
 La primera línea debe producir un [emoji snake](https://emojipedia.org/snake/), mientras que la segunda debe producir un [símbolo de rama de Powerline(e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-Si cualquiera de los dos símbolos no se puede mostrar correctamente, su sistema todavía está mal configurado. Desafortunadamente, obtener la configuración correcta de las fuentes es a veces difícil. Los usuarios en el Discord pueden ayudar. Si ambos símbolos se muestran correctamente, pero todavía no los ves en Starship, [¡envía un informe de error!](https://github.com/starship/starship/issues/new/choose)
+Si cualquiera de los dos símbolos no se puede mostrar correctamente, su sistema todavía está mal configurado.
+Desafortunadamente, obtener la configuración correcta de las fuentes es a veces difícil. Los usuarios en el Discord pueden ayudar. Si ambos símbolos se muestran correctamente, pero todavía no los ves en Starship, [¡envía un informe de error!](https://github.com/starship/starship/issues/new/choose)
 
 ## ¿Cómo puedo desinstalar Starship?
 
 Starship es tan fácil de desinstalar como de instalar en primer lugar.
 
 1. Elimina cualquier línea de tu configuración de intérprete de comandos (por ejemplo, `~/.bashrc`) usada para inicializar Starship.
-1. Elimina el binario de Starship.
+2. Elimina el binario de Starship.
 
 Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a sus documentos para instrucciones de desinstalación.
 

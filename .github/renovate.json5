@@ -135,5 +135,16 @@
             ],
             datasourceTemplate: 'crate',
         },
+        {
+            customType: 'regex',
+            managerFilePatterns: [
+                '/^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$/',
+            ],
+            matchStrings: [
+                'ziglang==(?<currentValue>\\S+)',
+            ],
+            datasourceTemplate: 'pypi',
+            depNameTemplate: 'ziglang',
+        },
     ],
 }

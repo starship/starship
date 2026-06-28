@@ -1076,9 +1076,7 @@
         "detect_files": [
           "pom.xml"
         ],
-        "detect_folders": [
-          ".mvn"
-        ]
+        "detect_folders": []
       }
     },
     "memory_usage": {
@@ -1211,7 +1209,10 @@
           ".nvmrc",
           "!bunfig.toml",
           "!bun.lock",
-          "!bun.lockb"
+          "!bun.lockb",
+          "!deno.json",
+          "!deno.jsonc",
+          "!deno.lock"
         ],
         "detect_folders": [
           "node_modules"
@@ -4846,9 +4847,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            ".mvn"
-          ]
+          "default": []
         }
       },
       "additionalProperties": false
@@ -5203,7 +5202,10 @@
             ".nvmrc",
             "!bunfig.toml",
             "!bun.lock",
-            "!bun.lockb"
+            "!bun.lockb",
+            "!deno.json",
+            "!deno.jsonc",
+            "!deno.lock"
           ]
         },
         "detect_folders": {

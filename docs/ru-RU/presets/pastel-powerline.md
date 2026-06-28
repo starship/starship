@@ -2,7 +2,8 @@
 
 # Пресет Pastel Powerline
 
-Этот пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). В нем также показано, как работает замена пути в starship.
+Этот пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+В нем также показано, как работает замена пути в starship.
 
 ![Скриншот пресета Pastel Powerline](/presets/img/pastel-powerline.png)
 
