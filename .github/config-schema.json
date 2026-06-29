@@ -4146,7 +4146,30 @@
             "cabal.project"
           ]
         },
-        "detect_folders": {
+        "cabal_folders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "stack_extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "stack_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "stack.yaml"
+          ]
+        },
+        "stack_folders": {
           "type": "array",
           "items": {
             "type": "string"
