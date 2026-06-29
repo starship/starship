@@ -420,8 +420,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
             stderr: String::default(),
         }),
-        "lean --version" => Some(CommandOutput { 
-            stdout: String::from("Lean (version 4.29.1, x86_64-unknown-linux-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)"),
+        "lean --version" => Some(CommandOutput {
+            stdout: String::from(
+                "Lean (version 4.29.1, x86_64-unknown-linux-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)",
+            ),
             stderr: String::default(),
         }),
         "lua -v" => Some(CommandOutput {

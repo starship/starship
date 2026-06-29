@@ -59,11 +59,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_lean_version(version: &str) -> Option<String> {
     // Index of first literal "version " + jump to after space
-    let idx_start_version = version.find("version ")? + 8; 
-    let idx_after_version = idx_start_version + version[idx_start_version..]
-                                    .find(|c : char| !(c.is_numeric() || c == '.'))?;
+    let idx_start_version = version.find("version ")? + 8;
+    let idx_after_version = idx_start_version
+        + version[idx_start_version..].find(|c: char| !(c.is_numeric() || c == '.'))?;
 
-    
     let test = &version[idx_start_version..idx_after_version];
     Some(String::from(test))
 }
@@ -97,7 +96,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(53, 145, 253).bold().paint("∀ 4.29.1 ")
+            Color::Rgb(53, 145, 253).bold().paint("∀ v4.29.1 ")
         ));
 
         assert_eq!(actual, expected);
@@ -113,12 +112,29 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(53, 145, 253).bold().paint("∀ 4.29.1 ")
+            Color::Rgb(53, 145, 253).bold().paint("∀ v4.29.1 ")
         ));
 
         assert_eq!(actual, expected);
         dir.close()
     }
+
+    #[test]
+    fn test_folder_with_lean_toolchain() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("lean-toolchain"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("lean").path(dir.path()).collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Rgb(53, 145, 253).bold().paint("∀ v4.29.1 ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
 
     #[test]
     fn test_parse_lean_version() {
