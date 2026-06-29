@@ -317,7 +317,7 @@ pub fn description(module: &str) -> &'static str {
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
-        "lean" => "The currently used version of Lean",
+        "lean" => "The currently installed version of Lean",
         "line_break" => "Separates the prompt into two lines",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
