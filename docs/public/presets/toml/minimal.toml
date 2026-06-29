@@ -1,0 +1,34 @@
+format = """
+$username$directory$git_branch$python$conda$character
+"""
+
+[username]
+style_user = "bold green"
+format = '[$user@](bold green)'
+show_always = true
+
+[directory]
+style = "bold blue"
+format = '[$path](bold blue) '
+
+[python]
+symbol = ""
+style = "dimmed yellow"
+format = '[$symbol $virtualenv ]($style)'
+
+[conda]
+symbol = "󱔎"
+style = "dimmed yellow"
+format = '[($environment) ]($style)'
+
+[git_branch]
+symbol = ""
+style = "bold purple"
+format = '[ $symbol $branch ]($style) '
+
+[character]
+success_symbol = "❯"
+error_symbol = "❯"
+format = "$symbol "
+
+
