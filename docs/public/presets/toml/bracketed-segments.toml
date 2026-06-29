@@ -138,6 +138,9 @@ format = '\[[$symbol($version)]($style)\]'
 [kubernetes]
 format = '\[[$symbol$context( \($namespace\))]($style)\]'
 
+[lean]
+format = '\[[$symbol($version)]($style)\]'
+
 [localip]
 format = '\[[$localipv4]($style)\]'
 

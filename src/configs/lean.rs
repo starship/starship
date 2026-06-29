@@ -22,7 +22,7 @@ impl Default for LeanConfig<'_> {
     fn default() -> Self {
         Self {
             format: "via [$symbol($version )]($style)",
-            version_format: "${raw}",
+            version_format: "v${raw}",
             symbol: "∀ ",
             style: "bold #3591fd",
             disabled: false,

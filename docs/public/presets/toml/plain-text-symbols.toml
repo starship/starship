@@ -148,6 +148,9 @@ symbol = "kt "
 [kubernetes]
 symbol = "kubernetes "
 
+[lean]
+symbol = "lean "
+
 [lua]
 symbol = "lua "
 
