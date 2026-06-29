@@ -135,7 +135,6 @@ mod tests {
         dir.close()
     }
 
-
     #[test]
     fn test_parse_lean_version() {
         let version = "Lean (version 4.29.1, x86_64-unknown-linux-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)";
