@@ -60,8 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn parse_lean_version(version: &str) -> Option<String> {
     // Index of first literal "version " + jump to after space
     let idx_start_version = version.find("version ")? + 8;
-    let idx_after_version = idx_start_version
-        + version[idx_start_version..].find(|c: char| !(c.is_numeric() || c == '.'))?;
+    let idx_after_version = idx_start_version + version[idx_start_version..].find(",")?;
 
     let test = &version[idx_start_version..idx_after_version];
     Some(String::from(test))
@@ -139,5 +138,20 @@ mod tests {
     fn test_parse_lean_version() {
         let version = "Lean (version 4.29.1, x86_64-unknown-linux-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)";
         assert_eq!(parse_lean_version(version), Some("4.29.1".to_string()));
+    }
+
+    #[test]
+    fn test_parse_lean_rc_version() {
+        let version = "Lean (version 4.32.0-rc1, x86_64-unknown-linux-gnu, commit b4812ae53eea93439ad5dce5a5c26591c31cb697, Release)";
+        assert_eq!(parse_lean_version(version), Some("4.32.0-rc1".to_string()));
+    }
+
+    #[test]
+    fn test_parse_lean_nightly_version() {
+        let version = "Lean (version 4.33.0-nightly-2026-06-29, x86_64-unknown-linux-gnu, commit bf755648d817af332909637a9ab0573dadef542f, Release)";
+        assert_eq!(
+            parse_lean_version(version),
+            Some("4.33.0-nightly-2026-06-29".to_string())
+        );
     }
 }
