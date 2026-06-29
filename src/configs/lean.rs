@@ -22,9 +22,9 @@ impl Default for LeanConfig<'_> {
     fn default() -> Self {
         Self {
             format: "via [$symbol($version )]($style)",
-            version_format: "v${raw}",
+            version_format: "${raw}",
             symbol: "∀ ",
-            style: "bold #3591fdff",
+            style: "bold #3591fd",
             disabled: false,
             detect_extensions: vec!["lean"],
             detect_files: vec!["lakefile.toml", "lakefile.lean", "lean-toolchain"],

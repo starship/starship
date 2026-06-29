@@ -58,8 +58,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_lean_version(version: &str) -> Option<String> {
-    let version = version.split_whitespace().last()?;
-    Some(version.to_string())
+    // Index of first literal "version " + jump to after space
+    let idx_start_version = version.find("version ")? + 8; 
+    let idx_after_version = idx_start_version + version[idx_start_version..]
+                                    .find(|c : char| !(c.is_numeric() || c == '.'))?;
+
+    
+    let test = &version[idx_start_version..idx_after_version];
+    Some(String::from(test))
 }
 
 #[cfg(test)]
@@ -91,7 +97,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(53, 145, 253).bold().paint("∀ v1.0.0 ")
+            Color::Rgb(53, 145, 253).bold().paint("∀ 4.29.1 ")
         ));
 
         assert_eq!(actual, expected);
@@ -107,7 +113,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(53, 145, 253).bold().paint("∀ v1.0.0 ")
+            Color::Rgb(53, 145, 253).bold().paint("∀ 4.29.1 ")
         ));
 
         assert_eq!(actual, expected);
@@ -116,7 +122,7 @@ mod tests {
 
     #[test]
     fn test_parse_lean_version() {
-        let version = "lean 1.0.0";
-        assert_eq!(parse_lean_version(version), Some("1.0.0".to_string()));
+        let version = "Lean (version 4.29.1, x86_64-unknown-linux-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)";
+        assert_eq!(parse_lean_version(version), Some("4.29.1".to_string()));
     }
 }
