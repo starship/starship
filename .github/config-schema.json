@@ -177,6 +177,7 @@
         "format": "$symbol ",
         "success_symbol": "[❯](bold green)",
         "error_symbol": "[❯](bold red)",
+        "success_exit_codes": [],
         "vimcmd_symbol": "[❮](bold green)",
         "vimcmd_visual_symbol": "[❮](bold yellow)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
@@ -2281,6 +2282,14 @@
         "error_symbol": {
           "type": "string",
           "default": "[❯](bold red)"
+        },
+        "success_exit_codes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "default": []
         },
         "vimcmd_symbol": {
           "type": "string",
