@@ -30,7 +30,8 @@ fi
 # Runs before each new command line.
 prompt_starship_precmd() {
     # Save the status, because subsequent commands in this function will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
+    STARSHIP_CMD_STATUS=$?
+    STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
     # Calculate duration if a command was executed
     if (( ${+STARSHIP_START_TIME} )); then
