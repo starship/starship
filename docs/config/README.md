@@ -2860,23 +2860,23 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`. |
-| `symbol`            | `'∀ '`                              | A format string of the `forall` symbol (U+2200), often used to represent Lean. |
-| `detect_extensions` | `['lean']`                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `['lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.                |
-| `style`             | `'bold #3591fd'`                     | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `lean` module.                                              |
+| Option              | Default                                                | Description                                                                    |
+| ------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                   | The format for the module.                                                     |
+| `version_format`    | `'v${raw}'`                                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.     |
+| `symbol`            | `'∀ '`                                                 | A format string of the `forall` symbol (U+2200), often used to represent Lean. |
+| `detect_extensions` | `['lean']`                                             | Which extensions should trigger this module.                                   |
+| `detect_files`      | `['lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.                                    |
+| `style`             | `'bold #3591fd'`                                     | The style for the module.                                                      |
+| `disabled`          | `false`                                                | Disables the `lean` module.                                                    |
 
 ### Variables
 
-| Variable | Example  | Description                          |
-| -------- | -------- | ------------------------------------ |
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
 | version  | `v4.31.0` | The version of `lean`                |
-| symbol   |          | Mirrors the value of option `symbol` |
-| style\*  |          | Mirrors the value of option `style`  |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
