@@ -1824,6 +1824,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+The `CLOUDSDK_CORE_PROJECT` and `CLOUDSDK_COMPUTE_REGION` environment variables, when set, override the `project` and `region` values from the active configuration, mirroring the behavior of `gcloud` itself.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has
 been set in which case the module will only be active when one of the
@@ -2041,7 +2042,7 @@ the current git repository.
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.                                                                                                    |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.                                                                                            |
 | `ignore_submodules`  | `false`                                                      | Ignore changes to submodules                                                                                                  |
-| `mode`               | `"unstaged"`                                                 | Controls how changes are counted: `"unstaged"` counts only unstaged changes; `"all"` counts both staged and unstaged changes. |
+| `mode`               | `"all"`                                                      | Controls how changes are counted: `"unstaged"` counts only unstaged changes; `"all"` counts both staged and unstaged changes. |
 
 ### Variables
 
@@ -3345,12 +3346,13 @@ The module will be shown when inside a nix-shell environment.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| state    | `pure`  | The state of the nix-shell           |
-| name     | `lorri` | The name of the nix-shell            |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                                                                   |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| state    | `pure`  | The state of the nix-shell                                                    |
+| name     | `lorri` | The name of the nix-shell                                                     |
+| level    | `1`     | The depth level of the nix-shell (Only when using [Lix](https://lix.systems)) |
+| symbol   |         | Mirrors the value of option `symbol`                                          |
+| style\*  |         | Mirrors the value of option `style`                                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -3379,7 +3381,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
-Additionally, the module will be hidden by default if the directory contains a `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+Additionally, the module will be hidden by default if the directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
 
 ### Options
 
@@ -3858,7 +3860,8 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 ## Pixi
 
-The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated environment, if `$PIXI_ENVIRONMENT_NAME` is set.
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated
+environment and project name, if `$PIXI_ENVIRONMENT_NAME` is set.
 
 > [!TIP]
 > This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
@@ -3880,12 +3883,13 @@ The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as
 
 ### Variables
 
-| Variable    | Example   | Description                          |
-| ----------- | --------- | ------------------------------------ |
-| version     | `v0.33.0` | The version of `pixi`                |
-| environment | `py311`   | The current pixi environment         |
-| symbol      |           | Mirrors the value of option `symbol` |
-| style       |           | Mirrors the value of option `style`  |
+| Variable     | Example      | Description                          |
+| ------------ | ------------ | ------------------------------------ |
+| version      | `v0.33.0`    | The version of `pixi`                |
+| environment  | `py311`      | The current pixi environment         |
+| project_name | `my-project` | The current pixi project name        |
+| symbol       |              | Mirrors the value of option `symbol` |
+| style        |              | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -4033,10 +4037,16 @@ By default, the module will be shown if any of the following conditions are met:
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
 
 > [!TIP]
-> The `python_binary` variable accepts either a string or a list of strings.
-> Starship will try executing each binary until it gets a result. Note you can
-> only change the binary that Starship executes to get the version of Python not
-> the arguments that are used.
+> The `python_binary` variable accepts either:
+>
+> - a string (e.g. `'python3'`),
+> - a list of strings (e.g. `['python', 'python3']`)
+> - a list of lists of strings, representing commands with optional arguments (e.g.
+>   `[['mise', 'exec', '--', 'python'], ['python3']]`)
+>
+> Starship will try executing each configured command until it gets a result.
+> Note you can only change the binary that Starship executes to get the version
+> of Python not the arguments that are used.
 >
 > The default values and order for `python_binary` was chosen to first identify
 > the Python version in a virtualenv/conda environments (which currently still
@@ -4073,6 +4083,22 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = 'python3'
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Use `mise` to get the version.
+python_binary = [['mise', 'exec', '--', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Potentially dangerous: `uv` can run any binary at `.venv/bin/python` without interaction
+python_binary = [['uv', 'run', '--no-python-downloads', '--no-project', 'python']]
 ```
 
 ```toml
@@ -4790,7 +4816,7 @@ format = 'via [$symbol$workspace]($style) '
 ## Time
 
 The `time` module shows the current **local** time.
-The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
 
 > [!TIP]
 > This module is disabled by default.
@@ -4798,15 +4824,15 @@ The `format` configuration value is used by the [`chrono`](https://crates.io/cra
 
 ### Options
 
-| Option            | Default                 | Description                                                                                                            |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                      |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                             |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.    |
-| `style`           | `'bold yellow'`         | The style for the module time                                                                                          |
-| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                            |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                  |
+| Option            | Default                 | Description                                                                                                                                               |
+| ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                                         |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                                                |
+| `time_format`     | see below               | The [jiff format string](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) used to format the time.                                                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
 Manually setting `time_format` will override the `use_12hr` setting.
@@ -4822,6 +4848,8 @@ Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Example
 
+#### With UTC offset
+
 ```toml
 # ~/.config/starship.toml
 
@@ -4831,6 +4859,17 @@ format = '🕙[\[ $time \]]($style) '
 time_format = '%T'
 utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
+```
+
+#### With Timezone name
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+time_format = '%T'
+utc_time_offset = 'Europe/Berlin'
 ```
 
 ## Typst

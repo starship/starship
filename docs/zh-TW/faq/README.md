@@ -12,16 +12,16 @@
 
 ## 我該如何做出示例圖中的命令自動補齊效果？
 
-有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 而示例中環境是使用 [Fish Shell](https://fishshell.com/)，原生就提供了補全功能。 如果你的環境是使用 Z Shell (zsh)，建議參考一下 [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)。
+有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. 有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 而示例中環境是使用 [Fish Shell](https://fishshell.com/)，原生就提供了補全功能。 如果你的環境是使用 Z Shell (zsh)，建議參考一下 [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)。
 
 ## 最上層的 `format` 與 `<module>.disabled` 的功能一樣嗎？
 
-對，他們都可以被用來關閉提示字元中的 module。 如果你單純只是想關閉 modules，推薦使用 `<module>.disabled`，原因如下所述：
+對，他們都可以被用來關閉提示字元中的 module。 對，他們都可以被用來關閉提示字元中的 module。 如果你單純只是想關閉 modules，推薦使用 `<module>.disabled`，原因如下所述：
 
 - 明確性：關閉 modules 的動作比在 top level `format` 標記忽略更爲清楚易懂
 - 當 Starship 更新後，新組件能被自動加入到提示字元中
 
-## 文件中提到 Starship 是跨 shell 的。 為什麼我偏好的 shell 沒有被支持？
+## 文件中提到 Starship 是跨 shell 的。 文件中提到 Starship 是跨 shell 的。 為什麼我偏好的 shell 沒有被支持？
 
 Starship 構建方式基本上確立了他應當能支援所有 shell 的基礎。 Starship 的執行檔是不會紀錄狀態且不假設底下是哪種 Shell 的，所以只要你的 Shell 支援客製化命令提示字元以及 shell expansion，就應該要能使用 Starship。
 
@@ -66,7 +66,7 @@ Starship executes different commands to get information to display in the prompt
 
 ## Starship 運作時做出預期之外的事情，我該怎麼除錯？
 
-你可以使用  `STARSHIP_LOG` 環境變數開啟除錯記錄 (debug logs)。 These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+You can enable the debug logs by using the `STARSHIP_LOG` env var. 你可以使用  `STARSHIP_LOG` 環境變數開啟除錯記錄 (debug logs)。 These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
@@ -90,8 +90,9 @@ starship bug-report
 
 會導致這種狀況，通常是因為系統配置錯誤。 有些 Linux 發行版不支援隨開隨用的字體。 你需要確保：
 
-- 你的當地語言設置為 UTF-8，如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 如果 `LC_ALL` 不是 UTF-8，[你會需要改變他](https://www.tecmint.com/set-system-locales-in-linux/)。
-- 你已經安裝一個表情符號字體。 大多數的系統在預設情況下皆有支持表情符號字體，然後有些（尤其 Arch Linux）沒有。 你通常可以透過系統的套件管理器安裝一個表情符號字體 —— [noto emoji](https://www.google.com/get/noto/help/emoji/) 是個受歡迎的選擇。
+- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. 你的當地語言設置為 UTF-8，如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 如果 `LC_ALL` 不是 UTF-8，[你會需要改變他](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 你已經安裝一個表情符號字體。 Most systems come with an emoji font by default, but
+  some (notably Arch Linux) do not. 你已經安裝一個表情符號字體。 大多數的系統在預設情況下皆有支持表情符號字體，然後有些（尤其 Arch Linux）沒有。 你通常可以透過系統的套件管理器安裝一個表情符號字體 —— [noto emoji](https://www.google.com/get/noto/help/emoji/) 是個受歡迎的選擇。
 - 你正在使用 [Nerd Font](https://www.nerdfonts.com/)。
 
 要測試你的系統，你可以在終端中執行以下指令：
@@ -103,14 +104,15 @@ echo -e "\xee\x82\xa0"
 
 第一行指令應該會顯示一個 [snake emoji](https://emojipedia.org/snake/)，同時，第二行指令應該顯示 [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)。
 
-如果任何一個符號顯示錯誤，代表你的系統配置仍然是錯誤的。 不幸的是，正確的設置字體有時候是件困難的事。 Discord 上的使用者可能可以提供協助。 如果兩種符號皆正確顯示，但你仍然無法在 starship 中看到他們，請[發送 bug 回報](https://github.com/starship/starship/issues/new/choose)！
+如果任何一個符號顯示錯誤，代表你的系統配置仍然是錯誤的。
+不幸的是，正確的設置字體有時候是件困難的事。 Discord 上的使用者可能可以提供協助。 如果任何一個符號顯示錯誤，代表你的系統配置仍然是錯誤的。 不幸的是，正確的設置字體有時候是件困難的事。 Discord 上的使用者可能可以提供協助。 如果兩種符號皆正確顯示，但你仍然無法在 starship 中看到他們，請[發送 bug 回報](https://github.com/starship/starship/issues/new/choose)！
 
 ## 我要如何從電腦中移除 Starship？
 
 移除 Starship 的過程與安裝過程一樣簡單。
 
 1. 刪除 Shell 的設定檔案 (比如 `~/.bashrc`) 中用來初始化 Starship 的部分。
-1. 刪除 Starship 的執行檔
+2. 刪除 Starship 的執行檔
 
 如果你是透過套件管理器安裝 Starship 的，請到套件管理器的文件中尋找相關的移除步驟指示。
 

@@ -1,6 +1,7 @@
 # Gotowe konfiguracje
 
-Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność. Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) z modyfikacją tego pliku! 😊
+Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność.
+Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) z modyfikacją tego pliku! 😊
 
 Aby uzyskać szczegółowe informacje na temat użytkowania ustawień, po prostu kliknij na obraz.
 
@@ -32,7 +33,7 @@ Ten zestaw ustawień zmienia symbole w zwykły tekst dla każdego modułu. Świe
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-Ten zestaw ustawień ukrywa wersję środowiska wykonawczego.  Jeśli pracujesz w kontenerach lub wirtualnych środowiskach, to jest to dla Ciebie!
+Ten zestaw ustawień ukrywa wersję środowiska wykonawczego. Jeśli pracujesz w kontenerach lub wirtualnych środowiskach, to jest to dla Ciebie!
 
 [![Zrzut ekranu No Runtime Versions](/presets/img/no-runtime-versions.png "Kliknij, aby wyświetlić ustawienia No Runtime Versions")](./no-runtimes)
 
@@ -50,7 +51,8 @@ Ten zestaw ustawień naśladuje wygląd i zachowanie  [Pure](https://github.com/
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Pokazuje ono również, jak działa zastępowanie ścieżek w starship.
+Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Pokazuje ono również, jak działa zastępowanie ścieżek w starship.
 
 [![Zrzut ekranu ustawień Pastel Powerline](/presets/img/pastel-powerline.png "Kliknij, aby wyświetlić ustawienia wiersza Pure")](./pastel-powerline)
 

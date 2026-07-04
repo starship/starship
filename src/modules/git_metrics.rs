@@ -20,6 +20,7 @@ use crate::{
 /// Well-known empty tree object id for SHA1 repos.
 /// SHA256 cannot be discovered via gix, so cannot be handled yet.
 const EMPTY_TREE_SHA1: &str = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+const EMPTY_TREE_SHA256: &str = "6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321";
 
 /// Creates a module with the current added/deleted lines in the git repository at the
 /// current directory
@@ -35,9 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let gix_repo = repo.open();
-    if gix_repo.is_bare() {
-        return None;
-    }
+    gix_repo.workdir()?;
     let status_module = context.new_module("git_status");
     let status_config = GitStatusConfig::try_load(status_module.config);
     // TODO: remove this special case once `gitoxide` can handle sparse indices for tree-index comparisons.
@@ -54,7 +53,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // Fall back to a well-known empty tree SHA1 if HEAD is unborn.
         if matches!(config.mode, GitMetricsMode::All) {
             if gix_repo.head().is_ok_and(|h| h.is_unborn()) {
-                git_args.push(EMPTY_TREE_SHA1);
+                let object_hash = gix_repo.object_hash();
+                match object_hash {
+                    gix::hash::Kind::Sha1 => git_args.push(EMPTY_TREE_SHA1),
+                    gix::hash::Kind::Sha256 => git_args.push(EMPTY_TREE_SHA256),
+                    _ => {
+                        log::warn!("Unsupported object hash kind: {:?}", object_hash);
+                        return None;
+                    }
+                }
             } else {
                 git_args.push("HEAD");
             }
@@ -412,15 +419,11 @@ mod tests {
     use std::process::Stdio;
 
     use crate::modules::git_status::tests::make_sparse;
-    use crate::test::{FixtureProvider, ModuleRenderer, config_git_repo_for_tests, fixture_repo};
+    use crate::test::{
+        BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer,
+        config_git_repo_for_tests, fixture_repo,
+    };
     use nu_ansi_term::Color;
-
-    // This also ensures both the gitoxide and git implementations are tested:
-    // GitBare uses gitoxide and GitReftable uses git-cli
-    const NORMAL_AND_REFTABLES: [FixtureProvider; 2] =
-        [FixtureProvider::Git, FixtureProvider::GitReftable];
-    const BARE_AND_REFTABLE: [FixtureProvider; 2] =
-        [FixtureProvider::GitBare, FixtureProvider::GitBareReftable];
 
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
@@ -437,7 +440,7 @@ mod tests {
 
     #[test]
     fn shows_added_lines() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -458,14 +461,14 @@ mod tests {
 
     #[test]
     fn shows_staged_addition() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
             std::fs::write(path.join("new-file"), "new line")?;
             run_git_cmd(["add", "new-file"], Some(path), true)?;
 
-            let actual = render_metrics_with_staged(path);
+            let actual = render_metrics(path);
             let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
@@ -475,23 +478,17 @@ mod tests {
     }
 
     #[test]
-    fn dont_show_staged_in_staged_mode() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+    fn shows_staged_by_default_mode() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
             std::fs::write(path.join("new-file"), "new line")?;
             run_git_cmd(["add", "new-file"], Some(path), true)?;
 
-            let actual = ModuleRenderer::new("git_metrics")
-                .config(toml::toml! {
-                    [git_metrics]
-                    disabled = false
-                })
-                .path(path)
-                .collect();
+            let actual = render_metrics(path);
 
-            let expected = None;
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -501,7 +498,7 @@ mod tests {
 
     #[test]
     fn shows_staged_rename_modification() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -512,7 +509,7 @@ mod tests {
             run_git_cmd(["add", "the_file"], Some(path), true)?;
             run_git_cmd(["mv", "the_file", "that_file"], Some(path), true)?;
 
-            let actual = render_metrics_with_staged(path);
+            let actual = render_metrics(path);
 
             let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
@@ -524,7 +521,7 @@ mod tests {
 
     #[test]
     fn shows_staged_addition_intended() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -543,14 +540,14 @@ mod tests {
 
     #[test]
     fn shows_staged_modification() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
             std::fs::write(path.join("the_file"), "modify all")?;
             run_git_cmd(["add", "the_file"], Some(path), true)?;
 
-            let actual = render_metrics_with_staged(path);
+            let actual = render_metrics(path);
 
             let expected = Some(format!(
                 "{} {} ",
@@ -566,7 +563,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_lines() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -585,7 +582,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_lines_of_entire_file() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -603,13 +600,13 @@ mod tests {
 
     #[test]
     fn shows_staged_deletion() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
             run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
-            let actual = render_metrics_with_staged(path);
+            let actual = render_metrics(path);
             let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
             assert_eq!(expected, actual);
@@ -620,7 +617,7 @@ mod tests {
 
     #[test]
     fn shows_all_changes() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -642,8 +639,8 @@ mod tests {
     }
 
     #[test]
-    fn shows_unstaged_changes_only() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+    fn shows_all_changes_by_default_mode() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -651,19 +648,37 @@ mod tests {
             write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
             let file_staged = path.join("the_file_staged");
-            write_file(
-                &file_staged,
-                "First Line\nSecond Line\nThird Line\nAdded line\n",
-            )?;
+            write_file(&file_staged, "Alpha\nBeta\nGamma\nDelta\n")?;
             run_git_cmd(["add", "the_file_staged"], Some(path), true)?;
 
-            let actual = ModuleRenderer::new("git_metrics")
-                .config(toml::toml! {
-                    [git_metrics]
-                    disabled = false
-                })
-                .path(path)
-                .collect();
+            let actual = render_metrics(path);
+
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+8"),
+                Color::Red.bold().paint("-2")
+            ));
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_unstaged_changes_only_in_unstaged_mode() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
+
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+            let file_staged = path.join("the_file_staged");
+            write_file(&file_staged, "Alpha\nBeta\nGamma\nDelta\n")?;
+            run_git_cmd(["add", "the_file_staged"], Some(path), true)?;
+
+            let actual = render_metrics_unstaged(path);
 
             let expected = Some(format!(
                 "{} {} ",
@@ -679,7 +694,7 @@ mod tests {
 
     #[test]
     fn shows_nothing_if_no_changes() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -694,7 +709,7 @@ mod tests {
 
     #[test]
     fn shows_nothing_on_untracked() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
             std::fs::write(path.join("untracked"), "a line")?;
@@ -710,7 +725,7 @@ mod tests {
 
     #[test]
     fn shows_nothing_if_no_changes_sparse() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -726,7 +741,7 @@ mod tests {
 
     #[test]
     fn shows_all_if_only_nonzero_diffs_is_false() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -754,7 +769,7 @@ mod tests {
 
     #[test]
     fn doesnt_generate_git_metrics_for_bare_repo() -> io::Result<()> {
-        for mode in BARE_AND_REFTABLE {
+        for &mode in BARE_GIT_PROVIDERS {
             let repo_dir = fixture_repo(mode)?;
 
             let actual = render_metrics(repo_dir.path());
@@ -766,8 +781,36 @@ mod tests {
     }
 
     #[test]
+    fn does_generate_git_metrics_for_worktree_backed_by_bare_repo() -> io::Result<()> {
+        for &mode in BARE_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+            let worktree_dir = tempfile::tempdir()?;
+
+            create_command("git")?
+                .args(["worktree", "add"])
+                .arg(worktree_dir.path())
+                .args(["-b", "metrics-worktree"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let file_path = worktree_dir.path().join("readme.md");
+            let mut the_file = OpenOptions::new().append(true).open(&file_path)?;
+            writeln!(the_file, "Added line")?;
+            the_file.sync_all()?;
+
+            let actual = render_metrics(worktree_dir.path());
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
     fn shows_all_changes_with_ignored_submodules() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -797,7 +840,7 @@ mod tests {
 
     #[test]
     fn works_if_git_executable_is_used() -> io::Result<()> {
-        for mode in NORMAL_AND_REFTABLES {
+        for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
             let path = repo_dir.path();
 
@@ -836,12 +879,12 @@ mod tests {
             .collect()
     }
 
-    fn render_metrics_with_staged(path: &Path) -> Option<String> {
+    fn render_metrics_unstaged(path: &Path) -> Option<String> {
         ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                 [git_metrics]
                 disabled = false
-                mode = "all"
+                mode = "unstaged"
             })
             .path(path)
             .collect()
@@ -872,19 +915,21 @@ mod tests {
         }
     }
 
-    fn create_unborn_repo() -> io::Result<tempfile::TempDir> {
+    fn create_unborn_repo(sha256: bool) -> io::Result<tempfile::TempDir> {
         let repo_dir = tempfile::tempdir()?;
         let path = repo_dir.path();
+        let mut git_args = vec![
+            "init",
+            "--quiet",
+            path.to_str().expect("Path was not UTF-8"),
+        ];
+        if sha256 {
+            git_args.push("--object-format=sha256");
+        } else {
+            git_args.push("--object-format=sha1");
+        }
 
-        run_git_cmd(
-            [
-                "init",
-                "--quiet",
-                path.to_str().expect("Path was not UTF-8"),
-            ],
-            None,
-            true,
-        )?;
+        run_git_cmd(git_args, None, true)?;
         config_git_repo_for_tests(path)?;
         run_git_cmd(["checkout", "-b", "master"], Some(path), false)?;
         Ok(repo_dir)
@@ -892,41 +937,47 @@ mod tests {
 
     #[test]
     fn shows_staged_addition_on_unborn_head() -> io::Result<()> {
-        let repo_dir = create_unborn_repo()?;
-        let path = repo_dir.path();
+        for sha256 in [false, true] {
+            let repo_dir = create_unborn_repo(sha256)?;
+            let path = repo_dir.path();
 
-        std::fs::write(path.join("new-file"), "new line\n")?;
-        run_git_cmd(["add", "new-file"], Some(path), true)?;
+            std::fs::write(path.join("new-file"), "new line\n")?;
+            run_git_cmd(["add", "new-file"], Some(path), true)?;
 
-        let actual = render_metrics_with_staged(path);
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+            let actual = render_metrics(path);
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]
     fn shows_staged_addition_on_unborn_head_with_git_executable() -> io::Result<()> {
-        let repo_dir = create_unborn_repo()?;
-        let path = repo_dir.path();
+        for sha256 in [false, true] {
+            let repo_dir = create_unborn_repo(sha256)?;
+            let path = repo_dir.path();
 
-        std::fs::write(path.join("new-file"), "new line\n")?;
-        run_git_cmd(["add", "new-file"], Some(path), true)?;
+            std::fs::write(path.join("new-file"), "new line\n")?;
+            run_git_cmd(["add", "new-file"], Some(path), true)?;
 
-        let actual = ModuleRenderer::new("git_metrics")
-            .config(toml::toml! {
-                [git_status]
-                use_git_executable = true
-                [git_metrics]
-                disabled = false
-                mode = "all"
-            })
-            .path(path)
-            .collect();
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_status]
+                    use_git_executable = true
+                    [git_metrics]
+                    disabled = false
+                    mode = "all"
+                })
+                .path(path)
+                .collect();
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     fn create_repo_with_commit(provider: FixtureProvider) -> io::Result<tempfile::TempDir> {
@@ -939,14 +990,16 @@ mod tests {
             ["init", "--quiet"]
                 .into_iter()
                 .chain(
-                    matches!(provider, FixtureProvider::GitReftable)
-                        .then(|| "--ref-format=reftable"),
+                    matches!(provider, FixtureProvider::Git { reftable: true, .. })
+                        .then_some("--ref-format=reftable"),
                 )
+                .chain(rand::random::<bool>().then_some("--object-format=sha256"))
                 .chain(Some(path.to_str().expect("Path was not UTF-8"))),
             None,
             true,
         )?;
 
+        // Set local author and repo info
         config_git_repo_for_tests(path)?;
 
         // Ensure on the expected branch.

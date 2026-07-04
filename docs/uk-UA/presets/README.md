@@ -1,6 +1,7 @@
 # Шаблони
 
-Тут ви можете переглянути добірку шаблонів налаштувань, створених спільнотою Starship. Якщо у вас є шаблон, яким ви бажаєте поділитись з іншими, будь ласка, [зробіть Pull Request](https://github.com/starship/starship/edit/master/docs/presets/README.md) з оновленнями для цього файлу! 😊
+Тут ви можете переглянути добірку шаблонів налаштувань, створених спільнотою Starship.
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
 Щоб отримати додаткову інформацію про використання шаблону, просто натисніть на зображення.
 
@@ -50,7 +51,8 @@
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показує як працює шлях підстановки в starship.
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Він також показує як працює шлях підстановки в starship.
 
 [![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png "Натисніть для перегляду шаблона Pastel Powerline")](./pastel-powerline)
 

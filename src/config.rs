@@ -103,12 +103,12 @@ where
     T: schemars::JsonSchema + Sized,
 {
     fn schema_name() -> Cow<'static, str> {
-        Either::<T, Vec<T>>::schema_name()
+        // `Either::<T, Vec<T>>::schema_name()` is not unique per `T`; nested `VecOr`s must not share a `$defs` entry.
+        Cow::Owned(format!("VecOr_{}", T::schema_name()))
     }
 
     fn schema_id() -> Cow<'static, str> {
-        let mod_path = module_path!();
-        Cow::Owned(format!("{mod_path}::{}", Self::schema_name()))
+        Cow::Owned(format!("{}::VecOr<{}>", module_path!(), T::schema_id()))
     }
 
     fn json_schema(generator: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
@@ -1057,6 +1057,22 @@ mod tests {
             None,
             StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
+        );
+    }
+
+    /// Guard against schemars `$defs` collisions by requiring distinct IDs for nested `VecOr` types.
+    #[cfg(feature = "config-schema")]
+    #[test]
+    fn vec_or_schema_ids_distinguish_nesting() {
+        use schemars::JsonSchema;
+
+        assert_ne!(
+            VecOr::<VecOr<&str>>::schema_id(),
+            VecOr::<&str>::schema_id(),
+        );
+        assert_ne!(
+            VecOr::<VecOr<&str>>::schema_name(),
+            VecOr::<&str>::schema_name(),
         );
     }
 }

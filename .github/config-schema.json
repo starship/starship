@@ -719,7 +719,7 @@
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "disabled": true,
         "ignore_submodules": false,
-        "mode": "unstaged"
+        "mode": "all"
       }
     },
     "git_state": {
@@ -1077,9 +1077,7 @@
         "detect_files": [
           "pom.xml"
         ],
-        "detect_folders": [
-          ".mvn"
-        ]
+        "detect_folders": []
       }
     },
     "memory_usage": {
@@ -1212,7 +1210,10 @@
           ".nvmrc",
           "!bunfig.toml",
           "!bun.lock",
-          "!bun.lockb"
+          "!bun.lockb",
+          "!deno.json",
+          "!deno.jsonc",
+          "!deno.lock"
         ],
         "detect_folders": [
           "node_modules"
@@ -3751,7 +3752,7 @@
         },
         "mode": {
           "$ref": "#/$defs/GitMetricsMode",
-          "default": "unstaged"
+          "default": "all"
         }
       },
       "additionalProperties": false
@@ -4858,9 +4859,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            ".mvn"
-          ]
+          "default": []
         }
       },
       "additionalProperties": false
@@ -5215,7 +5214,10 @@
             ".nvmrc",
             "!bunfig.toml",
             "!bun.lock",
-            "!bun.lockb"
+            "!bun.lockb",
+            "!deno.json",
+            "!deno.jsonc",
+            "!deno.lock"
           ]
         },
         "detect_folders": {
@@ -5680,7 +5682,7 @@
       "type": "object",
       "properties": {
         "pixi_binary": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "pixi"
           ]
@@ -5736,7 +5738,7 @@
       },
       "additionalProperties": false
     },
-    "Either2": {
+    "VecOr_string": {
       "anyOf": [
         {
           "type": "string"
@@ -5844,7 +5846,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_VecOr_string",
           "default": [
             [
               "python"
@@ -5927,6 +5929,19 @@
         }
       },
       "additionalProperties": false
+    },
+    "VecOr_VecOr_string": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VecOr_string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VecOr_string"
+          }
+        }
+      ]
     },
     "QuartoConfig": {
       "type": "object",
@@ -6461,7 +6476,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "solc"
           ]
@@ -7158,7 +7173,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either3",
+          "$ref": "#/$defs/Either2",
           "default": false
         },
         "require_repo": {
@@ -7166,7 +7181,7 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": []
         },
         "description": {
@@ -7225,7 +7240,7 @@
       },
       "additionalProperties": false
     },
-    "Either3": {
+    "Either2": {
       "anyOf": [
         {
           "type": "boolean"
