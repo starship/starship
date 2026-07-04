@@ -2849,9 +2849,10 @@ context_alias = "gke-$cluster"
 ```
 
 ## Lean
+
 The `lean` module shows the currently installed version of [Lean](https://lean-lang.org).
 When [elan](https://github.com/leanprover/elan) manages your toolchain, this reflects the
-version pinned by the `lean-toolchain` file. 
+version pinned by the `lean-toolchain` file.
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -2867,7 +2868,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`            | `'∀ '`                                                 | A format string of the `forall` symbol (U+2200), often used to represent Lean. |
 | `detect_extensions` | `['lean']`                                             | Which extensions should trigger this module.                                   |
 | `detect_files`      | `['lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.                                    |
-| `style`             | `'bold #3591fd'`                                     | The style for the module.                                                      |
+| `style`             | `'bold #3591fd'`                                      | The style for the module.                                                      |
 | `disabled`          | `false`                                                | Disables the `lean` module.                                                    |
 
 ### Variables
@@ -2888,7 +2889,6 @@ By default the module will be shown if any of the following conditions are met:
 [lean]
 format = 'via [∀ $version](bold #3591fd) '
 ```
-
 
 ## Line Break
 
