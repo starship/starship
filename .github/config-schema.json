@@ -1747,7 +1747,8 @@
         "symbol": "🧙 ",
         "style": "bold blue",
         "allow_windows": false,
-        "disabled": true
+        "disabled": true,
+        "use_legacy_check": false
       }
     },
     "swift": {
@@ -6631,6 +6632,10 @@
         "disabled": {
           "type": "boolean",
           "default": true
+        },
+        "use_legacy_check": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
