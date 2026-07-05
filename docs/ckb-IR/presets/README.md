@@ -1,7 +1,7 @@
 # پێش ڕێکخستنەکان
 
 ئەمە کۆکراوەیەکە لەو پێش ڕێکخستنانەی کە لەلایەن کۆمەڵگاوە نێردراون بۆ Starship.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
 
 To get details on how to use a preset, simply click on the image.
 
