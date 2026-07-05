@@ -1,7 +1,7 @@
 # 프리셋
 
 커뮤니티가 제공한 Starship 설정 프리셋의 모음집입니다.
-공유할 프리셋이 있다면 이 파일을 [수정하는 PR을 제출](https://github.com/starship/starship/edit/master/docs/presets/README.md)해 주세요! 😊
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
 
 프리셋 사용 방법에 대한 자세한 내용을 보려면 이미지를 클릭하기만 하면 됩니다.
 
