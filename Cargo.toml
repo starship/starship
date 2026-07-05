@@ -52,7 +52,7 @@ log = { version = "0.4.33", features = ["std"] }
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.18.0", optional = true }
 nu-ansi-term = "0.50.3"
-open = "5.3.5"
+open = "5.3.6"
 # update os module config and tests when upgrading os_info
 os_info = { version = "3.15.0", features = ["schemars"] }
 # for efficient shared state between `git_status` and `git_metrics`, allowing parallel printing. This is for poison-free locks.
