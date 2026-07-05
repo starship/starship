@@ -454,13 +454,13 @@ Dieses Projekt ist [ISC](https://github.com/starship/starship/blob/main/LICENSE)
 [linuxbrew]: https://formulae.brew.sh/formula/starship
 [homebrew]: https://formulae.brew.sh/formula/starship
 [macports]: https://ports.macports.org/port/starship
-[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/main/pkgs/by-name/st/starship/package.nix
+[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix
 [OSS]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
-[scoop]: https://github.com/ScoopInstaller/Main/blob/main/bucket/starship.json
+[scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
 [SignPath Foundation]: https://signpath.org
 [SignPath.io]: https://signpath.io
-[termux]: https://github.com/termux/termux-packages/tree/main/packages/starship
+[termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
 [ubuntu universe]: https://packages.ubuntu.com/source/plucky/starship
-[void linux packages]: https://github.com/void-linux/void-packages/tree/main/srcpkgs/starship
-[winget]: https://github.com/microsoft/winget-pkgs/tree/main/manifests/s/Starship/Starship
+[void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship
