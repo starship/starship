@@ -1,7 +1,7 @@
 # Gotowe konfiguracje
 
 Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność.
-Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) z modyfikacją tego pliku! 😊
+Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) z modyfikacją tego pliku! 😊
 
 Aby uzyskać szczegółowe informacje na temat użytkowania ustawień, po prostu kliknij na obraz.
 
