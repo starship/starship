@@ -2006,7 +2006,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 > [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment.
 > You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
-### # ~/.config/starship.toml[custom.foo]&#xA;command = 'echo foo' # 显示命令输出&#xA;detect_files = ['foo'] # 支持过滤器，但不支持通配符&#xA;when = ''' test "$HOME" = "$PWD" '''&#xA;format = ' transcending [$output]($style)'[custom.time]&#xA;command = 'time /T'&#xA;detect_extensions = ['pst'] # 识别 \*.pst 文件&#xA;shell = ['pwsh.exe', '-NoProfile', '-Command', '-'][custom.time-as-arg]&#xA;command = 'time /T'&#xA;detect_extensions = ['pst'] # 识别 \*.pst 文件&#xA;shell = ['pwsh.exe', '-NoProfile', '-Command']&#xA;use_stdin = false
+### 配置项
 
 | 选项                     | 默认值                                             | 描述                                                                                                                                             |
 | ---------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |

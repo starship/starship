@@ -45,106 +45,106 @@
   <a href="https://starship.rs/it-IT/config/">Configurazione</a>
 </p>
 
-<p align="center"><a href="https://github.com/starship/starship/blob/master/README.md"
+<p align="center"><a href="https://github.com/starship/starship/blob/main/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-us.png"
       alt="Inglese"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/de-DE/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-de.png"
       alt="Tedesco"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/es-ES/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-es.png"
       alt="Spagnolo"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/fr-FR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-fr.png"
       alt="Francese"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/id-ID/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-id.png"
       alt="Indonesiano"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/it-IT/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-it.png"
       alt="Italiano"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/ja-JP/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-jp.png"
       alt="Giapponese"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/pt-BR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-br.png"
       alt="Portoghese del Brasile"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/ru-RU/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ru.png"
       alt="Russo"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/uk-UA/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ua.png"
       alt="Українська"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/vi-VN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-vn.png"
       alt="Vietnamita"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/zh-CN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-cn.png"
       alt="Cinese semplificato"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/zh-TW/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-tw.png"
       alt="Cinese tradizionale"
  /></a>
 </p>
@@ -163,7 +163,7 @@
 > ```
 
 <img
-src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
+src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
 alt="Starship con iTerm2 e il tema Snazzy"
 width="50%"
 align="right"
@@ -406,7 +406,7 @@ Siamo sempre alla ricerca di collaboratori di **tutti i livelli**! If you're loo
 
 Se parli correntemente una lingua diversa dall'inglese, apprezziamo molto qualsiasi aiuto per mantenere i nostri documenti tradotti e aggiornati in altre lingue. Se desideri collaborare, le traduzioni possono essere fornite su [Starship Crowdin](https://translate.starship.rs/).
 
-Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nostra [Guida al Contributo](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Inoltre, sentiti libero di entrare nel nostro [server Discord](https://discord.gg/8Jzqu3T) e dire ciao. 👋
+Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nostra [Guida al Contributo](https://github.com/starship/starship/blob/main/CONTRIBUTING.md). Inoltre, sentiti libero di entrare nel nostro [server Discord](https://discord.gg/8Jzqu3T) e dire ciao. 👋
 
 ## 💭 Ispirato Da
 
@@ -440,27 +440,27 @@ This program will not transfer any information to other networked systems unless
 ## 📝 Licenza
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
-Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/main/LICENSE).
 
-[alpine linux packages]: <[Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)>
-[arch linux extra]: <[Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)>
-[chocolatey]: [Chocolatey]\(https://community.chocolatey.org/packages/starship\)
-[conda-forge]: <[forgiatura del conda](https://anaconda.org/conda-forge/starship)>
-[copr]: [Copr]\(https://copr.fedorainfracloud.org/coprs/atim/starship\)
-[crates.io]: **[crates.io]\(https://crates.io/crates/starship\)**
-[debian main]: <[Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)>
-[freshports]: [FreshPorts]\(https://www.freshports.org/shells/starship\)
-[gentoo packages]: <[Pacchetti Gentoo](https://packages.gentoo.org/packages/app-shells/starship)>
-[linuxbrew]: [Homebrew]\(https://formulae.brew.sh/formula/starship\)
-[homebrew]: [Linuxbrew]\(https://formulae.brew.sh/formula/starship\)
-[macports]: [MacPorts]\(https://ports.macports.org/port/starship\)
-[nixpkgs]: [nixpkgs]\(https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix\)
-[OSS]: [OSS]\(https://software.opensuse.org/package/starship\)
-[pkgsrc]: [pkgsrc]\(https://pkgsrc.se/shells/starship\)
-[scoop]: [Scoop]\(https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json\)
+[alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
+[arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
+[chocolatey]: https://community.chocolatey.org/packages/starship
+[conda-forge]: https://anaconda.org/conda-forge/starship
+[copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
+[crates.io]: https://crates.io/crates/starship
+[debian main]: https://sources.debian.org/src/starship/1.22.1-1/
+[freshports]: https://www.freshports.org/shells/starship
+[gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
+[linuxbrew]: https://formulae.brew.sh/formula/starship
+[homebrew]: https://formulae.brew.sh/formula/starship
+[macports]: https://ports.macports.org/port/starship
+[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix
+[OSS]: https://software.opensuse.org/package/starship
+[pkgsrc]: https://pkgsrc.se/shells/starship
+[scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
 [SignPath Foundation]: https://signpath.org
 [SignPath.io]: https://signpath.io
-[termux]: [Termux]\(https://github.com/termux/termux-packages/tree/master/packages/starship\)
-[ubuntu universe]: <[Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)>
-[void linux packages]: <[Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship)>
-[winget]: [winget]\(https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship\)
+[termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
+[ubuntu universe]: https://packages.ubuntu.com/source/plucky/starship
+[void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

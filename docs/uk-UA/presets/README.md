@@ -1,7 +1,7 @@
 # Шаблони
 
 Тут ви можете переглянути добірку шаблонів налаштувань, створених спільнотою Starship.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
 
 Щоб отримати додаткову інформацію про використання шаблону, просто натисніть на зображення.
 
