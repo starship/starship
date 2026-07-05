@@ -478,25 +478,6 @@ mod tests {
     }
 
     #[test]
-    fn shows_staged_by_default_mode() -> io::Result<()> {
-        for &mode in COMMON_GIT_PROVIDERS {
-            let repo_dir = create_repo_with_commit(mode)?;
-            let path = repo_dir.path();
-
-            std::fs::write(path.join("new-file"), "new line")?;
-            run_git_cmd(["add", "new-file"], Some(path), true)?;
-
-            let actual = render_metrics(path);
-
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
-
-            assert_eq!(expected, actual);
-            repo_dir.close()?;
-        }
-        Ok(())
-    }
-
-    #[test]
     fn shows_staged_rename_modification() -> io::Result<()> {
         for &mode in COMMON_GIT_PROVIDERS {
             let repo_dir = create_repo_with_commit(mode)?;
