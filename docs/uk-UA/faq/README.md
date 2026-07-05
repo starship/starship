@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-Реалізація [Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) створена в Starship є трохи складнішою, щоб дозволити використання додаткових функцій, таких як модуль [Command Duration](https://starship.rs/config/#command-duration) і переконатися, що Starship сумісний із попередньо встановленими конфігураціями Bash.
+The [Bash implementation](https://github.com/starship/starship/blob/main/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
 Для отримання переліку всіх прапорів, які приймаються `starship prompt`, скористайтесь наступною командою:
 
