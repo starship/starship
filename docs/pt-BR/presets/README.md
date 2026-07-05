@@ -1,7 +1,7 @@
 # Personalizações
 
 Aqui tem uma coleção de personalizações desenvolvidas pela comunidade para usar com Starship.
-Se você tem uma personalização para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
+If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
 
 Para mais detalhes sobre como usar uma personalização, clique na imagem.
 
