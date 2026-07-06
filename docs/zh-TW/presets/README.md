@@ -1,7 +1,7 @@
 # 預設樣式
 
 這裡蒐集了社群提交的 Starship 預設樣式。
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+這裡蒐集了社群提交的 Starship 預設樣式。 如果你也想要分享你的樣式，請[提交一個 PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) 來更新這個檔案！ 😊 😊
 
 To get details on how to use a preset, simply click on the image.
 

@@ -1,7 +1,7 @@
 # Préréglages
 
 Voici un ensemble de préréglages pour Starship soumis par la communauté.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+Si vous avez un préréglage à partager, veuillez [proposer une PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) pour mettre à jour ce fichier! 😊
 
 Pour obtenir des détails sur comment utiliser un préréglage, cliquez simplement sur l’image.
 

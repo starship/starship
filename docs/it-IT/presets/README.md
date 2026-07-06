@@ -1,7 +1,7 @@
 # Preset
 
 Ecco una raccolta dei preset di configurazione inviati dalla community per Starship.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+Se hai un preset da condividere, per favore [ invia un PR ](https://github.com/starship/starship/edit/main/docs/presets/README.md) aggiornando questo file! 😊
 
 To get details on how to use a preset, simply click on the image.
 

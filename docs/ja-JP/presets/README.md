@@ -1,7 +1,7 @@
 # プリセット
 
 以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新して[PR](https://github.com/starship/starship/edit/main/docs/presets/README.md)を送信してください！ 😊 😊
 
 プリセットの使い方を確認するには画像をクリックしてください。
 

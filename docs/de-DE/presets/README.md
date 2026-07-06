@@ -1,7 +1,7 @@
 # Presets (Voreinstellungen)
 
 Hier eine Sammlung von Konfigurations-Presets für Starship, die von der Community eingereicht wurden.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+Wenn Sie ein Preset zum Teilen haben, bitte [reichen Sie einen PR ein](https://github.com/starship/starship/edit/main/docs/presets/README.md), um diese Datei zu aktualisieren! 😊
 
 Um weitere Details zur Verwendung eines Presets zu erhalten, klicken Sie einfach auf das Bild.
 

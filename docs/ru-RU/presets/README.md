@@ -1,7 +1,7 @@
 # Пресеты
 
 Ниже представлена коллекция пресетов для Starship, созданных сообществом.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+Если у вас есть пресет, которым вы хотите поделиться, пожалуйста, [отправьте PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) для обновления этого файла! 😊
 
 Чтобы получить подробную информацию о том, как использовать тот или иной пресет, просто щелкните на его изображение.
 

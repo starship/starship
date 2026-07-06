@@ -1,7 +1,7 @@
 # Preajustes
 
 Aqui tienes una colección de preajustes creados por la comunidad de Starship.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+¡Si quieres compartir un preajuste, por favor, [envía un PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) actualizando este archivo! 😊
 
 Para obtener detalles sobre cómo utilizar un preajuste, simplemente haga clic en la imagen.
 

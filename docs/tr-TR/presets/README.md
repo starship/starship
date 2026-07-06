@@ -1,7 +1,7 @@
 # Hazır Ayarlar
 
 Topluluk tarafından gönderilen Starship için yapılandırma ön ayarları koleksiyonu.
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+Paylaşacak bir ön ayarınız varsa, lütfen bu dosyayı güncelleyerek [PR gönderin](https://github.com/starship/starship/edit/main/docs/presets/README.md)! 😊
 
 To get details on how to use a preset, simply click on the image.
 

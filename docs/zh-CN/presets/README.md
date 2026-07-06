@@ -1,7 +1,7 @@
 # 预设
 
 这里有一系列社区提供的 Starship 预设。
-If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) updating this file! 😊
+这里有一系列社区提供的 Starship 预设。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/main/docs/presets/README.md) 来更新此文件！ 😊 😊
 
 单击图像以获取使用预设的详细方法。
 
