@@ -4736,7 +4736,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ### Приклад
 
-#### З версією Terraform {#with-terraform-version}
+#### Без версії Terraform {#without-terraform-version}
 
 ```toml
 # ~/.config/starship.toml
