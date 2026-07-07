@@ -7,22 +7,23 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-pub struct GitCommitConfig<'a> {
-    pub commit_hash_length: usize,
+pub struct GitTagsConfig<'a> {
     pub format: &'a str,
+    pub symbol: &'a str,
+    pub separator: &'a str,
     pub style: &'a str,
     pub only_detached: bool,
     pub disabled: bool,
 }
 
-impl Default for GitCommitConfig<'_> {
+impl<'a> Default for GitTagsConfig<'a> {
     fn default() -> Self {
         Self {
-            // be consistent with git by default, which has DEFAULT_ABBREV set to 7
-            commit_hash_length: 7,
-            format: "[\\($hash\\)]($style) ",
-            style: "green bold",
-            only_detached: true,
+            format: "[\\($symbol$tags\\)]($style) ",
+            symbol: "🏷 ",
+            separator: " ",
+            style: "yellow bold",
+            only_detached: false,
             disabled: false,
         }
     }
