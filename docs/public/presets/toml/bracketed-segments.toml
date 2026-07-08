@@ -96,6 +96,9 @@ format = '\[[$state ($progress_current/$progress_total)]($style)\]'
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style))'
 
+[git_user]
+format = '\[[\($name $email\)]($style)\]'
+
 [gleam]
 format = '\[[$symbol($version)]($style)\]'
 
