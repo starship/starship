@@ -236,9 +236,11 @@ mod tests {
     }
 
     #[test]
-    fn test_resolve_scoop_shim_with_args() {
+    fn test_resolve_scoop_shim_with_args() -> std::io::Result<()> {
         let dir = tempdir().unwrap();
-        let shims_dir = dir.path().to_path_buf();
+        let root_dir = dir.path();
+        let shims_dir = root_dir.join("shims");
+        fs::create_dir_all(&shims_dir).unwrap();
 
         let shim_exe = write_shim(
             &shims_dir,
@@ -247,23 +249,27 @@ mod tests {
         );
 
         assert_eq!(
-            resolve_scoop_shim_in(&shim_exe, &[shims_dir]),
+            resolve_scoop_shim_in(&shim_exe, &[PathBuf::from(root_dir)]),
             None,
             "The shim forwards extra arguments, so it is not resolved to the target"
         );
+        dir.close()
     }
 
     #[test]
-    fn test_resolve_scoop_shim_missing_target() {
+    fn test_resolve_scoop_shim_missing_target() -> std::io::Result<()> {
         let dir = tempdir().unwrap();
-        let shims_dir = dir.path().to_path_buf();
+        let root_dir = dir.path();
+        let shims_dir = root_dir.join("shims");
+        fs::create_dir_all(&shims_dir).unwrap();
 
         let shim_exe = write_shim(&shims_dir, "git", "path = ../apps/git/git.exe\n");
 
         assert_eq!(
-            resolve_scoop_shim_in(&shim_exe, &[shims_dir]),
+            resolve_scoop_shim_in(&shim_exe, &[PathBuf::from(root_dir)]),
             None,
             "The shim target does not exist, so it is not resolved to the target"
         );
+        dir.close()
     }
 }
