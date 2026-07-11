@@ -113,7 +113,7 @@ impl DirenvState {
                 allowed = Some(AllowStatus::from_str(value.trim())?);
             } else if line.contains("No .envrc or .env loaded") {
                 loaded = false;
-            };
+            }
         }
 
         if rc_path.as_os_str().is_empty() || allowed.is_none() {
