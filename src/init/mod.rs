@@ -3,7 +3,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
 
-use which::which;
+use crate::utils::which::which;
 
 /* We use a two-phase init here: the first phase gives a simple command to the
 shell. This command evaluates a more complicated script using `source` and
