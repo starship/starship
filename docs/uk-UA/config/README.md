@@ -3553,7 +3553,7 @@ OS information is detected via the [os_info](https://lib.rs/crates/os_info) crat
 If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# Це таблиця стандартних символів.
+# This is the default symbols table.
 [os.symbols]
 AIX = "➿ "
 Alpaquita = "🔔 "
@@ -3565,6 +3565,7 @@ Android = "🤖 "
 AOSC = "🐱 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bazzite = "🎮 "
 Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
@@ -3578,10 +3579,12 @@ FreeBSD = "😈 "
 Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
+Hurd = "🐂 "
 Illumos = "🐦 "
 Ios = "📱 "
 InstantOS = "⏲️ "
 Kali = "🐉 "
+KDENeon = "⚛️ "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "
