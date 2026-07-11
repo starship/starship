@@ -1,7 +1,8 @@
 pub mod env;
 pub mod serde;
 pub mod statusline;
-pub mod which;
+#[cfg(windows)]
+mod which;
 
 use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
@@ -14,6 +15,11 @@ use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
+
+#[cfg(windows)]
+pub use self::which::which;
+#[cfg(not(windows))]
+pub use which::which;
 
 /// Default timeout for command execution in milliseconds
 pub const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 500;
@@ -170,7 +176,7 @@ pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
     log::trace!("Creating Command for binary {binary_name:?}");
 
-    let full_path = match self::which::which(binary_name) {
+    let full_path = match which(binary_name) {
         Ok(full_path) => {
             log::trace!("Using {full_path:?} as {binary_name:?}");
             full_path

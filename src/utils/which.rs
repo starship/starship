@@ -1,8 +1,5 @@
-#[cfg(windows)]
 use std::env;
-#[cfg(windows)]
 use std::ffi::OsStr;
-#[cfg(windows)]
 use std::path::{Path, PathBuf};
 
 #[cfg(not(windows))]
@@ -11,7 +8,6 @@ pub use which::which;
 /// A wrapper around `which::which` that resolves Scoop shim executables on
 /// Windows to their actual target executables, avoiding the overhead of
 /// launching the shim process.
-#[cfg(windows)]
 pub fn which<T: AsRef<OsStr>>(binary_name: T) -> Result<PathBuf, which::Error> {
     which::which(binary_name).map(resolve_scoop_shim)
 }
@@ -21,7 +17,6 @@ pub fn which<T: AsRef<OsStr>>(binary_name: T) -> Result<PathBuf, which::Error> {
 /// The path is returned unchanged unless it is an `.exe` inside a Scoop shims
 /// directory whose `.shim` file points to an existing target and forwards no
 /// extra arguments (a shim with `args` has to run as-is).
-#[cfg(windows)]
 pub fn resolve_scoop_shim(path: PathBuf) -> PathBuf {
     if let Some(resolved) = resolve_scoop_shim_in(&path, &scoop_shims_dirs()) {
         log::trace!("Resolved Scoop shim executable {path:?} to target {resolved:?}");
@@ -33,7 +28,6 @@ pub fn resolve_scoop_shim(path: PathBuf) -> PathBuf {
 }
 
 /// Resolve a Scoop shim executable to its target executable, if applicable.
-#[cfg(windows)]
 fn resolve_scoop_shim_in(path: &Path, shims_dirs: &[PathBuf]) -> Option<PathBuf> {
     let is_exe = path
         .extension()
@@ -43,12 +37,11 @@ fn resolve_scoop_shim_in(path: &Path, shims_dirs: &[PathBuf]) -> Option<PathBuf>
     }
 
     parse_shim_file(&path.with_extension("shim"))
-        .and_then(|path| dunce::canonicalize(&path).ok())
+        // Not running canonicalize here as which::which should already return an absolute path.
         .filter(|target| target.is_file())
 }
 
 /// Retrieve the possible Scoop shims directories on the system.
-#[cfg(windows)]
 fn scoop_shims_dirs() -> Vec<PathBuf> {
     let user_root = env::var_os("SCOOP")
         .filter(|v| !v.is_empty())
@@ -68,23 +61,24 @@ fn scoop_shims_dirs() -> Vec<PathBuf> {
 }
 
 /// Check if a path resides directly inside one of the given directories.
-#[cfg(windows)]
 fn is_in_dirs(path: &Path, dirs: &[PathBuf]) -> bool {
     let Some(parent) = path.parent() else {
         return false;
     };
-    let Ok(parent) = dunce::canonicalize(parent) else {
+    if parent
+        .file_name()
+        .is_none_or(|name| !name.eq_ignore_ascii_case("shims"))
+    {
         return false;
-    };
-    dirs.iter()
-        .any(|dir| dunce::canonicalize(dir).is_ok_and(|dir| dir == parent))
+    }
+
+    dirs.iter().any(|dir| dir == parent)
 }
 
 /// Parse a Scoop `.shim` file and return the target path.
 ///
 /// Returns `None` if the shim forwards extra arguments or contains any
 /// other unsupported directives.
-#[cfg(windows)]
 fn parse_shim_file(shim_path: &Path) -> Option<PathBuf> {
     let content = std::fs::read_to_string(shim_path).ok()?;
     let mut target_path = None;
@@ -108,7 +102,7 @@ fn parse_shim_file(shim_path: &Path) -> Option<PathBuf> {
     Some(parent.join(target_path?))
 }
 
-#[cfg(all(test, windows))]
+#[cfg(test)]
 mod tests {
     use crate::utils;
 
