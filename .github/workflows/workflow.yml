@@ -197,7 +197,7 @@ jobs:
           -- --include-ignored"
         env:
           # Avoid -D warnings on nightly builds
-          RUSTFLAGS: ""
+          CARGO_BUILD_WARNINGS: ${{ matrix.rust == 'stable' && 'deny' || 'allow' }}
 
       - name: Build | Installer [Windows]
         continue-on-error: true
