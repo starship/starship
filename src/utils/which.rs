@@ -28,11 +28,11 @@ pub fn resolve_scoop_shim(path: PathBuf) -> PathBuf {
 }
 
 /// Resolve a Scoop shim executable to its target executable, if applicable.
-fn resolve_scoop_shim_in(path: &Path, shims_dirs: &[PathBuf]) -> Option<PathBuf> {
+fn resolve_scoop_shim_in(path: &Path, scoop_roots: &[PathBuf]) -> Option<PathBuf> {
     let is_exe = path
         .extension()
         .is_some_and(|ext| ext.eq_ignore_ascii_case("exe"));
-    if !is_exe || !is_in_dirs(path, shims_dirs) {
+    if !is_exe || !is_scoop_shim_directory(path, scoop_roots) {
         return None;
     }
 
@@ -56,8 +56,8 @@ fn scoop_shims_dirs() -> Vec<PathBuf> {
     [user_root, global_root].into_iter().flatten().collect()
 }
 
-/// Check if a path resides directly inside one of the given directories.
-fn is_in_dirs(path: &Path, dirs: &[PathBuf]) -> bool {
+/// Check if a path resides directly inside one of the given scoop roots' `shims` directories.
+fn is_scoop_shim_directory(path: &Path, dirs: &[PathBuf]) -> bool {
     let Some(parent) = path.parent() else {
         return false;
     };
@@ -72,7 +72,7 @@ fn is_in_dirs(path: &Path, dirs: &[PathBuf]) -> bool {
     };
 
     dirs.iter()
-        .any(|root_candidate| root_candidate == &potential_root)
+        .any(|root_candidate| root_candidate == potential_root)
 }
 
 /// Parse a Scoop `.shim` file and return the target path.
@@ -107,7 +107,7 @@ mod tests {
     use crate::utils;
 
     use super::*;
-    use std::fs::{self, File};
+    use std::fs;
     use tempfile::tempdir;
 
     fn write_shim(dir: &Path, name: &str, content: &str) -> PathBuf {
@@ -119,8 +119,8 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_shim_file_simple_path() {
-        let dir = tempdir().unwrap();
+    fn test_parse_shim_file_simple_path() -> std::io::Result<()> {
+        let dir = tempdir()?;
         let shim_path = dir.path().join("test.shim");
         fs::write(
             &shim_path,
@@ -131,11 +131,12 @@ mod tests {
             parse_shim_file(&shim_path),
             Some(PathBuf::from("C:\\scoop\\apps\\git\\current\\bin\\git.exe"))
         );
+        dir.close()
     }
 
     #[test]
-    fn test_parse_shim_file_quotes() {
-        let dir = tempdir().unwrap();
+    fn test_parse_shim_file_quotes() -> std::io::Result<()> {
+        let dir = tempdir()?;
         let shim_path = dir.path().join("test.shim");
         for quote in ["\"", "'"] {
             fs::write(
@@ -148,11 +149,12 @@ mod tests {
                 Some(PathBuf::from("C:\\scoop\\apps\\git\\current\\bin\\git.exe"))
             );
         }
+        dir.close()
     }
 
     #[test]
-    fn test_parse_shim_file_non_empty_args() {
-        let dir = tempdir().unwrap();
+    fn test_parse_shim_file_non_empty_args() -> std::io::Result<()> {
+        let dir = tempdir()?;
         let shim_path = dir.path().join("test.shim");
         fs::write(
             &shim_path,
@@ -160,11 +162,12 @@ mod tests {
         )
         .unwrap();
         assert_eq!(parse_shim_file(&shim_path), None);
+        dir.close()
     }
 
     #[test]
-    fn test_parse_shim_file_other_directives() {
-        let dir = tempdir().unwrap();
+    fn test_parse_shim_file_other_directives() -> std::io::Result<()> {
+        let dir = tempdir()?;
         let shim_path = dir.path().join("test.shim");
         for directive in ["args = ", "args = \"\"", "workingdir = C:\\somewhere"] {
             fs::write(
@@ -174,11 +177,12 @@ mod tests {
             .unwrap();
             assert_eq!(parse_shim_file(&shim_path), None);
         }
+        dir.close()
     }
 
     #[test]
-    fn test_parse_shim_file_comments_and_spaces() {
-        let dir = tempdir().unwrap();
+    fn test_parse_shim_file_comments_and_spaces() -> std::io::Result<()> {
+        let dir = tempdir()?;
         let shim_path = dir.path().join("test.shim");
         fs::write(
             &shim_path,
@@ -189,10 +193,11 @@ mod tests {
             parse_shim_file(&shim_path),
             Some(PathBuf::from("C:\\test.exe"))
         );
+        dir.close()
     }
 
     #[test]
-    fn test_resolve_scoop_shim() {
+    fn test_resolve_scoop_shim() -> std::io::Result<()> {
         let dir = tempdir().unwrap();
 
         // Mock a Scoop-like directory structure:
@@ -203,28 +208,31 @@ mod tests {
         //   apps/
         //     git/
         //       git.exe (empty placeholder)
-        let shims_dir = dir.path().join("shims");
-        let apps_dir = dir.path().join("apps").join("git");
-        fs::create_dir_all(&shims_dir).unwrap();
-        fs::create_dir_all(&apps_dir).unwrap();
+        let root_dir = dir.path();
+        let shims_dir = root_dir.join("shims");
+        let apps_dir = root_dir.join("apps").join("git");
+        fs::create_dir_all(&shims_dir)?;
+        fs::create_dir_all(&apps_dir)?;
 
         let shim_exe = write_shim(&shims_dir, "git", "path = ../apps/git/git.exe\n");
         let target_exe = apps_dir.join("git.exe");
-        File::create(&target_exe).unwrap();
+        utils::write_file(&target_exe, "").unwrap();
 
-        let shims_dirs = [shims_dir];
-        let resolved = resolve_scoop_shim_in(&shim_exe, &shims_dirs)
+        let scoop_roots = [PathBuf::from(root_dir)];
+        let resolved = resolve_scoop_shim_in(&shim_exe, &scoop_roots)
             .expect("The shim should resolve to the target executable");
         assert_eq!(
             dunce::canonicalize(&resolved).unwrap(),
-            dunce::canonicalize(&target_exe).unwrap()
+            dunce::canonicalize(&target_exe).unwrap(),
+            "The resolved path ({resolved:?}) should match the target executable ({target_exe:?})"
         );
 
         assert_eq!(
-            resolve_scoop_shim_in(&target_exe, &shims_dirs),
+            resolve_scoop_shim_in(&target_exe, &scoop_roots),
             None,
             "A non-shim executable should not be resolved"
         );
+        dir.close()
     }
 
     #[test]
