@@ -4,7 +4,7 @@
 
 هذا الدليل هو جولة خلال التغييرات الرئيسية التي قمنا بها.
 
-## `prompt_order`تم استبداله بتنسيق  root-level ``
+## `prompt_order`تم استبداله بتنسيق  root-level \`\`
 
 Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 

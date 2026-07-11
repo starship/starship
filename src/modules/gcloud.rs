@@ -116,10 +116,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .and_then(|(_, domain)| domain)
                     .map(Cow::Borrowed)
                     .map(Ok),
-                "region" => gcloud_context
-                    .get_region()
-                    .map(|region| config.region_aliases.get(region).copied().unwrap_or(region))
-                    .map(Cow::Borrowed)
+                "region" => context
+                    .get_env("CLOUDSDK_COMPUTE_REGION")
+                    .map(Cow::Owned)
+                    .or_else(|| gcloud_context.get_region().map(Cow::Borrowed))
+                    .map(|region| {
+                        config
+                            .region_aliases
+                            .get(region.as_ref())
+                            .copied()
+                            .map_or(region, Cow::Borrowed)
+                    })
                     .map(Ok),
                 "project" => context
                     .get_env("CLOUDSDK_CORE_PROJECT")
@@ -446,6 +453,63 @@ project = very-long-project-name
             })
             .collect();
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  vlpn")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn region_set_in_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations").join("config_default");
+        let mut config_default_file = File::create(config_default_path)?;
+        config_default_file.write_all(
+            b"\
+[compute]
+region = us-central1
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_COMPUTE_REGION", "europe-west2")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$region]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("☁️  europe-west2")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn region_set_in_env_with_alias() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_COMPUTE_REGION", "europe-west2")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$region]($style) "
+                [gcloud.region_aliases]
+                europe-west2 = "ew2"
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  ew2")));
 
         assert_eq!(actual, expected);
         dir.close()

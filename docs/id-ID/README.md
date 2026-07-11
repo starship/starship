@@ -2,25 +2,22 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Mari Mulai →
       link: ./guide/
 features:
-  - 
-    title: Kompatibilitas Yang Utama
+  - title: Kompatibilitas Yang Utama
     details: Dapat berfungsi di shells standar dengan sistem operasi yang paling biasa. Pakai di mana saja!
-  - 
-    title: Dibuat dengan Rust
+  - title: Dibuat dengan Rust
     details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
-  - 
-    title: Dapat Dikustomisasi
+  - title: Dapat Dikustomisasi
     details: Kamu dapat mengatur semua detail kecil dengan sesukamu, entah itu untuk membuatnya sebagai prompt yang seminimal mungkin atau kaya akan fitur yang kamu mau.
 footer: Berlisensi ISC | Hak Cipta © 2019-sekarang Kontributor Starship
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Prompt Lintas Shell"
 description: Starship merupakan sebuah prompt yang minimal, super cepat, dan sangat bisa untuk dikustomisasi untuk shell apapun! Bisa menampilkan informasi yang kamu butuhkan, namun tetap bisa tampil dengan ramping dan minimal. Instalasi sederhana tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, dan PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Instalasi dengan menggunakan binary **starship**:
 
-
    #### Pasang Versi Terbaru
 
    Dengan Shell:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Untuk memperbarui Starship, jalankan ulang skrip di atas. Hal ini akan memperbarui versi yang terpasang tanpa mengubah konfigurasi Starship.
-
 
    #### Pasang Melalui Package Manager
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Tambahkan skrip init ke dalam file konfigurasi Shell:
-
+2. Tambahkan skrip init ke dalam file konfigurasi Shell:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Tambahkan skrip berikut pada baris akhir `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
+   #### PowerShell
 
-   #### Powershell
-
-   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. Kamu dapat mengecek lokasi file tersebut dengan mencari tahu keberadaan variabel `$PROFILE` di dalam PowerShell. Biasanya, lokasi file tersebut berada di `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` atau `~/.config/powershell/Microsoft.PowerShell_profile.ps1` pada -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Hanya Nushell v0.96+ yang menerima dukungan.
+   > [!WARNING]> This will change in the future.
+   > > Hanya Nushell v0.96+ yang menerima dukungan.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -181,10 +169,9 @@ onMounted(() => {
    execx($(starship init xonsh))
    ```
 
-
    #### Cmd
 
-   Kamu perlu menggunakan [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) pada Cmd. Tambahkan baris berikut ke dalam `starship.lua` lalu taruhlah file berikut ke dalam direktori Clink:
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

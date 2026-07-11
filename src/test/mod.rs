@@ -1,5 +1,4 @@
-use crate::context::{Context, Properties, Shell, Target};
-use crate::context_env::Env;
+use crate::context::{Context, Env, Properties, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -9,6 +8,7 @@ use log::{Level, LevelFilter};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 use std::sync::LazyLock;
 use std::sync::Once;
 use tempfile::TempDir;
@@ -17,9 +17,27 @@ static FIXTURE_DIR: LazyLock<PathBuf> =
     LazyLock::new(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src/test/fixtures/"));
 
 static GIT_FIXTURE: LazyLock<PathBuf> = LazyLock::new(|| FIXTURE_DIR.join("git-repo.bundle"));
+static GIT_SHA256_FIXTURE: LazyLock<PathBuf> =
+    LazyLock::new(|| FIXTURE_DIR.join("git-repo-sha256.bundle"));
 static HG_FIXTURE: LazyLock<PathBuf> = LazyLock::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
 static LOGGER: Once = Once::new();
+
+static TEST_GIT_CONFIG: &[(&str, &str)] = &[
+    // Dummy user
+    ("user.email", "starship@example.com"),
+    ("user.name", "starship"),
+    // Prevent intermittent test failures and ensure that the result of git commands
+    // are available during I/O-contentious tests, by having git run `fsync`.
+    // This is especially important on Windows.
+    // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
+    ("core.fsync", "all"),
+    // Older git setting for `fsync` for compatibility with older git versions:
+    ("core.fsyncObjectFiles", "true"),
+    // Disable signing
+    ("commit.gpgsign", "false"),
+    ("tag.gpgsign", "false"),
+];
 
 fn init_logger() {
     let mut logger = StarshipLogger::default();
@@ -148,6 +166,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn claude_code_data(mut self, data: crate::context::ClaudeCodeData) -> Self {
+        self.context.claude_code_data = Some(Box::new(data));
+        self
+    }
+
     #[cfg(feature = "battery")]
     pub fn battery_info_provider(
         mut self,
@@ -184,18 +207,57 @@ impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum FixtureProvider {
     Fossil,
-    Git,
-    GitReftable,
-    GitBare,
-    GitBareReftable,
+    Git { reftable: bool, bare: bool },
     Hg,
     Pijul,
 }
 
+pub const COMMON_GIT_PROVIDERS: &[FixtureProvider] = &[
+    FixtureProvider::Git {
+        reftable: false,
+        bare: false,
+    },
+    FixtureProvider::Git {
+        reftable: true,
+        bare: false,
+    },
+];
+
+pub const BARE_GIT_PROVIDERS: &[FixtureProvider] = &[
+    FixtureProvider::Git {
+        reftable: false,
+        bare: true,
+    },
+    FixtureProvider::Git {
+        reftable: true,
+        bare: true,
+    },
+];
+
+pub fn config_cmd_for_tests(cmd: &mut Command) {
+    for (key, value) in TEST_GIT_CONFIG {
+        cmd.args(["-c", &format!("{key}={value}")]);
+    }
+}
+
+pub fn config_git_repo_for_tests(path: &Path) -> io::Result<()> {
+    for (key, value) in TEST_GIT_CONFIG {
+        create_command("git")?
+            .args(["config", "--local", key, value])
+            .current_dir(path)
+            .output()?;
+    }
+    Ok(())
+}
+
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
+    fixture_repo_with_hash(provider, rand::random())
+}
+
+pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
             let checkout_db = if cfg!(windows) {
@@ -213,67 +275,38 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .sync_all()?;
             Ok(path)
         }
-        FixtureProvider::Git | FixtureProvider::GitReftable => {
+        FixtureProvider::Git { reftable, bare } => {
             let path = tempfile::tempdir()?;
 
-            create_command("git")?
+            let fixture = if sha256 {
+                &GIT_SHA256_FIXTURE
+            } else {
+                &GIT_FIXTURE
+            };
+
+            let mut command = create_command("git")?;
+            command
                 .current_dir(path.path())
                 .arg("clone")
-                .args(
-                    matches!(provider, FixtureProvider::GitReftable)
-                        .then(|| "--ref-format=reftable"),
-                )
-                .args(["-b", "master"])
-                .arg(GIT_FIXTURE.as_os_str())
-                .arg(path.path())
-                .output()?;
+                .args(reftable.then_some("--ref-format=reftable"))
+                .args(["-b", "master"]);
 
-            create_command("git")?
-                .args(["config", "--local", "user.email", "starship@example.com"])
-                .current_dir(path.path())
-                .output()?;
+            if bare {
+                command.arg("--bare");
+            }
 
-            create_command("git")?
-                .args(["config", "--local", "user.name", "starship"])
-                .current_dir(path.path())
-                .output()?;
+            config_cmd_for_tests(&mut command);
 
-            // Prevent intermittent test failures and ensure that the result of git commands
-            // are available during I/O-contentious tests, by having git run `fsync`.
-            // This is especially important on Windows.
-            // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
-            create_command("git")?
-                .args(["config", "--local", "core.fsync", "all"])
-                .current_dir(path.path())
-                .output()?;
+            command.arg(fixture.as_os_str()).arg(path.path()).output()?;
 
-            // Older git setting for `fsync` for compatibility with older git versions:
-            create_command("git")?
-                .args(["config", "--local", "core.fsyncObjectFiles", "true"])
-                .current_dir(path.path())
-                .output()?;
+            config_git_repo_for_tests(path.path())?;
+            if !bare {
+                create_command("git")?
+                    .args(["reset", "--hard", "HEAD"])
+                    .current_dir(path.path())
+                    .output()?;
+            }
 
-            create_command("git")?
-                .args(["reset", "--hard", "HEAD"])
-                .current_dir(path.path())
-                .output()?;
-
-            Ok(path)
-        }
-        FixtureProvider::GitBare | FixtureProvider::GitBareReftable => {
-            let path = tempfile::tempdir()?;
-
-            create_command("git")?
-                .current_dir(path.path())
-                .arg("clone")
-                .args(
-                    matches!(provider, FixtureProvider::GitBareReftable)
-                        .then(|| "--ref-format=reftable"),
-                )
-                .args(["-b", "master", "--bare"])
-                .arg(GIT_FIXTURE.as_os_str())
-                .arg(path.path())
-                .output()?;
             Ok(path)
         }
         FixtureProvider::Hg => {

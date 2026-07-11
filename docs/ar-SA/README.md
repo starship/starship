@@ -2,25 +2,22 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: التخصيص البسيط و السريع و الغير محدود لي ال"shell"!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: البدء مع Starship ←
       link: ./guide/
 features:
-  - 
-    title: التوافق أولاً
+  - title: التوافق أولاً
     details: يعمل على أكثر موجهات الأوامر شيوعاً في أكثر نظم التشغيل شيوعاً. استخدمه في كل مكان!
-  - 
-    title: Rust-Powered
+  - title: Rust-Powered
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
-  - 
-    title: قابل للتخصيص
+  - title: قابل للتخصيص
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. تثبيت **starship**:
 
-
    #### تثبيت أحدث إصدار
 
    بإستخدام Shell:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
-
 
    #### التثبيت عبر مدير الحزم
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
-
+2. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-
-   #### Powershell
+   #### PowerShell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Only Nushell v0.96+ is supported.
+   > [!WARNING] This will change in the future.
+   > Only Nushell v0.96+ is supported.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +168,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 

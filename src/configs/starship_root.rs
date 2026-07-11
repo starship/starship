@@ -2,6 +2,13 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+pub fn default_profiles() -> IndexMap<String, String> {
+    IndexMap::from_iter([(
+        "claude-code".to_string(),
+        "$claude_model$git_branch$claude_context$claude_cost".to_string(),
+    )])
+}
+
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[cfg_attr(
     feature = "config-schema",
@@ -22,7 +29,11 @@ pub struct StarshipRootConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
-    pub profiles: IndexMap<String, String>,
+    #[serde(rename = "profiles")]
+    #[cfg_attr(feature = "config-schema", schemars(default = "default_profiles"))]
+    pub user_profiles: IndexMap<String, String>,
+    #[serde(skip)]
+    pub internal_profiles: IndexMap<String, String>,
 }
 
 pub type Palette = HashMap<String, String>;
@@ -146,7 +157,8 @@ impl Default for StarshipRootConfig {
             format: "$all".to_string(),
             right_format: String::new(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
-            profiles: Default::default(),
+            user_profiles: IndexMap::new(),
+            internal_profiles: default_profiles(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,

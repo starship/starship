@@ -2,7 +2,8 @@
 
 # Préréglage Pastel Powerline
 
-Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Il montre également comment fonctionne la substitution de chemin dans starship.
+Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Il montre également comment fonctionne la substitution de chemin dans starship.
 
 ![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png)
 
@@ -16,6 +17,6 @@ Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml){download}
+[Cliquez pour télécharger TOML](/presets/toml/pastel-powerline.toml){download}
 
 <<< @/public/presets/toml/pastel-powerline.toml

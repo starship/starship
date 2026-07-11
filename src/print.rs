@@ -73,6 +73,20 @@ pub fn prompt(args: Properties, target: Target) {
     let context = Context::new(args, target);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
+
+    write!(handle, "{}", get_prompt(&context)).unwrap();
+}
+
+pub fn prompt_with_claude_code(args: Properties, target: Target) {
+    let claude_data = serde_json::from_reader(io::stdin())
+        .inspect_err(|e| log::error!("Failed to read Claude Code JSON from stdin: {e}"))
+        .unwrap_or_default();
+
+    let mut context = Context::new(args, target).with_claude_code_data(claude_data);
+    context.shell = Shell::Unknown;
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
@@ -189,7 +203,7 @@ pub fn timings(args: Properties) {
         })
         .collect::<Vec<ModuleTiming>>();
 
-    modules.sort_by(|a, b| b.duration.cmp(&a.duration));
+    modules.sort_by_key(|m| std::cmp::Reverse(m.duration));
 
     let max_name_width = modules.iter().map(|i| i.name_len).max().unwrap_or(0);
     let max_duration_width = modules.iter().map(|i| i.duration_len).max().unwrap_or(0);
@@ -446,7 +460,11 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let (left_format_str, right_format_str): (&str, &str) = match context.target {
         Target::Main | Target::Right => (&config.format, &config.right_format),
         Target::Profile(ref name) => {
-            if let Some(lf) = config.profiles.get(name) {
+            if let Some(lf) = config
+                .user_profiles
+                .get(name)
+                .or_else(|| config.internal_profiles.get(name))
+            {
                 (lf, "")
             } else {
                 log::error!("Profile {name:?} not found");
@@ -509,7 +527,7 @@ impl ValueEnum for Preset {
     }
 }
 
-pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool) {
+pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, force: bool, list: bool) {
     if list {
         println!("{}", preset_list());
         return;
@@ -517,11 +535,11 @@ pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool)
     let variant = name.expect("name argument must be specified");
     let content = shadow::get_preset_content(variant.0);
     if let Some(output) = output {
-        if let Err(err) = std::fs::write(output, content) {
-            eprintln!("Error writing preset to file: {err}");
+        if let Err(e) = crate::utils::write_file_atomic(&output, content, force) {
+            eprintln!("Error writing preset to {output:?}: {e}");
             std::process::exit(1);
         }
-    } else if let Err(err) = std::io::stdout().write_all(content) {
+    } else if let Err(err) = std::io::stdout().write_all(content.as_bytes()) {
         eprintln!("Error writing preset to stdout: {err}");
         std::process::exit(1);
     }
@@ -663,9 +681,9 @@ mod test {
 
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
-        preset_command(None, None, true);
+        preset_command(None, None, false, true);
         for v in Preset::value_variants() {
-            preset_command(Some(v.clone()), None, false);
+            preset_command(Some(v.clone()), None, false, false);
         }
     }
 
@@ -673,12 +691,35 @@ mod test {
     fn preset_command_output_to_file() -> std::io::Result<()> {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("preset.toml");
-        preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
+        preset_command(
+            Some(Preset("nerd-font-symbols")),
+            Some(path.clone()),
+            false,
+            false,
+        );
 
         let actual = utils::read_file(&path)?;
         let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
         assert_eq!(actual, expected);
+        dir.close()
+    }
 
+    #[test]
+    fn preset_command_output_existing_file_force() -> io::Result<()> {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("preset.toml");
+        utils::write_file(&path, "existing content")?;
+
+        preset_command(
+            Some(Preset("nerd-font-symbols")),
+            Some(path.clone()),
+            true,
+            false,
+        );
+
+        let actual = utils::read_file(&path).unwrap();
+        let expected = include_str!("../docs/public/presets/toml/nerd-font-symbols.toml");
+        assert_eq!(actual, expected);
         dir.close()
     }
 
@@ -811,5 +852,19 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn test_prefer_user_profile() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [profiles]
+            claude-code = "user profile"
+        });
+        context.target = Target::Profile("claude-code".to_string());
+
+        let expected = "user profile";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
     }
 }

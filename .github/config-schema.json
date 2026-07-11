@@ -60,7 +60,9 @@
       "additionalProperties": {
         "type": "string"
       },
-      "default": {}
+      "default": {
+        "claude-code": "$claude_model$git_branch$claude_context$claude_cost"
+      }
     },
     "aws": {
       "$ref": "#/$defs/AwsConfig",
@@ -179,6 +181,75 @@
         "vimcmd_visual_symbol": "[❮](bold yellow)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
+        "disabled": false
+      }
+    },
+    "claude_context": {
+      "$ref": "#/$defs/ClaudeContextConfig",
+      "default": {
+        "format": "[$gauge $percentage]($style) ",
+        "symbol": "",
+        "gauge_width": 5,
+        "gauge_full_symbol": "█",
+        "gauge_partial_symbol": "▒",
+        "gauge_empty_symbol": "░",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 30.0,
+            "style": "bold green",
+            "hidden": false
+          },
+          {
+            "threshold": 60.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 80.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_cost": {
+      "$ref": "#/$defs/ClaudeCostConfig",
+      "default": {
+        "format": "[$symbol(\\$$cost)]($style) ",
+        "symbol": "💰 ",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 1.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 5.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
+    "claude_model": {
+      "$ref": "#/$defs/ClaudeModelConfig",
+      "default": {
+        "format": "[$symbol$model]($style) ",
+        "symbol": "🤖 ",
+        "style": "bold blue",
+        "model_aliases": {},
         "disabled": false
       }
     },
@@ -1005,9 +1076,7 @@
         "detect_files": [
           "pom.xml"
         ],
-        "detect_folders": [
-          ".mvn"
-        ]
+        "detect_folders": []
       }
     },
     "memory_usage": {
@@ -1140,7 +1209,10 @@
           ".nvmrc",
           "!bunfig.toml",
           "!bun.lock",
-          "!bun.lockb"
+          "!bun.lockb",
+          "!deno.json",
+          "!deno.jsonc",
+          "!deno.lock"
         ],
         "detect_folders": [
           "node_modules"
@@ -2226,6 +2298,160 @@
         "vimcmd_replace_one_symbol": {
           "type": "string",
           "default": "[❮](bold purple)"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeContextConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$gauge $percentage]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": ""
+        },
+        "gauge_width": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 5
+        },
+        "gauge_full_symbol": {
+          "type": "string",
+          "default": "█"
+        },
+        "gauge_partial_symbol": {
+          "type": "string",
+          "default": "▒"
+        },
+        "gauge_empty_symbol": {
+          "type": "string",
+          "default": "░"
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 30.0,
+              "style": "bold green",
+              "hidden": false
+            },
+            {
+              "threshold": 60.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 80.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "format": "float",
+          "default": 0.0
+        },
+        "style": {
+          "type": "string",
+          "default": "bold green"
+        },
+        "hidden": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeCostConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol(\\$$cost)]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "💰 "
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 1.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 5.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeModelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol$model]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "🤖 "
+        },
+        "style": {
+          "type": "string",
+          "default": "bold blue"
+        },
+        "model_aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
         },
         "disabled": {
           "type": "boolean",
@@ -4622,9 +4848,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            ".mvn"
-          ]
+          "default": []
         }
       },
       "additionalProperties": false
@@ -4979,7 +5203,10 @@
             ".nvmrc",
             "!bunfig.toml",
             "!bun.lock",
-            "!bun.lockb"
+            "!bun.lockb",
+            "!deno.json",
+            "!deno.jsonc",
+            "!deno.lock"
           ]
         },
         "detect_folders": {
@@ -5444,7 +5671,7 @@
       "type": "object",
       "properties": {
         "pixi_binary": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "pixi"
           ]
@@ -5500,7 +5727,7 @@
       },
       "additionalProperties": false
     },
-    "Either2": {
+    "VecOr_string": {
       "anyOf": [
         {
           "type": "string"
@@ -5608,7 +5835,7 @@
           "default": "pyenv "
         },
         "python_binary": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_VecOr_string",
           "default": [
             [
               "python"
@@ -5691,6 +5918,19 @@
         }
       },
       "additionalProperties": false
+    },
+    "VecOr_VecOr_string": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VecOr_string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VecOr_string"
+          }
+        }
+      ]
     },
     "QuartoConfig": {
       "type": "object",
@@ -6225,7 +6465,7 @@
           "default": "S "
         },
         "compiler": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": [
             "solc"
           ]
@@ -6926,7 +7166,7 @@
           "default": ""
         },
         "when": {
-          "$ref": "#/$defs/Either3",
+          "$ref": "#/$defs/Either2",
           "default": false
         },
         "require_repo": {
@@ -6934,7 +7174,7 @@
           "default": false
         },
         "shell": {
-          "$ref": "#/$defs/Either2",
+          "$ref": "#/$defs/VecOr_string",
           "default": []
         },
         "description": {
@@ -6993,7 +7233,7 @@
       },
       "additionalProperties": false
     },
-    "Either3": {
+    "Either2": {
       "anyOf": [
         {
           "type": "boolean"

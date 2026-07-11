@@ -1,8 +1,12 @@
+pub mod env;
+pub mod serde;
+pub mod statusline;
+
 use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
-use std::fs::read_to_string;
-use std::io::{Error, ErrorKind, Result};
+use std::fs;
+use std::io::{Error, ErrorKind, Result, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -40,7 +44,7 @@ pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathB
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     log::trace!("Trying to read from {file_name:?}");
 
-    let result = read_to_string(file_name);
+    let result = fs::read_to_string(file_name);
 
     if result.is_err() {
         log::debug!("Error reading file: {result:?}");
@@ -54,8 +58,6 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
 /// Write a string to a file
 #[cfg(test)]
 pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Result<()> {
-    use std::io::Write;
-
     let file_name = file_name.as_ref();
     let text = text.as_ref();
 
@@ -83,6 +85,73 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
         }
     }
     file.sync_all()
+}
+
+/// Write contents to a file by first writing to a temporary file
+/// and then move it to the target location in place
+/// Only overwrites existing files if `force` is true
+pub fn write_file_atomic<P: AsRef<Path>, S: AsRef<str>>(
+    target_path: P,
+    text: S,
+    force: bool,
+) -> std::result::Result<(), String> {
+    let target_path = target_path.as_ref();
+    let text = text.as_ref();
+
+    log::trace!("Trying to write {text:?} to {target_path:?}");
+
+    #[cfg_attr(not(unix), allow(unused_mut))]
+    let mut builder = tempfile::Builder::new();
+
+    // On Unix, the default permissions are too restrictive, so we need to relax them
+    // This should be safe because we're creating a temporary file in the same directory
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+
+        let permissions = target_path
+            .metadata()
+            .as_ref()
+            .map(fs::Metadata::permissions)
+            .unwrap_or_else(|_| {
+                let all_read_write = 0o666;
+                std::fs::Permissions::from_mode(all_read_write)
+            });
+
+        builder.permissions(permissions);
+    }
+
+    let Some(parent_dir) = target_path.parent() else {
+        return Err(format!(
+            "Unable to determine parent directory of {target_path:?}"
+        ));
+    };
+
+    let mut temp_file = builder
+        .tempfile_in(parent_dir)
+        .map_err(|e| format!("Error creating temporary file: {}", e))?;
+
+    if let Err(err) = temp_file.write_all(text.as_bytes()) {
+        return Err(format!("Error writing to temporary file: {}", err));
+    }
+
+    let result = if force {
+        temp_file.persist(target_path)
+    } else {
+        temp_file.persist_noclobber(target_path)
+    };
+
+    result.map_err(|e| {
+        if !force && e.error.kind() == ErrorKind::AlreadyExists {
+            "Error saving file, use --force to overwrite existing configuration file".to_string()
+        } else {
+            format!("Error moving temporary file to target location: {e}")
+        }
+    })?;
+
+    log::trace!("File {target_path:?} written successfully");
+
+    Ok(())
 }
 
 /// Reads command output from stderr or stdout depending on to which stream program streamed it's output
@@ -738,6 +807,34 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     }
 }
 
+/// Formats an integer into a human-readable string using SI prefixes (k, M, G, T)
+pub fn humanize_int(n: u64) -> String {
+    if n < 1000 {
+        return n.to_string();
+    }
+
+    let n = n as f64;
+    let units = ["k", "M", "G", "T", "P", "E"];
+    let mut unit_idx = 0;
+    let mut val = n / 1000.0;
+
+    while val >= 1000.0 && unit_idx < units.len() - 1 {
+        val /= 1000.0;
+        unit_idx += 1;
+    }
+
+    if val < 10.0 {
+        let s = format!("{:.1}{}", val, units[unit_idx]);
+        if s.contains(".0") {
+            s.replace(".0", "")
+        } else {
+            s
+        }
+    } else {
+        format!("{:.0}{}", val, units[unit_idx])
+    }
+}
+
 pub fn home_dir() -> Option<PathBuf> {
     dirs::home_dir()
 }
@@ -787,6 +884,8 @@ impl PathExt for Path {
 
 #[cfg(test)]
 mod tests {
+    use tempfile::tempdir;
+
     use super::*;
 
     #[test]
@@ -820,6 +919,18 @@ mod tests {
     #[test]
     fn render_time_test_1d() {
         assert_eq!(render_time(86_400_000_u128, false), "1d0h0m0s");
+    }
+
+    #[test]
+    fn test_humanize_int() {
+        assert_eq!(humanize_int(0), "0");
+        assert_eq!(humanize_int(999), "999");
+        assert_eq!(humanize_int(1000), "1k");
+        assert_eq!(humanize_int(1200), "1.2k");
+        assert_eq!(humanize_int(10000), "10k");
+        assert_eq!(humanize_int(100000), "100k");
+        assert_eq!(humanize_int(1000000), "1M");
+        assert_eq!(humanize_int(1500000), "1.5M");
     }
 
     #[test]
@@ -988,5 +1099,52 @@ mod tests {
             encode_to_hex(&[8, 13, 9, 189, 129, 94]),
             "080d09bd815e".to_string()
         );
+    }
+
+    #[test]
+    fn test_write_file_atomic() -> Result<()> {
+        // Create a temporary file for testing
+        let tmp_dir = tempdir()?;
+        let path = tmp_dir.path().join("test_config.toml");
+
+        let expected = "test data";
+        write_file_atomic(&path, expected, false).unwrap();
+
+        let actual_data = read_file(&path)?;
+        assert_eq!(actual_data, expected);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn test_write_file_atomic_already_exists() -> Result<()> {
+        let tmp_dir = tempdir()?;
+        let tmp_file_path = tmp_dir.path().join("test_config.toml");
+
+        write_file(&tmp_file_path, "existing data")?;
+
+        let err = write_file_atomic(&tmp_file_path, "should not contain this", false).unwrap_err();
+        assert!(err.contains("--force"));
+
+        let actual_data = read_file(&tmp_file_path)?;
+        assert_eq!(actual_data, "existing data");
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn test_write_file_atomic_overwrite() -> Result<()> {
+        let tmp_dir = tempdir()?;
+        let path = tmp_dir.path().join("test_config.toml");
+
+        write_file(&path, "existing data")?;
+
+        let expected = "test data";
+        write_file_atomic(&path, expected, true).unwrap();
+
+        let actual = read_file(&path)?;
+        assert_eq!(actual, expected);
+
+        tmp_dir.close()
     }
 }

@@ -1,13 +1,12 @@
 <p align="center">
   <img
     width="400"
-    src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
+    src="https://raw.githubusercontent.com/starship/starship/main/media/logo.png"
     alt="Starship – Cross-shell prompt"
- />
+  />
 </p>
 
-<p align="center">
-  <a href="https://github.com/starship/starship/actions"
+<p align="center"><a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="Trạng thái GitHub Actions workflow"
@@ -39,179 +38,184 @@
  /></a>
 </p>
 
-<p align="center">
-  <a href="https://starship.rs">Website</a>
+<p align="center"><a href="https://starship.rs">Website</a>
   ·
   <a href="#🚀-installation">Cài đặt</a>
   ·
   <a href="https://starship.rs/config/">Cấu hình</a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/starship/starship/blob/master/README.md"
+<p align="center"><a href="https://github.com/starship/starship/blob/main/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-us.png"
       alt="Tiếng Anh"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/de-DE/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-de.png"
       alt="Tiếng Đức"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/es-ES/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-es.png"
       alt="Tiếng Tây Ban Nha"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/fr-FR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-fr.png"
       alt="Thiếng Pháp"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/id-ID/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-id.png"
       alt="Bahasa Indonesia"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/it-IT/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-it.png"
       alt="Italiano"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/ja-JP/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-jp.png"
       alt="Tiếng Nhật"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/pt-BR/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-br.png"
       alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/ru-RU/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ru.png"
       alt="Tiếng Nga"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/uk-UA/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-ua.png"
       alt="Українська"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/vi-VN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-vn.png"
       alt="Tiếng Việt"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/zh-CN/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-cn.png"
       alt="Tiếng Trung giản thể"
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
+    href="https://github.com/starship/starship/blob/main/docs/zh-TW/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-tw.png"
       alt="Tiếng Trung hiện đại"
  /></a>
 </p>
 
 <h1></h1>
 
+> [!WARNING]
+> **The default branch has been renamed from `master` to `main`.**
+> If you have a local clone, update it by running:
+>
+> ```sh
+> git branch -m master main
+> git fetch origin
+> git branch -u origin/main main
+> git remote set-head origin -a
+> ```
+
 <img
-  src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship với iTerm2 and chủ đề Snazzy"
-  width="50%"
-  align="right"
- />
+src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
+alt="Starship with iTerm2 and the Snazzy theme"
+width="50%"
+align="right"
+/>
 
-**Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
-- **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
-- **Độ phổ biến:** làm việc trên mọi shell, bất kì hệ điều hành nào.
-- **Thông minh:** hiển thị thông tin liên quan dưới một cái nhìn.
-- **Tính năng phong phú:** hỗ trợ tất cả các công cụ yêu thích của bạn.
-- **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
+- **Fast:** it's fast – _really really_ fast! 🚀
+- **Customizable:** configure every aspect of your prompt.
+- **Universal:** works on any shell, on any operating system.
+- **Intelligent:** shows relevant information at a glance.
+- **Feature rich:** support for all your favorite tools.
+- **Easy:** quick to install – start using it in minutes.
 
-<p align="center">
-<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
+<p align="center"><a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Cài đặt
+## Yêu cầu
 
 ### Yêu cầu
 
-- Bạn phải có [Nerd Font](https://www.nerdfonts.com/) được cài đặt và kích hoạt trên terminal (ví dụ, bạn có thể thử [FiraCode NerdFont](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Bước 1. Cài Đặt Starship
 
 Chọn hệ điều hành của bạn trong danh sách bên dưới để xem hướng dẫn cài đặt:
 
-<details>
-<summary>Android</summary>
+<details><summary>Android</summary>
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Kho lưu trữ                                                                       | Hướng dẫn              |
-| --------------------------------------------------------------------------------- | ---------------------- |
-| [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
+| Kho lưu trữ | Hướng dẫn              |
+| ----------- | ---------------------- |
+| [Termux]    | `pkg install starship` |
 
 </details>
 
-<details>
-<summary>BSD</summary>
+<details><summary>BSD</summary>
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Bản phân phối | Kho lưu trữ                                              | Hướng dẫn                         |
-| ------------- | -------------------------------------------------------- | --------------------------------- |
-| **_Bất kỳ_**  | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD       | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD        | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| Bản phân phối | Kho lưu trữ     | Hướng dẫn                         |
+| ------------- | --------------- | --------------------------------- |
+| **_Any_**     | **[crates.io]** | `cargo install starship --locked` |
+| FreeBSD       | [FreshPorts]    | `pkg install starship`            |
+| NetBSD        | [pkgsrc]        | `pkgin install starship`          |
 
 </details>
 
-<details>
-<summary>Linux</summary>
+<details><summary>Linux</summary>
 
 Cài đặt phiên bản mới nhất cho hệ điều hành của bạn:
 
@@ -221,27 +225,26 @@ curl -sS https://starship.rs/install.sh | sh
 
 Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
-| Bản phân phối      | Kho lưu trữ                                                                                     | Hướng dẫn                                                                      |
-| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Bất kỳ_**       | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Bất kỳ_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Bất kỳ_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
-| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Debian 13+         | [Debian Main](https://sources.debian.org/src/starship/1.22.1-1/)                                | `apt install starship`                                                         |
-| Fedora 40+         | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
-| Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
-| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
-| Ubuntu 25.04+      | [Ubuntu Universe](https://packages.ubuntu.com/source/plucky/starship)                           | `apt install starship`                                                         |
-| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
+| Bản phân phối                      | Kho lưu trữ             | Hướng dẫn                                                     |
+| ---------------------------------- | ----------------------- | ------------------------------------------------------------- |
+| **_Any_**                          | **[crates.io]**         | `cargo install starship --locked`                             |
+| _Any_                              | [conda-forge]           | `conda install -c conda-forge starship`                       |
+| _Any_                              | [Linuxbrew]             | `brew install starship`                                       |
+| Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
+| Arch Linux                         | [Arch Linux Extra]      | `pacman -S starship`                                          |
+| CentOS 7+                          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Debian 13+                         | [Debian Main]           | `apt install starship`                                        |
+| Fedora 40+                         | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Gentoo                             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
+| Manjaro                            |                         | `pacman -S starship`                                          |
+| NixOS                              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
+| openSUSE                           | [OSS]                   | `zypper in starship`                                          |
+| Ubuntu 25.04+      | [Ubuntu Universe]       | `apt install starship`                                        |
+| Void Linux                         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
 
-<details>
-<summary>macOS</summary>
+<details><summary>macOS</summary>
 
 Cài đặt phiên bản mới nhất cho hệ điều hành của bạn:
 
@@ -251,29 +254,28 @@ curl -sS https://starship.rs/install.sh | sh
 
 Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
-| Kho lưu trữ                                              | Hướng dẫn                               |
-| -------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
-| [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
-| [Homebrew](https://formulae.brew.sh/formula/starship)    | `brew install starship`                 |
-| [MacPorts](https://ports.macports.org/port/starship)     | `port install starship`                 |
+| Kho lưu trữ     | Hướng dẫn                               |
+| --------------- | --------------------------------------- |
+| **[crates.io]** | `cargo install starship --locked`       |
+| [conda-forge]   | `conda install -c conda-forge starship` |
+| [Homebrew]      | `brew install starship`                 |
+| [MacPorts]      | `port install starship`                 |
 
 </details>
 
-<details>
-<summary>Windows</summary>
-
-Cài đặt phiên bản mới nhất cho hệ điều hành của bạn với MSI-installers từ [phần release](https://github.com/starship/starship/releases/latest).
+<details><summary>Windows</summary>
 
 Cài đặt Starship bằng một package manager bất kì:
 
-| Kho lưu trữ                                                                                  | Hướng dẫn                               |
-| -------------------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
-| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
+Cài đặt Starship bằng một package manager bất kì:
+
+| Kho lưu trữ     | Hướng dẫn                               |
+| --------------- | --------------------------------------- |
+| **[crates.io]** | `cargo install starship --locked`       |
+| [Chocolatey]    | `choco install starship`                |
+| [conda-forge]   | `conda install -c conda-forge starship` |
+| [Scoop]         | `scoop install starship`                |
+| [winget]        | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -281,8 +283,7 @@ Cài đặt Starship bằng một package manager bất kì:
 
 Cấu hình shell của bạn để chạy starship. Bạn có thể chọn từ danh sách bên dưới:
 
-<details>
-<summary>Bash</summary>
+<details><summary>Bash</summary>
 
 Thêm đoạn sau vào cuối tệp tin `~/.bashrc`:
 
@@ -292,10 +293,10 @@ eval "$(starship init bash)"
 
 </details>
 
-<details>
-<summary>Cmd</summary>
+<details><summary>Cmd</summary>
 
-Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Tạo một file như đường dẫn `%LocalAppData%/clink/starship.lua` với nội dung như sau:
+You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
+Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -303,21 +304,19 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 </details>
 
-<details>
-<summary>Elvish</summary>
+<details><summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+Thêm các dòng sau vào cuối tệp `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` trên Windows):
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Note: Only Elvish v0.18+ is supported. Đối với các phiên bản elvish trước v0.21.0 tệp cấu hình có thể là `~/.elvish/rc.elv`
 
 </details>
 
-<details>
-<summary>Fish</summary>
+<details><summary>Fish</summary>
 
 Thêm đoạn sau vào cuối tệp tin `~/.config/fish/config.fish`:
 
@@ -327,8 +326,7 @@ starship init fish | source
 
 </details>
 
-<details>
-<summary>Ion</summary>
+<details><summary>Ion</summary>
 
 Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
 
@@ -338,10 +336,9 @@ eval $(starship init ion)
 
 </details>
 
-<details>
-<summary>Nushell</summary>
+<details><summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Thêm những dòng sau vào cuối tệp cấu hình Nushell (tìm bằng cách chạy `$nu.config-path` trong Nushell):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
@@ -352,10 +349,9 @@ Lưu ý: Chỉ hỗ trợ Nushell v0.96+
 
 </details>
 
-<details>
-<summary>PowerShell</summary>
+<details><summary>PowerShell</summary>
 
-Thêm đoạn code sau vào cuối file cấu hình PowerShell (bạn có thể tìm đường dẫn tới file cấu hình PowerShell bằng cách chạy câu lệnh `$PROFILE`):
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -363,8 +359,7 @@ Invoke-Expression (&starship init powershell)
 
 </details>
 
-<details>
-<summary>Tcsh</summary>
+<details><summary>Tcsh</summary>
 
 Thêm đoạn sau vào cuối tệp tin `~/.tcshrc`:
 
@@ -374,8 +369,7 @@ eval `starship init tcsh`
 
 </details>
 
-<details>
-<summary>Xonsh</summary>
+<details><summary>Xonsh</summary>
 
 Thêm dòng này vào cuối của file `~/.xonshrc`:
 
@@ -385,8 +379,7 @@ execx($(starship init xonsh))
 
 </details>
 
-<details>
-<summary>Zsh</summary>
+<details><summary>Zsh</summary>
 
 Thêm đoạn sau vào cuối tệp tin `~/.zshrc`:
 
@@ -398,21 +391,22 @@ eval "$(starship init zsh)"
 
 ### Bước 3. Cấu hình Starship
 
-Khởi tạo một shell mới, và bạn sẽ thấy một chiếc shell mới tinh, đẹp lung linh. Nếu bạn hài lòng với cấu hình mặc định thì giờ là lúc mà bạn nên tận hưởng chiếc shell mới của mình!
+Khởi tạo một shell mới, và bạn sẽ thấy một chiếc shell mới tinh, đẹp lung linh.
+Nếu bạn hài lòng với cấu hình mặc định thì giờ là lúc mà bạn nên tận hưởng chiếc shell mới của mình!
 
 Nếu bạn muốn tùy chỉnh Starship nhiều hơn nữa:
 
-- **[Cấu hình](https://starship.rs/config/)** – học cách cấu hình Starship để tùy chỉnh prompt theo ý bạn
+- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
-- **[Cấu hình mẫu](https://starship.rs/presets/)** – lấy cảm hứng từ cấu hình của những người khác
+- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
 
 ## 🤝 Đóng góp
 
-Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/"🌱%20good%20first%20issue").
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
 
-Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
+Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin hãy xem [Hướng dẫn đóng góp](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) của chúng tôi. Ngoài ra, vui lòng truy cập vào [máy chủ Discord](https://discord.gg/8Jzqu3T) và nói xin chào. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/main/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## Cảm hứng
 
@@ -426,11 +420,11 @@ Xin hãy xem qua những công việc này trước đây, những thứ đã gi
 
 ## Tài trợ
 
-Hỗ trợ project này bằng việc [trở thành nhà tài trợ](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
 
 ## 🔒 Code Signing Policy
 
-Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Free code signing provided by [SignPath.io], certificate by [SignPath Foundation].
 
 Code Signing Roles:
 
@@ -439,11 +433,34 @@ Code Signing Roles:
 
 Chương trình này sẽ không chuyển bất kỳ thông tin nào sang các hệ thống mạng khác trừ khi có yêu cầu cụ thể của người dùng hoặc người cài đặt hoặc vận hành chương trình.
 
-<p align="center">
-    <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+<p align="center"><br>
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/main/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 Giấy phép
 
-Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
+This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
+
+[alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
+[arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
+[chocolatey]: https://community.chocolatey.org/packages/starship
+[conda-forge]: https://anaconda.org/conda-forge/starship
+[copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
+[crates.io]: https://crates.io/crates/starship
+[debian main]: https://sources.debian.org/src/starship/1.22.1-1/
+[freshports]: https://www.freshports.org/shells/starship
+[gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
+[linuxbrew]: https://formulae.brew.sh/formula/starship
+[homebrew]: https://formulae.brew.sh/formula/starship
+[macports]: https://ports.macports.org/port/starship
+[nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/st/starship/package.nix
+[OSS]: https://software.opensuse.org/package/starship
+[pkgsrc]: https://pkgsrc.se/shells/starship
+[scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
+[SignPath Foundation]: https://signpath.org
+[SignPath.io]: https://signpath.io
+[termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
+[ubuntu universe]: https://packages.ubuntu.com/source/plucky/starship
+[void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

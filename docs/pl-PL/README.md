@@ -2,25 +2,22 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Pierwsze kroki →
       link: ./guide/
 features:
-  - 
-    title: Kompatybilność przede wszystkim
+  - title: Kompatybilność przede wszystkim
     details: Działa na większości powszechnych powłokach, na większości najpopularniejszych systemach. Używaj go wszędzie!
-  - 
-    title: Napędzany językiem Rust
+  - title: Napędzany językiem Rust
     details: Zapewnia najlepszą w swojej klasie prędkość i bezpieczeństwo języka Rust, w celu zapewnienia jak najszybszej i niezawodnej odpowiedzi.
-  - 
-    title: Konfigurowalny
+  - title: Konfigurowalny
     details: Każdy mały detal jest konfigurowalny do Twoich preferencji, aby wiersz poleceń był tak minimalny lub tak bogaty w funkcje, jak tylko zechcesz.
 footer: Licencja ISC | Copyright © 2019-obecnie Kontrybutorzy Starship
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Wiersz poleceń dla dowolnej powłoki"
 description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz poleceń dla każdej powłoki! Pokazuje informacje których potrzebujesz, pozostając elegancki i minimalny. Szybka instalacja dostępna dla powłok Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd i PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Zainstaluj plik programu **starship**:
 
-
    #### Instalacja najnowszej wersji
 
    Za pomocą powłoki:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. Obecna wersja zostanie zastąpiona nową, bez modyfikowania konfiguracji Starship.
-
 
    #### Instalacja za pomocą menedżera pakietów
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
-
+2. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Dodaj na koniec pliku `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-
-   #### Powershell
+   #### PowerShell
 
    Dodaj na koniec pliku `Microsoft.PowerShell_profile.ps1`. Możesz sprawdzić lokalizację tego pliku odczytując zmienną środowiskową `$PROFILE` w PowerShell. Zazwyczaj jest to `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` lub `~/.config/powershell/Microsoft.PowerShell_profile.ps1` na -Nixie.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -133,20 +123,19 @@ onMounted(() => {
    eval $(starship init ion)
    ```
 
-
    #### Elvish
 
    > [!WARNING] Only elvish v0.18 or higher is supported.
 
-   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+   Dodaj następujący fragment na końcu pliku `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` w systemie Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   W wersjach elvish starszych niż v0.21.0 plik konfiguracyjny może znajdować się w lokalizacji `~/.elvish/rc.elv`.
 
    #### Tcsh
 
@@ -158,18 +147,17 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Działa tylko na Nushell v0.96+.
+   > [!WARNING] This will change in the future.
+   > Działa tylko na Nushell v0.96+.
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Dodaj następujący fragment na końcu konfiguracji Nushell (znajdziesz go, uruchamiając polecenie `$nu.config-path` w Nushell):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +168,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 

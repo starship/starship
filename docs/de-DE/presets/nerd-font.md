@@ -1,14 +1,14 @@
-[Zurück zu den Voreinstellungen](./#nerd-font-symbols)
+[Zurück zu Presets](./#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Preset - Nerd Font Symbols
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Dieses Preset ändert die Symbole für jedes Modul, um Nerd-Font-Symbole zu verwenden.
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Screenshot für Preset Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in Ihrem Terminal (das Beispiel verwendet Fira Code Nerd Font)
 
 ### Konfiguration
 
@@ -16,6 +16,6 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/nerd-font-symbols.toml){download}
 
 <<< @/public/presets/toml/nerd-font-symbols.toml

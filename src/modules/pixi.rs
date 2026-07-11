@@ -44,6 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "environment" => pixi_environment_name.clone().map(Ok),
+                "project_name" => context.get_env("PIXI_PROJECT_NAME").map(Ok),
                 "version" => {
                     let pixi_version = get_pixi_version(context, &config)?;
                     VersionFormatter::format_module_version(
@@ -115,6 +116,45 @@ mod tests {
     fn env_set() {
         let actual = ModuleRenderer::new("pixi")
             .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🧚 v0.33.0 (py312) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn project_name_set() {
+        let actual = ModuleRenderer::new("pixi")
+            .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .env("PIXI_PROJECT_NAME", "my-project")
+            .config(toml::toml! {
+                [pixi]
+                format = "via [$symbol($version )(\\($environment\\) )(\\[$project_name\\] )]($style)"
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow
+                .bold()
+                .paint("🧚 v0.33.0 (py312) [my-project] ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn project_name_not_set() {
+        let actual = ModuleRenderer::new("pixi")
+            .env("PIXI_ENVIRONMENT_NAME", "py312")
+            .config(toml::toml! {
+                [pixi]
+                format = "via [$symbol($version )(\\($environment\\) )(\\[$project_name\\] )]($style)"
+            })
             .collect();
 
         let expected = Some(format!(

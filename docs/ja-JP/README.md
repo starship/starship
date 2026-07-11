@@ -2,27 +2,24 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Get Started →
       link: ./guide/
 features:
-  - 
-    title: 互換性優先
+  - title: 互換性優先
     details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
-  - 
-    title: Rust製
+  - title: Rust製
     details: Rustの最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
-  - 
-    title: カスタマイズ可能
+  - title: カスタマイズ可能
     details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。
+description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。 ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。
 ---
 
 <script setup>
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. **Starship** のバイナリをインストール
 
-
    #### 最新版のインストール
 
    Shellを利用する
@@ -61,8 +57,7 @@ onMounted(() => {
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Starship自体を更新するには、上記のスクリプトを再度実行してください。 最新のバージョンに置き換わり、設定ファイルには変更を加えません。
-
+   Starship自体を更新するには、上記のスクリプトを再度実行してください。 最新のバージョンに置き換わり、設定ファイルには変更を加えません。 最新のバージョンに置き換わり、設定ファイルには変更を加えません。
 
    #### パッケージマネージャー経由でインストール
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
-
+2. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    `~/.config/fish/config.fish` の最後に以下を追記してください
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
+   #### PowerShell
 
-   #### Powershell
-
-   `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Nushell v0.96+ のみサポートされています。
+   > [!WARNING] This will change in the future.
+   > Nushell v0.96+ のみサポートされています。
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -181,10 +169,9 @@ onMounted(() => {
    execx($(starship init xonsh))
    ```
 
-
    #### Cmd
 
-   [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 以下をファイル `starship.lua` に追加し、Clinkスクリプトディレクトリに配置します:
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 以下をファイル `starship.lua` に追加し、Clinkスクリプトディレクトリに配置します:
 
    ```lua
    -- starship.lua
