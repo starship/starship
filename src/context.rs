@@ -566,7 +566,7 @@ impl DirContents {
             let worker = move || {
                 let dir_iter = fs::read_dir(base).unwrap();
                 let _ = dir_iter
-                    .filter_map(|entry| entry.ok())
+                    .filter_map(std::result::Result::ok)
                     .try_for_each(|entry| tx.send(entry).map_err(Box::new));
             };
 
@@ -588,11 +588,10 @@ impl DirContents {
                 Ok(entry) => {
                     let path = PathBuf::from(entry.path().strip_prefix(base_path).unwrap());
 
-                    let is_dir = match follow_symlinks {
-                        true => entry.path().is_dir(),
-                        false => fs::symlink_metadata(entry.path())
-                            .map(|m| m.is_dir())
-                            .unwrap_or(false),
+                    let is_dir = if follow_symlinks {
+                        entry.path().is_dir()
+                    } else {
+                        fs::symlink_metadata(entry.path()).is_ok_and(|m| m.is_dir())
                     };
 
                     if is_dir {

@@ -46,8 +46,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 })
                 .map(|variable| match variable {
                     "gauge" => {
-                        let filled_float = (percentage as f64 / 100.0) * config.gauge_width as f64;
-                        let (filled_count, partial) = if !config.gauge_partial_symbol.is_empty() {
+                        let filled_float =
+                            (f64::from(percentage) / 100.0) * f64::from(config.gauge_width);
+                        let (filled_count, partial) = if config.gauge_partial_symbol.is_empty() {
+                            (filled_float.round() as usize, false)
+                        } else {
                             let full = filled_float.floor() as usize;
                             let rem = filled_float - full as f64;
                             // Show partial block if remainder is significant enough (> 0.25)
@@ -57,17 +60,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             } else {
                                 (full, false)
                             }
-                        } else {
-                            (filled_float.round() as usize, false)
                         };
 
                         let filled_count = filled_count.min(config.gauge_width as usize);
-                        let partial_count = if partial && filled_count < config.gauge_width as usize
-                        {
-                            1
-                        } else {
-                            0
-                        };
+                        let partial_count =
+                            usize::from(partial && filled_count < config.gauge_width as usize);
                         let empty_count = (config.gauge_width as usize)
                             .saturating_sub(filled_count + partial_count);
 

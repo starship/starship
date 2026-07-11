@@ -119,8 +119,10 @@ impl RustToolingEnvironmentInfo {
                         })
                     })
                     .and_then(|mut cmd| cmd.current_dir(&context.current_dir).output())
-                    .map(extract_toolchain_from_rustup_run_rustc_version)
-                    .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
+                    .map_or(
+                        RustupRunRustcVersionOutcome::RustupNotWorking,
+                        extract_toolchain_from_rustup_run_rustc_version,
+                    )
             } else {
                 RustupRunRustcVersionOutcome::ToolchainUnknown
             };
@@ -219,7 +221,7 @@ fn get_module_version(
             // execute `rustc --version` without triggering a toolchain download
             format_rustc_version(&execute_rustc_version(context)?, config.version_format)
         }
-        Outcome::ToolchainNotInstalled(name) => Some(name.to_string()),
+        Outcome::ToolchainNotInstalled(name) => Some(name.clone()),
         Outcome::Err => None,
     }
 }
