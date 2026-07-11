@@ -46,7 +46,7 @@ guess_host_triple = "0.1.5"
 home = "0.5.12"
 indexmap = { version = "2.14.0", features = ["serde"] }
 jiff = { version = "0.2.31", features = ["serde"] }
-jsonc-parser = { version = "0.32.4", features = ["serde"] }
+jsonc-parser = { version = "0.33.0", features = ["serde"] }
 log = { version = "0.4.33", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
