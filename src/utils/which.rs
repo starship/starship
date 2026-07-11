@@ -53,11 +53,7 @@ fn scoop_shims_dirs() -> Vec<PathBuf> {
         .map(PathBuf::from)
         .or_else(|| Some(PathBuf::from(env::var_os("ProgramData")?).join("scoop")));
 
-    [user_root, global_root]
-        .into_iter()
-        .flatten()
-        .map(|root| root.join("shims"))
-        .collect()
+    [user_root, global_root].into_iter().flatten().collect()
 }
 
 /// Check if a path resides directly inside one of the given directories.
@@ -71,8 +67,12 @@ fn is_in_dirs(path: &Path, dirs: &[PathBuf]) -> bool {
     {
         return false;
     }
+    let Some(potential_root) = parent.parent() else {
+        return false;
+    };
 
-    dirs.iter().any(|dir| dir == parent)
+    dirs.iter()
+        .any(|root_candidate| root_candidate == &potential_root)
 }
 
 /// Parse a Scoop `.shim` file and return the target path.
