@@ -1844,6 +1844,55 @@ mod tests {
         tmp_dir.close()
     }
 
+    #[test]
+    fn directory_prefix_and_basename_styling() -> io::Result<()> {
+        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
+        let dir = tmp_dir.path().join("engine/schematics");
+        fs::create_dir_all(&dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                format = "[$prefix]($style_prefix)[$basename]($style_basename) "
+                style_prefix = "red"
+                style_basename = "bold green"
+                truncate_to_repo = false
+            })
+            .path(&dir)
+            .collect();
+
+        let expected = Some(format!(
+            "{}{}{} ",
+            Color::Red.prefix(),
+            convert_path_sep(&format!("{name}/engine/")),
+            Color::Green.bold().paint("schematics")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn directory_prefix_empty_for_single_segment_path() {
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                format = "[$prefix]($style_prefix)[$basename]($style_basename)"
+                style_prefix = "red"
+                style_basename = "green"
+            })
+            .path(home_dir().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "{}{}",
+            Color::Red.prefix(),
+            Color::Green.paint("~")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
     #[cfg(any(unix, target_os = "redox"))]
     fn invalid_path() -> PathBuf {
