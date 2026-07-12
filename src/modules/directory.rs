@@ -175,7 +175,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "path" => Some(Ok(path_vec[2].as_str())),
                 "before_root_path" => Some(Ok(path_vec[0].as_str())),
                 "repo_root" => Some(Ok(path_vec[1].as_str())),
-                "prefix" => Some(Ok(path_prefix.as_str())),
+                "prefix" => {
+                    if path_prefix.is_empty() {
+                        None
+                    } else {
+                        Some(Ok(path_prefix.as_str()))
+                    }
+                }
                 "basename" => Some(Ok(path_basename.as_str())),
                 "read_only" => {
                     if is_readonly_dir(physical_dir) {
@@ -1884,11 +1890,7 @@ mod tests {
             .path(home_dir().unwrap())
             .collect();
 
-        let expected = Some(format!(
-            "{}{}",
-            Color::Red.prefix(),
-            Color::Green.paint("~")
-        ));
+        let expected = Some(Color::Green.paint("~").to_string());
 
         assert_eq!(expected, actual);
     }
