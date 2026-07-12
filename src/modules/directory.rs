@@ -136,6 +136,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         path_vec
     };
 
+    let sep = if config.use_os_path_sep {
+        std::path::MAIN_SEPARATOR
+    } else {
+        '/'
+    };
+    let (path_prefix, path_basename) = match path_vec[2].rfind(sep) {
+        Some(idx) => (
+            path_vec[2][..=idx].to_string(),
+            path_vec[2][idx + 1..].to_string(),
+        ),
+        None => (String::new(), path_vec[2].clone()),
+    };
+
     let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
         config.format
     } else {
@@ -144,6 +157,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_root_style = config.repo_root_style.unwrap_or(config.style);
     let before_repo_root_style = config.before_repo_root_style.unwrap_or(config.style);
 
+    let style_prefix = config.style_prefix.unwrap_or(config.style);
+    let style_basename = config.style_basename.unwrap_or(config.style);
+
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
@@ -151,12 +167,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
                 "before_repo_root_style" => Some(Ok(before_repo_root_style)),
+                "style_prefix" => Some(Ok(style_prefix)),
+                "style_basename" => Some(Ok(style_basename)),
                 _ => None,
             })
             .map(|variable| match variable {
                 "path" => Some(Ok(path_vec[2].as_str())),
                 "before_root_path" => Some(Ok(path_vec[0].as_str())),
                 "repo_root" => Some(Ok(path_vec[1].as_str())),
+                "prefix" => Some(Ok(path_prefix.as_str())),
+                "basename" => Some(Ok(path_basename.as_str())),
                 "read_only" => {
                     if is_readonly_dir(physical_dir) {
                         Some(Ok(config.read_only))
