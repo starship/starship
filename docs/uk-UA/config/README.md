@@ -3553,7 +3553,7 @@ OS information is detected via the [os_info](https://lib.rs/crates/os_info) crat
 If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# This is the default symbols table.
+# Це таблиця стандартних символів.
 [os.symbols]
 AIX = "➿ "
 Alpaquita = "🔔 "
