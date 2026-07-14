@@ -46,8 +46,8 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Ведення журналу
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal.
-This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Стандартно starship виводить попередження та інформацію про помилки у файл `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, де ключ сесії відповідає екземпляру вашого термінала.
+Це, однак, може бути змінено за допомогою змінної середовища `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -67,9 +67,9 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Термінологія
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. Наприклад, модуль "nodejs" показує версію Node.js, яка встановлена на вашому компʼютері, якщо ваша поточна тека є проєктом Node.js.
+**Модуль**: Компонент командного рядка, що надає інформацію на основі контексту з вашої ОС. Наприклад, модуль "nodejs" показує версію Node.js, яка встановлена на вашому компʼютері, якщо ваша поточна тека є проєктом Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. Наприклад, змінна "version" в модулі "nodejs" містить поточну версію Node.js.
+**Змінна**: менші субкомпоненти, що містять інформацію, що надається модулем. Наприклад, змінна "version" в модулі "nodejs" містить поточну версію Node.js.
 
 Згідно з правилами, більшість модулів мають префікс стандартного кольору термінала (наприклад, `via` в "nodejs") та порожнє місце як суфікс.
 
@@ -100,7 +100,7 @@ format = '\[\$\] '
 ```
 
 При використанні символів розриву рядків можна використовувати багаторядкові оголошення.
-For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+Наприклад, якщо ви хочете вивести символ `$` на новий рядок, такі значення для `format` є еквівалентними:
 
 ```toml
 # для літералів
@@ -133,12 +133,12 @@ line2
 ### Формат рядків
 
 Формат рядків це формат, з яким модуль виводить всі змінні.
-Most modules have an entry called `format` that configures the display format of the module.
+У більшості модулів є запис з назвою `format`, який налаштовує формат виводу модуля.
 Можна використовувати текст, змінні та текстові групи у форматуванні рядків.
 
 #### Змінна
 
-A variable contains a `$` symbol followed by the name of the variable.
+Змінна починається з символу `$`, за яким йде назва змінної.
 Назва змінною може складатись лише з літер та цифр та символу `_`.
 
 Наприклад:
@@ -151,10 +151,10 @@ A variable contains a `$` symbol followed by the name of the variable.
 
 Текстова група складається з двох різних частин.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings).
+Перша частина, яка вкладена у квадратні дужки `[]` — це [форматований рядок](#format-strings).
 Ви можете додати текст, змінні або навіть вкладені текстові групи.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). Ця частина використовується для стилізації першої частини.
+В наступній частині, що вкладена в круглі дужки `()`, міститься опис [стилю рядка](#style-strings). Ця частина використовується для стилізації першої частини.
 
 Наприклад:
 
@@ -164,7 +164,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 
 #### Рядки стилів
 
-Більшість модулів в starship дозволяють вам налаштовувати стилі їх виводу. This is done with an entry (usually called `style`) which is a string specifying the configuration. Ось деякі приклади стилів поряд з тим, що вони роблять. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
+Більшість модулів в starship дозволяють вам налаштовувати стилі їх виводу. Це робиться за допомогою запису (зазвичай `style`), який є рядком, що вказує на конфігурацію. Ось деякі приклади стилів поряд з тим, що вони роблять. За деталями щодо повного синтаксису зверніться до [Довідника з розширеного налаштування](../advanced-config/).
 
 - `'fg:green bg:blue'` – зелений текст на блакитному фоні
 - `'bg:blue fg:bright-green'` – яскраво зелений текст на блакитному фоні
@@ -183,16 +183,14 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 
 - `'(@$region)'` – не буде показуватись, якщо змінна `region` дорівнює `None` чи є порожнім рядком, в іншому випадку вона буде показана разом з `@`, за яким йде значення регіону.
 - `'(якийсь текст)'` ніколи не буде показуватись, через те, що немає змінних, загорнутих в дужки.
-- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`.
-  This works the same as `'(\[$a$b\] )'`.
+- Коли `$combined` є посиланням для `\[$a$b\]`, `'($combined)'` не показуватиме нічого, лише якщо `$a` і `$b` одночасно містять `None`.
+  Це працює так само й для `'(\[$a$b\] )'`.
 
 ### Негативний збіг
 
-Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. Вони отримують перелік рядків для порівняння, чи в них є збіги, чи – немає. Символ для перевірки "негативного збігу"  (негативний збіг – те що не має мати збігу з вказаним значенням) – '!' знак оклику, вказується на початку параметра, що перевіряється. The presence of _any_ negative indicator in the directory
-will result in the module not being matched.
+Багато модулів мають змінні `detect_extensions`, `detect_files` та `detect_folders`. Вони отримують перелік рядків для порівняння, чи в них є збіги, чи – немає. Символ для перевірки "негативного збігу"  (негативний збіг – те що не має мати збігу з вказаним значенням) – '!' знак оклику, вказується на початку параметра, що перевіряється. Наявність _будь-якого_ індикатора негативного збігу в теці призведе до того, що результат роботи модуля буде перевірятись на негативний збіг.
 
-Розширення зіставляються як із символами після останньої крапки в назві файлу, так і з
-символами після першої крапки в назві файлу. For example, `foo.bar.tar.gz` will be matched
+Розширення зіставляються як із символами після останньої крапки в назві файлу, так і з символами після першої крапки в назві файлу. For example, `foo.bar.tar.gz` will be matched
 against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Файли, назва яких починається з крапки, взагалі не вважаються такими, що мають розширення.
 
 Щоб побачити, як це працює на практиці, ви можете шукати збіг для файлів TypeScript, але не для MPEG Transport Stream, таким чином:
