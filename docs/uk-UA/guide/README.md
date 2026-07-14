@@ -426,8 +426,8 @@ eval "$(starship init zsh)"
 
 Ролі:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Рецензенти: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Особи, що затверджують, та автори: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
 Ця програма не передаватиме жодної інформації до інших мережевих систем, якщо користувач або особа, яка її встановлює чи експлуатує, не зробить на це спеціального запиту.
 
@@ -437,8 +437,8 @@ eval "$(starship init zsh)"
 
 ## 📝 Ліцензія
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
-This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
+Авторське право ©️ 2019-сьогодення, [Учасники Starship](https://github.com/starship/starship/graphs/contributors).<br>
+Цей проєкт ліцензується на умовах Ліцензії [ISC](https://github.com/starship/starship/blob/main/LICENSE).
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
 [arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
