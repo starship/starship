@@ -281,7 +281,7 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 continuation_prompt = '▶▶ '
 ```
 
-## Statusline for Claude Code
+## Línea de estado para Claude Code
 
 Starship supports displaying a custom statusline when running inside Claude Code, Anthropic's CLI tool for interactive coding with Claude. This statusline provides real-time information about your Claude session, including the model being used, context window usage, and session costs.
 
