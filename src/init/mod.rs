@@ -5,6 +5,10 @@ use std::{env, io};
 
 use which::which;
 
+fn quote_posix_path(path: &str) -> String {
+    shell_words::quote(path).into_owned()
+}
+
 /* We use a two-phase init here: the first phase gives a simple command to the
 shell. This command evaluates a more complicated script using `source` and
 process substitution.
@@ -70,7 +74,9 @@ impl StarshipPath {
             return self.sprint();
         }
         let str_path = self.str_path()?;
-        let res = create_command("cygpath").and_then(|mut cmd| cmd.arg(str_path).output());
+        // Ask cygpath for a Unix path explicitly. Its default output format is
+        // Windows-native, which a POSIX shell cannot execute when the path has spaces.
+        let res = create_command("cygpath").and_then(|mut cmd| cmd.args(["-u", str_path]).output());
         let output = match res {
             Ok(output) => output,
             Err(e) => {
@@ -97,7 +103,7 @@ impl StarshipPath {
                 str_path
             }
         };
-        Ok(shell_words::quote(posix_path).into_owned())
+        Ok(quote_posix_path(posix_path))
     }
 }
 
@@ -319,5 +325,13 @@ mod tests {
             r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
+    }
+
+    #[test]
+    fn escape_space_posix() {
+        assert_eq!(
+            quote_posix_path("/c/Program Files/starship.exe"),
+            "'/c/Program Files/starship.exe'"
+        );
     }
 }
