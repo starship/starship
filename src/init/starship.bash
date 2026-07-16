@@ -67,12 +67,13 @@ starship_precmd() {
 
     if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
         if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ "${STARSHIP_PROMPT_COMMAND@a}" == "a" ]]; then
+            # Extended `STARSHIP_PROMPT_COMMAND` array usage
             # PR: https://github.com/starship/starship/pull/7603
-            \builtin declare -- __starship_prompt_subcommand
+            \builtin declare __starship_prompt_subcommand
             for __starship_prompt_subcommand in "${STARSHIP_PROMPT_COMMAND[@]}"; do
                 eval "${__starship_prompt_subcommand}"
             done
-            \builtin unset -- __starship_prompt_subcommand
+            \builtin unset __starship_prompt_subcommand
         else
             eval "$STARSHIP_PROMPT_COMMAND"
         fi
@@ -137,20 +138,23 @@ else
         # In Bash 5.1+, the type of PROMPT_COMMAND can be 'array'. Old assignment
         # commands will work with the first element instead of the full PROMPT_COMMAND.
         # PR: https://github.com/starship/starship/pull/7603
-        \builtin declare -- __prompt_subcommand="" __make_starship_precmd=1
+        \builtin declare -a STARSHIP_PROMPT_COMMAND=()
+        \builtin declare __prompt_subcommand
         for __prompt_subcommand in "${PROMPT_COMMAND[@]}"; do
-            if [[ "${__prompt_subcommand}" == *"starship_precmd"* ]]; then  # If modify this, modify line 157 as well
-                __make_starship_precmd=""
+            if [[ "${__prompt_subcommand}" == *"starship_precmd"* ]]; then  # If modify this line, modify line 161 as well
+                \builtin unset STARSHIP_PROMPT_COMMAND
                 \builtin break
+            elif [[ -n "${__prompt_subcommand}" ]]; then
+                STARSHIP_PROMPT_COMMAND+=("${__prompt_subcommand}")
             fi
         done
-        if [[ -n "${__make_starship_precmd}" ]]; then
-            if ((${#PROMPT_COMMAND[@]} > 0)); then
-                STARSHIP_PROMPT_COMMAND=("${PROMPT_COMMAND[@]}")
-            fi
+        \builtin unset __prompt_subcommand
+        if \builtin declare -p STARSHIP_PROMPT_COMMAND 1> /dev/null 2>&1; then  # If no `starship_precmd` exists
             PROMPT_COMMAND=("starship_precmd")
+            if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # If `STARSHIP_PROMPT_COMMAND` is empty
+                \builtin unset STARSHIP_PROMPT_COMMAND
+            fi
         fi
-        \builtin unset -- __prompt_subcommand __make_starship_precmd
     else
         if [[ -z "${PROMPT_COMMAND-}" ]]; then
             PROMPT_COMMAND="starship_precmd"
