@@ -124,15 +124,28 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "${PROMPT_COMMAND-}" ]]; then
-        PROMPT_COMMAND="starship_precmd"
-    elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
-        # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
-        # Prepending to PROMPT_COMMAND breaks "command duration" module.
-        # So, we are preserving the existing PROMPT_COMMAND
-        # which will be executed later in the starship_precmd function
-        STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
-        PROMPT_COMMAND="starship_precmd"
+    if ((BASH_VERSINFO[0] < 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 1)); then
+        if [[ -z "${PROMPT_COMMAND-}" ]]; then
+            PROMPT_COMMAND="starship_precmd"
+        elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
+            # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
+            # Prepending to PROMPT_COMMAND breaks "command duration" module.
+            # So, we are preserving the existing PROMPT_COMMAND
+            # which will be executed later in the starship_precmd function
+            STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
+            PROMPT_COMMAND="starship_precmd"
+        fi
+    else
+        # In Bash 5.1+, the type of PROMPT_COMMAND can be 'array'. Old assignment
+        # commands will work with the first element instead of the full PROMPT_COMMAND.
+        \builtin declare -- __starship_prompt_command_cand="$(IFS=';'; \builtin printf '%s\n' "${PROMPT_COMMAND[*]-}")"
+        if [[ ";${__starship_prompt_command_cand};" != *";starship_precmd;"* ]]; then
+            PROMPT_COMMAND=("starship_precmd")
+            if [[ -n "${__starship_prompt_command_cand}" ]]; then
+                STARSHIP_PROMPT_COMMAND="${__starship_prompt_command_cand}"
+            fi
+        fi
+        \builtin unset -- __starship_prompt_command_cand
     fi
 fi
 
