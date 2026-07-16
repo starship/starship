@@ -14,13 +14,13 @@ $character"""
 [username]
 show_always = false
 format = "[$user]($style)"
-style_user = "bright-black"
-style_root = "bright-black"
+style_user = "242"
+style_root = ""
 
 [hostname]
 ssh_only = true
 format = "[@$hostname]($style)"
-style = "bright-black"
+style = "242"
 
 [directory]
 style = "blue"
