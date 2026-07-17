@@ -135,7 +135,7 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ "${PROMPT_COMMAND@a}" == "a" ]]; then
+    if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ -v PROMPT_COMMAND ]] && [[ "${PROMPT_COMMAND@a}" == "a" ]]; then
         # In Bash 5.1+, the type of PROMPT_COMMAND can be 'array'. Old assignment
         # commands will work with the first element instead of the full PROMPT_COMMAND.
         # Even so, when 'string' PROMPT_COMMAND is detected when `Starship` is triggered,
