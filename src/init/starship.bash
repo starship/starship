@@ -141,7 +141,9 @@ else
         # Even so, when 'string' PROMPT_COMMAND is detected when `Starship` is triggered,
         # use old fallback logic.
         # PR: https://github.com/starship/starship/pull/7603
-        \builtin declare __starship_ifs="${IFS-}"  # Cause we use empty IFS to figure out if array is empty
+        if [[ -v IFS ]]; then
+            \builtin declare __starship_ifs="${IFS}"  # Cause we use empty IFS to figure out if array is empty
+        fi
         \builtin unset IFS
         \builtin declare -a STARSHIP_PROMPT_COMMAND
         if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # Fix: Reenter this line should not overwrite STARSHIP_PROMPT_COMMAND
@@ -168,7 +170,7 @@ else
         fi
         \builtin unset __prompt_subcommand
 
-        if [[ -n "${__starship_ifs}" ]]; then  # Recover IFS
+        if [[ -v __starship_ifs ]]; then  # Recover IFS
             IFS="${__starship_ifs}"
         fi
         \builtin unset __starship_ifs
