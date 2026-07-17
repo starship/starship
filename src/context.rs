@@ -55,7 +55,7 @@ pub struct Context<'a> {
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    git_repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
+    git_repo: OnceLock<Result<GitRepo, Box<gix::discover::Error>>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -323,9 +323,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_git_repo(&self) -> Result<&Repo, &gix::discover::Error> {
+    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::discover::Error> {
         self.git_repo
-            .get_or_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+            .get_or_init(|| -> Result<GitRepo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -386,7 +386,7 @@ impl<'a> Context<'a> {
                     .boolean("core.fsmonitor")
                     .unwrap_or(false);
 
-                Ok(Repo {
+                Ok(GitRepo {
                     repo: shared_repo,
                     branch: branch.map(|b| b.shorten().to_string()),
                     workdir: repository.workdir().map(PathBuf::from),
@@ -714,7 +714,7 @@ impl DirContents {
     }
 }
 
-pub struct Repo {
+pub struct GitRepo {
     pub repo: ThreadSafeRepository,
 
     /// If `current_dir` is a git repository or is contained within one,
@@ -740,7 +740,7 @@ pub struct Repo {
     pub(crate) fs_monitor_value_is_true: bool,
 }
 
-impl Repo {
+impl GitRepo {
     /// Opens the associated git repository.
     pub fn open(&self) -> Repository {
         self.repo.to_thread_local()

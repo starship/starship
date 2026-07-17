@@ -4,7 +4,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
-use crate::context::Repo;
+use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
 use crate::modules::git_status::uses_reftables;
 
@@ -184,7 +184,7 @@ fn find_longest_matching_remote_name(
 /// Returns `None` if not on a branch (detached HEAD) or if the git command fails.
 fn get_branch_info_from_git(
     context: &Context,
-    repo: &Repo,
+    repo: &GitRepo,
 ) -> Option<(gix::refs::FullName, Option<gix::refs::FullName>)> {
     // Get current branch name using git symbolic-ref
     let branch_output = repo.exec_git(context, ["symbolic-ref", "HEAD"])?;
