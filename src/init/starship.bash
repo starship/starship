@@ -142,9 +142,11 @@ else
         # use old fallback logic.
         # PR: https://github.com/starship/starship/pull/7603
         if [[ -v IFS ]]; then
-            \builtin declare __starship_ifs="${IFS}"  # Cause we use empty IFS to figure out if array is empty
+            \builtin declare __starship_ifs="${IFS}"
+        else
+            \builtin unset __starship_ifs
         fi
-        \builtin unset IFS
+        \builtin declare IFS=''  # Use empty IFS to figure out if array is empty
         \builtin declare -a STARSHIP_PROMPT_COMMAND
         if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # Fix: Reenter this line should not overwrite STARSHIP_PROMPT_COMMAND
             STARSHIP_PROMPT_COMMAND=()
@@ -170,10 +172,12 @@ else
         fi
         \builtin unset __prompt_subcommand
 
-        if [[ -v __starship_ifs ]]; then  # Recover IFS
-            IFS="${__starship_ifs}"
+        if [[ -v __starship_ifs ]]; then  # If detect IFS defined
+            IFS="${__starship_ifs}" # Recover IFS
+            \builtin unset __starship_ifs
+        else
+            \builtin unset IFS  # Remove definition of IFS
         fi
-        \builtin unset __starship_ifs
     else
         if [[ -z "${PROMPT_COMMAND-}" ]]; then
             PROMPT_COMMAND="starship_precmd"
