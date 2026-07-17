@@ -309,6 +309,14 @@ format = " hs [$symbol($version )]($style)"
 symbol = "∪ "
 format = " java [${symbol}(${version} )]($style)"
 
+[jj_bookmark]
+format = " [$symbol$bookmark( \\(+$overflow_count others\\))]($style)"
+symbol = "[△](bold italic bright-blue)"
+style = "italic bright-blue"
+truncation_symbol = "⋯"
+truncation_length = 11
+ignore_names = ["main", "master"]
+
 [julia]
 symbol = "◎ "
 format = " jl [$symbol($version )]($style)"
