@@ -55,7 +55,7 @@ pub struct Context<'a> {
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
+    git_repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -175,7 +175,7 @@ impl<'a> Context<'a> {
             current_dir,
             logical_dir,
             dir_contents: OnceLock::new(),
-            repo: OnceLock::new(),
+            git_repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -323,8 +323,8 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, &gix::discover::Error> {
-        self.repo
+    pub fn get_git_repo(&self) -> Result<&Repo, &gix::discover::Error> {
+        self.git_repo
             .get_or_init(|| -> Result<Repo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =

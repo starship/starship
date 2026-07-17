@@ -12,7 +12,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_commit");
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
     let git_repo = repo.open();
     let git_head = git_repo.head().ok()?;
 
@@ -28,11 +28,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
+                "hash" => Some(Ok(git_hash(context.get_git_repo().ok()?, &config)?)),
                 "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
-                    git_tag(context.get_repo().ok()?, &config)?
+                    git_tag(context.get_git_repo().ok()?, &config)?
                 ))),
                 _ => None,
             })

@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
     let config: GitStateConfig = GitStateConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     let state_description = get_state_description(repo, &config)?;
 

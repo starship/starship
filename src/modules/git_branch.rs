@@ -27,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     let gix_repo = repo.open();
     if config.ignore_bare_repo && gix_repo.workdir().is_none() {

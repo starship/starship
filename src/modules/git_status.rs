@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
     // Return None if not in git repository
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     if repo.open().workdir().is_none() {
         log::debug!("This is a bare repository, git_status is not applicable");
