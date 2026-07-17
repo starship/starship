@@ -2564,6 +2564,48 @@ By default the module will be shown if any of the following conditions are met:
 symbol = '🌟 '
 ```
 
+## JJ Bookmark
+
+The `jj_bookmark` module shows the [Jujutsu](https://docs.jj-vcs.dev/) bookmark when the current directory is in a Jujutsu repository.
+
+It looks at `@ | @-` to find bookmarks and will prioritize displaying those of `@` (after filtering has been applied).
+
+### Options
+
+| Option              | Default                                                            | Description                                                                              |
+| ------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$bookmark( \\(+$overflow_count others\\))]($style) "` | The format for the module.                                                               |
+| `symbol`            | `" "`                                                             | The symbol used in the `$symbol` variable.                                               |
+| `style`             | `"bold purple"`                                                    | The style for the module.                                                                |
+| `truncation_length` | `u16::MAX`                                                         | Truncates the bookmark's name and remote to `N` graphemes.                               |
+| `truncation_symbol` | `"…"`                                                              | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
+| `diverged_symbol`   | `"*"`                                                              | Symbol appended to the bookmark to indicate it has diverged from its remote state        |
+| `ignore_names`      | `[]`                                                               | A list of bookmark names to avoid displaying. Useful for `'master'` or `'main'`.         |
+| `ignore_remotes`    | `[]`                                                               | A list of bookmark remotes to avoid displaying. Useful for `'upstream'` or `'fork'`.     |
+| `disabled`          | `false`                                                            | Disables the `jj_bookmark` module.                                                       |
+
+### Variables
+
+| Variable         | Example | Description                                              |
+| ---------------- | ------- | -------------------------------------------------------- |
+| bookmark         | `main`  | The bookmark's name, remote and status as provided by JJ |
+| overflow_count\* | `3`     | How many other bookmarks were found (and not ignored)    |
+| symbol           |         | Mirrors the value of option `symbol`                     |
+| style\*\*        |         | Mirrors the value of option `style`                      |
+
+- *: This variable is only set if non-zero
+- **: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_bookmark]
+ignore_bookmarks = ["main", "master"]
+diverged_symbol = "⇕"
+```
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running.

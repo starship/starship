@@ -126,6 +126,9 @@ format = '\[[$ssh_symbol($hostname)]($style)\] '
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
+[jj_bookmark]
+format = '\[[$symbol$bookmark( \\(+$overflow_count others\\))]($style)\]'
+
 [jobs]
 format = '\[[$symbol$number]($style)\]'
 
