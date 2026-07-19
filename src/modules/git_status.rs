@@ -302,7 +302,7 @@ impl<'a> GitStatusInfo<'a> {
 /// path so the cache is trashed.
 ///
 /// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
-pub(crate) fn get_static_repo_status(
+pub fn get_static_repo_status(
     context: &Context,
     repo: &context::Repo,
     config: &GitStatusConfig,
@@ -320,7 +320,7 @@ pub(crate) fn get_static_repo_status(
     status.as_ref().map(|(status, _)| Arc::clone(status))
 }
 
-pub(crate) fn uses_reftables(repo: &gix::Repository) -> bool {
+pub fn uses_reftables(repo: &gix::Repository) -> bool {
     repo.config_snapshot()
         .string("extensions.refstorage")
         .is_some_and(|kind| kind.as_ref() == "reftable")
@@ -603,7 +603,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
 }
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct RepoStatus {
+pub struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
     pub(crate) changes: Vec<gix::status::Item>,
@@ -767,7 +767,7 @@ where
             .parse(None, Some(context))
             .ok()
     } else {
-        log::warn!("Error parsing format string `{}`", &config_path);
+        log::warn!("Error parsing format string `{config_path}`");
         None
     }
 }
@@ -906,7 +906,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 }
 
 #[cfg(test)]
-pub(crate) mod tests {
+pub mod tests {
     use crate::test::{
         BARE_GIT_PROVIDERS, COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo,
     };
@@ -2166,7 +2166,7 @@ pub(crate) mod tests {
         Ok(())
     }
 
-    pub(crate) fn make_sparse(repo_dir: &Path) -> io::Result<()> {
+    pub fn make_sparse(repo_dir: &Path) -> io::Result<()> {
         let sparse_dirname = "sparse-dir";
         let dir = repo_dir.join(sparse_dirname);
         std::fs::create_dir(&dir)?;

@@ -129,8 +129,12 @@ fn get_aws_profile_and_region(
 fn get_sso_cache_key_input(profile_section: &ini::Properties) -> Option<String> {
     profile_section
         .get("sso_session")
-        .map(|s| s.to_string())
-        .or_else(|| profile_section.get("sso_start_url").map(|s| s.to_string()))
+        .map(std::string::ToString::to_string)
+        .or_else(|| {
+            profile_section
+                .get("sso_start_url")
+                .map(std::string::ToString::to_string)
+        })
 }
 
 fn get_credentials_duration(

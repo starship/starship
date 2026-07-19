@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-Starship에 내장된 [Bash 구현](https://github.com/starship/starship/blob/master/src/init/starship.bash)은 [명령 지속 시간 모듈](https://starship.rs/config/#command-duration)과 같은 고급 기능을 허용하고 Starship이 사전 설치된 Bash 구성과 호환되도록 하기 위해 약간 더 복잡합니다.
+Starship에 내장된 [Bash 구현](https://github.com/starship/starship/blob/main/src/init/starship.bash)은 [명령 지속 시간 모듈](https://starship.rs/config/#command-duration)과 같은 고급 기능을 허용하고 Starship이 사전 설치된 Bash 구성과 호환되도록 하기 위해 약간 더 복잡합니다.
 
 `starship 프롬프트`에서 지원하는 모든 플래그 값을 보려면 아래 명령어를 사용하세요:
 

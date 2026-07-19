@@ -24,7 +24,7 @@ const sidebar = (lang: string | undefined, override = {}) =>
         return { link: path, text: override?.[item.page] ?? item.text };
     });
 
-const editLinkPattern = 'https://github.com/starship/starship/edit/master/docs/:path';
+const editLinkPattern = 'https://github.com/starship/starship/edit/main/docs/:path';
 
 export default defineConfig({
     locales: {

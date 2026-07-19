@@ -37,5 +37,5 @@ pub fn num_rayon_threads() -> usize {
     num_configured_starship_threads()
         // Default to the number of logical cores,
         // but restrict the number of threads to 8
-        .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8))
+        .unwrap_or_else(|| available_parallelism().map_or(1, usize::from).min(8))
 }

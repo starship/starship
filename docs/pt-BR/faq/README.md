@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-A [implementação do Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) embutida no Starship é um pouco mais complexa para aceitar recursos avançados como o [Módulo de duração de comando](https://starship.rs/config/#command-duration) e para garantir isto o Starship é compatível com configurações pre-instaladas.
+A [implementação do Bash](https://github.com/starship/starship/blob/main/src/init/starship.bash) embutida no Starship é um pouco mais complexa para aceitar recursos avançados como o [Módulo de duração de comando](https://starship.rs/config/#command-duration) e para garantir isto o Starship é compatível com configurações pre-instaladas.
 
 Para uma lista de flags aceitos pelo `starship prompt`, use o seguinte comando:
 

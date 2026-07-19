@@ -425,7 +425,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -496,7 +496,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -682,7 +682,7 @@ mod tests {
                 .path(path)
                 .collect();
 
-            let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;

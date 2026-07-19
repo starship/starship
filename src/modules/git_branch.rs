@@ -37,45 +37,42 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Get branch and remote information
     let (branch_name, remote_branch, remote_name) = if uses_reftables(&gix_repo) {
         // Use git executable for branch information
-        match get_branch_info_from_git(context, repo) {
-            Some((branch, remote_branch)) => {
-                // Successfully got branch name, parse upstream into remote_name and remote_branch
-                let remote_name = remote_branch
-                    .as_ref()
-                    .map(|remote_branch| {
-                        find_longest_matching_remote_name(
-                            remote_branch.as_ref(),
-                            &gix_repo.remote_names(),
-                        )
-                    })
-                    .unwrap_or_default();
-                (
-                    branch.shorten().to_string(),
-                    remote_branch.zip(remote_name.as_deref()).map(
-                        |(remote_branch, remote_name)| {
-                            remote_branch
-                                .shorten()
-                                .to_str_lossy()
-                                .strip_prefix(remote_name)
-                                .expect("remote name determined by finding it as prefix before")
-                                .trim_start_matches("/")
-                                .to_string()
-                        },
-                    ),
-                    remote_name,
-                )
+        if let Some((branch, remote_branch)) = get_branch_info_from_git(context, repo) {
+            // Successfully got branch name, parse upstream into remote_name and remote_branch
+            let remote_name = remote_branch
+                .as_ref()
+                .map(|remote_branch| {
+                    find_longest_matching_remote_name(
+                        remote_branch.as_ref(),
+                        &gix_repo.remote_names(),
+                    )
+                })
+                .unwrap_or_default();
+            (
+                branch.shorten().to_string(),
+                remote_branch
+                    .zip(remote_name.as_deref())
+                    .map(|(remote_branch, remote_name)| {
+                        remote_branch
+                            .shorten()
+                            .to_str_lossy()
+                            .strip_prefix(remote_name)
+                            .expect("remote name determined by finding it as prefix before")
+                            .trim_start_matches('/')
+                            .to_string()
+                    }),
+                remote_name,
+            )
+        } else {
+            // get_branch_info_from_git returns None when:
+            // 1. HEAD is detached (git symbolic-ref fails)
+            // 2. git command fails for other reasons (corrupted repo, missing git, etc.)
+            // In both cases, if only_attached is set, we should return None
+            if config.only_attached {
+                return None;
             }
-            None => {
-                // get_branch_info_from_git returns None when:
-                // 1. HEAD is detached (git symbolic-ref fails)
-                // 2. git command fails for other reasons (corrupted repo, missing git, etc.)
-                // In both cases, if only_attached is set, we should return None
-                if config.only_attached {
-                    return None;
-                }
-                // Fallback to HEAD for detached state or when branch can't be determined
-                ("HEAD".to_string(), None, None)
-            }
+            // Fallback to HEAD for detached state or when branch can't be determined
+            ("HEAD".to_string(), None, None)
         }
     } else {
         if config.only_attached && gix_repo.head().ok()?.is_detached() {
@@ -371,7 +368,7 @@ mod tests {
             symbol = "git: "
             style = "green"
         "#,
-            format!("git: {}", Color::Green.paint("1337_hello_world"),),
+            format!("git: {}", Color::Green.paint("1337_hello_world")),
         )
     }
 
