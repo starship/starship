@@ -140,12 +140,19 @@ else
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
         # So, we are splitting the precmd into two parts, one that runs before starship_precmd and one that runs after.
 
-        # Remove leading and trailing whitespace and semicolons from the preserved prompt command
-        # If preserved_prompt_command was `;;`, it would become empty, but `;;` is not a valid command,
-        # so we do not need to handle that case.
-        preserved_prompt_command="${PROMPT_COMMAND#;}"
-        preserved_prompt_command="${preserved_prompt_command%;}"
-        PROMPT_COMMAND="starship_precmd_pre;${preserved_prompt_command};starship_precmd_post"
+        # Remove leading and trailing whitespace and semicolons from the preserved prompt.
+        # The nested expansions strip the longest run of [whitespace or `;`] from each end;
+        # this only uses POSIX character classes, so extglob is not required.
+        preserved_prompt_command="$PROMPT_COMMAND"
+        preserved_prompt_command="${preserved_prompt_command#"${preserved_prompt_command%%[![:space:];]*}"}"
+        preserved_prompt_command="${preserved_prompt_command%"${preserved_prompt_command##*[![:space:];]}"}"
+        if [[ -z "$preserved_prompt_command" ]]; then
+            # PROMPT_COMMAND contained only whitespace/semicolons (e.g. `PROMPT_COMMAND="  "`,
+            # a valid no-op on its own); joining it would yield `pre;;post`, a syntax error.
+            PROMPT_COMMAND="starship_precmd"
+        else
+            PROMPT_COMMAND="starship_precmd_pre;${preserved_prompt_command};starship_precmd_post"
+        fi
         unset preserved_prompt_command
     fi
 fi
