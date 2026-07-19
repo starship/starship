@@ -140,7 +140,8 @@ else
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
         # So, we are splitting the precmd into two parts, one that runs before starship_precmd and one that runs after.
 
-        # Join with newlines, not semicolons, to avoid breaking existing PROMPT_COMMANDs that start or end with semicolons.
+        # Join with newlines, not semicolons, to avoid breaking existing prompt command entries
+        # that start or end with semicolons.
         # Double newlines guard against trailing backslashes in PROMPT_COMMAND
         PROMPT_COMMAND=starship_precmd_pre$'\n'"${PROMPT_COMMAND}"$'\n\n'starship_precmd_post
     fi
