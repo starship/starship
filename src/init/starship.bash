@@ -70,11 +70,10 @@ starship_precmd() {
             # Extended `STARSHIP_PROMPT_COMMAND` array usage
             # If Bash 5.1+ and `STARSHIP_PROMPT_COMMAND` is non-empty array
             # PR: https://github.com/starship/starship/pull/7603
-            \builtin declare __starship_prompt_subcommand
+            \builtin local __starship_prompt_subcommand
             for __starship_prompt_subcommand in "${STARSHIP_PROMPT_COMMAND[@]}"; do
                 eval "${__starship_prompt_subcommand}"
             done
-            \builtin unset __starship_prompt_subcommand
         else
             eval "$STARSHIP_PROMPT_COMMAND"
         fi
@@ -135,7 +134,7 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ -v PROMPT_COMMAND ]] && [[ "${PROMPT_COMMAND@a}" == "a" ]]; then
+    if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ -v PROMPT_COMMAND && "${PROMPT_COMMAND@a}" == "a" ]]; then
         # In Bash 5.1+, the type of PROMPT_COMMAND can be 'array'. Old assignment
         # commands will work with the first element instead of the full PROMPT_COMMAND.
         # Even so, when 'string' PROMPT_COMMAND is detected when `Starship` is triggered,
@@ -147,7 +146,7 @@ else
             \builtin unset __starship_ifs
         fi
         \builtin declare IFS=''  # Use empty IFS to figure out if array is empty
-        \builtin declare -a STARSHIP_PROMPT_COMMAND
+        \builtin declare -ag STARSHIP_PROMPT_COMMAND  # Force global variable
         if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # Fix: Reenter this line should not overwrite STARSHIP_PROMPT_COMMAND
             STARSHIP_PROMPT_COMMAND=()
         fi
@@ -173,6 +172,7 @@ else
         \builtin unset __prompt_subcommand
 
         if [[ -v __starship_ifs ]]; then  # If detect IFS defined
+            # TODO: Maybe we can remove IFS when declared in a function
             IFS="${__starship_ifs}" # Recover IFS
             \builtin unset __starship_ifs
         else
@@ -206,4 +206,3 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
-
