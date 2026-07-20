@@ -24,7 +24,7 @@ pub struct JujutsuStateConfig<'a> {
 impl Default for JujutsuStateConfig<'_> {
     fn default() -> Self {
         Self {
-            disabled: true,
+            disabled: false,
             format: "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
             style: "red",
             conflicted: "⚠ ",

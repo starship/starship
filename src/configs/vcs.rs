@@ -49,7 +49,7 @@ pub struct VcsConfig<'a> {
 impl Default for VcsConfig<'_> {
     fn default() -> Self {
         VcsConfig {
-            order: vec!["git", "hg", "pijul", "fossil", "jujutsu"],
+            order: vec!["jujutsu", "git", "hg", "pijul", "fossil"],
             disabled: false,
             fossil_modules: "$fossil_branch$fossil_metrics",
             git_modules: "$git_branch$git_commit$git_state$git_metrics$git_status",

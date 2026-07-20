@@ -992,7 +992,7 @@
         "style": "purple",
         "format": "[$symbol$change_id]($style) ",
         "change_id_length": 7,
-        "disabled": true
+        "disabled": false
       }
     },
     "jujutsu_commit": {
@@ -1018,7 +1018,7 @@
         "immutable_style": "red",
         "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
         "style": "red",
-        "disabled": true
+        "disabled": false
       }
     },
     "jobs": {
@@ -1911,11 +1911,11 @@
       "$ref": "#/$defs/VcsConfig",
       "default": {
         "order": [
+          "jujutsu",
           "git",
           "hg",
           "pijul",
-          "fossil",
-          "jujutsu"
+          "fossil"
         ],
         "disabled": false,
         "fossil_modules": "$fossil_branch$fossil_metrics",
@@ -4587,7 +4587,7 @@
         },
         "disabled": {
           "type": "boolean",
-          "default": true
+          "default": false
         }
       },
       "additionalProperties": false
@@ -4665,7 +4665,7 @@
         },
         "disabled": {
           "type": "boolean",
-          "default": true
+          "default": false
         }
       },
       "additionalProperties": false
@@ -7160,11 +7160,11 @@
             "type": "string"
           },
           "default": [
+            "jujutsu",
             "git",
             "hg",
             "pijul",
-            "fossil",
-            "jujutsu"
+            "fossil"
           ]
         },
         "disabled": {

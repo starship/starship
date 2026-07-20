@@ -18,7 +18,7 @@ pub struct JujutsuChangeConfig<'a> {
 impl Default for JujutsuChangeConfig<'_> {
     fn default() -> Self {
         Self {
-            disabled: true,
+            disabled: false,
             format: "[$symbol$change_id]($style) ",
             style: "purple",
             symbol: "",
