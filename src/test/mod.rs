@@ -1,4 +1,4 @@
-use crate::context::{Context, Env, Properties, Shell, Target};
+use crate::context::{Context, Env, JJRepo, Properties, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::StarshipConfig,
@@ -112,6 +112,16 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.logical_dir = path.into();
+        self
+    }
+
+    /// Init at `JJRepo` with a mocked path, allowing to test JJ modules in several situations:
+    /// valid repo, invalid repo, no repo at all.
+    pub fn jj_repo<T>(mut self, path: T) -> Self
+    where
+        T: Into<PathBuf>,
+    {
+        self.context.set_jj_repo(JJRepo::with_root(path.into()));
         self
     }
 
