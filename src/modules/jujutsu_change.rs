@@ -20,7 +20,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let change_id = get_jujutsu_change_id(context, config.change_id_length)?;
+    let (change_id, prefix_len) = get_jujutsu_change_id(context)?;
+    let remaining_len = config.change_id_length.saturating_sub(prefix_len);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -29,11 +30,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "prefix_style" => Some(Ok(config.prefix_style)),
+                "suffix_style" => Some(Ok(config.suffix_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "change_id" => Some(Ok(change_id.as_str())),
+                "change_id" => Some(Ok(change_id
+                    .chars()
+                    .take(config.change_id_length)
+                    .collect::<String>())),
+                "change_prefix" => Some(Ok(change_id.chars().take(prefix_len).collect::<String>())),
+                "change_suffix" => Some(Ok(change_id
+                    .chars()
+                    .skip(prefix_len)
+                    .take(remaining_len)
+                    .collect::<String>())),
                 _ => None,
             })
             .parse(None, Some(context))

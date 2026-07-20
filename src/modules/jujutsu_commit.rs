@@ -20,7 +20,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let commit_id = get_jujutsu_commit_id(context, config.commit_hash_length)?;
+    let (commit_id, prefix_len) = get_jujutsu_commit_id(context)?;
+    let remaining_len = config.commit_hash_length.saturating_sub(prefix_len);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -29,11 +30,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "prefix_style" => Some(Ok(config.prefix_style)),
+                "suffix_style" => Some(Ok(config.suffix_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "commit" => Some(Ok(commit_id.as_str())),
+                "commit" => Some(Ok(commit_id
+                    .chars()
+                    .take(config.commit_hash_length)
+                    .collect::<String>())),
+                "commit_prefix" => Some(Ok(commit_id.chars().take(prefix_len).collect::<String>())),
+                "commit_suffix" => Some(Ok(commit_id
+                    .chars()
+                    .skip(prefix_len)
+                    .take(remaining_len)
+                    .collect::<String>())),
                 _ => None,
             })
             .parse(None, Some(context))

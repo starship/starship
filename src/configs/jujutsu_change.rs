@@ -9,7 +9,8 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct JujutsuChangeConfig<'a> {
     pub symbol: &'a str,
-    pub style: &'a str,
+    pub prefix_style: &'a str,
+    pub suffix_style: &'a str,
     pub format: &'a str,
     pub change_id_length: usize,
     pub disabled: bool,
@@ -19,8 +20,9 @@ impl Default for JujutsuChangeConfig<'_> {
     fn default() -> Self {
         Self {
             disabled: false,
-            format: "[$symbol$change_id]($style) ",
-            style: "purple",
+            format: "[$change_prefix]($prefix_style)$change_suffix($suffix_style) ",
+            prefix_style: "purple",
+            suffix_style: "",
             symbol: "",
             change_id_length: 7,
         }

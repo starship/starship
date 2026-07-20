@@ -1,9 +1,9 @@
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_bookmark::JujutsuBookmarkConfig;
-use crate::formatter::string_formatter::StringFormatterError;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::{get_jujutsu_bookmarks, JujutsuBookmarkInfo};
+use crate::formatter::string_formatter::StringFormatterError;
+use crate::modules::utils::jujutsu::{JujutsuBookmarkInfo, get_jujutsu_bookmarks};
 use crate::modules::vcs;
 use crate::segment::Segment;
 
@@ -29,9 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         jujutsu_bookmarks
             .iter()
-            .map(|bookmark| {
-                format_bookmark(&config, bookmark, context)
-            })
+            .map(|bookmark| format_bookmark(&config, bookmark, context))
             .collect::<Result<Vec<_>, _>>()
             .map(|nested_vec| {
                 nested_vec
@@ -88,11 +86,13 @@ fn format_bookmark(
         formatter
             .map(|variable| match variable {
                 "bookmark_name" => Some(Ok(bookmark.name.to_string())),
-                "conflicted" => if bookmark.is_conflicted {
-                    Some(Ok(config.conflicted.to_string()))
-                } else {
-                    None
-                },
+                "conflicted" => {
+                    if bookmark.is_conflicted {
+                        Some(Ok(config.conflicted.to_string()))
+                    } else {
+                        None
+                    }
+                }
                 _ => None,
             })
             .map_variables_to_segments(|variable| match variable {
@@ -101,45 +101,40 @@ fn format_bookmark(
                         let local_ahead = bookmark.remote_behind;
                         let local_behind = bookmark.remote_ahead;
                         if local_ahead > 0 && local_behind > 0 {
-                            Some(
-                                StringFormatter::new(config.diverged).and_then(|formatter| {
-                                    formatter
-                                        .map(|variable| match variable {
-                                            "ahead_count" => Some(Ok(local_ahead.to_string())),
-                                            "behind_count" => Some(Ok(local_behind.to_string())),
-                                            _ => None,
-                                        })
-                                        .parse(None, Some(context))
-                                })
-                            )
+                            Some(StringFormatter::new(config.diverged).and_then(|formatter| {
+                                formatter
+                                    .map(|variable| match variable {
+                                        "ahead_count" => Some(Ok(local_ahead.to_string())),
+                                        "behind_count" => Some(Ok(local_behind.to_string())),
+                                        _ => None,
+                                    })
+                                    .parse(None, Some(context))
+                            }))
                         } else if local_ahead > 0 || local_behind > 0 {
                             let (template, count) = if local_ahead > 0 {
                                 (config.ahead, local_ahead)
                             } else {
                                 (config.behind, local_behind)
                             };
-                            Some(
-                                StringFormatter::new(template).and_then(|formatter| {
-                                    formatter
-                                        .map(|variable| match variable {
-                                            "count" => Some(Ok(count.to_string())),
-                                            _ => None,
-                                        })
-                                        .parse(None, Some(context))
-                                })
-                            )
+                            Some(StringFormatter::new(template).and_then(|formatter| {
+                                formatter
+                                    .map(|variable| match variable {
+                                        "count" => Some(Ok(count.to_string())),
+                                        _ => None,
+                                    })
+                                    .parse(None, Some(context))
+                            }))
                         } else {
                             Some(
-                                StringFormatter::new(config.up_to_date).and_then(|formatter| {
-                                    formatter.parse(None, Some(context))
-                                })
+                                StringFormatter::new(config.up_to_date)
+                                    .and_then(|formatter| formatter.parse(None, Some(context))),
                             )
                         }
                     } else {
                         None
                     }
-                },
-                _ => None
+                }
+                _ => None,
             })
             .parse(None, Some(context))
     })

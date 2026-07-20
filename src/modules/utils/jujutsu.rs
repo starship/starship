@@ -6,6 +6,7 @@ use futures::stream::StreamExt;
 use jj_lib::backend::CommitId;
 use jj_lib::config::{ConfigLayer, ConfigSource, StackedConfig};
 use jj_lib::fileset::FilesetAliasesMap;
+use jj_lib::id_prefix::IdPrefixContext;
 use jj_lib::object_id::ObjectId as _;
 use jj_lib::op_store::RefTarget;
 use jj_lib::op_store::RemoteRef;
@@ -147,25 +148,39 @@ pub(crate) struct JujutsuBookmarkInfo {
     pub is_conflicted: bool,
 }
 
-pub fn get_jujutsu_change_id(ctx: &Context, change_id_length: usize) -> Option<String> {
+pub fn get_jujutsu_change_id(ctx: &Context) -> Option<(String, usize)> {
     let repo = ctx.get_jujutsu_repo()?;
 
     let commit_id = working_copy_commit_id(repo)?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
-    let change_id = shorten_id(&commit.change_id().reverse_hex(), change_id_length);
+    let default_log_expression =
+        repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
+    let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
+        .disambiguate_within(default_log_expression);
+    let id_prefix_index = id_prefix_context.populate(repo.repo().as_ref()).ok()?;
+    let prefix_len = id_prefix_index
+        .shortest_change_prefix_len(repo.repo().as_ref(), &commit.change_id())
+        .ok()?;
 
-    Some(change_id)
+    Some((commit.change_id().reverse_hex(), prefix_len))
 }
 
-pub fn get_jujutsu_commit_id(ctx: &Context, commit_hash_length: usize) -> Option<String> {
+pub fn get_jujutsu_commit_id(ctx: &Context) -> Option<(String, usize)> {
     let repo = ctx.get_jujutsu_repo()?;
 
     let commit_id = working_copy_commit_id(repo)?;
-    let commit = repo.repo().store().get_commit(&commit_id).ok()?;
-    let commit_id_short = shorten_id(&commit.id().hex(), commit_hash_length);
 
-    Some(commit_id_short)
+    let default_log_expression =
+        repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
+    let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
+        .disambiguate_within(default_log_expression);
+    let id_prefix_index = id_prefix_context.populate(repo.repo().as_ref()).ok()?;
+    let prefix_len = id_prefix_index
+        .shortest_commit_prefix_len(repo.repo().as_ref(), &commit_id)
+        .ok()?;
+
+    Some((commit_id.hex(), prefix_len))
 }
 
 pub(crate) fn get_jujutsu_bookmarks(
@@ -413,11 +428,4 @@ fn load_revset_aliases(settings: &UserSettings) -> RevsetAliasesMap {
         }
     }
     aliases
-}
-
-fn shorten_id(id: &str, length: usize) -> String {
-    if length == 0 {
-        return String::new();
-    }
-    id.chars().take(length).collect()
 }

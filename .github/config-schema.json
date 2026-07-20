@@ -986,8 +986,9 @@
       "$ref": "#/$defs/JujutsuChangeConfig",
       "default": {
         "symbol": "",
-        "style": "purple",
-        "format": "[$symbol$change_id]($style) ",
+        "prefix_style": "purple",
+        "suffix_style": "",
+        "format": "[$change_prefix]($prefix_style)$change_suffix($suffix_style) ",
         "change_id_length": 7,
         "disabled": false
       }
@@ -996,8 +997,9 @@
       "$ref": "#/$defs/JujutsuCommitConfig",
       "default": {
         "symbol": "",
-        "style": "blue",
-        "format": "[$symbol$commit]($style) ",
+        "prefix_style": "blue",
+        "suffix_style": "",
+        "format": "[$commit_prefix]($prefix_style)$commit_suffix($suffix_style) ",
         "commit_hash_length": 7,
         "disabled": true
       }
@@ -4570,13 +4572,17 @@
           "type": "string",
           "default": ""
         },
-        "style": {
+        "prefix_style": {
           "type": "string",
           "default": "purple"
         },
+        "suffix_style": {
+          "type": "string",
+          "default": ""
+        },
         "format": {
           "type": "string",
-          "default": "[$symbol$change_id]($style) "
+          "default": "[$change_prefix]($prefix_style)$change_suffix($suffix_style) "
         },
         "change_id_length": {
           "type": "integer",
@@ -4598,13 +4604,17 @@
           "type": "string",
           "default": ""
         },
-        "style": {
+        "prefix_style": {
           "type": "string",
           "default": "blue"
         },
+        "suffix_style": {
+          "type": "string",
+          "default": ""
+        },
         "format": {
           "type": "string",
-          "default": "[$symbol$commit]($style) "
+          "default": "[$commit_prefix]($prefix_style)$commit_suffix($suffix_style) "
         },
         "commit_hash_length": {
           "type": "integer",
