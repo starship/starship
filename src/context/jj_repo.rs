@@ -37,15 +37,26 @@ pub struct CurrentChange {
 pub struct Bookmark(pub Box<str>);
 
 impl JJRepo {
+    /// Discover if we're in a JJ repo by looking for a `.jj` directory in the current directory
+    /// and its parents.
+    ///
+    /// While this is technically more error prone than `jj workspace root`, it also much faster
+    /// and subsequent JJ commands will fail fast if it's not actually a JJ repo.
     pub fn discover(context: &Context) -> Option<Self> {
-        let root = context.begin_ancestor_scan().set_folders(&[".jj"]).scan()?;
+        context
+            .begin_ancestor_scan()
+            .set_folders(&[".jj"])
+            .scan()
+            .map(Self::with_root)
+    }
 
+    pub fn with_root(root: PathBuf) -> Self {
         // NOTE: we don't compute anything by default, gating everything behind `OnceLock`s
         //       to avoid running `jj` commands for nothing if the information is never asked for.
-        Some(Self {
+        Self {
             root,
             current_change: OnceLock::new(),
-        })
+        }
     }
 
     /// Information about the current change's state.
@@ -272,6 +283,145 @@ fn parse_bookmark_lines(current: &str, parents: &str) -> Option<Vec<Bookmark>> {
     };
 
     Some(line.split(' ').map(|b| Bookmark(Box::from(b))).collect())
+}
+
+#[cfg(test)]
+impl JJRepo {
+    pub const BASE: &str = "/jj/base";
+    pub const EMPTY_OUTPUT: &str = "/jj/empty-output";
+    pub const INVALID_OUTPUT: &str = "/jj/invalid-output";
+
+    pub const BOOKMARK_NO_CURRENT: &str = "/jj/bookmarks/no-current";
+
+    pub const NONE: &str = "/jj/no-repo";
+}
+
+/// Helper function to generate mock command outputs for JJ module tests
+#[cfg(test)]
+pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
+    use crate::utils::CommandOutput;
+
+    // Constants to avoid magic numbers in `let outputs` and allow changing the indexes
+    // without having to rewrite the whole array every time.
+    // We allow unused for all of them to avoid having to add/remove/rename in commits all over.
+    #[allow(unused)]
+    const CONFLICT: usize = 0;
+    #[allow(unused)]
+    const DESC: usize = 1;
+    #[allow(unused)]
+    const HIDDEN: usize = 2;
+    #[allow(unused)]
+    const IMMUTABLE: usize = 3;
+    #[allow(unused)]
+    const CHANGE: usize = 4;
+    #[allow(unused)]
+    const CHANGE_SHORT_LENGTH: usize = 5;
+    #[allow(unused)]
+    const COMMIT: usize = 6;
+    #[allow(unused)]
+    const COMMIT_SHORT_LENGTH: usize = 7;
+    #[allow(unused)]
+    const BOOKMARKS_CUR: usize = 8;
+    #[allow(unused)]
+    const BOOKMARKS_PREV: usize = 9;
+    #[allow(unused)]
+    const LINES_A: usize = 10;
+    #[allow(unused)]
+    const LINES_D: usize = 11;
+    #[allow(unused)]
+    const FILES: usize = 12;
+
+    /// Generate output for JJ while allowing easy replacement of lines to test various valid
+    /// possibilities
+    fn output<const N: usize>(mods: [(usize, &str); N]) -> Option<CommandOutput> {
+        let mut stdout = [
+            // conflict
+            "conflict_before|false",
+            // description
+            "false",
+            // hidden
+            "false",
+            // immutable
+            "false",
+            // change id
+            "pvtxwmvtttmrkkoqkutlystlnozssmnk",
+            // change id shortest prefix length
+            "3",
+            // commit id
+            "30363e463b3a5c87ad352b2d342f7408e3c2dda8",
+            // commit id shortest prefix length
+            "4",
+            // @ bookmarks
+            "cur_local cur_tracked* cur_modified@upstream* cur_untracked@origin",
+            // @- bookmarks
+            "par_local par_tracked* par_modified@upstream* par_untracked@origin",
+            // lines added
+            "100",
+            // lines deleted
+            "90",
+            // files status in current directory
+            "ACDMR",
+        ];
+
+        for (index, replacement) in mods {
+            stdout[index] = replacement;
+        }
+
+        Some(CommandOutput {
+            stdout: stdout.as_ref().join("\n"),
+            stderr: String::new(),
+        })
+    }
+
+    if !s.contains("show @") {
+        panic!("Found non-mocked JJ command: {s}");
+    }
+
+    // Voluntarily unformatted to allow easy modifications that don't conflict all the time
+    // and to make each outputs formatted the same for easier reading
+    #[rustfmt::skip]
+    #[expect(clippy::type_complexity)]
+    let outputs: [(_, fn() -> Option<CommandOutput>); _] = [
+        (
+            JJRepo::BASE,
+            || output([])
+        ),
+        // Repos testing jj_bookmark rendering
+        (
+            JJRepo::BOOKMARK_NO_CURRENT,
+            || output([
+                (BOOKMARKS_CUR, ""),
+            ]),
+        ),
+        // Used to test the parsing will correctly fail on empty stdout
+        (
+            JJRepo::EMPTY_OUTPUT,
+            || {
+                Some(CommandOutput {
+                    stdout: String::new(),
+                    stderr: String::new(),
+                })
+            },
+        ),
+        // Used to test the parsing will correctly fail on invalid stdout
+        (
+            JJRepo::INVALID_OUTPUT,
+            || {
+                Some(CommandOutput {
+                    stdout: String::from("invalid output"),
+                    stderr: String::new(),
+                })
+            },
+        ),
+    ];
+
+    for (key, closure) in outputs {
+        if s.contains(key) {
+            return (closure)();
+        }
+    }
+
+    None
 }
 
 #[cfg(test)]
