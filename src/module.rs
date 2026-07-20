@@ -60,7 +60,6 @@ pub const ALL_MODULES: &[&str] = &[
     "jobs",
     "jujutsu_bookmark",
     "jujutsu_change",
-    "jujutsu_closest_bookmarks",
     "jujutsu_commit",
     "jujutsu_state",
     "julia",

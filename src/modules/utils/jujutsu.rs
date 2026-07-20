@@ -24,8 +24,6 @@ use jj_lib::str_util::StringExpression;
 use jj_lib::workspace::{Workspace, default_working_copy_factories};
 use pollster::FutureExt;
 
-use crate::configs::jujutsu_change::JujutsuChangeConfig;
-use crate::configs::jujutsu_commit::JujutsuCommitConfig;
 use crate::context::Context;
 
 const DEFAULT_REVSET_ALIASES: &str = r#"
@@ -149,41 +147,47 @@ pub(crate) struct JujutsuBookmarkInfo {
     pub is_conflicted: bool,
 }
 
-pub fn get_jujutsu_change_id(ctx: &Context, config: &JujutsuChangeConfig) -> Option<String> {
+pub fn get_jujutsu_change_id(ctx: &Context, change_id_length: usize) -> Option<String> {
     let repo = ctx.get_jujutsu_repo()?;
 
     let commit_id = working_copy_commit_id(repo)?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
-    let change_id = shorten_id(&commit.change_id().reverse_hex(), config.change_id_length);
+    let change_id = shorten_id(&commit.change_id().reverse_hex(), change_id_length);
 
     Some(change_id)
 }
 
-pub fn get_jujutsu_commit_id(ctx: &Context, config: &JujutsuCommitConfig) -> Option<String> {
+pub fn get_jujutsu_commit_id(ctx: &Context, commit_hash_length: usize) -> Option<String> {
     let repo = ctx.get_jujutsu_repo()?;
 
     let commit_id = working_copy_commit_id(repo)?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
-    let commit_id_short = shorten_id(&commit.id().hex(), config.commit_hash_length);
+    let commit_id_short = shorten_id(&commit.id().hex(), commit_hash_length);
 
     Some(commit_id_short)
 }
 
-pub(crate) fn get_jujutsu_bookmarks(ctx: &Context) -> Option<Vec<JujutsuBookmarkInfo>> {
+pub(crate) fn get_jujutsu_bookmarks(
+    ctx: &Context,
+    find_closest: bool,
+) -> Option<Vec<JujutsuBookmarkInfo>> {
     let repo = ctx.get_jujutsu_repo()?;
     let commit_id = working_copy_commit_id(repo)?;
     let tracked_bookmarks = tracked_bookmarks(repo.repo());
 
-    Some(commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks))
-}
+    let bookmarks = commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks);
 
-pub fn get_closest_jujutsu_bookmarks(ctx: &Context<'_>) -> Option<Vec<JujutsuBookmarkInfo>> {
-    let repo = ctx.get_jujutsu_repo()?;
-    let commit_id = closest_bookmark_commit_id(repo)?;
-    let tracked_bookmarks = tracked_bookmarks(repo.repo());
+    if !bookmarks.is_empty() || !find_closest {
+        return Some(bookmarks);
+    }
 
-    Some(commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks))
+    let closest_bookmark_commit_id = closest_bookmark_commit_id(repo)?;
+    Some(commit_bookmarks(
+        repo.repo(),
+        &closest_bookmark_commit_id,
+        &tracked_bookmarks,
+    ))
 }
 
 pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {

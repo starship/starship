@@ -1,9 +1,11 @@
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_bookmark::JujutsuBookmarkConfig;
+use crate::formatter::string_formatter::StringFormatterError;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::get_jujutsu_bookmarks;
+use crate::modules::utils::jujutsu::{get_jujutsu_bookmarks, JujutsuBookmarkInfo};
 use crate::modules::vcs;
+use crate::segment::Segment;
 
 /// Creates a module with the Jujutsu bookmarks in the current directory
 ///
@@ -20,34 +22,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_bookmarks = get_jujutsu_bookmarks(context)?;
+    let jujutsu_bookmarks = get_jujutsu_bookmarks(context, config.find_closest)?;
 
     let bookmarks = if jujutsu_bookmarks.is_empty() {
-        None
+        return None;
     } else {
-        Some(
-            jujutsu_bookmarks
-                .iter()
-                .map(|bookmark| {
-                    let mut name = bookmark.name.clone();
-                    let local_ahead = bookmark.remote_behind;
-                    let local_behind = bookmark.remote_ahead;
-                    if bookmark.is_tracked {
-                        if local_ahead > 0 && local_behind > 0 {
-                            name.push_str(&format!(" ⇡{}⇣{}", local_ahead, local_behind));
-                        } else if local_ahead > 0 {
-                            name.push_str(&format!(" ⇡{}", local_ahead));
-                        } else if local_behind > 0 {
-                            name.push_str(&format!(" ⇣{}", local_behind));
+        jujutsu_bookmarks
+            .iter()
+            .map(|bookmark| {
+                format_bookmark(&config, bookmark, context)
+            })
+            .collect::<Result<Vec<_>, _>>()
+            .map(|nested_vec| {
+                nested_vec
+                    .into_iter()
+                    .enumerate()
+                    .flat_map(|(i, segments)| {
+                        if i == 0 {
+                            segments
+                        } else {
+                            Segment::from_text(None, config.joiner)
+                                .into_iter()
+                                .chain(segments)
+                                .collect::<Vec<_>>()
                         }
-                    }
-                    name
-                })
-                .collect::<Vec<_>>(),
-        )
+                    })
+                    .collect::<Vec<_>>()
+            })
     };
-
-    bookmarks.as_ref()?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -59,19 +61,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "bookmarks" => Some(Ok(bookmarks
-                    .as_ref()?
-                    .iter()
-                    .map(|bookmark| {
-                        if jujutsu_bookmarks.iter().any(|bookmark| bookmark.is_conflicted) {
-                            format!("{}{}", bookmark, config.bookmark_conflicted)
-                        } else {
-                            bookmark.to_string()
-                        }
-                    })
-                    .collect::<Vec<_>>()
-                    .join(" "))),
+            .map_variables_to_segments(|variable| match variable {
+                "bookmarks" => Some(bookmarks.clone()),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -86,4 +77,70 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn format_bookmark(
+    config: &JujutsuBookmarkConfig,
+    bookmark: &JujutsuBookmarkInfo,
+    context: &Context,
+) -> Result<Vec<Segment>, StringFormatterError> {
+    StringFormatter::new(config.bookmark_format).and_then(|formatter| {
+        formatter
+            .map(|variable| match variable {
+                "bookmark_name" => Some(Ok(bookmark.name.to_string())),
+                "conflicted" => if bookmark.is_conflicted {
+                    Some(Ok(config.conflicted.to_string()))
+                } else {
+                    None
+                },
+                _ => None,
+            })
+            .map_variables_to_segments(|variable| match variable {
+                "ahead_behind" => {
+                    if bookmark.is_tracked {
+                        let local_ahead = bookmark.remote_behind;
+                        let local_behind = bookmark.remote_ahead;
+                        if local_ahead > 0 && local_behind > 0 {
+                            Some(
+                                StringFormatter::new(config.diverged).and_then(|formatter| {
+                                    formatter
+                                        .map(|variable| match variable {
+                                            "ahead_count" => Some(Ok(local_ahead.to_string())),
+                                            "behind_count" => Some(Ok(local_behind.to_string())),
+                                            _ => None,
+                                        })
+                                        .parse(None, Some(context))
+                                })
+                            )
+                        } else if local_ahead > 0 || local_behind > 0 {
+                            let (template, count) = if local_ahead > 0 {
+                                (config.ahead, local_ahead)
+                            } else {
+                                (config.behind, local_behind)
+                            };
+                            Some(
+                                StringFormatter::new(template).and_then(|formatter| {
+                                    formatter
+                                        .map(|variable| match variable {
+                                            "count" => Some(Ok(count.to_string())),
+                                            _ => None,
+                                        })
+                                        .parse(None, Some(context))
+                                })
+                            )
+                        } else {
+                            Some(
+                                StringFormatter::new(config.up_to_date).and_then(|formatter| {
+                                    formatter.parse(None, Some(context))
+                                })
+                            )
+                        }
+                    } else {
+                        None
+                    }
+                },
+                _ => None
+            })
+            .parse(None, Some(context))
+    })
 }

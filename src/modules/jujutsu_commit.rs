@@ -2,7 +2,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_commit::JujutsuCommitConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::{get_jujutsu_commit_id};
+use crate::modules::utils::jujutsu::get_jujutsu_commit_id;
 use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu commit hash in the current directory
@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let commit_id = get_jujutsu_commit_id(context, &config)?;
+    let commit_id = get_jujutsu_commit_id(context, config.commit_hash_length)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

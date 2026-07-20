@@ -971,17 +971,14 @@
         "symbol": "󰑟 ",
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
-        "bookmark_conflicted": "??",
-        "disabled": true
-      }
-    },
-    "jujutsu_closest_bookmarks": {
-      "$ref": "#/$defs/JujutsuClosestBookmarksConfig",
-      "default": {
-        "symbol": "󰑟 ",
-        "style": "purple",
-        "format": "[$symbol$bookmarks]($style) ",
-        "bookmark_conflicted": "??",
+        "bookmark_format": "$bookmark_name$ahead_behind$conflicted",
+        "ahead": " ⇡$count",
+        "behind": " ⇣$count",
+        "diverged": " ⇡$ahead_count⇣$behind_count",
+        "up_to_date": " ✓",
+        "conflicted": "??",
+        "joiner": " ",
+        "find_closest": false,
         "disabled": true
       }
     },
@@ -4527,35 +4524,37 @@
           "type": "string",
           "default": "[$symbol$bookmarks]($style) "
         },
-        "bookmark_conflicted": {
+        "bookmark_format": {
+          "type": "string",
+          "default": "$bookmark_name$ahead_behind$conflicted"
+        },
+        "ahead": {
+          "type": "string",
+          "default": " ⇡$count"
+        },
+        "behind": {
+          "type": "string",
+          "default": " ⇣$count"
+        },
+        "diverged": {
+          "type": "string",
+          "default": " ⇡$ahead_count⇣$behind_count"
+        },
+        "up_to_date": {
+          "type": "string",
+          "default": " ✓"
+        },
+        "conflicted": {
           "type": "string",
           "default": "??"
         },
-        "disabled": {
+        "joiner": {
+          "type": "string",
+          "default": " "
+        },
+        "find_closest": {
           "type": "boolean",
-          "default": true
-        }
-      },
-      "additionalProperties": false
-    },
-    "JujutsuClosestBookmarksConfig": {
-      "type": "object",
-      "properties": {
-        "symbol": {
-          "type": "string",
-          "default": "󰑟 "
-        },
-        "style": {
-          "type": "string",
-          "default": "purple"
-        },
-        "format": {
-          "type": "string",
-          "default": "[$symbol$bookmarks]($style) "
-        },
-        "bookmark_conflicted": {
-          "type": "string",
-          "default": "??"
+          "default": false
         },
         "disabled": {
           "type": "boolean",
