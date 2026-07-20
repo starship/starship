@@ -37,6 +37,8 @@ mod jj_repo;
 
 pub use git_repo::{GitRemote, GitRepo};
 pub use jj_repo::JJRepo;
+#[cfg(test)]
+pub use jj_repo::mock_jj_cmd;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -412,6 +414,11 @@ impl<'a> Context<'a> {
     /// Will lazily discover Jujutsu repo root when a module requests it.
     pub fn get_jj_repo(&self) -> Option<&JJRepo> {
         self.jj_repo.get_or_init(|| JJRepo::discover(self)).as_ref()
+    }
+
+    #[cfg(test)]
+    pub fn set_jj_repo(&mut self, repo: JJRepo) {
+        self.jj_repo = OnceLock::from(Some(repo));
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
