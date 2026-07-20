@@ -979,6 +979,17 @@
         "disabled": false
       }
     },
+    "jj_change": {
+      "$ref": "#/$defs/JJChangeConfig",
+      "default": {
+        "format": "$change ",
+        "prefix_style": "green bold",
+        "suffix_style": "dimmed",
+        "change_hash_length": 7,
+        "commit_hash_length": 7,
+        "disabled": false
+      }
+    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -4519,6 +4530,48 @@
             "type": "string"
           },
           "default": []
+        },
+        "disabled": {
+          "description": "Disable the module",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "JJChangeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "Format string for the module",
+          "type": "string",
+          "default": "$change "
+        },
+        "prefix_style": {
+          "description": "Value of the `$prefix_style` variable in the format string",
+          "type": "string",
+          "default": "green bold"
+        },
+        "suffix_style": {
+          "description": "Value of the `$suffix_style` variable in the format string",
+          "type": "string",
+          "default": "dimmed"
+        },
+        "change_hash_length": {
+          "description": "The max length of the displayed change hash, when combining prefix and suffix\n\nThe actual length of the displayed value will be `max(prefix.len(), change_hash_length)`",
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 7
+        },
+        "commit_hash_length": {
+          "description": "The max length of the displayed commit hash, when combining prefix and suffix\n\nThe actual length of the displayed value will be `max(prefix.len(), commit_hash_length)`",
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 7
         },
         "disabled": {
           "description": "Disable the module",

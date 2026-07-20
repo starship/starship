@@ -129,6 +129,9 @@ format = '\[[$symbol($version)]($style)\]'
 [jj_bookmark]
 format = '\[[$symbol$bookmark( \\(+$overflow_count others\\))]($style)\]'
 
+[jj_change]
+format = '\[[\($change\)]($style)\]'
+
 [jobs]
 format = '\[[$symbol$number]($style)\]'
 

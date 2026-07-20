@@ -2606,6 +2606,48 @@ ignore_bookmarks = ["main", "master"]
 diverged_symbol = "⇕"
 ```
 
+## JJ Change
+
+The `jj_change` module shows the current [Jujutsu](https://docs.jj-vcs.dev/) change and optionally the underlying commit when the current directory is in a Jujutsu repository.
+
+### Options
+
+| Option                | Default      | Description                                                               |
+| --------------------- | ------------ | ------------------------------------------------------------------------- |
+| `format`              | `"$change "` | Format string for the module                                              |
+| `prefix_style`        | `bold green` | Value of the `$prefix_style` variable in the format string                |
+| `suffix_style`        | `dimmed`     | Value of the `$suffix_style` variable in the format string                |
+| `change_hash_length`* | `7`          | The length of the displayed change hash, when combining prefix and suffix |
+| `commit_hash_length`* | `7`          | The length of the displayed commit hash, when combining prefix and suffix |
+| `disabled`            | `false`      | Disable the module                                                        |
+
+*: The length of `$<id>_prefix` will be `max(<id>_prefix.len(), <id>_hash_length)`, to ensure the shortest unique
+prefix is always correctly displayed
+
+### Variables
+
+| Variable       | Example | Description                                                                                      |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| change         |         | The full styled change at once: `[$change_prefix]($prefix_style)[$change_suffix]($suffix_style)` |
+| change_prefix  | `vpo`   | Current change hash shortest unique prefix                                                       |
+| change_suffix  | `vrqx`  | Current change hash, truncated to `change_hash_length` and after removing `change_prefix`        |
+| commit         |         | The full styled commit at once: `[$commit_prefix]($prefix_style)[$commit_suffix]($suffix_style)` |
+| commit_prefix  | `303`   | Current commit hash shortest unique prefix                                                       |
+| commit_suffix  | `63e4`  | Current commit hash, truncated to `commit_hash_length` and after removing `commit_prefix`        |
+| prefix_style\* |         | Mirrors the value of option `prefix_style`                                                       |
+| suffix_style\* |         | Mirrors the value of option `suffix_style`                                                       |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_change]
+format = "($change:$commit) "
+```
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running.
