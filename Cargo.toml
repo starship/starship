@@ -35,18 +35,20 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
+chrono = "0.4"
 clap = { version = "4.6.2", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.6.7"
 clap_complete_nushell = "4.6.0"
 dirs = "6.0.0"
 dunce = "1.0.5"
+futures = "0.3"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 gix = { version = "0.85.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status", "sha1", "sha256"] }
 guess_host_triple = "0.1.5"
 home = "0.5.12"
 indexmap = { version = "2.14.0", features = ["serde"] }
 jiff = { version = "0.2.32", features = ["serde"] }
-jj-lib = "0.37.0"
+jj-lib = "0.43.0"
 jsonc-parser = { version = "0.33.0", features = ["serde"] }
 log = { version = "0.4.33", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
@@ -61,6 +63,7 @@ parking_lot = "0.12.5"
 path-slash = "0.2.1"
 pest = "2.8.7"
 pest_derive = "2.8.7"
+pollster = "1"
 process_control = "5.2.0"
 quick-xml = "0.41.0"
 rand = "0.10.2"

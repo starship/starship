@@ -2,7 +2,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_closest_bookmarks::JujutsuClosestBookmarksConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::get_closest_jujutsu_bookmarks_info;
+use crate::modules::utils::jujutsu::get_closest_jujutsu_bookmarks;
 use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu bookmarks in the current directory
@@ -21,14 +21,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = get_closest_jujutsu_bookmarks_info(context)?;
+    let jujutsu_bookmarks = get_closest_jujutsu_bookmarks(context)?;
 
-    let bookmarks = if jujutsu_info.bookmarks.is_empty() {
+    let bookmarks = if jujutsu_bookmarks.is_empty() {
         None
     } else {
         Some(
-            jujutsu_info
-                .bookmarks
+            jujutsu_bookmarks
                 .iter()
                 .map(|bookmark| {
                     let mut name = bookmark.name.clone();

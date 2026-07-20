@@ -1,8 +1,11 @@
-use crate::config::ModuleConfig;
-use crate::context::Context;
-use crate::modules::vcs;
+use std::collections::HashMap;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+
+use futures::stream::StreamExt;
 use jj_lib::backend::CommitId;
 use jj_lib::config::{ConfigLayer, ConfigSource, StackedConfig};
+use jj_lib::fileset::FilesetAliasesMap;
 use jj_lib::object_id::ObjectId as _;
 use jj_lib::op_store::RefTarget;
 use jj_lib::op_store::RemoteRef;
@@ -19,9 +22,11 @@ use jj_lib::revset::{RevsetAliasesMap, RevsetExtensions};
 use jj_lib::settings::UserSettings;
 use jj_lib::str_util::StringExpression;
 use jj_lib::workspace::{Workspace, default_working_copy_factories};
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use pollster::FutureExt;
+
+use crate::configs::jujutsu_change::JujutsuChangeConfig;
+use crate::configs::jujutsu_commit::JujutsuCommitConfig;
+use crate::context::Context;
 
 const DEFAULT_REVSET_ALIASES: &str = r#"
 [revset-aliases]
@@ -47,12 +52,13 @@ pub struct JujutsuRepo {
     settings: UserSettings,
     workspace_name: jj_lib::ref_name::WorkspaceNameBuf,
     workspace_root: PathBuf,
+    fileset_aliases: FilesetAliasesMap,
     revset_aliases: RevsetAliasesMap,
     revset_extensions: RevsetExtensions,
 }
 
 impl JujutsuRepo {
-    pub(crate) fn load(context: &Context) -> Option<Self> {
+    pub fn load(context: &Context<'_>) -> Option<Self> {
         let workspace_root = context.begin_ancestor_scan().set_folders(&[".jj"]).scan()?;
         let settings = load_settings(context, &workspace_root)?;
 
@@ -65,8 +71,9 @@ impl JujutsuRepo {
         .ok()?;
 
         let workspace_name = workspace.workspace_name().to_owned();
-        let repo = workspace.repo_loader().load_at_head().ok()?;
+        let repo = workspace.repo_loader().load_at_head().block_on().ok()?;
 
+        let fileset_aliases = load_fileset_aliases(&settings);
         let revset_aliases = load_revset_aliases(&settings);
         let revset_extensions = RevsetExtensions::default();
 
@@ -75,82 +82,115 @@ impl JujutsuRepo {
             settings,
             workspace_name,
             workspace_root: workspace_root.to_path_buf(),
+            fileset_aliases,
             revset_aliases,
             revset_extensions,
         })
     }
 
-    pub(crate) fn repo(&self) -> &Arc<ReadonlyRepo> {
+    pub fn repo(&self) -> &Arc<ReadonlyRepo> {
         &self.repo
     }
 
-    pub(crate) fn settings(&self) -> &UserSettings {
-        &self.settings
-    }
-
-    pub(crate) fn workspace_name(&self) -> &jj_lib::ref_name::WorkspaceName {
+    pub fn workspace_name(&self) -> &jj_lib::ref_name::WorkspaceName {
         &self.workspace_name
     }
 
-    pub(crate) fn workspace_root(&self) -> &Path {
-        &self.workspace_root
+    pub fn resolve_revset_expression(
+        &self,
+        expr: Arc<UserRevsetExpression>,
+    ) -> Option<Arc<ResolvedRevsetExpression>> {
+        let resolver = SymbolResolver::new(
+            self.repo.as_ref(),
+            self.revset_extensions.symbol_resolvers(),
+        );
+        expr.resolve_user_expression(self.repo.as_ref(), &resolver)
+            .ok()
     }
 
-    pub(crate) fn revset_aliases(&self) -> &RevsetAliasesMap {
-        &self.revset_aliases
-    }
+    pub fn parse_revset_expression(&self, expression: &str) -> Option<Arc<UserRevsetExpression>> {
+        let mut diagnostics = RevsetDiagnostics::new();
+        let path_converter = RepoPathUiConverter::Fs {
+            cwd: self.workspace_root.to_path_buf(),
+            base: self.workspace_root.to_path_buf(),
+        };
+        let context = RevsetParseContext {
+            aliases_map: &self.revset_aliases,
+            local_variables: HashMap::new(),
+            user_email: self.settings.user_email(),
+            date_pattern_context: chrono::Utc::now().fixed_offset().into(),
+            default_ignored_remote: None,
+            fileset_aliases_map: &self.fileset_aliases,
+            extensions: &self.revset_extensions,
+            workspace: Some(RevsetWorkspaceContext {
+                path_converter: &path_converter,
+                workspace_name: &self.workspace_name,
+            }),
+        };
 
-    pub(crate) fn revset_extensions(&self) -> &RevsetExtensions {
-        &self.revset_extensions
+        revset::parse(&mut diagnostics, expression, &context).ok()
     }
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct JjRepoInfo {
-    pub change_id: String,
-    pub commit_id: String,
-    pub bookmarks: Vec<BookmarkInfo>,
+pub(crate) struct JujutsuRepoInfo {
     pub conflicted: bool,
     pub divergent: bool,
     pub hidden: bool,
     pub immutable: bool,
-    pub bookmark_conflicted: bool,
-}
-
-pub(crate) struct JjClosestBookmarksInfo {
-    pub bookmarks: Vec<BookmarkInfo>,
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct BookmarkInfo {
+pub(crate) struct JujutsuBookmarkInfo {
     pub name: String,
     pub remote_ahead: usize,
     pub remote_behind: usize,
     pub is_tracked: bool,
+    pub is_conflicted: bool,
 }
 
-pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
-    vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
+pub fn get_jujutsu_change_id(ctx: &Context, config: &JujutsuChangeConfig) -> Option<String> {
     let repo = ctx.get_jujutsu_repo()?;
-    let change_id_length = crate::configs::jujutsu_change::JujutsuChangeConfig::try_load(
-        ctx.config.get_module_config("jujutsu_change"),
-    )
-    .change_id_length;
-
-    let commit_hash_length = crate::configs::jujutsu_commit::JujutsuCommitConfig::try_load(
-        ctx.config.get_module_config("jujutsu_commit"),
-    )
-    .commit_hash_length;
 
     let commit_id = working_copy_commit_id(repo)?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
-    let change_id = shorten_id(&commit.change_id().reverse_hex(), change_id_length);
-    let commit_id_short = shorten_id(&commit.id().hex(), commit_hash_length);
+    let change_id = shorten_id(&commit.change_id().reverse_hex(), config.change_id_length);
 
+    Some(change_id)
+}
+
+pub fn get_jujutsu_commit_id(ctx: &Context, config: &JujutsuCommitConfig) -> Option<String> {
+    let repo = ctx.get_jujutsu_repo()?;
+
+    let commit_id = working_copy_commit_id(repo)?;
+    let commit = repo.repo().store().get_commit(&commit_id).ok()?;
+    let commit_id_short = shorten_id(&commit.id().hex(), config.commit_hash_length);
+
+    Some(commit_id_short)
+}
+
+pub(crate) fn get_jujutsu_bookmarks(ctx: &Context) -> Option<Vec<JujutsuBookmarkInfo>> {
+    let repo = ctx.get_jujutsu_repo()?;
+    let commit_id = working_copy_commit_id(repo)?;
     let tracked_bookmarks = tracked_bookmarks(repo.repo());
-    let (bookmarks, bookmark_conflicted) =
-        commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks);
+
+    Some(commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks))
+}
+
+pub fn get_closest_jujutsu_bookmarks(ctx: &Context<'_>) -> Option<Vec<JujutsuBookmarkInfo>> {
+    let repo = ctx.get_jujutsu_repo()?;
+    let commit_id = closest_bookmark_commit_id(repo)?;
+    let tracked_bookmarks = tracked_bookmarks(repo.repo());
+
+    Some(commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks))
+}
+
+pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
+    let repo = ctx.get_jujutsu_repo()?;
+
+    let commit_id = working_copy_commit_id(repo)?;
+    let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
     let hidden = commit.is_hidden(repo.repo().as_ref()).ok()?;
     let divergent = repo
@@ -162,26 +202,12 @@ pub(crate) fn get_jujutsu_info(ctx: &Context) -> Option<JjRepoInfo> {
         .unwrap_or(false);
     let immutable = is_commit_immutable(repo, &commit_id).unwrap_or(false);
 
-    Some(JjRepoInfo {
-        change_id,
-        commit_id: commit_id_short,
-        bookmarks,
+    Some(JujutsuRepoInfo {
         conflicted: commit.has_conflict(),
         divergent,
         hidden,
         immutable,
-        bookmark_conflicted,
     })
-}
-
-pub(crate) fn get_closest_jujutsu_bookmarks_info(ctx: &Context) -> Option<JjClosestBookmarksInfo> {
-    vcs::discover_repo_root(ctx, vcs::Vcs::Jujutsu)?;
-    let repo = ctx.get_jujutsu_repo()?;
-    let commit_id = closest_bookmark_commit_id(repo)?;
-    let tracked_bookmarks = tracked_bookmarks(repo.repo());
-    let (bookmarks, _) = commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks);
-
-    Some(JjClosestBookmarksInfo { bookmarks })
 }
 
 fn working_copy_commit_id(repo: &JujutsuRepo) -> Option<CommitId> {
@@ -239,14 +265,14 @@ fn commit_bookmarks(
     repo: &ReadonlyRepo,
     commit_id: &CommitId,
     tracked_bookmarks: &HashMap<String, (usize, usize)>,
-) -> (Vec<BookmarkInfo>, bool) {
-    let mut bookmark_conflicted = false;
+) -> Vec<JujutsuBookmarkInfo> {
     let mut bookmarks = Vec::new();
 
     for (name, local_target) in repo.view().local_bookmarks_for_commit(commit_id) {
+        let mut is_conflicted = false;
         let name_str = name.as_str().to_string();
         if local_target.has_conflict() {
-            bookmark_conflicted = true;
+            is_conflicted = true;
         }
 
         let remote_conflict = repo
@@ -258,75 +284,42 @@ fn commit_bookmarks(
             .any(|(_, remote_ref)| remote_ref.target.has_conflict());
 
         if remote_conflict {
-            bookmark_conflicted = true;
+            is_conflicted = true;
         }
 
         let (ahead, behind, is_tracked) = tracked_bookmarks
             .get(&name_str)
             .map(|(ahead, behind)| (*ahead, *behind, true))
             .unwrap_or((0, 0, false));
-        bookmarks.push(BookmarkInfo {
+        bookmarks.push(JujutsuBookmarkInfo {
             name: name_str,
             remote_ahead: ahead,
             remote_behind: behind,
             is_tracked,
+            is_conflicted,
         });
     }
 
-    (bookmarks, bookmark_conflicted)
+    bookmarks
 }
 
 fn closest_bookmark_commit_id(repo: &JujutsuRepo) -> Option<CommitId> {
     let working_copy = UserRevsetExpression::working_copy(repo.workspace_name().to_owned());
     let bookmarks = UserRevsetExpression::bookmarks(StringExpression::all());
     let expr = working_copy.ancestors().intersection(&bookmarks).heads();
-    let resolved = resolve_revset_expression(repo, expr)?;
+    let resolved = repo.resolve_revset_expression(expr)?;
     let revset = resolved.evaluate(repo.repo().as_ref()).ok()?;
 
-    revset.iter().find_map(|entry| entry.ok())
-}
-
-fn resolve_revset_expression(
-    repo: &JujutsuRepo,
-    expr: Arc<UserRevsetExpression>,
-) -> Option<Arc<ResolvedRevsetExpression>> {
-    let resolver = SymbolResolver::new(
-        repo.repo().as_ref(),
-        repo.revset_extensions().symbol_resolvers(),
-    );
-    expr.resolve_user_expression(repo.repo().as_ref(), &resolver)
-        .ok()
-}
-
-fn parse_revset_expression(
-    repo: &JujutsuRepo,
-    expression: &str,
-) -> Option<Arc<UserRevsetExpression>> {
-    let mut diagnostics = RevsetDiagnostics::new();
-    let path_converter = RepoPathUiConverter::Fs {
-        cwd: repo.workspace_root().to_path_buf(),
-        base: repo.workspace_root().to_path_buf(),
-    };
-    let context = RevsetParseContext {
-        aliases_map: repo.revset_aliases(),
-        local_variables: HashMap::new(),
-        user_email: repo.settings().user_email(),
-        date_pattern_context: chrono::Utc::now().fixed_offset().into(),
-        default_ignored_remote: None,
-        use_glob_by_default: true,
-        extensions: repo.revset_extensions(),
-        workspace: Some(RevsetWorkspaceContext {
-            path_converter: &path_converter,
-            workspace_name: repo.workspace_name(),
-        }),
-    };
-
-    revset::parse(&mut diagnostics, expression, &context).ok()
+    revset
+        .stream()
+        .next()
+        .block_on()
+        .and_then(|entry| entry.ok())
 }
 
 fn is_commit_immutable(repo: &JujutsuRepo, commit_id: &CommitId) -> Option<bool> {
-    let expr = parse_revset_expression(repo, "immutable()")?;
-    let resolved = resolve_revset_expression(repo, expr)?;
+    let expr = repo.parse_revset_expression("immutable()")?;
+    let resolved = repo.resolve_revset_expression(expr)?;
     let revset = resolved.evaluate(repo.repo().as_ref()).ok()?;
     let contains = revset.containing_fn();
     contains(commit_id).ok()
@@ -392,12 +385,25 @@ fn user_config_dirs(context: &Context) -> Vec<PathBuf> {
     paths
 }
 
+fn load_fileset_aliases(settings: &UserSettings) -> FilesetAliasesMap {
+    let mut aliases = FilesetAliasesMap::new();
+    let config = settings.config();
+    for alias in config.table_keys("fileset-aliases") {
+        if let Ok(value) = config.get::<String>(["fileset-aliases", alias])
+            && let Err(error) = aliases.insert(alias, value, None)
+        {
+            log::debug!("Failed to load fileset alias '{alias}': {error}");
+        }
+    }
+    aliases
+}
+
 fn load_revset_aliases(settings: &UserSettings) -> RevsetAliasesMap {
     let mut aliases = RevsetAliasesMap::new();
     let config = settings.config();
     for alias in config.table_keys("revset-aliases") {
         if let Ok(value) = config.get::<String>(["revset-aliases", alias])
-            && let Err(error) = aliases.insert(alias, value)
+            && let Err(error) = aliases.insert(alias, value, None)
         {
             log::debug!("Failed to load revset alias '{alias}': {error}");
         }

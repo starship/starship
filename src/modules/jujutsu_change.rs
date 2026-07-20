@@ -2,7 +2,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::jujutsu_change::JujutsuChangeConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::jujutsu::get_jujutsu_info;
+use crate::modules::utils::jujutsu::{get_jujutsu_change_id};
 use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu change ID in the current directory
@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_info = get_jujutsu_info(context)?;
+    let change_id = get_jujutsu_change_id(context, &config)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "change_id" => Some(Ok(jujutsu_info.change_id.as_str())),
+                "change_id" => Some(Ok(change_id.as_str())),
                 _ => None,
             })
             .parse(None, Some(context))
