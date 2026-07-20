@@ -315,6 +315,8 @@ impl JJRepo {
 
     pub const BOOKMARK_NO_CURRENT: &str = "/jj/bookmarks/no-current";
 
+    pub const CHANGE_DIVERGENT: &str = "/jj/status/divergent";
+
     pub const NONE: &str = "/jj/no-repo";
 }
 
@@ -421,6 +423,14 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             JJRepo::BOOKMARK_NO_CURRENT,
             || output([
                 (BOOKMARKS_CUR, ""),
+            ]),
+        ),
+        // Repos testing jj_change rendering
+        (
+            JJRepo::CHANGE_DIVERGENT,
+            || output([
+                (DIVERGENT, "true"),
+                (CHANGE_OFFSET, "2"),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout
