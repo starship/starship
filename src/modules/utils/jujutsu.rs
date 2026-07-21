@@ -1,7 +1,9 @@
 use std::collections::{HashMap, HashSet};
-use std::path::PathBuf;
+use std::env;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
+use etcetera::BaseStrategy;
 use jj_lib::backend::CommitId;
 use jj_lib::config::{ConfigLayer, ConfigSource, StackedConfig};
 use jj_lib::fileset::FilesetAliasesMap;
@@ -16,11 +18,14 @@ use jj_lib::revset::{
     ResolvedRevsetExpression, RevsetAliasesMap, RevsetDiagnostics, RevsetExtensions,
     RevsetParseContext, RevsetWorkspaceContext, SymbolResolver, UserRevsetExpression,
 };
+use jj_lib::secure_config::SecureConfig;
 use jj_lib::settings::UserSettings;
 use jj_lib::str_util::StringMatcher;
 use jj_lib::view::View;
 use jj_lib::workspace::{Workspace, default_working_copy_factories};
+use log::warn;
 use pollster::FutureExt;
+use rand_chacha::ChaCha20Rng;
 
 use crate::context::Context;
 use crate::modules::vcs;
@@ -37,8 +42,8 @@ pub struct JujutsuRepo {
 
 impl JujutsuRepo {
     pub fn load(context: &Context<'_>) -> Option<Self> {
-        let workspace_root = vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
-        let settings = create_minimal_settings()?;
+        let workspace_root = vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?.into_owned();
+        let settings = create_imitation_settings(workspace_root.clone())?;
 
         let workspace = Workspace::load(
             &settings,
@@ -163,7 +168,7 @@ pub fn get_jujutsu_change_id(ctx: &Context) -> Option<JujutsuChangeInfo> {
     Some(JujutsuChangeInfo {
         change_id: commit.change_id().reverse_hex(),
         prefix_len,
-        description: commit.description().to_owned(),
+        description: commit.description().trim().to_owned(),
     })
 }
 
@@ -223,8 +228,14 @@ pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
         .is_empty(repo.repo().as_ref())
         .block_on()
         .unwrap_or(false);
-    let immutable_heads = find_immutable_heads(repo.repo().view());
-    let immutable = immutable_heads.contains(&commit_id);
+
+    let immutable_expression = repo.parse_revset_expression("immutable()")?;
+    let resolved_immutable_expression = repo.resolve_revset_expression(immutable_expression)?;
+    let immutable_revset = resolved_immutable_expression
+        .evaluate(repo.repo().as_ref())
+        .ok()?;
+    let is_immutable = immutable_revset.containing_fn();
+    let immutable = is_immutable(&commit_id).ok()?;
 
     Some(JujutsuRepoInfo {
         conflicted: commit.has_conflict(),
@@ -376,7 +387,7 @@ fn find_ancestor_bookmarks(
 
     // Convert to vec and sort by distance
     let mut result = bookmarks_with_details.into_values().collect::<Vec<_>>();
-    result.sort_by_key(|details| details.distance);
+    result.sort_by_key(|details| (details.distance, details.name.clone()));
     Some(result)
 }
 
@@ -421,22 +432,155 @@ latest(
 'mutable()' = '~immutable()'
 "#;
 
-fn create_minimal_settings() -> Option<UserSettings> {
+fn create_imitation_settings(workspace_root: PathBuf) -> Option<UserSettings> {
     let mut config = StackedConfig::with_defaults();
 
     // ensure revset aliases are there for change ID shortening
     let default_layer = ConfigLayer::parse(ConfigSource::Default, DEFAULT_REVSET_ALIASES).ok()?;
     config.add_layer(default_layer);
 
-    // Minimal config required by UserSettings
-    let mut user_layer = ConfigLayer::empty(ConfigSource::User);
-    user_layer.set_value("user.name", "jujutsu-starship").ok()?;
-    user_layer
-        .set_value("user.email", "jujutsu-starship@localhost")
-        .ok()?;
-    config.add_layer(user_layer);
+    let jj_config = env::var("JJ_CONFIG").ok();
+    let user_config_dir = etcetera::choose_base_strategy()
+        .ok()
+        .map(|s| s.config_dir());
+
+    // attempt to load configuration just as Jujutsu does it
+    let all_config_paths = resolve_system_config_paths(&jj_config)
+        .into_iter()
+        .map(|path| (path, ConfigSource::System))
+        .chain(
+            resolve_user_config_paths(&jj_config, &user_config_dir)
+                .into_iter()
+                .map(|path| (path, ConfigSource::User)),
+        )
+        .chain(resolve_repo_config_paths(&workspace_root, &user_config_dir))
+        .collect::<Vec<_>>();
+
+    for (path, source) in all_config_paths {
+        if path.is_dir() {
+            if let Err(error) = config.load_dir(source, path.clone()) {
+                warn!(
+                    "Error loading JJ configuration directory '{}': {error}",
+                    path.display()
+                );
+            }
+        } else if path.exists()
+            && let Err(error) = config.load_file(source, path.clone())
+        {
+            warn!(
+                "Error loading JJ configuration file '{}': {error}",
+                path.display()
+            );
+        }
+    }
 
     UserSettings::from_config(config).ok()
+}
+
+fn resolve_user_config_paths(
+    jj_config: &Option<String>,
+    user_config_dir: &Option<PathBuf>,
+) -> Vec<PathBuf> {
+    if let Some(paths) = jj_config {
+        return env::split_paths(&paths)
+            .filter(|path| !path.as_os_str().is_empty())
+            .collect();
+    }
+
+    let home_dir = etcetera::home_dir()
+        .ok()
+        .map(|d| dunce::canonicalize(&d).unwrap_or(d));
+
+    let mut paths = vec![];
+    let home_config_path = home_dir.map(|home_dir| home_dir.join(".jjconfig.toml"));
+    let platform_config_path = user_config_dir
+        .as_ref()
+        .map(|config_dir| config_dir.join("jj").join("config.toml"));
+    let platform_config_dir = user_config_dir
+        .as_ref()
+        .map(|config_dir| config_dir.join("jj").join("conf.d"));
+
+    if let Some(path) = home_config_path
+        && (path.exists() || platform_config_path.is_none())
+    {
+        paths.push(path);
+    }
+
+    // This should be the default config created if there's
+    // no user config and `jj config edit` is executed.
+    if let Some(path) = platform_config_path {
+        paths.push(path);
+    }
+
+    if let Some(path) = platform_config_dir
+        && path.exists()
+    {
+        paths.push(path);
+    }
+
+    paths
+}
+
+fn resolve_system_config_paths(jj_config: &Option<String>) -> Vec<PathBuf> {
+    if cfg!(unix) {
+        let path = PathBuf::from("/etc");
+        if jj_config.is_none() {
+            vec![path.join("jj/config.toml"), path.join("jj/conf.d")]
+        } else {
+            Vec::new()
+        }
+    } else {
+        Vec::new()
+    }
+}
+
+fn resolve_repo_config_paths(
+    workspace_root: &Path,
+    user_config_dir: &Option<PathBuf>,
+) -> Vec<(PathBuf, ConfigSource)> {
+    let root_config_dir = user_config_dir.as_ref().map(|c| c.join("jj"));
+    let mut rng = rand::make_rng();
+
+    let mut configs = Vec::new();
+
+    const REPO_CONFIG_DIR: &str = "repos";
+    let repo_path = workspace_root.join(".jj").join("repo");
+
+    if let Some(config) =
+        resolve_secure_config_path(&mut rng, &root_config_dir, repo_path, REPO_CONFIG_DIR)
+    {
+        configs.push((config, ConfigSource::Repo))
+    };
+
+    const WORKSPACE_CONFIG_DIR: &str = "workspaces";
+    let workspace_path = workspace_root.join(".jj");
+
+    if let Some(config) = resolve_secure_config_path(
+        &mut rng,
+        &root_config_dir,
+        workspace_path,
+        WORKSPACE_CONFIG_DIR,
+    ) {
+        configs.push((config, ConfigSource::Repo))
+    };
+
+    configs
+}
+
+fn resolve_secure_config_path(
+    rng: &mut ChaCha20Rng,
+    root_config_dir: &Option<PathBuf>,
+    repo_path: PathBuf,
+    secure_path_segment: &str,
+) -> Option<PathBuf> {
+    let secure_config = SecureConfig::new_repo(repo_path.clone());
+    match root_config_dir.as_ref() {
+        Some(root_config_dir) => secure_config
+            .maybe_load_config(rng, &root_config_dir.join(secure_path_segment))
+            .ok()
+            .and_then(|config| config.config_file),
+        _ => None,
+    }
 }
 
 fn load_fileset_aliases(settings: &UserSettings) -> FilesetAliasesMap {

@@ -1023,7 +1023,7 @@
         "immutable_style": "red",
         "missing_description": "",
         "missing_description_style": "red",
-        "format": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])",
+        "format": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty]($empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])",
         "style": "red",
         "disabled": false
       }
@@ -4714,7 +4714,7 @@
         },
         "format": {
           "type": "string",
-          "default": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])"
+          "default": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty]($empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])"
         },
         "style": {
           "type": "string",
