@@ -426,12 +426,13 @@ The `claude_model` module displays the current Claude model being used in the se
 
 #### Variables
 
-| Variable | Example             | Description                           |
-| -------- | ------------------- | ------------------------------------- |
-| model    | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id | `claude-3-5-sonnet` | The model ID                          |
-| symbol   |                     | Mirrors the value of option `symbol`  |
-| style\*  |                     | Mirrors the value of option `style`   |
+| Variable | Example             | Description                             |
+| -------- | ------------------- | --------------------------------------- |
+| model    | `Claude 3.5 Sonnet` | The display name of the current model   |
+| model_id | `claude-3-5-sonnet` | The model ID                            |
+| effort   | `high`              | The reasoning effort level, if reported |
+| symbol   |                     | Mirrors the value of option `symbol`    |
+| style\*  |                     | Mirrors the value of option `style`     |
 
 \*: This variable can only be used as a part of a style string
 

@@ -38,6 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "model" => Some(Ok(model_display)),
                 "model_id" => Some(Ok(claude_data.model.id.as_str())),
+                "effort" => claude_data.effort.as_ref().map(|e| Ok(e.level.as_str())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -76,6 +77,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            effort: None,
         };
         let actual = ModuleRenderer::new("claude_model")
             .config(toml::toml! {
@@ -98,6 +100,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            effort: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -125,6 +128,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            effort: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -143,6 +147,62 @@ mod tests {
     }
 
     #[test]
+    fn test_effort_level() {
+        let data = crate::context::ClaudeCodeData {
+            cwd: None,
+            model: crate::context::ModelInfo {
+                id: "claude-opus-4-8".to_string(),
+                display_name: "Opus 4.8".to_string(),
+            },
+            context_window: crate::context::ContextWindow::default(),
+            cost: None,
+            workspace: None,
+            effort: Some(crate::utils::statusline::EffortInfo {
+                level: "high".to_string(),
+            }),
+        };
+
+        let actual = ModuleRenderer::new("claude_model")
+            .config(toml::toml! {
+                [claude_model]
+                symbol = ""
+                format = "[$model $effort]($style)"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Blue.bold().paint("Opus 4.8 high")));
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_effort_absent_omits_variable() {
+        let data = crate::context::ClaudeCodeData {
+            cwd: None,
+            model: crate::context::ModelInfo {
+                id: "claude-opus-4-8".to_string(),
+                display_name: "Opus 4.8".to_string(),
+            },
+            context_window: crate::context::ContextWindow::default(),
+            cost: None,
+            workspace: None,
+            effort: None,
+        };
+
+        let actual = ModuleRenderer::new("claude_model")
+            .config(toml::toml! {
+                [claude_model]
+                symbol = ""
+                format = "[$model( \\($effort\\))]($style)"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Blue.bold().paint("Opus 4.8")));
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
     fn test_alias_by_display_name() {
         let data = crate::context::ClaudeCodeData {
             cwd: None,
@@ -153,6 +213,7 @@ mod tests {
             context_window: crate::context::ContextWindow::default(),
             cost: None,
             workspace: None,
+            effort: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
