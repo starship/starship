@@ -2570,6 +2570,13 @@ The `jj_bookmark` module shows the [Jujutsu](https://docs.jj-vcs.dev/) bookmark 
 
 It looks at `@ | @-` to find bookmarks and will prioritize displaying those of `@` (after filtering has been applied).
 
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
 ### Options
 
 | Option              | Default                                                            | Description                                                                              |
@@ -2609,6 +2616,13 @@ diverged_symbol = "⇕"
 ## JJ Change
 
 The `jj_change` module shows the current [Jujutsu](https://docs.jj-vcs.dev/) change and optionally the underlying commit when the current directory is in a Jujutsu repository.
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
 
 ### Options
 
@@ -2652,6 +2666,13 @@ format = "($change:$commit) "
 
 The `jj_metrics` module shows the number of added and deleted lines in the current [Jujutsu](https://docs.jj-vcs.dev/) repository.
 
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
 ### Options
 
 | Option               | Default                                                      | Description                           |
@@ -2686,6 +2707,13 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ## JJ Status
 
 The `jj_status` module shows symbols representing the state of the [Jujutsu](https://docs.jj-vcs.dev/) repo in your current directory.
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
 
 ### Options
 
@@ -5222,10 +5250,11 @@ The module will be shown only if a configured VCS is currently in use.
 
 | Option           | Default                                                     | Description                                           |
 | ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `order`          | `["git", "jj", "hg", "pijul", "fossil"]`                    | The order in which to search VCSes.                   |
 | `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
 | `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
 | `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `jj_modules`     | `"$jj_bookmark$jj_change$jj_metrics$jj_status"`             | Modules to show when a Jujutsu repository is found.   |
 | `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
 | `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
 

@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use super::Context;
@@ -61,6 +61,11 @@ impl JJRepo {
             root,
             current_change: OnceLock::new(),
         }
+    }
+
+    /// Root directory of the Jujutsu repository
+    pub fn root(&self) -> &Path {
+        &self.root
     }
 
     /// Information about the current change's state.
