@@ -23,13 +23,13 @@ impl Default for JujutsuChangeConfig<'_> {
     fn default() -> Self {
         Self {
             disabled: false,
-            format: "[$symbol[$change_prefix]($prefix_style)$change_suffix]($style)([ $description$no_description]($description_style)) ",
+            format: "on [$symbol [$change_prefix]($prefix_style)$change_suffix]($style)([ ('$description')$no_description]($description_style)) ",
             prefix_style: "purple",
-            style: "",
+            style: "green",
             description_style: "",
-            description_limit: 10,
+            description_limit: 15,
             no_description_symbol: "",
-            symbol: "",
+            symbol: "󱗆",
             change_id_length: 7,
         }
     }

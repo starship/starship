@@ -29,19 +29,19 @@ impl Default for JujutsuStateConfig<'_> {
     fn default() -> Self {
         Self {
             disabled: false,
-            format: "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)",
+            format: "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])",
             style: "red",
-            conflicted: "⚠ ",
+            conflicted: "⚠",
             conflicted_style: "red",
-            divergent: "󰓁 ",
+            divergent: "󰓁",
             divergent_style: "purple",
-            empty: "∅ ",
+            empty: "∅",
             empty_style: "orange",
-            hidden: "󰘓 ",
+            hidden: "󰘓",
             hidden_style: "none",
-            immutable: " ",
+            immutable: "",
             immutable_style: "red",
-            missing_description: " ",
+            missing_description: "",
             missing_description_style: "red",
         }
     }

@@ -22,8 +22,8 @@ impl Default for JujutsuCommitConfig<'_> {
             disabled: true,
             format: "[$symbol[$commit_prefix]($prefix_style)$commit_suffix]($style) ",
             prefix_style: "blue",
-            style: "",
-            symbol: "",
+            style: "green",
+            symbol: " ",
             commit_hash_length: 7,
         }
     }

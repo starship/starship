@@ -969,9 +969,9 @@
       "$ref": "#/$defs/JujutsuBookmarkConfig",
       "default": {
         "symbol": "󰑟 ",
-        "style": "purple",
+        "style": "cyan",
         "format": "[$symbol$bookmarks]($style) ",
-        "bookmark_format": "$bookmark_name(~$depth)$ahead_behind",
+        "bookmark_format": "$bookmark_name(~$distance)$ahead_behind",
         "ahead": " ⇡$count",
         "behind": " ⇣$count",
         "diverged": " ⇡$ahead_count⇣$behind_count",
@@ -986,13 +986,13 @@
     "jujutsu_change": {
       "$ref": "#/$defs/JujutsuChangeConfig",
       "default": {
-        "symbol": "",
-        "style": "",
+        "symbol": "󱗆",
+        "style": "green",
         "prefix_style": "purple",
         "description_style": "",
-        "description_limit": 10,
+        "description_limit": 15,
         "no_description_symbol": "",
-        "format": "[$symbol[$change_prefix]($prefix_style)$change_suffix]($style)([ $description$no_description]($description_style)) ",
+        "format": "on [$symbol [$change_prefix]($prefix_style)$change_suffix]($style)([ ('$description')$no_description]($description_style)) ",
         "change_id_length": 7,
         "disabled": false
       }
@@ -1000,8 +1000,8 @@
     "jujutsu_commit": {
       "$ref": "#/$defs/JujutsuCommitConfig",
       "default": {
-        "symbol": "",
-        "style": "",
+        "symbol": " ",
+        "style": "green",
         "prefix_style": "blue",
         "format": "[$symbol[$commit_prefix]($prefix_style)$commit_suffix]($style) ",
         "commit_hash_length": 7,
@@ -1011,19 +1011,19 @@
     "jujutsu_state": {
       "$ref": "#/$defs/JujutsuStateConfig",
       "default": {
-        "conflicted": "⚠ ",
+        "conflicted": "⚠",
         "conflicted_style": "red",
-        "divergent": "󰓁 ",
+        "divergent": "󰓁",
         "divergent_style": "purple",
-        "empty": "∅ ",
+        "empty": "∅",
         "empty_style": "orange",
-        "hidden": "󰘓 ",
+        "hidden": "󰘓",
         "hidden_style": "none",
-        "immutable": " ",
+        "immutable": "",
         "immutable_style": "red",
-        "missing_description": " ",
+        "missing_description": "",
         "missing_description_style": "red",
-        "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)",
+        "format": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])",
         "style": "red",
         "disabled": false
       }
@@ -1928,7 +1928,7 @@
         "fossil_modules": "$fossil_branch$fossil_metrics",
         "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
         "hg_modules": "$hg_branch$hg_state",
-        "jujutsu_modules": "$jujutsu_state$jujutsu_change$jujutsu_commit$jujutsu_bookmark",
+        "jujutsu_modules": "$jujutsu_change$jujutsu_commit$jujutsu_bookmark$jujutsu_state",
         "pijul_modules": "$pijul_channel"
       }
     },
@@ -4528,7 +4528,7 @@
         },
         "style": {
           "type": "string",
-          "default": "purple"
+          "default": "cyan"
         },
         "format": {
           "type": "string",
@@ -4536,7 +4536,7 @@
         },
         "bookmark_format": {
           "type": "string",
-          "default": "$bookmark_name(~$depth)$ahead_behind"
+          "default": "$bookmark_name(~$distance)$ahead_behind"
         },
         "ahead": {
           "type": "string",
@@ -4588,11 +4588,11 @@
       "properties": {
         "symbol": {
           "type": "string",
-          "default": ""
+          "default": "󱗆"
         },
         "style": {
           "type": "string",
-          "default": ""
+          "default": "green"
         },
         "prefix_style": {
           "type": "string",
@@ -4606,7 +4606,7 @@
           "type": "integer",
           "format": "uint",
           "minimum": 0,
-          "default": 10
+          "default": 15
         },
         "no_description_symbol": {
           "type": "string",
@@ -4614,7 +4614,7 @@
         },
         "format": {
           "type": "string",
-          "default": "[$symbol[$change_prefix]($prefix_style)$change_suffix]($style)([ $description$no_description]($description_style)) "
+          "default": "on [$symbol [$change_prefix]($prefix_style)$change_suffix]($style)([ ('$description')$no_description]($description_style)) "
         },
         "change_id_length": {
           "type": "integer",
@@ -4634,11 +4634,11 @@
       "properties": {
         "symbol": {
           "type": "string",
-          "default": ""
+          "default": " "
         },
         "style": {
           "type": "string",
-          "default": ""
+          "default": "green"
         },
         "prefix_style": {
           "type": "string",
@@ -4666,7 +4666,7 @@
       "properties": {
         "conflicted": {
           "type": "string",
-          "default": "⚠ "
+          "default": "⚠"
         },
         "conflicted_style": {
           "type": "string",
@@ -4674,7 +4674,7 @@
         },
         "divergent": {
           "type": "string",
-          "default": "󰓁 "
+          "default": "󰓁"
         },
         "divergent_style": {
           "type": "string",
@@ -4682,7 +4682,7 @@
         },
         "empty": {
           "type": "string",
-          "default": "∅ "
+          "default": "∅"
         },
         "empty_style": {
           "type": "string",
@@ -4690,7 +4690,7 @@
         },
         "hidden": {
           "type": "string",
-          "default": "󰘓 "
+          "default": "󰘓"
         },
         "hidden_style": {
           "type": "string",
@@ -4698,7 +4698,7 @@
         },
         "immutable": {
           "type": "string",
-          "default": " "
+          "default": ""
         },
         "immutable_style": {
           "type": "string",
@@ -4706,7 +4706,7 @@
         },
         "missing_description": {
           "type": "string",
-          "default": " "
+          "default": ""
         },
         "missing_description_style": {
           "type": "string",
@@ -4714,7 +4714,7 @@
         },
         "format": {
           "type": "string",
-          "default": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)"
+          "default": "(\\[[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)\\])"
         },
         "style": {
           "type": "string",
@@ -7247,7 +7247,7 @@
         "jujutsu_modules": {
           "description": "Modules to use when Jujutsu is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
-          "default": "$jujutsu_state$jujutsu_change$jujutsu_commit$jujutsu_bookmark"
+          "default": "$jujutsu_change$jujutsu_commit$jujutsu_bookmark$jujutsu_state"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",

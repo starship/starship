@@ -54,7 +54,7 @@ impl Default for VcsConfig<'_> {
             fossil_modules: "$fossil_branch$fossil_metrics",
             git_modules: "$git_branch$git_commit$git_state$git_metrics$git_status",
             hg_modules: "$hg_branch$hg_state",
-            jujutsu_modules: "$jujutsu_state$jujutsu_change$jujutsu_commit$jujutsu_bookmark",
+            jujutsu_modules: "$jujutsu_change$jujutsu_commit$jujutsu_bookmark$jujutsu_state",
             pijul_modules: "$pijul_channel",
         }
     }
