@@ -18,6 +18,8 @@ pub struct JujutsuStateConfig<'a> {
     pub hidden_style: &'a str,
     pub immutable: &'a str,
     pub immutable_style: &'a str,
+    pub missing_description: &'a str,
+    pub missing_description_style: &'a str,
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,
@@ -27,7 +29,7 @@ impl Default for JujutsuStateConfig<'_> {
     fn default() -> Self {
         Self {
             disabled: false,
-            format: "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
+            format: "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)[$missing_description]($missing_description_style)",
             style: "red",
             conflicted: "⚠ ",
             conflicted_style: "red",
@@ -39,6 +41,8 @@ impl Default for JujutsuStateConfig<'_> {
             hidden_style: "none",
             immutable: " ",
             immutable_style: "red",
+            missing_description: " ",
+            missing_description_style: "red",
         }
     }
 }

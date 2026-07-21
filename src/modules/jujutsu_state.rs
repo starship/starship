@@ -28,6 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         && !jujutsu_info.divergent
         && !jujutsu_info.hidden
         && !jujutsu_info.immutable
+        && !jujutsu_info.missing_description
     {
         return None;
     }
@@ -40,43 +41,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "divergent_style" => Some(Ok(config.divergent_style)),
                 "hidden_style" => Some(Ok(config.hidden_style)),
                 "immutable_style" => Some(Ok(config.immutable_style)),
+                "missing_description_style" => Some(Ok(config.missing_description_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "conflicted" => {
-                    if jujutsu_info.conflicted {
-                        Some(Ok(config.conflicted))
-                    } else {
-                        None
-                    }
-                }
-                "divergent" => {
-                    if jujutsu_info.divergent {
-                        Some(Ok(config.divergent))
-                    } else {
-                        None
-                    }
-                }
-                "empty" => {
-                    if jujutsu_info.empty {
-                        Some(Ok(config.empty))
-                    } else {
-                        None
-                    }
-                }
-                "hidden" => {
-                    if jujutsu_info.hidden {
-                        Some(Ok(config.hidden))
-                    } else {
-                        None
-                    }
-                }
-                "immutable" => {
-                    if jujutsu_info.immutable {
-                        Some(Ok(config.immutable))
-                    } else {
-                        None
-                    }
+                "conflicted" if jujutsu_info.conflicted => Some(Ok(config.conflicted)),
+                "divergent" if jujutsu_info.divergent => Some(Ok(config.divergent)),
+                "empty" if jujutsu_info.empty => Some(Ok(config.empty)),
+                "hidden" if jujutsu_info.hidden => Some(Ok(config.hidden)),
+                "immutable" if jujutsu_info.immutable => Some(Ok(config.immutable)),
+                "missing_description" if jujutsu_info.missing_description => {
+                    Some(Ok(config.missing_description))
                 }
                 _ => None,
             })

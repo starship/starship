@@ -131,6 +131,7 @@ pub(crate) struct JujutsuRepoInfo {
     pub empty: bool,
     pub hidden: bool,
     pub immutable: bool,
+    pub missing_description: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -202,10 +203,6 @@ pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
     let commit_id = repo.get_working_copy_commit_id()?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
-    let empty = commit
-        .is_empty(repo.repo().as_ref())
-        .block_on()
-        .unwrap_or(false);
     let hidden = commit.is_hidden(repo.repo().as_ref()).unwrap_or(false);
     let divergent = repo
         .repo()
@@ -213,6 +210,10 @@ pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
         .resolve_change_id(commit.change_id())
         .ok()
         .and_then(|targets| targets.map(|targets| targets.is_divergent()))
+        .unwrap_or(false);
+    let empty = commit
+        .is_empty(repo.repo().as_ref())
+        .block_on()
         .unwrap_or(false);
     let immutable_heads = find_immutable_heads(repo.repo().view());
     let immutable = immutable_heads.contains(&commit_id);
@@ -223,6 +224,7 @@ pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
         empty,
         hidden,
         immutable,
+        missing_description: commit.description().is_empty() && !empty,
     })
 }
 
