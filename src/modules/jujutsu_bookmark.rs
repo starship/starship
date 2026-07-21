@@ -4,7 +4,6 @@ use crate::configs::jujutsu_bookmark::JujutsuBookmarkConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::string_formatter::StringFormatterError;
 use crate::modules::utils::jujutsu::{JujutsuBookmarkInfo, get_jujutsu_bookmarks};
-use crate::modules::vcs;
 use crate::segment::Segment;
 
 /// Creates a module with the Jujutsu bookmarks in the current directory
@@ -14,15 +13,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jujutsu_bookmark");
     let config: JujutsuBookmarkConfig = JujutsuBookmarkConfig::try_load(module.config);
 
-    // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
         return None;
     }
 
-    // Only run in jj repositories
-    vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
-
     let jujutsu_bookmarks = get_jujutsu_bookmarks(context, config.max_depth)?;
+
+    let max_length = if config.max_length < 2 {
+        let default_value = JujutsuBookmarkConfig::default().max_length;
+        log::warn!(
+            "\"max_length\" in 'jujutsu_bookmark' should be at least 2, found {}, using default value {default_value}",
+            config.max_length,
+        );
+        default_value
+    } else {
+        config.max_length
+    };
 
     let bookmarks = if jujutsu_bookmarks.is_empty() {
         return None;
@@ -30,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         jujutsu_bookmarks
             .iter()
             .take(config.max_shown)
-            .map(|bookmark| format_bookmark(&config, bookmark, context))
+            .map(|bookmark| format_bookmark(&config, max_length, bookmark, context))
             .collect::<Result<Vec<_>, _>>()
             .map(|nested_vec| {
                 nested_vec
@@ -80,6 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn format_bookmark(
     config: &JujutsuBookmarkConfig,
+    max_length: usize,
     bookmark: &JujutsuBookmarkInfo,
     context: &Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
@@ -96,10 +103,10 @@ fn format_bookmark(
             .map(|variable| match variable {
                 "bookmark_name" => {
                     let chars = bookmark.name.chars().collect::<Vec<_>>();
-                    if chars.len() > config.max_length {
+                    if chars.len() > max_length {
                         Some(Ok(chars
                             .into_iter()
-                            .take(config.max_length.saturating_sub(1))
+                            .take(max_length.saturating_sub(1))
                             .chain(['…'])
                             .collect::<String>()))
                     } else {

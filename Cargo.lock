@@ -3659,7 +3659,6 @@ dependencies = [
  "deelevate",
  "dirs 6.0.0",
  "dunce",
- "futures",
  "gix",
  "guess_host_triple",
  "home",

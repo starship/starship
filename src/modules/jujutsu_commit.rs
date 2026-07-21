@@ -3,7 +3,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::jujutsu_commit::JujutsuCommitConfig;
 use crate::formatter::StringFormatter;
 use crate::modules::utils::jujutsu::get_jujutsu_commit_id;
-use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu commit hash in the current directory
 ///
@@ -12,13 +11,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jujutsu_commit");
     let config: JujutsuCommitConfig = JujutsuCommitConfig::try_load(module.config);
 
-    // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
         return None;
     }
-
-    // Only run in jj repositories
-    vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
     let (commit_id, prefix_len) = get_jujutsu_commit_id(context)?;
     let remaining_len = config.commit_hash_length.saturating_sub(prefix_len);

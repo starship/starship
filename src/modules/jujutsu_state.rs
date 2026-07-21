@@ -3,7 +3,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::jujutsu_state::JujutsuStateConfig;
 use crate::formatter::StringFormatter;
 use crate::modules::utils::jujutsu::get_jujutsu_state;
-use crate::modules::vcs;
 
 /// Creates a module with the Jujutsu state indicators in the current directory
 ///
@@ -13,13 +12,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("jujutsu_state");
     let config: JujutsuStateConfig = JujutsuStateConfig::try_load(module.config);
 
-    // We default to disabled=true, so we have to check after loading our config module.
     if config.disabled {
         return None;
     }
-
-    // Only run in jj repositories
-    vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
     let jujutsu_info = get_jujutsu_state(context)?;
 
@@ -39,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 "conflicted_style" => Some(Ok(config.conflicted_style)),
                 "divergent_style" => Some(Ok(config.divergent_style)),
+                "empty_style" => Some(Ok(config.empty_style)),
                 "hidden_style" => Some(Ok(config.hidden_style)),
                 "immutable_style" => Some(Ok(config.immutable_style)),
                 "missing_description_style" => Some(Ok(config.missing_description_style)),
