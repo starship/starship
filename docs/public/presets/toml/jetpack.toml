@@ -317,6 +317,11 @@ truncation_symbol = "⋯"
 truncation_length = 11
 ignore_names = ["main", "master"]
 
+[jj_metrics]
+format = '([▴$added]($added_style))([▿$deleted]($deleted_style))'
+added_style = 'italic dimmed green'
+deleted_style = 'italic dimmed red'
+
 [julia]
 symbol = "◎ "
 format = " jl [$symbol($version )]($style)"
