@@ -971,15 +971,13 @@
         "symbol": "󰑟 ",
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
-        "bookmark_format": "$depth$bookmark_name$ahead_behind$conflicted",
+        "bookmark_format": "$bookmark_name(~$depth)$ahead_behind",
         "ahead": " ⇡$count",
         "behind": " ⇣$count",
         "diverged": " ⇡$ahead_count⇣$behind_count",
         "up_to_date": " ✓",
-        "conflicted_symbol": "??",
-        "depth_symbol": "↓",
         "joiner": " ",
-        "find_closest": false,
+        "max_depth": 5,
         "disabled": true
       }
     },
@@ -1015,11 +1013,13 @@
         "conflicted_style": "red",
         "divergent": "󰓁 ",
         "divergent_style": "purple",
+        "empty": "∅ ",
+        "empty_style": "orange",
         "hidden": "󰘓 ",
         "hidden_style": "none",
         "immutable": " ",
         "immutable_style": "red",
-        "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
+        "format": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)",
         "style": "red",
         "disabled": false
       }
@@ -4532,7 +4532,7 @@
         },
         "bookmark_format": {
           "type": "string",
-          "default": "$depth$bookmark_name$ahead_behind$conflicted"
+          "default": "$bookmark_name(~$depth)$ahead_behind"
         },
         "ahead": {
           "type": "string",
@@ -4550,21 +4550,15 @@
           "type": "string",
           "default": " ✓"
         },
-        "conflicted_symbol": {
-          "type": "string",
-          "default": "??"
-        },
-        "depth_symbol": {
-          "type": "string",
-          "default": "↓"
-        },
         "joiner": {
           "type": "string",
           "default": " "
         },
-        "find_closest": {
-          "type": "boolean",
-          "default": false
+        "max_depth": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 5
         },
         "disabled": {
           "type": "boolean",
@@ -4670,6 +4664,14 @@
           "type": "string",
           "default": "purple"
         },
+        "empty": {
+          "type": "string",
+          "default": "∅ "
+        },
+        "empty_style": {
+          "type": "string",
+          "default": "orange"
+        },
         "hidden": {
           "type": "string",
           "default": "󰘓 "
@@ -4688,7 +4690,7 @@
         },
         "format": {
           "type": "string",
-          "default": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$hidden]($hidden_style)[$immutable]($immutable_style)"
+          "default": "[$conflicted]($conflicted_style)[$divergent]($divergent_style)[$empty](empty_style)[$hidden]($hidden_style)[$immutable]($immutable_style)"
         },
         "style": {
           "type": "string",

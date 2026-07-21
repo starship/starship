@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Only run in jj repositories
     vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
 
-    let jujutsu_bookmarks = get_jujutsu_bookmarks(context, config.find_closest)?;
+    let jujutsu_bookmarks = get_jujutsu_bookmarks(context, config.max_depth)?;
 
     let bookmarks = if jujutsu_bookmarks.is_empty() {
         return None;
@@ -94,20 +94,7 @@ fn format_bookmark(
             })
             .map(|variable| match variable {
                 "bookmark_name" => Some(Ok(bookmark.name.to_string())),
-                "conflicted" => {
-                    if bookmark.is_conflicted {
-                        Some(Ok(config.conflicted_symbol.to_string()))
-                    } else {
-                        None
-                    }
-                }
-                "depth" => {
-                    if bookmark.is_deep {
-                        Some(Ok(config.depth_symbol.to_string()))
-                    } else {
-                        None
-                    }
-                }
+                "distance" if bookmark.distance > 0 => Some(Ok(bookmark.distance.to_string())),
                 _ => None,
             })
             .map_variables_to_segments(|variable| match variable {

@@ -1,55 +1,34 @@
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+use std::collections::{HashMap, HashSet};
+use std::path::PathBuf;
 use std::sync::Arc;
 
-use futures::stream::StreamExt;
 use jj_lib::backend::CommitId;
 use jj_lib::config::{ConfigLayer, ConfigSource, StackedConfig};
 use jj_lib::fileset::FilesetAliasesMap;
 use jj_lib::id_prefix::IdPrefixContext;
-use jj_lib::object_id::ObjectId as _;
-use jj_lib::op_store::RefTarget;
-use jj_lib::op_store::RemoteRef;
-use jj_lib::repo::ReadonlyRepo;
-use jj_lib::repo::Repo as _;
+use jj_lib::object_id::ObjectId;
+use jj_lib::op_store::{RefTarget, RemoteRef};
+use jj_lib::ref_name::{RefName, WorkspaceNameBuf};
+use jj_lib::repo::{ReadonlyRepo, Repo, StoreFactories};
 use jj_lib::repo_path::RepoPathUiConverter;
-use jj_lib::revset::RevsetDiagnostics;
-use jj_lib::revset::RevsetParseContext;
-use jj_lib::revset::RevsetWorkspaceContext;
-use jj_lib::revset::SymbolResolver;
-use jj_lib::revset::UserRevsetExpression;
-use jj_lib::revset::{self, ResolvedRevsetExpression};
-use jj_lib::revset::{RevsetAliasesMap, RevsetExtensions};
+use jj_lib::revset;
+use jj_lib::revset::{
+    ResolvedRevsetExpression, RevsetAliasesMap, RevsetDiagnostics, RevsetExtensions,
+    RevsetParseContext, RevsetWorkspaceContext, SymbolResolver, UserRevsetExpression,
+};
 use jj_lib::settings::UserSettings;
-use jj_lib::str_util::StringExpression;
+use jj_lib::str_util::StringMatcher;
+use jj_lib::view::View;
 use jj_lib::workspace::{Workspace, default_working_copy_factories};
 use pollster::FutureExt;
 
 use crate::context::Context;
-
-const DEFAULT_REVSET_ALIASES: &str = r#"
-[revset-aliases]
-'trunk()' = '''
-latest(
-  remote_bookmarks(exact:"main", exact:"origin") |
-  remote_bookmarks(exact:"master", exact:"origin") |
-  remote_bookmarks(exact:"trunk", exact:"origin") |
-  remote_bookmarks(exact:"main", exact:"upstream") |
-  remote_bookmarks(exact:"master", exact:"upstream") |
-  remote_bookmarks(exact:"trunk", exact:"upstream") |
-  root()
-)
-'''
-'builtin_immutable_heads()' = 'trunk() | tags() | untracked_remote_bookmarks()'
-'immutable_heads()' = 'builtin_immutable_heads()'
-'immutable()' = '::(immutable_heads() | root())'
-'mutable()' = '~immutable()'
-"#;
+use crate::modules::vcs;
 
 pub struct JujutsuRepo {
     repo: Arc<ReadonlyRepo>,
     settings: UserSettings,
-    workspace_name: jj_lib::ref_name::WorkspaceNameBuf,
+    workspace_name: WorkspaceNameBuf,
     workspace_root: PathBuf,
     fileset_aliases: FilesetAliasesMap,
     revset_aliases: RevsetAliasesMap,
@@ -58,13 +37,13 @@ pub struct JujutsuRepo {
 
 impl JujutsuRepo {
     pub fn load(context: &Context<'_>) -> Option<Self> {
-        let workspace_root = context.begin_ancestor_scan().set_folders(&[".jj"]).scan()?;
-        let settings = load_settings(context, &workspace_root)?;
+        let workspace_root = vcs::discover_repo_root(context, vcs::Vcs::Jujutsu)?;
+        let settings = create_minimal_settings()?;
 
         let workspace = Workspace::load(
             &settings,
             &workspace_root,
-            &jj_lib::repo::StoreFactories::default(),
+            &StoreFactories::default(),
             &default_working_copy_factories(),
         )
         .ok()?;
@@ -89,6 +68,13 @@ impl JujutsuRepo {
 
     pub fn repo(&self) -> &Arc<ReadonlyRepo> {
         &self.repo
+    }
+
+    fn get_working_copy_commit_id(&self) -> Option<CommitId> {
+        self.repo
+            .view()
+            .get_wc_commit_id(&self.workspace_name)
+            .cloned()
     }
 
     pub fn workspace_name(&self) -> &jj_lib::ref_name::WorkspaceName {
@@ -142,6 +128,7 @@ pub(crate) struct JujutsuChangeInfo {
 pub(crate) struct JujutsuRepoInfo {
     pub conflicted: bool,
     pub divergent: bool,
+    pub empty: bool,
     pub hidden: bool,
     pub immutable: bool,
 }
@@ -152,23 +139,17 @@ pub(crate) struct JujutsuBookmarkInfo {
     pub remote_ahead: usize,
     pub remote_behind: usize,
     pub is_tracked: bool,
-    pub is_conflicted: bool,
-    pub is_deep: bool,
+    pub distance: usize,
 }
 
 pub fn get_jujutsu_change_id(ctx: &Context) -> Option<JujutsuChangeInfo> {
     let repo = ctx.get_jujutsu_repo()?;
 
-    let commit_id = working_copy_commit_id(repo)?;
+    let commit_id = repo.get_working_copy_commit_id()?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
-
-    let default_log_expression =
-        repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
-    let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
-        .disambiguate_within(default_log_expression);
-    let id_prefix_index = id_prefix_context.populate(repo.repo().as_ref()).ok()?;
-    let prefix_len = id_prefix_index
-        .shortest_change_prefix_len(repo.repo().as_ref(), &commit.change_id())
+    let prefix_len = repo
+        .repo()
+        .shortest_unique_change_id_prefix_len(commit.change_id())
         .ok()?;
 
     Some(JujutsuChangeInfo {
@@ -181,8 +162,9 @@ pub fn get_jujutsu_change_id(ctx: &Context) -> Option<JujutsuChangeInfo> {
 pub fn get_jujutsu_commit_id(ctx: &Context) -> Option<(String, usize)> {
     let repo = ctx.get_jujutsu_repo()?;
 
-    let commit_id = working_copy_commit_id(repo)?;
+    let commit_id = repo.get_working_copy_commit_id()?;
 
+    // TODO - is this worth the effort or can it be done without revsets?
     let default_log_expression =
         repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
     let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
@@ -195,36 +177,36 @@ pub fn get_jujutsu_commit_id(ctx: &Context) -> Option<(String, usize)> {
     Some((commit_id.hex(), prefix_len))
 }
 
-pub(crate) fn get_jujutsu_bookmarks(
-    ctx: &Context,
-    find_closest: bool,
-) -> Option<Vec<JujutsuBookmarkInfo>> {
+pub fn get_jujutsu_bookmarks(ctx: &Context, max_depth: usize) -> Option<Vec<JujutsuBookmarkInfo>> {
     let repo = ctx.get_jujutsu_repo()?;
-    let commit_id = working_copy_commit_id(repo)?;
-    let tracked_bookmarks = tracked_bookmarks(repo.repo());
+    let commit_id = repo.get_working_copy_commit_id()?;
 
-    let bookmarks = commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks, false);
+    let repo = repo.repo().as_ref();
+    let view = repo.view();
+    let mut bookmarks = view
+        .local_bookmarks_for_commit(&commit_id)
+        .map(|(name, target)| collect_bookmark_details(name, target, repo, 0))
+        .collect::<Vec<_>>();
 
-    if !bookmarks.is_empty() || !find_closest {
-        return Some(bookmarks);
+    if max_depth > 0 {
+        let ancestors = find_ancestor_bookmarks(repo, view, &commit_id, max_depth)?;
+        bookmarks.extend(ancestors);
     }
 
-    let closest_bookmark_commit_id = closest_bookmark_commit_id(repo)?;
-    Some(commit_bookmarks(
-        repo.repo(),
-        &closest_bookmark_commit_id,
-        &tracked_bookmarks,
-        true,
-    ))
+    Some(bookmarks)
 }
 
 pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
     let repo = ctx.get_jujutsu_repo()?;
 
-    let commit_id = working_copy_commit_id(repo)?;
+    let commit_id = repo.get_working_copy_commit_id()?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
 
-    let hidden = commit.is_hidden(repo.repo().as_ref()).ok()?;
+    let empty = commit
+        .is_empty(repo.repo().as_ref())
+        .block_on()
+        .unwrap_or(false);
+    let hidden = commit.is_hidden(repo.repo().as_ref()).unwrap_or(false);
     let divergent = repo
         .repo()
         .as_ref()
@@ -232,50 +214,167 @@ pub fn get_jujutsu_state(ctx: &Context) -> Option<JujutsuRepoInfo> {
         .ok()
         .and_then(|targets| targets.map(|targets| targets.is_divergent()))
         .unwrap_or(false);
-    let immutable = is_commit_immutable(repo, &commit_id).unwrap_or(false);
+    let immutable_heads = find_immutable_heads(repo.repo().view());
+    let immutable = immutable_heads.contains(&commit_id);
 
     Some(JujutsuRepoInfo {
         conflicted: commit.has_conflict(),
         divergent,
+        empty,
         hidden,
         immutable,
     })
 }
 
-fn working_copy_commit_id(repo: &JujutsuRepo) -> Option<CommitId> {
-    repo.repo()
+fn collect_bookmark_details(
+    name: &RefName,
+    target: &RefTarget,
+    repo: &dyn Repo,
+    depth: usize,
+) -> JujutsuBookmarkInfo {
+    let name_str = name.as_str().to_string();
+
+    let matching_bookmarks = repo
         .view()
-        .get_wc_commit_id(repo.workspace_name())
-        .cloned()
-}
+        .bookmarks()
+        .filter(|(bookmark_name, _)| *bookmark_name == name)
+        .flat_map(|(_, target)| target.remote_refs)
+        .collect::<Vec<_>>();
 
-fn tracked_bookmarks(repo: &ReadonlyRepo) -> HashMap<String, (usize, usize)> {
-    let mut tracked = HashMap::new();
-
-    for (name, targets) in repo.view().bookmarks() {
-        let local_target = targets.local_target;
-        for (_, remote_ref) in targets.remote_refs {
-            if let Some((ahead, behind)) = tracking_counts(repo, local_target, remote_ref)
-                .ok()
-                .flatten()
-            {
-                let counts = tracked
-                    .entry(name.as_str().to_string())
-                    .or_insert((ahead, behind));
-                counts.0 = counts.0.max(ahead);
-                counts.1 = counts.1.max(behind);
+    let mut ahead_behind = None;
+    for (_, remote_ref) in matching_bookmarks {
+        if let Some((ahead, behind)) = tracking_counts(repo, target, remote_ref).ok().flatten() {
+            match &ahead_behind {
+                None => ahead_behind = Some((ahead, behind)),
+                Some((old_ahead, old_behind)) => {
+                    ahead_behind = Some((*old_ahead.max(&ahead), *old_behind.max(&behind)));
+                }
             }
         }
     }
 
-    tracked
+    let (ahead, behind, is_tracked) = ahead_behind
+        .map(|(ahead, behind)| (ahead, behind, true))
+        .unwrap_or((0, 0, false));
+
+    JujutsuBookmarkInfo {
+        name: name_str,
+        remote_ahead: ahead,
+        remote_behind: behind,
+        is_tracked,
+        distance: depth,
+    }
+}
+
+/// Find immutable head commits (trunk + tags + untracked remote bookmarks)
+/// Mirrors jj's `builtin_immutable_heads()` without revset evaluation
+fn find_immutable_heads(view: &View) -> HashSet<CommitId> {
+    let mut immutable = HashSet::new();
+
+    // Single pass over all remote bookmarks
+    for (symbol, remote_ref) in
+        view.remote_bookmarks_matching(&StringMatcher::All, &StringMatcher::All)
+    {
+        let name = symbol.name.as_str();
+        let remote = symbol.remote.as_str();
+
+        if remote == "git" {
+            continue;
+        }
+
+        // trunk: main/master/trunk on origin/upstream
+        let is_trunk =
+            matches!(remote, "origin" | "upstream") && matches!(name, "main" | "master" | "trunk");
+
+        // untracked: no local counterpart
+        let is_untracked = view.get_local_bookmark(symbol.name).is_absent();
+
+        if (is_trunk || is_untracked)
+            && let Some(id) = remote_ref.target.as_normal()
+        {
+            immutable.insert(id.clone());
+        }
+    }
+
+    // Tags (usually few)
+    for (_, target) in view.tags() {
+        if let Some(id) = target.local_target.as_normal() {
+            immutable.insert(id.clone());
+        }
+    }
+
+    immutable
+}
+
+/// Search for all bookmarks on ancestor commits using BFS
+/// Returns bookmarks sorted by distance (closest first)
+fn find_ancestor_bookmarks(
+    repo: &dyn Repo,
+    view: &View,
+    commit_id: &CommitId,
+    max_depth: usize,
+) -> Option<Vec<JujutsuBookmarkInfo>> {
+    use std::collections::{HashMap, HashSet, VecDeque};
+
+    let mut queue: VecDeque<(CommitId, usize)> = VecDeque::new();
+    let mut visited = HashSet::new();
+    let mut bookmarks_with_details = HashMap::new();
+
+    // Pre-compute immutable heads to stop traversal at trunk/tags/untracked remotes
+    let immutable_heads = find_immutable_heads(view);
+
+    // Start BFS from WC commit parents
+    let wc_commit = repo.store().get_commit(commit_id).ok()?;
+
+    for parent_id in wc_commit.parent_ids() {
+        queue.push_back((parent_id.clone(), 1));
+    }
+
+    while let Some((commit_id, depth)) = queue.pop_front() {
+        // Stop if we exceed max depth
+        if depth > max_depth {
+            continue;
+        }
+
+        // Skip if already visited
+        if !visited.insert(commit_id.clone()) {
+            continue;
+        }
+
+        // Collect all bookmarks at this commit
+        for (name, target) in view.local_bookmarks_for_commit(&commit_id) {
+            let details = collect_bookmark_details(name, target, repo, depth);
+            let name = details.name.clone();
+            // Only record first (shortest) distance for each bookmark
+            bookmarks_with_details.entry(name).or_insert(details);
+        }
+
+        // Stop at immutable heads - don't traverse past trunk/tags/untracked remotes
+        if immutable_heads.contains(&commit_id) {
+            continue;
+        }
+
+        // Add parents to queue for next level
+        if depth < max_depth {
+            let commit = repo.store().get_commit(&commit_id).ok()?;
+
+            for parent_id in commit.parent_ids() {
+                queue.push_back((parent_id.clone(), depth + 1));
+            }
+        }
+    }
+
+    // Convert to vec and sort by distance
+    let mut result = bookmarks_with_details.into_values().collect::<Vec<_>>();
+    result.sort_by_key(|details| details.distance);
+    Some(result)
 }
 
 fn tracking_counts(
-    repo: &dyn jj_lib::repo::Repo,
+    repo: &dyn Repo,
     local_target: &RefTarget,
     remote_ref: &RemoteRef,
-) -> Result<Option<(usize, usize)>, jj_lib::revset::RevsetEvaluationError> {
+) -> Result<Option<(usize, usize)>, revset::RevsetEvaluationError> {
     if !remote_ref.is_tracked() {
         return Ok(None);
     }
@@ -293,130 +392,18 @@ fn tracking_counts(
     Ok(Some((ahead, behind)))
 }
 
-fn commit_bookmarks(
-    repo: &ReadonlyRepo,
-    commit_id: &CommitId,
-    tracked_bookmarks: &HashMap<String, (usize, usize)>,
-    is_deep: bool,
-) -> Vec<JujutsuBookmarkInfo> {
-    let mut bookmarks = Vec::new();
-
-    for (name, local_target) in repo.view().local_bookmarks_for_commit(commit_id) {
-        let mut is_conflicted = false;
-        let name_str = name.as_str().to_string();
-        if local_target.has_conflict() {
-            is_conflicted = true;
-        }
-
-        let remote_conflict = repo
-            .view()
-            .bookmarks()
-            .filter(|(bookmark_name, _)| *bookmark_name == name)
-            .flat_map(|(_, target)| target.remote_refs)
-            .filter(|(_, remote_ref)| remote_ref.target.added_ids().any(|id| id == commit_id))
-            .any(|(_, remote_ref)| remote_ref.target.has_conflict());
-
-        if remote_conflict {
-            is_conflicted = true;
-        }
-
-        let (ahead, behind, is_tracked) = tracked_bookmarks
-            .get(&name_str)
-            .map(|(ahead, behind)| (*ahead, *behind, true))
-            .unwrap_or((0, 0, false));
-        bookmarks.push(JujutsuBookmarkInfo {
-            name: name_str,
-            remote_ahead: ahead,
-            remote_behind: behind,
-            is_tracked,
-            is_conflicted,
-            is_deep,
-        });
-    }
-
-    bookmarks
-}
-
-fn closest_bookmark_commit_id(repo: &JujutsuRepo) -> Option<CommitId> {
-    let working_copy = UserRevsetExpression::working_copy(repo.workspace_name().to_owned());
-    let bookmarks = UserRevsetExpression::bookmarks(StringExpression::all());
-    let expr = working_copy.ancestors().intersection(&bookmarks).heads();
-    let resolved = repo.resolve_revset_expression(expr)?;
-    let revset = resolved.evaluate(repo.repo().as_ref()).ok()?;
-
-    revset
-        .stream()
-        .next()
-        .block_on()
-        .and_then(|entry| entry.ok())
-}
-
-fn is_commit_immutable(repo: &JujutsuRepo, commit_id: &CommitId) -> Option<bool> {
-    let expr = repo.parse_revset_expression("immutable()")?;
-    let resolved = repo.resolve_revset_expression(expr)?;
-    let revset = resolved.evaluate(repo.repo().as_ref()).ok()?;
-    let contains = revset.containing_fn();
-    contains(commit_id).ok()
-}
-
-fn load_settings(context: &Context, workspace_root: &Path) -> Option<UserSettings> {
+fn create_minimal_settings() -> Option<UserSettings> {
     let mut config = StackedConfig::with_defaults();
-    let default_layer = ConfigLayer::parse(ConfigSource::Default, DEFAULT_REVSET_ALIASES).ok()?;
-    config.add_layer(default_layer);
 
-    for path in user_config_paths(context) {
-        if let Err(error) = config.load_file(ConfigSource::User, path) {
-            log::debug!("Failed to read JJ config file: {error}");
-        }
-    }
-    for dir in user_config_dirs(context) {
-        if let Err(error) = config.load_dir(ConfigSource::User, dir) {
-            log::debug!("Failed to read JJ config dir: {error}");
-        }
-    }
-
-    if let Some(path) = repo_config_path(workspace_root)
-        && let Err(error) = config.load_file(ConfigSource::Repo, path)
-    {
-        log::debug!("Failed to read JJ repo config file: {error}");
-    }
+    // Minimal config required by UserSettings
+    let mut user_layer = ConfigLayer::empty(ConfigSource::User);
+    user_layer.set_value("user.name", "jujutsu-starship").ok()?;
+    user_layer
+        .set_value("user.email", "jujutsu-starship@localhost")
+        .ok()?;
+    config.add_layer(user_layer);
 
     UserSettings::from_config(config).ok()
-}
-
-fn repo_config_path(workspace_root: &Path) -> Option<PathBuf> {
-    let repo_config = workspace_root.join(".jj").join("repo").join("config.toml");
-    repo_config.exists().then_some(repo_config)
-}
-
-fn user_config_paths(context: &Context) -> Vec<PathBuf> {
-    let mut paths = Vec::new();
-
-    if let Some(home) = context.get_home() {
-        paths.push(home.join(".jjconfig.toml"));
-
-        let config_home = context
-            .get_env("XDG_CONFIG_HOME")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| home.join(".config"));
-        paths.push(config_home.join("jj").join("config.toml"));
-    }
-
-    paths
-}
-
-fn user_config_dirs(context: &Context) -> Vec<PathBuf> {
-    let mut paths = Vec::new();
-
-    if let Some(home) = context.get_home() {
-        let config_home = context
-            .get_env("XDG_CONFIG_HOME")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| home.join(".config"));
-        paths.push(config_home.join("jj").join("conf.d"));
-    }
-
-    paths
 }
 
 fn load_fileset_aliases(settings: &UserSettings) -> FilesetAliasesMap {

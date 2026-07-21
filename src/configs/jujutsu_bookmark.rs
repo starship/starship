@@ -16,10 +16,8 @@ pub struct JujutsuBookmarkConfig<'a> {
     pub behind: &'a str,
     pub diverged: &'a str,
     pub up_to_date: &'a str,
-    pub conflicted_symbol: &'a str,
-    pub depth_symbol: &'a str,
     pub joiner: &'a str,
-    pub find_closest: bool,
+    pub max_depth: usize,
     pub disabled: bool,
 }
 
@@ -28,17 +26,15 @@ impl Default for JujutsuBookmarkConfig<'_> {
         Self {
             disabled: true,
             format: "[$symbol$bookmarks]($style) ",
-            bookmark_format: "$depth$bookmark_name$ahead_behind$conflicted",
+            bookmark_format: "$bookmark_name(~$depth)$ahead_behind",
             ahead: " ⇡$count",
             behind: " ⇣$count",
             diverged: " ⇡$ahead_count⇣$behind_count",
             up_to_date: " ✓",
-            conflicted_symbol: "??",
-            depth_symbol: "↓",
             joiner: " ",
             style: "purple",
             symbol: "󰑟 ",
-            find_closest: false,
+            max_depth: 5,
         }
     }
 }

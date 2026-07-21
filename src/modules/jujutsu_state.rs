@@ -24,6 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let jujutsu_info = get_jujutsu_state(context)?;
 
     if !jujutsu_info.conflicted
+        && !jujutsu_info.empty
         && !jujutsu_info.divergent
         && !jujutsu_info.hidden
         && !jujutsu_info.immutable
@@ -52,6 +53,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "divergent" => {
                     if jujutsu_info.divergent {
                         Some(Ok(config.divergent))
+                    } else {
+                        None
+                    }
+                }
+                "empty" => {
+                    if jujutsu_info.empty {
+                        Some(Ok(config.empty))
                     } else {
                         None
                     }
