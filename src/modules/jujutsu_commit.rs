@@ -30,8 +30,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
                 "prefix_style" => Some(Ok(config.prefix_style)),
-                "suffix_style" => Some(Ok(config.suffix_style)),
                 _ => None,
             })
             .map(|variable| match variable {

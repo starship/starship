@@ -132,6 +132,13 @@ impl JujutsuRepo {
 }
 
 #[derive(Debug, Clone)]
+pub(crate) struct JujutsuChangeInfo {
+    pub change_id: String,
+    pub prefix_len: usize,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
 pub(crate) struct JujutsuRepoInfo {
     pub conflicted: bool,
     pub divergent: bool,
@@ -149,7 +156,7 @@ pub(crate) struct JujutsuBookmarkInfo {
     pub is_deep: bool,
 }
 
-pub fn get_jujutsu_change_id(ctx: &Context) -> Option<(String, usize)> {
+pub fn get_jujutsu_change_id(ctx: &Context) -> Option<JujutsuChangeInfo> {
     let repo = ctx.get_jujutsu_repo()?;
 
     let commit_id = working_copy_commit_id(repo)?;
@@ -164,7 +171,11 @@ pub fn get_jujutsu_change_id(ctx: &Context) -> Option<(String, usize)> {
         .shortest_change_prefix_len(repo.repo().as_ref(), &commit.change_id())
         .ok()?;
 
-    Some((commit.change_id().reverse_hex(), prefix_len))
+    Some(JujutsuChangeInfo {
+        change_id: commit.change_id().reverse_hex(),
+        prefix_len,
+        description: commit.description().to_owned(),
+    })
 }
 
 pub fn get_jujutsu_commit_id(ctx: &Context) -> Option<(String, usize)> {

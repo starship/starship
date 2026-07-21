@@ -987,9 +987,12 @@
       "$ref": "#/$defs/JujutsuChangeConfig",
       "default": {
         "symbol": "",
+        "style": "",
         "prefix_style": "purple",
-        "suffix_style": "",
-        "format": "[$change_prefix]($prefix_style)$change_suffix($suffix_style) ",
+        "description_style": "",
+        "description_limit": 10,
+        "no_description_symbol": "",
+        "format": "[$symbol[$change_prefix]($prefix_style)$change_suffix]($style)([ $description$no_description]($description_style)) ",
         "change_id_length": 7,
         "disabled": false
       }
@@ -998,9 +1001,9 @@
       "$ref": "#/$defs/JujutsuCommitConfig",
       "default": {
         "symbol": "",
+        "style": "",
         "prefix_style": "blue",
-        "suffix_style": "",
-        "format": "[$commit_prefix]($prefix_style)$commit_suffix($suffix_style) ",
+        "format": "[$symbol[$commit_prefix]($prefix_style)$commit_suffix]($style) ",
         "commit_hash_length": 7,
         "disabled": true
       }
@@ -4577,17 +4580,31 @@
           "type": "string",
           "default": ""
         },
+        "style": {
+          "type": "string",
+          "default": ""
+        },
         "prefix_style": {
           "type": "string",
           "default": "purple"
         },
-        "suffix_style": {
+        "description_style": {
           "type": "string",
           "default": ""
         },
+        "description_limit": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 10
+        },
+        "no_description_symbol": {
+          "type": "string",
+          "default": ""
+        },
         "format": {
           "type": "string",
-          "default": "[$change_prefix]($prefix_style)$change_suffix($suffix_style) "
+          "default": "[$symbol[$change_prefix]($prefix_style)$change_suffix]($style)([ $description$no_description]($description_style)) "
         },
         "change_id_length": {
           "type": "integer",
@@ -4609,17 +4626,17 @@
           "type": "string",
           "default": ""
         },
+        "style": {
+          "type": "string",
+          "default": ""
+        },
         "prefix_style": {
           "type": "string",
           "default": "blue"
         },
-        "suffix_style": {
-          "type": "string",
-          "default": ""
-        },
         "format": {
           "type": "string",
-          "default": "[$commit_prefix]($prefix_style)$commit_suffix($suffix_style) "
+          "default": "[$symbol[$commit_prefix]($prefix_style)$commit_suffix]($style) "
         },
         "commit_hash_length": {
           "type": "integer",
