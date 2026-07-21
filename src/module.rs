@@ -60,6 +60,7 @@ pub const ALL_MODULES: &[&str] = &[
     "jj_bookmark",
     "jj_change",
     "jj_metrics",
+    "jj_status",
     "jobs",
     "julia",
     "kotlin",
