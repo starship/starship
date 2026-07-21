@@ -148,9 +148,16 @@ pub fn get_jujutsu_change_id(ctx: &Context) -> Option<JujutsuChangeInfo> {
 
     let commit_id = repo.get_working_copy_commit_id()?;
     let commit = repo.repo().store().get_commit(&commit_id).ok()?;
-    let prefix_len = repo
-        .repo()
-        .shortest_unique_change_id_prefix_len(commit.change_id())
+
+    // TODO - If this can be removed, then no revsets will need to be parsed,
+    // which will remove a lot of code.
+    let default_log_expression =
+        repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
+    let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
+        .disambiguate_within(default_log_expression);
+    let id_prefix_index = id_prefix_context.populate(repo.repo().as_ref()).ok()?;
+    let prefix_len = id_prefix_index
+        .shortest_change_prefix_len(repo.repo().as_ref(), commit.change_id())
         .ok()?;
 
     Some(JujutsuChangeInfo {
@@ -165,7 +172,8 @@ pub fn get_jujutsu_commit_id(ctx: &Context) -> Option<(String, usize)> {
 
     let commit_id = repo.get_working_copy_commit_id()?;
 
-    // TODO - is this worth the effort or can it be done without revsets?
+    // TODO - If this can be removed, then no revsets will need to be parsed,
+    // which will remove a lot of code.
     let default_log_expression =
         repo.parse_revset_expression("present(@) | ancestors(immutable_heads().., 2) | trunk()")?;
     let id_prefix_context = IdPrefixContext::new(Arc::new(RevsetExtensions::default()))
@@ -394,8 +402,31 @@ fn tracking_counts(
     Ok(Some((ahead, behind)))
 }
 
+const DEFAULT_REVSET_ALIASES: &str = r#"
+[revset-aliases]
+'trunk()' = '''
+latest(
+  remote_bookmarks(exact:"main", exact:"origin") |
+  remote_bookmarks(exact:"master", exact:"origin") |
+  remote_bookmarks(exact:"trunk", exact:"origin") |
+  remote_bookmarks(exact:"main", exact:"upstream") |
+  remote_bookmarks(exact:"master", exact:"upstream") |
+  remote_bookmarks(exact:"trunk", exact:"upstream") |
+  root()
+)
+'''
+'builtin_immutable_heads()' = 'trunk() | tags() | untracked_remote_bookmarks()'
+'immutable_heads()' = 'builtin_immutable_heads()'
+'immutable()' = '::(immutable_heads() | root())'
+'mutable()' = '~immutable()'
+"#;
+
 fn create_minimal_settings() -> Option<UserSettings> {
     let mut config = StackedConfig::with_defaults();
+
+    // ensure revset aliases are there for change ID shortening
+    let default_layer = ConfigLayer::parse(ConfigSource::Default, DEFAULT_REVSET_ALIASES).ok()?;
+    config.add_layer(default_layer);
 
     // Minimal config required by UserSettings
     let mut user_layer = ConfigLayer::empty(ConfigSource::User);
