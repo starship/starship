@@ -303,6 +303,7 @@
       "$ref": "#/$defs/CondaConfig",
       "default": {
         "truncation_length": 1,
+        "truncation_width": 0,
         "format": "via [$symbol$environment]($style) ",
         "symbol": "🅒 ",
         "style": "green bold",
@@ -437,6 +438,7 @@
       "$ref": "#/$defs/DirectoryConfig",
       "default": {
         "truncation_length": 3,
+        "truncation_width": 0,
         "truncate_to_repo": true,
         "substitutions": [],
         "fish_style_pwd_dir_length": 0,
@@ -1715,6 +1717,7 @@
       "$ref": "#/$defs/SpackConfig",
       "default": {
         "truncation_length": 1,
+        "truncation_width": 0,
         "format": "via [$symbol$environment]($style) ",
         "symbol": "🅢 ",
         "style": "blue bold",
@@ -2617,6 +2620,12 @@
           "minimum": 0,
           "default": 1
         },
+        "truncation_width": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 0
+        },
         "format": {
           "type": "string",
           "default": "via [$symbol$environment]($style) "
@@ -2888,6 +2897,11 @@
           "type": "integer",
           "format": "int64",
           "default": 3
+        },
+        "truncation_width": {
+          "type": "integer",
+          "format": "int64",
+          "default": 0
         },
         "truncate_to_repo": {
           "type": "boolean",
@@ -6509,6 +6523,12 @@
           "format": "uint",
           "minimum": 0,
           "default": 1
+        },
+        "truncation_width": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0,
+          "default": 0
         },
         "format": {
           "type": "string",
