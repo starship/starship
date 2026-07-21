@@ -58,3 +58,154 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod tests {
+    use nu_ansi_term::Color;
+    use toml::toml;
+
+    use crate::context::JJRepo;
+
+    use crate::modules::jj_bookmark::tests::Tester;
+
+    fn tester(repo: &'static str) -> Tester {
+        Tester::new("jj_status").repo(repo)
+    }
+
+    #[test]
+    fn test_render_basics() {
+        Tester::basic_tests("jj_status");
+    }
+
+    #[test]
+    fn test_render_default_config() {
+        tester(JJRepo::BASE)
+            .expected(format!("{} ", Color::Red.bold().paint("[!◌+=✘~»]")))
+            .render();
+    }
+
+    #[test]
+    fn test_render_style() {
+        tester(JJRepo::BASE)
+            .options(toml! {
+                style = "italic blue"
+            })
+            .expected(format!("{} ", Color::Blue.italic().paint("[!◌+=✘~»]")))
+            .render();
+    }
+
+    #[test]
+    fn test_render_format() {
+        tester(JJRepo::BASE)
+            .options(toml! {
+                format = "$all"
+            })
+            .expected("!◌+=✘~»")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_immediate_conflict() {
+        tester(JJRepo::STATUS_IMMEDIATE_CONFLICT)
+            .options(toml! { format = "$all" })
+            .expected("!◌+=✘~»")
+            .render();
+        tester(JJRepo::STATUS_IMMEDIATE_CONFLICT)
+            .options(toml! { format = "$conflicted" })
+            .expected("!")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_no_conflict() {
+        tester(JJRepo::STATUS_NO_CONFLICT)
+            .options(toml! { format = "$all" })
+            .expected("◌+=✘~»")
+            .render();
+        tester(JJRepo::STATUS_NO_CONFLICT)
+            .options(toml! { format = "$conflicted" })
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_description() {
+        tester(JJRepo::STATUS_DESCRIPTION)
+            .options(toml! {
+                format = "$description"
+                description_present = "d"
+            })
+            .expected("d")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_hidden() {
+        tester(JJRepo::STATUS_HIDDEN)
+            .options(toml! {
+                format = "$hidden"
+                hidden = "h"
+            })
+            .expected("h")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_immutable() {
+        tester(JJRepo::STATUS_IMMUTABLE)
+            .options(toml! {
+                format = "$immutable"
+            })
+            .expected("◆")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_added() {
+        tester(JJRepo::STATUS_ADDED)
+            .options(toml! {
+                format = "$added"
+            })
+            .expected("+")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_copied() {
+        tester(JJRepo::STATUS_COPIED)
+            .options(toml! {
+                format = "$copied"
+            })
+            .expected("=")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_deleted() {
+        tester(JJRepo::STATUS_DELETED)
+            .options(toml! {
+                format = "$deleted"
+            })
+            .expected("✘")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_modified() {
+        tester(JJRepo::STATUS_MODIFIED)
+            .options(toml! {
+                format = "$modified"
+            })
+            .expected("~")
+            .render();
+    }
+
+    #[test]
+    fn test_render_format_status_renamed() {
+        tester(JJRepo::STATUS_RENAMED)
+            .options(toml! {
+                format = "$renamed"
+            })
+            .expected("»")
+            .render();
+    }
+}
