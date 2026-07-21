@@ -29,6 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         jujutsu_bookmarks
             .iter()
+            .take(config.max_shown)
             .map(|bookmark| format_bookmark(&config, bookmark, context))
             .collect::<Result<Vec<_>, _>>()
             .map(|nested_vec| {
@@ -93,7 +94,18 @@ fn format_bookmark(
                 _ => None,
             })
             .map(|variable| match variable {
-                "bookmark_name" => Some(Ok(bookmark.name.to_string())),
+                "bookmark_name" => {
+                    let chars = bookmark.name.chars().collect::<Vec<_>>();
+                    if chars.len() > config.max_length {
+                        Some(Ok(chars
+                            .into_iter()
+                            .take(config.max_length.saturating_sub(1))
+                            .chain(['…'])
+                            .collect::<String>()))
+                    } else {
+                        Some(Ok(bookmark.name.clone()))
+                    }
+                }
                 "distance" if bookmark.distance > 0 => Some(Ok(bookmark.distance.to_string())),
                 _ => None,
             })

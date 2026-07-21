@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     if chars.len() > config.description_limit {
                         Some(Ok(chars
                             .into_iter()
-                            .take(config.description_limit)
+                            .take(config.description_limit.saturating_sub(1))
                             .chain(['…'])
                             .collect::<String>()))
                     } else {

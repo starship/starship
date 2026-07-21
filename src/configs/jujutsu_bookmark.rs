@@ -17,7 +17,9 @@ pub struct JujutsuBookmarkConfig<'a> {
     pub diverged: &'a str,
     pub up_to_date: &'a str,
     pub joiner: &'a str,
+    pub max_length: usize,
     pub max_depth: usize,
+    pub max_shown: usize,
     pub disabled: bool,
 }
 
@@ -34,7 +36,9 @@ impl Default for JujutsuBookmarkConfig<'_> {
             joiner: " ",
             style: "purple",
             symbol: "󰑟 ",
-            max_depth: 5,
+            max_depth: 10,
+            max_shown: 3,
+            max_length: 15,
         }
     }
 }
