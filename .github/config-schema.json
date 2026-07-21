@@ -1000,6 +1000,24 @@
         "disabled": false
       }
     },
+    "jj_status": {
+      "$ref": "#/$defs/JJStatusConfig",
+      "default": {
+        "format": "([\\[$all\\]]($style) )",
+        "style": "bold red",
+        "conflicted": "!",
+        "description_empty": "◌",
+        "description_present": "",
+        "hidden": "",
+        "immutable": "◆",
+        "added": "+",
+        "copied": "=",
+        "deleted": "✘",
+        "modified": "~",
+        "renamed": "»",
+        "disabled": false
+      }
+    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -4615,7 +4633,78 @@
           "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )"
         },
         "disabled": {
-          "description": "Disable the `jj_metrics`",
+          "description": "Disable the module",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "JJStatusConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "The default format for `jj_status`.",
+          "type": "string",
+          "default": "([\\[$all\\]]($style) )"
+        },
+        "style": {
+          "description": "The style for the module.",
+          "type": "string",
+          "default": "bold red"
+        },
+        "conflicted": {
+          "description": "The format shown when the current change or a parent has merge conflicts.",
+          "type": "string",
+          "default": "!"
+        },
+        "description_empty": {
+          "description": "The format shown when the current change has no description.",
+          "type": "string",
+          "default": "◌"
+        },
+        "description_present": {
+          "description": "The format shown when the current change has a description.",
+          "type": "string",
+          "default": ""
+        },
+        "hidden": {
+          "description": "The format shown when the current change is hidden.",
+          "type": "string",
+          "default": ""
+        },
+        "immutable": {
+          "description": "The format shown when the current change is immutable.",
+          "type": "string",
+          "default": "◆"
+        },
+        "added": {
+          "description": "The format shown when a new file has been added in the working directory.",
+          "type": "string",
+          "default": "+"
+        },
+        "copied": {
+          "description": "The format shown when a new file has been copied in the working directory.",
+          "type": "string",
+          "default": "="
+        },
+        "deleted": {
+          "description": "The format shown when a file has been deleted in the working directory.",
+          "type": "string",
+          "default": "✘"
+        },
+        "modified": {
+          "description": "The format shown when a file has been modified in the working directory.",
+          "type": "string",
+          "default": "~"
+        },
+        "renamed": {
+          "description": "The format shown when a file has been renamed in the working directory.",
+          "type": "string",
+          "default": "»"
+        },
+        "disabled": {
+          "description": "Disables the `jj_status` module.",
           "type": "boolean",
           "default": false
         }

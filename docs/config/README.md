@@ -2683,6 +2683,64 @@ added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
+## JJ Status
+
+The `jj_status` module shows symbols representing the state of the [Jujutsu](https://docs.jj-vcs.dev/) repo in your current directory.
+
+### Options
+
+| Option                | Default                   | Description                                                                |
+| --------------------- | ------------------------- | -------------------------------------------------------------------------- |
+| `format`              | `'([\[$all\]]($style) )'` | The default format for `jj_status`.                                        |
+| `conflicted`          | `'!'`                     | The format shown when the current change or a parent has merge conflicts.  |
+| `description_empty`   | `'◌'`                     | The format shown when the current change has no description.               |
+| `description_present` | `''`                      | The format shown when the current change has a description.                |
+| `hidden`              | `''`                      | The format shown when the current change is hidden.                        |
+| `immutable`           | `'◆'`                     | The format shown when the current change is immutable.                     |
+| `added`               | `'+'`                     | The format shown when a new file has been added in the working directory.  |
+| `copied`              | `'='`                     | The format shown when a new file has been copied in the working directory. |
+| `deleted`             | `'✘'`                     | The format shown when a file has been deleted in the working directory.    |
+| `modified`            | `'~'`                     | The format shown when a file has been modified in the working directory.   |
+| `renamed`             | `'»'`                     | The format shown when a file has been renamed in the working directory.    |
+| `style`               | `'bold red'`              | The style for the module.                                                  |
+| `disabled`            | `false`                   | Disables the `jj_status` module.                                           |
+
+### Variables
+
+The following variables can be used in `format`:
+
+| Variable      | Description                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `all`         | Shortcut for `$conflicted$description$hidden$immutable$added$copied$deleted$modified$renamed`. |
+| `conflicted`  | Displays `conflicted` when the current change or a parent has merge conflicts.                 |
+| `description` | Displays `description_empty` or `description_present` accordingly.                             |
+| `hidden`      | Displays `hidden` when the current change is hidden.                                           |
+| `immutable`   | Displays `immutable` when the current change is immutable.                                     |
+| `added`       | Displays `added` when a file has been added in the working directory.                          |
+| `copied`      | Displays `copied` when a file has been copied in the working directory.                        |
+| `deleted`     | Displays `deleted` when a file has been deleted in the working directory.                      |
+| `modified`    | Displays `modified` when a file has been modified in the working directory.                    |
+| `renamed`     | Displays `renamed` when a file has been renamed in the working directory.                      |
+| style\*       | Mirrors the value of option `style`.                                                           |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_status]
+conflicted = '🏳'
+description_present = ""
+hidden = '🥷'
+immutable = '🔒'
+added = '📦'
+deleted = '🗑'
+modified = '📝'
+renamed = '👅'
+```
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running.

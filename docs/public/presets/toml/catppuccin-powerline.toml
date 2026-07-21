@@ -125,6 +125,10 @@ symbol = ""
 style = "bg:yellow"
 format = '[[ $symbol $bookmark( \\(+$overflow_count others\\)) ](fg:crust bg:yellow)]($style)'
 
+[jj_status]
+style = "bg:yellow"
+format = '[[($all )](fg:crust bg:yellow)]($style)'
+
 [kotlin]
 symbol = ""
 style = "bg:green"
