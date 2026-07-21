@@ -45,6 +45,10 @@ symbol = ""
 style = "bg:#394260"
 format = '[[ $symbol $bookmark( \\(+$overflow_count others\\)) ](fg:#769ff0 bg:#394260)]($style)'
 
+[jj_status]
+style = "bg:#394260"
+format = '[[($all )](fg:#769ff0 bg:#394260)]($style)'
+
 [nodejs]
 symbol = ""
 style = "bg:#212736"

@@ -47,6 +47,20 @@ style = "yellow"
 format = "[$bookmark( \\(+$overflow_count others\\))]($style)"
 style = "bright-black"
 
+[jj_status]
+format = "[[(*$all)](218)]($style)"
+style = "cyan"
+conflicted = "​"
+description_empty = ""
+description_present = ""
+hidden = "​"
+immutable = "​"
+added = "​"
+copied = ""
+deleted = "​"
+modified = "​"
+renamed = "​"
+
 [python]
 format = "[$virtualenv]($style) "
 style = "bright-black"
