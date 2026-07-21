@@ -971,12 +971,13 @@
         "symbol": "󰑟 ",
         "style": "purple",
         "format": "[$symbol$bookmarks]($style) ",
-        "bookmark_format": "$bookmark_name$ahead_behind$conflicted",
+        "bookmark_format": "$depth$bookmark_name$ahead_behind$conflicted",
         "ahead": " ⇡$count",
         "behind": " ⇣$count",
         "diverged": " ⇡$ahead_count⇣$behind_count",
         "up_to_date": " ✓",
-        "conflicted": "??",
+        "conflicted_symbol": "??",
+        "depth_symbol": "↓",
         "joiner": " ",
         "find_closest": false,
         "disabled": true
@@ -4528,7 +4529,7 @@
         },
         "bookmark_format": {
           "type": "string",
-          "default": "$bookmark_name$ahead_behind$conflicted"
+          "default": "$depth$bookmark_name$ahead_behind$conflicted"
         },
         "ahead": {
           "type": "string",
@@ -4546,9 +4547,13 @@
           "type": "string",
           "default": " ✓"
         },
-        "conflicted": {
+        "conflicted_symbol": {
           "type": "string",
           "default": "??"
+        },
+        "depth_symbol": {
+          "type": "string",
+          "default": "↓"
         },
         "joiner": {
           "type": "string",

@@ -84,11 +84,26 @@ fn format_bookmark(
 ) -> Result<Vec<Segment>, StringFormatterError> {
     StringFormatter::new(config.bookmark_format).and_then(|formatter| {
         formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
             .map(|variable| match variable {
                 "bookmark_name" => Some(Ok(bookmark.name.to_string())),
                 "conflicted" => {
                     if bookmark.is_conflicted {
-                        Some(Ok(config.conflicted.to_string()))
+                        Some(Ok(config.conflicted_symbol.to_string()))
+                    } else {
+                        None
+                    }
+                }
+                "depth" => {
+                    if bookmark.is_deep {
+                        Some(Ok(config.depth_symbol.to_string()))
                     } else {
                         None
                     }

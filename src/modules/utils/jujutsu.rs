@@ -146,6 +146,7 @@ pub(crate) struct JujutsuBookmarkInfo {
     pub remote_behind: usize,
     pub is_tracked: bool,
     pub is_conflicted: bool,
+    pub is_deep: bool,
 }
 
 pub fn get_jujutsu_change_id(ctx: &Context) -> Option<(String, usize)> {
@@ -191,7 +192,7 @@ pub(crate) fn get_jujutsu_bookmarks(
     let commit_id = working_copy_commit_id(repo)?;
     let tracked_bookmarks = tracked_bookmarks(repo.repo());
 
-    let bookmarks = commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks);
+    let bookmarks = commit_bookmarks(repo.repo(), &commit_id, &tracked_bookmarks, false);
 
     if !bookmarks.is_empty() || !find_closest {
         return Some(bookmarks);
@@ -202,6 +203,7 @@ pub(crate) fn get_jujutsu_bookmarks(
         repo.repo(),
         &closest_bookmark_commit_id,
         &tracked_bookmarks,
+        true,
     ))
 }
 
@@ -284,6 +286,7 @@ fn commit_bookmarks(
     repo: &ReadonlyRepo,
     commit_id: &CommitId,
     tracked_bookmarks: &HashMap<String, (usize, usize)>,
+    is_deep: bool,
 ) -> Vec<JujutsuBookmarkInfo> {
     let mut bookmarks = Vec::new();
 
@@ -316,6 +319,7 @@ fn commit_bookmarks(
             remote_behind: behind,
             is_tracked,
             is_conflicted,
+            is_deep,
         });
     }
 
