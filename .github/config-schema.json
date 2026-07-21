@@ -990,6 +990,16 @@
         "disabled": false
       }
     },
+    "jj_metrics": {
+      "$ref": "#/$defs/JJMetricsConfig",
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "only_nonzero_diffs": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "disabled": false
+      }
+    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -4575,6 +4585,37 @@
         },
         "disabled": {
           "description": "Disable the module",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "JJMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "added_style": {
+          "description": "Value of the `$added_style` variable in the format string",
+          "type": "string",
+          "default": "bold green"
+        },
+        "deleted_style": {
+          "description": "Value of the `$deleted_style` variable in the format string",
+          "type": "string",
+          "default": "bold red"
+        },
+        "only_nonzero_diffs": {
+          "description": "Render only for changed items",
+          "type": "boolean",
+          "default": true
+        },
+        "format": {
+          "description": "Format string for the module",
+          "type": "string",
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )"
+        },
+        "disabled": {
+          "description": "Disable the `jj_metrics`",
           "type": "boolean",
           "default": false
         }
