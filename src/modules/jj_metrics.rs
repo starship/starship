@@ -47,3 +47,107 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     Some(module)
 }
+
+#[cfg(test)]
+mod tests {
+    use nu_ansi_term::Color;
+    use toml::toml;
+
+    use crate::context::JJRepo;
+
+    use crate::modules::jj_bookmark::tests::Tester;
+
+    fn tester(repo: &'static str) -> Tester {
+        Tester::new("jj_metrics").repo(repo)
+    }
+
+    #[test]
+    fn test_render_basics() {
+        Tester::basic_tests("jj_metrics");
+    }
+
+    #[test]
+    fn test_render_default_config() {
+        tester(JJRepo::BASE)
+            .expected(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+100"),
+                Color::Red.bold().paint("-90")
+            ))
+            .render();
+    }
+
+    #[test]
+    fn test_render_style() {
+        tester(JJRepo::BASE)
+            .options(toml! {
+                added_style = "italic blue"
+                deleted_style = "italic yellow"
+            })
+            .expected(format!(
+                "{} {} ",
+                Color::Blue.italic().paint("+100"),
+                Color::Yellow.italic().paint("-90")
+            ))
+            .render();
+    }
+
+    #[test]
+    fn test_render_format() {
+        tester(JJRepo::BASE)
+            .options(toml! {
+                format = "(-$deleted)/(+$added)"
+            })
+            .expected("-90/+100")
+            .render();
+    }
+
+    #[test]
+    fn test_render_only_added() {
+        tester(JJRepo::METRIC_ADDED)
+            .options(toml! {
+                format = "(+$added )(-$deleted )"
+            })
+            .expected("+100 ")
+            .render();
+
+        tester(JJRepo::METRIC_ADDED)
+            .options(toml! {
+                format = "(+$added )(-$deleted )"
+                only_nonzero_diffs = false
+            })
+            .expected("+100 -0 ")
+            .render();
+    }
+
+    #[test]
+    fn test_render_only_deleted() {
+        tester(JJRepo::METRIC_DELETED)
+            .options(toml! {
+                format = "(+$added )(-$deleted )"
+            })
+            .expected("-90 ")
+            .render();
+
+        tester(JJRepo::METRIC_DELETED)
+            .options(toml! {
+                format = "(+$added )(-$deleted )"
+                only_nonzero_diffs = false
+            })
+            .expected("+0 -90 ")
+            .render();
+    }
+
+    #[test]
+    fn test_render_zero_diffs() {
+        tester(JJRepo::METRIC_ZERO)
+            .options(toml! {
+                format = "(+$added )(-$deleted )"
+                only_nonzero_diffs = false
+            })
+            .expected("+0 -0 ")
+            .render();
+
+        tester(JJRepo::METRIC_ZERO).render();
+    }
+}
