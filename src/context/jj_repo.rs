@@ -299,6 +299,19 @@ impl JJRepo {
     pub const METRIC_DELETED: &str = "/jj/metrics-deleted";
     pub const METRIC_ZERO: &str = "/jj/metrics-zero";
 
+    pub const STATUS_IMMEDIATE_CONFLICT: &str = "/jj/status/immediate-conflict";
+    pub const STATUS_NO_CONFLICT: &str = "/jj/status/no-conflict";
+    pub const STATUS_DESCRIPTION: &str = "/jj/status/description";
+    pub const STATUS_HIDDEN: &str = "/jj/status/hidden";
+    pub const STATUS_IMMUTABLE: &str = "/jj/status/immutable";
+
+    pub const STATUS_ADDED: &str = "/jj/status/added";
+    pub const STATUS_COPIED: &str = "/jj/status/copied";
+    pub const STATUS_DELETED: &str = "/jj/status/deleted";
+    pub const STATUS_MODIFIED: &str = "/jj/status/modified";
+    pub const STATUS_RENAMED: &str = "/jj/status/renamed";
+    pub const STATUS_NO_CHANGES: &str = "/jj/status/no-changes";
+
     pub const NONE: &str = "/jj/no-repo";
 }
 
@@ -439,6 +452,73 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             || output([
                 (LINES_A, "0"),
                 (LINES_D, "0"),
+            ]),
+        ),
+        // Repos testing jj_status rendering
+        (
+            JJRepo::STATUS_IMMEDIATE_CONFLICT,
+            || output([
+                (CONFLICT, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_NO_CONFLICT,
+            || output([
+                (CONFLICT, "false"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DESCRIPTION,
+            || output([
+                (DESC, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_HIDDEN,
+            || output([
+                (HIDDEN, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_IMMUTABLE,
+            || output([
+                (IMMUTABLE, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_ADDED,
+            || output([
+                (FILES, "AA"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_COPIED,
+            || output([
+                (FILES, "CCC"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DELETED,
+            || output([
+                (FILES, "DDDD"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_MODIFIED,
+            || output([
+                (FILES, "MMMMM"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_RENAMED,
+            || output([
+                (FILES, "RRRRRR"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_NO_CHANGES,
+            || output([
+                (FILES, ""),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout
