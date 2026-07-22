@@ -56,7 +56,7 @@ format = """\
 
 Sebelum v0.45.0, beberapa modul bisa menerima `prefix` dan/atau `suffix` untuk menata gayanya sesuai modul yang di-render.
 
-Starship v0.45.0 menerima nilai `format` sebagai gantinya, yang memungkinkan bagaimana modul di-render untuk kustomisasi yang lebih jauh. Daripada membuat prefix dan suffix untuk varibel yang berbasis konteks, kini variabel dapat disubtitusikan dari dalam sebuah format string, yang mana mewakili hasil keluaran dari modul.
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Daripada membuat prefix dan suffix untuk varibel yang berbasis konteks, kini variabel dapat disubtitusikan dari dalam sebuah format string, yang mana mewakili hasil keluaran dari modul.
 
 **Contoh konfigurasi pra-v0.45.0**
 

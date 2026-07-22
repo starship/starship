@@ -99,7 +99,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         Err(error) => {
             log::warn!("Error in module `custom.{name}`:\n{error}");
         }
-    };
+    }
     Some(module)
 }
 
@@ -126,7 +126,7 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         log::debug!(
             "top level format contains custom module {module_name:?}, but no configuration was provided.",
         );
-    };
+    }
     None
 }
 
@@ -313,7 +313,7 @@ mod tests {
     use super::*;
 
     use crate::context::Shell;
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{COMMON_GIT_PROVIDERS, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -761,20 +761,23 @@ mod tests {
 
     #[test]
     fn test_render_require_repo_in() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                when = true
-                require_repo = true
-                format = "test"
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let actual = ModuleRenderer::new("custom.test")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [custom.test]
+                    when = true
+                    require_repo = true
+                    format = "test"
+                })
+                .collect();
+            let expected = Some("test".to_string());
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]

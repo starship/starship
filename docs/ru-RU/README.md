@@ -2,25 +2,22 @@
 layout: дом
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!
   actions:
-    - 
-      theme: бренд
+    - theme: бренд
       text: Начало работы →
       link: ./guide/
 features:
-  - 
-    title: Совместимость в первую очередь
+  - title: Совместимость в первую очередь
     details: Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!
-  - 
-    title: Основана на Rust
+  - title: Основана на Rust
     details: Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу оболочку как можно быстрее и надежнее.
-  - 
-    title: Настраиваемая
+  - title: Настраиваемая
     details: Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту оболочку минималистичной или функциональной, как вы захотите.
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, и PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Установите бинарный файл **starship**:
 
-
    #### Установка последней версии
 
    Через Shell:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Чтобы обновить Starship, повторно запустите приведенный выше скрипт. Он заменит текущую версию, не затрагивая конфигурацию Starship.
-
 
    #### Установка через пакетный менеджер
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
-
+2. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Добавьте следующее в конец `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,7 +105,6 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-
    #### PowerShell
 
    Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете узнать расположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
@@ -121,7 +112,6 @@ onMounted(() => {
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Поддерживается только Nushell v0.96+.
+   > [!WARNING] This will change in the future.
+   > Поддерживается только Nushell v0.96+.
 
    Добавьте следующее в конец вашей конфигурации Nushell (найдите это, запустив `$nu.config-path` в Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +168,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 

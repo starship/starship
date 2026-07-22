@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `vcs`:\n{}", error);
+            log::warn!("Error in module `vcs`:\n{error}");
             return None;
         }
     });
@@ -100,7 +100,7 @@ mod tests {
 
     use nu_ansi_term::Color;
 
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{COMMON_GIT_PROVIDERS, FixtureProvider, ModuleRenderer, fixture_repo};
 
     #[test]
     fn empty_order_disables() {
@@ -158,11 +158,14 @@ mod tests {
 
     #[test]
     fn detect_git() -> io::Result<()> {
-        with_marker(
-            "git",
-            FixtureProvider::Git,
-            Some(format!("{}", Color::Green.bold().paint("test "))),
-        )
+        for &mode in COMMON_GIT_PROVIDERS {
+            with_marker(
+                "git",
+                mode,
+                Some(format!("{}", Color::Green.bold().paint("test "))),
+            )?;
+        }
+        Ok(())
     }
 
     #[test]
