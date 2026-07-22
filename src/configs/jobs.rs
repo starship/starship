@@ -23,7 +23,7 @@ impl Default for JobsConfig<'_> {
             threshold: 1,
             symbol_threshold: 1,
             number_threshold: 2,
-            format: "[$symbol$number]($style) ",
+            format: "($symbol$number )($style)",
             symbol: "✦",
             style: "bold blue",
             disabled: false,
