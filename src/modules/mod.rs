@@ -104,6 +104,7 @@ mod vcs;
 mod vcsh;
 mod vlang;
 mod xmake;
+mod yadm;
 mod zig;
 
 #[cfg(feature = "battery")]
@@ -229,6 +230,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "vcs" => vcs::module(context),
             "vcsh" => vcsh::module(context),
             "xmake" => xmake::module(context),
+            "yadm" => yadm::module(context),
             "zig" => zig::module(context),
             env if env.starts_with("env_var.") => {
                 env_var::module(env.strip_prefix("env_var."), context)
@@ -369,6 +371,7 @@ pub fn description(module: &str) -> &'static str {
         "vcsh" => "The currently active VCSH repository",
         "vlang" => "The currently installed version of V",
         "xmake" => "The currently installed version of XMake",
+        "yadm" => "The state of the YADM dotfiles repository",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }

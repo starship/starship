@@ -4,6 +4,7 @@ format = """
 $username\
 $hostname\
 $directory\
+$yadm\
 $git_branch\
 $git_state\
 $git_status\

@@ -20,6 +20,7 @@ $singularity\
 $kubernetes\
 $directory\
 $vcsh\
+$yadm\
 $fossil_branch\
 $git_branch\
 $git_commit\

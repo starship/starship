@@ -334,5 +334,8 @@ symbol = "terraform "
 [xmake]
 symbol = "xmake "
 
+[yadm]
+symbol = "yadm "
+
 [zig]
 symbol = "zig "
