@@ -394,7 +394,7 @@ mod tests {
 
             let expected = Some(format!(
                 "on {} ",
-                Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+                Color::Purple.bold().paint(format!("\u{2387} {}", "main")),
             ));
 
             assert_eq!(expected, actual);
@@ -425,7 +425,7 @@ mod tests {
                 "on {} ",
                 Color::Purple
                     .bold()
-                    .paint(format!("\u{e0a0} {}", "test_branch")),
+                    .paint(format!("\u{2387} {}", "test_branch")),
             ));
 
             assert_eq!(expected, actual);
@@ -483,7 +483,7 @@ mod tests {
 
             let expected = Some(format!(
                 "on {} ",
-                Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+                Color::Purple.bold().paint(format!("\u{2387} {}", "main")),
             ));
 
             assert_eq!(expected, actual);
@@ -570,7 +570,7 @@ mod tests {
                 "on {} ",
                 Color::Purple
                     .bold()
-                    .paint(format!("\u{e0a0} {}", "my-worktree-feature")),
+                    .paint(format!("\u{2387} {}", "my-worktree-feature")),
             ));
 
             assert_eq!(expected, actual);
@@ -669,7 +669,7 @@ mod tests {
 
     //     let expected = Some(format!(
     //         "on {} ",
-    //         Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+    //         Color::Purple.bold().paint(format!("\u{2387} {}", "master")),
     //     ));
 
     //     assert_eq!(expected, actual);
@@ -724,7 +724,7 @@ mod tests {
                 "on {} ",
                 Color::Purple
                     .bold()
-                    .paint(format!("\u{e0a0} {expected_name}{truncation_symbol}")),
+                    .paint(format!("\u{2387} {expected_name}{truncation_symbol}")),
             ));
 
             assert_eq!(expected, actual);

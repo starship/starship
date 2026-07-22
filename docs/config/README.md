@@ -481,7 +481,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Variable               | Default                                  | Description                                                                           |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'🅰 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -496,7 +496,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = '󰠅 '
+symbol = '🅰 '
 style = 'blue bold'
 ```
 
@@ -508,7 +508,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "󰠅 "
+symbol = "🅰 "
 style = "blue bold"
 ```
 
@@ -530,11 +530,11 @@ The module is only visible when the device's battery is below 10%.
 
 | Option               | Default                           | Description                                         |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
+| `full_symbol`        | `'• '`                            | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `'⇡ '`                            | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `'⇣ '`                            | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `'? '`                            | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `'! '`                            | The symbol shown when the battery state is empty.   |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
@@ -1608,7 +1608,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                  |
+| `symbol`            | `'e '`                               | The symbol used before displaying the version of erlang.                  |
 | `style`             | `'bold red'`                         | The style for the module.                                                 |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
@@ -1754,7 +1754,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | Option              | Default                          | Description                                                                              |
 | ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol$branch]($style) '` | The format for the module. Use `'$branch'` to refer to the current branch name.          |
-| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory.       |
+| `symbol`            | `'⎇ '`                           | The symbol used before the branch name of the check-out in your current directory.       |
 | `style`             | `'bold purple'`                  | The style for the module.                                                                |
 | `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                          |
 | `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
@@ -1910,7 +1910,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | The format for the module. Use `'$branch'` to refer to the current branch name.          |
-| `symbol`             | `' '`                                            | A format string representing the symbol of git branch.                                   |
+| `symbol`             | `'⎇ '`                                            | A format string representing the symbol of git branch.                                   |
 | `style`              | `'bold purple'`                                   | The style for the module.                                                                |
 | `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
@@ -3078,7 +3078,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 | Option              | Default                                   | Description                                                                                  |
 | ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `symbol`            | `'⎇ '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `'bold purple'`                           | The style for the module.                                                                    |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | The format for the module.                                                                   |
 | `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
@@ -3387,7 +3387,7 @@ Additionally, the module will be hidden by default if the directory contains a `
 | ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`          | The format for the module.                                                                            |
 | `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `symbol`            | `'⬢ '`                                        | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `['node_modules']`                            | Which folders should trigger this module.                                                             |
@@ -3660,9 +3660,9 @@ Solus = "⛵ "
 SUSE = "🦎 "
 Ubuntu = "🎯 "
 Ultramarine = "🔷 "
-Unknown = "❓ "
+Unknown = "? "
 Uos = "🐲 "
-Void = " "
+Void = "⊚ "
 Windows = "🪟 "
 Zorin = "🔹 "
 ```
@@ -3852,7 +3852,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 | Option              | Default                           | Description                                                                          |
 | ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
-| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `symbol`            | `'⎇ '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
 | `style`             | `'bold purple'`                   | The style for the module.                                                            |
 | `format`            | `'on [$symbol$channel]($style) '` | The format for the module.                                                           |
 | `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
@@ -3920,7 +3920,7 @@ By default the module will be shown if any of the following conditions are met:
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                         |
 | `version_format` | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                            |
+| `symbol`         | `'⠿ '`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `'bold 5'`                                   | The style for the module.                                                 |
 | `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
