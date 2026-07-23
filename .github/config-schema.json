@@ -451,7 +451,9 @@
         "read_only_style": "red",
         "truncation_symbol": "",
         "home_symbol": "~",
-        "use_os_path_sep": true
+        "use_os_path_sep": true,
+        "style_prefix": null,
+        "style_basename": null
       }
     },
     "direnv": {
@@ -2955,6 +2957,20 @@
         "use_os_path_sep": {
           "type": "boolean",
           "default": true
+        },
+        "style_prefix": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "style_basename": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
       },
       "additionalProperties": false

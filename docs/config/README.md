@@ -1191,21 +1191,38 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Option                   | Default                                                                                                                      | Description                                                                                                |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                                                                                                          | The number of parent folders that the current directory should be truncated to.                            |
-| `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                           |
-| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | The format for the module.                                                                                 |
-| `style`                  | `'bold cyan'`                                                                                                                | The style for the module.                                                                                  |
-| `disabled`               | `false`                                                                                                                      | Disables the `directory` module.                                                                           |
-| `read_only`              | `'🔒'`                                                                                                                       | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
-| `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
-| `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
-| `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
-| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                   |
-| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                      |
-| `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                       |
+| Option                   | Default                                                                                                                      | Description                                                                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                                                                                                          | The number of parent folders that the current directory should be truncated to.                                                  |
+| `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                                                 |
+| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | The format for the module.                                                                                                       |
+| `style`                  | `'bold cyan'`                                                                                                                | The style for the module.                                                                                                        |
+| `disabled`               | `false`                                                                                                                      | Disables the `directory` module.                                                                                                 |
+| `read_only`              | `'🔒'`                                                                                                                       | The symbol indicating current directory is read only.                                                                            |
+| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                                              |
+| `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                                                |
+| `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`.                       |
+| `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                                              |
+| `style_prefix`           |                                                                                                                              | The style for the path segment before the last path separator (the "prefix"). The default value is equivalent to `style`.        |
+| `style_basename`         |                                                                                                                              | The style for the final path segment after the last path separator (the "basename"). The default value is equivalent to `style`. |
+| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                                         |
+| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                                            |
+| `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                                             |
+
+The `format` string can also reference `$prefix` and `$basename`, which split
+the final rendered path at its last path separator — `$prefix` is everything
+up to and including that separator, and `$basename` is what remains. This
+lets you style the parent structure differently from the active folder, e.g.:
+
+```toml
+[directory]
+format = "[$prefix]($style_prefix)[$basename]($style_basename) "
+style_prefix = "bright-208"
+style_basename = "bold 166"
+```
+
+For a path like `~/projects/backend/api-node`, this would render
+`~/projects/backend/` in `style_prefix` and `api-node` in `style_basename`.
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
