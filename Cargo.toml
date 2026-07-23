@@ -67,7 +67,7 @@ rayon = "1.12.0"
 regex = { version = "1.13.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.21.3"
 semver = "1.0.28"
-serde = { version = "1.0.228", features = ["derive"] }
+serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.150"
 sha1 = "0.11.0"
 shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] }
