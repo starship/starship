@@ -81,7 +81,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 match formatted {
                     Ok(segments) => Some(segments),
                     Err(e) => {
-                        log::warn!("Error parsing format string in `status.pipestatus_segment_format`: {e:?}");
+                        log::warn!(
+                            "Error parsing format string in `status.pipestatus_segment_format`:\n{e}"
+                        );
                         None
                     }
                 }
@@ -99,8 +101,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
-        Err(_error) => {
-            log::warn!("Error parsing format string in `status.format`");
+        Err(error) => {
+            log::warn!("Error parsing format string in `status.format`:\n{error}");
             return None;
         }
     });
@@ -883,5 +885,21 @@ mod tests {
             .pipestatus(pipe_exit_code)
             .collect();
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn format_parse_error_renders_nothing() {
+        // A malformed `format` must not panic or emit a garbled module:
+        // `module` logs the parse error and returns `None`. Guards the
+        // error arm this change added when surfacing the underlying error.
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "${"
+                disabled = false
+            })
+            .status(1)
+            .collect();
+        assert_eq!(None, actual);
     }
 }
