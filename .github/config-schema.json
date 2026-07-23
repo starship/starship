@@ -74,7 +74,8 @@
         "region_aliases": {},
         "profile_aliases": {},
         "expiration_symbol": "X",
-        "force_display": false
+        "force_display": false,
+        "profiles": []
       }
     },
     "azure": {
@@ -1961,7 +1962,7 @@
           "default": false
         },
         "region_aliases": {
-          "description": "Table of region aliases to display in addition to the AWS name.",
+          "description": "Deprecated: Table of region aliases to display in addition to the AWS name.",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -1969,7 +1970,7 @@
           "default": {}
         },
         "profile_aliases": {
-          "description": "Table of profile aliases to display in addition to the AWS name.",
+          "description": "Deprecated: Table of profile aliases to display in addition to the AWS name.",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -1985,6 +1986,65 @@
           "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
           "type": "boolean",
           "default": false
+        },
+        "profiles": {
+          "description": "Customised styles and symbols for specific profiles.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AwsProfileConfig"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "AwsProfileConfig": {
+      "type": "object",
+      "properties": {
+        "profile_pattern": {
+          "description": "Regular expression to match the current AWS profile name.",
+          "type": "string",
+          "default": ""
+        },
+        "region_pattern": {
+          "description": "Regular expression to match the current AWS region name.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "profile_alias": {
+          "description": "Profile alias to display instead of the full profile name.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "region_alias": {
+          "description": "Region alias to display instead of the full region name.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "style": {
+          "description": "The style for the module when this profile matches.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "symbol": {
+          "description": "The symbol for the module when this profile matches.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
         }
       },
       "additionalProperties": false
