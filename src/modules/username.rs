@@ -119,7 +119,7 @@ fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
-fn is_ssh_session(context: &Context) -> bool {
+pub(crate) fn is_ssh_session(context: &Context) -> bool {
     let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
     ssh_env.iter().any(|env| context.get_env_os(env).is_some())
 }
