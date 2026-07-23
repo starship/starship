@@ -66,7 +66,17 @@ starship_precmd() {
     _starship_set_return "$STARSHIP_CMD_STATUS"
 
     if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
-        eval "$STARSHIP_PROMPT_COMMAND"
+        if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ "${STARSHIP_PROMPT_COMMAND@a}" == "a" ]]; then
+            # Extended `STARSHIP_PROMPT_COMMAND` array usage
+            # If Bash 5.1+ and `STARSHIP_PROMPT_COMMAND` is non-empty array
+            # PR: https://github.com/starship/starship/pull/7603
+            \builtin local __starship_prompt_subcommand
+            for __starship_prompt_subcommand in "${STARSHIP_PROMPT_COMMAND[@]}"; do
+                eval "${__starship_prompt_subcommand}"
+            done
+        else
+            eval "$STARSHIP_PROMPT_COMMAND"
+        fi
     fi
 
     local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
@@ -74,7 +84,7 @@ starship_precmd() {
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
+        ARGS+=("--cmd-duration=${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
     fi
     PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
@@ -126,15 +136,61 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "${PROMPT_COMMAND-}" ]]; then
-        PROMPT_COMMAND="starship_precmd"
-    elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
-        # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
-        # Prepending to PROMPT_COMMAND breaks "command duration" module.
-        # So, we are preserving the existing PROMPT_COMMAND
-        # which will be executed later in the starship_precmd function
-        STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
-        PROMPT_COMMAND="starship_precmd"
+    if ((BASH_VERSINFO[0] > 5 || BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 1)) && [[ -v PROMPT_COMMAND && "${PROMPT_COMMAND@a}" == "a" ]]; then
+        # In Bash 5.1+, the type of PROMPT_COMMAND can be 'array'. Old assignment
+        # commands will work with the first element instead of the full PROMPT_COMMAND.
+        # Even so, when 'string' PROMPT_COMMAND is detected when `Starship` is triggered,
+        # use old fallback logic.
+        # PR: https://github.com/starship/starship/pull/7603
+        if [[ -v IFS ]]; then
+            \builtin declare __starship_ifs="${IFS}"
+        else
+            \builtin unset __starship_ifs
+        fi
+        \builtin declare IFS=''  # Use empty IFS to figure out if array is empty
+        \builtin declare -ag STARSHIP_PROMPT_COMMAND  # Force global variable
+        if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # Fix: Reenter this line should not overwrite STARSHIP_PROMPT_COMMAND
+            STARSHIP_PROMPT_COMMAND=()
+        fi
+
+        \builtin declare __prompt_subcommand
+        for __prompt_subcommand in "${PROMPT_COMMAND[@]}"; do  # Test if PROMPT_COMMAND contains 'starship_precmd'
+            if [[ "${__prompt_subcommand}" == *"starship_precmd"* ]]; then  # If modify this line, modify line 158,178 as well
+                \builtin break
+            fi
+        done
+
+        if [[ "${__prompt_subcommand}" != *"starship_precmd"* ]]; then  # If not contain 'starship_precmd' (first initialization)
+            for __prompt_subcommand in "${PROMPT_COMMAND[@]}"; do  # Join non-empty STARSHIP_PROMPT_COMMAND array
+                if [[ -n "${__prompt_subcommand}" ]]; then
+                    STARSHIP_PROMPT_COMMAND+=("${__prompt_subcommand}")
+                fi
+            done
+            PROMPT_COMMAND=("starship_precmd")
+            if [[ -z "${STARSHIP_PROMPT_COMMAND[*]}" ]]; then  # If STARSHIP_PROMPT_COMMAND is empty
+                \builtin unset STARSHIP_PROMPT_COMMAND  # Unset STARSHIP_PROMPT_COMMAND
+            fi
+        fi
+        \builtin unset __prompt_subcommand
+
+        if [[ -v __starship_ifs ]]; then  # If detect IFS defined
+            # TODO: Maybe we can remove IFS when declared in a function
+            IFS="${__starship_ifs}" # Recover IFS
+            \builtin unset __starship_ifs
+        else
+            \builtin unset IFS  # Remove definition of IFS
+        fi
+    else
+        if [[ -z "${PROMPT_COMMAND-}" ]]; then
+            PROMPT_COMMAND="starship_precmd"
+        elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
+            # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
+            # Prepending to PROMPT_COMMAND breaks "command duration" module.
+            # So, we are preserving the existing PROMPT_COMMAND
+            # which will be executed later in the starship_precmd function
+            STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
+            PROMPT_COMMAND="starship_precmd"
+        fi
     fi
 fi
 
@@ -152,4 +208,3 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
-
