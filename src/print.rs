@@ -41,7 +41,7 @@ pub trait UnicodeWidthGraphemes {
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
 
 fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;?]*[a-zA-Z]").unwrap())
 }
 
 impl<T> UnicodeWidthGraphemes for T
@@ -67,6 +67,13 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    // Non-SGR ANSI escape sequences should also be stripped
+    assert_eq!(11, "\x1B[Knormal text".width_graphemes());
+    assert_eq!(11, "\x1B[Jnormal text".width_graphemes());
+    assert_eq!(4, "\x1B[35;6m\x1B[Jtest".width_graphemes());
+    // Private-mode CSI sequences (with ? prefix) should also be stripped
+    assert_eq!(4, "\x1B[?25htest".width_graphemes());
+    assert_eq!(4, "\x1B[?25ltest".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {

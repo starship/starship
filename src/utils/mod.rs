@@ -647,14 +647,38 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
 
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
-    const ESCAPE_BEGIN: char = '\u{1b}';
-    const ESCAPE_END: char = 'm';
-    wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
+    let (beg, end) = match shell {
+        // \[ and \]
+        Shell::Bash => ("\u{5c}\u{5b}", "\u{5c}\u{5d}"),
+        // %{ and %}
+        Shell::Tcsh | Shell::Zsh => ("\u{25}\u{7b}", "\u{25}\u{7d}"),
+        _ => return ansi,
+    };
+
+    // ANSI escape codes cannot be nested, so we can keep track of whether we're
+    // in an escape or not with a single boolean variable
+    let mut escaped = false;
+    let final_string: String = ansi
+        .chars()
+        .map(|x| {
+            if x == '\u{1b}' && !escaped {
+                escaped = true;
+                format!("{beg}\u{1b}")
+            } else if escaped && x.is_alphabetic() {
+                escaped = false;
+                format!("{x}{end}")
+            } else {
+                x.to_string()
+            }
+        })
+        .collect();
+    final_string
 }
 
 /// Many shells cannot deal with raw unprintable characters and miscompute the cursor position,
 /// leading to strange visual bugs like duplicated/missing chars. This function wraps a specified
 /// sequence in shell-specific escapes to avoid these problems.
+#[allow(dead_code)]
 pub fn wrap_seq_for_shell(
     ansi: String,
     shell: Shell,
