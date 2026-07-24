@@ -118,10 +118,11 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<&
     let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
     let version = re
         .captures(nodejs_version)
-        .unwrap()
-        .get(0)
-        .unwrap()
-        .as_str();
+        .and_then(|c| c.get(0))
+        .map(|m| m.as_str());
+    let Some(version) = version else {
+        return true;
+    };
 
     let v = match Version::parse(version) {
         Ok(v) => v,
