@@ -370,6 +370,21 @@ impl<'a> Context<'a> {
                         }
                     };
 
+                let mut repository = shared_repo.to_thread_local();
+                if repository.workdir().is_none()
+                    && let Some(worktree) = self.get_env_os("GIT_WORK_TREE")
+                {
+                    let worktree = PathBuf::from(worktree);
+                    let worktree = if worktree.is_absolute() {
+                        worktree
+                    } else {
+                        self.current_dir.join(worktree)
+                    };
+                    if let Err(error) = repository.set_workdir(worktree) {
+                        log::debug!("Failed to apply GIT_WORK_TREE: {error}");
+                    }
+                }
+                let shared_repo = repository.into_sync();
                 let repository = shared_repo.to_thread_local();
                 log::trace!(
                     "Found git repo: {repository:?}, (trust: {:?})",

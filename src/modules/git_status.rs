@@ -2024,6 +2024,45 @@ pub mod tests {
         Ok(())
     }
 
+    #[test]
+    fn does_generate_git_status_for_explicit_worktree_of_bare_repo() -> io::Result<()> {
+        for &mode in BARE_GIT_PROVIDERS {
+            let worktree_dir = tempfile::tempdir()?;
+            let repo_dir = fixture_repo(mode)?;
+
+            create_command("git")?
+                .args([
+                    OsStr::new("--git-dir"),
+                    repo_dir.path().as_os_str(),
+                    OsStr::new("--work-tree"),
+                    worktree_dir.path().as_os_str(),
+                    OsStr::new("checkout"),
+                    OsStr::new("-f"),
+                ])
+                .output()?;
+
+            let mut the_file = std::fs::File::create(worktree_dir.path().join("test_file"))?;
+            writeln!(the_file, "content")?;
+            the_file.sync_all()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .env("GIT_WORK_TREE", worktree_dir.path().to_string_lossy())
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$all_status"
+                    style = ""
+                })
+                .collect();
+            let expected = Some("?".to_string());
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
     fn ahead(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
