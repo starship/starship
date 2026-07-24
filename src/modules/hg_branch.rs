@@ -80,7 +80,7 @@ fn get_hg_branch_name(hg_root: &Path) -> Result<String, Error> {
 }
 
 fn get_hg_current_bookmark(hg_root: &Path) -> Result<String, Error> {
-    read_file(hg_root.join(".hg").join("bookmarks.current"))
+    read_file(hg_root.join(".hg").join("bookmarks.current")).map(|s| s.trim().to_string())
 }
 
 fn get_hg_topic_name(hg_root: &Path) -> Result<String, Error> {
