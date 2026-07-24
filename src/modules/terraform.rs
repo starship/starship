@@ -81,7 +81,7 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
     };
     match utils::read_file(datadir.join("environment")) {
         Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
-        Ok(s) => Some(s),
+        Ok(s) => Some(s.trim().to_string()),
         _ => None,
     }
 }
