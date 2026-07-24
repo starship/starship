@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_state::GitStateConfig;
-use crate::context::Repo;
+use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the state of the git repository at the current directory
@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_state");
     let config: GitStateConfig = GitStateConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     let state_description = get_state_description(repo, &config)?;
 
@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 ///
 /// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
 fn get_state_description<'a>(
-    repo: &'a Repo,
+    repo: &'a GitRepo,
     config: &GitStateConfig<'a>,
 ) -> Option<StateDescription<'a>> {
     match repo.state.as_ref()? {
@@ -84,7 +84,7 @@ fn get_state_description<'a>(
 }
 
 // TODO: Use future gitoxide API to get the state of the rebase
-fn describe_rebase_apply<'a>(repo: &'a Repo, state_label: &'a str) -> StateDescription<'a> {
+fn describe_rebase_apply<'a>(repo: &'a GitRepo, state_label: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files

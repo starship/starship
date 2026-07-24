@@ -9,7 +9,6 @@ use clap::Parser;
 use gix::{
     Repository, ThreadSafeRepository,
     sec::{self as git_sec, trust::DefaultForLevel},
-    state as git_state,
 };
 #[cfg(test)]
 use std::collections::HashMap;
@@ -33,6 +32,14 @@ pub use crate::utils::statusline::{
     ClaudeCodeData, ContextWindow, CostInfo, CurrentUsage, ModelInfo, Workspace,
 };
 
+mod git_repo;
+mod jj_repo;
+
+pub use git_repo::{GitRemote, GitRepo};
+pub use jj_repo::JJRepo;
+#[cfg(test)]
+pub use jj_repo::mock_jj_cmd;
+
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
 /// of the prompt.
@@ -55,7 +62,10 @@ pub struct Context<'a> {
     pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
-    repo: OnceLock<Result<Repo, Box<gix::discover::Error>>>,
+    git_repo: OnceLock<Result<GitRepo, Box<gix::discover::Error>>>,
+
+    /// Private field to store JJ information for modules who need it
+    jj_repo: OnceLock<Option<JJRepo>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -175,7 +185,8 @@ impl<'a> Context<'a> {
             current_dir,
             logical_dir,
             dir_contents: OnceLock::new(),
-            repo: OnceLock::new(),
+            git_repo: OnceLock::new(),
+            jj_repo: OnceLock::new(),
             shell,
             target,
             width,
@@ -323,9 +334,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, &gix::discover::Error> {
-        self.repo
-            .get_or_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+    pub fn get_git_repo(&self) -> Result<&GitRepo, &gix::discover::Error> {
+        self.git_repo
+            .get_or_init(|| -> Result<GitRepo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -386,7 +397,7 @@ impl<'a> Context<'a> {
                     .boolean("core.fsmonitor")
                     .unwrap_or(false);
 
-                Ok(Repo {
+                Ok(GitRepo {
                     repo: shared_repo,
                     branch: branch.map(|b| b.shorten().to_string()),
                     workdir: repository.workdir().map(PathBuf::from),
@@ -398,6 +409,16 @@ impl<'a> Context<'a> {
             })
             .as_ref()
             .map_err(std::convert::AsRef::as_ref)
+    }
+
+    /// Will lazily discover Jujutsu repo root when a module requests it.
+    pub fn get_jj_repo(&self) -> Option<&JJRepo> {
+        self.jj_repo.get_or_init(|| JJRepo::discover(self)).as_ref()
+    }
+
+    #[cfg(test)]
+    pub fn set_jj_repo(&mut self, repo: JJRepo) {
+        self.jj_repo = OnceLock::from(Some(repo));
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, &std::io::Error> {
@@ -714,86 +735,6 @@ impl DirContents {
     }
 }
 
-pub struct Repo {
-    pub repo: ThreadSafeRepository,
-
-    /// If `current_dir` is a git repository or is contained within one,
-    /// this is the short name of the current branch name of that repo,
-    /// i.e. `main`.
-    pub branch: Option<String>,
-
-    /// If `current_dir` is a git repository or is contained within one,
-    /// this is the path to the root of that repo.
-    pub workdir: Option<PathBuf>,
-
-    /// The path of the repository's `.git` directory.
-    pub path: PathBuf,
-
-    /// State
-    pub state: Option<git_state::InProgress>,
-
-    /// Remote repository
-    pub remote: Option<Remote>,
-
-    /// Contains `true` if the value of `core.fsmonitor` is set to `true`.
-    /// If not `true`, `fsmonitor` is explicitly disabled in git commands.
-    pub(crate) fs_monitor_value_is_true: bool,
-}
-
-impl Repo {
-    /// Opens the associated git repository.
-    pub fn open(&self) -> Repository {
-        self.repo.to_thread_local()
-    }
-
-    /// Wrapper to execute external git commands.
-    /// Handles adding the appropriate `--git-dir` and `--work-tree` flags to the command.
-    /// Also handles additional features required for security, such as disabling `fsmonitor`.
-    /// At this time, mocking is not supported.
-    pub fn exec_git<T: AsRef<OsStr> + Debug>(
-        &self,
-        context: &Context,
-        git_args: impl IntoIterator<Item = T>,
-    ) -> Option<CommandOutput> {
-        let mut command = create_command("git").ok()?;
-
-        // A value of `true` should not execute external commands.
-        let fsm_config_value = if self.fs_monitor_value_is_true {
-            "core.fsmonitor=true"
-        } else {
-            "core.fsmonitor="
-        };
-
-        command.env("GIT_OPTIONAL_LOCKS", "0").args([
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--git-dir"),
-            self.path.as_os_str(),
-            OsStr::new("-c"),
-            OsStr::new(fsm_config_value),
-        ]);
-
-        // Bare repositories might not have a workdir, so we need to check for that.
-        if let Some(wt) = self.workdir.as_ref() {
-            command.args([OsStr::new("--work-tree"), wt.as_os_str()]);
-        }
-
-        command.args(git_args);
-        log::trace!("Executing git command: {command:?}");
-
-        exec_timeout(
-            &mut command,
-            Duration::from_millis(context.root_config.command_timeout),
-        )
-    }
-}
-
-/// Remote repository
-pub struct Remote {
-    pub branch: Option<String>,
-    pub name: Option<String>,
-}
-
 // A struct of Criteria which will be used to verify current PathBuf is
 // of X language, criteria can be set via the builder pattern
 pub struct ScanDir<'a> {
@@ -921,7 +862,7 @@ fn get_current_branch(repository: &Repository) -> Option<gix::refs::FullName> {
 fn get_remote_repository_info(
     repository: &Repository,
     branch_name: Option<&gix::refs::FullNameRef>,
-) -> Option<Remote> {
+) -> Option<GitRemote> {
     let branch_name = branch_name?;
     let branch = repository
         .branch_remote_ref_name(branch_name, gix::remote::Direction::Fetch)
@@ -931,7 +872,7 @@ fn get_remote_repository_info(
         .branch_remote_name(branch_name.shorten(), gix::remote::Direction::Fetch)
         .map(|n| n.as_bstr().to_string());
 
-    Some(Remote { branch, name })
+    Some(GitRemote { branch, name })
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

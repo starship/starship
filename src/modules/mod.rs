@@ -50,6 +50,10 @@ mod hg_branch;
 mod hg_state;
 mod hostname;
 mod java;
+mod jj_bookmark;
+mod jj_change;
+mod jj_metrics;
+mod jj_status;
 mod jobs;
 mod julia;
 mod kotlin;
@@ -174,6 +178,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hg_state" => hg_state::module(context),
             "hostname" => hostname::module(context),
             "java" => java::module(context),
+            "jj_bookmark" => jj_bookmark::module(context),
+            "jj_change" => jj_change::module(context),
+            "jj_metrics" => jj_metrics::module(context),
+            "jj_status" => jj_status::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -295,11 +303,13 @@ pub fn description(module: &str) -> &'static str {
         "fossil_branch" => "The active branch of the check-out in your current directory",
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
-        "git_branch" => "The active branch of the repo in your current directory",
-        "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
-        "git_metrics" => "The currently added/deleted lines in your repo",
-        "git_state" => "The current git operation, and it's progress",
-        "git_status" => "Symbol representing the state of the repo",
+        "git_branch" => "The active branch of the current Git repo",
+        "git_commit" => "The active commit (and tag if any) of the current Git repo",
+        "git_metrics" => "The currently added/deleted lines in your Git repo",
+        "git_state" => "The current Git operation, and it's progress",
+        "git_status" => {
+            "Symbols representing the state of the current Git repo, filtered to your current directory"
+        }
         "gleam" => "The currently installed version of Gleam",
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",
@@ -311,6 +321,10 @@ pub fn description(module: &str) -> &'static str {
         "hg_state" => "The current hg operation",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
+        "jj_bookmark" => "The closest ancestor bookmark in Jujutsu",
+        "jj_change" => "The current change in Jujutsu",
+        "jj_metrics" => "The number of added and deleted lines in Jujutsu",
+        "jj_status" => "Current status in Jujutsu represented via symbols",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",

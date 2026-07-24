@@ -2564,6 +2564,211 @@ By default the module will be shown if any of the following conditions are met:
 symbol = '🌟 '
 ```
 
+## JJ Bookmark
+
+The `jj_bookmark` module shows the [Jujutsu](https://docs.jj-vcs.dev/) bookmark when the current directory is in a Jujutsu repository.
+
+It looks at `@ | @-` to find bookmarks and will prioritize displaying those of `@` (after filtering has been applied).
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
+### Options
+
+| Option              | Default                                                            | Description                                                                              |
+| ------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `format`            | `"on [$symbol$bookmark( \\(+$overflow_count others\\))]($style) "` | The format for the module.                                                               |
+| `symbol`            | `" "`                                                             | The symbol used in the `$symbol` variable.                                               |
+| `style`             | `"bold purple"`                                                    | The style for the module.                                                                |
+| `truncation_length` | `u16::MAX`                                                         | Truncates the bookmark's name and remote to `N` graphemes.                               |
+| `truncation_symbol` | `"…"`                                                              | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
+| `diverged_symbol`   | `"*"`                                                              | Symbol appended to the bookmark to indicate it has diverged from its remote state        |
+| `ignore_names`      | `[]`                                                               | A list of bookmark names to avoid displaying. Useful for `'master'` or `'main'`.         |
+| `ignore_remotes`    | `[]`                                                               | A list of bookmark remotes to avoid displaying. Useful for `'upstream'` or `'fork'`.     |
+| `disabled`          | `false`                                                            | Disables the `jj_bookmark` module.                                                       |
+
+### Variables
+
+| Variable         | Example | Description                                              |
+| ---------------- | ------- | -------------------------------------------------------- |
+| bookmark         | `main`  | The bookmark's name, remote and status as provided by JJ |
+| overflow_count\* | `3`     | How many other bookmarks were found (and not ignored)    |
+| symbol           |         | Mirrors the value of option `symbol`                     |
+| style\*\*        |         | Mirrors the value of option `style`                      |
+
+- *: This variable is only set if non-zero
+- **: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_bookmark]
+ignore_bookmarks = ["main", "master"]
+diverged_symbol = "⇕"
+```
+
+## JJ Change
+
+The `jj_change` module shows the current [Jujutsu](https://docs.jj-vcs.dev/) change and optionally the underlying commit when the current directory is in a Jujutsu repository.
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
+### Options
+
+| Option                | Default      | Description                                                               |
+| --------------------- | ------------ | ------------------------------------------------------------------------- |
+| `format`              | `"$change "` | Format string for the module                                              |
+| `prefix_style`        | `bold green` | Value of the `$prefix_style` variable in the format string                |
+| `suffix_style`        | `dimmed`     | Value of the `$suffix_style` variable in the format string                |
+| `change_hash_length`* | `7`          | The length of the displayed change hash, when combining prefix and suffix |
+| `commit_hash_length`* | `7`          | The length of the displayed commit hash, when combining prefix and suffix |
+| `disabled`            | `false`      | Disable the module                                                        |
+
+*: The length of `$<id>_prefix` will be `max(<id>_prefix.len(), <id>_hash_length)`, to ensure the shortest unique
+prefix is always correctly displayed
+
+### Variables
+
+| Variable       | Example | Description                                                                                      |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| change         |         | The full styled change at once: `[$change_prefix]($prefix_style)[$change_suffix]($suffix_style)` |
+| change_prefix  | `vpo`   | Current change hash shortest unique prefix                                                       |
+| change_suffix  | `vrqx`  | Current change hash, truncated to `change_hash_length` and after removing `change_prefix`        |
+| commit         |         | The full styled commit at once: `[$commit_prefix]($prefix_style)[$commit_suffix]($suffix_style)` |
+| commit_prefix  | `303`   | Current commit hash shortest unique prefix                                                       |
+| commit_suffix  | `63e4`  | Current commit hash, truncated to `commit_hash_length` and after removing `commit_prefix`        |
+| prefix_style\* |         | Mirrors the value of option `prefix_style`                                                       |
+| suffix_style\* |         | Mirrors the value of option `suffix_style`                                                       |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_change]
+format = "($change:$commit) "
+```
+
+## JJ Metrics
+
+The `jj_metrics` module shows the number of added and deleted lines in the current [Jujutsu](https://docs.jj-vcs.dev/) repository.
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
+### Options
+
+| Option               | Default                                                      | Description                           |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `'bold green'`                                               | The style for the added count.        |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
+| `disabled`           | `false`                                                      | Disables the `jj_metrics` module.     |
+
+### Variables
+
+| Variable        | Example | Description                                 |
+| --------------- | ------- | ------------------------------------------- |
+| added           | `1`     | The current number of added lines           |
+| deleted         | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
+## JJ Status
+
+The `jj_status` module shows symbols representing the state of the [Jujutsu](https://docs.jj-vcs.dev/) repo in your current directory.
+
+> [!TIP]
+> Jujutsu modules are not in the default `format` entry nor is JJ first in the [`vcs`](#vcs) module, you can either:
+>
+> - Use `$all`
+> - Add them manually
+> - Use the `vcs` module with `order = ["jj", "git", "..."]`
+
+### Options
+
+| Option                | Default                   | Description                                                                |
+| --------------------- | ------------------------- | -------------------------------------------------------------------------- |
+| `format`              | `'([\[$all\]]($style) )'` | The default format for `jj_status`.                                        |
+| `conflicted`          | `'!'`                     | The format shown when the current change or a parent has merge conflicts.  |
+| `description_empty`   | `'◌'`                     | The format shown when the current change has no description.               |
+| `description_present` | `''`                      | The format shown when the current change has a description.                |
+| `hidden`              | `''`                      | The format shown when the current change is hidden.                        |
+| `immutable`           | `'◆'`                     | The format shown when the current change is immutable.                     |
+| `added`               | `'+'`                     | The format shown when a new file has been added in the working directory.  |
+| `copied`              | `'='`                     | The format shown when a new file has been copied in the working directory. |
+| `deleted`             | `'✘'`                     | The format shown when a file has been deleted in the working directory.    |
+| `modified`            | `'~'`                     | The format shown when a file has been modified in the working directory.   |
+| `renamed`             | `'»'`                     | The format shown when a file has been renamed in the working directory.    |
+| `style`               | `'bold red'`              | The style for the module.                                                  |
+| `disabled`            | `false`                   | Disables the `jj_status` module.                                           |
+
+### Variables
+
+The following variables can be used in `format`:
+
+| Variable      | Description                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `all`         | Shortcut for `$conflicted$description$hidden$immutable$added$copied$deleted$modified$renamed`. |
+| `conflicted`  | Displays `conflicted` when the current change or a parent has merge conflicts.                 |
+| `description` | Displays `description_empty` or `description_present` accordingly.                             |
+| `hidden`      | Displays `hidden` when the current change is hidden.                                           |
+| `immutable`   | Displays `immutable` when the current change is immutable.                                     |
+| `added`       | Displays `added` when a file has been added in the working directory.                          |
+| `copied`      | Displays `copied` when a file has been copied in the working directory.                        |
+| `deleted`     | Displays `deleted` when a file has been deleted in the working directory.                      |
+| `modified`    | Displays `modified` when a file has been modified in the working directory.                    |
+| `renamed`     | Displays `renamed` when a file has been renamed in the working directory.                      |
+| style\*       | Mirrors the value of option `style`.                                                           |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_status]
+conflicted = '🏳'
+description_present = ""
+hidden = '🥷'
+immutable = '🔒'
+added = '📦'
+deleted = '🗑'
+modified = '📝'
+renamed = '👅'
+```
+
 ## Jobs
 
 The `jobs` module shows the current number of jobs running.
@@ -5045,10 +5250,11 @@ The module will be shown only if a configured VCS is currently in use.
 
 | Option           | Default                                                     | Description                                           |
 | ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `order`          | `["git", "jj", "hg", "pijul", "fossil"]`                    | The order in which to search VCSes.                   |
 | `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
 | `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
 | `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `jj_modules`     | `"$jj_bookmark$jj_change$jj_metrics$jj_status"`             | Modules to show when a Jujutsu repository is found.   |
 | `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
 | `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
 
