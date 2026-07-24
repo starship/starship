@@ -68,7 +68,7 @@ regex = { version = "1.13.1", default-features = false, features = ["perf", "std
 rust-ini = "0.21.3"
 semver = "1.0.28"
 serde = { version = "1.0.229", features = ["derive"] }
-serde_json = "1.0.150"
+serde_json = "1.0.151"
 sha1 = "0.11.0"
 shadow-rs = { version = "2.0.0", default-features = false, features = ["build"] }
 shell-words = "1.1.1"
