@@ -1206,6 +1206,7 @@ java {
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
+
     #[test]
     fn test_extract_gradle_version_kotlin_dsl() -> io::Result<()> {
         let config_name = "build.gradle.kts";
