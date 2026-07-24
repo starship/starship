@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/starship/starship/compare/v1.26.0...v1.26.1) (2026-07-24)
+
+
+### Bug Fixes
+
+* **bash:** avoid duplicating PS0 preexec hook ([#7587](https://github.com/starship/starship/issues/7587)) ([8f28dfc](https://github.com/starship/starship/commit/8f28dfcb1ca3242fba00a3cf98c10ee24605c3ed))
+
 ## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-28)
 
 
