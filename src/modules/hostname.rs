@@ -16,10 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
-    let is_ssh = ["SSH_CONNECTION", "SSH_TTY", "SSH_CLIENT"]
-        .iter()
-        .any(|s| context.get_env_os(s).is_some());
-
+    let is_ssh = context.is_ssh_session();
     if (config.ssh_only && !is_ssh) || !context.detect_env_vars(&config.detect_env_vars) {
         return None;
     }
