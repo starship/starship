@@ -45,7 +45,7 @@ impl StarshipPath {
 
     /// Returns POSIX quoted path to starship binary
     fn sprint(&self) -> io::Result<String> {
-        self.str_path().map(|p| shell_words::quote(p).into_owned())
+        self.str_path().map(quote_posix_path)
     }
 
     /// `PowerShell` specific path escaping
