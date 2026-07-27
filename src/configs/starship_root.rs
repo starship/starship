@@ -51,6 +51,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nats",
     "directory",
     "vcsh",
+    "yadm",
     "fossil_branch",
     "fossil_metrics",
     "git_branch",

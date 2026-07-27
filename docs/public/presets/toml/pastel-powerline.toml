@@ -6,6 +6,7 @@ $os\
 $username\
 [](bg:#DA627D fg:#9A348E)\
 $directory\
+$yadm\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
 $git_status\

@@ -1910,6 +1910,16 @@
         "detect_folders": []
       }
     },
+    "yadm": {
+      "$ref": "#/$defs/YadmConfig",
+      "default": {
+        "format": "[$symbol]($style)",
+        "symbol": " ",
+        "style": "red",
+        "repo_path": null,
+        "disabled": false
+      }
+    },
     "zig": {
       "$ref": "#/$defs/ZigConfig",
       "default": {
@@ -7098,6 +7108,35 @@
             "type": "string"
           },
           "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "YadmConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol]($style)"
+        },
+        "symbol": {
+          "type": "string",
+          "default": " "
+        },
+        "style": {
+          "type": "string",
+          "default": "red"
+        },
+        "repo_path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false

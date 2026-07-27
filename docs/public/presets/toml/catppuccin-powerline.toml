@@ -6,6 +6,7 @@ $os\
 $username\
 [](bg:peach fg:red)\
 $directory\
+$yadm\
 [](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
