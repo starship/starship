@@ -416,23 +416,25 @@ The `claude_model` module displays the current Claude model being used in the se
 
 #### Options
 
-| Option          | Default                      | Description                                                                               |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`        | `'[$symbol$model]($style) '` | The format for the module.                                                                |
-| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | The style for the module.                                                                 |
-| `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| Option            | Default                      | Description                                                                               |
+| ----------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`          | `'[$symbol$model]($style) '` | The format for the module.                                                                |
+| `symbol`          | `'🤖 '`                      | The symbol shown before the model name.                                                   |
+| `thinking_symbol` | `'💭 '`                      | The symbol shown when extended thinking is enabled.                                       |
+| `style`           | `'bold blue'`                | The style for the module.                                                                 |
+| `model_aliases`   | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
+| `disabled`        | `false`                      | Disables the `claude_model` module.                                                       |
 
 #### Variables
 
-| Variable | Example             | Description                             |
-| -------- | ------------------- | --------------------------------------- |
-| model    | `Claude 3.5 Sonnet` | The display name of the current model   |
-| model_id | `claude-3-5-sonnet` | The model ID                            |
-| effort   | `high`              | The reasoning effort level, if reported |
-| symbol   |                     | Mirrors the value of option `symbol`    |
-| style\*  |                     | Mirrors the value of option `style`     |
+| Variable        | Example             | Description                                                       |
+| --------------- | ------------------- | ----------------------------------------------------------------- |
+| model           | `Claude 3.5 Sonnet` | The display name of the current model                             |
+| model_id        | `claude-3-5-sonnet` | The model ID                                                      |
+| effort          | `high`              | The reasoning effort level; empty when not reported               |
+| symbol          |                     | Mirrors the value of option `symbol`                              |
+| thinking_symbol | `💭`                | Mirrors option `thinking_symbol`; empty when thinking is disabled |
+| style\*         |                     | Mirrors the value of option `style`                               |
 
 \*: This variable can only be used as a part of a style string
 
@@ -442,9 +444,11 @@ The `claude_model` module displays the current Claude model being used in the se
 # ~/.config/starship.toml
 
 # Basic customization
+# $thinking_symbol renders only while extended thinking is enabled
 [claude_model]
-format = "on [$symbol$model]($style) "
+format = "on [$thinking_symbol$symbol$model]($style) "
 symbol = "🧠 "
+thinking_symbol = "💭 "
 style = "bold cyan"
 
 # Using model aliases for vendor-specific model names
