@@ -323,7 +323,7 @@ pub fn get_static_repo_status(
 pub fn uses_reftables(repo: &gix::Repository) -> bool {
     repo.config_snapshot()
         .string("extensions.refstorage")
-        .is_some_and(|kind| kind.as_ref() == "reftable")
+        .is_some_and(|kind| kind == "reftable")
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
