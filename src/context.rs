@@ -489,6 +489,13 @@ impl<'a> Context<'a> {
     pub fn get_config_path_os(&self) -> Option<OsString> {
         get_config_path_os(&self.env)
     }
+
+    /// Checks if it is a SSH session
+    pub fn is_ssh_session(&self) -> bool {
+        ["SSH_CONNECTION", "SSH_TTY", "SSH_CLIENT"]
+            .iter()
+            .any(|s| self.get_env_os(s).is_some())
+    }
 }
 
 impl Default for Context<'_> {
