@@ -103,6 +103,7 @@ pub const ALL_MODULES: &[&str] = &[
     "sudo",
     "swift",
     "terraform",
+    "disk_usage",
     "time",
     "typst",
     "username",
