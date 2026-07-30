@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
     // Return None if not in git repository
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     if repo.open().workdir().is_none() {
         log::debug!("This is a bare repository, git_status is not applicable");
@@ -191,7 +191,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
-    repo: &'a context::Repo,
+    repo: &'a context::GitRepo,
     config: GitStatusConfig<'a>,
     repo_status: OnceLock<Option<Arc<RepoStatus>>>,
     stashed_count: OnceLock<Option<usize>>,
@@ -200,7 +200,7 @@ struct GitStatusInfo<'a> {
 impl<'a> GitStatusInfo<'a> {
     pub fn load(
         context: &'a Context,
-        repo: &'a context::Repo,
+        repo: &'a context::GitRepo,
         config: GitStatusConfig<'a>,
     ) -> Self {
         Self {
@@ -304,7 +304,7 @@ impl<'a> GitStatusInfo<'a> {
 /// The trashing is only expected when tests run though, as otherwise one path is used with a variety of modules.
 pub fn get_static_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<Arc<RepoStatus>> {
     static REPO_STATUS: parking_lot::Mutex<Option<(Arc<RepoStatus>, PathBuf)>> =
@@ -329,7 +329,7 @@ pub fn uses_reftables(repo: &gix::Repository) -> bool {
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(
     context: &Context,
-    repo: &context::Repo,
+    repo: &context::GitRepo,
     config: &GitStatusConfig,
 ) -> Option<RepoStatus> {
     log::debug!("New repo status created");
@@ -576,7 +576,7 @@ fn sanitize_rename_tracking(mut config: gix::diff::Rewrites) -> gix::diff::Rewri
     config
 }
 
-fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
+fn get_stashed_count(repo: &context::GitRepo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
         // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
