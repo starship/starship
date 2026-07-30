@@ -167,7 +167,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// Given `remote_names`, find the longest matching remote name in `remote_ref_name` and return it.
 fn find_longest_matching_remote_name(
     remote_ref_name: &gix::refs::FullNameRef,
-    remote_names: &gix::remote::Names<'_>,
+    remote_names: &gix::remote::Names,
 ) -> Option<String> {
     let (category, shorthand_name) = remote_ref_name.category_and_short_name()?;
     if !matches!(category, gix::refs::Category::RemoteBranch) {
