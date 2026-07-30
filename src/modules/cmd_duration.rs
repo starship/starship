@@ -116,6 +116,7 @@ fn undistract_me<'a>(
 
 #[cfg(feature = "notify")]
 fn sanitize_notification_text(text: &str) -> String {
+    // Private-use glyphs depend on terminal fonts and render as tofu in desktop notifications.
     text.chars()
         .filter(|character| {
             !matches!(
