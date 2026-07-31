@@ -2765,14 +2765,16 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 To customize the style of the module for specific environments, use the following configuration as
 part of the `contexts` list:
 
-| Variable          | Description                                                                              |
-| ----------------- | ---------------------------------------------------------------------------------------- |
-| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
-| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
-| `context_alias`   | Context alias to display instead of the full context name.                               |
-| `user_alias`      | User alias to display instead of the full user name.                                     |
-| `style`           | The style for the module when using this context. If not set, will use module's style.   |
-| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+| Variable            | Description                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| `context_pattern`   | **Required** Regular expression to match current Kubernetes context name.                |
+| `user_pattern`      | Regular expression to match current Kubernetes user name.                                |
+| `namespace_pattern` | Regular expression to match current Kubernetes namespace name.                           |
+| `context_alias`     | Context alias to display instead of the full context name.                               |
+| `user_alias`        | User alias to display instead of the full user name.                                     |
+| `namespace_alias`   | Namespace alias to display instead of the full namespace name.                           |
+| `style`             | The style for the module when using this context. If not set, will use module's style.   |
+| `symbol`            | The symbol for the module when using this context. If not set, will use module's symbol. |
 
 Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
 regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
@@ -2846,6 +2848,19 @@ context_alias = "openshift"
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
 context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
+
+[[kubernetes.contexts]]
+# Styling based on the current namespace — useful when multiple environments share the same cluster
+context_pattern = ".*"
+namespace_pattern = "prod-.*"
+style = "bold red"
+symbol = "🚨 "
+
+[[kubernetes.contexts]]
+context_pattern = ".*"
+namespace_pattern = "dev-.*"
+style = "bold green"
+namespace_alias = "dev"
 ```
 
 ## Line Break

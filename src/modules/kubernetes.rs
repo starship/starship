@@ -198,8 +198,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         });
 
     // Select the first style that matches the context_pattern and,
-    // if it is defined, the user_pattern
-    let (matched_context_config, display_context, display_user) = config
+    // if defined, the user_pattern and namespace_pattern
+    let (matched_context_config, display_context, display_user, display_namespace) = config
         .contexts
         .iter()
         .find_map(|context_config| {
@@ -219,9 +219,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 return None;
             }
 
-            Some((Some(context_config), context_alias, user_alias))
+            let namespace_alias = get_aliased_name(
+                context_config.namespace_pattern,
+                ctx_components.namespace.as_deref(),
+                context_config.namespace_alias,
+            );
+            if matches!(
+                (context_config.namespace_pattern, &namespace_alias),
+                (Some(_), None)
+            ) {
+                // defined pattern, but it didn't match
+                return None;
+            }
+
+            Some((
+                Some(context_config),
+                context_alias,
+                user_alias,
+                namespace_alias,
+            ))
         })
-        .unwrap_or_else(|| (None, current_kube_ctx_name.to_string(), ctx_components.user));
+        .unwrap_or_else(|| {
+            (
+                None,
+                current_kube_ctx_name.to_string(),
+                ctx_components.user,
+                None,
+            )
+        });
 
     // TODO: remove deprecated aliases after starship 2.0
     let display_context =
@@ -236,6 +261,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .and_then(|ctx_cfg| ctx_cfg.symbol)
         .unwrap_or(config.symbol);
 
+    let display_namespace = display_namespace.or(ctx_components.namespace);
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -248,8 +275,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "context" => Some(Ok(Cow::Borrowed(display_context.as_str()))),
-                "namespace" => ctx_components
-                    .namespace
+                "namespace" => display_namespace
                     .as_ref()
                     .map(|kube_ns| Ok(Cow::Borrowed(kube_ns.as_str()))),
                 "cluster" => ctx_components
@@ -1627,6 +1653,188 @@ users: []
             .collect();
 
         let expected = Some("test_user test_context test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_namespace_pattern_matches() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: prod-app
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                namespace_pattern = "prod-.*"
+                style = "bold green"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Green.bold().paint("§ test_context (prod-app)")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_namespace_pattern_does_not_match() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: dev-app
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                namespace_pattern = "prod-.*"
+                style = "bold green"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Red.bold().paint("☸ test_context (dev-app)")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_all_patterns_must_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: prod-app
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "$symbol$context ($user )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                user_pattern = "test.*"
+                namespace_pattern = "prod-.*"
+                context_alias = "yy"
+                user_alias = "xx"
+                namespace_alias = "pp"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ yy xx pp".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_namespace_alias_regex_replace() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+      namespace: production-123
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                format = "$symbol($user )($context )($cluster )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                namespace_pattern = "production-(.*)"
+                namespace_alias = "prod-$1"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ test_user test_context prod-123".to_string());
         assert_eq!(expected, actual);
         dir.close()
     }
