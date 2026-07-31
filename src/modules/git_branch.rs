@@ -4,7 +4,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
-use crate::context::Repo;
+use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
 use crate::modules::git_status::uses_reftables;
 
@@ -27,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     let gix_repo = repo.open();
     if config.ignore_bare_repo && gix_repo.workdir().is_none() {
@@ -167,7 +167,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// Given `remote_names`, find the longest matching remote name in `remote_ref_name` and return it.
 fn find_longest_matching_remote_name(
     remote_ref_name: &gix::refs::FullNameRef,
-    remote_names: &gix::remote::Names<'_>,
+    remote_names: &gix::remote::Names,
 ) -> Option<String> {
     let (category, shorthand_name) = remote_ref_name.category_and_short_name()?;
     if !matches!(category, gix::refs::Category::RemoteBranch) {
@@ -184,7 +184,7 @@ fn find_longest_matching_remote_name(
 /// Returns `None` if not on a branch (detached HEAD) or if the git command fails.
 fn get_branch_info_from_git(
     context: &Context,
-    repo: &Repo,
+    repo: &GitRepo,
 ) -> Option<(gix::refs::FullName, Option<gix::refs::FullName>)> {
     // Get current branch name using git symbolic-ref
     let branch_output = repo.exec_git(context, ["symbolic-ref", "HEAD"])?;

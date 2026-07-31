@@ -41,12 +41,12 @@ clap_complete_nushell = "4.6.1"
 dirs = "6.0.0"
 dunce = "1.0.5"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.85.0", default-features = false, features = ["max-performance-safe", "revision", "zlib-rs", "status", "sha1", "sha256"] }
+gix = { version = "0.86.0", default-features = false, features = ["max-performance-safe", "revision", "status", "sha1", "sha256"] }
 guess_host_triple = "0.1.5"
 home = "0.5.12"
 indexmap = { version = "2.14.0", features = ["serde"] }
-jiff = { version = "0.2.34", features = ["serde"] }
-jsonc-parser = { version = "0.33.0", features = ["serde"] }
+jiff = { version = "0.2.35", features = ["serde"] }
+jsonc-parser = { version = "0.33.1", features = ["serde"] }
 log = { version = "0.4.33", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876

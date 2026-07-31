@@ -35,7 +35,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if config.require_repo && context.get_repo().is_err() {
+    if config.require_repo && context.get_git_repo().is_err() {
         return None;
     }
 

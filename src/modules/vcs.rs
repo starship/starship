@@ -65,7 +65,7 @@ pub fn discover_repo_root<'a>(context: &'a Context, vcs: Vcs) -> Option<Cow<'a, 
         }),
         Vcs::Hg => scan.set_folders(&[".hg"]),
         Vcs::Pijul => scan.set_folders(&[".pijul"]),
-        Vcs::Git => return context.get_repo().ok().map(|r| r.repo.path().into()),
+        Vcs::Git => return context.get_git_repo().ok().map(|r| r.repo.path().into()),
     };
 
     scan.scan().map(Into::into)
