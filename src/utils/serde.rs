@@ -94,7 +94,7 @@ impl ValueDeserializer<'_> {
             (Some(key), Some(StructInfo { name, .. })) => {
                 // Prettify name of struct
                 let display_name = name.strip_suffix("Config").unwrap_or(name);
-                ValueError::custom(format!("Error in '{display_name}' at '{key}': {msg}",))
+                ValueError::custom(format!("Error in '{display_name}' at '{key}': {msg}"))
             }
             // Handling other cases leads to duplicates in the error message.
             _ => ValueError::custom(msg),

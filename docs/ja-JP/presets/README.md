@@ -1,6 +1,7 @@
 # プリセット
 
-以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新して[PR](https://github.com/starship/starship/edit/master/docs/presets/README.md)を送信してください！ 😊
+以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。
+以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新して[PR](https://github.com/starship/starship/edit/main/docs/presets/README.md)を送信してください！ 😊 😊
 
 プリセットの使い方を確認するには画像をクリックしてください。
 
@@ -20,19 +21,19 @@
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-このプリセットは付属のモジュール全てのフォーマットを変更し、デフォルトのStarshipの表示("via", "on", etc.) から、それぞれの情報を括弧で区分けするように変更します。
+このプリセットは付属のモジュール全てのフォーマットを変更し、デフォルトのStarshipの表示("via", "on", etc.)
 
 [![Bracketed Segmentsプリセットのスクリーンショット](/presets/img/bracketed-segments.png "Bracketed Segmentsプリセットを表示するにはクリックしてください")](./bracketed-segments)
 
 ## [Plain Text Symbols](./plain-text.md)
 
-このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。
+このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。 Unicodeにアクセスできない場合に最適です。
 
 [![Plain Text Symbolsプリセットのスクリーンショット](/presets/img/plain-text-symbols.png "Plain Text Symbolsプリセットを表示するにはクリックしてください")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-このプリセットは言語ランタイムのバージョンを非表示にします。 コンテナまたは仮想環境で作業している場合は、これはあなたのためのものです。
+このプリセットは言語ランタイムのバージョンを非表示にします。 コンテナまたは仮想環境で作業している場合は、これはあなたのためのものです。 コンテナまたは仮想環境で作業している場合は、これはあなたのためのものです。
 
 [![Hide Runtime Versionsプリセットのスクリーンショット](/presets/img/no-runtime-versions.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-runtimes)
 
@@ -51,6 +52,7 @@
 ## [Pastel Powerline](./pastel-powerline.md)
 
 このプリセットは[M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)にインスパイアされています。 また、starshipでパス置換がどのように機能するかを示しています。
+また、starshipでパス置換がどのように機能するかを示しています。
 
 [![Pastel Powerlineプリセットのスクリーンショット](/presets/img/pastel-powerline.png "Pure Promptプリセットを表示するにはクリックしてください")](./pastel-powerline)
 
@@ -75,6 +77,3 @@
 ## [Catppuccin Powerline](./catppuccin-powerline.md)
 
 [Catppuccin](https://github.com/catppuccin/catppuccin) のテーマを利用して [Gruvbox Rainbow](./gruvbox-rainbow.md) に最小限の変更を加えたプリセットです。
-
-[![Catppuccin プリセットのスクリーンショット](/presets/img/catppuccin-powerline.png "Catppuccin プリセットを表示するにはクリックしてください
-")](./catppuccin-powerline)

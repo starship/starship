@@ -6,7 +6,7 @@
 
 ## TransientPrompt для PowerShell
 
-Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить, запустите `Enable-TransientPrompt` в сеансе оболочки. Чтобы включить его глобально, вставьте это в ваш `$PROFILE` Переход может быть отключён на лету с помощью `Disable-TransientPrompt`.
+Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить это, запустите `enable_transience` в сеансе оболочки. Чтобы включить его глобально, добавьте это в ваш `~/.config/fish/config.fish`. Переход может быть отключён на лету с помощью `disable_transience`.
 
 По умолчанию, левая сторона ввода заменяется на `>`. Для настройки определите новую функцию под названием `Invoke-Starship-TransientFunction`. Например, чтобы отобразить модуль Starship `character`, вы должны выполнить
 
@@ -52,7 +52,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt и TransientRightPrompt в Fish
 
-Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить это, запустите `enable_transience` в сеансе оболочки. Чтобы включить его глобально, добавьте это в ваш `~/.config/fish/config.fish`. Переход может быть отключён на лету с помощью `disable_transience`.
+Можно заменить предыдущий выведенный промпт на пользовательскую строку. Это полезно в тех случаях, когда весь промпт не всегда нужен. Чтобы включить, запустите `Enable-TransientPrompt` в сеансе оболочки. To make it permanent, put
+this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with
+`disable_transience`.
 
 Обратите внимание, что в случае с Fish, временный промпт печатается только в том случае, если командная строка не пустая и синтаксически верна.
 
@@ -124,7 +126,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Пользовательские команды перед командной строкой и перед запуском Bash
 
-Bash не имеет формальной среды preexec/precmd, как и большинство других оболочек. Из-за этого трудно предоставить полностью настраиваемые хуки в `bash`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+Bash не имеет формальной среды preexec/precmd, как и большинство других оболочек.
+Из-за этого трудно предоставить полностью настраиваемые хуки в `bash`.
+Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
 
 - Чтобы запустить пользовательскую функцию прямо перед отображением подсказки, определите новую функцию и затем назначьте ей имя `starship_precmd_user_func`. Например, чтобы нарисовать ракету перед появлением подсказки, сделайте
 
@@ -135,7 +139,9 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Чтобы запустить пользовательскую функцию непосредственно перед выполнением команды, вы можете использовать механизм ловушки [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Тем не менее, вы **должны** поймать сигнал DEBUG _перед_ инициализацией Starship! Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
+- Чтобы запустить пользовательскую функцию непосредственно перед выполнением команды, вы можете использовать механизм ловушки [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
+  Тем не менее, вы **должны** поймать сигнал DEBUG _перед_ инициализацией Starship!
+  Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
 
 ```bash
 function blastoff(){
@@ -149,7 +155,9 @@ set +o functrace
 
 ## Пользовательские команды предварительного промпта и предварительного выполнения в PowerShell
 
-PowerShell не имеет формальной платформы preexec/precmd, как большинство других оболочек. Из-за этого трудно предоставить полностью настраиваемые хуки в `powershell`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+PowerShell не имеет формальной платформы preexec/precmd, как большинство других оболочек.
+Из-за этого трудно предоставить полностью настраиваемые хуки в `powershell`.
+Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
 
 Создайте функцию с именем `Invoke-Starship-PreCommand`
 
@@ -161,7 +169,8 @@ function Invoke-Starship-PreCommand {
 
 ## Изменение заголовка окна
 
-Некоторые промпты командной строки автоматически изменят название окна для вас (например, чтобы оно отражало ваш рабочий каталог). Fish даже делает это по умолчанию. Starship этого не делает, но довольно просто добавить эту функциональность в `bash`, `zsh`, `cmd` или `powershell`.
+Некоторые промпты командной строки автоматически изменят название окна для вас (например, чтобы оно отражало ваш рабочий каталог). Fish даже делает это по умолчанию.
+Starship этого не делает, но довольно просто добавить эту функциональность в `bash`, `zsh`, `cmd` или `powershell`.
 
 Сначала задайте функцию изменения заголовка окна (идентичную в bash и zsh):
 
@@ -243,6 +252,12 @@ right_format = """$all"""
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+When using `zsh` (v5.0.5+), the shell adds a default trailing space to the right prompt. This can cause alignment issues specifically when using the Starship `$fill` module. To remove this gap, add the following to your `.zshrc`:
+
+```zsh
+ZLE_RPROMPT_INDENT=0
 ```
 
 ## Продолжение Промпта
@@ -338,24 +353,24 @@ symbol = "💰 "
 
 The `claude_model` module displays the current Claude model being used in the session.
 
-#### Опции
+#### Параметр
 
-| Параметр        | По умолчанию                 | Описание                                                                                  |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`        | `'[$symbol$model]($style) '` | Формат модуля.                                                                            |
-| `symbol`        | `'🤖 '`                       | The symbol shown before the model name.                                                   |
-| `style`         | `'bold blue'`                | Стиль модуля.                                                                             |
+| Параметр        | По умолчанию                 | Описание                                                                                                                  |
+| --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `format`        | `'[$symbol$model]($style) '` | Формат модуля.                                                                                            |
+| `symbol`        | `'🤖 '`                      | The symbol shown before the model name.                                                                   |
+| `style`         | `'bold blue'`                | Стиль модуля.                                                                                             |
 | `model_aliases` | `{}`                         | Map of model IDs or display names to shorter aliases. Checks ID first, then display name. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                       |
+| `disabled`      | `false`                      | Disables the `claude_model` module.                                                                       |
 
 #### Переменные
 
-| Переменная | Пример              | Описание                              |
-| ---------- | ------------------- | ------------------------------------- |
-| model      | `Claude 3.5 Sonnet` | The display name of the current model |
-| model_id   | `claude-3-5-sonnet` | The model ID                          |
-| symbol     |                     | Отражает значение параметра `symbol`  |
-| style\*  |                     | Отражает значение параметра `style`   |
+| Переменная                    | Пример              | Описание                              |
+| ----------------------------- | ------------------- | ------------------------------------- |
+| model                         | `Claude 3.5 Sonnet` | The display name of the current model |
+| model_id | `claude-3-5-sonnet` | The model ID                          |
+| symbol                        |                     | Отражает значение параметра `symbol`  |
+| style\*                       |                     | Отражает значение параметра `style`   |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -383,28 +398,28 @@ style = "bold cyan"
 
 The `claude_context` module displays context window usage as a percentage and visual gauge. The style automatically changes based on configurable thresholds.
 
-#### Опции
+#### Параметр
 
-| Параметр               | По умолчанию                      | Описание                                           |
-| ---------------------- | --------------------------------- | -------------------------------------------------- |
-| `format`               | `'[$gauge $percentage]($style) '` | Формат модуля.                                     |
-| `symbol`               | `''`                              | The symbol shown before the gauge.                 |
-| `gauge_width`          | `5`                               | The width of the gauge in characters.              |
-| `gauge_full_symbol`    | `'█'`                             | The symbol used for filled segments of the gauge.  |
-| `gauge_partial_symbol` | `'▒'`                             | The symbol used for partial segments of the gauge. |
-| `gauge_empty_symbol`   | `'░'`                             | The symbol used for empty segments of the gauge.   |
-| `display`              | [см. ниже](#display)              | Threshold and style configurations.                |
-| `disabled`             | `false`                           | Disables the `claude_context` module.              |
+| Параметр               | По умолчанию                         | Описание                                                           |
+| ---------------------- | ------------------------------------ | ------------------------------------------------------------------ |
+| `format`               | `'[$gauge $percentage]($style) '`    | Формат модуля.                                     |
+| `symbol`               | `''`                                 | The symbol shown before the gauge.                 |
+| `gauge_width`          | `5`                                  | The width of the gauge in characters.              |
+| `gauge_full_symbol`    | `'█'`                                | The symbol used for filled segments of the gauge.  |
+| `gauge_partial_symbol` | `'▒'`                                | The symbol used for partial segments of the gauge. |
+| `gauge_empty_symbol`   | `'░'`                                | The symbol used for empty segments of the gauge.   |
+| `display`              | [см. ниже](#display) | Threshold and style configurations.                |
+| `disabled`             | `false`                              | Disables the `claude_context` module.              |
 
 ##### Display
 
 The `display` option is an array of objects that define thresholds and styles for different usage levels. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
-| Параметр    | По умолчанию | Описание                                                                 |
+| Опции       | По умолчанию | Описание                                                                 |
 | ----------- | ------------ | ------------------------------------------------------------------------ |
 | `threshold` | `0.0`        | The minimum context windows usage percentage to match this configuration |
 | `style`     | `bold green` | The value of `style` if this display configuration is matched            |
-| `hidden`    | `false`      | Hide this module if this the configuration is matched.                   |
+| `hidden`    | `false`      | Hide this module if this the configuration is matched.   |
 
 ```toml
 [[claude_context.display]]
@@ -426,19 +441,19 @@ style = "bold red"
 
 #### Переменные
 
-| Переменная                   | Пример  | Описание                                              |
-| ---------------------------- | ------- | ----------------------------------------------------- |
-| gauge                        | `██▒░░` | Visual representation of context usage                |
-| percentage                   | `65%`   | Context usage as a percentage                         |
-| input_tokens                 | `45.2k` | Total input tokens in conversation                    |
-| output_tokens                | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
+| Переменная                                                                                | Пример  | Описание                                              |
+| ----------------------------------------------------------------------------------------- | ------- | ----------------------------------------------------- |
+| gauge                                                                                     | `██▒░░` | Visual representation of context usage                |
+| percentage                                                                                | `65%`   | Context usage as a percentage                         |
+| input_tokens                                                         | `45.2k` | Total input tokens in conversation                    |
+| output_tokens                                                        | `12.3k` | Total output tokens in conversation                   |
+| curr_input_tokens                               | `5.1k`  | Input tokens from most recent API call                |
+| curr_output_tokens                              | `1.2k`  | Output tokens from most recent API call               |
 | curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
 | curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens                 | `200k`  | Total context window size                             |
-| symbol                       |         | Отражает значение параметра `symbol`                  |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| total_tokens                                                         | `200k`  | Total context window size                             |
+| symbol                                                                                    |         | Отражает значение параметра `symbol`                  |
+| style\*                                                                                   |         | Mirrors the style from the matching display threshold |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -502,24 +517,24 @@ style = "bold red"
 
 The `claude_cost` module displays the total cost of the current Claude Code session in USD. Like `claude_context`, it supports threshold-based styling.
 
-#### Опции
+#### Параметр
 
-| Параметр   | По умолчанию                       | Описание                            |
-| ---------- | ---------------------------------- | ----------------------------------- |
-| `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                      |
-| `symbol`   | `'💰 '`                             | The symbol shown before the cost.   |
-| `display`  | [см. ниже](#display-1)             | Threshold and style configurations. |
-| `disabled` | `false`                            | Disables the `claude_cost` module.  |
+| Опции      | По умолчанию                           | Описание                                            |
+| ---------- | -------------------------------------- | --------------------------------------------------- |
+| `format`   | `'[$symbol(\\$$cost)]($style) '`     | Формат модуля.                      |
+| `symbol`   | `'💰 '`                                | The symbol shown before the cost.   |
+| `display`  | [см. ниже](#display-1) | Threshold and style configurations. |
+| `disabled` | `false`                                | Disables the `claude_cost` module.  |
 
 ##### Display
 
 The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
 
-| Параметр    | По умолчанию | Описание                                                      |
-| ----------- | ------------ | ------------------------------------------------------------- |
-| `threshold` | `0.0`        | The minimum cost in USD to match this configuration           |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched |
-| `hidden`    | `false`      | Hide this module if this configuration is matched.            |
+| Опции       | По умолчанию | Описание                                                           |
+| ----------- | ------------ | ------------------------------------------------------------------ |
+| `threshold` | `0.0`        | The minimum cost in USD to match this configuration                |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched      |
+| `hidden`    | `false`      | Hide this module if this configuration is matched. |
 
 **Default configuration:**
 
@@ -539,15 +554,15 @@ style = "bold red"
 
 #### Переменные
 
-| Переменная    | Пример   | Описание                                              |
-| ------------- | -------- | ----------------------------------------------------- |
-| cost          | `1.23`   | Total session cost in USD (formatted to 2 decimals)   |
-| duration      | `1m 30s` | Total session duration                                |
-| api_duration  | `45s`    | Total API call duration                               |
-| lines_added   | `1.2k`   | Total lines of code added                             |
-| lines_removed | `500`    | Total lines of code removed                           |
-| symbol        |          | Отражает значение параметра `symbol`                  |
-| style\*     |          | Mirrors the style from the matching display threshold |
+| Переменная                         | Пример   | Описание                                                               |
+| ---------------------------------- | -------- | ---------------------------------------------------------------------- |
+| cost                               | `1.23`   | Total session cost in USD (formatted to 2 decimals) |
+| duration                           | `1m 30s` | Total session duration                                                 |
+| api_duration  | `45s`    | Total API call duration                                                |
+| lines_added   | `1.2k`   | Total lines of code added                                              |
+| lines_removed | `500`    | Total lines of code removed                                            |
+| symbol                             |          | Отражает значение параметра `symbol`                                   |
+| style\*                            |          | Mirrors the style from the matching display threshold                  |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -595,7 +610,9 @@ format = "[$symbol$cost ($duration)]($style) "
 - `<color>`
 - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время выполняет то же самое, хотя в будущем это может измениться. `<color>` также может быть установлено значение `prev_fg` или `prev_bg`, которое соответствует цвету переднего плана или фона предыдущего элемента соответственно, если доступно, или `none` в противном случае. `inverted` меняет местами цвета фона и переднего плана. Порядок слов в строке не имеет значения.
+где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время выполняет то же самое, хотя в будущем это может измениться.
+`<color>` также может быть установлено значение `prev_fg` или `prev_bg`, которое соответствует цвету переднего плана или фона предыдущего элемента соответственно, если доступно, или `none` в противном случае.
+`inverted` меняет местами цвета фона и переднего плана. Порядок слов в строке не имеет значения.
 
 Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` устанавливает цвет по умолчанию на цвет `fg:red bg:none` эквивалентно `red` или `fg:red` и `bg:green fg:red bg:none` также эквивалентно `fg:red` или `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
 

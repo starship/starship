@@ -96,7 +96,7 @@ fn get_poetry_version(pyproject: &toml::Table) -> Option<String> {
         .get("poetry")?
         .get("version")?
         .as_str()
-        .map(|s| s.to_owned())
+        .map(std::borrow::ToOwned::to_owned)
 }
 
 fn parse_file_version_for_hatchling(context: &Context, path: &str) -> Option<String> {
@@ -144,7 +144,7 @@ fn get_pep621_static_version(pyproject: &toml::Table) -> Option<String> {
         .get("project")?
         .get("version")?
         .as_str()
-        .map(|s| s.to_owned())
+        .map(std::borrow::ToOwned::to_owned)
 }
 
 fn get_pep621_version(context: &Context, pyproject: &toml::Table) -> Option<String> {

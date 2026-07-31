@@ -2,7 +2,8 @@
 
 # Ustawienia Pastel Powerline
 
-Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Pokazuje ono również, jak działa zastępowanie ścieżek w starship.
+Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Pokazuje ono również, jak działa zastępowanie ścieżek w starship.
 
 ![Zrzut ekranu ustawień Pastel Powerline](/presets/img/pastel-powerline.png)
 

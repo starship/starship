@@ -46,14 +46,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         &context.current_dir
     };
 
-    log::debug!("Home dir: {:?}", &home_dir);
-    log::debug!("Physical dir: {:?}", &physical_dir);
-    log::debug!("Display dir: {:?}", &display_dir);
+    log::debug!("Home dir: {home_dir:?}");
+    log::debug!("Physical dir: {physical_dir:?}");
+    log::debug!("Display dir: {display_dir:?}");
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
     let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
-        context.get_repo().ok()
+        context.get_git_repo().ok()
     } else {
         None
     };

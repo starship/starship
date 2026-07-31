@@ -210,29 +210,24 @@ where
     let mut prev_style: Option<AnsiStyle> = None;
 
     for segment in segments {
-        match segment {
-            Segment::Fill(fs) => {
-                chunks.push((current, fs));
-                current = Vec::new();
-                prev_style = None;
+        if let Segment::Fill(fs) = segment {
+            chunks.push((current, fs));
+            current = Vec::new();
+            prev_style = None;
+        } else if let Segment::LineTerm { max_width } = segment {
+            if *max_width > 0 && used <= *max_width {
+                continue;
             }
-            Segment::LineTerm { max_width } => {
-                // max_width specified by [line_break] config
-                if *max_width > 0 && used <= *max_width {
-                    continue; // skip newline
-                }
 
-                let current_segment_string = segment.ansi_string(prev_style.as_ref());
-                current.push(current_segment_string);
-                break;
-            }
-            _ => {
-                used += segment.width_graphemes();
-                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+            let current_segment_string = segment.ansi_string(prev_style.as_ref());
+            current.push(current_segment_string);
+            break;
+        } else {
+            used += segment.width_graphemes();
+            let current_segment_string = segment.ansi_string(prev_style.as_ref());
 
-                prev_style = Some(*current_segment_string.style_ref());
-                current.push(current_segment_string);
-            }
+            prev_style = Some(*current_segment_string.style_ref());
+            current.push(current_segment_string);
         }
     }
 

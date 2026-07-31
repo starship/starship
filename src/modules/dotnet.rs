@@ -53,7 +53,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
-                        let repo_root = context.get_repo().ok().and_then(|r| r.workdir.as_deref());
+                        let repo_root = context
+                            .get_git_repo()
+                            .ok()
+                            .and_then(|r| r.workdir.as_deref());
                         estimate_dotnet_version(
                             context,
                             &dotnet_files,
@@ -208,7 +211,7 @@ fn check_directory_for_global_json(path: &Path) -> Option<String> {
     let global_json_path = path.join(GLOBAL_JSON_FILE);
     log::debug!(
         "Checking if global.json exists at: {}",
-        &global_json_path.display()
+        global_json_path.display()
     );
     if global_json_path.exists() {
         get_pinned_sdk_version_from_file(&global_json_path)
@@ -271,7 +274,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
         Some(GLOBAL_JSON_FILE) => return Some(FileType::GlobalJson),
         Some(PROJECT_JSON_FILE) => return Some(FileType::ProjectJson),
         _ => (),
-    };
+    }
 
     let extension_lower = map_str_to_lower(path.extension());
 
