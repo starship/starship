@@ -400,16 +400,35 @@ is read from the `AWS_SSO_PROFILE` env var.
 
 ### Options
 
+> [!WARNING]
+> The `profile_aliases` and `region_aliases` options are deprecated. Use `profiles` and the corresponding `profile_alias`
+> and `region_alias` options instead.
+
 | Option              | Default                                                           | Description                                                                                                 |
 | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
 | `symbol`            | `'☁️ '`                                                            | The symbol used before displaying the current AWS profile.                                                  |
-| `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
-| `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
+| `region_aliases`*   | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
+| `profile_aliases`*  | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| `profiles`          | `[]`                                                              | Customised styles and symbols for specific profiles.                                                        |
+
+*: This option is deprecated, please add `profiles` with the corresponding `profile_alias` and `region_alias` options instead.
+
+To customise the style of the module for specific profiles, use the following configuration as
+part of the `profiles` list:
+
+| Variable          | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `profile_pattern` | **Required** Regular expression to match the current AWS profile name.                   |
+| `region_pattern`  | Regular expression to match the current AWS region name.                                 |
+| `profile_alias`   | Profile alias to display instead of the full profile name.                               |
+| `region_alias`    | Region alias to display instead of the full region name.                                 |
+| `style`           | The style for the module when using this profile. If not set, will use module's style.   |
+| `symbol`          | The symbol for the module when using this profile. If not set, will use module's symbol. |
 
 ### Variables
 
@@ -434,11 +453,11 @@ is read from the `AWS_SSO_PROFILE` env var.
 format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = 'bold blue'
 symbol = '🅰 '
-[aws.region_aliases]
-ap-southeast-2 = 'au'
-us-east-1 = 'va'
-[aws.profile_aliases]
-CompanyGroupFrobozzOnCallAccess = 'Frobozz'
+profiles = [
+  { profile_pattern = "CompanyGroup_(?P<team>[\\w]+)_OnCallAccess", profile_alias = "$team" },
+  { profile_pattern = ".*", region_pattern = "ap-southeast-.*", region_alias = "au" },
+  { profile_pattern = ".*", region_pattern = "us-east-.*", region_alias = "va" },
+]
 ```
 
 #### Display region
@@ -450,9 +469,10 @@ CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 format = 'on [$symbol$region]($style) '
 style = 'bold blue'
 symbol = '🅰 '
-[aws.region_aliases]
-ap-southeast-2 = 'au'
-us-east-1 = 'va'
+profiles = [
+  { profile_pattern = ".*", region_pattern = "ap-southeast-.*", region_alias = "au" },
+  { profile_pattern = ".*", region_pattern = "us-east-.*", region_alias = "va" },
+]
 ```
 
 #### Display profile
@@ -464,8 +484,39 @@ us-east-1 = 'va'
 format = 'on [$symbol$profile]($style) '
 style = 'bold blue'
 symbol = '🅰 '
-[aws.profile_aliases]
-Enterprise_Naming_Scheme-voidstars = 'void**'
+profiles = [
+  { profile_pattern = "Enterprise_Naming_Scheme-.*", profile_alias = "void**" },
+]
+```
+
+#### AWS Profile specific config
+
+The `profiles` configuration option is used to customise what the current AWS profile name looks
+like (style and symbol) if the name matches the defined regular expression.
+
+```toml
+# ~/.config/starship.toml
+
+[[aws.profiles]]
+# "bold red" style + default symbol when AWS profile equals "production" *and* the current region
+# matches "us-east-*"
+profile_pattern = "production"
+region_pattern = "us-east-.*"
+style = "bold red"
+profile_alias = "prod"
+
+[[aws.profiles]]
+# "green" style + a different symbol when AWS profile contains "staging"
+profile_pattern = ".*staging.*"
+style = "green"
+symbol = "🔶 "
+profile_alias = "staging"
+
+[[aws.profiles]]
+# Using capture groups
+# Profiles with a company prefix like "company-prod-team" can be shortened to "team (prod)":
+profile_pattern = "company-(?P<env>[\\w-]+)-(?P<team>[\\w-]+)"
+profile_alias = "$team ($env)"
 ```
 
 ## Azure
