@@ -1277,7 +1277,7 @@ mod tests {
             .path(src_dir)
             .logical_path(symlink_dir)
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint(convert_path_sep("~/fuel-gauge"))));
 
         assert_eq!(expected, actual);
 
