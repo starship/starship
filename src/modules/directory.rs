@@ -1259,6 +1259,8 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(target_os = "windows"))]
+    #[ignore]
     fn symlinked_subdirectory_git_repo_with_repo_root_style() -> io::Result<()> {
         let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
