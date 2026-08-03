@@ -99,6 +99,12 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
     Some(version.to_string())
 }
 
+fn normalize_go_version(version: &str) -> &str {
+    version.split_once('-').map(|(v, _)| v).unwrap_or(version)
+}
+
+
+
 fn get_go_mod_version(context: &Context) -> Option<String> {
     let mod_str = context.read_file_from_pwd("go.mod")?;
     let re = Regex::new(r"(?:go\s)(\d+(\.\d+)+)").unwrap();
@@ -134,6 +140,7 @@ mod tests {
     use std::io;
     use std::io::Write;
 
+    
     #[test]
     fn folder_without_go_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -254,6 +261,16 @@ mod tests {
     fn test_format_go_version() {
         let input = "go version go1.12 darwin/amd64";
         assert_eq!(parse_go_version(input), Some("1.12".to_string()));
+    }
+
+    #[test]
+    fn normalize_go_version_without_suffix() {
+        assert_eq!(normalize_go_version("1.26.5"), "1.26.5");
+    }
+
+    #[test]
+    fn normalize_go_version_with_suffix() {
+        assert_eq!(normalize_go_version("1.26.5-X:nodwarf5"), "1.26.5");
     }
 
     #[test]
