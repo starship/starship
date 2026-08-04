@@ -103,8 +103,6 @@ fn normalize_go_version(version: &str) -> &str {
     version.split_once('-').map(|(v, _)| v).unwrap_or(version)
 }
 
-
-
 fn get_go_mod_version(context: &Context) -> Option<String> {
     let mod_str = context.read_file_from_pwd("go.mod")?;
     let re = Regex::new(r"(?:go\s)(\d+(\.\d+)+)").unwrap();
@@ -124,7 +122,7 @@ fn check_go_version(go_version: Option<&str>, mod_version: Option<&str>) -> bool
     let Ok(r) = VersionReq::parse(mod_version) else {
         return true;
     };
-    let Ok(v) = Version::parse(go_version) else {
+    let Ok(v) = Version::parse(normalize_go_version(go_version)) else {
         return true;
     };
 
@@ -140,7 +138,6 @@ mod tests {
     use std::io;
     use std::io::Write;
 
-    
     #[test]
     fn folder_without_go_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -271,6 +268,16 @@ mod tests {
     #[test]
     fn normalize_go_version_with_suffix() {
         assert_eq!(normalize_go_version("1.26.5-X:nodwarf5"), "1.26.5");
+    }
+
+    #[test]
+    fn custom_go_version_matches_mod_version() {
+        assert!(check_go_version(Some("1.26.5-X:nodwarf5"), Some("1.26")));
+    }
+
+    #[test]
+    fn custom_go_version_does_not_match_newer_mod_version() {
+        assert!(!check_go_version(Some("1.26.5-X:nodwarf5"), Some("1.27")));
     }
 
     #[test]
