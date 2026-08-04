@@ -52,9 +52,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let go_ver = golang_version.deref().as_ref()?;
 
-                    VersionFormatter::format_module_version(
+                    VersionFormatter::format_module_version_with_parsed(
                         module.get_name(),
                         go_ver,
+                        normalize_go_version(go_ver),
                         config.version_format,
                     )
                     .map(Ok)
@@ -133,6 +134,7 @@ fn check_go_version(go_version: Option<&str>, mod_version: Option<&str>) -> bool
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -302,6 +304,59 @@ mod tests {
             Color::Red.bold().paint("🐹 v1.12.1 1.16 ")
         ));
 
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_go_build_version_formats_without_suffix() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.go"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang")
+            .path(dir.path())
+            .cmd(
+                "go version",
+                Some(CommandOutput {
+                    stdout: String::from("go version go1.26.5-X:nodwarf5 linux/amd64\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .config(toml::toml! {
+                [golang]
+                version_format = "v${major}.${minor}.${patch}"
+            })
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🐹 v1.26.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_go_build_version_raw_format_with_suffix() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.go"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang")
+            .path(dir.path())
+            .cmd(
+                "go version",
+                Some(CommandOutput {
+                    stdout: String::from("go version go1.26.5-X:nodwarf5 linux/amd64\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .config(toml::toml! {
+                [golang]
+                version_format = "${raw}"
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Cyan.bold().paint("🐹 1.26.5-X:nodwarf5 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
