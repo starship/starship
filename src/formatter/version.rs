@@ -81,7 +81,7 @@ impl<'a> VersionFormatter<'a> {
         })
     }
 
-    pub fn format_module_version_with_parsed(
+    pub(crate) fn format_module_version_with_parsed(
         module_name: &str,
         raw_version: &str,
         parsed_version: &str,
