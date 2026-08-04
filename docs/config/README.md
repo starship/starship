@@ -5039,18 +5039,19 @@ format = 'via [V $version](blue bold) '
 > Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
 
 The `vcs` module displays the current active Version Control System (VCS).
-The module will be shown only if a configured VCS is currently in use.
+The module will show a configured VCS if a corresponding repo is found. Otherwise the fallback will be shown.
 
 ### Options
 
-| Option           | Default                                                     | Description                                           |
-| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
-| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
-| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
-| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
-| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
-| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+| Option             | Default                                                     | Description                                           |
+| ------------------ | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`            | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules`   | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`      | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`       | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`    | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `fallback_modules` | `""`                                                        | Modules to show when no repository is found.          |
+| `disabled`         | `false`                                                     | Disables the `vcs` module.                            |
 
 ### Example
 
