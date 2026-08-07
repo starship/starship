@@ -2848,6 +2848,48 @@ context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
 ```
 
+## Lean
+
+The `lean` module shows the currently installed version of [Lean](https://lean-lang.org).
+When [elan](https://github.com/leanprover/elan) manages your toolchain, this reflects the
+version pinned by the `lean-toolchain` file.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `lakefile.toml`, `lakefile.lean` or `lean-toolchain` file
+- The current directory contains a file with the `.lean` extension
+
+### Options
+
+| Option              | Default                                                | Description                                                                    |
+| ------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'`                   | The format for the module.                                                     |
+| `version_format`    | `'v${raw}'`                                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.     |
+| `symbol`            | `'∀ '`                                                 | A format string of the `forall` symbol (U+2200), often used to represent Lean. |
+| `detect_extensions` | `['lean']`                                             | Which extensions should trigger this module.                                   |
+| `detect_files`      | `['lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.                                    |
+| `style`             | `'bold #3591fd'`                                       | The style for the module.                                                      |
+| `disabled`          | `false`                                                | Disables the `lean` module.                                                    |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v4.31.0` | The version of `lean`                |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[lean]
+format = 'via [∀ $version](bold #3591fd) '
+```
+
 ## Line Break
 
 The `line_break` module separates the prompt into two lines.
