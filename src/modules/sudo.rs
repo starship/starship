@@ -18,7 +18,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let is_sudo_cached = context.exec_cmd("sudo", &["-n", "true"]).is_some();
+    let mut sudo_option = "-nv";
+
+    /* let's check if -N option is supported */
+    let is_sudo_nocreds_update = context.exec_cmd("sudo", &["-NV"]).is_some();
+    if is_sudo_nocreds_update {
+        sudo_option = "-Nnv"
+    }
+
+    let is_sudo_cached = context.exec_cmd("sudo", &[sudo_option]).is_some();
 
     if !is_sudo_cached {
         return None;
