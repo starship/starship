@@ -136,6 +136,10 @@ ssh_symbol = "ssh "
 [java]
 symbol = "java "
 
+[jj_bookmark]
+symbol = "jj "
+truncation_symbol = "..."
+
 [jobs]
 symbol = "*"
 

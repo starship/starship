@@ -43,6 +43,10 @@ style = "bright-black"
 format = "[$duration]($style) "
 style = "yellow"
 
+[jj_bookmark]
+format = "[$bookmark( \\(+$overflow_count others\\))]($style)"
+style = "bright-black"
+
 [python]
 format = "[$virtualenv]($style) "
 style = "bright-black"
