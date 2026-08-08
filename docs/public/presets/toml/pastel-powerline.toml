@@ -121,6 +121,15 @@ symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
+[jj_bookmark]
+symbol = ""
+style = "bg:#FCA17D"
+format = '[ $symbol $bookmark( \\(+$overflow_count others\\)) ]($style)'
+
+[jj_status]
+style = "bg:#FCA17D"
+format = '[$all ]($style)'
+
 [julia]
 symbol = " "
 style = "bg:#86BBD8"

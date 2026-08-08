@@ -53,6 +53,10 @@ pub mod hg_branch;
 pub mod hg_state;
 pub mod hostname;
 pub mod java;
+pub mod jj_bookmark;
+pub mod jj_change;
+pub mod jj_metrics;
+pub mod jj_status;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
@@ -227,6 +231,14 @@ pub struct FullConfig<'a> {
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
+    #[serde(borrow)]
+    jj_bookmark: jj_bookmark::JJBookmarkConfig<'a>,
+    #[serde(borrow)]
+    jj_change: jj_change::JJChangeConfig<'a>,
+    #[serde(borrow)]
+    jj_metrics: jj_metrics::JJMetricsConfig<'a>,
+    #[serde(borrow)]
+    jj_status: jj_status::JJStatusConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]
