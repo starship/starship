@@ -14,6 +14,7 @@ pub struct CmdDurationConfig<'a> {
     pub show_milliseconds: bool,
     pub disabled: bool,
     pub show_notifications: bool,
+    pub notifications_transient: bool,
     pub min_time_to_notify: i64,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -29,8 +30,25 @@ impl Default for CmdDurationConfig<'_> {
             style: "yellow bold",
             disabled: false,
             show_notifications: false,
+            notifications_transient: false,
             min_time_to_notify: 45_000,
             notification_timeout: None,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn default_notifications_transient_is_false() {
+        assert!(!CmdDurationConfig::default().notifications_transient);
+    }
+
+    #[test]
+    fn notifications_transient_deserializes() {
+        let config: CmdDurationConfig = toml::from_str("notifications_transient = true").unwrap();
+        assert!(config.notifications_transient);
     }
 }
