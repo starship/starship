@@ -13,9 +13,16 @@ pub struct HaskellConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub default_compiler: &'a str,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub cabal_extensions: Vec<&'a str>,
+    pub cabal_files: Vec<&'a str>,
+    pub cabal_folders: Vec<&'a str>,
+    pub stack_extensions: Vec<&'a str>,
+    pub stack_files: Vec<&'a str>,
+    pub stack_folders: Vec<&'a str>,
 }
 
 impl Default for HaskellConfig<'_> {
@@ -26,9 +33,16 @@ impl Default for HaskellConfig<'_> {
             symbol: "λ ",
             style: "bold purple",
             disabled: false,
-            detect_extensions: vec!["hs", "cabal", "hs-boot"],
-            detect_files: vec!["stack.yaml", "cabal.project"],
+            default_compiler: "ghc",
+            detect_extensions: vec!["hs", "hs-boot"],
+            detect_files: vec![],
             detect_folders: vec![],
+            cabal_extensions: vec!["cabal"],
+            cabal_files: vec!["cabal.project"],
+            cabal_folders: vec![],
+            stack_extensions: vec![],
+            stack_files: vec!["stack.yaml"],
+            stack_folders: vec![],
         }
     }
 }
