@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.27.0](https://github.com/starship/starship/compare/v1.26.0...v1.27.0) (2026-08-08)
+
+
+### Features
+
+* **claude_model:** add effort variable ([#7614](https://github.com/starship/starship/issues/7614)) ([ea4098c](https://github.com/starship/starship/commit/ea4098cbc2ce0cdb2bd44e259aa8125496ab7839))
+
+
+### Bug Fixes
+
+* **bash:** avoid duplicating PS0 preexec hook ([#7587](https://github.com/starship/starship/issues/7587)) ([8f28dfc](https://github.com/starship/starship/commit/8f28dfcb1ca3242fba00a3cf98c10ee24605c3ed))
+* **package:** support build.gradle.kts in gradle version detection ([#7627](https://github.com/starship/starship/issues/7627)) ([0461483](https://github.com/starship/starship/commit/04614837ddab699783211627a7d7929bffaed82c))
+* **sudo:** Avoid creating system error logs on every unsuccessful invocation ([#7530](https://github.com/starship/starship/issues/7530)) ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+* **sudo:** sudo module pollutes journalctl with error logs ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+
 ## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-28)
 
 
