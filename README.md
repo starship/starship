@@ -286,6 +286,8 @@ Install Starship using any of the following package managers:
 | [Scoop]         | `scoop install starship`                |
 | [winget]        | `winget install --id Starship.Starship` |
 
+After Chocolatey, Scoop, or winget, open a **new** terminal so `PATH` includes `starship`.
+
 </details>
 
 ### Step 2. Set up your shell to use Starship
