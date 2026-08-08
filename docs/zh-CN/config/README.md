@@ -522,7 +522,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `unknown_symbol`     | `'󰂑 '`                           | 显示于电池状态未知时       |
 | `empty_symbol`       | `'󰂎 '`                           | 显示于电池状态为空时       |
 | `format`             | `'[$symbol$percentage]($style) '` | 组件格式化模板。         |
-| `display`            | [见下文](#battery-display)           | 电量显示阈值和样式。       |
+| `dispaly`            | [见下文](#battery-display)           | 电量显示阈值和样式。       |
 | `disabled`           | `false`                           | 禁用 `battery` 组件。 |
 
 ### 示例
@@ -538,8 +538,8 @@ discharging_symbol = '💀 '
 
 ### Battery 组件的显示
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style).
-If no `display` is provided. 默认配置如下：
+`display` 配置选项用于定义电量指示器的显示规则，包括显示阈值（threshold）、使用的符号（symbol）以及样式（style）。
+如果没有`display`配置。 默认配置如下：
 
 ```toml
 [[battery.display]]
@@ -547,11 +547,11 @@ threshold = 10
 style = 'bold red'
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+`charging_symbol` 和 `discharging_symbol` 选项的默认值，分别继承自 `battery` 配置中的 `charging_symbol` 和 `discharging_symbol` 设置。
 
 #### 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)
 
-The `display` option is an array of the following table.
+`display`选项为一个数组，其元素结构如下表所示。
 
 | 选项                   | 默认值          | 描述                                                                                                                        |
 | -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------- |
@@ -563,16 +563,15 @@ The `display` option is an array of the following table.
 #### 示例
 
 ```toml
-[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # 当电量处于 0% 至 10% 区间时，应用 ‘bold red’ 样式，并使用 discharging_symbol
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # 当电量在 10% 到 30% 时以 "bold yellow" 样式，并使用 discharging_symbol'💦'
 threshold = 30
 style = 'bold yellow'
 discharging_symbol = '💦 '
-
-# when capacity is over 30%, the battery indicator will not be displayed
+# 当电量在 30% 时以上时，电池指示器组件将不会显示出来
 ```
 
 ## Buf
@@ -2006,7 +2005,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 > [!TIP] The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment.
 > You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
-### 配置项
+### # ~/.config/starship.toml[custom.foo]&#xA;command = 'echo foo' # 显示命令输出&#xA;detect_files = ['foo'] # 支持过滤器，但不支持通配符&#xA;when = ''' test "$HOME" = "$PWD" '''&#xA;format = ' transcending [$output]($style)'[custom.time]&#xA;command = 'time /T'&#xA;detect_extensions = ['pst'] # 识别 \*.pst 文件&#xA;shell = ['pwsh.exe', '-NoProfile', '-Command', '-'][custom.time-as-arg]&#xA;command = 'time /T'&#xA;detect_extensions = ['pst'] # 识别 \*.pst 文件&#xA;shell = ['pwsh.exe', '-NoProfile', '-Command']&#xA;use_stdin = false
 
 | 选项                     | 默认值                                             | 描述                                                                                                                                             |
 | ---------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -3512,6 +3511,7 @@ Android = "🤖 "
 AOSC = "🐱 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bazzite = "🎮 "
 Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
@@ -3525,10 +3525,12 @@ FreeBSD = "😈 "
 Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
+Hurd = "🐂 "
 Illumos = "🐦 "
 Ios = "📱 "
 InstantOS = "⏲️ "
 Kali = "🐉 "
+KDENeon = "⚛️ "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "
