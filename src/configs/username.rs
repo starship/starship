@@ -14,6 +14,7 @@ pub struct UsernameConfig<'a> {
     pub style_root: &'a str,
     pub style_user: &'a str,
     pub show_always: bool,
+    pub show_git_user: bool,
     pub disabled: bool,
     pub aliases: IndexMap<String, &'a str>,
 }
@@ -26,6 +27,7 @@ impl Default for UsernameConfig<'_> {
             style_root: "red bold",
             style_user: "yellow bold",
             show_always: false,
+            show_git_user: false,
             disabled: false,
             aliases: IndexMap::new(),
         }
