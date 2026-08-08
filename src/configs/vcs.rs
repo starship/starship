@@ -24,6 +24,10 @@ pub struct VcsConfig<'a> {
     pub order: Vec<&'a str>,
     /// Disables the VCS module.
     pub disabled: bool,
+    /// The style for the module if the VCS is in a clean state.
+    pub style_clean: &'a str,
+    /// The style for the module if the VCS is in a dirty state.
+    pub style_dirty: &'a str,
     /// Modules to use when Fossil is matched.
     ///
     /// They are configured separately at the top level.
@@ -47,6 +51,8 @@ impl Default for VcsConfig<'_> {
         VcsConfig {
             order: vec!["git", "hg", "pijul", "fossil"],
             disabled: false,
+            style_clean: "bold green",
+            style_dirty: "bold yellow",
             fossil_modules: "$fossil_branch$fossil_metrics",
             git_modules: "$git_branch$git_commit$git_state$git_metrics$git_status",
             hg_modules: "$hg_branch$hg_state",
