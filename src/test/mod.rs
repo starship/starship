@@ -529,3 +529,141 @@ pub fn fixture_repo_with_hash(provider: FixtureProvider, sha256: bool) -> io::Re
         }
     }
 }
+
+/// The regression net for test-suite hermeticity.
+///
+/// A suite that reads the developer's own `~/.config/starship.toml` verifies
+/// nothing: it passes in continuous integration, where no such file exists, and
+/// fails on any machine that has one — and a personal configuration can just as
+/// easily make a genuinely broken module render the expected output. Everything
+/// derived from configuration is affected, not only `config` itself:
+/// `root_config` carries `palette`/`palettes`, which rewrite every named color
+/// a module renders.
+///
+/// The structural fix lives in `Context::ambient_config`, which compiles the
+/// filesystem read out of test builds entirely. These checks exist so that
+/// removing it fails loudly and immediately, on every machine, rather than
+/// silently rearming the trap.
+#[cfg(test)]
+mod hermeticity {
+    use super::{ModuleRenderer, default_context};
+    use crate::configs::StarshipRootConfig;
+    use crate::context::{Context, Env, Properties, Shell, Target};
+    use std::ffi::OsString;
+    use std::path::PathBuf;
+
+    /// A configuration that would be impossible to miss if it were ever read:
+    /// it redefines the palette every styled module resolves its colors
+    /// through, and overrides a module format outright.
+    const LOUD_CONFIGURATION: &str = r##"
+add_newline = false
+palette = "planted"
+
+[palettes.planted]
+green = "#ff0000"
+red = "#00ff00"
+
+[nodejs]
+format = "PLANTED"
+"##;
+
+    /// Plants a configuration exactly where the ambient loader would look for
+    /// one, points the environment at it, and builds a context the ordinary
+    /// way. The context must agree that this is the file it would load — and
+    /// must still not have loaded it.
+    ///
+    /// This is deliberately not a check on a temporary directory being ignored:
+    /// it asserts on `get_config_path_os`, the very function the ambient loader
+    /// consults, so the file really is reachable and really is the one that
+    /// would be read.
+    #[test]
+    fn a_test_build_never_reads_the_configuration_the_environment_points_at() {
+        let directory =
+            tempfile::tempdir().expect("failed to create a temporary configuration directory");
+        let configuration_path = directory.path().join("starship.toml");
+        std::fs::write(&configuration_path, LOUD_CONFIGURATION)
+            .expect("failed to plant the configuration file");
+        let configuration_path_text = configuration_path.display().to_string();
+
+        let mut environment = Env::default();
+        environment.insert("STARSHIP_CONFIG", configuration_path_text.clone());
+
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            PathBuf::new(),
+            PathBuf::new(),
+            environment,
+        );
+
+        assert_eq!(
+            context.get_config_path_os(),
+            Some(OsString::from(&configuration_path_text)),
+            "the planted configuration is not where the ambient loader would look, so this check \
+             would pass for the wrong reason"
+        );
+        assert!(
+            context.config.config.is_none(),
+            "a test build read the configuration file the environment points at"
+        );
+        assert_eq!(
+            root_configuration_text(&context.root_config),
+            root_configuration_text(&StarshipRootConfig::default()),
+            "a test build derived its root configuration from the file the environment points at"
+        );
+    }
+
+    /// The harness every module test renders through carries no configuration,
+    /// and nothing derived from one.
+    ///
+    /// Compared by serializing the whole root configuration rather than by
+    /// checking the fields that are known to matter today: a field added later
+    /// and populated from a leftover configuration is caught without anyone
+    /// remembering to extend this check.
+    #[test]
+    fn the_test_harness_context_carries_no_configuration() {
+        let context = default_context();
+
+        assert!(
+            context.config.config.is_none(),
+            "default_context() carries a configuration it was never given"
+        );
+        assert_eq!(
+            root_configuration_text(&context.root_config),
+            root_configuration_text(&StarshipRootConfig::default()),
+            "default_context() carries a root configuration that is not starship's default; some \
+             field derived from configuration is not being derived from the configuration the \
+             context was constructed with"
+        );
+    }
+
+    /// A module rendered through the harness resolves its colors against
+    /// starship's own definitions.
+    ///
+    /// This is the symptom the hermeticity bug actually presented as: with a
+    /// developer palette in effect, a module styled `green` renders as that
+    /// palette's truecolor green (`ESC[38;2;R;G;Bm`) rather than as ANSI green
+    /// (`ESC[32m`), and every assertion on rendered output fails.
+    #[test]
+    fn rendered_modules_resolve_colors_against_starship_defaults() {
+        let rendered = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_symbol = "[>](green)"
+            })
+            .collect()
+            .expect("the character module always renders");
+
+        assert!(
+            rendered.contains("\u{1b}[32m"),
+            "expected ANSI green in {rendered:?}; a palette from outside the test redefined it"
+        );
+    }
+
+    /// `StarshipRootConfig` has no `PartialEq`, so compare the whole thing by
+    /// its serialized form.
+    fn root_configuration_text(root_config: &StarshipRootConfig) -> String {
+        toml::to_string(root_config).expect("the root configuration always serializes")
+    }
+}
