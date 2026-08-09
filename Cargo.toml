@@ -124,7 +124,16 @@ dunce = "1.0.5"
 winresource = "0.1.31"
 
 [dev-dependencies]
+# Snapshot assertions for rendered module output. The `filters` feature lets a
+# snapshot redact the randomly named temporary directories that some module
+# tests necessarily render. Note that insta's ANSI-escape-stripping support is
+# deliberately NOT enabled: the ANSI styling is part of the contract under test.
+insta = { version = "1.48.0", features = ["filters"] }
 mockall = "=0.15.0"
+# Parameterized tests and fixtures, replacing hand-rolled `for` loops over
+# cases: every case becomes its own named test, so one failing case neither
+# hides the others nor loses the identity of the case that broke.
+rstest = "0.26.1"
 
 [profile.release]
 codegen-units = 1
