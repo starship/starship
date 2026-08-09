@@ -164,7 +164,7 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
         with:
-          tool: cargo-llvm-cov@0.8.5
+          tool: cargo-llvm-cov
 
       # For windows installer test
       # On stable rust & main repo pushes only

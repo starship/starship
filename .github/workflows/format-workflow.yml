@@ -26,7 +26,7 @@ jobs:
       - name: Install | Taplo
         uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
         with:
-          tool: taplo-cli@0.10.0
+          tool: taplo-cli
       - name: Presets | Validate with schema
         run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/public/presets/toml/*.toml
 
