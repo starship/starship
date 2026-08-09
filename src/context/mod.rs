@@ -136,17 +136,67 @@ impl<'a> Context<'a> {
         )
     }
 
-    /// Create a new instance of Context for the provided directory
+    /// Create a new instance of Context for the provided directory, loading the
+    /// configuration the environment points at.
+    ///
+    /// In a test build there is no ambient configuration to load: see
+    /// [`Self::ambient_config`].
     pub fn new_with_shell_and_path(
-        mut properties: Properties,
+        properties: Properties,
         shell: Shell,
         target: Target,
         path: PathBuf,
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
+        let config = Self::ambient_config(&env);
+        Self::new_with_config(properties, shell, target, path, logical_path, env, config)
+    }
 
+    /// The configuration the ambient environment points at.
+    ///
+    /// The filesystem read only exists in a non-test build. A test build that
+    /// could reach the developer's own `~/.config/starship.toml` would report
+    /// results that depend on their personal dotfiles: a `palette` alone
+    /// redefines every named color a module renders, so a test asserting on
+    /// ANSI yellow sees the palette's truecolor yellow instead. Worse, a
+    /// personal configuration can coincidentally make a genuinely broken module
+    /// render the expected output. Pointing `STARSHIP_CONFIG` elsewhere does not
+    /// help either, because `Env` is a mock in test builds and never forwards
+    /// it.
+    ///
+    /// So in a test build this is not "a read that is skipped" but a read that
+    /// does not exist: there is no code path from a test to the filesystem
+    /// configuration. Tests that need a configuration hand one to
+    /// [`Self::new_with_config`] or [`Self::set_config`], which is also what
+    /// guarantees everything derived from configuration — `root_config` today,
+    /// whatever is added tomorrow — is derived from *that* configuration and
+    /// not from a half-reset leftover.
+    fn ambient_config(env: &Env<'a>) -> StarshipConfig {
+        #[cfg(test)]
+        {
+            let _ = env;
+            StarshipConfig { config: None }
+        }
+        #[cfg(not(test))]
+        StarshipConfig::initialize(get_config_path_os(env).as_deref())
+    }
+
+    /// Create a new instance of Context for the provided directory from an
+    /// explicitly supplied, fully owned configuration.
+    ///
+    /// Everything the context derives from configuration is derived here, so a
+    /// caller that supplies a configuration gets a context consistent with it —
+    /// there is no second step to forget.
+    pub fn new_with_config(
+        mut properties: Properties,
+        shell: Shell,
+        target: Target,
+        path: PathBuf,
+        logical_path: PathBuf,
+        env: Env<'a>,
+        config: StarshipConfig,
+    ) -> Self {
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
         if properties

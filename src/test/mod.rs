@@ -59,17 +59,25 @@ fn init_logger() {
     log::set_boxed_logger(Box::new(logger)).unwrap();
 }
 
+/// A context rendering against starship's defaults and nothing else.
+///
+/// Built through [`Context::new_with_config`], the constructor that demands a
+/// configuration, rather than through the one that loads whatever the ambient
+/// environment points at. That is what makes a test's result independent of the
+/// developer's own `starship.toml`: everything the context derives from
+/// configuration — `root_config` today, whatever is added later — is derived
+/// from the empty configuration supplied here, so there is no field left
+/// carrying a value the test never asked for.
 pub fn default_context() -> Context<'static> {
-    let mut context = Context::new_with_shell_and_path(
+    Context::new_with_config(
         Properties::default(),
         Shell::Unknown,
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
         Env::default(),
-    );
-    context.config = StarshipConfig { config: None };
-    context
+        StarshipConfig { config: None },
+    )
 }
 
 /// Render a specific starship module by name
