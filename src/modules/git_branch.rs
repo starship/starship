@@ -96,6 +96,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let is_ignored_remote = config
+        .ignore_remotes
+        .iter()
+        .any(|ignored| remote_name.as_deref() == Some(ignored));
+
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
 
     let remote_branch_string = remote_branch.unwrap_or_default();
@@ -142,7 +147,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }
                 }
                 "remote_name" => {
-                    if show_remote && !remote_name_graphemes.is_empty() {
+                    if show_remote && !is_ignored_remote && !remote_name_graphemes.is_empty() {
                         Some(Ok(remote_name_graphemes.concat()))
                     } else {
                         None
@@ -514,6 +519,46 @@ mod tests {
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_ignore_remotes() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let remote_dir = fixture_repo(mode)?;
+            let repo_dir = fixture_repo(mode)?;
+
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["remote", "add", "--fetch", "remote_repo"])
+                .arg(remote_dir.path())
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["branch", "--set-upstream-to", "remote_repo/master"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_remotes = ["remote_repo"]
+                        format = "($remote_name/)$branch"
+                })
+                .collect();
+
+            let expected = Some("test_branch");
+
+            assert_eq!(expected, actual.as_deref());
+            repo_dir.close()?;
+            remote_dir.close()?;
         }
         Ok(())
     }
