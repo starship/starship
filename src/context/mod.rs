@@ -357,7 +357,7 @@ impl<'a> Context<'a> {
                         ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
                     });
 
-                let shared_repo =
+                let mut shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
                         &self.current_dir,
                         gix::discover::upwards::Options {
@@ -372,6 +372,14 @@ impl<'a> Context<'a> {
                             return Err(Box::new(e));
                         }
                     };
+
+                // Git honors `GIT_WORK_TREE` even for a repository with `core.bare = true`,
+                // but `gix` drops the work tree it read from the environment in that case.
+                if shared_repo.work_tree.is_none()
+                    && let Some(work_tree) = self.get_env_os("GIT_WORK_TREE")
+                {
+                    shared_repo.work_tree = Some(self.current_dir.join(work_tree));
+                }
 
                 let repository = shared_repo.to_thread_local();
                 log::trace!(

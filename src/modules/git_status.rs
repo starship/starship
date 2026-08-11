@@ -1993,6 +1993,40 @@ pub mod tests {
     }
 
     #[test]
+    fn does_generate_git_status_for_bare_repo_with_git_work_tree() -> io::Result<()> {
+        for &mode in BARE_GIT_PROVIDERS {
+            let worktree_dir = tempfile::tempdir()?;
+            let repo_dir = fixture_repo(mode)?;
+
+            create_command("git")?
+                .args([
+                    OsStr::new("--work-tree"),
+                    worktree_dir.path().as_os_str(),
+                    OsStr::new("checkout"),
+                    OsStr::new("-f"),
+                    OsStr::new("master"),
+                ])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let mut the_file = std::fs::File::create(worktree_dir.path().join("test_file"))?;
+            writeln!(the_file, "content")?;
+            the_file.sync_all()?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .path(repo_dir.path())
+                .env("GIT_WORK_TREE", worktree_dir.path().to_str().unwrap())
+                .collect();
+            let expected = format_output("?");
+
+            assert_eq!(expected, actual);
+            worktree_dir.close()?;
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
     fn does_generate_git_status_for_worktree_backed_by_bare_repo() -> io::Result<()> {
         for &mode in BARE_GIT_PROVIDERS {
             let worktree_dir = tempfile::tempdir()?;
