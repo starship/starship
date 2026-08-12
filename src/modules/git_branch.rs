@@ -526,8 +526,10 @@ mod tests {
     #[test]
     fn test_ignore_remotes() -> io::Result<()> {
         for &mode in COMMON_GIT_PROVIDERS {
-            let remote_dir = fixture_repo(mode)?;
-            let repo_dir = fixture_repo(mode)?;
+            // Both repos must use the same hash format; SHA1/SHA256 repos can't fetch from each other.
+            let sha256 = rand::random();
+            let remote_dir = fixture_repo_with_hash(mode, sha256)?;
+            let repo_dir = fixture_repo_with_hash(mode, sha256)?;
 
             create_command("git")?
                 .args(["checkout", "-b", "test_branch"])
