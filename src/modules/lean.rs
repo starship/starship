@@ -20,6 +20,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    // A stray `.lean` file is not a Lean project: without a lakefile or a `lean-toolchain`
+    // there is no toolchain to report a version for, so require one of those markers in the
+    // current directory or one of its ancestors.
+    context
+        .begin_ancestor_scan()
+        .set_files(&config.detect_files)
+        .scan()?;
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -87,11 +95,27 @@ mod tests {
     }
 
     #[test]
-    fn test_folder_with_lean_file() -> io::Result<()> {
+    fn test_folder_with_lean_file_outside_project() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.lean"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("lean").path(dir.path()).collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_folder_with_lean_file_inside_project() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("lean-toolchain"))?.sync_all()?;
+        let src = dir.path().join("Hello");
+        std::fs::create_dir(&src)?;
+        File::create(src.join("Basic.lean"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("lean").path(&src).collect();
 
         let expected = Some(format!(
             "via {}",
