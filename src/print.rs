@@ -421,7 +421,7 @@ pub fn format_duration(duration: &Duration) -> String {
     if milis == 0 {
         "<1ms".to_string()
     } else {
-        format!("{:?}ms", &milis)
+        format!("{milis:?}ms")
     }
 }
 

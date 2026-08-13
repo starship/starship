@@ -109,14 +109,13 @@ pub fn write_file_atomic<P: AsRef<Path>, S: AsRef<str>>(
     {
         use std::os::unix::fs::PermissionsExt;
 
-        let permissions = target_path
-            .metadata()
-            .as_ref()
-            .map(fs::Metadata::permissions)
-            .unwrap_or_else(|_| {
+        let permissions = target_path.metadata().as_ref().map_or_else(
+            |_| {
                 let all_read_write = 0o666;
                 std::fs::Permissions::from_mode(all_read_write)
-            });
+            },
+            fs::Metadata::permissions,
+        );
 
         builder.permissions(permissions);
     }
@@ -129,10 +128,10 @@ pub fn write_file_atomic<P: AsRef<Path>, S: AsRef<str>>(
 
     let mut temp_file = builder
         .tempfile_in(parent_dir)
-        .map_err(|e| format!("Error creating temporary file: {}", e))?;
+        .map_err(|e| format!("Error creating temporary file: {e}"))?;
 
     if let Err(err) = temp_file.write_all(text.as_bytes()) {
-        return Err(format!("Error writing to temporary file: {}", err));
+        return Err(format!("Error writing to temporary file: {err}"));
     }
 
     let result = if force {

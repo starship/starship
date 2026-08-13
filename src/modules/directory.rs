@@ -46,9 +46,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         &context.current_dir
     };
 
-    log::debug!("Home dir: {:?}", &home_dir);
-    log::debug!("Physical dir: {:?}", &physical_dir);
-    log::debug!("Display dir: {:?}", &display_dir);
+    log::debug!("Home dir: {home_dir:?}");
+    log::debug!("Physical dir: {physical_dir:?}");
+    log::debug!("Display dir: {display_dir:?}");
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting

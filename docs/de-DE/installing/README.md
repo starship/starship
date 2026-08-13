@@ -3,7 +3,7 @@
 Um Starship zu installieren, musst du zwei Dinge tun:
 
 1. Laden Sie die **starship** Binärdatei auf Ihren Computer herunter
-1. Weisen Sie Ihre Shell an, die Starship-Binärdatei als Eingabeaufforderung zu verwenden, indem Sie die Init-Skripte entsprechend anpassen
+2. Weisen Sie Ihre Shell an, die Starship-Binärdatei als Eingabeaufforderung zu verwenden, indem Sie die Init-Skripte entsprechend anpassen
 
 Für die meisten Benutzer funktionieren die Anweisungen auf [der Hauptseite](../guide/#🚀-installation) hervorragend. Für einige speziellere Plattformen sind jedoch andere Anweisungen erforderlich.
 

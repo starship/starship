@@ -19,7 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_style = config
         .display
         .iter()
-        .filter(|s| total_cost >= (s.threshold as f64))
+        .filter(|s| total_cost >= f64::from(s.threshold))
         .max_by(|a, b| {
             a.threshold
                 .partial_cmp(&b.threshold)
@@ -40,10 +40,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 })
                 .map(|variable| match variable {
-                    "cost" => Some(Ok(format!("{:.2}", total_cost))),
-                    "duration" => Some(Ok(render_time(cost_info.total_duration_ms as u128, false))),
+                    "cost" => Some(Ok(format!("{total_cost:.2}"))),
+                    "duration" => Some(Ok(render_time(
+                        u128::from(cost_info.total_duration_ms),
+                        false,
+                    ))),
                     "api_duration" => Some(Ok(render_time(
-                        cost_info.total_api_duration_ms as u128,
+                        u128::from(cost_info.total_api_duration_ms),
                         false,
                     ))),
                     "lines_added" => Some(Ok(humanize_int(cost_info.total_lines_added))),

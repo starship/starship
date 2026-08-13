@@ -3,7 +3,7 @@
 Aby zainstalować starship, musisz zrobić dwie rzeczy:
 
 1. Pobrać plik wykonywalny **starship** na swój komputer
-1. Skonfigurować swoją powłokę żeby używała pliku wykonywalnego starship jako wiersza poleceń poprzez modyfikację skryptów inicjalizacyjnych
+2. Skonfigurować swoją powłokę żeby używała pliku wykonywalnego starship jako wiersza poleceń poprzez modyfikację skryptów inicjalizacyjnych
 
 For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. Jednakże, dla niektórych wyspecjalizowanych platform, potrzebne będą inne.
 

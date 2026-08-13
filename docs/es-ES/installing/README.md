@@ -3,7 +3,7 @@
 Para instalar Starship, necesitas hacer dos cosas:
 
 1. Consigue el binario de **Starship** en tu ordenador
-1. Decirle a tu intérprete de comandos que use el binario de Starship como su prompt modificando sus guiones de inicio
+2. Decirle a tu intérprete de comandos que use el binario de Starship como su prompt modificando sus guiones de inicio
 
 Para la mayoría de los usuarios, las instrucciones en [la página principal](../guide/#🚀-installation) funcionarán genial. Sin embargo, para algunas plataformas más especializadas, se necesitan diferentes instrucciones.
 

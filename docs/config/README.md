@@ -2849,9 +2849,10 @@ context_alias = "gke-$cluster"
 ```
 
 ## Lean
+
 The `lean` module shows the currently installed version of [Lean](https://lean-lang.org).
 When [elan](https://github.com/leanprover/elan) manages your toolchain, this reflects the
-version pinned by the `lean-toolchain` file. 
+version pinned by the `lean-toolchain` file.
 
 By default the module will be shown if the current directory is part of a Lean project, that is
 if the current directory or one of its parents contains a `lakefile.toml`, `lakefile.lean` or
@@ -2890,7 +2891,6 @@ if the current directory or one of its parents contains a `lakefile.toml`, `lake
 [lean]
 format = 'via [∀ $version](bold #3591fd) '
 ```
-
 
 ## Line Break
 
@@ -3658,6 +3658,7 @@ Android = "🤖 "
 AOSC = "🐱 "
 Arch = "🎗️ "
 Artix = "🎗️ "
+Bazzite = "🎮 "
 Bluefin = "🐟 "
 CachyOS = "🎗️ "
 CentOS = "💠 "
@@ -3671,10 +3672,12 @@ FreeBSD = "😈 "
 Garuda = "🦅 "
 Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
+Hurd = "🐂 "
 Illumos = "🐦 "
 Ios = "📱 "
 InstantOS = "⏲️ "
 Kali = "🐉 "
+KDENeon = "⚛️ "
 Linux = "🐧 "
 Mabox = "📦 "
 Macos = "🍎 "

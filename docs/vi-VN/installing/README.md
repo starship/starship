@@ -3,9 +3,9 @@
 Để cài đặt starship, bạn cần làm 2 thứ:
 
 1. Lấy tệp tin **starship** nhị phân về máy tính của bạn
-1. Nói với shell của bạn để sử dụng tệp tin starship nhị phân như là prompt của nó bằng việc chỉnh sửa những đoạn mã khởi tạo của nó
+2. Nói với shell của bạn để sử dụng tệp tin starship nhị phân như là prompt của nó bằng việc chỉnh sửa những đoạn mã khởi tạo của nó
 
-Đối với đa số người dùng, hướng dẫn ở [trang chủ](../guide/#🚀-installation) là đủ. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
+For most users, the instructions on [the main page](../guide/#🚀-installation) will work great. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
 
 Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp như trong tệp tin README.md, do đó đây là vài hướng dẫn cài đặt cho những nền tảng khác đến từ cộng đồng. Của bạn không có ở đây? Xin hãy thêm nó vào đây nếu bạn tìm ra nó!
 

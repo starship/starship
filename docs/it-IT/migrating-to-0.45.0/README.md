@@ -4,7 +4,7 @@ Starship v0.45.0 è una versione contenente importanti cambiamenti in preparazio
 
 Questa guida è destinata ad attraversare questi grandi cambiamenti.
 
-## `prompt_order` è stato sostituito da un formato root-level ``
+## `prompt_order` è stato sostituito da un formato root-level \`\`
 
 Prima della v0.45.0, `prompt_order` avrebbe accettato un array di nomi di moduli nell'ordine in cui sarebbero stati renderizzati da Starship.
 
@@ -52,7 +52,7 @@ format = """\
   """
 ```
 
-## Il prefisso `del modulo` e il suffisso `` sono stati sostituiti dal formato ``
+## Il prefisso `del modulo` e il suffisso `sono stati sostituiti dal formato`
 
 Precedentemente la v0.45.0, alcuni moduli accetterebbero `prefisso` e/o `suffisso` per stilare il modo in cui i moduli vengono renderizzati.
 

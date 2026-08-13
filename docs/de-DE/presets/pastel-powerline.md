@@ -2,7 +2,8 @@
 
 # Preset - Pastel Powerline
 
-Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
+Dieses Preset ist inspiriert von [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Es zeigt außerdem, wie Pfadsubstitution in Starship funktioniert.
 
 ![Screenshot für Preset Pastel Powerline](/presets/img/pastel-powerline.png)
 
