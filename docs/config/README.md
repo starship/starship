@@ -2870,7 +2870,7 @@ if the current directory or one of its parents contains a `lakefile.toml`, `lake
 | `symbol`            | `'∀ '`                                                 | A format string of the `forall` symbol (U+2200), often used to represent Lean. |
 | `detect_extensions` | `['lean']`                                             | Which extensions should trigger this module.                                   |
 | `detect_files`      | `['lakefile.toml', 'lakefile.lean', 'lean-toolchain']` | Which filenames should trigger this module.                                    |
-| `style`             | `'bold #3591fd'`                                     | The style for the module.                                                      |
+| `style`             | `'bold #3591fd'`                                       | The style for the module.                                                      |
 | `disabled`          | `false`                                                | Disables the `lean` module.                                                    |
 
 ### Variables
