@@ -171,7 +171,7 @@ jobs:
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.8 cargo-wix
+        run: cargo install --version 0.3.9 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
