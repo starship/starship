@@ -110,7 +110,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && !matrix.use_zigbuild
         uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
         with:
-          tool: cross@0.2.5
+          tool: cross
 
       - name: Setup | Install Zig [riscv64]
         if: matrix.use_zigbuild
