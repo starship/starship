@@ -81,6 +81,8 @@ starship_precmd() {
     if [[ ${BLE_ATTACHED-} ]]; then
         local nlns=${PS1//[!$'\n']}
         bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+    elif [[ ${FLYLINE_VERSION-} ]]; then
+        RPS1="$(::STARSHIP:: prompt --right "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
