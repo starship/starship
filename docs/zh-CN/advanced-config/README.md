@@ -261,7 +261,7 @@ not explicitly used in either `format` or `right_format`.
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: Either the [Ble.sh](https://github.com/akinomyoga/ble.sh) framework (v0.4 or higher) or [Flyline](https://github.com/HalFrgrd/Flyline) should be installed in order to use right prompt in bash.
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework v0.4 or higher should be installed in order to use right prompt in bash.
 
 ### 示例
 
