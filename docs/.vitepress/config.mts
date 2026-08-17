@@ -191,6 +191,34 @@ export default defineConfig({
                 },
             },
         },
+        "kk-KZ": {
+            label: "Қазақша",
+            lang: "kk-KZ",
+            title: "Starship",
+            description:
+                "Кез келген қабықша үшін шағын, аса жылдам әрі шексіз баптауға болатын командалық жол шақыруы!",
+            themeConfig: {
+                // text for the language dropdown
+                langMenuLabel: "Тілдер",
+                returnToTopLabel: "Жоғарыға қайту",
+                sidebarMenuLabel: "Мәзір",
+                // Custom navbar values
+                nav: [{ text: "Баптау", link: "/kk-KZ/config/" }],
+                // Custom sidebar values
+                sidebar: sidebar("kk-KZ", {
+                    guide: "Нұсқаулық",
+                    installing: "Кеңейтілген орнату",
+                    config: "Баптау",
+                    "advanced-config": "Кеңейтілген баптау",
+                    faq: "Жиі қойылатын сұрақтар",
+                    presets: "Алдын ала орнатылған үлгілер",
+                }),
+                editLink: {
+                    text: "Бұл бетті GitHub-та өңдеу",
+                    pattern: editLinkPattern,
+                },
+            },
+        },
         "pt-BR": {
             label: "Português do Brasil",
             lang: "pt-BR",

@@ -97,6 +97,15 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/main/docs/kk-KZ/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-kz.png"
+      alt="Қазақша"
+  /></a>
+  &nbsp;
+
+  <a
     href="https://github.com/starship/starship/blob/main/docs/pt-BR/guide/README.md"
     ><img
       height="20"

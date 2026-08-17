@@ -1,0 +1,5306 @@
+# Баптау (Конфигурация)
+
+Starship-ті баптауды бастау үшін келесі файлды жасаңыз: `~/.config/starship.toml`.
+
+```sh
+mkdir -p ~/.config && touch ~/.config/starship.toml
+```
+
+Starship-тің барлық баптаулары осы [TOML](https://github.com/toml-lang/toml) файлында орындалады:
+
+```toml
+# Конфигурация схемасы негізінде редакторда автотолтыруды алу
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Промпттар арасына бос жол қояды
+add_newline = true
+
+# Промпттағы '❯' таңбасын '➜' таңбасына ауыстыру
+[character] # Біз баптап жатқан модульдің атауы — 'character'
+success_symbol = '[➜](bold green)' # 'success_symbol' сегменті 'bold green' түсіндегі '➜' таңбасына орнатылады
+
+# package модулін өшіріп, оны промпттан толық жасыру
+[package]
+disabled = true
+```
+
+### Конфигурация файлының орны
+
+Әдепкі конфигурация файлының орнын `STARSHIP_CONFIG` орта айнымалысы арқылы өзгертуге болады:
+
+```sh
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
+```
+
+PowerShell (Windows) үшін `$PROFILE` файлыңызға келесі жолды қосуға болады:
+
+```powershell
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
+```
+
+Cmd (Windows) үшін `starship.lua` файлыңызға мына жолды қосыңыз:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
+```
+
+### Журналға жазу (Логтар)
+
+Әдепкі бойынша Starship ескертулер мен қателерді `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log` файлына жазады, мұндағы сессия кілті терминалыңыздың нақты данасына сәйкес келеді.
+Дегенмен, мұны `STARSHIP_CACHE` орта айнымалысы арқылы өзгертуге болады:
+
+```sh
+export STARSHIP_CACHE=~/.starship/cache
+```
+
+PowerShell (Windows) ішінде `$PROFILE` файлына келесіні қосыңыз:
+
+```powershell
+$ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
+
+Cmd (Windows) ішінде `starship.lua` файлына мынаны қосыңыз:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+```
+
+### Терминология
+
+**Модуль**: Операциялық жүйеңіздің контекстік ақпаратына сүйене отырып, промптта тиісті мәліметтерді көрсететін компонент. Мысалы, егер сіз Node.js жобасының каталогында болсаңыз, "nodejs" модулі компьютеріңізде орнатылған Node.js нұсқасын көрсетеді.
+
+**Айнымалы (Variable)**: Модуль ұсынатын ақпаратты қамтитын кіші ішкі компоненттер. Мысалы, "nodejs" модуліндегі "version" айнымалысы Node.js-тің ағымдағы нұсқасын сақтайды.
+
+Әдетте, модульдердің көпшілігінде терминалдың әдепкі түсінің префиксі (мысалы, "nodejs" ішіндегі `via`) және суффикс ретінде бос орын болады.
+
+### Жолдар (Strings)
+
+TOML синтаксисінде [мәтіндік мәндер](https://toml.io/en/v1.0.0#string) `'`, `"`, `'''` немесе `"""` арқылы жарияланады.
+
+Келесі Starship синтаксистік таңбалары пішімдеу жолында арнайы қолданысқа ие және оларды кәдімгі таңба ретінде шығару үшін экрандау (escape) қажет: `$ [ ] ( )`.
+
+| Таңба | Түрі | Ескертпелер |
+| :--- | :--- | :--- |
+| `'` | тура жол (literal string) | экрандау аз қажет етіледі |
+| `"` | қарапайым жол (string) | көбірек экрандау қажет |
+| `'''` | көп жолды тура жол | экрандау аз қажет етіледі |
+| `"""` | көп жолды негізгі жол | экрандау көбірек, анықтамадағы жаңа жолдарды ескермеуге болады |
+
+Мысалы:
+
+```toml
+# тура жол
+format = '☺\☻ '
+
+# қарапайым жол
+format = "☺\\☻ "
+
+# Starship таңбаларын экрандау
+format = '\[\$\] '
+```
+
+Жолдарды бөлгенде (line breaks), көп жолды декларацияларды қолдануға болады.
+Мысалы, `$` таңбасын жаңа жолға шығарғыңыз келсе, `format` үшін келесі мәндер бірдей болып табылады:
+
+```toml
+# тура жолмен
+format = '''
+
+\$'''
+
+# көп жолды негізгі жолмен
+format = """
+
+\\$"""
+
+# қарапайым жолмен
+format = "\n\\$"
+```
+
+Көп жолды негізгі жолдарда жаңа жол таңбасын экрандау арқылы кодты көрнекі пішімдеуге болады:
+
+```toml
+format = """
+line1\
+line1\
+line1
+line2\
+line2\
+line2
+"""
+```
+
+### Пішімдеу жолдары (Format Strings)
+
+Пішімдеу жолдары модульдің барлық айнымалыларын қалай шығаратынын анықтайды.
+Модульдердің көпшілігінде олардың көрсетілу пішімін баптайтын `format` атты параметр бар.
+Пішімдеу жолында мәтіндерді, айнымалыларды және мәтіндік топтарды қолдана аласыз.
+
+#### Айнымалылар
+
+Айнымалы `$` таңбасынан және одан кейінгі айнымалы атауынан тұрады.
+Айнымалы атауында тек әріптер, сандар және `_` таңбасы ғана болуы мүмкін.
+
+Мысалы:
+
+- `'$version'` — `version` атты айнымалысы бар пішімдеу жолы.
+- `'$git_branch$git_commit'` — `git_branch` және `git_commit` атты екі айнымалысы бар пішімдеу жолы.
+- `'$git_branch $git_commit'` — арасында бос орны бар екі айнымалы.
+
+#### Мәтіндік топтар (Text Group)
+
+Мәтіндік топ екі түрлі бөліктен тұрады.
+
+Бірінші бөлігі `[]` жақшаларына алынған [пішімдеу жолы](#пішімдеу-жолдары-format-strings) болып табылады.
+Оған мәтіндерді, айнымалыларды немесе тіпті ішкі кірістірілген мәтіндік топтарды қосуға болады.
+
+Екінші бөлігі `()` жақшаларына алынған [стиль жолы](#стиль-жолдары-style-strings) болып табылады. Ол бірінші бөлікті стильдеу үшін қолданылады.
+
+Мысалы:
+
+- `'[on](red bold)'` — қалың қызыл түспен `on` сөзін шығарады.
+- `'[⌘ $version](bold green)'` — қалың жасыл түспен `⌘` таңбасын және `version` айнымалысының мәнін шығарады.
+- `'[a [b](red) c](green)'` — `b` әрпі қызыл, ал `a` мен `c` жасыл болатын `a b c` мәтінін шығарады.
+
+#### Стиль жолдары (Style Strings)
+
+Starship-тегі модульдердің көпшілігі олардың визуалды стилін баптауға мүмкіндік береді. Бұл баптауды көрсететін жол болып табылатын параметр (әдетте `style` деп аталады) арқылы жүзеге асады. Толық синтаксис туралы мәлімет алу үшін [кеңейтілген баптау нұсқаулығын](../advanced-config/) қараңыз.
+
+- `'fg:green bg:blue'` — көк фондағы жасыл мәтін
+- `'bg:blue fg:bright-green'` — көк фондағы ашық жасыл мәтін
+- `'bold fg:27'` — [ANSI 27 түсіндегі](https://i.stack.imgur.com/KTSQa.png) қалың мәтін
+- `'underline bg:#bf5700'` — қызғылт-қоңыр фондағы асты сызылған мәтін
+- `'bold italic fg:purple'` — қалың курсивті күлгін мәтін
+- `''` — барлық стильдерді толық өшіреді
+
+Стильдің қалай көрінетіні терминал эмуляторыңызға байланысты екенін ескеріңіз.
+
+#### Шартты пішімдеу жолдары (Conditional Format Strings)
+
+`(` және `)` жақшаларына алынған шартты пішімдеу жолы егер оның ішіндегі барлық айнымалылар бос болса, экранға ештеңе шығармайды.
+
+Мысалы:
+
+- `'(@$region)'` — егер `region` айнымалысы `None` немесе бос жол болса, ештеңе көрсетпейді, әйтпесе `@` таңбасын және region мәнін көрсетеді.
+- `'(some text)'` — жақша ішінде ешқандай айнымалы болмағандықтан, әрқашан ештеңе көрсетпейді.
+- `$combined` айнымалысы `\[$a$b\]` қысқартуы болғанда, `'($combined)'` тек `$a` және `$b` екеуі де `None` болғанда ғана ештеңе көрсетпейді.
+
+### Терістеу бойынша сәйкестендіру (Negative matching)
+
+Көптеген модульдерде `detect_extensions`, `detect_files` және `detect_folders` айнымалылары бар. Олар сәйкес келетін немесе сәйкес келмейтін жолдар тізімін қабылдайды. Сәйкес келмеуі тиіс «теріс» опциялар алдына '!' таңбасын қою арқылы көрсетіледі. Каталогта кез келген теріс индикатордың болуы модульдің сәйкес келмеуіне әкеледі.
+
+Мысалы, TypeScript файлдарын сәйкестендіріп, бірақ MPEG Transport Stream файлдарын өткізіп жіберу үшін:
+
+```toml
+detect_extensions = ['ts', '!video.ts', '!audio.ts']
+```
+
+
+## Prompt
+
+Бұл — бүкіл промптқа ортақ жалпы конфигурациялық опциялар тізімі.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Промпттың пішімін баптау.                                                                                                                                                |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Starship файлдарды сканерлеу уақытының шегі (миллисекундпен).                                                                                                                              |
+| `command_timeout` | `500`                          | Starship орындайтын пәрмендердің уақыт шегі (миллисекундпен).                                                                                                                       |
+| `add_newline`     | `true`                         | Промпттар арасына бос жол қосады.                                                                                                                                          |
+| `palette`         | `''`                           | `palettes` жиынтығынан қай түстер палитрасы қолданылатынын орнатады.                                                                                                                                   |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Символдық сілтемелерді каталог ретінде тексереді; git сияқты модульдерде қолданылады.                                                                                                     |
+
+> [!TIP]
+> If you have symlinks to networked filesystems, consider setting
+> `follow_symlinks` to `false`.
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+# Use custom format
+format = '''
+[┌───────────────────>](bold green)
+[│](bold green)$directory$rust$package
+[└─>](bold green) '''
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+
+# Disable the blank line at the start of the prompt
+add_newline = false
+
+# Set 'foo' as custom color palette
+palette = 'foo'
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = '21'
+# Define new color
+mustard = '#af8700'
+```
+
+### Промпттың әдепкі пішімі
+
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+
+```toml
+format = '$all'
+
+# Бұл келесіге баламалы:
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$nats\
+$directory\
+$vcsh\
+$fossil_branch\
+$fossil_metrics\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$hg_state\
+$pijul_channel\
+$docker_context\
+$package\
+$bun\
+$c\
+$cmake\
+$cobol\
+$cpp\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$fortran\
+$gleam\
+$golang\
+$gradle\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$maven\
+$mojo\
+$nim\
+$nodejs\
+$ocaml\
+$odin\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$quarto\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
+$swift\
+$terraform\
+$typst\
+$vlang\
+$vagrant\
+$xmake\
+$zig\
+$buf\
+$guix_shell\
+$nix_shell\
+$conda\
+$pixi\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$direnv\
+$env_var\
+$mise\
+$crystal\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$container\
+$netns\
+$os\
+$shell\
+$character"""
+```
+
+If you just want to extend the default format, you can use `$all`;
+modules you explicitly add to the format will not be duplicated. Eg.
+
+```toml
+# Move the directory to the second line
+format = '$all$directory$character'
+```
+
+## AWS
+
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
+The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
+If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile
+is read from the `AWS_VAULT` env var and the credentials expiration date
+is read from the `AWS_SESSION_EXPIRATION` env var.
+
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile
+is read from the `AWSU_PROFILE` env var.
+
+When using [AWSume](https://awsu.me) the profile
+is read from the `AWSUME_PROFILE` env var and the credentials expiration
+date is read from the `AWSUME_EXPIRATION` env var.
+
+When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials`
+falls back to the `x_security_token_expires` key.
+
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile
+is read from the `AWS_SSO_PROFILE` env var.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Модульдің пішімдеу жолы.                                                                                  |
+| `symbol`            | `'☁️ '`                                                            | The symbol used before displaying the current AWS profile.                                                  |
+| `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
+| `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `'bold yellow'`                                                   | Модульдің стилі.                                                                                   |
+| `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
+| `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------------- | ------------------------------------------- |
+| region   | `ap-northeast-1` | The current AWS region                      |
+| profile  | `astronauts`     | The current AWS profile                     |
+| duration | `2h27m20s`       | The temporary credentials validity duration |
+| symbol   |                  | `symbol` опциясының мәнін қайталайды        |
+| style\*  |                  | `style` опциясының мәнін қайталайды         |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысалдар
+
+#### Display everything
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+style = 'bold blue'
+symbol = '🅰 '
+[aws.region_aliases]
+ap-southeast-2 = 'au'
+us-east-1 = 'va'
+[aws.profile_aliases]
+CompanyGroupFrobozzOnCallAccess = 'Frobozz'
+```
+
+#### Display region
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = 'on [$symbol$region]($style) '
+style = 'bold blue'
+symbol = '🅰 '
+[aws.region_aliases]
+ap-southeast-2 = 'au'
+us-east-1 = 'va'
+```
+
+#### Display profile
+
+```toml
+# ~/.config/starship.toml
+
+[aws]
+format = 'on [$symbol$profile]($style) '
+style = 'bold blue'
+symbol = '🅰 '
+[aws.profile_aliases]
+Enterprise_Naming_Scheme-voidstars = 'void**'
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Variable               | Default                                  | Description                                                                           |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
+
+### Мысалдар
+
+#### Display Subscription Name
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = 'on [$symbol($subscription)]($style) '
+symbol = '󰠅 '
+style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "󰠅 "
+style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
+```
+
+## Battery
+
+The `battery` module shows how charged the device's battery is and its current charging status.
+The module is only visible when the device's battery is below 10%.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | --------------------------------- | --------------------------------------------------- |
+| `full_symbol`        | `'󰁹 '`                            | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `'󰂄 '`                            | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `'󰂃 '`                            | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `'󰂑 '`                            | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `'󰂎 '`                            | The symbol shown when the battery state is empty.   |
+| `format`             | `'[$symbol$percentage]($style) '` | Модульдің пішімдеу жолы.                          |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
+| `disabled`           | `false`                           | Disables the `battery` module.                      |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[battery]
+full_symbol = '🔋 '
+charging_symbol = '⚡️ '
+discharging_symbol = '💀 '
+```
+
+### Battery Display
+
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style).
+If no `display` is provided. The default is as shown:
+
+```toml
+[[battery.display]]
+threshold = 10
+style = 'bold red'
+```
+
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
+#### Опциялар
+
+The `display` option is an array of the following table.
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`         | The upper bound for the display option.                                                                   |
+| `style`              | `'red bold'` | The style used if the display option is in use.                                                           |
+| `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+
+#### Мысал
+
+```toml
+[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+threshold = 10
+style = 'bold red'
+
+[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+threshold = 30
+style = 'bold yellow'
+discharging_symbol = '💦 '
+
+# when capacity is over 30%, the battery indicator will not be displayed
+```
+
+## Buf
+
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if the current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
+| `version_format`    | `'v${raw}'`                                     | The version format.                                   |
+| `symbol`            | `'🐃 '`                                         | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
+| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this module.             |
+| `style`             | `'bold blue'`                                   | Модульдің стилі.                             |
+| `disabled`          | `false`                                         | Disables the `elixir` module.                         |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | -------- | ------------------------------------ |
+| `version` | `v1.0.0` | Нұсқасы: `buf`                 |
+| `symbol`  |          | `symbol` опциясының мәнін қайталайды |
+| `style`*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[buf]
+symbol = '🦬 '
+```
+
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime.
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `bun.lock` file
+- Ағымдағы жұмыс каталогы contains a `bun.lockb` file
+- Ағымдағы жұмыс каталогы contains a `bunfig.toml` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`       | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🥟 '`                                    | A format string representing the symbol of Bun.                           |
+| `detect_extensions` | `[]`                                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `['bun.lock', 'bun.lockb', 'bunfig.toml']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                       | Which folders should trigger this module.                                 |
+| `style`             | `'bold red'`                               | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                    | Disables the `bun` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.1.4` | Нұсқасы: `bun`                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+#### Customize the format
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = 'via [🍔 $version](bold green) '
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default
+the module will be shown if the current directory contains a `.c` or `.h`
+file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `['c', 'h']`                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                                          | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                          | Which folders should trigger this module.                                 |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                        |
+| `style`             | `'bold 149'`                                                                  | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                       | Disables the `c` module.                                                  |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| name     | clang   | The name of the compiler             |
+| version  | 13.0.0  | Нұсқасы: the compiler          |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style    |         | `style` опциясының мәнін қайталайды  |
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = 'via [$name $version]($style)'
+```
+
+## CPP
+
+The `cpp` module shows some information about your `C++` compiler. By default,
+the module will be shown if the current directory contains a `.cpp`, `.hpp`, or other `C++`-related files.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                     | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C++ '`                                                                         | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `['cpp', 'cc', 'cxx', 'c++', 'hpp', 'hh', 'hxx', 'h++', 'tcc']`                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                                             | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                             | Which folders should trigger this module.                                 |
+| `commands`          | `[ [ 'c++', '--version' ], [ 'g++', '--version' ], [ 'clang++', '--version' ] ]` | How to detect what the compiler is                                        |
+| `style`             | `'bold 149'`                                                                     | Модульдің стилі.                                                 |
+| `disabled`          | `true`                                                                           | Disables the `cpp` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| name     | clang++ | The name of the compiler             |
+| version  | 13.0.0  | Нұсқасы: the compiler          |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style    |         | `style` опциясының мәнін қайталайды  |
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycpp', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C++ compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/issues/new/choose).
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[cpp]
+disabled = false
+format = 'via [$name $version]($style)'
+```
+
+## Character
+
+The `character` module shows a character (usually an arrow) beside where the text
+is entered in your terminal.
+
+The character will tell you whether the last command was successful or not. It
+can do this in two ways:
+
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
+
+By default it only changes color. If you also want to change its shape take a
+look at [this example](#with-custom-error-shape).
+
+> [!WARNING]
+> `vimcmd_symbol` is only supported in cmd, fish and zsh.
+> `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol`
+> are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `'$symbol '`         | The format string used before the text input.                                           |
+| `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.         |
+| `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.            |
+| `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.        |
+| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
+| `disabled`                  | `false`              | Disables the `character` module.                                                        |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+
+### Мысалдар
+
+#### With custom error shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+success_symbol = '[➜](bold green) '
+error_symbol = '[✗](bold red) '
+```
+
+#### Without custom error shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+success_symbol = '[➜](bold green) '
+error_symbol = '[➜](bold red) '
+```
+
+#### With custom vim shape
+
+```toml
+# ~/.config/starship.toml
+
+[character]
+vimcmd_symbol = '[V](bold green) '
+```
+
+## CMake
+
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default
+the module will be activated if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `CMakeLists.txt` file
+- Ағымдағы жұмыс каталогы contains a `CMakeCache.txt` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`   | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                                 | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
+| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Which filenames should trigger this module                                |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
+| `style`             | `'bold blue'`                          | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v3.17.3` | Нұсқасы: cmake                 |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## COBOL / GNUCOBOL
+
+The `cobol` module shows the currently installed version of COBOL.
+By default, the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains any files ending in `.cob` or `.COB`
+- Ағымдағы жұмыс каталогы contains any files ending in `.cbl` or `.CBL`
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `'⚙️ '`                               | The symbol used before displaying the version of COBOL.                   |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold blue'`                        | Модульдің стилі.                                                 |
+| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `cobol` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------- | ------------------------------------ |
+| version  | `v3.1.2.0` | Нұсқасы: `cobol`               |
+| symbol   |            | `symbol` опциясының мәнін қайталайды |
+| style\*  |            | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Command Duration
+
+The `cmd_duration` module shows how long the last command took to execute.
+The module will be shown only if the command took longer than two seconds, or
+the `min_time` config value, if it exists.
+
+> [!WARNING]
+> Do not hook the DEBUG trap in Bash
+>
+> If you are running Starship in `bash`, do not hook the `DEBUG` trap after running
+> `eval $(starship init $0)`, or this module **will** break.
+
+Bash users who need preexec-like functionality can use
+[rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec).
+Simply define the arrays `preexec_functions` and `precmd_functions` before
+running `eval $(starship init $0)`, and then proceed as normal.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
+| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
+| `format`               | `'took [$duration]($style) '` | Модульдің пішімдеу жолы.                                                                                                                                        |
+| `style`                | `'bold yellow'`               | Модульдің стилі.                                                                                                                                         |
+| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | --------------------------------------- |
+| duration | `16m40s` | The time it took to execute the command |
+| style\*  |          | `style` опциясының мәнін қайталайды     |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[cmd_duration]
+min_time = 500
+format = 'underwent [$duration](bold yellow)'
+```
+
+## Conda
+
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+
+> [!TIP]
+> This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+> If you use [pixi](https://pixi.sh), you can disable pixi's prompt modifier by running `pixi config set shell.change-ps1 false`.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `'🅒 '`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `'bold green'`                         | Модульдің стилі.                                                                                                                                                                                   |
+| `format`            | `'via [$symbol$environment]($style) '` | Модульдің пішімдеу жолы.                                                                                                                                                                                  |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `detect_env_vars`   | `["!PIXI_ENVIRONMENT_NAME"]`           | Which environment variable(s) should trigger this module. If it's a pixi environment, this module is not being triggered by default.                                                                        |
+| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current conda environment        |
+| symbol      |              | `symbol` опциясының мәнін қайталайды |
+| style\*     |              | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[conda]
+format = '[$symbol$environment](dimmed green) '
+```
+
+## Container
+
+The `container` module displays a symbol and container name, if inside a container.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | -------------------------------- | ----------------------------------------- |
+| `symbol`   | `'⬢'`                            | The symbol shown, when inside a container |
+| `style`    | `'bold red dimmed'`              | Модульдің стилі.                 |
+| `format`   | `'[$symbol \[$name\]]($style) '` | Модульдің пішімдеу жолы.                |
+| `disabled` | `false`                          | Disables the `container` module.          |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------------- | ------------------------------------ |
+| name     | `fedora-toolbox:35` | The name of the container            |
+| symbol   |                     | `symbol` опциясының мәнін қайталайды |
+| style\*  |                     | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[container]
+format = '[$symbol \[$name\]]($style) '
+```
+
+## Crystal
+
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `shard.yml` file
+- Ағымдағы жұмыс каталогы contains a `.cr` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `'🔮 '`                              | The symbol used before displaying the version of crystal.                 |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold red'`                         | Модульдің стилі.                                                 |
+| `detect_extensions` | `['cr']`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `['shard.yml']`                      | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v0.32.1` | Нұсқасы: `crystal`             |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[crystal]
+format = 'via [✨ $version](bold blue) '
+```
+
+## Daml
+
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers)
+SDK version when you are in the root directory of your Daml project. The `sdk-version` in
+the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION`
+environment variable.
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `daml.yaml` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                           |
+| `style`             | `'bold cyan'`                        | Модульдің стилі.                                                 |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['daml.yaml']`                      | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.2.0` | Нұсқасы: `daml`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[daml]
+format = 'via [D $version](bold bright-green) '
+```
+
+## Dart
+
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with `.dart` extension
+- Ағымдағы жұмыс каталогы contains a `.dart_tool` directory
+- Ағымдағы жұмыс каталогы contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`              | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🎯 '`                                           | A format string representing the symbol of Dart                           |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.dart_tool']`                                  | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                                     | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.8.4` | Нұсқасы: `dart`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = 'via [🔰 $version](bold red) '
+```
+
+## Deno
+
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `deno.json`, `deno.jsonc`, `deno.lock`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                 | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🦕 '`                                                                              | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                                                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'deno.lock', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                 | Which folders should trigger this module.                                 |
+| `style`             | `'green bold'`                                                                       | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                              | Disables the `deno` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.8.3` | Нұсқасы: `deno`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[deno]
+format = 'via [🦕 $version](green bold) '
+```
+
+## Directory
+
+The `directory` module shows the path to your current directory, truncated to
+three parent folders. Your directory will also be truncated to the root of the
+git repo that you're currently in.
+
+When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is
+truncated, you will see a shortened name of each directory based on the number
+you enable for the option.
+
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root,
+and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before
+it would have been `nixpkgs/pkgs`.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                                                                                                          | The number of parent folders that the current directory should be truncated to.                            |
+| `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                           |
+| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | Модульдің пішімдеу жолы.                                                                                 |
+| `style`                  | `'bold cyan'`                                                                                                                | Модульдің стилі.                                                                                  |
+| `disabled`               | `false`                                                                                                                      | Disables the `directory` module.                                                                           |
+| `read_only`              | `'🔒'`                                                                                                                       | The symbol indicating current directory is read only.                                                      |
+| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
+| `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
+| `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
+| `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
+| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                   |
+| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                      |
+| `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                       |
+
+<details>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+
+| Advanced Option             | Default | Description                                                                                                                                                            |
+| --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                             |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
+| `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
+prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following
+key/value pairs:
+
+| Value   | Type    | Description                              |
+| ------- | ------- | ---------------------------------------- |
+| `from`  | String  | The value to substitute                  |
+| `to`    | String  | The replacement for that value, if found |
+| `regex` | Boolean | (Optional) Whether `from` is a regex     |
+
+By using `regex = true`, you can use [Rust's regular expressions](https://docs.rs/regex/latest/regex/#syntax) in `from`.
+For instance you can replace every slash except the first with the following:
+
+```toml
+substitutions = [
+  { from = "^/", to = "<root>/", regex = true },
+  { from = "/", to = " | " },
+  { from = "^<root>", to = "/", regex = true },
+]
+```
+
+This will replace `/var/log` to `/ | var | log`.
+
+The old syntax still works, although it doesn't support regular expressions:
+
+```toml
+[directory.substitutions]
+'/Volumes/network/path' = '/net'
+'src/com/long/java/path' = 'mypath'
+```
+
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
+the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
+`/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as
+`/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with
+a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+
+</details>
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------------------- | ----------------------------------- |
+| path     | `'D:/Projects'`       | Ағымдағы жұмыс каталогы path          |
+| style\*  | `'black bold dimmed'` | `style` опциясының мәнін қайталайды |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------------- | --------------------- | --------------------------------------- |
+| before_root_path | `'/path/to/home/'`    | The path before git root directory path |
+| repo_root        | `'git_repo'`          | The git root directory name             |
+| path             | `'/src/lib'`          | The remaining path                      |
+| style            | `'black bold dimmed'` | `style` опциясының мәнін қайталайды     |
+| repo_root_style  | `'underline white'`   | Style for git root directory name       |
+
+</details>
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[directory]
+truncation_length = 8
+truncation_symbol = '…/'
+```
+
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------- | ------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Модульдің пішімдеу жолы.                              |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.   |
+| `style`             | `'bold orange'`                        | Модульдің стилі.                               |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                           |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.            |
+| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.             |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module.               |
+| `detect_env_vars`   | `['DIRENV_FILE']`                      | Which environment variables should trigger this module. |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.       |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed.   |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.        |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.        |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.    |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------------- | --------------------------------------- |
+| loaded   | `loaded`            | Whether the current rc file is loaded.  |
+| allowed  | `denied`            | Whether the current rc file is allowed. |
+| rc_path  | `/home/test/.envrc` | The current rc file path.               |
+| symbol   |                     | `symbol` опциясының мәнін қайталайды.   |
+| style\*  | `red bold`          | `style` опциясының мәнін қайталайды.    |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
+```
+
+## Docker Context
+
+The `docker_context` module shows the currently active
+[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)
+if it's not set to `default` or `desktop-linux`, or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or
+`DOCKER_CONTEXT` environment variables are set (as they are meant to override
+the context in use).
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                                                           | Модульдің пішімдеу жолы.                                                        |
+| `symbol`            | `'🐳 '`                                                                                      | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                                                       | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                                                         | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `['compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                                                         | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `'blue bold'`                                                                                | Модульдің стилі.                                                         |
+| `disabled`          | `false`                                                                                      | Disables the `docker_context` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------------- | ------------------------------------ |
+| context  | `test_context` | The current docker context           |
+| symbol   |                | `symbol` опциясының мәнін қайталайды |
+| style\*  |                | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[docker_context]
+format = 'via [🐋 $context](blue bold)'
+```
+
+## Dotnet
+
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If
+the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
+shows the latest installed version of the SDK.
+
+By default this module will only be shown in your prompt when one or more of
+the following files are present in the current directory:
+
+- `global.json`
+- `project.json`
+- `Directory.Build.props`
+- `Directory.Build.targets`
+- `Packages.props`
+- `*.csproj`
+- `*.fsproj`
+- `*.xproj`
+
+You'll also need the .NET Core SDK installed in order to use it correctly.
+
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast
+as running `dotnet --version`, but it may show an incorrect version if your .NET project has an
+unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by
+setting `heuristic = false` in the module options.
+
+The module will also show the Target Framework Moniker
+(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>)
+when there is a `.csproj` file in the current directory.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                          | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.                  |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                                                                                           | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------------- | ------------------------------------------------------------------ |
+| version  | `v3.1.201`       | Нұсқасы: `dotnet` sdk                                        |
+| tfm      | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
+| symbol   |                  | `symbol` опциясының мәнін қайталайды                               |
+| style\*  |                  | `style` опциясының мәнін қайталайды                                |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[dotnet]
+symbol = '🥅 '
+style = 'green'
+heuristic = false
+```
+
+## Elixir
+
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `mix.exs` file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
+| `version_format`    | `'v${raw}'`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💧 '`                                                   | The symbol used before displaying the version of Elixir/Erlang.           |
+| `detect_extensions` | `[]`                                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `['mix.exs']`                                             | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                      | Which folders should trigger this module.                                 |
+| `style`             | `'bold purple'`                                           | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                   | Disables the `elixir` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ----------- | ------- | ------------------------------------ |
+| version     | `v1.10` | Нұсқасы: `elixir`              |
+| otp_version |         | The otp version of `elixir`          |
+| symbol      |         | `symbol` опциясының мәнін қайталайды |
+| style\*     |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[elixir]
+symbol = '🔮 '
+```
+
+## Elm
+
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `elm.json` file
+- Ағымдағы жұмыс каталогы contains a `elm-package.json` file
+- Ағымдағы жұмыс каталогы contains a `.elm-version` file
+- Ағымдағы жұмыс каталогы contains a `elm-stuff` folder
+- Ағымдағы жұмыс каталогы contains `*.elm` files
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`               | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🌳 '`                                            | A format string representing the symbol of Elm.                           |
+| `detect_extensions` | `['elm']`                                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['elm-stuff']`                                    | Which folders should trigger this module.                                 |
+| `style`             | `'cyan bold'`                                      | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v0.19.1` | Нұсқасы: `elm`                 |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[elm]
+format = 'via [ $version](cyan bold) '
+```
+
+## Environment Variable
+
+The `env_var` module displays the current value of a selected environment variables.
+The module will be shown only if any of the following conditions are met:
+
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
+
+> [!TIP]
+> The order in which env_var modules are shown can be individually set by including
+> `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`).
+> By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+
+> [!TIP]
+> Multiple environmental variables can be displayed by using a `.`. (see example)
+> If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+>
+> Example: following configuration will display value of USER environment variable
+>
+> ```toml
+> # ~/.config/starship.toml
+>
+> [env_var.USER]
+> default = 'unknown user'
+> ```
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------- | ------------------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`      | `""`                                  | The symbol used before displaying the variable value.                        |
+| `variable`    |                                       | The environment variable to be displayed.                                    |
+| `default`     |                                       | The default value to be displayed when the selected variable is not defined. |
+| `format`      | `"with [$symbol$env_value]($style) "` | Модульдің пішімдеу жолы.                                                   |
+| `description` | `"<env_var module>"`                  | The description of the module that is shown when running `starship explain`. |
+| `disabled`    | `false`                               | Disables the `env_var` module.                                               |
+| `style`       | `"black bold dimmed"`                 | Модульдің стилі.                                                    |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | `symbol` опциясының мәнін қайталайды       |
+| style\*   |                                             | `style` опциясының мәнін қайталайды        |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[env_var]
+variable = 'SHELL'
+default = 'unknown shell'
+```
+
+Displaying multiple environmental variables:
+
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = 'SHELL'
+default = 'unknown shell'
+[env_var.USER]
+default = 'unknown user'
+```
+
+## Erlang
+
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `rebar.config` file.
+- Ағымдағы жұмыс каталогы contains a `erlang.mk` file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                  |
+| `style`             | `'bold red'`                         | Модульдің стилі.                                                 |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['rebar.config', 'elang.mk']`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v22.1.3` | Нұсқасы: `erlang`              |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[erlang]
+format = 'via [e $version](bold red) '
+```
+
+## Fennel
+
+The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with the `.fnl` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🧅 '`                              | The symbol used before displaying the version of fennel.                  |
+| `style`             | `'bold green'`                       | Модульдің стилі.                                                 |
+| `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `fennel` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.2.1` | Нұсқасы: `fennel`              |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[fennel]
+symbol = '⫰ '
+```
+
+## Fill
+
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are
+present in a line they will split the space evenly between them. This is useful for aligning
+other modules.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `'.'`          | The symbol used to fill the line. |
+| `style`    | `'bold black'` | Модульдің стилі.         |
+| `disabled` | `false`        | Disables the `fill` module        |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+format = 'AA $fill BB $fill CC'
+
+[fill]
+symbol = '-'
+style = 'bold green'
+```
+
+Produces a prompt that looks like:
+
+```
+AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Fortran
+
+The `fortran` module shows the current compiler version of Fortran.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                                                                                                      | The symbol used before displaying the version of Fortran.                 |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                                        | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'${raw}'`                                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `'bold purple'`                                                                                                             | Модульдің стилі.                                                 |
+| `detect_extensions` | `['f', 'F', 'for', 'FOR', 'ftn', 'FTN', 'f77', 'F77', 'f90', 'F90', 'f95', 'F95','f03', 'F03', 'f08', 'F08', 'f18', 'F18']` | Which extensions should trigger this module.                              |
+| `detect_files`      | `['fpm.toml']`                                                                                                              | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                                        | Which folders should trigger this module.                                 |
+| `commands`          | `[ [ 'gfortran', '--version' ], [ 'flang', '--version' ], [ 'flang-new', '--version' ] ]`                                   | How to detect what the compiler is                                        |
+| `disabled`          | `false`                                                                                                                     | Disables the `fortran` module.                                            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| name     | gfortran | The name of the compiler             |
+| version  | `14.2.0` | Нұсқасы: the Fortran compiler  |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['myfortran', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a Fortran compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+## Fossil Branch
+
+The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol$branch]($style) '` | Модульдің пішімдеу жолы. Use `'$branch'` to refer to the current branch name.          |
+| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory.       |
+| `style`             | `'bold purple'`                  | Модульдің стилі.                                                                |
+| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                          |
+| `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
+| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                     |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| branch   | `trunk` | The active Fossil branch             |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_branch]
+symbol = '🦎 '
+truncation_length = 4
+truncation_symbol = ''
+```
+
+## Fossil Metrics
+
+The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Модульдің пішімдеу жолы.            |
+| `added_style`        | `'bold green'`                                               | The style for the added count.        |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module. |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------------- | ------- | ------------------------------------------- |
+| added           | `1`     | The current number of added lines           |
+| deleted         | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
+## Google Cloud (`gcloud`)
+
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
+This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+The `CLOUDSDK_CORE_PROJECT` and `CLOUDSDK_COMPUTE_REGION` environment variables, when set, override the `project` and `region` values from the active configuration, mirroring the behavior of `gcloud` itself.
+
+When the module is enabled it will always be active, unless `detect_env_vars` has
+been set in which case the module will only be active when one of the
+environment variables has been set.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Модульдің пішімдеу жолы.                                       |
+| `symbol`          | `'☁️  '`                                                  | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  | `{}`                                                     | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` | `{}`                                                     | Table of project aliases to display in addition to the GCP name. |
+| `detect_env_vars` | `[]`                                                     | Which environmental variables should trigger this module         |
+| `style`           | `'bold blue'`                                            | Модульдің стилі.                                        |
+| `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------- | ------------------------------------------------------------------ |
+| region   | `us-central1` | The current GCP region                                             |
+| account  | `foo`         | The current GCP profile                                            |
+| domain   | `example.com` | The current GCP profile domain                                     |
+| project  |               | The current GCP project                                            |
+| active   | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol   |               | `symbol` опциясының мәнін қайталайды                               |
+| style\*  |               | `style` опциясының мәнін қайталайды                                |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысалдар
+
+#### Display account and project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+```
+
+#### Display active config name only
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = '[$symbol$active]($style) '
+style = 'bold yellow'
+```
+
+#### Display account and aliased region
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+symbol = '️🇬️ '
+[gcloud.region_aliases]
+us-central1 = 'uc1'
+asia-northeast1 = 'an1'
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = 'vlpn'
+```
+
+## Git Branch
+
+The `git_branch` module shows the active branch of the repo in your current directory.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | Модульдің пішімдеу жолы. Use `'$branch'` to refer to the current branch name.          |
+| `symbol`             | `' '`                                            | A format string representing the symbol of git branch.                                   |
+| `style`              | `'bold purple'`                                   | Модульдің стилі.                                                                |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
+| `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                         |
+| `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | Ағымдағы тармақ атауы, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |          | `symbol` опциясының мәнін қайталайды                                                                   |
+| style\*       |          | `style` опциясының мәнін қайталайды                                                                    |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[git_branch]
+symbol = '🌱 '
+truncation_length = 4
+truncation_symbol = ''
+ignore_branches = ['master', 'main']
+```
+
+## Git Commit
+
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                          | The length of the displayed git commit hash.                                         |
+| `format`             | `'[\($hash$tag\)]($style) '` | Модульдің пішімдеу жолы.                                                           |
+| `style`              | `'bold green'`               | Модульдің стилі.                                                            |
+| `only_detached`      | `true`                       | Only show git commit hash when in detached `HEAD` state                              |
+| `tag_disabled`       | `true`                       | Disables showing tag info in `git_commit` module.                                    |
+| `tag_max_candidates` | `0`                          | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `' 🏷  '`                     | Tag symbol prefixing the info shown                                                  |
+| `disabled`           | `false`                      | Disables the `git_commit` module.                                                    |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | -------------------------------------------- |
+| hash     | `b703eb3` | The current git commit hash                  |
+| tag      | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\*  |           | `style` опциясының мәнін қайталайды          |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = '🔖 '
+```
+
+## Git State
+
+The `git_state` module will show in directories which are part of a git
+repository, and where there is an operation in progress, such as: _REBASING_,
+_BISECTING_, etc. If there is progress information (e.g., REBASING 3/10),
+that information will be shown too.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `rebase`       | `'REBASING'`                                                  | A format string displayed when a `rebase` is in progress.                               |
+| `merge`        | `'MERGING'`                                                   | A format string displayed when a `merge` is in progress.                                |
+| `revert`       | `'REVERTING'`                                                 | A format string displayed when a `revert` is in progress.                               |
+| `cherry_pick`  | `'CHERRY-PICKING'`                                            | A format string displayed when a `cherry-pick` is in progress.                          |
+| `bisect`       | `'BISECTING'`                                                 | A format string displayed when a `bisect` is in progress.                               |
+| `am`           | `'AM'`                                                        | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `am_or_rebase` | `'AM/REBASE'`                                                 | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
+| `style`        | `'bold yellow'`                                               | Модульдің стилі.                                                               |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Модульдің пішімдеу жолы.                                                              |
+| `disabled`     | `false`                                                       | Disables the `git_state` module.                                                        |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*          |            | `style` опциясының мәнін қайталайды |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = '[🍒 PICKING](bold red)'
+```
+
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in
+the current git repository.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `'bold green'`                                               | The style for the added count.        |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Модульдің пішімдеу жолы.            |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------------- | ------- | ------------------------------------------- |
+| added           | `1`     | The current number of added lines           |
+| deleted         | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
+## Git Status
+
+The `git_status` module shows symbols representing the state of the repo in your
+current directory.
+
+> [!TIP]
+> The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment.
+> You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`               | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`           | `'='`                                         | The format shown when this branch has merge conflicts.                                                      |
+| `ahead`                | `'⇡'`                                         | The format shown when this branch is ahead of the branch being tracked.                                     |
+| `behind`               | `'⇣'`                                         | The format shown when this branch is behind the branch being tracked.                                       |
+| `diverged`             | `'⇕'`                                         | The format shown when this branch has diverged from the branch being tracked.                               |
+| `up_to_date`           | `''`                                          | The format shown when this branch is up to date with the branch being tracked.                              |
+| `untracked`            | `'?'`                                         | The format shown when there are untracked files in the working directory.                                   |
+| `stashed`              | `'\$'`                                        | The format shown when a stash exists for the local repository.                                              |
+| `modified`             | `'!'`                                         | The format shown when there are file modifications in the working directory.                                |
+| `staged`               | `'+'`                                         | The format shown when a new file has been added to the staging area.                                        |
+| `renamed`              | `'»'`                                         | The format shown when a renamed file has been added to the staging area.                                    |
+| `deleted`              | `'✘'`                                         | The format shown when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | `""`                                          | The format shown when a file's type has been changed in the staging area.                                   |
+| `style`                | `'bold red'`                                  | Модульдің стилі.                                                                                   |
+| `ignore_submodules`    | `false`                                       | Ignore changes to submodules.                                                                               |
+| `worktree_added`       | `""`                                          | The format shown when a new file has been added in the working directory.                                   |
+| `worktree_deleted`     | `""`                                          | The format shown when a file has been deleted in the working directory.                                     |
+| `worktree_modified`    | `""`                                          | The format shown when a file has been modified in the working directory.                                    |
+| `worktree_typechanged` | `""`                                          | The format shown when a file's type has been changed in the working directory.                              |
+| `index_added`          | `""`                                          | The format shown when a new file has been added to the staging area.                                        |
+| `index_deleted`        | `""`                                          | The format shown when a file has been deleted from the staging area.                                        |
+| `index_modified`       | `""`                                          | The format shown when a file has been modified in the staging area.                                         |
+| `index_typechanged`    | `""`                                          | The format shown when a file's type has been changed in the staging area.                                   |
+| `disabled`             | `false`                                       | Disables the `git_status` module.                                                                           |
+| `windows_starship`     |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `use_git_executable`   | `false`                                       | Do not use `gitoxide` for computing the status, but use the `git` executable instead.                       |
+
+### Айнымалылар
+
+The following variables can be used in `format`:
+
+| Variable               | Description                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`           | Shortcut for `$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked`.                     |
+| `ahead_behind`         | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`           | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`            | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`              | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`             | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`               | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`              | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`              | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`          | Displays `typechanged` when a file's type has been changed in the staging area.                               |
+| `worktree_added`       | Displays `worktree_added` when a new file has been added in the working directory.                            |
+| `worktree_deleted`     | Displays `worktree_deleted` when a file's been deleted in the working directory.                              |
+| `worktree_modified`    | Displays `worktree_modified` when a file's been modified in the working directory.                            |
+| `worktree_typechanged` | Displays `worktree_typechanged` when a file's type has been changed in the working directory.                 |
+| `index_added`          | Displays `index_added` when a new file has been added to the staging area.                                    |
+| `index_deleted`        | Displays `index_deleted` when a file has been deleted from the staging area.                                  |
+| `index_modified`       | Displays `index_modified` when a file has been modified in the staging area.                                  |
+| `index_typechanged`    | Displays `index_typechanged` when a file's type has been changed in the staging area.                         |
+| style\*                | `style` опциясының мәнін қайталайды                                                                           |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+The following variables can be used in `diverged`:
+
+| Variable       | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `ahead_count`  | Number of commits ahead of the tracking branch |
+| `behind_count` | Number of commits behind the tracking branch   |
+
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed`, `deleted`, `typechanged`, `worktree_added`, `worktree_deleted`, `worktree_modified`, `worktree_typechanged`, `index_added`, `index_deleted`, `index_modified`, and `index_typechanged`:
+
+| Variable | Description              |
+| -------- | ------------------------ |
+| `count`  | Show the number of files |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+conflicted = '🏳'
+ahead = '🏎💨'
+behind = '😰'
+diverged = '😵'
+up_to_date = '✓'
+untracked = '🤷'
+stashed = '📦'
+modified = '📝'
+staged = '[++\($count\)](green)'
+renamed = '👅'
+deleted = '🗑'
+```
+
+Show ahead/behind count of the branch being tracked
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+```
+
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
+## Gleam
+
+The `gleam` module shows the currently installed version of [Gleam](https://gleam.run/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `gleam.toml` file
+- Ағымдағы жұмыс каталогы contains a file with the `.gleam` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⭐ '`                              | A format string representing the symbol of Gleam.                         |
+| `detect_extensions` | `['gleam']`                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `['gleam.toml']`                     | Which filenames should trigger this module.                               |
+| `style`             | `'bold #FFAFF3'`                     | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `gleam` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.0.0` | Нұсқасы: `gleam`               |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[gleam]
+format = 'via [⭐ $version](bold red) '
+```
+
+## Go
+
+The `golang` module shows the currently installed version of [Go](https://golang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `go.mod` file
+- Ағымдағы жұмыс каталогы contains a `go.sum` file
+- Ағымдағы жұмыс каталогы contains a `go.work` file
+- Ағымдағы жұмыс каталогы contains a `glide.yaml` file
+- Ағымдағы жұмыс каталогы contains a `Gopkg.yml` file
+- Ағымдағы жұмыс каталогы contains a `Gopkg.lock` file
+- Ағымдағы жұмыс каталогы contains a `.go-version` file
+- Ағымдағы жұмыс каталогы contains a `Godeps` directory
+- Ағымдағы жұмыс каталогы contains a file with the `.go` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Модульдің пішімдеу жолы.                                                                                 |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐹 '`                                                                                   | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | Модульдің стилі.                                                                                  |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | Нұсқасы: `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | `symbol` опциясының мәнін қайталайды                                                                                                        |
+| style\*     |           | `style` опциясының мәнін қайталайды                                                                                                         |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
+```
+
+## Guix-shell
+
+The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment.
+The module will be shown when inside a guix-shell environment.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `'via [$symbol]($style) '` | Модульдің пішімдеу жолы.                             |
+| `symbol`   | `'🐃 '`                    | A format string representing the symbol of guix-shell. |
+| `style`    | `'yellow bold'`            | Модульдің стилі.                              |
+| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[guix_shell]
+disabled = true
+format = 'via [🐂](yellow bold) '
+```
+
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
+currently used in the project directory.
+
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- Ағымдағы жұмыс каталогы contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                        |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['gradle']`                         | Which folders should trigger this module.                                 |
+| `style`             | `'bold bright-cyan'`                 | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                             |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.5.1` | Нұсқасы: `gradle`              |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style*   |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `stack.yaml` file
+- Ағымдағы жұмыс каталогы contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                         |
+| `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Which extensions should trigger this module.       |
+| `detect_files`      | `['stack.yaml', 'cabal.project']`    | Which filenames should trigger this module.        |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `style`             | `'bold purple'`                      | Модульдің стилі.                          |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------ | ----------- | --------------------------------------------------------------------------------------- |
+| version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol       |             | `symbol` опциясының мәнін қайталайды                                                    |
+| style\*      |             | `style` опциясының мәнін қайталайды                                                     |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Haxe
+
+The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `project.xml`, `Project.xml`, `application.xml`, `haxelib.json`, `hxformat.json` or `.haxerc` file
+- Ағымдағы жұмыс каталогы contains a `.haxelib` or a `haxe_libraries` directory
+- Ағымдағы жұмыс каталогы contains a file with the `.hx` or `.hxml` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                            | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | Which extensions should trigger this module.                              |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Which folders should trigger this module.                                 |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Haxe.                          |
+| `style`             | `'bold fg:202'`                                                                                 | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v4.2.5` | Нұсқасы: `haxe`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[haxe]
+format = "via [⌘ $version](bold fg:202) "
+```
+
+## Helm
+
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `helmfile.yaml` file
+- Ағымдағы жұмыс каталогы contains a `Chart.yaml` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                          |
+| `style`             | `'bold white'`                       | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `helm` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v3.1.1` | Нұсқасы: `helm`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[helm]
+format = 'via [⎈ $version](bold white) '
+```
+
+## Hostname
+
+The `hostname` module shows the system hostname.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
+| `ssh_symbol`      | `'🌐 '`                                | A format string representing the symbol when connected to SSH session.                                                                |
+| `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | Модульдің пішімдеу жолы.                                                                                                            |
+| `style`           | `'bold dimmed green'`                  | Модульдің стилі.                                                                                                             |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
+| `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | The hostname of the computer                          |
+| style\*    |            | `style` опциясының мәнін қайталайды                   |
+| ssh_symbol | `'🌏 '`    | The symbol to represent when connected to SSH session |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысалдар
+
+#### Always show the hostname
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
+trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
+disabled = false
+```
+
+#### Replace the hostname with a nickname
+
+```toml
+# ~/.config/starship.toml
+[hostname]
+aliases = { "Max's MacBook Pro" = "home" }
+```
+
+## Java
+
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
+- Ағымдағы жұмыс каталогы contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                                                                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this module.                                 |
+| `symbol`            | `'☕ '`                                                                                                               | A format string representing the symbol of Java                           |
+| `style`             | `'red dimmed'`                                                                                                        | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| version  | `v14`   | Нұсқасы: `java`                |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[java]
+symbol = '🌟 '
+```
+
+## Jobs
+
+The `jobs` module shows the current number of jobs running.
+The module will be shown only if there are background jobs running.
+The module will show the number of jobs running if there are at least
+2 jobs, or more than the `number_threshold` config value, if it exists.
+The module will show a symbol if there is at least 1 job, or more than the
+`symbol_threshold` config value, if it exists. You can set both values
+to 0 in order to _always_ show the symbol and number of jobs, even if there are
+0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
+
+> [!WARNING]
+> This module is not supported on tcsh.
+
+> [!WARNING]
+> The `threshold` option is deprecated, but if you want to use it,
+> the module will show the number of jobs running if there is more than 1 job, or
+> more than the `threshold` config value, if it exists. If `threshold` is set to 0,
+> then the module will also show when there are 0 jobs running.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `'[$symbol$number]($style) '` | Модульдің пішімдеу жолы.                                               |
+| `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `'bold blue'`                 | Модульдің стилі.                                                |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| number   | `1`     | The number of jobs                   |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысалдар
+
+```toml
+# ~/.config/starship.toml
+
+[jobs]
+symbol = '+ '
+number_threshold = 4
+symbol_threshold = 0
+```
+
+#### Changing process grouping behavior in fish
+
+When using the Fish shell, Starship counts **job groups** instead of individual process IDs by default. This prevents overcounting when a pipeline has multiple processes but only one suspended group. To revert to the legacy PID-based counting, please add the following to your shell config:
+
+```fish
+set -g __starship_fish_use_job_groups "false"
+```
+
+## Julia
+
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Project.toml` file
+- Ағымдағы жұмыс каталогы contains a `Manifest.toml` file
+- Ағымдағы жұмыс каталогы contains a file with the `.jl` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['jl']`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                         |
+| `style`             | `'bold purple'`                      | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `julia` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.4.0` | Нұсқасы: `julia`               |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[julia]
+symbol = '∴ '
+```
+
+## Kotlin
+
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `.kt` or a `.kts` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                    |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
+| `detect_extensions` | `['kt', 'kts']`                      | Which extensions should trigger this module.                                  |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                     |
+| `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `'bold blue'`                        | Модульдің стилі.                                                     |
+| `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.4.21` | Нұсқасы: `kotlin`              |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+symbol = '🅺 '
+```
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+# Uses the Kotlin Compiler binary to get the installed version
+kotlin_binary = 'kotlinc'
+```
+
+## Kubernetes
+
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
+The namespace needs to be set in the kubeconfig file, this can be done via
+`kubectl config set-context starship-context --namespace astronaut`.
+Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user`
+and `kubectl config set-context starship-context --cluster starship-cluster`.
+If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+>
+> When the module is enabled it will always be active, unless any of
+> `detect_env_vars`, `detect_extensions`, `detect_files` or `detect_folders` have
+> been set in which case the module will only be active in directories that match
+> those conditions or one of the environmental variables has been set.
+
+### Опциялар
+
+> [!WARNING]
+> The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias`
+> and `user_alias` options instead.
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `'☸ '`                                             | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Модульдің пішімдеу жолы.                                            |
+| `style`             | `'cyan bold'`                                      | Модульдің стилі.                                             |
+| `context_aliases`*  | `{}`                                               | Table of context aliases to display.                                  |
+| `user_aliases`*     | `{}`                                               | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                               | Which folders should trigger this module.                             |
+| `detect_env_vars`   | `[]`                                               | Which environmental variables should trigger this module              |
+| `contexts`          | `[]`                                               | Customized styles and symbols for specific contexts.                  |
+| `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
+
+*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+
+To customize the style of the module for specific environments, use the following configuration as
+part of the `contexts` list:
+
+| Variable          | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
+| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
+| `context_alias`   | Context alias to display instead of the full context name.                               |
+| `user_alias`      | User alias to display instead of the full user name.                                     |
+| `style`           | The style for the module when using this context. If not set, will use module's style.   |
+| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+
+Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
+regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
+(see example below and the
+[rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-context`   | The current kubernetes context name      |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| user      | `starship-user`      | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
+| symbol    |                      | `symbol` опциясының мәнін қайталайды     |
+| style\*   |                      | `style` опциясының мәнін қайталайды      |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+disabled = false
+contexts = [
+  { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
+]
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
+```
+
+#### Kubernetes Context specific config
+
+The `contexts` configuration option is used to customise what the current Kubernetes context name looks
+like (style and symbol) if the name matches the defined regular expression.
+
+```toml
+# ~/.config/starship.toml
+
+[[kubernetes.contexts]]
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
+context_pattern = "production"
+user_pattern = "admin_user"
+style = "bold red"
+context_alias = "prod"
+user_alias = "admin"
+
+[[kubernetes.contexts]]
+# "green" style + a different symbol when Kubernetes current context name contains openshift
+context_pattern = ".*openshift.*"
+style = "green"
+symbol = "💔 "
+context_alias = "openshift"
+
+[[kubernetes.contexts]]
+# Using capture groups
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+context_alias = "gke-$cluster"
+```
+
+## Line Break
+
+The `line_break` module separates the prompt into two lines.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[line_break]
+disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `'[$localipv4]($style) '` | Модульдің пішімдеу жолы.                             |
+| `style`    | `'bold yellow'`           | Модульдің стилі.                              |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | ------------ | ----------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
+| style\*   |              | `style` опциясының мәнін қайталайды |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = '@[$localipv4](bold red) '
+disabled = false
+```
+
+## Lua
+
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `.lua-version` file
+- Ағымдағы жұмыс каталогы contains a `lua` directory
+- Ағымдағы жұмыс каталогы contains a file with the `.lua` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                 |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
+| `symbol`            | `'🌙 '`                              | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `['lua']`                            | Which extensions should trigger this module.                               |
+| `detect_files`      | `['.lua-version']`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `['lua']`                            | Which folders should trigger this module.                                  |
+| `style`             | `'bold blue'`                        | Модульдің стилі.                                                  |
+| `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v5.4.0` | Нұсқасы: `lua`                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[lua]
+format = 'via [🌕 $version](bold blue) '
+```
+
+## Maven
+
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `pom.xml` file.
+- Ағымдағы жұмыс каталогы contains a `.mvn/wrapper/maven-wrapper.properties` file.
+
+If you use an alternate POM syntax (for example `pom.hocon`), add its filename to `detect_files`.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
+| `style`             | `'bold bright-cyan'`                 | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `maven` module.                                              |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v3.2.0` | Нұсқасы: `maven`               |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style*   |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Memory Usage
+
+The `memory_usage` module shows current system memory and swap usage.
+
+By default the swap usage is displayed if the total system swap is non-zero.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | Модульдің пішімдеу жолы.                               |
+| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `'bold dimmed white'`                          | Модульдің стилі.                                |
+| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------ | ------------- | ------------------------------------------------------------------ |
+| ram          | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
+| ram_pct      | `48%`         | The percentage of the current system memory.                       |
+| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
+| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
+| symbol       | `🐏`          | `symbol` опциясының мәнін қайталайды                               |
+| style\*      |               | `style` опциясының мәнін қайталайды                                |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+*\*: The SWAP file information is only displayed if detected on the current system
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[memory_usage]
+disabled = false
+threshold = -1
+symbol = ' '
+style = 'bold dimmed green'
+```
+
+## Meson
+
+The `meson` module shows the current Meson developer environment status.
+
+By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------- |
+| `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                                |
+| `truncation_symbol` | `'…'`                              | The symbol used to indicate a project name was truncated. You can use `''` for no symbol. |
+| `format`            | `'via [$symbol$project]($style) '` | Модульдің пішімдеу жолы.                                                                |
+| `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                                       |
+| `style`             | `'blue bold'`                      | Модульдің стилі.                                                                 |
+| `disabled`          | `false`                            | Disables the `meson` module.                                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------- | ------------------------------------ |
+| project  | `starship` | The current Meson project name       |
+| symbol   | `🐏`       | `symbol` опциясының мәнін қайталайды |
+| style\*  |            | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[meson]
+disabled = false
+truncation_symbol = '--'
+symbol = ' '
+style = 'bold dimmed green'
+```
+
+## Mercurial Branch
+
+The `hg_branch` module shows the active branch and topic of the repo in your current directory.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `'bold purple'`                           | Модульдің стилі.                                                                    |
+| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | Модульдің пішімдеу жолы.                                                                   |
+| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
+| `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
+| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| branch   | `master`  | The active mercurial branch          |
+| topic    | `feature` | The active mercurial topic           |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[hg_branch]
+format = 'on [🌱 $branch](bold purple)'
+truncation_length = 4
+truncation_symbol = ''
+```
+
+## Mercurial State
+
+The `hg_state` module will show in directories which are part of a mercurial
+repository, and where there is an operation in progress, such as: _REBASING_,
+_BISECTING_, etc.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------ | ------------------------- | ------------------------------------------------------------- |
+| `merge`      | `'MERGING'`               | A format string displayed when a `merge` is in progress.      |
+| `rebase`     | `'REBASING'`              | A format string displayed when a `rebase` is in progress.     |
+| `update`     | `'UPDATING'`              | A format string displayed when a `update` is in progress.     |
+| `bisect`     | `'BISECTING'`             | A format string displayed when a `bisect` is in progress.     |
+| `shelve`     | `'SHELVING'`              | A format string displayed when a `shelve` is in progress.     |
+| `graft`      | `'GRAFTING'`              | A format string displayed when a `graft` is in progress.      |
+| `transplant` | `'TRANSPLANTING'`         | A format string displayed when a `transplant` is in progress. |
+| `histedit`   | `'HISTEDITING'`           | A format string displayed when a `histedit` is in progress.   |
+| `style`      | `'bold yellow'`           | Модульдің стилі.                                     |
+| `format`     | `'\([$state]($style)\) '` | Модульдің пішімдеу жолы.                                    |
+| `disabled`   | `true`                    | Disables the `hg_state` module.                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------------- | ---------- | ----------------------------------- |
+| state            | `REBASING` | The current state of the repo       |
+| progress_current | `1`        | The current operation progress      |
+| progress_total   | `2`        | The total operation progress        |
+| style\*          |            | `style` опциясының мәнін қайталайды |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Mise
+
+The `mise` module shows the current mise health as reported by running `mise doctor`.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| `symbol`            | `'mise '`                                                            | The symbol used before displaying _mise_ health. |
+| `style`             | `'bold purple'`                                                      | Модульдің стилі.                        |
+| `format`            | `'on [$symbol$health]($style) '`                                     | Модульдің пішімдеу жолы.                       |
+| `detect_extensions` | `[]`                                                                 | Which extensions should trigger this module.     |
+| `detect_files`      | `['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']` | Which filenames should trigger this module.      |
+| `detect_folders`    | `['.mise']`                                                          | Which folders should trigger this module.        |
+| `healthy_symbol`    | `healthy`                                                            | The message displayed when _mise_ is healthy.    |
+| `unhealthy_symbol`  | `unhealthy`                                                          | The message displayed when _mise_ is unhealthy.  |
+| `disabled`          | `true`                                                               | Disables the `mise` module.                      |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| health   | `healthy` | The health of _mise_                 |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[mise]
+health = 'ready'
+```
+
+## Mojo
+
+The `mojo` module shows the current version of [Mojo programming language](https://www.modular.com/mojo) installed
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                             |
+| `symbol`            | `'🔥 '`                               | The symbol used before displaying the version of Mojo. |
+| `style`             | `'bold 208'`                          | Модульдің стилі.                              |
+| `disabled`          | `false`                               | Disables the `mojo` module.                            |
+| `detect_extensions` | `['mojo', '🔥']`                      | Which extensions should trigger this module.           |
+| `detect_files`      | `[]`                                  | Which filenames should trigger this module.            |
+| `detect_folders`    | `[]`                                  | Which folders should trigger this module.              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `24.4.0` | Нұсқасы: `mojo`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[mojo]
+format = 'via [mojo ($version )($hash )]($style)'
+```
+
+## NATS
+
+The `nats` module shows the name of the current [NATS](https://nats.io) context.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| `symbol`   | `'✉️ '`                     | The symbol used before the NATS context (defaults to empty). |
+| `style`    | `'bold purple'`            | Модульдің стилі.                                    |
+| `format`   | `'[$symbol$name]($style)'` | Модульдің пішімдеу жолы.                                   |
+| `disabled` | `false`                    | Disables the `nats` module.                                  |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ----------- | ------------------------------------ |
+| name     | `localhost` | The name of the NATS context         |
+| symbol   |             | `symbol` опциясының мәнін қайталайды |
+| style\*  |             | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+[nats]
+format = '[$symbol]($style)'
+style = 'bold purple'
+```
+
+## Network Namespace
+
+The `netns` module shows the current network namespace.
+This uses `ip netns identify` to get the network namespace, so only network namespaces mounted at `/var/run/netns` will be detected.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | ------------------------------- | ----------------------------------------------------------------- |
+| `format`   | `'[$symbol \[$name\]]($style)'` | Модульдің пішімдеу жолы.                                        |
+| `symbol`   | `'🛜 '`                         | The symbol used before the network namespace (defaults to empty). |
+| `style`    | `'blue bold dimmed'`            | Модульдің стилі.                                         |
+| `disabled` | `false`                         | Disables the `netns` module.                                      |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------- | ----------------------------------------- |
+| name     | `my-netns` | The name of the current network namespace |
+| symbol   |            | `symbol` опциясының мәнін қайталайды      |
+| style\*  |            | `style` опциясының мәнін қайталайды       |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[netns]
+style = 'bold yellow'
+symbol = '🌐 '
+```
+
+## Nim
+
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `nim.cfg` file
+- Ағымдағы жұмыс каталогы contains a file with the `.nim` extension
+- Ағымдағы жұмыс каталогы contains a file with the `.nims` extension
+- Ағымдағы жұмыс каталогы contains a file with the `.nimble` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                 |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'👑 '`                              | The symbol used before displaying the version of Nim.                     |
+| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Which extensions should trigger this module.                              |
+| `detect_files`      | `['nim.cfg']`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold yellow'`                      | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `nim` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.2.0` | Нұсқасы: `nimc`                |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[nim]
+style = 'yellow'
+symbol = '🎣 '
+```
+
+## Nix-shell
+
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment.
+The module will be shown when inside a nix-shell environment.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | Модульдің пішімдеу жолы.                                            |
+| `symbol`      | `'❄️ '`                                       | A format string representing the symbol of nix-shell.                 |
+| `style`       | `'bold blue'`                                | Модульдің стилі.                                             |
+| `impure_msg`  | `'impure'`                                   | A format string shown when the shell is impure.                       |
+| `pure_msg`    | `'pure'`                                     | A format string shown when the shell is pure.                         |
+| `unknown_msg` | `''`                                         | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                      | Disables the `nix_shell` module.                                      |
+| `heuristic`   | `false`                                      | Attempts to detect new `nix shell`-style shells with a heuristic.     |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| state    | `pure`  | The state of the nix-shell                                                    |
+| name     | `lorri` | The name of the nix-shell                                                     |
+| level    | `1`     | The depth level of the nix-shell (Only when using [Lix](https://lix.systems)) |
+| symbol   |         | `symbol` опциясының мәнін қайталайды                                          |
+| style\*  |         | `style` опциясының мәнін қайталайды                                           |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[nix_shell]
+disabled = true
+impure_msg = '[impure shell](bold red)'
+pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
+format = 'via [☃️ $state( \($name\))](bold blue) '
+```
+
+## Node.js
+
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `package.json` file
+- Ағымдағы жұмыс каталогы contains a `.node-version` file
+- Ағымдағы жұмыс каталогы contains a `.nvmrc` file
+- Ағымдағы жұмыс каталогы contains a `node_modules` directory
+- Ағымдағы жұмыс каталогы contains a file with the `.js`, `.mjs` or `.cjs` extension
+- Ағымдағы жұмыс каталогы contains a file with the `.ts`, `.mts` or `.cts` extension
+
+Additionally, the module will be hidden by default if the directory contains a `deno.json`, `deno.jsonc`, `deno.lock`, `bunfig.toml`, `bun.lock`, or `bun.lockb` file, overriding the above conditions.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Модульдің пішімдеу жолы.                                                                            |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `' '`                                        | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']`    | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `['package.json', '.node-version', '.nvmrc']` | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `['node_modules']`                            | Which folders should trigger this module.                                                             |
+| `style`             | `'bold green'`                                | Модульдің стилі.                                                                             |
+| `disabled`          | `false`                                       | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `'bold red'`                                  | The style for the module when an engines property in package.json does not match the Node.js version. |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0` | Нұсқасы: `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |            | `symbol` опциясының мәнін қайталайды                                                                                                                      |
+| style\*         |            | `style` опциясының мәнін қайталайды                                                                                                                       |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[nodejs]
+format = 'via [🤖 $version](bold green) '
+```
+
+## OCaml
+
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with `.opam` extension or `_opam` directory
+- Ағымдағы жұмыс каталогы contains a `esy.lock` directory
+- Ағымдағы жұмыс каталогы contains a `dune` or `dune-project` file
+- Ағымдағы жұмыс каталогы contains a `jbuild` or `jbuild-ignore` file
+- Ағымдағы жұмыс каталогы contains a `.merlin` file
+- Ағымдағы жұмыс каталогы contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                         |
+| `version_format`          | `'v${raw}'`                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`                  | `'🐫 '`                                                                  | The symbol used before displaying the version of OCaml.                   |
+| `global_switch_indicator` | `''`                                                                     | The format string used to represent global OPAM switch.                   |
+| `local_switch_indicator`  | `'*'`                                                                    | The format string used to represent local OPAM switch.                    |
+| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                     | Which extensions should trigger this module.                              |
+| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`         | Which filenames should trigger this module.                               |
+| `detect_folders`          | `['_opam', 'esy.lock']`                                                  | Which folders should trigger this module.                                 |
+| `style`                   | `'bold yellow'`                                                          | Модульдің стилі.                                                 |
+| `disabled`                | `false`                                                                  | Disables the `ocaml` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------------- | ------------ | ----------------------------------------------------------------- |
+| version          | `v4.10.0`    | Нұсқасы: `ocaml`                                            |
+| switch_name      | `my-project` | The active OPAM switch                                            |
+| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
+| symbol           |              | `symbol` опциясының мәнін қайталайды                              |
+| style\*          |              | `style` опциясының мәнін қайталайды                               |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[ocaml]
+format = 'via [🐪 $version]($style) '
+```
+
+## Odin
+
+The `odin` module shows the currently installed version of [Odin](https://odin-lang.org/). By default the module will be shown if the current directory contains a `.odin` file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                             |
+| `show_commit`       | `false`                              | Shows the commit as part of the version.               |
+| `symbol`            | `'Ø '`                               | The symbol used before displaying the version of Odin. |
+| `style`             | `'bold bright-blue'`                 | Модульдің стилі.                              |
+| `disabled`          | `false`                              | Disables the `odin` module.                            |
+| `detect_extensions` | `['odin']`                           | Which extensions should trigger this module.           |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.            |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------- | ------------------------------------ |
+| version  | `dev-2024-03` | Нұсқасы: `odin`                |
+| symbol   |               | `symbol` опциясының мәнін қайталайды |
+| style\*  |               | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[odin]
+format = 'via [󰹩 ($version )]($style)'
+show_commit = true
+```
+
+## Open Policy Agent
+
+The `opa` module shows the currently installed version of the OPA tool.
+By default the module will be shown if the current directory contains a `.rego` file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🪖  '`                             | A format string representing the symbol of OPA.                           |
+| `detect_extensions` | `['rego']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                        | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `opa` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v0.44.0` | Нұсқасы: `opa`                 |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[opa]
+format = 'via [⛑️  $version](bold red) '
+```
+
+## OpenStack
+
+The `openstack` module shows the current OpenStack cloud and project. The module
+only active when the `OS_CLOUD` env var is set, in which case it will read
+`clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files).
+to fetch the current project in use.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | --------------------------------------------- | -------------------------------------------------------------- |
+| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | Модульдің пішімдеу жолы.                                     |
+| `symbol`   | `'☁️ '`                                        | The symbol used before displaying the current OpenStack cloud. |
+| `style`    | `'bold yellow'`                               | Модульдің стилі.                                      |
+| `disabled` | `false`                                       | Disables the `openstack` module.                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| cloud    | `corp`  | The current OpenStack cloud          |
+| project  | `dev`   | The current OpenStack project        |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[openstack]
+format = 'on [$symbol$cloud(\($project\))]($style) '
+style = 'bold yellow'
+symbol = '☁️ '
+```
+
+## OS
+
+The `os` module shows the current operating system.
+OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
+
+> [!WARNING]
+> The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | --------------------- | ------------------------------------------------------ |
+| `format`   | `'[$symbol]($style)'` | Модульдің пішімдеу жолы.                             |
+| `style`    | `'bold white'`        | Модульдің стилі.                              |
+| `disabled` | `true`                | Disables the `os` module.                              |
+| `symbols`  |                       | A table that maps each operating system to its symbol. |
+
+`symbols` allows you to define arbitrary symbols to display for each operating system type.
+Operating system types not defined by your configuration use the default symbols table below.
+All operating systems currently supported by the module are listed below.
+If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
+
+```toml
+# This is the default symbols table.
+[os.symbols]
+AIX = "➿ "
+Alpaquita = "🔔 "
+AlmaLinux = "💠 "
+Alpine = "🏔️ "
+ALTLinux = "Ⓐ "
+Amazon = "🙂 "
+Android = "🤖 "
+AOSC = "🐱 "
+Arch = "🎗️ "
+Artix = "🎗️ "
+Bazzite = "🎮 "
+Bluefin = "🐟 "
+CachyOS = "🎗️ "
+CentOS = "💠 "
+Debian = "🌀 "
+DragonFly = "🐉 "
+Elementary = "🍏 "
+Emscripten = "🔗 "
+EndeavourOS = "🚀 "
+Fedora = "🎩 "
+FreeBSD = "😈 "
+Garuda = "🦅 "
+Gentoo = "🗜️ "
+HardenedBSD = "🛡️ "
+Hurd = "🐂 "
+Illumos = "🐦 "
+Ios = "📱 "
+InstantOS = "⏲️ "
+Kali = "🐉 "
+KDENeon = "⚛️ "
+Linux = "🐧 "
+Mabox = "📦 "
+Macos = "🍎 "
+Manjaro = "🥭 "
+Mariner = "🌊 "
+MidnightBSD = "🌘 "
+Mint = "🌿 "
+NetBSD = "🚩 "
+NixOS = "❄️ "
+Nobara = "🎩 "
+OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
+openSUSE = "🦎 "
+OracleLinux = "🦴 "
+PikaOS = "🐤 "
+Pop = "🍭 "
+Raspbian = "🍓 "
+Redhat = "🎩 "
+RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
+Redox = "🧪 "
+Solus = "⛵ "
+SUSE = "🦎 "
+Ubuntu = "🎯 "
+Ultramarine = "🔷 "
+Unknown = "❓ "
+Uos = "🐲 "
+Void = " "
+Windows = "🪟 "
+Zorin = "🔹 "
+```
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------ | ------------------------------------------------------------------ |
+| symbol   | `🎗️`          | The current operating system symbol from advanced option `symbols` |
+| name     | `Arch Linux` | The current operating system name                                  |
+| type     | `Arch`       | The current operating system type                                  |
+| codename |              | The current operating system codename, if applicable               |
+| edition  |              | The current operating system edition, if applicable                |
+| version  |              | The current operating system version, if applicable                |
+| style\*  |              | `style` опциясының мәнін қайталайды                                |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[os]
+format = "on [($name )]($style)"
+style = "bold blue"
+disabled = false
+
+[os.symbols]
+Windows = " "
+Arch = "Arch is the best! "
+```
+
+## Package Version
+
+The `package` module is shown when the current directory is the repository for a
+package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`,
+`poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `galaxy`, `daml` and `dart` packages.
+
+- [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
+  in the current directory
+- [**JSR**](https://jsr.io/) – The `jsr` package version is extracted from the `jsr.json`/`jsr.jsonc` or `deno.json`/`deno.jsonc` present in the current directory
+- [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
+- [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
+  in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
+- [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
+  in the current directory
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` or `build.gradle.kts` present in the current directory
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
+- [**Galaxy**](https://galaxy.ansible.com/) - The `galaxy` package version is extracted from the `galaxy.yml` present in the current directory
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
+- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
+- [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
+
+> ⚠️ The version being shown is that of the package whose source code is in your
+> current directory, not your package manager.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `'is [$symbol$version]($style) '` | Модульдің пішімдеу жолы.                                                |
+| `symbol`          | `'📦 '`                           | The symbol used before displaying the version the package.                |
+| `version_format`  | `'v${raw}'`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `'bold 208'`                      | Модульдің стилі.                                                 |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.0.0` | Нұсқасы: your package          |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[package]
+format = 'via [🎁 $version](208 bold) '
+```
+
+## Perl
+
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Makefile.PL` or `Build.PL` file
+- Ағымдағы жұмыс каталогы contains a `cpanfile` or `cpanfile.snapshot` file
+- Ағымдағы жұмыс каталогы contains a `META.json` file or `META.yml` file
+- Ағымдағы жұмыс каталогы contains a `.perl-version` file
+- Ағымдағы жұмыс каталогы contains a `.pl`, `.pm` or `.pod`
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🐪 '`                                                                                                  | The symbol used before displaying the version of Perl                     |
+| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |
+| `style`             | `'bold 149'`                                                                                             | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `v5.26.1` | Нұсқасы: `perl`                |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[perl]
+format = 'via [🦪 $version]($style) '
+```
+
+## PHP
+
+The `php` module shows the currently installed version of [PHP](https://www.php.net/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `composer.json` file
+- Ағымдағы жұмыс каталогы contains a `.php-version` file
+- Ағымдағы жұмыс каталогы contains a `.php` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🐘 '`                              | The symbol used before displaying the version of PHP.                     |
+| `detect_extensions` | `['php']`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `['composer.json', '.php-version']`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'147 bold'`                         | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `php` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.3.8` | Нұсқасы: `php`                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[php]
+format = 'via [🔹 $version](147 bold) '
+```
+
+## Pijul Channel
+
+The `pijul_channel` module shows the active channel of the repo in your current directory.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `style`             | `'bold purple'`                   | Модульдің стилі.                                                            |
+| `format`            | `'on [$symbol$channel]($style) '` | Модульдің пішімдеу жолы.                                                           |
+| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
+| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
+
+## Pixi
+
+The `pixi` module shows the installed [pixi](https://pixi.sh) version as well as the activated
+environment and project name, if `$PIXI_ENVIRONMENT_NAME` is set.
+
+> [!TIP]
+> This does not suppress pixi's own prompt modifier, you may want to run `pixi config set shell.change-ps1 false`.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`                   | `'via [$symbol($version )(\($environment\) )]($style)'` | Модульдің пішімдеу жолы.                                                        |
+| `version_format`           | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`.        |
+| `symbol`                   | `'🧚 '`                                                 | The symbol used before the environment name.                                      |
+| `style`                    | `'yellow bold'`                                         | Модульдің стилі.                                                         |
+| `show_default_environment` | `true`                                                  | Whether to indicate that the `default` environment of your project is activated.  |
+| `pixi_binary`              | `['pixi']`                                              | Configures the pixi binary that Starship should execute when getting the version. |
+| `detect_extensions`        | `[]`                                                    | Which extensions should trigger this module.                                      |
+| `detect_files`             | `['pixi.toml']`                                         | Which filenames should trigger this module.                                       |
+| `detect_folders`           | `[]`                                                    | Which folders should trigger this module.                                         |
+| `disabled`                 | `false`                                                 | Disables the `pixi` module.                                                       |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------ | ------------ | ------------------------------------ |
+| version      | `v0.33.0`    | Нұсқасы: `pixi`                |
+| environment  | `py311`      | The current pixi environment         |
+| project_name | `my-project` | The current pixi project name        |
+| symbol       |              | `symbol` опциясының мәнін қайталайды |
+| style        |              | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[pixi]
+format = '[$symbol$environment](yellow) '
+```
+
+## Pulumi
+
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+
+> [!TIP]
+> By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms).
+> If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                         |
+| `version_format` | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                            |
+| `style`          | `'bold 5'`                                   | Модульдің стилі.                                                 |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------- | ------------------------------------ |
+| version  | `v0.12.24` | Нұсқасы: `pulumi`              |
+| stack    | `dev`      | The current Pulumi stack             |
+| username | `alice`    | The current Pulumi username          |
+| symbol   |            | `symbol` опциясының мәнін қайталайды |
+| style\*  |            | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+#### With Pulumi Version
+
+```toml
+# ~/.config/starship.toml
+
+[pulumi]
+format = '[🛥 ($version )$stack]($style) '
+```
+
+#### Without Pulumi version
+
+```toml
+# ~/.config/starship.toml
+[pulumi]
+symbol = '🛥 '
+format = '[$symbol$stack]($style) '
+```
+
+## PureScript
+
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version.
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `spago.dhall` file
+- Ағымдағы жұмыс каталогы contains a `spago.yaml` file
+- Ағымдағы жұмыс каталогы contains a `spago.lock` file
+- Ағымдағы жұмыс каталогы contains a file with the `.purs` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`          | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                                      | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `['purs']`                                    | Which extensions should trigger this module.                              |
+| `detect_files`      | `['spago.dhall', 'spago.yaml', 'spago.lock']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                          | Which folders should trigger this module.                                 |
+| `style`             | `'bold white'`                                | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                       | Disables the `purescript` module.                                         |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `0.13.5` | Нұсқасы: `purescript`          |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[purescript]
+format = 'via [$symbol$version](bold white)'
+```
+
+## Python
+
+The `python` module shows the currently installed version of [Python](https://www.python.org/) and the
+current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+
+If `pyenv_version_name` is set to `true`, it will display the pyenv version
+name. Otherwise, it will display the version number from `python --version`.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `.python-version` file
+- Ағымдағы жұмыс каталогы contains a `Pipfile` file
+- Ағымдағы жұмыс каталогы contains a `__init__.py` file
+- Ағымдағы жұмыс каталогы contains a `pyproject.toml` file
+- Ағымдағы жұмыс каталогы contains a `requirements.txt` file
+- Ағымдағы жұмыс каталогы contains a `setup.py` file
+- Ағымдағы жұмыс каталогы contains a `tox.ini` file
+- Ағымдағы жұмыс каталогы contains a file with the `.py` extension.
+- Ағымдағы жұмыс каталогы contains a file with the `.ipynb` extension.
+- A virtual environment is currently activated
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | Модульдің пішімдеу жолы.                                                            |
+| `version_format`     | `'v${raw}'`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`             |
+| `symbol`             | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                     |
+| `style`              | `'yellow bold'`                                                                                              | Модульдің стилі.                                                             |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                       |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                       |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should execute when getting the version. |
+| `detect_extensions`  | `['py', 'ipynb']`                                                                                            | Which extensions should trigger this module                                           |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                            |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                              |
+| `generic_venv_names` | `[]`                                                                                                         | Which venv names should be replaced with the parent directory name.                   |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                         |
+
+> [!TIP]
+> The `python_binary` variable accepts either:
+>
+> - a string (e.g. `'python3'`),
+> - a list of strings (e.g. `['python', 'python3']`)
+> - a list of lists of strings, representing commands with optional arguments (e.g.
+>   `[['mise', 'exec', '--', 'python'], ['python3']]`)
+>
+> Starship will try executing each configured command until it gets a result.
+> Note you can only change the binary that Starship executes to get the version
+> of Python not the arguments that are used.
+>
+> The default values and order for `python_binary` was chosen to first identify
+> the Python version in a virtualenv/conda environments (which currently still
+> add a `python`, no matter if it points to `python3` or `python2`). This has the
+> side effect that if you still have a system Python 2 installed, it may be
+> picked up before any Python 3 (at least on Linux Distros that always symlink
+> `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but
+> cannot remove the system Python 2, changing this to `'python3'` will hide any
+> Python version 2, see example below.
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------ | --------------- | --------------------------------------------------------------------------- |
+| version      | `'v3.8.1'`      | Нұсқасы: `python`                                                     |
+| symbol       | `'🐍 '`         | `symbol` опциясының мәнін қайталайды                                        |
+| style        | `'yellow bold'` | `style` опциясының мәнін қайталайды                                         |
+| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix`                                  |
+| virtualenv   | `'venv'`        | The current `virtualenv` name or the parent if matches `generic_venv_names` |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+symbol = '👾 '
+pyenv_version_name = true
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Only use the `python3` binary to get the version.
+python_binary = 'python3'
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Use `mise` to get the version.
+python_binary = [['mise', 'exec', '--', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Potentially dangerous: `uv` can run any binary at `.venv/bin/python` without interaction
+python_binary = [['uv', 'run', '--no-python-downloads', '--no-project', 'python']]
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
+```
+
+## Quarto
+
+The `quarto` module shows the current installed version of Quarto used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `_quarto.yml` file
+- Ағымдағы жұмыс каталогы contains any `*.qmd` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⨁ '`                               | A format string representing the symbol of Quarto                         |
+| `style`             | `'bold #75AADB'`                     | Модульдің стилі.                                                 |
+| `detect_extensions` | `['.qmd']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['_quarto.yml']`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `quarto` module.                                             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | --------- | ------------------------------------ |
+| version  | `1.4.549` | Нұсқасы: `quarto`              |
+| symbol   |           | `symbol` опциясының мәнін қайталайды |
+| style\*  |           | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## R
+
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if
+any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with the `.R` extension.
+- Ағымдағы жұмыс каталогы contains a file with the `.Rd` extension.
+- Ағымдағы жұмыс каталогы contains a file with the `.Rmd` extension.
+- Ағымдағы жұмыс каталогы contains a file with the `.Rproj` extension.
+- Ағымдағы жұмыс каталогы contains a file with the `.Rsx` extension.
+- Ағымдағы жұмыс каталогы contains a `.Rprofile` file
+- Ағымдағы жұмыс каталогы contains a `.Rproj.user` folder
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'📐'`                               | A format string representing the symbol of R.                             |
+| `style`             | `'blue bold'`                        | Модульдің стилі.                                                 |
+| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Which extensions should trigger this module                               |
+| `detect_files`      | `['.Rprofile']`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `['.Rproj.user']`                    | Which folders should trigger this module                                  |
+| `disabled`          | `false`                              | Disables the `r` module.                                                  |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------- | ------------------------------------ |
+| version  | `v4.0.5`      | Нұсқасы: `R`                   |
+| symbol   |               | `symbol` опциясының мәнін қайталайды |
+| style    | `'blue bold'` | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = 'with [📐 $version](blue bold) '
+```
+
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `META6.json` file
+- Ағымдағы жұмыс каталогы contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🦋 '`                                          | The symbol used before displaying the version of Raku                     |
+| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `['META6.json']`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
+| `style`             | `'bold 149'`                                     | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ---------- | ------- | ------------------------------------ |
+| version    | `v6.d`  | Нұсқасы: `raku`                |
+| vm_version | `moar`  | Нұсқасы: VM `raku` is built on |
+| symbol     |         | `symbol` опциясының мәнін қайталайды |
+| style\*    |         | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = 'via [🦪 $version]($style) '
+```
+
+## Red
+
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/).
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with `.red` or `.reds` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🔺 '`                              | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `['red']`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'red bold'`                         | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.5.1` | Нұсқасы: `red`                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = '🔴 '
+```
+
+## Ruby
+
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/).
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Gemfile` file
+- Ағымдағы жұмыс каталогы contains a `.ruby-version` file
+- Ағымдағы жұмыс каталогы contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💎 '`                              | A format string representing the symbol of Ruby.                          |
+| `detect_extensions` | `['rb']`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Gemfile', '.ruby-version']`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.                   |
+| `style`             | `'bold red'`                         | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------------- |
+| version  | `v2.5.1` | Нұсқасы: `ruby`                       |
+| symbol   |          | `symbol` опциясының мәнін қайталайды        |
+| style\*  |          | `style` опциясының мәнін қайталайды         |
+| gemset   | `test`   | Optional, gets the current RVM gemset name. |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[ruby]
+symbol = '🔺 '
+```
+
+## Rust
+
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/).
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Cargo.toml` file
+- Ағымдағы жұмыс каталогы contains a file with the `.rs` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🦀 '`                              | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `['rs']`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Cargo.toml']`                     | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold red'`                         | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | Нұсқасы: `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | `symbol` опциясының мәнін қайталайды         |
+| style\*   |                   | `style` опциясының мәнін қайталайды          |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[rust]
+format = 'via [⚙️ $version](red bold)'
+```
+
+## Scala
+
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- Ағымдағы жұмыс каталогы contains a file with the `.scala` or `.sbt` extension
+- Ағымдағы жұмыс каталогы contains a directory named `.metals`
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['sbt', 'scala']`                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.metals']`                            | Which folders should trigger this module.                                 |
+| `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                         |
+| `style`             | `'red dimmed'`                           | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `2.13.5` | Нұсқасы: `scala`               |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[scala]
+symbol = '🌟 '
+```
+
+## Shell
+
+The `shell` module shows an indicator for currently used shell.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                                                                |
+| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                                                                |
+| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                                                                 |
+| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                                                          |
+| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
+| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                                                                 |
+| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                                                              |
+| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                                                |
+| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                                                               |
+| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                                                 |
+| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                                                  |
+| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                                           |
+| `format`               | `'[$indicator]($style) '` | Модульдің пішімдеу жолы.                                                                             |
+| `style`                | `'white bold'`            | Модульдің стилі.                                                                              |
+| `disabled`             | `true`                    | Disables the `shell` module.                                                                           |
+
+### Айнымалылар
+
+| Variable  | Default | Description                                                |
+| --------- | ------- | ---------------------------------------------------------- |
+| indicator |         | Mirrors the value of `indicator` for currently used shell. |
+| style\*   |         | `style` опциясының мәнін қайталайды.                       |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысалдар
+
+```toml
+# ~/.config/starship.toml
+
+[shell]
+fish_indicator = '󰈺 '
+powershell_indicator = '_'
+unknown_indicator = 'mystery shell'
+style = 'cyan bold'
+disabled = false
+```
+
+## SHLVL
+
+The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is
+set to a number and meets or exceeds the specified threshold.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| --------------- | ---------------------------- | ------------------------------------------------------------------- |
+| `threshold`     | `2`                          | Display threshold.                                                  |
+| `format`        | `'[$symbol$shlvl]($style) '` | Модульдің пішімдеу жолы.                                          |
+| `symbol`        | `'↕️  '`                      | The symbol used to represent the `SHLVL`.                           |
+| `repeat`        | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount.       |
+| `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
+| `style`         | `'bold yellow'`              | Модульдің стилі.                                           |
+| `disabled`      | `true`                       | Disables the `shlvl` module.                                        |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| shlvl    | `3`     | The current value of `SHLVL`         |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = '$shlvl level(s) down'
+threshold = 3
+```
+
+Using `repeat` and `repeat_offset` along with `character` module, one can get
+prompt like `❯❯❯` where last character is colored appropriately for return
+status code and preceding characters are provided by `shlvl`.
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = '[$symbol]($style)'
+repeat = true
+symbol = '❯'
+repeat_offset = 1
+```
+
+## Singularity
+
+The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container
+and `$SINGULARITY_NAME` is set.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | ------------------------------ | ------------------------------------------------ |
+| `format`   | `'[$symbol\[$env\]]($style) '` | Модульдің пішімдеу жолы.                       |
+| `symbol`   | `''`                           | A format string displayed before the image name. |
+| `style`    | `'bold dimmed blue'`           | Модульдің стилі.                        |
+| `disabled` | `false`                        | Disables the `singularity` module.               |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------ | ------------------------------------ |
+| env      | `centos.img` | The current Singularity image        |
+| symbol   |              | `symbol` опциясының мәнін қайталайды |
+| style\*  |              | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[singularity]
+format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/)
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with the `.sol` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                       |
+| `compiler           | ['solc']                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `['sol']`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                        | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.8.1` | Нұсқасы: `solidity`            |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
+## Spack
+
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `'🅢  '`                                | The symbol used before the environment name.                                                                                                   |
+| `style`             | `'bold blue'`                          | Модульдің стилі.                                                                                                                      |
+| `format`            | `'via [$symbol$environment]($style) '` | Модульдің пішімдеу жолы.                                                                                                                     |
+| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current spack environment        |
+| symbol      |              | `symbol` опциясының мәнін қайталайды |
+| style\*     |              | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[spack]
+format = '[$symbol$environment](dimmed blue) '
+```
+
+## Status
+
+The `status` module displays the exit code of the previous command.
+If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`.
+The status code will cast to a signed 32-bit integer.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| --------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                  | The format of the module                                              |
+| `symbol`                    | `'❌'`                                                                         | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                           | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                         | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                         | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                         | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                         | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                   | Модульдің стилі.                                             |
+| `success_style`             |                                                                                | The style used on program success (defaults to `style` if unset).     |
+| `failure_style`             |                                                                                | The style used on program failure (defaults to `style` if unset).     |
+| `recognize_signal_code`     | `true`                                                                         | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                        | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                        | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style) '` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                         | Disables the `status` module.                                         |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------------- | ------- | -------------------------------------------------------------------------------------------- |
+| status         | `127`   | The exit code of the last command                                                            |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                     |
+| int            | `127`   | The exit code of the last command                                                            |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                          |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                              |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                         |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                 |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format   |
+| symbol         |         | `symbol` опциясының мәнін қайталайды                                                         |
+| style\*        |         | Mirrors the value of option `success_style` on program success and `failure_style` otherwise |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[status]
+style = 'bg:blue'
+symbol = '🔴 '
+success_symbol = '🟢 SUCCESS'
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false
+```
+
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached.
+The module will only be shown if credentials are cached.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------ | ------------------------ | --------------------------------------------------------------------------- |
+| `format`           | `'[as $symbol]($style)'` | The format of the module                                                    |
+| `symbol`           | `'🧙 '`                  | The symbol displayed when credentials are cached                            |
+| `style`            | `'bold blue'`            | Модульдің стилі.                                                   |
+| `allow_windows`    | `false`                  | Since windows has no default sudo, default is disabled.                     |
+| `disabled`         | `true`                   | Disables the `sudo` module.                                                 |
+| `use_legacy_check` | `false`                  | Uses the legacy sudo check for compatibility with older versions of `sudo`. |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[sudo]
+style = 'bold green'
+symbol = '👩‍💻 '
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
+```
+
+## Swift
+
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/).
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Package.swift` file
+- Ағымдағы жұмыс каталогы contains a file with the `.swift` extension
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🐦 '`                              | A format string representing the symbol of Swift                          |
+| `detect_extensions` | `['swift']`                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Package.swift']`                  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'bold 202'`                         | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `swift` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v5.2.4` | Нұсқасы: `swift`               |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[swift]
+format = 'via [🏎  $version](red bold)'
+```
+
+## Terraform
+
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+It supports both Hashicorp Terraform and OpenTofu for version detection.
+
+> [!TIP]
+> By default the Terraform/OpenTofu version is not shown, since this is slow for current versions when a lot of plugins are in use.
+> If you still want to enable it, [follow the example shown below](#with-terraform-version).
+
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `.terraform` folder
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '`                    | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'💠'`                                                  | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.terraform']`                                        | Which folders should trigger this module.                                 |
+| `style`             | `'bold 105'`                                            | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                                 | Disables the `terraform` module.                                          |
+| `commands`          | `[ [ 'terraform', 'version' ], [ 'tofu', 'version' ] ]` | How to detect what the Terraform version is.                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | Нұсқасы: `terraform`           |
+| workspace | `default`  | The current Terraform workspace      |
+| symbol    |            | `symbol` опциясының мәнін қайталайды |
+| style\*   |            | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+#### With Terraform Version
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+format = 'via [$symbol$version $workspace]($style) '
+```
+
+#### Without Terraform version
+
+```toml
+# ~/.config/starship.toml
+
+[terraform]
+format = 'via [$symbol$workspace]($style) '
+```
+
+## Time
+
+The `time` module shows the current **local** time.
+The `format` configuration value is used by the [`jiff`](https://crates.io/crates/jiff) crate to control how the time is displayed. Take a look [at the jiff strftime docs](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) to see what options are available.
+
+> [!TIP]
+> This module is disabled by default.
+> To enable it, set `disabled` to `false` in your configuration file.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                                         |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                                                |
+| `time_format`     | see below               | The [jiff format string](https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html) used to format the time.                                                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                                             |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Either an IANA time zone name or a range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                                               |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                     |
+
+If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`.
+Manually setting `time_format` will override the `use_12hr` setting.
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------- | ----------------------------------- |
+| time     | `13:08:10` | The current time.                   |
+| style\*  |            | `style` опциясының мәнін қайталайды |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+#### With UTC offset
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+format = '🕙[\[ $time \]]($style) '
+time_format = '%T'
+utc_time_offset = '-5'
+time_range = '10:00:00-14:00:00'
+```
+
+#### With Timezone name
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+time_format = '%T'
+utc_time_offset = 'Europe/Berlin'
+```
+
+## Typst
+
+The `typst` module shows the current installed version of Typst used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `template.typ` file
+- Ағымдағы жұмыс каталогы contains any `*.typ` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Typst                          |
+| `style`             | `'bold #0093A7'`                     | Модульдің стилі.                                                 |
+| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `typst` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| ------------- | --------- | ----------------------------------------------- |
+| version       | `v0.9.0`  | Нұсқасы: `typst`, alias for typst_version |
+| typst_version | `default` | The current Typst version                       |
+| symbol        |           | `symbol` опциясының мәнін қайталайды            |
+| style\*       |           | `style` опциясының мәнін қайталайды             |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Username
+
+The `username` module shows active user's username.
+The module will be shown if any of the following conditions are met:
+
+- The current user is root/admin
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
+- The array `detect_env_vars` contains at least the name of one environment variable, that is set
+
+> [!TIP]
+> SSH connection is detected by checking environment variables
+> `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
+> these variables, one workaround is to set one of them with a dummy value.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ----------------- | ----------------------- | --------------------------------------------------------- |
+| `style_root`      | `'bold red'`            | The style used when the user is root/admin.               |
+| `style_user`      | `'bold yellow'`         | The style used for non-root users.                        |
+| `detect_env_vars` | `[]`                    | Which environment variable(s) should trigger this module. |
+| `format`          | `'[$user]($style) in '` | Модульдің пішімдеу жолы.                                |
+| `show_always`     | `false`                 | Always shows the `username` module.                       |
+| `disabled`        | `false`                 | Disables the `username` module.                           |
+| `aliases`         | `{}`                    | Translate system usernames to something else.             |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
+
+### Мысал
+
+#### Always show the username
+
+```toml
+# ~/.config/starship.toml
+
+[username]
+style_user = 'white bold'
+style_root = 'black bold'
+format = 'user: [$user]($style) '
+disabled = false
+show_always = true
+aliases = { "corpuser034g" = "matchai" }
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `Vagrantfile` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.                       |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `['Vagrantfile']`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `'cyan bold'`                        | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ---------------- | ------------------------------------ |
+| version  | `Vagrant 2.2.10` | Нұсқасы: `Vagrant`             |
+| symbol   |                  | `symbol` опциясының мәнін қайталайды |
+| style\*  |                  | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = 'via [⍱ $version](bold white) '
+```
+
+## V
+
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/).
+By default the module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file with `.v` extension
+- Ағымдағы жұмыс каталогы contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`         | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `['v']`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `'blue bold'`                                | Модульдің стилі.                                                 |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------- | ------------------------------------ |
+| version  | `v0.2`  | Нұсқасы: `v`                   |
+| symbol   |         | `symbol` опциясының мәнін қайталайды |
+| style\*  |         | `style` опциясының мәнін қайталайды  |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+[vlang]
+format = 'via [V $version](blue bold) '
+```
+
+## VCS
+
+> Note the module is enabled by default but **not** included in the default list because that would be a breaking change.
+> Additionally, the exact format of the module may change in the future, for example to handle right-aligned prompt.
+
+The `vcs` module displays the current active Version Control System (VCS).
+The module will be shown only if a configured VCS is currently in use.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
+| `order`          | `["git", "hg", "pijul", "fossil"]`                          | The order in which to search VCSes.                   |
+| `fossil_modules` | `"$fossil_branch$fossil_metrics"`                           | Modules to show when a Fossil repository is found.    |
+| `git_modules`    | `"$git_branch$git_commit$git_state$git_metrics$git_status"` | Modules to show when a Git repository is found.       |
+| `hg_modules`     | `"$hg_branch$hg_state"`                                     | Modules to show when a Mercurial repository is found. |
+| `pijul_modules`  | `"$pijul_channel"`                                          | Modules to show when a Pijul repository is found.     |
+| `disabled`       | `false`                                                     | Disables the `vcs` module.                            |
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[vcs]
+# Will look for Git then Pijul if not found but not for other VCSes at all
+order = [
+  "git",
+  "pijul",
+]
+# Any module (except `$vcs` itself to avoid infinite loops) can be included here
+git_modules = "$git_branch${custom.foo}"
+
+# See documentation for custom modules
+[custom.foo]
+command = 'echo foo'
+detect_files = ['foo']
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
+```
+
+## VCSH
+
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository.
+The module will be shown only if a repository is currently in use.
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   | `''`                             | The symbol used before displaying the repository name. |
+| `style`    | `'bold yellow'`                  | Модульдің стилі.                              |
+| `format`   | `'vcsh [$symbol$repo]($style) '` | Модульдің пішімдеу жолы.                             |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | ------------------------------------------- | ------------------------------------ |
+| repo     | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
+| symbol   |                                             | `symbol` опциясының мәнін қайталайды |
+| style\*  | `black bold dimmed`                         | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[vcsh]
+format = '[🆅 $repo](bold blue) '
+```
+
+## XMake
+
+The `xmake` module shows the currently installed version of [XMake](https://xmake.io/). By default
+the module will be activated if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `xmake.lua` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'△ '`                               | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module                               |
+| `detect_files`      | `['xmake.lua']`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module                                  |
+| `style`             | `'bold green'`                       | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `xmake` module.                                              |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.9.5` | Нұсқасы: xmake                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+## Zig
+
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/).
+The module will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a `.zig` file
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Модульдің пішімдеу жолы.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.                     |
+| `style`             | `'bold yellow'`                      | Модульдің стилі.                                                 |
+| `disabled`          | `false`                              | Disables the `zig` module.                                                |
+| `detect_extensions` | `['zig']`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+
+### Айнымалылар
+
+| Айнымалы | Мысалы | Сипаттамасы |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.6.0` | Нұсқасы: `zig`                 |
+| symbol   |          | `symbol` опциясының мәнін қайталайды |
+| style\*  |          | `style` опциясының мәнін қайталайды  |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[zig]
+symbol = '⚡️ '
+```
+
+## Custom commands
+
+The `custom` modules show the output of some arbitrary commands.
+
+These modules will be shown if any of the following conditions are met:
+
+- Ағымдағы жұмыс каталогы contains a file whose name is in `detect_files`
+- Ағымдағы жұмыс каталогы contains a directory whose name is in `detect_folders`
+- Ағымдағы жұмыс каталогы contains a file whose extension is in `detect_extensions`
+- The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
+
+> [!TIP]
+> Multiple custom modules can be defined by using a `.`.
+
+> [!TIP]
+> The order in which custom modules are shown can be individually set by including
+> `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`).
+> By default, the `custom` module will simply show all custom modules in the order they were defined.
+
+> [!TIP]
+> [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules.
+> If you have an interesting example not covered there, feel free to share it there!
+
+> [!WARNING]
+> If `unsafe_no_escape` is enabled or prior to starship v1.20 command output is printed unescaped to the prompt.
+>
+> Whatever output the command generates is printed unmodified in the prompt. This means if the output
+> contains shell-specific interpretable sequences, they could be interpreted on display.
+> Depending on the shell, this can mean that e.g. strings enclosed by backticks are executed by the shell.
+> Such sequences are usually shell specific, e.g. you can write a command module that writes bash sequences,
+> e.g. `\h`, but this module will not work in a fish or zsh shell.
+>
+> Format strings can also contain shell specific prompt sequences, e.g.
+> [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html),
+> [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+
+### Опциялар
+
+| Опция | Әдепкі мәні | Сипаттамасы |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the `shell` returns a `0` status code from executing it.                                                        |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
+| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `unsafe_no_escape`  | `false`                         | When set, command output is not escaped of characters that could be interpreted by the shell.                                                                                                                                                                                                 |
+| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
+| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
+| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
+| `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
+| `style`             | `'bold green'`                  | Модульдің стилі.                                                                                                                                                                                                                                                                     |
+| `format`            | `'[$symbol($output )]($style)'` | Модульдің пішімдеу жолы.                                                                                                                                                                                                                                                                    |
+| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
+| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
+| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
+
+### Айнымалылар
+
+| Variable | Description                            |
+| -------- | -------------------------------------- |
+| output   | The output of `command` run in `shell` |
+| symbol   | `symbol` опциясының мәнін қайталайды   |
+| style\*  | `style` опциясының мәнін қайталайды    |
+
+*: Бұл айнымалы тек стиль жолының бөлігі ретінде ғана қолданыла алады
+
+#### Custom command shell
+
+`shell` accepts a non-empty list of strings, where:
+
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
+
+If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+
+The `command` (and `when`, if applicable) will be passed in on stdin.
+
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
+the following arguments will automatically be added: `-NoProfile -Command -`.
+If `shell` is not given or only contains one element and Starship detects Cmd will be used,
+the following argument will automatically be added: `/C` and `stdin` will be set to `false`.
+If `shell` is not given or only contains one element and Starship detects Nushell will be used,
+the following arguments will automatically be added: `-c` and `stdin` will be set to `false`.
+This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+
+```toml
+shell = ['pwsh', '-Command', '-']
+```
+
+> [!WARNING]
+> Make sure your custom shell configuration exits gracefully
+>
+> If you set a custom command, make sure that the default Shell used by starship
+> will properly execute the command with a graceful exit (via the `shell`
+> option).
+>
+> For example, PowerShell requires the `-Command` parameter to execute a one
+> liner. Omitting this parameter might throw starship into a recursive loop
+> where the shell might try to load a full profile environment with starship
+> itself again and hence re-execute the custom command, getting into a never
+> ending loop.
+>
+> Parameters similar to `-NoProfile` in PowerShell are recommended for other
+> shells as well to avoid extra loading time of a custom profile on every
+> starship invocation.
+>
+> Automatic detection of shells and proper parameters addition are currently
+> implemented, but it's possible that not all shells are covered.
+> [Please open an issue](https://github.com/starship/starship/issues/new/choose)
+> with shell details and starship configuration if you hit such scenario.
+
+### Мысал
+
+```toml
+# ~/.config/starship.toml
+
+[custom.foo]
+command = 'echo foo' # shows output of command
+detect_files = ['foo'] # can specify filters but wildcards are not supported
+when = ''' test "$HOME" = "$PWD" '''
+format = ' transcending [$output]($style)'
+
+[custom.time]
+command = 'time /T'
+detect_extensions = ['pst'] # filters *.pst files
+shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
+
+[custom.time-as-arg]
+command = 'time /T'
+detect_extensions = ['pst'] # filters *.pst files
+shell = ['pwsh.exe', '-NoProfile', '-Command']
+use_stdin = false
+```

@@ -15,22 +15,22 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Crates.io нұсқасы"
   /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status"/></a
+      alt="Пакеттеу күйі"/></a
   ><br />
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="Discord чаты"
   /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="Twitter-де @StarshipPrompt жазылу"
   /></a>
   <a href="https://stand-with-ukraine.pp.ua"
     ><img
@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Веб-сайт</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-орнату">Орнату</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/kk-KZ/config/">Баптау</a>
 </p>
 
 <p align="center">
@@ -163,8 +163,8 @@
 <h1></h1>
 
 > [!WARNING]
-> **The default branch has been renamed from `master` to `main`.**
-> If you have a local clone, update it by running:
+> **Негізгі тармақтың атауы `master`-ден `main`-ге ауыстырылды.**
+> Егер сізде жергілікті клондалған нұсқасы болса, келесі пәрмендерді орындау арқылы жаңартыңыз:
 >
 > ```sh
 > git branch -m master main
@@ -175,55 +175,55 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship iTerm2 және Snazzy тақырыбымен"
   width="50%"
   align="right"
 />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Кез келген қабықша үшін шағын, аса жылдам әрі шексіз баптауға болатын командалық жол шақыруы!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Жылдам:** ол шынымен де өте, өте жылдам! 🚀
+- **Шексіз бапталады:** промпттың әрбір бөлігін өзіңізге ыңғайлап реттеңіз.
+- **Әмбебап:** кез келген операциялық жүйеде және кез келген қабықшада жұмыс істейді.
+- **Ақылды:** қажетті ақпаратты бірден көз алдыңызға шығарады.
+- **Мүмкіндіктері мол:** сіз қолданатын барлық танымал құралдар мен бағдарламалау тілдерін қолдайды.
+- **Оңай:** бірнеше минут ішінде оңай орнатып, бірден қолдануды бастаңыз.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/kk-KZ/config/"><strong>Starship құжаттамасын қарау&nbsp;&nbsp;▶</strong></a>
 </p>
 
-<a name="🚀-installation"></a>
+<a name="🚀-орнату"></a>
 
-## 🚀 Installation
+## 🚀 Орнату
 
-### Prerequisites
+### Қажетті алғышарттар
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Терминалыңызда [Nerd Font](https://www.nerdfonts.com/) қарпі орнатылған және қосылған болуы қажет (мысалы, [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads) қарпін көріңіз).
 
-### Step 1. Install Starship
+### 1-қадам. Starship-ті орнату
 
-Select your operating system from the list below to view installation instructions:
+Орнату нұсқаулығын көру үшін төмендегі тізімнен операциялық жүйеңізді таңдаңыз:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Starship-ті төмендегі пакет менеджері арқылы орнатыңыз:
 
-| Repository | Instructions           |
-| ---------- | ---------------------- |
-| [Termux]   | `pkg install starship` |
+| Репозиторий | Орнату пәрмені         |
+| ----------- | ---------------------- |
+| [Termux]    | `pkg install starship` |
 
 </details>
 
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Starship-ті төмендегі пакет менеджерлерінің бірі арқылы орнатыңыз:
 
-| Distribution | Repository      | Instructions                      |
+| Дистрибутив  | Репозиторий     | Орнату пәрмені                    |
 | ------------ | --------------- | --------------------------------- |
-| **_Any_**    | **[crates.io]** | `cargo install starship --locked` |
+| **_Кез келген_** | **[crates.io]** | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts]    | `pkg install starship`            |
 | NetBSD       | [pkgsrc]        | `pkgin install starship`          |
 
@@ -232,19 +232,19 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Жүйеңізге арналған ең соңғы нұсқасын орнатыңыз:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Немесе Starship-ті төмендегі пакет менеджерлерінің бірі арқылы орнатыңыз:
 
-| Distribution       | Repository              | Instructions                                                  |
+| Дистрибутив        | Репозиторий             | Орнату пәрмені                                                |
 | ------------------ | ----------------------- | ------------------------------------------------------------- |
-| **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
-| _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
-| _Any_              | [Linuxbrew]             | `brew install starship`                                       |
+| **_Кез келген_**   | **[crates.io]**         | `cargo install starship --locked`                             |
+| _Кез келген_       | [conda-forge]           | `conda install -c conda-forge starship`                       |
+| _Кез келген_       | [Linuxbrew]             | `brew install starship`                                       |
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
 | Arch Linux         | [Arch Linux Extra]      | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -262,15 +262,15 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Жүйеңізге арналған ең соңғы нұсқасын орнатыңыз:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Немесе Starship-ті төмендегі пакет менеджерлерінің бірі арқылы орнатыңыз:
 
-| Repository      | Instructions                            |
+| Репозиторий     | Орнату пәрмені                          |
 | --------------- | --------------------------------------- |
 | **[crates.io]** | `cargo install starship --locked`       |
 | [conda-forge]   | `conda install -c conda-forge starship` |
@@ -282,11 +282,11 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Ең соңғы нұсқасын [шығарылымдар бетінен](https://github.com/starship/starship/releases/latest) MSI-орнатқышы арқылы орнатыңыз.
 
-Install Starship using any of the following package managers:
+Немесе Starship-ті келесі пакет менеджерлері арқылы орнатыңыз:
 
-| Repository      | Instructions                            |
+| Репозиторий     | Орнату пәрмені                          |
 | --------------- | --------------------------------------- |
 | **[crates.io]** | `cargo install starship --locked`       |
 | [Chocolatey]    | `choco install starship`                |
@@ -296,14 +296,14 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Set up your shell to use Starship
+### 2-қадам. Қабықшаңызды Starship-ті қолдануға баптау
 
-Configure your shell to initialize starship. Select yours from the list below:
+Starship-ті іске қосу үшін қабықшаңызды баптаңыз. Төмендегі тізімнен өз қабықшаңызды таңдаңыз:
 
 <details>
 <summary>Bash</summary>
 
-Add the following to the end of `~/.bashrc`:
+`~/.bashrc` файлының соңына мына жолды қосыңыз:
 
 ```sh
 eval "$(starship init bash)"
@@ -314,8 +314,8 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
-Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Cmd бағдарламасымен бірге [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) құралын қолдану қажет.
+Мына жолда `%LocalAppData%\clink\starship.lua` файлының ішіне келесі мазмұнды қосыңыз:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -326,20 +326,20 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+`~/.config/elvish/rc.elv` (Windows жүйесінде `%AppData%\elvish\rc.elv`) файлының соңына келесіні қосыңыз:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
+Ескертпе: Тек Elvish v0.18+ нұсқаларына қолдау көрсетіледі. v0.21.0 дейінгі нұсқалар үшін файл жолы `~/.elvish/rc.elv` болуы мүмкін.
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-Add the following to the end of `~/.config/fish/config.fish`:
+`~/.config/fish/config.fish` файлының соңына келесіні қосыңыз:
 
 ```fish
 starship init fish | source
@@ -350,7 +350,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Add the following to the end of `~/.config/ion/initrc`:
+`~/.config/ion/initrc` файлының соңына келесіні қосыңыз:
 
 ```sh
 eval $(starship init ion)
@@ -361,21 +361,21 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+Nushell конфигурациясының соңына келесіні қосыңыз (Nushell ішінде `$nu.config-path` пәрменін орындау арқылы файлды таба аласыз):
 
 ```sh
 mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Note: Only Nushell v0.96+ is supported
+Ескертпе: Тек Nushell v0.96+ нұсқаларына қолдау көрсетіледі.
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+PowerShell конфигурация файлының соңына келесіні қосыңыз (`$PROFILE` айнымалысы арқылы жолды көре аласыз):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -386,7 +386,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Add the following to the end of `~/.tcshrc`:
+`~/.tcshrc` файлының соңына келесіні қосыңыз:
 
 ```sh
 eval `starship init tcsh`
@@ -397,7 +397,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+`~/.xonshrc` файлының соңына келесіні қосыңыз:
 
 ```python
 execx($(starship init xonsh))
@@ -408,7 +408,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Add the following to the end of `~/.zshrc`:
+`~/.zshrc` файлының соңына келесіні қосыңыз:
 
 ```sh
 eval "$(starship init zsh)"
@@ -416,63 +416,60 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 3-қадам. Starship-ті баптау
 
-Start a new shell instance, and you should see your beautiful new shell prompt.
-If you're happy with the defaults, enjoy!
+Терминалдың жаңа терезесін ашыңыз, сонда сіз керемет жаңа командалық шақыру жолын көресіз.
+Егер әдепкі көрінісі ұнаса — қолдана беріңіз!
 
-If you're looking to further customize Starship:
+Егер Starship-ті одан әрі жеке талғамыңызға сай баптағыңыз келсе:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Баптау (Конфигурация)](https://starship.rs/kk-KZ/config/)** – Starship-ті өз қалауыңызша өзгерту жолдарын үйреніңіз
+- **[Алдын ала баптаулар (Presets)](https://starship.rs/kk-KZ/presets/)** – басқа қолданушылар жасаған дайын баптау үлгілерінен шабыт алыңыз
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+## 🤝 Үлес қосу (Contributing)
 
-## 🤝 Contributing
+Біз **кез келген деңгейдегі** қолданушылардың жобаға үлес қосқанын әрдайым қолдаймыз! Егер жобаға қадам басқыңыз келсе, [жаңадан бастаушыларға арналған тапсырмаларды](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22) қарап көріңіз.
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/issues?q=state%3Aopen%20label%3A%22%F0%9F%8C%B1%20good%20first%20issue%22).
+Егер сіз басқа тілдерді жақсы білсеңіз, құжаттаманы аударуға және өзекті күйде ұстауға көмектессеңіз қуанамыз. Аудармаларға [Starship Crowdin](https://translate.starship.rs/) арқылы үлес қоса аласыз.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Starship жобасына көмектескіңіз келсе, біздің [Үлес қосу бойынша нұсқаулығымызды](https://github.com/starship/starship/blob/main/CONTRIBUTING.md) қараңыз. Сонымен қатар, біздің [Discord серверімізге](https://discord.gg/8Jzqu3T) қосылып, қауымдастықпен амандасуға болады. 👋
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/main/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+## 💭 Шабыттандырған жобалар (Inspired By)
 
-## 💭 Inspired By
+Starship-ті жасауға шабыт берген келесі жобаларды қарап шығуды ұсынамыз. 🙏
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Ғарышкерлерге арналған ZSH промпты.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – JavaScript тілінде жазылған барлық қабықшаларға арналған robbyrussell тақырыбы.
+- **[reujab/silver](https://github.com/reujab/silver)** – Белгішелері бар әрі бапталатын powerline тәрізді промпт.
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+## ❤️ Демеушілер (Sponsors)
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+[Демеуші болу](https://github.com/sponsors/starship) арқылы бұл жобаға қолдау көрсетіңіз. Сіздің атыңыз немесе логотипіңіз веб-сайтыңызға сілтемесімен бірге осында көрсетіледі.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
-
-## ❤️ Sponsors
-
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
-
-**Supporter Tier**
+**Қолдаушылар (Supporter Tier)**
 
 - [Alex Holmes](https://github.com/alexhholmes)
 
-## 🔒 Code Signing Policy
+## 🔒 Кодқа цифрлық қолтаңба қою саясаты (Code Signing Policy)
 
-Free code signing provided by [SignPath.io], certificate by [SignPath Foundation].
+Тегін код қолтаңбасы [SignPath.io] арқылы ұсынылған, сертификат [SignPath Foundation] тарапынан берілген.
 
-Code Signing Roles:
+Кодқа қолтаңба қою рөлдері:
 
-- Reviewers: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
-- Approvers and Authors: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
+- Сарапшылар: [Astronauts](https://github.com/orgs/starship/teams/astronauts)
+- Бекітушілер және авторлар: [Mission Control](https://github.com/orgs/starship/teams/mission-control)
 
-This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+Бұл бағдарлама пайдаланушы немесе оны орнатқан/басқаратын тұлға арнайы сұрамаса, басқа желілік жүйелерге ешқандай ақпарат тасымалдамайды.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/main/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Лицензия
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br>
-This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
+Авторлық құқық © 2019-қазіргі уақыт, [Starship Үлес қосушылары](https://github.com/starship/starship/graphs/contributors).<br>
+Бұл жобаға [ISC](https://github.com/starship/starship/blob/main/LICENSE) лицензиясы берілген.
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
 [arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
