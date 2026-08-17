@@ -104,7 +104,7 @@
   /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/kk-KZ/guide/README.md"
+    href="README.md"
     ><img
       height="20"
       src="../../../media/flag-kz.png"
