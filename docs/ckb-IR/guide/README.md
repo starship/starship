@@ -97,10 +97,10 @@
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/main/docs/kk-KZ/guide/README.md"
+    href="https://github.com/Liyfez/starship/blob/main/docs/kk-KZ/guide/README.md"
     ><img
       height="20"
-      src="https://raw.githubusercontent.com/starship/starship/main/media/flag-kz.png"
+      src="https://raw.githubusercontent.com/Liyfez/starship/main/media/flag-kz.png"
       alt="Қазақша"
   /></a>
   &nbsp;
