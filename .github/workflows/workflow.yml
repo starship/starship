@@ -47,7 +47,7 @@ jobs:
         run: rustup toolchain install stable --profile minimal --component clippy --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Lint
         run: cargo clippy --workspace --locked -- -D warnings
@@ -64,7 +64,7 @@ jobs:
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -82,7 +82,7 @@ jobs:
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -100,7 +100,7 @@ jobs:
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -120,7 +120,7 @@ jobs:
         run: rustup toolchain install stable --profile minimal --no-self-update
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -159,7 +159,7 @@ jobs:
           rustup default ${{ matrix.rust }}
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@7f4eb899022d8fe70b20c4f3de697aa85c309026 # v2.85.11
