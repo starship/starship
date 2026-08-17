@@ -50,6 +50,10 @@ mod hg_branch;
 mod hg_state;
 mod hostname;
 mod java;
+mod jj_bookmark;
+mod jj_change;
+mod jj_metrics;
+mod jj_status;
 mod jobs;
 mod julia;
 mod kotlin;
@@ -174,6 +178,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hg_state" => hg_state::module(context),
             "hostname" => hostname::module(context),
             "java" => java::module(context),
+            "jj_bookmark" => jj_bookmark::module(context),
+            "jj_change" => jj_change::module(context),
+            "jj_metrics" => jj_metrics::module(context),
+            "jj_status" => jj_status::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -313,6 +321,10 @@ pub fn description(module: &str) -> &'static str {
         "hg_state" => "The current hg operation",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
+        "jj_bookmark" => "The closest ancestor bookmark in Jujutsu",
+        "jj_change" => "The current change in Jujutsu",
+        "jj_metrics" => "The number of added and deleted lines in Jujutsu",
+        "jj_status" => "Current status in Jujutsu represented via symbols",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
