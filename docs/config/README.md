@@ -2854,17 +2854,29 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Default | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Option      | Default | Description                                                                                 |
+| ----------- | ------- | ------------------------------------------------------------------------------------------- |
+| `disabled`  | `false` | Disables the `line_break` module, making the prompt a single line.                          |
+| `max_width` | `0`     | Disables the `line_break` module when the prompt is less than or equal to `max_width` chars |
 
-### Example
+### Examples
+
+#### Disable the line break entirely
 
 ```toml
 # ~/.config/starship.toml
 
 [line_break]
 disabled = true
+```
+
+#### Only break when the prompt exceeds 50 characters
+
+```toml
+# ~/.config/starship.toml
+
+[line_break]
+max_width = 50
 ```
 
 ## Local IP
