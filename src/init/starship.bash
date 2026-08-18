@@ -20,6 +20,10 @@ starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
     local PREV_LAST_ARG=$1
 
+    if [[ "${BASH_COMMAND-}" = "starship_precmd" ]]; then
+        return
+    fi
+
     # Avoid restarting the timer for commands in the same pipeline
     if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
@@ -69,13 +73,21 @@ starship_precmd() {
         eval "$STARSHIP_PROMPT_COMMAND"
     fi
 
-    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
+    local STARSHIP_PROMPT_STATUS="${STARSHIP_CMD_STATUS}"
+    local STARSHIP_PROMPT_PIPE_STATUS="${STARSHIP_PIPE_STATUS[*]}"
     # Prepare the timer data, if needed.
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
+    else
+        STARSHIP_PROMPT_STATUS=""
+        STARSHIP_PROMPT_PIPE_STATUS=""
+        STARSHIP_DURATION=""
+    fi
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_PROMPT_STATUS}" --pipestatus="${STARSHIP_PROMPT_PIPE_STATUS}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
+    if [[ -n "${STARSHIP_DURATION-}" ]]; then
+        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
     fi
     PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     if [[ ${BLE_ATTACHED-} ]]; then
@@ -152,4 +164,3 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
-
