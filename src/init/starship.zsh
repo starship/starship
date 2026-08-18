@@ -7,7 +7,7 @@
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
-zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
+zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOB_COUNT
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
@@ -50,7 +50,7 @@ prompt_starship_precmd() {
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
-    STARSHIP_JOBS_COUNT="${#jobstates[*]}"
+    export STARSHIP_JOB_COUNT="${#jobstates[*]}"
 }
 
 # Runs after the user submits the command line, but before it is executed and
@@ -97,6 +97,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOB_COUNT")'
+RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOB_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
