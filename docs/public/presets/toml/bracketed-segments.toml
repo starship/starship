@@ -270,6 +270,9 @@ format = '\[[$user]($style)\]'
 [vagrant]
 format = '\[[$symbol($version)]($style)\]'
 
+[vault]
+format = '[$symbol Token expires: $expire_time]($style)'
+
 [vcsh]
 format = '\[vcsh [$symbol$repo]($style)\]'
 
