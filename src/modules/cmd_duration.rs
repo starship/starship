@@ -88,9 +88,10 @@ fn undistract_me<'a>(
         #[cfg(target_os = "macos")]
         let _ = notify_rust::set_application("com.apple.Terminal");
 
+        let module_text = unstyle(&AnsiStrings(&module.ansi_strings()));
         let body = format!(
             "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
+            sanitize_notification_text(&module_text)
         );
 
         let timeout = match config.notification_timeout {
@@ -113,8 +114,27 @@ fn undistract_me<'a>(
     module
 }
 
+#[cfg(feature = "notify")]
+fn sanitize_notification_text(text: &str) -> String {
+    // Private-use glyphs depend on terminal fonts and render as tofu in desktop notifications.
+    text.chars()
+        .filter(|character| {
+            !matches!(
+                *character,
+                '\u{E000}'..='\u{F8FF}'
+                    | '\u{F0000}'..='\u{FFFFD}'
+                    | '\u{100000}'..='\u{10FFFD}'
+            )
+        })
+        .collect::<String>()
+        .trim()
+        .to_owned()
+}
+
 #[cfg(test)]
 mod tests {
+    #[cfg(feature = "notify")]
+    use super::sanitize_notification_text;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
 
@@ -192,5 +212,19 @@ mod tests {
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);
+    }
+
+    #[cfg(feature = "notify")]
+    #[test]
+    fn private_use_characters_are_removed_from_notifications() {
+        let text = "\u{EAF4} took 5s \u{F0000}\u{100000}";
+        assert_eq!(sanitize_notification_text(text), "took 5s");
+    }
+
+    #[cfg(feature = "notify")]
+    #[test]
+    fn standard_unicode_is_preserved_in_notifications() {
+        let text = "Command finished: 你好 🚀";
+        assert_eq!(sanitize_notification_text(text), text);
     }
 }
