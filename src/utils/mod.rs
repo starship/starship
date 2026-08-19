@@ -834,6 +834,26 @@ pub fn humanize_int(n: u64) -> String {
     }
 }
 
+/// Renders a fixed-width gauge for a percentage between 0 and 100.
+///
+/// The cell straddling the boundary is drawn with `partial` once at least a
+/// quarter of it is used; an empty `partial` rounds to whole cells instead.
+pub fn render_gauge(percentage: f64, width: u8, full: &str, partial: &str, empty: &str) -> String {
+    let width = usize::from(width);
+    let filled = percentage / 100.0 * width as f64;
+    let (filled_count, show_partial) = if partial.is_empty() {
+        (filled.round() as usize, false)
+    } else {
+        (filled.floor() as usize, filled.fract() >= 0.25)
+    };
+
+    let filled_count = filled_count.min(width);
+    let partial_count = usize::from(show_partial && filled_count < width);
+    let empty_count = width.saturating_sub(filled_count + partial_count);
+
+    full.repeat(filled_count) + &partial.repeat(partial_count) + &empty.repeat(empty_count)
+}
+
 pub fn home_dir() -> Option<PathBuf> {
     dirs::home_dir()
 }
@@ -930,6 +950,24 @@ mod tests {
         assert_eq!(humanize_int(100000), "100k");
         assert_eq!(humanize_int(1000000), "1M");
         assert_eq!(humanize_int(1500000), "1.5M");
+    }
+
+    #[test]
+    fn test_render_gauge() {
+        let gauge = |percentage, width| render_gauge(percentage, width, "█", "▒", "░");
+        assert_eq!(gauge(0.0, 5), "░░░░░");
+        assert_eq!(gauge(100.0, 5), "█████");
+        assert_eq!(gauge(50.0, 5), "██▒░░");
+        // A cell is drawn as partial from a quarter of it onwards
+        assert_eq!(gauge(44.0, 5), "██░░░");
+        assert_eq!(gauge(45.0, 5), "██▒░░");
+        // The partial cell never pushes the gauge past its width
+        assert_eq!(gauge(99.0, 5), "████▒");
+        assert_eq!(gauge(50.0, 0), "");
+
+        // An empty partial symbol rounds to whole cells instead
+        assert_eq!(render_gauge(44.0, 5, "█", "", "░"), "██░░░");
+        assert_eq!(render_gauge(50.0, 5, "█", "", "░"), "███░░");
     }
 
     #[test]

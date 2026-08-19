@@ -253,6 +253,40 @@
         "disabled": false
       }
     },
+    "claude_rate_limits": {
+      "$ref": "#/$defs/ClaudeRateLimitsConfig",
+      "default": {
+        "format": "[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) ",
+        "symbol": "⏳",
+        "gauge_width": 5,
+        "gauge_full_symbol": "█",
+        "gauge_partial_symbol": "▒",
+        "gauge_empty_symbol": "░",
+        "display": [
+          {
+            "threshold": 0.0,
+            "style": "bold green",
+            "hidden": true
+          },
+          {
+            "threshold": 50.0,
+            "style": "bold green",
+            "hidden": false
+          },
+          {
+            "threshold": 70.0,
+            "style": "bold yellow",
+            "hidden": false
+          },
+          {
+            "threshold": 90.0,
+            "style": "bold red",
+            "hidden": false
+          }
+        ],
+        "disabled": false
+      }
+    },
     "cmake": {
       "$ref": "#/$defs/CMakeConfig",
       "default": {
@@ -2455,6 +2489,71 @@
             "type": "string"
           },
           "default": {}
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClaudeRateLimitsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "default": "[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) "
+        },
+        "symbol": {
+          "type": "string",
+          "default": "⏳"
+        },
+        "gauge_width": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 5
+        },
+        "gauge_full_symbol": {
+          "type": "string",
+          "default": "█"
+        },
+        "gauge_partial_symbol": {
+          "type": "string",
+          "default": "▒"
+        },
+        "gauge_empty_symbol": {
+          "type": "string",
+          "default": "░"
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaudeDisplayConfig"
+          },
+          "default": [
+            {
+              "threshold": 0.0,
+              "style": "bold green",
+              "hidden": true
+            },
+            {
+              "threshold": 50.0,
+              "style": "bold green",
+              "hidden": false
+            },
+            {
+              "threshold": 70.0,
+              "style": "bold yellow",
+              "hidden": false
+            },
+            {
+              "threshold": 90.0,
+              "style": "bold red",
+              "hidden": false
+            }
+          ]
         },
         "disabled": {
           "type": "boolean",
