@@ -139,10 +139,16 @@ mod tests {
     fn folder_with_java_file_preview() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.java"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").cmd("java -version", Some(CommandOutput {
-            stdout: "openjdk version \"16\" 2021-01-17".to_owned(),
-            stderr: String::new()
-        })).path(dir.path()).collect();
+        let actual = ModuleRenderer::new("java")
+            .cmd(
+                "java -version",
+                Some(CommandOutput {
+                    stdout: "openjdk version \"16\" 2021-01-17".to_owned(),
+                    stderr: String::new(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v16 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -250,11 +256,13 @@ mod tests {
 
         let actual = ModuleRenderer::new("java")
             .env("JAVA_HOME", java_home.to_str().unwrap())
-            .cmd(&format!("{} -version", java_bin.to_str().unwrap()),
-            Some(CommandOutput {
-                stdout: "openjdk version \"11.0.4\" 2019-07-17".to_owned(),
-                stderr: String::new(),
-            }))
+            .cmd(
+                &format!("{} -version", java_bin.to_str().unwrap()),
+                Some(CommandOutput {
+                    stdout: "openjdk version \"11.0.4\" 2019-07-17".to_owned(),
+                    stderr: String::new(),
+                }),
+            )
             .path(dir.path())
             .collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v11.0.4 ")));
