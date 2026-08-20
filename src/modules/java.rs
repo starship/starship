@@ -278,7 +278,7 @@ mod tests {
             .cmd(
                 &format!("{} -version", java_bin.to_str().unwrap()),
                 Some(CommandOutput {
-                    stdout: "openjdk version \"11.0.4\" 2019-07-17".to_owned(),
+                    stdout: "openjdk version \"11.0.4\" 2019-07-16\nOpenJDK Runtime Environment (build 11.0.4+11)\nOpenJDK 64-Bit Server VM (build 11.0.4+11, mixed mode, sharing)".to_owned(),
                     stderr: String::new(),
                 }),
             )
