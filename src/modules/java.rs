@@ -168,7 +168,7 @@ mod tests {
             .cmd(
                 "java -version",
                 Some(CommandOutput {
-                    stdout: "openjdk version \"16\" 2021-01-17".to_owned(),
+                    stdout: "openjdk version \"16\" 2021-03-16\nOpenJDK Runtime Environment (build 16+36)\nOpenJDK 64-Bit Server VM (build 16+36, mixed mode, sharing)".to_owned(),
                     stderr: String::new(),
                 }),
             )
