@@ -102,9 +102,14 @@ mod tests {
     use std::io;
 
     #[test]
-    fn test_parse_java_version_output() {
+    fn test_parse_java_version_output_openjdk() {
         let java_version_output = "openjdk version \"25.0.4.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Zulu25.36+205-CA (build 25.0.4.1+1-LTS)\nOpenJDK 64-Bit Server VM Zulu25.36+205-CA (build 25.0.4.1+1-LTS, mixed mode, sharing)";
         assert_eq!(parse_java_version_output(java_version_output), Some("25.0.4.1".to_string()));
+    }
+
+    fn test_parse_java_version_output_oracle_jdk() {
+        let java_version_output = "java version \"17.0.8\" 2023-07-18 LTS\nJava(TM) SE Runtime Environment (build 17.0.8+9-LTS-211)\nJava HotSpot(TM) 64-Bit Server VM (build 17.0.8+9-LTS-211, mixed mode, sharing)";
+        assert_eq!(parse_java_version_output(java_version_output), Some("17.0.8".to_string()));
     }
 
     #[test]
