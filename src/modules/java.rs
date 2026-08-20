@@ -78,7 +78,9 @@ fn get_java_version(context: &Context) -> Option<String> {
 fn parse_java_version_output(java_version_output: &str) -> Option<String> {
     let version_line = java_version_output
         .lines()
-        .find(|line| line.contains("version \""))?;
+        .find(|line| {
+            line.starts_with("java version \"") || line.starts_with("openjdk version \"")
+        })?;
 
     parse_java_version_line(version_line)
         .map(ToString::to_string)
