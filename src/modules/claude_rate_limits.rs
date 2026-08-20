@@ -22,10 +22,8 @@ fn render_reset(resets_at: i64, now: i64) -> String {
         ("m", minutes % 60),
     ]
     .iter()
-    .skip_while(|(_, amount)| *amount == 0)
-    .take(2)
-    // Filtering after taking keeps `2d0h` as `2d` rather than padding it with minutes
     .filter(|(_, amount)| *amount != 0)
+    .take(2)
     .map(|(unit, amount)| format!("{amount}{unit}"))
     .collect()
 }
@@ -321,7 +319,7 @@ mod tests {
     fn test_render_reset() {
         assert_eq!(render_reset(1_000_000, 1_000_000 - 5_400), "1h30m");
         assert_eq!(render_reset(1_000_000, 1_000_000 - 176_400), "2d1h");
-        assert_eq!(render_reset(1_000_000, 1_000_000 - 174_600), "2d");
+        assert_eq!(render_reset(1_000_000, 1_000_000 - 174_600), "2d30m");
         assert_eq!(render_reset(1_000_000, 1_000_000 - 59), "");
         assert_eq!(render_reset(1_000_000, 1_000_001), "");
     }
