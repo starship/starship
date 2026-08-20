@@ -73,7 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Add the init script to your shell's config file. Starship is a prompt and should only be initialized in interactive shells. The Bash and Fish examples below explicitly check for an interactive session because their config files may also be evaluated in non-interactive contexts:
 
    #### Bash
 
@@ -82,7 +82,9 @@ onMounted(() => {
    ```sh
    # ~/.bashrc
 
-   eval "$(starship init bash)"
+   if [[ $- == *i* ]]; then
+       eval "$(starship init bash)"
+   fi
    ```
 
    #### Fish
@@ -92,7 +94,9 @@ onMounted(() => {
    ```sh
    # ~/.config/fish/config.fish
 
-   starship init fish | source
+   if status is-interactive
+       starship init fish | source
+   end
    ```
 
    #### Zsh
