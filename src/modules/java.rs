@@ -70,12 +70,18 @@ fn get_java_version(context: &Context) -> Option<String> {
         .unwrap_or_else(|| String::from("java"));
 
     let output = context.exec_cmd(java_command, &["-version"])?;
-    let java_version_string = get_command_string_output(output);
-    let version_line = java_version_string
+    let java_version_output = get_command_string_output(output);
+
+    parse_java_version_output(&java_version_output)
+}
+
+fn parse_java_version_output(java_version_output: &str) -> Option<String> {
+    let version_line = java_version_output
         .lines()
         .find(|line| line.contains("version \""))?;
 
-    parse_java_version_line(version_line).map(ToString::to_string)
+    parse_java_version_line(version_line)
+        .map(ToString::to_string)
 }
 
 fn parse_java_version_line(java_version_line: &str) -> Option<&str> {
@@ -94,6 +100,18 @@ mod tests {
     use std::io;
 
     #[test]
+    fn test_parse_java_version_output() {
+        let java_version_output = "openjdk version \"25.0.4.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Zulu25.36+205-CA (build 25.0.4.1+1-LTS)\nOpenJDK 64-Bit Server VM Zulu25.36+205-CA (build 25.0.4.1+1-LTS, mixed mode, sharing)";
+        assert_eq!(parse_java_version_output(java_version_output), Some("25.0.4.1".to_string()));
+    }
+
+    #[test]
+    fn test_parse_java_version_output_with_version_not_on_first_line() {
+        let java_version_output = "Picked up JAVA_TOOL_OPTIONS: -Xmx2g\nopenjdk version \"25.0.4.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Zulu25.36+205-CA (build 25.0.4.1+1-LTS)\nOpenJDK 64-Bit Server VM Zulu25.36+205-CA (build 25.0.4.1+1-LTS, mixed mode, sharing)";
+        assert_eq!(parse_java_version_output(java_version_output), Some("25.0.4.1".to_string()));
+    }
+
+    #[test]
     fn test_parse_java_version_line_openjdk() {
         let java_8 = "openjdk version \"1.8.0_222\"";
         let java_11 = "openjdk version \"11.0.4\" 2019-07-18";
@@ -104,7 +122,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_java_version_line_oracle() {
+    fn test_parse_java_version_line_oracle_jdk() {
         let java_8 = "java version \"1.8.0_65\"";
         assert_eq!(parse_java_version_line(java_8), Some("1.8.0_65"));
     }
@@ -259,25 +277,6 @@ mod tests {
             .path(dir.path())
             .collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v11.0.4 ")));
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn java_version_not_on_first_line() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("Main.java"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java")
-            .cmd(
-                "java -version",
-                Some(CommandOutput {
-                    stdout: "Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8\nopenjdk version \"17.0.5\" 2022-10-18 LTS\nOpenJDK Runtime Environment (build 17.0.5+8)\n".to_owned(),
-                    stderr: String::new(),
-                }),
-            )
-            .path(dir.path())
-            .collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v17.0.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
