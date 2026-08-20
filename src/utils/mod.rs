@@ -393,7 +393,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stderr: String::default(),
         }),
         s if s.ends_with("java -version") => Some(CommandOutput {
-            stdout: String::from("openjdk version \"13.0.2\" 2020-01-14"),
+            stdout: String::from("openjdk version \"13.0.2\" 2020-01-14\nOpenJDK Runtime Environment (build 13.0.2+8)\nOpenJDK 64-Bit Server VM (build 13.0.2+8, mixed mode, sharing)"),
             stderr: String::default(),
         }),
         "scala-cli version --scala" => Some(CommandOutput {
