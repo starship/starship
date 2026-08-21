@@ -451,7 +451,8 @@
         "read_only_style": "red",
         "truncation_symbol": "",
         "home_symbol": "~",
-        "use_os_path_sep": true
+        "use_os_path_sep": true,
+        "use_osc8_url": false
       }
     },
     "direnv": {
@@ -2970,6 +2971,10 @@
         "use_os_path_sep": {
           "type": "boolean",
           "default": true
+        },
+        "use_osc8_url": {
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
