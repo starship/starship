@@ -110,6 +110,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
+    let (prefix, osc8_suffix) = if config.use_osc8_url {
+        (format!("\u{001B}]8;;file://{}\u{001B}\\{prefix}", physical_dir.display()), "\u{001B}]8;;\u{001B}\\")
+    } else {
+        (prefix, "")
+    };
+
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
@@ -122,12 +128,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
+                [prefix + before, root.to_string(), after_repo_root + osc8_suffix]
             } else {
-                [String::new(), String::new(), prefix + dir_string.as_str()]
+                [String::new(), String::new(), prefix + dir_string.as_str() + osc8_suffix]
             }
         }
-        _ => [String::new(), String::new(), prefix + dir_string.as_str()],
+        _ => [String::new(), String::new(), prefix + dir_string.as_str() + osc8_suffix],
     };
 
     let path_vec = if config.use_os_path_sep {
