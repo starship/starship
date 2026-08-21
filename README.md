@@ -237,6 +237,7 @@ Alternatively, install Starship using any of the following package managers:
 | **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
 | _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
 | _Any_              | [Linuxbrew]             | `brew install starship`                                       |
+| _Any_              | [AM]                    | `am -i starship` <br /> `appman -i starship`                  |
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
 | Arch Linux         | [Arch Linux Extra]      | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -467,6 +468,7 @@ Copyright © 2019-present, [Starship Contributors](https://github.com/starship/s
 This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
+[AM]: https://github.com/ivan-hc/AM/blob/main/programs/x86_64/starship
 [arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
 [chocolatey]: https://community.chocolatey.org/packages/starship
 [conda-forge]: https://anaconda.org/conda-forge/starship
