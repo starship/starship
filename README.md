@@ -468,7 +468,7 @@ Copyright © 2019-present, [Starship Contributors](https://github.com/starship/s
 This project is [ISC](https://github.com/starship/starship/blob/main/LICENSE) licensed.
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
-[AM]: https://github.com/ivan-hc/AM/blob/main/programs/x86_64/starship
+[AM]: https://github.com/ivan-hc/AM
 [arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
 [chocolatey]: https://community.chocolatey.org/packages/starship
 [conda-forge]: https://anaconda.org/conda-forge/starship
