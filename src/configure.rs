@@ -1,4 +1,5 @@
 use std::fmt::Write as _;
+use std::fs::File;
 use std::process;
 use std::process::Stdio;
 use std::str::FromStr;
@@ -17,6 +18,14 @@ const STD_EDITOR: &str = "vi";
 const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(context: &Context, name: &str, value: &str) {
+    // Acquire an exclusive lock on a sibling lockfile before the read-modify-write
+    // cycle. Without this, concurrent `starship config` calls race: both read the
+    // same TOML, both modify independently, and the second write silently overwrites
+    // the first. See #7688.
+    let _lock = context
+        .get_config_path_os()
+        .and_then(|p| acquire_config_lock(&PathBuf::from(p)));
+
     let mut doc = get_configuration_edit(context);
 
     match handle_update_configuration(&mut doc, name, value) {
@@ -26,6 +35,23 @@ pub fn update_configuration(context: &Context, name: &str, value: &str) {
         }
         _ => write_configuration(context, &doc),
     }
+    // _lock is dropped here, releasing the file lock
+}
+
+/// Acquire an exclusive advisory lock on `{config_path}.lock`.
+/// Returns `None` (and logs a warning) if the lock cannot be acquired — the
+/// caller proceeds without locking rather than failing, keeping the old
+/// behavior for edge cases (read-only filesystem, permission issues).
+fn acquire_config_lock(config_path: &PathBuf) -> Option<File> {
+    let lock_path = config_path.with_extension("toml.lock");
+    let file = File::create(&lock_path).ok()?;
+    // File::lock_exclusive is stable since Rust 1.83 — blocks until the lock
+    // is available, then returns. The lock is released when the File is dropped.
+    if let Err(e) = file.lock_exclusive() {
+        log::warn!("Failed to acquire config lock on {lock_path:?}: {e}");
+        return None;
+    }
+    Some(file)
 }
 
 fn handle_update_configuration(
@@ -182,6 +208,10 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
 }
 
 pub fn toggle_configuration(context: &Context, name: &str, key: &str) {
+    let _lock = context
+        .get_config_path_os()
+        .and_then(|p| acquire_config_lock(&PathBuf::from(p)));
+
     let mut doc = get_configuration_edit(context);
 
     match handle_toggle_configuration(&mut doc, name, key) {
