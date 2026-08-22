@@ -290,7 +290,7 @@ Install Starship using any of the following package managers:
 
 ### Step 2. Set up your shell to use Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configure your shell to initialize starship. Starship is a prompt and should only be initialized in interactive shells; the Bash and Fish examples below explicitly guard against non-interactive sessions. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -298,7 +298,9 @@ Configure your shell to initialize starship. Select yours from the list below:
 Add the following to the end of `~/.bashrc`:
 
 ```sh
-eval "$(starship init bash)"
+if [[ $- == *i* ]]; then
+    eval "$(starship init bash)"
+fi
 ```
 
 </details>
@@ -334,7 +336,9 @@ Note: Only Elvish v0.18+ is supported. For elvish versions prior to v0.21.0 the 
 Add the following to the end of `~/.config/fish/config.fish`:
 
 ```fish
-starship init fish | source
+if status is-interactive
+    starship init fish | source
+end
 ```
 
 </details>
