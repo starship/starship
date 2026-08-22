@@ -384,6 +384,8 @@ The default profile format is:
 claude-code = "$claude_model$git_branch$claude_context$claude_cost"
 ```
 
+An additional module, `claude_rate_limits`, shows subscription rate limit usage. It is not part of the default profile, so add it to the profile format to use it.
+
 ### Configuration
 
 You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
@@ -653,6 +655,100 @@ style = "bold red"
 # Show duration information
 [claude_cost]
 format = "[$symbol$cost ($duration)]($style) "
+```
+
+### Claude Rate Limits
+
+The `claude_rate_limits` module displays how much of your Claude.ai subscription rate limits the session has consumed, for both the 5-hour and the 7-day window. Like `claude_context`, it supports gauges and threshold-based styling.
+
+Claude Code only reports rate limits for Claude.ai subscriptions (Pro/Max), and only after the first API response of a session. Each window is reported separately, so the module hides the parts of the format belonging to a window that is missing.
+
+#### Options
+
+| Option                 | Default                                                                      | Description                                      |
+| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------ |
+| `format`               | `'[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) '` | The format for the module.                       |
+| `symbol`               | `'⏳'`                                                                       | The symbol shown before the usage.               |
+| `gauge_width`          | `5`                                                                          | The width of a gauge in characters.              |
+| `gauge_full_symbol`    | `'█'`                                                                        | The symbol used for filled segments of a gauge.  |
+| `gauge_partial_symbol` | `'▒'`                                                                        | The symbol used for partial segments of a gauge. |
+| `gauge_empty_symbol`   | `'░'`                                                                        | The symbol used for empty segments of a gauge.   |
+| `display`              | [see below](#display-2)                                                      | Threshold and style configurations.              |
+| `disabled`             | `false`                                                                      | Disables the `claude_rate_limits` module.        |
+
+##### Display
+
+The `display` option is an array of objects that define thresholds and styles. The thresholds are matched against the usage of the window that is closest to its limit. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+
+| Option      | Default      | Description                                                         |
+| ----------- | ------------ | ------------------------------------------------------------------- |
+| `threshold` | `0.0`        | The minimum rate limit usage percentage to match this configuration |
+| `style`     | `bold green` | The value of `style` if this display configuration is matched       |
+| `hidden`    | `false`      | Hide this module if this configuration is matched.                  |
+
+**Default configuration:**
+
+```toml
+[[claude_rate_limits.display]]
+threshold = 0
+hidden = true
+
+[[claude_rate_limits.display]]
+threshold = 50
+style = "bold green"
+
+[[claude_rate_limits.display]]
+threshold = 70
+style = "bold yellow"
+
+[[claude_rate_limits.display]]
+threshold = 90
+style = "bold red"
+```
+
+#### Variables
+
+| Variable             | Example | Description                                           |
+| -------------------- | ------- | ----------------------------------------------------- |
+| five_hour_percentage | `24%`   | Usage of the 5-hour window                            |
+| five_hour_gauge      | `██▒░░` | Visual representation of the 5-hour window usage      |
+| five_hour_reset      | `1h30m` | Time until the 5-hour window resets                   |
+| seven_day_percentage | `41%`   | Usage of the 7-day window                             |
+| seven_day_gauge      | `██░░░` | Visual representation of the 7-day window usage       |
+| seven_day_reset      | `2d1h`  | Time until the 7-day window resets                    |
+| symbol               |         | Mirrors the value of option `symbol`                  |
+| style\*              |         | Mirrors the style from the matching display threshold |
+
+\*: This variable can only be used as a part of a style string
+
+Variables of a window that Claude Code did not report are unset. A reset variable is empty when the reset time is unknown, already past, or less than a minute away.
+
+#### Examples
+
+```toml
+# ~/.config/starship.toml
+
+# Add the module to the statusline
+[profiles]
+claude-code = "$claude_model$git_branch$claude_context$claude_cost$claude_rate_limits"
+
+# Gauges with the time left in each window
+[claude_rate_limits]
+format = "[$symbol( 5h $five_hour_gauge( $five_hour_reset))( 7d $seven_day_gauge( $seven_day_reset))]($style) "
+
+# Show the module at any usage, instead of only once a limit gets close.
+# A `display` array replaces the default one, so every threshold to keep has to be listed.
+[[claude_rate_limits.display]]
+threshold = 0
+style = "bold green"
+
+[[claude_rate_limits.display]]
+threshold = 70
+style = "bold yellow"
+
+[[claude_rate_limits.display]]
+threshold = 90
+style = "bold red"
 ```
 
 ## Style Strings

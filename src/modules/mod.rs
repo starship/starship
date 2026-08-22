@@ -9,6 +9,7 @@ mod character;
 mod claude_context;
 mod claude_cost;
 mod claude_model;
+mod claude_rate_limits;
 mod cmake;
 mod cmd_duration;
 mod cobol;
@@ -136,6 +137,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "claude_context" => claude_context::module(context),
             "claude_cost" => claude_cost::module(context),
             "claude_model" => claude_model::module(context),
+            "claude_rate_limits" => claude_rate_limits::module(context),
             "cmake" => cmake::module(context),
             "cmd_duration" => cmd_duration::module(context),
             "cobol" => cobol::module(context),
@@ -274,6 +276,7 @@ pub fn description(module: &str) -> &'static str {
         "claude_context" => "Context window usage for Claude Code session",
         "claude_cost" => "Cost info for Claude Code session",
         "claude_model" => "AI model name for Claude Code session",
+        "claude_rate_limits" => "Subscription rate limit usage for Claude Code session",
         "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
