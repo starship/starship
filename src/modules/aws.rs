@@ -19,6 +19,12 @@ type Region = String;
 type AwsConfigFile = OnceCell<Option<Ini>>;
 type AwsCredsFile = OnceCell<Option<Ini>>;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum CredentialExpiration {
+    ExpiresIn(i64),
+    Refreshable,
+}
+
 fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
     context
         .get_env("AWS_SHARED_CREDENTIALS_FILE")
@@ -137,49 +143,85 @@ fn get_sso_cache_key_input(profile_section: &ini::Properties) -> Option<String> 
         })
 }
 
-fn get_credentials_duration(
+fn classify_expiration(
+    expiration_date: Timestamp,
+    refreshable: bool,
+    now_seconds: i64,
+) -> CredentialExpiration {
+    let remaining = expiration_date.as_second() - now_seconds;
+    if remaining <= 0 && refreshable {
+        CredentialExpiration::Refreshable
+    } else {
+        CredentialExpiration::ExpiresIn(remaining)
+    }
+}
+
+fn get_sso_cache_expiration(
+    sso_cred_json: &json::Value,
+    now_seconds: i64,
+) -> Option<CredentialExpiration> {
+    let expiration_date = sso_cred_json
+        .get("expiresAt")?
+        .as_str()?
+        .parse::<Timestamp>()
+        .ok()?;
+    let refreshable = sso_cred_json
+        .get("refreshToken")
+        .and_then(json::Value::as_str)
+        .is_some_and(|token| !token.trim().is_empty());
+
+    Some(classify_expiration(
+        expiration_date,
+        refreshable,
+        now_seconds,
+    ))
+}
+
+fn get_credentials_expiration(
     context: &Context,
     aws_profile: Option<&Profile>,
     aws_config: &AwsConfigFile,
     aws_creds: &AwsCredsFile,
-) -> Option<i64> {
+) -> Option<CredentialExpiration> {
+    let now_seconds = Zoned::now().timestamp().as_second();
     let expiration_env_vars = [
         "AWS_CREDENTIAL_EXPIRATION",
         "AWS_SESSION_EXPIRATION",
         "AWSUME_EXPIRATION",
     ];
-    let expiration_date = if let Some(expiration_date) = expiration_env_vars
+    if let Some(expiration_date) = expiration_env_vars
         .into_iter()
         .find_map(|env_var| context.get_env(env_var))
     {
-        // get expiration from environment variables
-        expiration_date.parse::<Timestamp>().ok()
-    } else if let Some(section) =
+        return expiration_date
+            .parse::<Timestamp>()
+            .ok()
+            .map(|expiration| classify_expiration(expiration, false, now_seconds));
+    }
+
+    if let Some(section) =
         get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
     {
-        // get expiration from credentials file
         let expiration_keys = ["expiration", "x_security_token_expires"];
-        expiration_keys
+        return expiration_keys
             .iter()
             .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| expiration.parse::<Timestamp>().ok())
-    } else {
-        // get expiration from cached SSO credentials
-        let config = get_config(context, aws_config)?;
-        let section = get_profile_config(config, aws_profile)?;
-        let cache_key_input = get_sso_cache_key_input(section)?;
-        // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
-        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
-        // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
-        let mut sso_cred_path = context.get_home()?;
-        sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
-        let sso_cred_json: json::Value =
-            json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
-        let expires_at = sso_cred_json.get("expiresAt")?.as_str();
-        expires_at?.parse::<Timestamp>().ok()
-    }?;
+            .map(|expiration| classify_expiration(expiration, false, now_seconds));
+    }
 
-    Some(expiration_date.as_second() - Zoned::now().timestamp().as_second())
+    let config = get_config(context, aws_config)?;
+    let section = get_profile_config(config, aws_profile)?;
+    let cache_key_input = get_sso_cache_key_input(section)?;
+    // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
+    let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
+    // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
+    let mut sso_cred_path = context.get_home()?;
+    sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
+    let sso_cred_json: json::Value =
+        json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
+
+    get_sso_cache_expiration(&sso_cred_json, now_seconds)
 }
 
 fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
@@ -288,17 +330,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let duration = {
-        get_credentials_duration(context, aws_profile.as_ref(), &aws_config, &aws_creds).map(
-            |duration| {
-                if duration > 0 {
+    let duration =
+        get_credentials_expiration(context, aws_profile.as_ref(), &aws_config, &aws_creds).map(
+            |expiration| match expiration {
+                CredentialExpiration::ExpiresIn(duration) if duration > 0 => {
                     render_time((duration * 1000) as u128, false)
-                } else {
-                    config.expiration_symbol.to_string()
                 }
+                CredentialExpiration::ExpiresIn(_) => config.expiration_symbol.to_string(),
+                CredentialExpiration::Refreshable => config.refresh_symbol.to_string(),
             },
-        )
-    };
+        );
 
     let mapped_region = alias_name(aws_region, &config.region_aliases);
 
@@ -1040,6 +1081,110 @@ credential_process = /opt/bin/awscreds-for-tests
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn expired_sso_access_token_with_refresh_token_is_refreshable() {
+        let expires_at = Timestamp::from_second(100).unwrap();
+        let cache = json::json!({
+            "expiresAt": expires_at.to_string(),
+            "refreshToken": "refresh-token",
+        });
+
+        assert_eq!(
+            Some(CredentialExpiration::Refreshable),
+            get_sso_cache_expiration(&cache, 101)
+        );
+    }
+
+    #[test]
+    fn expired_sso_access_token_without_refresh_token_is_expired() {
+        let expires_at = Timestamp::from_second(100).unwrap();
+        let cache = json::json!({"expiresAt": expires_at.to_string()});
+
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(-1)),
+            get_sso_cache_expiration(&cache, 101)
+        );
+    }
+
+    #[test]
+    fn valid_sso_access_token_keeps_countdown_when_refreshable() {
+        let expires_at = Timestamp::from_second(160).unwrap();
+        let cache = json::json!({
+            "expiresAt": expires_at.to_string(),
+            "refreshToken": "refresh-token",
+        });
+
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(60)),
+            get_sso_cache_expiration(&cache, 100)
+        );
+    }
+
+    #[test]
+    fn empty_refresh_token_does_not_mark_session_refreshable() {
+        let expires_at = Timestamp::from_second(100).unwrap();
+        let cache = json::json!({
+            "expiresAt": expires_at.to_string(),
+            "refreshToken": "   ",
+        });
+
+        assert_eq!(
+            Some(CredentialExpiration::ExpiresIn(-1)),
+            get_sso_cache_expiration(&cache, 101)
+        );
+    }
+
+    #[test]
+    fn sso_refreshable_session_uses_refresh_symbol() -> io::Result<()> {
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let mut config = File::create(dir.path().join(".aws/config"))?;
+        config.write_all(
+            "[profile astronauts]
+sso_session = default
+sso_account_id = 123456789011
+sso_role_name = readOnly
+region = us-west-2
+
+[sso-session default]
+sso_region = us-east-1
+sso_start_url = https://starship.rs/sso
+"
+            .as_bytes(),
+        )?;
+        config.sync_all()?;
+
+        let one_second_ago =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+        let mut cache_file = File::create(
+            dir.path()
+                .join(".aws/sso/cache/7505d64a54e061b7acd54ccd58b49dc43500b635.json"),
+        )?;
+        cache_file.write_all(
+            format!(r#"{{"expiresAt": "{one_second_ago}", "refreshToken": "refresh-token"}}"#)
+                .as_bytes(),
+        )?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer
+            .env("AWS_PROFILE", "astronauts")
+            .config(toml::toml! {
+                [aws]
+                refresh_symbol = "REFRESH"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (us-west-2) [REFRESH] ")
         ));
 
         assert_eq!(expected, actual);

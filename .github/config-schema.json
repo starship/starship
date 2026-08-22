@@ -74,6 +74,7 @@
         "region_aliases": {},
         "profile_aliases": {},
         "expiration_symbol": "X",
+        "refresh_symbol": "↻",
         "force_display": false
       }
     },
@@ -1995,6 +1996,11 @@
           "description": "The symbol displayed when the temporary credentials have expired.",
           "type": "string",
           "default": "X"
+        },
+        "refresh_symbol": {
+          "description": "The symbol displayed when an expired SSO access token can be refreshed silently.",
+          "type": "string",
+          "default": "↻"
         },
         "force_display": {
           "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
