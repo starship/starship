@@ -1,0 +1,5 @@
+[jobs]
+number_threshold = 0
+symbol_threshold = 0
+format = "[+ $number]($style) "
+style = "bold blue"
