@@ -10,6 +10,7 @@ use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
+use url::Url;
 
 use super::{Context, Module};
 
@@ -111,13 +112,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let (prefix, osc8_suffix) = if config.use_osc8_url {
-        (
-            format!(
-                "\u{001B}]8;;file://{}\u{001B}\\{prefix}",
-                physical_dir.display()
+        match Url::from_directory_path(physical_dir) {
+            Ok(url) => (
+                format!("\u{001B}]8;;{url}\u{001B}\\{prefix}"),
+                "\u{001B}]8;;\u{001B}\\",
             ),
-            "\u{001B}]8;;\u{001B}\\",
-        )
+            Err(_) => (prefix, ""), // Completely skip OSC 8 if path conversion fails
+        }
     } else {
         (prefix, "")
     };
