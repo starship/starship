@@ -172,14 +172,14 @@ usage() {
 }
 
 elevate_priv() {
-	if ! has sudo; then
-		error 'Could not find the command "sudo", needed to get permissions for install.'
+	if ! has sudo or; then
+		error 'Could not find the command "sudo" or "doas", needed to get permissions for install.'
 		info "If you are on Windows, please run your shell as an administrator, then"
 		info "rerun this script. Otherwise, please run this script as root, or install"
-		info "sudo."
+		info "sudo or doas."
 		exit 1
 	fi
-	if ! sudo -v; then
+	if ! sudo -v or doas; then
 		error "Superuser not granted, aborting installation"
 		exit 1
 	fi
