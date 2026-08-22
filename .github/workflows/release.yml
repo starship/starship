@@ -101,16 +101,16 @@ jobs:
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        run: cargo install --version 0.3.8 cargo-wix
+        run: cargo install --version 0.3.9 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ""
 
       - name: Setup | Install cross [Linux]
         if: matrix.os == 'ubuntu-latest' && !matrix.use_zigbuild
-        uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
+        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
-          tool: cross@0.2.5
+          tool: cross
 
       - name: Setup | Install Zig [riscv64]
         if: matrix.use_zigbuild
@@ -118,7 +118,7 @@ jobs:
 
       - name: Setup | Install cargo-zigbuild [riscv64]
         if: matrix.use_zigbuild
-        uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
+        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
           tool: cargo-zigbuild
 
