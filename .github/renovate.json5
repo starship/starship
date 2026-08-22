@@ -124,16 +124,7 @@
                 'cargo install.*--version (?<currentValue>\\S+).*\\s(?<depName>\\S+)',
             ],
             datasourceTemplate: 'crate',
-        },
-        {
-            customType: 'regex',
-            managerFilePatterns: [
-                '/^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$/',
-            ],
-            matchStrings: [
-                '^\\s+tool: (?<depName>[\\w-]+)@(?<currentValue>[^\\s]+)',
-            ],
-            datasourceTemplate: 'crate',
+            versioningTemplate: 'semver',
         },
         {
             customType: 'regex',
