@@ -2,6 +2,8 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
+use super::asynchronous::AsynchronousConfig;
+
 pub fn default_profiles() -> IndexMap<String, String> {
     IndexMap::from_iter([(
         "claude-code".to_string(),
@@ -24,6 +26,12 @@ pub struct StarshipRootConfig {
     pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
+    /// How a streaming prompt paces itself: whether it streams at all, how
+    /// long it collects reflowing refinements before redrawing, and how often
+    /// each module whose value goes stale on its own is renewed. See
+    /// [`AsynchronousConfig`].
+    #[serde(rename = "async")]
+    pub asynchronous: AsynchronousConfig,
     pub add_newline: bool,
     pub follow_symlinks: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -60,6 +68,7 @@ impl Default for StarshipRootConfig {
             internal_profiles: default_profiles(),
             scan_timeout: 30,
             command_timeout: 500,
+            asynchronous: AsynchronousConfig::default(),
             add_newline: true,
             follow_symlinks: true,
             palette: None,
