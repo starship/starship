@@ -378,13 +378,13 @@ format = '$all$directory$character'
 Starship can draw available modules first and refine the prompt as slower
 modules resolve. The final prompt is identical to a synchronous render.
 
-| Shell | Refinement |
-| --- | --- |
-| zsh | Changed cells are repainted in place. |
-| fish | The complete prompt is replaced. |
-| Nushell main | The complete prompt is replaced with its unreleased async prompt API. |
-| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced. |
-| Stock Bash and other shells | The prompt remains synchronous. |
+| Shell                                                    | Refinement                                                            |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| zsh                                                      | Changed cells are repainted in place.                                 |
+| fish                                                     | The complete prompt is replaced.                                      |
+| Nushell main                                             | The complete prompt is replaced with its unreleased async prompt API. |
+| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced.                                      |
+| Stock Bash and other shells                              | The prompt remains synchronous.                                       |
 
 `bus` batches width-changing refinements for up to its configured delay;
 `adaptive` places those batches using timings from the current shell session.
@@ -395,20 +395,20 @@ but only while visible and included in the prompt's format.
 
 ### Options
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `enabled` | `true` | Enable streaming refinements. |
-| `bus` | `100` | Maximum grouping delay in milliseconds. |
-| `adaptive` | `true` | Group refinements from session timings. |
+| Option     | Default | Description                             |
+| ---------- | ------- | --------------------------------------- |
+| `enabled`  | `true`  | Enable streaming refinements.           |
+| `bus`      | `100`   | Maximum grouping delay in milliseconds. |
+| `adaptive` | `true`  | Group refinements from session timings. |
 
 ### `[async.dynamic]`
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `time` | `1000` | Clock refresh interval in milliseconds. |
-| `battery` | `30000` | Battery refresh interval in milliseconds. |
-| `memory_usage` | `5000` | Memory refresh interval in milliseconds. |
-| `localip` | `30000` | Address refresh interval in milliseconds. |
+| Option         | Default | Description                               |
+| -------------- | ------- | ----------------------------------------- |
+| `time`         | `1000`  | Clock refresh interval in milliseconds.   |
+| `battery`      | `30000` | Battery refresh interval in milliseconds. |
+| `memory_usage` | `5000`  | Memory refresh interval in milliseconds.  |
+| `localip`      | `30000` | Address refresh interval in milliseconds. |
 
 Intervals must be between 1 and 86,400,000 milliseconds. Invalid values retain
 their defaults. Disable a dynamic module with its own `disabled = true`.
