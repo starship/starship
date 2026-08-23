@@ -15,7 +15,15 @@ use crate::escaping::shell_prompt_escape;
 use crate::module::painted::Painted;
 use crate::utils::wrap_colorseq_for_shell;
 
-/// Streaming event encoding.
+const NULL_BYTE: u8 = b'\0';
+const NEWLINE: &[u8] = b"\n";
+const EMPTY_SLICE: &[u8] = &[];
+
+const EVENT_READY: &[u8] = b"READY";
+const EVENT_PATCH: &[u8] = b"PATCH";
+const EVENT_COMPLETE: &[u8] = b"COMPLETE";
+const EVENT_HEARTBEAT: &[u8] = b"HEARTBEAT";
+
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, ValueEnum)]
 pub enum FrameEncoding {
     #[default]
@@ -30,16 +38,14 @@ pub struct RawTerminalPayload(String);
 
 impl RawTerminalPayload {
     pub fn repaint(repaint: &CursorNeutral) -> Self {
-        let repaint =
+        let repaint_string =
             String::from_utf8(repaint.as_bytes().to_vec()).expect("repaints are valid UTF-8");
-        debug_assert!(!repaint.contains('\0'));
-        Self(repaint)
+        debug_assert!(!repaint_string.contains(char::from(NULL_BYTE)));
+        Self(repaint_string)
     }
 
     pub fn prompt(painted: &Painted) -> Self {
-        let mut prompt = painted.to_string();
-        prompt.retain(|character| character != '\0');
-        Self(prompt)
+        Self(painted.to_string().replace(char::from(NULL_BYTE), ""))
     }
 
     pub fn as_bytes(&self) -> &[u8] {
@@ -63,26 +69,32 @@ impl PromptVariablePayload {
 
     #[cfg(test)]
     pub fn as_terminal_bytes_under(&self, shell: Shell) -> RawTerminalPayload {
-        let expansion = match shell {
+        let escape_tokens = match shell {
             Shell::Bash => Some(('\\', '[', ']')),
             Shell::Zsh | Shell::Tcsh => Some(('%', '{', '}')),
             _ => None,
         };
-        let Some((introducer, zero_width_start, zero_width_end)) = expansion else {
+
+        let Some((intro, start, end)) = escape_tokens else {
             return RawTerminalPayload(self.0.clone());
         };
 
         let mut expanded = String::with_capacity(self.0.len());
         let mut characters = self.0.chars();
+
         while let Some(character) = characters.next() {
-            if character != introducer {
+            if character != intro {
                 expanded.push(character);
                 continue;
             }
+
             match characters.next() {
-                Some(next) if next == zero_width_start || next == zero_width_end => {}
+                Some(next) if next == start || next == end => continue,
                 Some(next) => expanded.push(next),
-                None => expanded.push(introducer),
+                None => {
+                    expanded.push(intro);
+                    break;
+                }
             }
         }
         RawTerminalPayload(expanded)
@@ -99,23 +111,26 @@ pub enum Patch {
 }
 
 impl Patch {
-    pub fn whole_prompt(prompt: PromptVariablePayload) -> Self {
+    pub const fn whole_prompt(prompt: PromptVariablePayload) -> Self {
         Self::Replace(prompt)
     }
 
-    pub fn repainting_cells(prompt: PromptVariablePayload, repaint: RawTerminalPayload) -> Self {
+    pub const fn repainting_cells(
+        prompt: PromptVariablePayload,
+        repaint: RawTerminalPayload,
+    ) -> Self {
         Self::Repaint { prompt, repaint }
     }
 
     #[cfg(test)]
-    pub fn prompt(&self) -> &PromptVariablePayload {
+    pub const fn prompt(&self) -> &PromptVariablePayload {
         match self {
             Self::Replace(prompt) | Self::Repaint { prompt, .. } => prompt,
         }
     }
 
     #[cfg(test)]
-    pub fn repaint(&self) -> Option<&RawTerminalPayload> {
+    pub const fn repaint(&self) -> Option<&RawTerminalPayload> {
         match self {
             Self::Replace(_) => None,
             Self::Repaint { repaint, .. } => Some(repaint),
@@ -135,6 +150,55 @@ impl ProcessId {
     #[must_use]
     pub const fn get(self) -> u32 {
         self.0
+    }
+}
+
+/// Module resolution timings.
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct Timings(BTreeMap<String, u64>);
+
+impl Timings {
+    /// An empty set of timings, usable in a `const` context.
+    #[must_use]
+    pub const fn empty() -> Self {
+        Self(BTreeMap::new())
+    }
+
+    pub fn record(&mut self, module: &str, elapsed: Duration) {
+        let elapsed_microseconds = u64::try_from(elapsed.as_micros()).unwrap_or(u64::MAX);
+        self.0
+            .entry(module.to_owned())
+            .and_modify(|recorded| *recorded = (*recorded).max(elapsed_microseconds))
+            .or_insert(elapsed_microseconds);
+    }
+
+    pub fn set(&mut self, module: &str, cost_microseconds: u64) {
+        self.0.insert(module.to_owned(), cost_microseconds);
+    }
+
+    pub fn get(&self, module: &str) -> Option<u64> {
+        self.0.get(module).copied()
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = (&str, u64)> {
+        self.0.iter().map(|(module, cost)| (module.as_str(), *cost))
+    }
+
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+
+    fn to_json_bytes(&self) -> Vec<u8> {
+        serde_json::to_vec(self).expect("a map of strings to integers always serializes")
+    }
+
+    pub fn from_json(payload: &[u8]) -> Option<Self> {
+        serde_json::from_slice(payload).ok()
     }
 }
 
@@ -167,29 +231,70 @@ impl ServerEvent {
     }
 
     fn write_compact(&self, writer: &mut impl Write) -> io::Result<()> {
-        const NOTHING: &[u8] = &[];
         match self {
             Self::Ready { prompt, process_id } => {
-                let process_id = process_id.get().to_string();
-                write_frame(writer, "READY", prompt.as_bytes(), process_id.as_bytes())
+                let process_id_string = process_id.get().to_string();
+                write_frame(
+                    writer,
+                    EVENT_READY,
+                    prompt.as_bytes(),
+                    process_id_string.as_bytes(),
+                )
             }
             Self::Patch(Patch::Replace(prompt)) => {
-                write_frame(writer, "PATCH", prompt.as_bytes(), NOTHING)
+                write_frame(writer, EVENT_PATCH, prompt.as_bytes(), EMPTY_SLICE)
             }
             Self::Patch(Patch::Repaint { prompt, repaint }) => {
-                write_frame(writer, "PATCH", prompt.as_bytes(), repaint.as_bytes())
+                write_frame(writer, EVENT_PATCH, prompt.as_bytes(), repaint.as_bytes())
             }
-            Self::Complete(timings) => {
-                let timings = timings.to_json_bytes();
-                write_frame(writer, "COMPLETE", &timings, NOTHING)
-            }
-            Self::Heartbeat => write_frame(writer, "HEARTBEAT", NOTHING, NOTHING),
+            Self::Complete(timings) => write_frame(
+                writer,
+                EVENT_COMPLETE,
+                &timings.to_json_bytes(),
+                EMPTY_SLICE,
+            ),
+            Self::Heartbeat => write_frame(writer, EVENT_HEARTBEAT, EMPTY_SLICE, EMPTY_SLICE),
         }
     }
 
     fn write_json(&self, writer: &mut impl Write) -> io::Result<()> {
-        serde_json::to_writer(&mut *writer, &JsonEvent::from(self))?;
-        writer.write_all(b"\n")?;
+        #[derive(Serialize)]
+        #[serde(tag = "kind", rename_all = "SCREAMING_SNAKE_CASE")]
+        enum JsonView<'a> {
+            Ready {
+                prompt: &'a str,
+                process_id: u32,
+            },
+            Patch {
+                prompt: &'a str,
+                #[serde(skip_serializing_if = "Option::is_none")]
+                repaint: Option<&'a str>,
+            },
+            Complete {
+                timings: &'a Timings,
+            },
+            Heartbeat,
+        }
+
+        let payload = match self {
+            Self::Ready { prompt, process_id } => JsonView::Ready {
+                prompt: &prompt.0,
+                process_id: process_id.get(),
+            },
+            Self::Patch(Patch::Replace(prompt)) => JsonView::Patch {
+                prompt: &prompt.0,
+                repaint: None,
+            },
+            Self::Patch(Patch::Repaint { prompt, repaint }) => JsonView::Patch {
+                prompt: &prompt.0,
+                repaint: Some(&repaint.0),
+            },
+            Self::Complete(timings) => JsonView::Complete { timings },
+            Self::Heartbeat => JsonView::Heartbeat,
+        };
+
+        serde_json::to_writer(&mut *writer, &payload)?;
+        writer.write_all(NEWLINE)?;
         writer.flush()
     }
 
@@ -200,88 +305,61 @@ impl ServerEvent {
         };
         let first = read_field(reader)?.ok_or(io::ErrorKind::UnexpectedEof)?;
         let second = read_field(reader)?.ok_or(io::ErrorKind::UnexpectedEof)?;
-        let malformed = |message| io::Error::new(io::ErrorKind::InvalidData, message);
 
-        match keyword.as_slice() {
-            b"READY" => Ok(Some(Self::Ready {
-                prompt: PromptVariablePayload(text(first)?),
-                process_id: ProcessId(
-                    std::str::from_utf8(&second)
-                        .ok()
-                        .and_then(|field| field.parse().ok())
-                        .ok_or_else(|| malformed("invalid process id"))?,
-                ),
-            })),
-            b"PATCH" => {
-                let prompt = PromptVariablePayload(text(first)?);
-                Ok(Some(Self::Patch(if second.is_empty() {
+        Self::parse_event(&keyword, first, second)
+            .map_err(|message| io::Error::new(io::ErrorKind::InvalidData, message))
+    }
+
+    #[cfg(test)]
+    fn parse_event(
+        keyword: &[u8],
+        first: Vec<u8>,
+        second: Vec<u8>,
+    ) -> Result<Option<Self>, &'static str> {
+        match keyword {
+            EVENT_READY => {
+                let prompt = PromptVariablePayload(parse_text(first)?);
+                let process_id = std::str::from_utf8(&second)
+                    .ok()
+                    .and_then(|string| string.parse().ok())
+                    .map(ProcessId)
+                    .ok_or("invalid process id")?;
+
+                Ok(Some(Self::Ready { prompt, process_id }))
+            }
+            EVENT_PATCH => {
+                let prompt = PromptVariablePayload(parse_text(first)?);
+                let patch = if second.is_empty() {
                     Patch::Replace(prompt)
                 } else {
                     Patch::Repaint {
                         prompt,
-                        repaint: RawTerminalPayload(text(second)?),
+                        repaint: RawTerminalPayload(parse_text(second)?),
                     }
-                })))
+                };
+
+                Ok(Some(Self::Patch(patch)))
             }
-            b"COMPLETE" if second.is_empty() => Timings::from_json(&first)
+            EVENT_COMPLETE if second.is_empty() => Timings::from_json(&first)
                 .map(Self::Complete)
                 .map(Some)
-                .ok_or_else(|| malformed("invalid timings")),
-            b"HEARTBEAT" if first.is_empty() && second.is_empty() => Ok(Some(Self::Heartbeat)),
-            _ => Err(malformed("invalid event")),
-        }
-    }
-}
-
-#[derive(Serialize)]
-#[serde(tag = "kind", rename_all = "SCREAMING_SNAKE_CASE")]
-enum JsonEvent<'a> {
-    Ready {
-        prompt: &'a str,
-        process_id: u32,
-    },
-    Patch {
-        prompt: &'a str,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        repaint: Option<&'a str>,
-    },
-    Complete {
-        timings: &'a Timings,
-    },
-    Heartbeat,
-}
-
-impl<'a> From<&'a ServerEvent> for JsonEvent<'a> {
-    fn from(event: &'a ServerEvent) -> Self {
-        match event {
-            ServerEvent::Ready { prompt, process_id } => Self::Ready {
-                prompt: &prompt.0,
-                process_id: process_id.get(),
-            },
-            ServerEvent::Patch(Patch::Replace(prompt)) => Self::Patch {
-                prompt: &prompt.0,
-                repaint: None,
-            },
-            ServerEvent::Patch(Patch::Repaint { prompt, repaint }) => Self::Patch {
-                prompt: &prompt.0,
-                repaint: Some(&repaint.0),
-            },
-            ServerEvent::Complete(timings) => Self::Complete { timings },
-            ServerEvent::Heartbeat => Self::Heartbeat,
+                .ok_or("invalid timings"),
+            EVENT_HEARTBEAT if first.is_empty() && second.is_empty() => Ok(Some(Self::Heartbeat)),
+            _ => Err("invalid event"),
         }
     }
 }
 
 fn write_frame(
     writer: &mut impl Write,
-    keyword: &str,
+    keyword: &[u8],
     first: &[u8],
     second: &[u8],
 ) -> io::Result<()> {
-    for field in [keyword.as_bytes(), first, second] {
-        debug_assert!(!field.contains(&0));
+    for field in [keyword, first, second] {
+        debug_assert!(!field.contains(&NULL_BYTE));
         writer.write_all(field)?;
-        writer.write_all(b"\0")?;
+        writer.write_all(&[NULL_BYTE])?;
     }
     writer.flush()
 }
@@ -289,75 +367,23 @@ fn write_frame(
 #[cfg(test)]
 fn read_field(reader: &mut impl BufRead) -> io::Result<Option<Vec<u8>>> {
     let mut field = Vec::new();
-    match reader.read_until(0, &mut field)? {
-        0 => Ok(None),
-        _ if field.pop() == Some(0) => Ok(Some(field)),
-        _ => Err(io::ErrorKind::UnexpectedEof.into()),
+    let bytes_read = reader.read_until(NULL_BYTE, &mut field)?;
+
+    if bytes_read == 0 {
+        return Ok(None);
+    }
+
+    if field.ends_with(&[NULL_BYTE]) {
+        field.pop();
+        Ok(Some(field))
+    } else {
+        Err(io::ErrorKind::UnexpectedEof.into())
     }
 }
 
 #[cfg(test)]
-fn text(field: Vec<u8>) -> io::Result<String> {
-    String::from_utf8(field).map_err(|_| io::ErrorKind::InvalidData.into())
-}
-
-/// A module resolution latency.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Microseconds(pub u64);
-
-impl Microseconds {
-    #[must_use]
-    pub fn duration(self) -> Duration {
-        Duration::from_micros(self.0)
-    }
-}
-
-impl From<Duration> for Microseconds {
-    fn from(duration: Duration) -> Self {
-        Self(u64::try_from(duration.as_micros()).unwrap_or(u64::MAX))
-    }
-}
-
-/// Module resolution timings.
-#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct Timings(BTreeMap<String, Microseconds>);
-
-impl Timings {
-    pub fn record(&mut self, module: &str, elapsed: Duration) {
-        let elapsed = Microseconds::from(elapsed);
-        let recorded = self.0.entry(module.to_owned()).or_default();
-        *recorded = (*recorded).max(elapsed);
-    }
-
-    pub fn set(&mut self, module: &str, cost: Microseconds) {
-        self.0.insert(module.to_owned(), cost);
-    }
-
-    pub fn get(&self, module: &str) -> Option<Microseconds> {
-        self.0.get(module).copied()
-    }
-
-    pub fn iter(&self) -> impl Iterator<Item = (&str, Microseconds)> {
-        self.0.iter().map(|(module, cost)| (module.as_str(), *cost))
-    }
-
-    pub fn len(&self) -> usize {
-        self.0.len()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
-
-    fn to_json_bytes(&self) -> Vec<u8> {
-        serde_json::to_vec(self).expect("a map of strings and integers always serializes")
-    }
-
-    pub fn from_json(payload: &[u8]) -> Option<Self> {
-        serde_json::from_slice(payload).ok()
-    }
+fn parse_text(field: Vec<u8>) -> Result<String, &'static str> {
+    String::from_utf8(field).map_err(|_| "invalid utf-8 text")
 }
 
 #[cfg(test)]
@@ -499,8 +525,8 @@ mod tests {
         let read = Timings::from_json(&fields[1]).expect("timings are JSON");
 
         assert_eq!(timings, read);
-        assert_eq!(Some(Microseconds(12)), read.get("character"));
-        assert_eq!(Some(Microseconds(180_000)), read.get("git_status"));
+        assert_eq!(Some(12), read.get("character"));
+        assert_eq!(Some(180_000), read.get("git_status"));
         assert_eq!(2, read.len());
     }
 
@@ -512,7 +538,7 @@ mod tests {
         timings.record("directory", Duration::from_millis(9));
         timings.record("directory", Duration::from_micros(50));
 
-        assert_eq!(Some(Microseconds(9_000)), timings.get("directory"));
+        assert_eq!(Some(9_000), timings.get("directory"));
     }
 
     #[test]
