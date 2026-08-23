@@ -8,7 +8,10 @@ use std::convert::Infallible;
 use std::num::NonZeroU64;
 use std::time::Duration;
 
-use crate::frame::{Microseconds, Timings};
+use crate::frame::Timings;
+
+const DEFAULT_SMOOTHING_PARTS: u64 = 4;
+const ESTIMATE_WEIGHT_OFFSET: u64 = 1;
 
 /// Integer weight (one part in `parts`) so blending never needs float rounding.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -20,64 +23,45 @@ impl SmoothingWeight {
         Self(parts)
     }
 
-    /// `estimate` moved one step towards `measured`.
-    fn blend(self, estimate: Microseconds, measured: Microseconds) -> Microseconds {
-        let parts = u128::from(self.0.get());
-        // In `u128` because a `u64` of microseconds is over half a million
-        // years and multiplying two of them is not: the arithmetic below cannot
-        // overflow, so it needs no saturating behaviour to reason about.
-        let blended = (u128::from(measured.0) + u128::from(estimate.0) * (parts - 1)) / parts;
-        Microseconds(u64::try_from(blended).unwrap_or(u64::MAX))
+    #[must_use]
+    fn blend(self, estimate: u64, measured: u64) -> u64 {
+        let total_parts = u128::from(self.0.get());
+        let previous_estimate_weight = total_parts - u128::from(ESTIMATE_WEIGHT_OFFSET);
+
+        // u128 avoids overflow without saturating.
+        let blended_microseconds =
+            (u128::from(measured) + u128::from(estimate) * previous_estimate_weight) / total_parts;
+        u64::try_from(blended_microseconds).unwrap_or(u64::MAX)
     }
 }
 
-/// The weight the newest measurement carries.
-///
-/// A quarter. Three prompts of a genuinely slower machine move the estimate
-/// most of the way there, which is fast enough to follow a change of working
-/// directory into a large repository, while one anomalous prompt moves it by a
-/// quarter and is undone by the next ordinary one.
-const NEWEST_MEASUREMENT_WEIGHT: SmoothingWeight =
-    SmoothingWeight::one_part_in(NonZeroU64::new(4).expect("four is not zero"));
+const NEWEST_MEASUREMENT_WEIGHT: SmoothingWeight = SmoothingWeight::one_part_in(
+    NonZeroU64::new(DEFAULT_SMOOTHING_PARTS).expect("smoothing parts must be non-zero"),
+);
 
 /// The session's running estimate of what each module costs.
-///
-/// Empty on the first prompt of a session, and empty for a shell whose
-/// transport does not carry the estimates back. Both are ordinary: see
-/// [`Self::is_empty`], whose callers fall back to a fixed bus window.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct LatencyEstimates(Timings);
 
 impl LatencyEstimates {
     /// No estimates at all: the first prompt of a session.
     #[must_use]
-    pub fn none() -> Self {
-        Self::default()
+    pub const fn none() -> Self {
+        Self(Timings::empty())
     }
 
-    /// The estimates a `--timings` argument carries.
-    ///
-    /// Never fails. The argument is a value this process wrote itself and a
-    /// shell handed back, so anything malformed in it is a bug in the transport
-    /// — but the estimates are advisory, and refusing to draw a prompt because
-    /// an advisory input was truncated would turn a slightly worse repaint
-    /// schedule into no prompt at all.
-    ///
-    /// # Errors
-    ///
-    /// None ever; the signature exists so that this can be a `clap` value
-    /// parser.
+    /// Parses the argument provided via the `--timings` command line flag.
     pub fn parse_argument(argument: &str) -> Result<Self, Infallible> {
         if argument.trim().is_empty() {
             return Ok(Self::none());
         }
-        match Timings::from_json(argument.as_bytes()) {
-            Some(timings) => Ok(Self(timings)),
-            None => {
-                log::warn!("Ignoring a --timings argument that is not a timing payload");
-                Ok(Self::none())
-            }
-        }
+
+        let parsed_timings = Timings::from_json(argument.as_bytes()).unwrap_or_else(|| {
+            log::warn!("Ignoring a --timings argument that is not a timing payload");
+            Timings::default()
+        });
+
+        Ok(Self(parsed_timings))
     }
 
     #[must_use]
@@ -85,37 +69,33 @@ impl LatencyEstimates {
         self.0.is_empty()
     }
 
-    /// How long `module` is expected to take, if it has ever been measured.
+    /// How long a specific module is expected to take, if recorded.
     #[must_use]
-    pub fn of(&self, module: &str) -> Option<Duration> {
-        self.0.get(module).map(Microseconds::duration)
+    pub fn of(&self, module_name: &str) -> Option<Duration> {
+        self.0.get(module_name).map(Duration::from_micros)
     }
 
-    /// These estimates brought up to date with what this prompt measured.
-    ///
-    /// A module measured this time moves a quarter of the way towards what it
-    /// cost; a module that was not measured — one this prompt does not show, or
-    /// one whose slot the format string dropped — keeps the estimate it had.
-    /// Keeping it is what makes a prompt in a repository still remember what
-    /// `git_status` costs after a few prompts spent outside one.
+    /// Folds `measured_timings` in; a module missing from it keeps its prior estimate.
     #[must_use]
-    pub fn updated_with(&self, measured: &Timings) -> Self {
-        let mut updated = self.0.clone();
-        for (module, cost) in measured.iter() {
-            let blended = match self.0.get(module) {
-                Some(estimate) => NEWEST_MEASUREMENT_WEIGHT.blend(estimate, cost),
-                // Nothing to smooth against: the first measurement *is* the
-                // estimate.
-                None => cost,
-            };
-            updated.set(module, blended);
+    pub fn updated_with(&self, measured_timings: &Timings) -> Self {
+        let mut updated_timings = self.0.clone();
+
+        for (module_name, measurement_cost) in measured_timings.iter() {
+            let resolved_cost = self
+                .0
+                .get(module_name)
+                .map_or(measurement_cost, |existing| {
+                    NEWEST_MEASUREMENT_WEIGHT.blend(existing, measurement_cost)
+                });
+            updated_timings.set(module_name, resolved_cost);
         }
-        Self(updated)
+
+        Self(updated_timings)
     }
 
-    /// The payload to hand back to the shell.
+    /// The timings to hand back to the shell.
     #[must_use]
-    pub fn timings(&self) -> &Timings {
+    pub const fn timings(&self) -> &Timings {
         &self.0
     }
 }
@@ -147,7 +127,7 @@ mod tests {
     fn measured(measurements: &[(&str, u64)]) -> Timings {
         let mut timings = Timings::default();
         for (module, microseconds) in measurements {
-            timings.set(module, Microseconds(*microseconds));
+            timings.set(module, *microseconds);
         }
         timings
     }
@@ -239,9 +219,6 @@ mod tests {
     fn no_smoothing_at_all_takes_the_newest_measurement() {
         let weight = SmoothingWeight::one_part_in(NonZeroU64::new(1).expect("one is not zero"));
 
-        assert_eq!(
-            Microseconds(400),
-            weight.blend(Microseconds(100), Microseconds(400))
-        );
+        assert_eq!(400, weight.blend(100, 400));
     }
 }

@@ -8,7 +8,6 @@ pub use latency::LatencyEstimates;
 
 use std::fmt;
 use std::io::{self, Write};
-use std::num::NonZeroUsize;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
@@ -28,198 +27,444 @@ use crate::transport::{RefinementTier, StreamingTransport, Tier, TransportMismat
 use bus::{Bus, BusWindow, Reflow, Verdict};
 use schedule::{ArrivalSchedule, PredictedArrival};
 
-// Detect abandoned pipes while no modules are due.
-const HEARTBEAT: Duration = Duration::from_secs(1);
+const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(1);
+const FAR_FUTURE_DELAY: Duration = Duration::from_secs(24 * 60 * 60);
 
-fn beyond_any_command_line() -> Instant {
-    Instant::now() + Duration::from_secs(60 * 60 * 24)
-}
-
-/// Writes one streamed prompt.
+/// Streams a prompt to the terminal output.
 pub fn stream(
     properties: Properties,
     target: Target,
-    estimates: &LatencyEstimates,
-    transport: StreamingTransport,
-    frames: FrameEncoding,
+    latency_estimates: &LatencyEstimates,
+    streaming_transport: StreamingTransport,
+    frame_encoding: FrameEncoding,
 ) -> Result<(), StreamError> {
     let context = Context::new(properties, target).rendering_for_the_terminal();
     let standard_output = io::stdout();
-    let mut output = standard_output.lock();
-    let tier = transport.tier(context.shell, &context.target)?;
-    run_at_tier(&context, estimates, tier, frames, &mut output).map_err(StreamError::Io)
+    let mut output_writer = standard_output.lock();
+
+    let transport_tier = streaming_transport.tier(context.shell, &context.target)?;
+    run_at_tier(
+        &context,
+        latency_estimates,
+        transport_tier,
+        frame_encoding,
+        &mut output_writer,
+    )
+    .map_err(StreamError::InputOutput)
 }
 
 #[derive(Debug)]
 pub enum StreamError {
-    Transport(TransportMismatch),
-    Io(io::Error),
+    TransportMismatch(TransportMismatch),
+    InputOutput(io::Error),
 }
 
 impl StreamError {
     pub fn is_broken_pipe(&self) -> bool {
-        matches!(self, Self::Io(error) if error.kind() == io::ErrorKind::BrokenPipe)
+        matches!(self, Self::InputOutput(error) if error.kind() == io::ErrorKind::BrokenPipe)
     }
 }
 
 impl fmt::Display for StreamError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Transport(error) => error.fmt(formatter),
-            Self::Io(error) => error.fmt(formatter),
+            Self::TransportMismatch(error) => error.fmt(formatter),
+            Self::InputOutput(error) => error.fmt(formatter),
         }
     }
 }
 
-impl std::error::Error for StreamError {}
+impl std::error::Error for StreamError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Self::TransportMismatch(error) => Some(error),
+            Self::InputOutput(error) => Some(error),
+        }
+    }
+}
 
 impl From<TransportMismatch> for StreamError {
     fn from(error: TransportMismatch) -> Self {
-        Self::Transport(error)
+        Self::TransportMismatch(error)
     }
 }
 
 #[cfg(test)]
-fn run(context: &Context, estimates: &LatencyEstimates, output: &mut impl Write) -> io::Result<()> {
-    let tier = StreamingTransport::Auto
+fn run(
+    context: &Context,
+    latency_estimates: &LatencyEstimates,
+    output_writer: &mut impl Write,
+) -> io::Result<()> {
+    let transport_tier = StreamingTransport::Auto
         .tier(context.shell, &context.target)
-        .expect("the automatic transport accepts every shell");
-    run_at_tier(context, estimates, tier, FrameEncoding::Compact, output)
+        .expect("The automatic transport accepts every shell environment.");
+    run_at_tier(
+        context,
+        latency_estimates,
+        transport_tier,
+        FrameEncoding::Compact,
+        output_writer,
+    )
 }
 
 fn run_at_tier(
     context: &Context,
-    estimates: &LatencyEstimates,
-    tier: Tier,
-    frames: FrameEncoding,
-    output: &mut impl Write,
+    latency_estimates: &LatencyEstimates,
+    transport_tier: Tier,
+    frame_encoding: FrameEncoding,
+    output_writer: &mut impl Write,
 ) -> io::Result<()> {
     if crate::print::is_dumb_terminal() {
-        log::error!("Under a 'dumb' terminal (TERM=dumb).");
-        let notice = Painted::paint(
-            &Segment::from_text(None, crate::print::DUMB_TERMINAL_PROMPT),
-            None,
+        return handle_dumb_terminal(context, frame_encoding, output_writer);
+    }
+
+    let prompt_config = prompt_configuration(context);
+    let execution_plan = Plan::build(&prompt_config);
+    let asynchronous_config = &context.root_config.asynchronous;
+    let optional_refinement = transport_tier.refinement();
+
+    let mut measured_timings = Timings::default();
+    let mut prompt_state = PromptState::empty(&execution_plan);
+
+    let is_asynchronous = asynchronous_config.enabled && optional_refinement.is_some();
+
+    if !is_asynchronous {
+        render::stream(
+            &execution_plan,
+            context,
+            Selection::EveryModule,
+            |resolution| {
+                measured_timings.record(resolution.module().as_str(), resolution.elapsed());
+                resolution.store_in(&mut prompt_state);
+            },
         );
-        ready(&notice, context).write(frames, output)?;
-        return ServerEvent::Complete(Timings::default()).write(frames, output);
+
+        let final_painted_prompt = paint_prompt(&prompt_state, context);
+        write_server_event(
+            create_ready_event(&final_painted_prompt, context),
+            frame_encoding,
+            output_writer,
+        )?;
+
+        let final_timings = latency_estimates
+            .updated_with(&measured_timings)
+            .timings()
+            .clone();
+        return write_server_event(
+            ServerEvent::Complete(final_timings),
+            frame_encoding,
+            output_writer,
+        );
     }
 
-    let plan = Plan::build(&prompt_configuration(context));
-    let asynchronous = &context.root_config.asynchronous;
-
-    let refinement = tier.refinement();
-    if !asynchronous.enabled || refinement.is_none() {
-        let mut timings = Timings::default();
-        let mut state = PromptState::empty(&plan);
-        render::stream(&plan, context, Selection::EveryModule, |resolution| {
-            record(&mut timings, &resolution);
-            resolution.store_in(&mut state);
-        });
-
-        let finished = paint(&state, context);
-        ready(&finished, context).write(frames, output)?;
-        return ServerEvent::Complete(estimates.updated_with(&timings).timings().clone())
-            .write(frames, output);
-    }
-
-    let mut timings = Timings::default();
-    let mut state = PromptState::empty(&plan);
-    render::stream_instant(&plan, context, |resolution| {
-        record(&mut timings, &resolution);
-        resolution.store_in(&mut state);
+    render::stream_instant(&execution_plan, context, |resolution| {
+        measured_timings.record(resolution.module().as_str(), resolution.elapsed());
+        resolution.store_in(&mut prompt_state);
     });
 
-    let drawn = paint(&state, context);
-    ready(&drawn, context).write(frames, output)?;
+    let initial_painted_prompt = paint_prompt(&prompt_state, context);
+    write_server_event(
+        create_ready_event(&initial_painted_prompt, context),
+        frame_encoding,
+        output_writer,
+    )?;
 
-    let window = BusWindow::from_milliseconds(asynchronous.bus);
-    let mut session = Session {
-        context,
-        refinement: refinement.expect("a static tier returns before opening a session"),
+    let refinement_tier = optional_refinement
+        .expect("A static transport tier returns early; async logic requires a refinement tier.");
+
+    let terminal_canvas = TerminalCanvas {
+        prompt_state,
+        painted_output: initial_painted_prompt,
         terminal_width: TerminalWidth(context.width),
-        state,
-        drawn,
-        bus: opened_bus(&plan, estimates, asynchronous.adaptive, window),
-        timings,
-        estimates,
-        completion: Completion::new(render::modules(&plan, Selection::DeferredOnly).count()),
-        polls: scheduled_polls(&plan, context, asynchronous),
-        frames,
-        last_written: Instant::now(),
+        refinement_tier,
     };
 
-    let (arrivals, resolutions) = mpsc::channel::<Resolution>();
+    let bus_window = BusWindow::from_milliseconds(asynchronous_config.bus);
+    let active_scheduler = Scheduler::new(&execution_plan, context, asynchronous_config);
+    let active_progress =
+        ProgressTracker::new(render::modules(&execution_plan, Selection::DeferredOnly).count());
+    let active_bus = initialize_bus(
+        &execution_plan,
+        latency_estimates,
+        asynchronous_config.adaptive,
+        bus_window,
+    );
+
+    let mut streaming_session = StreamingSession {
+        context,
+        canvas: terminal_canvas,
+        bus: active_bus,
+        measured_timings,
+        latency_estimates,
+        progress: active_progress,
+        scheduler: active_scheduler,
+        frame_encoding,
+        last_written_timestamp: Instant::now(),
+    };
+
+    let (arrival_sender, arrival_receiver) = mpsc::channel::<Resolution>();
     render::while_running(
-        &plan,
+        &execution_plan,
         context,
         Selection::DeferredOnly,
-        &arrivals,
-        |spawner| session.serve(&resolutions, spawner, output),
+        &arrival_sender,
+        |process_spawner| {
+            streaming_session.serve(&arrival_receiver, process_spawner, output_writer)
+        },
     )
 }
 
-fn opened_bus(plan: &Plan, estimates: &LatencyEstimates, adaptive: bool, window: BusWindow) -> Bus {
-    if !adaptive {
-        return Bus::fixed(window);
-    }
-    match expected_arrivals(plan, estimates, window) {
-        schedule if schedule.is_empty() => Bus::fixed(window),
-        schedule => Bus::scheduled(window, schedule, Instant::now()),
-    }
-}
-
-struct Session<'plan, 'context> {
+struct StreamingSession<'plan, 'context> {
     context: &'plan Context<'context>,
-    refinement: RefinementTier,
-    terminal_width: TerminalWidth,
-    state: PromptState<'plan>,
-    drawn: Painted,
+    canvas: TerminalCanvas<'plan>,
     bus: Bus,
-    timings: Timings,
-    estimates: &'plan LatencyEstimates,
-    completion: Completion,
+    measured_timings: Timings,
+    latency_estimates: &'plan LatencyEstimates,
+    progress: ProgressTracker,
+    scheduler: Scheduler<'plan>,
+    frame_encoding: FrameEncoding,
+    last_written_timestamp: Instant,
+}
+
+impl<'plan, 'context> StreamingSession<'plan, 'context> {
+    fn serve(
+        &mut self,
+        resolutions_receiver: &mpsc::Receiver<Resolution<'plan>>,
+        process_spawner: &Spawner<'_, 'plan, 'context>,
+        output_writer: &mut impl Write,
+    ) -> io::Result<()> {
+        loop {
+            if self.progress.check_and_take_ready() {
+                self.flush_held_bus_events(output_writer)?;
+                let final_timings = self
+                    .latency_estimates
+                    .updated_with(&self.measured_timings)
+                    .timings()
+                    .clone();
+                self.write_server_event(ServerEvent::Complete(final_timings), output_writer)?;
+            }
+
+            if self.progress.is_completed() && !self.scheduler.has_active_polls() {
+                return Ok(());
+            }
+
+            self.scheduler
+                .spawn_due_tasks(Instant::now(), process_spawner);
+
+            if self.last_written_timestamp.elapsed() >= HEARTBEAT_INTERVAL {
+                self.write_server_event(ServerEvent::Heartbeat, output_writer)?;
+            }
+
+            let next_wakeup_time = self.calculate_next_wakeup();
+            let timeout_duration = next_wakeup_time.saturating_duration_since(Instant::now());
+
+            match resolutions_receiver.recv_timeout(timeout_duration) {
+                Ok(resolution) => self.process_resolution(resolution, output_writer)?,
+                Err(mpsc::RecvTimeoutError::Timeout) => {
+                    let current_time = Instant::now();
+                    if self
+                        .bus
+                        .deadline()
+                        .is_some_and(|deadline| deadline <= current_time)
+                    {
+                        self.flush_held_bus_events(output_writer)?;
+                    }
+                }
+                Err(mpsc::RecvTimeoutError::Disconnected) => {
+                    unreachable!(
+                        "The streaming session holds a channel sender, so the receiver cannot disconnect."
+                    )
+                }
+            }
+        }
+    }
+
+    fn process_resolution(
+        &mut self,
+        resolution: Resolution<'plan>,
+        output_writer: &mut impl Write,
+    ) -> io::Result<()> {
+        self.measured_timings
+            .record(resolution.module().as_str(), resolution.elapsed());
+        self.scheduler.register_resolution(&resolution);
+        self.progress.register_resolution(&resolution);
+
+        resolution.store_in(&mut self.canvas.prompt_state);
+
+        let next_painted_prompt = paint_prompt(&self.canvas.prompt_state, self.context);
+        let reflow = Reflow::between(&self.canvas.painted_output, &next_painted_prompt);
+
+        if self.bus.admit(reflow, Instant::now()) == Verdict::DrawNow {
+            self.draw_and_transmit(next_painted_prompt, output_writer)?;
+        }
+        Ok(())
+    }
+
+    fn flush_held_bus_events(&mut self, output_writer: &mut impl Write) -> io::Result<()> {
+        if !self.bus.release() {
+            return Ok(());
+        }
+        let next_painted_prompt = paint_prompt(&self.canvas.prompt_state, self.context);
+        self.draw_and_transmit(next_painted_prompt, output_writer)
+    }
+
+    fn draw_and_transmit(
+        &mut self,
+        next_painted_prompt: Painted,
+        output_writer: &mut impl Write,
+    ) -> io::Result<()> {
+        let patch_payload = crate::transport::patch(
+            &self.canvas.painted_output,
+            &next_painted_prompt,
+            self.canvas.terminal_width,
+            self.canvas.refinement_tier,
+            self.context.shell,
+        );
+
+        self.canvas.painted_output = next_painted_prompt;
+
+        if let Some(payload) = patch_payload {
+            self.write_server_event(ServerEvent::Patch(payload), output_writer)?;
+        }
+        Ok(())
+    }
+
+    fn write_server_event(
+        &mut self,
+        event: ServerEvent,
+        output_writer: &mut impl Write,
+    ) -> io::Result<()> {
+        event.write(self.frame_encoding, output_writer)?;
+        self.last_written_timestamp = Instant::now();
+        Ok(())
+    }
+
+    fn calculate_next_wakeup(&self) -> Instant {
+        let heartbeat_deadline = self.last_written_timestamp + HEARTBEAT_INTERVAL;
+        let bus_deadline = self.bus.deadline();
+        let scheduler_deadline = self.scheduler.next_wakeup();
+
+        [Some(heartbeat_deadline), bus_deadline, scheduler_deadline]
+            .into_iter()
+            .flatten()
+            .min()
+            .unwrap_or(heartbeat_deadline)
+    }
+}
+
+struct TerminalCanvas<'plan> {
+    prompt_state: PromptState<'plan>,
+    painted_output: Painted,
+    terminal_width: TerminalWidth,
+    refinement_tier: RefinementTier,
+}
+
+struct ProgressTracker {
+    pending_initial_resolutions: usize,
+    is_reported: bool,
+}
+
+impl ProgressTracker {
+    fn new(total_deferred_modules: usize) -> Self {
+        Self {
+            pending_initial_resolutions: total_deferred_modules,
+            is_reported: false,
+        }
+    }
+
+    fn register_resolution(&mut self, resolution: &Resolution) {
+        if matches!(resolution.kind(), ResolutionKind::Initial) {
+            assert!(
+                self.pending_initial_resolutions > 0,
+                "Every deferred module must have exactly one initial resolution."
+            );
+            self.pending_initial_resolutions -= 1;
+        }
+    }
+
+    fn check_and_take_ready(&mut self) -> bool {
+        if self.pending_initial_resolutions == 0 && !self.is_reported {
+            self.is_reported = true;
+            true
+        } else {
+            false
+        }
+    }
+
+    fn is_completed(&self) -> bool {
+        self.is_reported
+    }
+}
+
+struct Scheduler<'plan> {
     polls: Vec<Option<ScheduledPoll<'plan>>>,
-    frames: FrameEncoding,
-    last_written: Instant,
 }
 
-enum Completion {
-    AwaitingInitial(NonZeroUsize),
-    Ready,
-    Reported,
-}
+impl<'plan> Scheduler<'plan> {
+    fn new(
+        plan: &'plan Plan,
+        context: &Context,
+        asynchronous_config: &crate::configs::asynchronous::AsynchronousConfig,
+    ) -> Self {
+        let mut polls = std::iter::repeat_with(|| None)
+            .take(plan.module_uses().len())
+            .collect::<Vec<_>>();
 
-impl Completion {
-    fn new(initial_resolutions: usize) -> Self {
-        NonZeroUsize::new(initial_resolutions).map_or(Self::Ready, Self::AwaitingInitial)
+        for module in configured_dynamic_modules(plan, context, asynchronous_config) {
+            let slot_index = module.slot().index();
+            polls[slot_index] = Some(ScheduledPoll {
+                module,
+                state: PollState::AwaitingInitial,
+            });
+        }
+        Self { polls }
     }
 
-    fn initial_resolved(&mut self) {
-        match self {
-            Self::AwaitingInitial(remaining) => {
-                *self = NonZeroUsize::new(remaining.get() - 1)
-                    .map_or(Self::Ready, Self::AwaitingInitial);
-            }
-            Self::Ready | Self::Reported => {
-                unreachable!("every deferred module has exactly one initial resolution")
+    fn register_resolution(&mut self, resolution: &Resolution) {
+        let slot_index = resolution.slot().index();
+        let optional_poll = self.polls[slot_index].as_mut();
+
+        let poll = match resolution.kind() {
+            ResolutionKind::Initial => optional_poll,
+            ResolutionKind::Refresh => Some(
+                optional_poll.expect("A refresh resolution was received for a non-dynamic module."),
+            ),
+        };
+        if let Some(poll) = poll {
+            poll.state = PollState::Due(calculate_next_due_time(poll.module.period()));
+        }
+    }
+
+    fn spawn_due_tasks(&mut self, current_time: Instant, process_spawner: &Spawner<'_, 'plan, '_>) {
+        for poll in self.polls.iter_mut().flatten() {
+            if let PollState::Due(due_time) = poll.state
+                && due_time <= current_time
+            {
+                process_spawner.poll(poll.module.clone());
+                poll.state = PollState::Running;
             }
         }
     }
 
-    fn take_ready(&mut self) -> bool {
-        if !matches!(self, Self::Ready) {
-            return false;
-        }
-        *self = Self::Reported;
-        true
+    fn next_wakeup(&self) -> Option<Instant> {
+        self.polls
+            .iter()
+            .flatten()
+            .filter_map(|poll| {
+                if let PollState::Due(due_time) = poll.state {
+                    Some(due_time)
+                } else {
+                    None
+                }
+            })
+            .min()
     }
 
-    fn is_reported(&self) -> bool {
-        matches!(self, Self::Reported)
+    fn has_active_polls(&self) -> bool {
+        self.polls.iter().any(Option::is_some)
     }
 }
 
-/// A dynamic module and its mutually exclusive polling state.
 struct ScheduledPoll<'plan> {
     module: DynamicModule<'plan>,
     state: PollState,
@@ -231,296 +476,119 @@ enum PollState {
     Running,
 }
 
-impl<'plan> ScheduledPoll<'plan> {
-    fn due(&self) -> Option<Instant> {
-        match self.state {
-            PollState::AwaitingInitial | PollState::Running => None,
-            PollState::Due(due) => Some(due),
-        }
-    }
-
-    fn start<'context>(&mut self, now: Instant, spawner: &Spawner<'_, 'plan, 'context>) {
-        if self.due().is_none_or(|due| due > now) {
-            return;
-        }
-        spawner.poll(self.module.clone());
-        self.state = PollState::Running;
-    }
-
-    fn initial_resolved(&mut self) {
-        assert!(matches!(self.state, PollState::AwaitingInitial));
-        self.state = PollState::Due(next_due(self.module.period()));
-    }
-
-    fn refresh_resolved(&mut self) {
-        assert!(matches!(self.state, PollState::Running));
-        self.state = PollState::Due(next_due(self.module.period()));
-    }
-}
-
-impl<'plan, 'context> Session<'plan, 'context> {
-    /// Runs until the shell stops reading, or until there is nothing left that
-    /// could ever change the prompt.
-    fn serve(
-        &mut self,
-        resolutions: &mpsc::Receiver<Resolution<'plan>>,
-        spawner: &Spawner<'_, 'plan, 'context>,
-        output: &mut impl Write,
-    ) -> io::Result<()> {
-        loop {
-            // Everything the session owes is settled before it waits, not
-            // after. A prompt whose modules are all instant has nothing
-            // outstanding the moment it starts, and checking after the wait
-            // made it sit through a whole heartbeat before saying so.
-
-            // The estimates are handed over as soon as every module has
-            // resolved once, rather than as the process exits: a prompt with a
-            // clock in it goes on writing for as long as the command line lives
-            // and would otherwise never hand them over at all.
-            if self.completion.take_ready() {
-                // Nothing is left to group a held refinement with, so holding it
-                // buys nothing — and returning below without drawing it would
-                // announce a finished prompt that is missing whichever module
-                // resolved last. The bus collects *future* arrivals; once there
-                // are none it has to let go.
-                self.release(output)?;
-
-                let measured = self.estimates.updated_with(&self.timings).timings().clone();
-                self.write(ServerEvent::Complete(measured), output)?;
-            }
-
-            // A finished prompt with nothing that goes stale can never change
-            // again, so the process has no further reason to exist.
-            if self.completion.is_reported() && self.polls.iter().all(Option::is_none) {
-                return Ok(());
-            }
-
-            self.start_due_polls(spawner);
-
-            if self.last_written.elapsed() >= HEARTBEAT {
-                self.write(ServerEvent::Heartbeat, output)?;
-            }
-
-            let now = Instant::now();
-            match resolutions.recv_timeout(self.next_wakeup().saturating_duration_since(now)) {
-                Ok(resolution) => {
-                    self.absorb(resolution);
-                    // The bus decides whether this refinement is drawn now or
-                    // held back to be drawn with whatever lands next.
-                    let next = paint(&self.state, self.context);
-                    if self
-                        .bus
-                        .admit(Reflow::between(&self.drawn, &next), Instant::now())
-                        == Verdict::DrawNow
-                    {
-                        self.draw(next, output)?;
-                    }
-                }
-                Err(mpsc::RecvTimeoutError::Timeout) => {
-                    self.release_if_due(Instant::now(), output)?;
-                }
-                // The session holds a sender of its own for the polls it
-                // starts, so the channel cannot disconnect while it is running.
-                Err(mpsc::RecvTimeoutError::Disconnected) => {
-                    unreachable!("the session holds a sender, so its channel cannot disconnect")
-                }
-            }
-        }
-    }
-
-    /// The next moment the loop has to be awake, whatever happens in between.
-    fn next_wakeup(&self) -> Instant {
-        let heartbeat = self.last_written + HEARTBEAT;
-        let bus = self.bus.deadline();
-        let polls = self.polls.iter().flatten().filter_map(ScheduledPoll::due);
-
-        [heartbeat]
-            .into_iter()
-            .chain(bus)
-            .chain(polls)
-            .min()
-            .unwrap_or(heartbeat)
-    }
-
-    /// Takes one module's output into the prompt.
-    fn absorb(&mut self, resolution: Resolution<'plan>) {
-        record(&mut self.timings, &resolution);
-        match resolution.kind() {
-            ResolutionKind::Initial => {
-                self.completion.initial_resolved();
-                if let Some(poll) = self.polls[resolution.slot().index()].as_mut() {
-                    poll.initial_resolved();
-                }
-            }
-            ResolutionKind::Refresh => {
-                self.polls[resolution.slot().index()]
-                    .as_mut()
-                    .expect("only a dynamic module can refresh")
-                    .refresh_resolved();
-            }
-        }
-
-        resolution.store_in(&mut self.state);
-    }
-
-    /// Starts a rendering of every dynamic module that has fallen due.
-    fn start_due_polls(&mut self, spawner: &Spawner<'_, 'plan, 'context>) {
-        let now = Instant::now();
-        for poll in self.polls.iter_mut().flatten() {
-            poll.start(now, spawner);
-        }
-    }
-
-    /// Draws whatever the bus is holding back, if it is holding anything.
-    fn release(&mut self, output: &mut impl Write) -> io::Result<()> {
-        if !self.bus.release() {
-            return Ok(());
-        }
-        let next = paint(&self.state, self.context);
-        self.draw(next, output)?;
-        Ok(())
-    }
-
-    fn release_if_due(&mut self, now: Instant, output: &mut impl Write) -> io::Result<()> {
-        if self.bus.deadline().is_some_and(|deadline| deadline <= now) {
-            self.release(output)?;
-        }
-        Ok(())
-    }
-
-    /// Writes whatever turns the prompt on screen into `next`.
-    fn draw(&mut self, next: Painted, output: &mut impl Write) -> io::Result<()> {
-        let patch = crate::transport::patch(
-            &self.drawn,
-            &next,
-            self.terminal_width,
-            self.refinement,
-            self.context.shell,
-        );
-        self.drawn = next;
-        let Some(patch) = patch else {
-            return Ok(());
-        };
-        self.write(ServerEvent::Patch(patch), output)
-    }
-
-    /// Writes one event and remembers when, so the heartbeat only fires when
-    /// nothing else has.
-    fn write(&mut self, event: ServerEvent, output: &mut impl Write) -> io::Result<()> {
-        event.write(self.frames, output)?;
-        self.last_written = Instant::now();
-        Ok(())
-    }
-}
-
-/// When a module polled now falls due again.
-fn next_due(period: Duration) -> Instant {
-    Instant::now()
-        .checked_add(period)
-        .unwrap_or_else(beyond_any_command_line)
-}
-
-/// Every dynamic module of `plan`, at the period `[async.dynamic]` configures
-/// for it rather than the one it declares for itself, ready to be polled.
-///
-/// The cadence table's own period is what a module is classified with — see
-/// [`crate::modules::cadence`] — and `[async.dynamic]` covers exactly the same
-/// modules by name, so every one of them has a configured period to fall back
-/// on if the two ever disagreed about which modules those are.
-fn scheduled_polls<'plan>(
-    plan: &'plan Plan,
-    context: &Context,
-    asynchronous: &crate::configs::asynchronous::AsynchronousConfig,
-) -> Vec<Option<ScheduledPoll<'plan>>> {
-    let mut polls = (0..plan.module_uses().len())
-        .map(|_| None)
-        .collect::<Vec<_>>();
-    for module in configured_dynamic_modules(plan, context, asynchronous) {
-        let slot = module.slot().index();
-        polls[slot] = Some(ScheduledPoll {
-            module,
-            state: PollState::AwaitingInitial,
-        });
-    }
-    polls
-}
-
-/// The dynamic modules this prompt actually has, at their configured periods.
-fn configured_dynamic_modules<'plan>(
-    plan: &'plan Plan,
-    context: &Context,
-    asynchronous: &crate::configs::asynchronous::AsynchronousConfig,
-) -> Vec<DynamicModule<'plan>> {
-    render::dynamic_modules(plan, context)
-        .into_iter()
-        .map(
-            |module| match asynchronous.dynamic.period_for(module.name().as_str()) {
-                Some(period) => module.every(period),
-                None => module,
-            },
-        )
-        .collect()
-}
-
-/// When each of this prompt's deferred modules is expected to resolve, grouped
-/// into the fewest repaints that adds no more than `window` of latency to any
-/// of them.
-///
-/// Only the modules this prompt actually runs, and only those that have ever
-/// been measured: a module nobody has timed yet is left out of the prediction
-/// rather than guessed at, so it simply falls through to the fixed window.
-fn expected_arrivals(
+fn initialize_bus(
     plan: &Plan,
-    estimates: &LatencyEstimates,
+    latency_estimates: &LatencyEstimates,
+    is_adaptive: bool,
+    window: BusWindow,
+) -> Bus {
+    if !is_adaptive {
+        return Bus::fixed(window);
+    }
+
+    let schedule = calculate_expected_arrivals(plan, latency_estimates, window);
+    if schedule.is_empty() {
+        Bus::fixed(window)
+    } else {
+        Bus::scheduled(window, schedule, Instant::now())
+    }
+}
+
+fn calculate_expected_arrivals(
+    plan: &Plan,
+    latency_estimates: &LatencyEstimates,
     window: BusWindow,
 ) -> ArrivalSchedule {
-    let arrivals = render::modules(plan, Selection::DeferredOnly)
-        .filter_map(|module| estimates.of(module.as_str()))
+    let predicted_arrivals = render::modules(plan, Selection::DeferredOnly)
+        .filter_map(|module| latency_estimates.of(module.as_str()))
         .map(PredictedArrival::after);
 
-    ArrivalSchedule::of(arrivals, window)
+    ArrivalSchedule::of(predicted_arrivals, window)
 }
 
-/// The opening event of a stream: the prompt as first drawn, and the process
-/// drawing it.
-fn ready(painted: &Painted, context: &Context) -> ServerEvent {
+fn handle_dumb_terminal(
+    context: &Context,
+    frame_encoding: FrameEncoding,
+    output_writer: &mut impl Write,
+) -> io::Result<()> {
+    log::error!("Environment configured as a 'dumb' terminal (TERM=dumb).");
+
+    let text_segment = Segment::from_text(None, crate::print::DUMB_TERMINAL_PROMPT);
+    let notice_painted = Painted::paint(&text_segment, None);
+
+    write_server_event(
+        create_ready_event(&notice_painted, context),
+        frame_encoding,
+        output_writer,
+    )?;
+    write_server_event(
+        ServerEvent::Complete(Timings::default()),
+        frame_encoding,
+        output_writer,
+    )
+}
+
+fn paint_prompt(state: &PromptState<'_>, context: &Context) -> Painted {
+    let rendered_state = state.render();
+    let mut segments = Vec::with_capacity(rendered_state.len() + 1);
+
+    if has_leading_blank_line(context) {
+        segments.push(Segment::LineTerm);
+    }
+
+    segments.extend(rendered_state);
+    Painted::paint(&segments, Some(TerminalWidth(context.width)))
+}
+
+fn has_leading_blank_line(context: &Context) -> bool {
+    context.root_config.add_newline && context.target == Target::Main
+}
+
+fn create_ready_event(painted_output: &Painted, context: &Context) -> ServerEvent {
+    let terminal_payload = RawTerminalPayload::prompt(painted_output);
+    let escaped_payload = PromptVariablePayload::escaped_for(&terminal_payload, context.shell);
+
     ServerEvent::Ready {
-        prompt: PromptVariablePayload::escaped_for(
-            &RawTerminalPayload::prompt(painted),
-            context.shell,
-        ),
+        prompt: escaped_payload,
         process_id: ProcessId::of_this_process(),
     }
 }
 
-/// Records what a resolution cost, under the module's own name.
-fn record(timings: &mut Timings, resolution: &Resolution<'_>) {
-    timings.record(resolution.module().as_str(), resolution.elapsed());
+fn write_server_event(
+    event: ServerEvent,
+    frame_encoding: FrameEncoding,
+    output_writer: &mut impl Write,
+) -> io::Result<()> {
+    event.write(frame_encoding, output_writer)
 }
 
-/// The prompt as it would appear on the terminal for what has resolved so far.
-///
-/// The leading blank line that `add_newline` asks for is part of the painted
-/// prompt rather than something written around it, because every repaint is
-/// positioned relative to the row the prompt starts on: a newline the painted
-/// representation does not know about would put every repaint one row out.
-fn paint(state: &PromptState<'_>, context: &Context) -> Painted {
-    let mut segments = Vec::new();
-    if leads_with_a_blank_line(context) {
-        segments.push(Segment::LineTerm);
-    }
-    segments.extend(state.render());
-
-    Painted::paint(&segments, Some(TerminalWidth(context.width)))
+fn calculate_next_due_time(period: Duration) -> Instant {
+    Instant::now()
+        .checked_add(period)
+        .unwrap_or_else(calculate_far_future_fallback)
 }
 
-/// Whether this prompt is preceded by a blank line.
-///
-/// The right prompt shares a row with the main one and a continuation prompt
-/// continues a line already begun, so neither may introduce a line of its own,
-/// whatever `add_newline` says.
-fn leads_with_a_blank_line(context: &Context) -> bool {
-    context.root_config.add_newline && context.target == Target::Main
+fn calculate_far_future_fallback() -> Instant {
+    Instant::now() + FAR_FUTURE_DELAY
+}
+
+fn configured_dynamic_modules<'plan>(
+    plan: &'plan Plan,
+    context: &Context,
+    asynchronous_config: &crate::configs::asynchronous::AsynchronousConfig,
+) -> Vec<DynamicModule<'plan>> {
+    render::dynamic_modules(plan, context)
+        .into_iter()
+        .map(|module| {
+            let override_period = asynchronous_config
+                .dynamic
+                .period_for(module.name().as_str());
+            match override_period {
+                Some(period) => module.every(period),
+                None => module,
+            }
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -839,7 +907,7 @@ mod tests {
 
         // What a plain synchronous `starship prompt` would have put on screen.
         let plan = Plan::build(&prompt_configuration(&context));
-        let expected = paint(&render::fill_slots(&plan, &context), &context);
+        let expected = paint_prompt(&render::fill_slots(&plan, &context), &context);
 
         assert_eq!(
             crate::damage::terminal::fully_rendered(&expected, width),
@@ -858,7 +926,7 @@ mod tests {
 
         let events = events_of(&context);
         let plan = Plan::build(&prompt_configuration(&context));
-        let expected = paint(&render::fill_slots(&plan, &context), &context);
+        let expected = paint_prompt(&render::fill_slots(&plan, &context), &context);
 
         assert_eq!(
             crate::damage::terminal::fully_rendered(&expected, width),
@@ -1104,7 +1172,7 @@ mod tests {
         let informed = events_of_a_session(&context, &estimates);
 
         let plan = Plan::build(&prompt_configuration(&context));
-        let expected = paint(&render::fill_slots(&plan, &context), &context);
+        let expected = paint_prompt(&render::fill_slots(&plan, &context), &context);
 
         assert_eq!(
             crate::damage::terminal::fully_rendered(&expected, width),
@@ -1234,12 +1302,36 @@ mod tests {
             disabled = false
         });
         let plan = Plan::build(&prompt_configuration(&context));
-        let mut polls = scheduled_polls(&plan, &context, &context.root_config.asynchronous);
-        let poll = polls.iter_mut().flatten().next().expect("time is dynamic");
+        let asynchronous = &context.root_config.asynchronous;
+        let mut scheduler = Scheduler::new(&plan, &context, asynchronous);
 
-        assert_eq!(None, poll.due());
-        poll.initial_resolved();
-        assert!(poll.due().is_some());
+        let slot_index = scheduler
+            .polls
+            .iter()
+            .position(Option::is_some)
+            .expect("time is dynamic");
+        assert!(matches!(
+            scheduler.polls[slot_index]
+                .as_ref()
+                .expect("time is dynamic")
+                .state,
+            PollState::AwaitingInitial
+        ));
+
+        let dynamic_module = configured_dynamic_modules(&plan, &context, asynchronous)
+            .into_iter()
+            .next()
+            .expect("time is dynamic");
+        let resolution = dynamic_module.resolve(&context);
+        scheduler.register_resolution(&resolution);
+
+        assert!(matches!(
+            scheduler.polls[slot_index]
+                .as_ref()
+                .expect("time is dynamic")
+                .state,
+            PollState::Due(_)
+        ));
     }
 
     #[test]
@@ -1399,7 +1491,7 @@ mod tests {
 
         let mut writer = ClosesAfter {
             buffer: Vec::new(),
-            deadline: Instant::now() + HEARTBEAT + Duration::from_millis(200),
+            deadline: Instant::now() + HEARTBEAT_INTERVAL + Duration::from_millis(200),
         };
         let result = run(&context, &LatencyEstimates::none(), &mut writer);
 
