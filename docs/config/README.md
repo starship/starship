@@ -373,6 +373,102 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Async
+
+Starship can draw available modules first and refine the prompt as slower
+modules resolve. The final prompt is identical to a synchronous render.
+
+| Shell | Refinement |
+| --- | --- |
+| zsh | Changed cells are repainted in place. |
+| fish | The complete prompt is replaced. |
+| Nushell main | The complete prompt is replaced with its unreleased async prompt API. |
+| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced. |
+| Stock Bash and other shells | The prompt remains synchronous. |
+
+`bus` batches width-changing refinements for up to its configured delay;
+`adaptive` places those batches using timings from the current shell session.
+Width-stable changes apply immediately.
+
+`time`, `battery`, `memory_usage`, and `localip` refresh on these intervals,
+but only while visible and included in the prompt's format.
+
+### How it works
+
+Starship classifies each module by when it can safely run:
+
+- **Instant** modules are cheap and appear in the first paint.
+- **Deferred** modules may scan directories, inspect a repository, read user
+  configuration, or start a subprocess. They resolve after the first paint.
+- **Dynamic** modules, such as `time`, are refreshed while the prompt is shown.
+
+Deferred modules aren't entirely helpless, and when available, will provide a
+*fast* variant. For the directory modulee, this looks like the returning of a path,
+before the details. Starship will replace the module with its details as they come.
+
+Refinements which don't change the width of the prompt are applied instantly.
+Those who do are collected into a 'bus' to avoid multiple visible redraws when grouped.
+The `bus` configuration valve defines the size of this bus, in ms. In tandem with
+`adaptive= true`, starship uses past timings and sizes to optimize this replacement.
+`bus` remains the fallback when no such info is available.
+
+### Shell support
+
+| Shell                                                    | Main prompt refinement                     | Notes                                                                 |
+| -------------------------------------------------------- | ------------------------------------------ | --------------------------------------------------------------------- |
+| zsh                                                      | Repaints only changed terminal cells.      | Right prompts are replaced as a whole.                               |
+| PowerShell                                               | Repaints changed terminal cells.           | Requires PSReadLine; hosts without it render synchronously.          |
+| fish                                                     | Replaces the complete prompt.              | Left and right prompts are refreshed together.                       |
+| Cmd with Clink 1.8+                                      | Replaces the complete prompt.              | Left and right prompts are refreshed through Clink prompt coroutines. |
+| Nushell                                                  | Replaces the complete prompt.              | Requires Nushell's asynchronous prompt support.                      |
+| Xonsh                                                    | Replaces the complete prompt.              | Uses prompt-toolkit.                                                  |
+| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | Replaces the complete prompt.              | Requires ble.sh 4.0 or later.                                        |
+| Bash without ble.sh, Elvish, Ion, tcsh, and other shells | No refinement.                             | Starship renders one completed prompt synchronously.                 |
+
+Setting `[async].enabled = false` also forces that behavior even when on shells that otherwise support it.
+
+### The `stream` command
+
+The internal `starship stream` is how shells obtain the first paint and later
+refinements. It receives shell context such as the command status, working
+directory, and terminal width; `--right` selects the right prompt. In normal
+use, it's pragmatic to invoke `starship init` rather than calling `stream` yourself.
+
+### Configuration
+
+```toml
+# ~/.config/starship.toml
+
+[async]
+# Set false to wait for the complete prompt on every shell.
+enabled = true
+
+# Wait at most 100 ms to group width-changing refinements.
+bus = 100
+
+# Use timings from earlier prompts in this shell session when available.
+adaptive = true
+```
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `enabled` | `true` | Enable streaming refinements. |
+| `bus` | `100` | Maximum grouping delay in milliseconds. |
+| `adaptive` | `true` | Group refinements from session timings. |
+
+### Refreshing dynamic modules
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `time` | `1000` | Clock refresh interval in milliseconds. |
+| `battery` | `30000` | Battery refresh interval in milliseconds. |
+| `memory_usage` | `5000` | Memory refresh interval in milliseconds. |
+| `localip` | `30000` | Address refresh interval in milliseconds. |
+
+Intervals must be whole milliseconds from `1` through `86_400_000` (one day).
+An invalid value is ignored and its default is retained. To stop a dynamic
+module from appearing or refreshing, set that module's own `disabled = true`.
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
