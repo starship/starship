@@ -292,9 +292,8 @@ struct Fixture {
 
 impl Fixture {
     fn new(shell: Shell) -> Self {
-        let directory = tempfile::tempdir().expect("failed to create scratch directory");
-        fs::write(
-            directory.path().join("starship.toml"),
+        Self::with_config(
+            shell,
             r#"
 format = "${custom.fast}${custom.slow}$character"
 add_newline = false
@@ -318,7 +317,11 @@ ignore_timeout = true
 success_symbol = ">"
 "#,
         )
-        .expect("failed to write config");
+    }
+
+    fn with_config(shell: Shell, config: &str) -> Self {
+        let directory = tempfile::tempdir().expect("failed to create scratch directory");
+        fs::write(directory.path().join("starship.toml"), config).expect("failed to write config");
 
         let init = directory.path().join("starship-init");
         let mut command = Command::new(starship());
@@ -396,7 +399,14 @@ struct Session {
 
 impl Session {
     fn start(shell: Shell) -> Self {
-        let fixture = Fixture::new(shell);
+        Self::start_with_fixture(shell, Fixture::new(shell))
+    }
+
+    fn start_with_config(shell: Shell, config: &str) -> Self {
+        Self::start_with_fixture(shell, Fixture::with_config(shell, config))
+    }
+
+    fn start_with_fixture(shell: Shell, fixture: Fixture) -> Self {
         let launch = shell.launch(&fixture);
         let startup = launch.startup;
         let mut pty = Pty::spawn(launch, fixture.directory.path());
@@ -454,6 +464,73 @@ fn streams(shell: Shell) {
 #[ignore = "requires zsh"]
 fn zsh_streams_a_live_prompt() {
     streams(Shell::Zsh);
+}
+
+/// Regression test: `right_format` must stream and repaint on its own, the
+/// same as `format` does — never recomputed once per prompt draw via a
+/// blocking synchronous `starship prompt --right` call. Each shell that can
+/// refine the right prompt (zsh, fish, and bash through ble.sh) drives its
+/// own independent right-prompt stream. A live clock placed in the right
+/// prompt advances with no input sent, proving the stream is running.
+fn right_prompt_ticks_on_its_own(shell: Shell) {
+    let mut session = Session::start_with_config(
+        shell,
+        r#"
+format = "MARK$character"
+add_newline = false
+
+right_format = "$time"
+
+[character]
+success_symbol = ">"
+
+[time]
+disabled = false
+format = "[$time]($style)"
+style = ""
+time_format = "%S%.6f"
+
+[async.dynamic]
+time = 30
+"#,
+    );
+
+    session.pty.wait_for("MARK");
+    session.pty.pump(Duration::from_millis(50));
+    let first = session.pty.screen();
+
+    let deadline = Instant::now() + TIMEOUT;
+    loop {
+        session.pty.pump(Duration::from_millis(25));
+        let later = session.pty.screen();
+        if later != first {
+            break;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "right prompt never changed on its own, with no input sent:\n{first}"
+        );
+    }
+
+    session.close();
+}
+
+#[test]
+#[ignore = "requires zsh"]
+fn zsh_right_prompt_ticks_on_its_own() {
+    right_prompt_ticks_on_its_own(Shell::Zsh);
+}
+
+#[test]
+#[ignore = "requires fish"]
+fn fish_right_prompt_ticks_on_its_own() {
+    right_prompt_ticks_on_its_own(Shell::Fish);
+}
+
+#[test]
+#[ignore = "requires BLE_SH and Bash 4+"]
+fn bash_ble_right_prompt_ticks_on_its_own() {
+    right_prompt_ticks_on_its_own(Shell::Bash);
 }
 
 #[test]
