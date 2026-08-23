@@ -1,0 +1,63 @@
+# Streaming-prompt demo configuration.
+#
+# Shows all three cadences at once:
+#   - $directory is Instant: painted synchronously, in the very first frame.
+#   - $git_branch / $git_status are Deferred: blank on the first paint, then
+#     stream in as their own frame once the git subprocess resolves.
+#   - $time is Dynamic: painted immediately like an Instant module, then kept
+#     current by re-polling on its own schedule (see [async.dynamic.time]
+#     below) without waiting for you to press Enter.
+#
+# Run `examples/streaming-demo/try.sh` from the repo root to try it live.
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$character"""
+
+right_format = "$time"
+
+# Streaming is on by default; spelled out here so the knobs are visible.
+[async]
+enabled = true
+# How long a batch of refinements is allowed to collect before it repaints,
+# so near-simultaneous updates (e.g. git_branch and git_status resolving a
+# few milliseconds apart) land as one repaint instead of two.
+bus = 100
+# Widen or shrink that window using this session's own measured module
+# latencies instead of the fixed 100ms above.
+adaptive = true
+
+[async.dynamic]
+# Re-poll the clock every second. This is also the built-in default —
+# spelled out here so it's the first knob you reach for.
+time = 1000
+
+[directory]
+style = "bold cyan"
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold red"
+format = '([\[$all_status$ahead_behind\]]($style)) '
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+format = "[$time]($style)"
+style = "bold yellow"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
