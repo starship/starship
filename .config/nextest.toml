@@ -1,0 +1,10 @@
+[test-groups]
+# Each test spawns a real shell in a pseudo-terminal and polls its output;
+# running many at once on a shared CI runner starves them of CPU and turns
+# the poll timeouts flaky, so parallelism is capped rather than serialized.
+pty = { max-threads = 2 }
+
+[[profile.default.overrides]]
+filter = 'binary(init_async)'
+test-group = 'pty'
+platform = 'cfg(unix)'

@@ -138,28 +138,55 @@ jobs:
             exit 1
           fi
 
-  # Run tests on Linux, macOS, and Windows
-  # On both Rust stable and Rust nightly
-  #
-  # The suite is executed with `cargo-nextest` rather than the built-in test
-  # harness. `cargo test` runs every test in a crate inside a single process
-  # and a shared thread pool; nextest runs each test in its own process.
-  # That isolation matters here because the integration tests under
-  # `src/test/init_async/` spawn real shells (bash, zsh, fish, PowerShell,
-  # elvish, xonsh) inside real pseudo-terminals. A shell that hangs, aborts,
-  # or wedges its pty takes down only its own test process instead of
-  # stalling or aborting the whole test binary, so the remaining tests still
-  # run and still report. Nextest also reports each test individually as it
-  # completes, so a wedged shell is identifiable by name rather than showing
-  # up as a silent suite-wide stall.
-  #
-  # The project has no doctests (nextest does not run those), so nothing is
-  # lost relative to `cargo test`.
+  streaming_shells:
+    name: Streaming Shells
+    needs: cargo_check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup | Rust
+        run: rustup toolchain install stable --profile minimal --no-self-update
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+
+      - name: Setup | Shells
+        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make zsh
+
+      - name: Setup | ble.sh
+        run: |
+          git clone --depth 1 --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
+          make -C "$RUNNER_TEMP/ble.sh"
+
+      - name: Build | Nushell main
+        run: |
+          git init "$RUNNER_TEMP/nushell"
+          git -C "$RUNNER_TEMP/nushell" remote add origin https://github.com/nushell/nushell.git
+          git -C "$RUNNER_TEMP/nushell" fetch --depth 1 origin 5d80505557115920993296600f57233c30a4248b
+          git -C "$RUNNER_TEMP/nushell" checkout --detach FETCH_HEAD
+          cargo build --locked --manifest-path "$RUNNER_TEMP/nushell/Cargo.toml" --bin nu
+        env:
+          RUSTFLAGS: ""
+
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5 # v2.82.0
+        with:
+          tool: cargo-nextest@0.9.140
+
+      - name: Test
+        run: cargo nextest run --all-features --locked --test init_async --run-ignored all --test-threads 1
+        env:
+          BASH: /usr/bin/bash
+          BLE_SH: ${{ runner.temp }}/ble.sh/out/ble.sh
+          NUSHELL_MAIN: ${{ runner.temp }}/nushell/target/debug/nu
+
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
     needs: cargo_check # First check then run expansive tests
-    # A shell wedged in a pseudo-terminal cannot block the runner forever.
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -226,6 +253,7 @@ jobs:
           --all-features
           --locked
           --workspace
+          -E 'not binary(init_async)'
           --lcov --output-path lcov.info
           --run-ignored all"
         env:
