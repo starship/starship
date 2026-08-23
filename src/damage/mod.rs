@@ -26,76 +26,74 @@ pub enum Damage {
 
 impl Damage {
     pub fn between(previous: &Painted, next: &Painted, terminal_width: TerminalWidth) -> Self {
-        let previous_cursor = cursor_row(previous);
-        let next_cursor = cursor_row(next);
+        let previous_cursor = compute_cursor_row(previous);
+        let next_cursor = compute_cursor_row(next);
+
         if previous.line_count() != next.line_count() || previous_cursor != next_cursor {
             return Self::Full;
         }
 
-        let mut changed = None;
-        for (index, (previous, next)) in previous.lines().zip(next.lines()).enumerate() {
-            let previous = Line::new(previous);
-            let next = Line::new(next);
-            if previous.width() > terminal_width || next.width() > terminal_width {
+        let mut changed_line_data = None;
+
+        for (line_index, (previous_runs, next_runs)) in
+            previous.lines().zip(next.lines()).enumerate()
+        {
+            let previous_line = Line::new(previous_runs);
+            let next_line = Line::new(next_runs);
+
+            if previous_line.exceeds_width(terminal_width)
+                || next_line.exceeds_width(terminal_width)
+            {
                 return Self::Full;
             }
 
-            let Some(span) = Span::between(previous, next) else {
-                continue;
-            };
-            if changed.replace((LineIndex(index), span, next)).is_some() {
-                return Self::Full;
+            if let Some(span) = Span::compare(previous_line, next_line) {
+                // Only one changed line is repaintable incrementally.
+                if changed_line_data.is_some() {
+                    return Self::Full;
+                }
+                changed_line_data = Some((LineIndex(line_index), span, next_line));
             }
         }
 
-        let Some((line, span, next)) = changed else {
+        let Some((changed_index, span, next_line)) = changed_line_data else {
             return Self::None;
         };
-        if line.0 == next_cursor && span.erases_tail {
+
+        if changed_index.0 == next_cursor && span.erases_tail {
             return Self::Full;
         }
 
-        let rows = RowsAbove(previous_cursor - line.0);
-        span.paint(rows, next).map_or(Self::Full, Self::Repaint)
+        let rows_above = RowsAbove(previous_cursor.saturating_sub(changed_index.0));
+        span.paint(rows_above, next_line)
+            .map_or(Self::Full, Self::Repaint)
     }
 }
 
-fn cursor_row(painted: &Painted) -> usize {
-    let last = painted.line_count().saturating_sub(1);
-    if painted
-        .line(LineIndex(last))
-        .and_then(<[_]>::last)
-        .is_some_and(|run| run.kind() == RunKind::LineTerminator)
-    {
-        painted.line_count()
+fn compute_cursor_row(painted: &Painted) -> usize {
+    let total_lines = painted.line_count();
+    let last_index = total_lines.saturating_sub(1);
+
+    let has_trailing_terminator = painted
+        .line(LineIndex(last_index))
+        .and_then(|runs| runs.last())
+        .is_some_and(|run| run.kind() == RunKind::LineTerminator);
+
+    if has_trailing_terminator {
+        total_lines
     } else {
-        last
+        last_index
     }
 }
 
 #[derive(Clone, Copy)]
 struct Line<'a> {
     runs: &'a [Run],
-    width: TerminalWidth,
 }
 
 impl<'a> Line<'a> {
     fn new(runs: &'a [Run]) -> Self {
-        let width = runs
-            .iter()
-            .filter(|run| run.kind() != RunKind::LineTerminator)
-            .flat_map(|run| run.text().graphemes(true))
-            .map(Grapheme)
-            .map(|grapheme| grapheme.width())
-            .sum();
-        Self {
-            runs,
-            width: TerminalWidth(width),
-        }
-    }
-
-    fn width(self) -> TerminalWidth {
-        self.width
+        Self { runs }
     }
 
     fn cells(self) -> impl Iterator<Item = Cell<'a>> {
@@ -104,16 +102,9 @@ impl<'a> Line<'a> {
             .filter(|run| run.kind() != RunKind::LineTerminator)
             .flat_map(|run| {
                 let style = run.style();
-                run.text().graphemes(true).map(move |text| (text, style))
-            })
-            .scan(Column::default(), |column, (text, style)| {
-                let cell = Cell {
-                    text,
-                    style,
-                    column: *column,
-                };
-                column.0 += Grapheme(text).width();
-                Some(cell)
+                run.text()
+                    .graphemes(true)
+                    .map(move |text| Cell { text, style })
             })
     }
 
@@ -127,20 +118,21 @@ impl<'a> Line<'a> {
                 run.text()
                     .graphemes(true)
                     .rev()
-                    .map(move |text| (text, style))
-            })
-            .scan(self.width.0, |column, (text, style)| {
-                *column -= Grapheme(text).width();
-                Some(Cell {
-                    text,
-                    style,
-                    column: Column(*column),
-                })
+                    .map(move |text| Cell { text, style })
             })
     }
 
     fn cell_count(self) -> usize {
         self.cells().count()
+    }
+
+    fn width(self) -> TerminalWidth {
+        let total_width = self.cells().map(|cell| Grapheme(cell.text).width()).sum();
+        TerminalWidth(total_width)
+    }
+
+    fn exceeds_width(self, max_width: TerminalWidth) -> bool {
+        self.width() > max_width
     }
 }
 
@@ -148,70 +140,99 @@ impl<'a> Line<'a> {
 struct Cell<'a> {
     text: &'a str,
     style: ResolvedStyle,
-    column: Column,
 }
 
 #[derive(Clone, Copy)]
 struct Span {
-    first: usize,
-    last: usize,
-    column: Column,
+    start_index: usize,
+    end_index: usize,
+    start_column: Column,
     erases_tail: bool,
 }
 
 impl Span {
-    fn between(previous: Line<'_>, next: Line<'_>) -> Option<Self> {
-        let first = previous
-            .cells()
-            .zip(next.cells())
-            .take_while(|(previous, next)| previous == next)
-            .count();
+    fn compare(previous: Line<'_>, next: Line<'_>) -> Option<Self> {
+        let (start_index, start_column) = Self::find_divergence(previous, next)?;
+
         let previous_count = previous.cell_count();
         let next_count = next.cell_count();
-        if first == previous_count && first == next_count {
-            return None;
-        }
 
-        let suffix = if previous_count == next_count {
-            previous
-                .cells_from_end()
-                .zip(next.cells_from_end())
-                .take(previous_count - first)
-                .take_while(|(previous, next)| previous == next)
-                .count()
+        // Suffix matching only makes sense when the lengths match.
+        let suffix_length = if previous_count == next_count {
+            Self::match_suffix_length(previous, next, previous_count.saturating_sub(start_index))
         } else {
-            0
+            usize::default()
         };
 
         Some(Self {
-            first,
-            last: next_count - suffix,
-            column: next
-                .cells()
-                .nth(first)
-                .map_or(Column(next.width().0), |cell| cell.column),
+            start_index,
+            end_index: next_count.saturating_sub(suffix_length),
+            start_column,
             erases_tail: previous.width() != next.width(),
         })
     }
 
-    fn paint(self, rows: RowsAbove, line: Line<'_>) -> Option<CursorNeutral> {
-        let span = || line.cells().skip(self.first).take(self.last - self.first);
-        span()
-            .all(|cell| CursorSafeText::new(cell.text).is_some())
-            .then(|| {
-                CursorNeutral::around(|body| {
-                    body.move_to(rows, self.column);
-                    for cell in span() {
-                        body.select_style(cell.style);
-                        body.write_text(CursorSafeText::new(cell.text).unwrap());
-                    }
-                    body.select_style(ResolvedStyle::plain());
-                    self.erases_tail.then(|| body.erase_to_end_of_line());
-                })
-            })
+    // Single pass, tracking column alongside index.
+    fn find_divergence(previous: Line<'_>, next: Line<'_>) -> Option<(usize, Column)> {
+        let mut current_column = Column::default();
+        let mut current_index = usize::default();
+
+        let mut previous_cells = previous.cells();
+        let mut next_cells = next.cells();
+
+        loop {
+            match (previous_cells.next(), next_cells.next()) {
+                (Some(previous_cell), Some(next_cell)) if previous_cell == next_cell => {
+                    current_column.0 += Grapheme(next_cell.text).width();
+                    current_index += 1;
+                }
+                (Some(_), Some(_)) | (Some(_), None) | (None, Some(_)) => {
+                    return Some((current_index, current_column));
+                }
+                (None, None) => return None,
+            }
+        }
+    }
+
+    fn match_suffix_length(previous: Line<'_>, next: Line<'_>, max_search_length: usize) -> usize {
+        previous
+            .cells_from_end()
+            .zip(next.cells_from_end())
+            .take(max_search_length)
+            .take_while(|(previous_cell, next_cell)| previous_cell == next_cell)
+            .count()
+    }
+
+    fn paint(self, rows_above: RowsAbove, next_line: Line<'_>) -> Option<CursorNeutral> {
+        // A closure avoids allocating twice below.
+        let cell_iterator = || {
+            next_line
+                .cells()
+                .skip(self.start_index)
+                .take(self.end_index.saturating_sub(self.start_index))
+        };
+
+        let is_cursor_safe = cell_iterator().all(|cell| CursorSafeText::new(cell.text).is_some());
+        if !is_cursor_safe {
+            return None;
+        }
+
+        Some(CursorNeutral::around(|terminal| {
+            terminal.move_to(rows_above, self.start_column);
+
+            for cell in cell_iterator() {
+                terminal.select_style(cell.style);
+                terminal.write_text(CursorSafeText::new(cell.text).unwrap()); // checked above
+            }
+
+            terminal.select_style(ResolvedStyle::plain());
+
+            if self.erases_tail {
+                terminal.erase_to_end_of_line();
+            }
+        }))
     }
 }
-
 #[cfg(test)]
 pub mod tests {
     use super::*;

@@ -26,11 +26,9 @@ impl Dimensions for ScreenSize {
     fn total_lines(&self) -> usize {
         SCREEN_ROWS
     }
-
     fn screen_lines(&self) -> usize {
         SCREEN_ROWS
     }
-
     fn columns(&self) -> usize {
         self.columns
     }
@@ -44,12 +42,8 @@ pub struct CellSnapshot {
     flags: Flags,
 }
 
-impl CellSnapshot {
-    fn is_blank(&self) -> bool {
-        *self == Self::blank()
-    }
-
-    fn blank() -> Self {
+impl Default for CellSnapshot {
+    fn default() -> Self {
         Self {
             character: ' ',
             foreground: TerminalColor::Named(NamedColor::Foreground),
@@ -59,17 +53,24 @@ impl CellSnapshot {
     }
 }
 
+impl CellSnapshot {
+    fn is_blank(&self) -> bool {
+        *self == Self::default()
+    }
+}
+
 impl std::fmt::Debug for CellSnapshot {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(formatter, "{:?}", self.character)?;
-        if self.foreground != Self::blank().foreground {
-            write!(formatter, "/fg:{:?}", self.foreground)?;
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let default = Self::default();
+        write!(f, "{:?}", self.character)?;
+        if self.foreground != default.foreground {
+            write!(f, "/fg:{:?}", self.foreground)?;
         }
-        if self.background != Self::blank().background {
-            write!(formatter, "/bg:{:?}", self.background)?;
+        if self.background != default.background {
+            write!(f, "/bg:{:?}", self.background)?;
         }
         if !self.flags.is_empty() {
-            write!(formatter, "/{:?}", self.flags)?;
+            write!(f, "/{:?}", self.flags)?;
         }
         Ok(())
     }
@@ -81,31 +82,38 @@ pub struct Screen {
     cursor: Point,
 }
 
-impl Screen {
-    fn of(terminal: &Term<DiscardEvents>) -> Self {
+impl From<&Term<DiscardEvents>> for Screen {
+    fn from(terminal: &Term<DiscardEvents>) -> Self {
         let grid = terminal.grid();
-        let mut rows = Vec::with_capacity(grid.screen_lines());
 
-        for row in 0..grid.screen_lines() {
-            let mut cells: Vec<CellSnapshot> = grid[Line(row as i32)]
-                .into_iter()
-                .map(|cell| CellSnapshot {
-                    character: cell.c,
-                    foreground: cell.fg,
-                    background: cell.bg,
-                    // `WRAPLINE` is transport history, not screen state.
-                    flags: cell.flags.difference(Flags::WRAPLINE),
-                })
-                .collect();
-            while cells.last().is_some_and(CellSnapshot::is_blank) {
-                cells.pop();
-            }
-            rows.push(cells);
-        }
+        let mut rows: Vec<Vec<CellSnapshot>> = (0..grid.screen_lines())
+            .map(|row| {
+                let mut cells: Vec<_> = grid[Line(row as i32)]
+                    .into_iter()
+                    .map(|cell| CellSnapshot {
+                        character: cell.c,
+                        foreground: cell.fg,
+                        background: cell.bg,
+                        flags: cell.flags.difference(Flags::WRAPLINE),
+                    })
+                    .collect();
 
-        while rows.last().is_some_and(Vec::is_empty) {
-            rows.pop();
-        }
+                cells.truncate(
+                    cells
+                        .iter()
+                        .rposition(|c| !c.is_blank())
+                        .map_or(0, |i| i + 1),
+                );
+                cells
+            })
+            .collect();
+
+        // Same trick, for trailing empty rows.
+        rows.truncate(
+            rows.iter()
+                .rposition(|r| !r.is_empty())
+                .map_or(0, |i| i + 1),
+        );
 
         Self {
             rows,
@@ -115,11 +123,11 @@ impl Screen {
 }
 
 impl std::fmt::Debug for Screen {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(formatter, "cursor at {:?}", self.cursor)?;
-        for (index, row) in self.rows.iter().enumerate() {
-            let text: String = row.iter().map(|cell| cell.character).collect();
-            writeln!(formatter, "  row {index}: {text:?} {row:?}")?;
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "cursor at {:?}", self.cursor)?;
+        for (i, row) in self.rows.iter().enumerate() {
+            let text: String = row.iter().map(|c| c.character).collect();
+            writeln!(f, "  row {i}: {text:?} {row:?}")?;
         }
         Ok(())
     }
@@ -146,13 +154,16 @@ impl EmulatedTerminal {
 
     /// Applies the tty's `ONLCR` translation (`\n` becomes `\r\n`) before feeding.
     pub fn feed(&mut self, bytes: &[u8]) {
-        let mut translated = Vec::with_capacity(bytes.len());
-        for &byte in bytes {
-            if byte == b'\n' {
-                translated.push(b'\r');
-            }
-            translated.push(byte);
-        }
+        let translated: Vec<u8> = bytes
+            .iter()
+            .flat_map(|&b| {
+                (b == b'\n')
+                    .then_some(b'\r')
+                    .into_iter()
+                    .chain(std::iter::once(b))
+            })
+            .collect();
+
         self.parser.advance(&mut self.terminal, &translated);
     }
 
@@ -162,7 +173,7 @@ impl EmulatedTerminal {
     }
 
     pub fn screen(&self) -> Screen {
-        Screen::of(&self.terminal)
+        Screen::from(&self.terminal)
     }
 }
 
