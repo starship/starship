@@ -13,12 +13,15 @@ pub mod config;
 pub mod configs;
 pub mod configure;
 pub mod context;
+pub mod escaping;
 pub mod formatter;
 pub mod init;
 pub mod logger;
 pub mod module;
 mod modules;
+mod plan;
 pub mod print;
+mod render;
 mod segment;
 mod utils;
 
