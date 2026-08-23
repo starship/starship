@@ -360,7 +360,8 @@ mkdir ($nu.data-dir | path join "vendor/autoload")
 starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
 ```
 
-Note: Only Nushell v0.96+ is supported
+> Requires a Nushell main build with `commandline set-prompt`; no release has
+> this API yet.
 
 </details>
 
