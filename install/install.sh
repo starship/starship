@@ -177,7 +177,7 @@ elevate_priv() {
 		info "If you are on Windows, please run your shell as an administrator, then"
 		info "rerun this script. Otherwise, please run this script as root, or install"
 		info "sudo or doas."
-		exit
+		exit 1
 	fi
 	if ! sudo -v or doas; then
 		error "Superuser not granted, aborting installation"
