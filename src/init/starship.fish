@@ -11,52 +11,102 @@ function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish jo
 end
 
 set -g STARSHIP_PROMPT ''
+set -g STARSHIP_RIGHT_PROMPT ''
 set -g STARSHIP_TIMINGS ''
+set -g STARSHIP_RIGHT_TIMINGS ''
 set -g __starship_stream_active_for_current_line 0
+set -g __starship_stream_right_active_for_current_line 0
 set -g __starship_stream_processes
+set -g __starship_stream_right_processes
 set -g __starship_stream_state_name __starship_stream_state_$fish_pid
+set -g __starship_stream_right_state_name __starship_stream_right_state_$fish_pid
 set -g __starship_stream_directory (mktemp -d 2>/dev/null)
 set -e -U $__starship_stream_state_name 2>/dev/null
+set -e -U $__starship_stream_right_state_name 2>/dev/null
 
-# Variable events may coalesce, so publish complete snapshots.
-function __starship_stream_apply --on-variable $__starship_stream_state_name
-    test $__starship_stream_active_for_current_line -eq 1; or return
-    set -l state $$__starship_stream_state_name
+# Variable events may coalesce, so publish complete snapshots. The left and
+# right prompts each stream into their own universal variable; a redraw
+# re-issues both `fish_prompt` and `fish_right_prompt`, so either side's patch
+# repaints the whole prompt.
+function __starship_stream_apply_target --argument-names state_name_variable active_variable prompt_variable timings_variable
+    test $$active_variable -eq 1; or return
+    set -l state_name $$state_name_variable
+    set -l state $$state_name
     test (count $state) -ge 4; or return
-    set -g STARSHIP_TIMINGS $state[4]
+    set -g $timings_variable $state[4]
 
     contains -- $state[1] READY PATCH REPAIR; or return
-    set -g STARSHIP_PROMPT $state[2]
+    set -g $prompt_variable $state[2]
     if test "$TRANSIENT" != 1; and test "$RIGHT_TRANSIENT" != 1
         commandline -f repaint
     end
 end
 
-function __starship_stream_stop
-    for process in $__starship_stream_processes
+function __starship_stream_apply --on-variable $__starship_stream_state_name
+    __starship_stream_apply_target __starship_stream_state_name __starship_stream_active_for_current_line STARSHIP_PROMPT STARSHIP_TIMINGS
+end
+
+function __starship_stream_right_apply --on-variable $__starship_stream_right_state_name
+    __starship_stream_apply_target __starship_stream_right_state_name __starship_stream_right_active_for_current_line STARSHIP_RIGHT_PROMPT STARSHIP_RIGHT_TIMINGS
+end
+
+function __starship_stream_stop --argument-names target
+    set -l processes_variable __starship_stream_processes
+    set -l active_variable __starship_stream_active_for_current_line
+    if test "$target" = right
+        set processes_variable __starship_stream_right_processes
+        set active_variable __starship_stream_right_active_for_current_line
+    end
+    for process in $$processes_variable
         command kill $process 2>/dev/null
     end
-    set -g __starship_stream_processes
-    set -g __starship_stream_active_for_current_line 0
+    set -g $processes_variable
+    set -g $active_variable 0
+end
+
+function __starship_stream_stop_all
+    __starship_stream_stop main
+    __starship_stream_stop right
 end
 
 function __starship_stream_cleanup --on-event fish_exit
-    __starship_stream_stop
+    __starship_stream_stop_all
     set -e -U $__starship_stream_state_name 2>/dev/null
+    set -e -U $__starship_stream_right_state_name 2>/dev/null
     if test -n "$__starship_stream_directory"
         command rm -rf -- "$__starship_stream_directory" 2>/dev/null
     end
 end
 
-function __starship_stream_start --argument-names terminal_width keymap command_status command_pipestatus command_duration jobs
-    __starship_stream_stop
-    set -g __starship_stream_active_for_current_line 1
-
-    if set -q $__starship_stream_state_name
-        set -l previous $$__starship_stream_state_name
-        test (count $previous) -ge 4; and set -g STARSHIP_TIMINGS $previous[4]
+# The `target` argument selects the left prompt (`main`) or the right prompt
+# (`right`); the two differ only in which universal variable they publish into
+# and whether `--right` is threaded through to Starship.
+function __starship_stream_start --argument-names target terminal_width keymap command_status command_pipestatus command_duration jobs
+    set -l state_name_variable __starship_stream_state_name
+    set -l active_variable __starship_stream_active_for_current_line
+    set -l processes_variable __starship_stream_processes
+    set -l prompt_variable STARSHIP_PROMPT
+    set -l timings_variable STARSHIP_TIMINGS
+    set -l stream_target
+    if test "$target" = right
+        set state_name_variable __starship_stream_right_state_name
+        set active_variable __starship_stream_right_active_for_current_line
+        set processes_variable __starship_stream_right_processes
+        set prompt_variable STARSHIP_RIGHT_PROMPT
+        set timings_variable STARSHIP_RIGHT_TIMINGS
+        set stream_target --right
     end
-    set -e -U $__starship_stream_state_name 2>/dev/null
+
+    __starship_stream_stop $target
+    set -g $active_variable 1
+
+    set -l state_name $$state_name_variable
+
+    if set -q $state_name
+        set -l previous $$state_name
+        test (count $previous) -ge 4; and set -g $timings_variable $previous[4]
+    end
+    set -e -U $state_name 2>/dev/null
 
     set -l arguments \
         --terminal-width="$terminal_width" \
@@ -66,14 +116,16 @@ function __starship_stream_start --argument-names terminal_width keymap command_
         --cmd-duration="$command_duration" \
         --jobs="$jobs"
 
+    set -l timings_value $$timings_variable
+
     if test -z "$__starship_stream_directory"
-        ::STARSHIP:: prompt $arguments | read -gz STARSHIP_PROMPT
+        ::STARSHIP:: prompt $stream_target $arguments | read -gz $prompt_variable
         return
     end
 
     set -l ready_fifo "$__starship_stream_directory/"(random)
     command mkfifo "$ready_fifo" 2>/dev/null; or begin
-        ::STARSHIP:: prompt $arguments | read -gz STARSHIP_PROMPT
+        ::STARSHIP:: prompt $stream_target $arguments | read -gz $prompt_variable
         return
     end
 
@@ -81,7 +133,7 @@ function __starship_stream_start --argument-names terminal_width keymap command_
     # that launched it, but nothing here ever reads stdin. Left inherited,
     # it would be the shell's own pty, and a renderer still alive when the
     # shell exits would keep that pty from ever reporting end-of-file.
-    ::STARSHIP:: stream $arguments --timings="$STARSHIP_TIMINGS" < /dev/null | $__fish_bin_dir/fish -c '
+    ::STARSHIP:: stream $stream_target $arguments --timings="$timings_value" < /dev/null | $__fish_bin_dir/fish -c '
         set -l state_name $argv[1]
         set -l ready_fifo $argv[2]
         set -l arguments $argv[3..]
@@ -116,32 +168,33 @@ function __starship_stream_start --argument-names terminal_width keymap command_
             set -U $state_name REPAIR "$prompt" "$process" "$timings"
             test $ready -eq 1; or echo READY > "$ready_fifo"
         end
-    ' -- $__starship_stream_state_name "$ready_fifo" $arguments &
-    set -g __starship_stream_processes (jobs --last --pid)
+    ' -- $state_name "$ready_fifo" $stream_target $arguments &
+    set -g $processes_variable (jobs --last --pid)
 
     read < "$ready_fifo"
     command rm -f -- "$ready_fifo" 2>/dev/null
 
-    if set -q $__starship_stream_state_name
-        set -l state $$__starship_stream_state_name
+    if set -q $state_name
+        set -l state $$state_name
         if test (count $state) -ge 4
-            set -g STARSHIP_PROMPT $state[2]
-            set -g STARSHIP_TIMINGS $state[4]
-            if test -n "$state[3]"; and not contains -- $state[3] $__starship_stream_processes
-                set -a __starship_stream_processes $state[3]
+            set -g $prompt_variable $state[2]
+            set -g $timings_variable $state[4]
+            if test -n "$state[3]"; and not contains -- $state[3] $$processes_variable
+                set -a $processes_variable $state[3]
             end
             return
         end
     end
 
-    __starship_stream_stop
-    set -g __starship_stream_active_for_current_line 1
-    ::STARSHIP:: prompt $arguments | read -gz STARSHIP_PROMPT
+    __starship_stream_stop $target
+    set -g $active_variable 1
+    ::STARSHIP:: prompt $stream_target $arguments | read -gz $prompt_variable
 end
 
 function __starship_stream_preexec --on-event fish_preexec
-    __starship_stream_stop
+    __starship_stream_stop_all
     set -g STARSHIP_PROMPT ''
+    set -g STARSHIP_RIGHT_PROMPT ''
 end
 
 function fish_prompt
@@ -173,7 +226,7 @@ function fish_prompt
         end
     else
         if test "$__starship_stream_active_for_current_line" = 0
-            __starship_stream_start "$COLUMNS" "$STARSHIP_KEYMAP" "$STARSHIP_CMD_STATUS" "$STARSHIP_CMD_PIPESTATUS" "$STARSHIP_DURATION" "$STARSHIP_JOBS"
+            __starship_stream_start main "$COLUMNS" "$STARSHIP_KEYMAP" "$STARSHIP_CMD_STATUS" "$STARSHIP_CMD_PIPESTATUS" "$STARSHIP_DURATION" "$STARSHIP_JOBS"
         end
         printf '%s' "$STARSHIP_PROMPT"
     end
@@ -181,7 +234,7 @@ end
 
 function fish_right_prompt
     switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
+        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
         case '*'
             set STARSHIP_KEYMAP insert
@@ -203,7 +256,10 @@ function fish_right_prompt
             printf ""
         end
     else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        if test "$__starship_stream_right_active_for_current_line" = 0
+            __starship_stream_start right "$COLUMNS" "$STARSHIP_KEYMAP" "$STARSHIP_CMD_STATUS" "$STARSHIP_CMD_PIPESTATUS" "$STARSHIP_DURATION" "$STARSHIP_JOBS"
+        end
+        printf '%s' "$STARSHIP_RIGHT_PROMPT"
     end
 end
 
