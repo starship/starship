@@ -11,12 +11,37 @@ use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
-use super::{Context, Module};
+use super::{Context, Module, Render};
 
 use super::utils::directory::truncate;
 use crate::config::{Either, ModuleConfig};
 use crate::configs::directory::{DirectoryConfig, SubstitutionConfig};
 use crate::formatter::StringFormatter;
+
+/// The `directory` module's renderer.
+///
+/// Reaches the filesystem in two places — repository discovery and the
+/// `$read_only` `stat` — both unbounded on a slow or network mount, so the
+/// instant approximation skips them; see [`UnboundedWork`].
+pub struct Directory;
+
+impl Render for Directory {
+    fn full<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>> {
+        render(context, UnboundedWork::Allowed)
+    }
+
+    fn instant<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>> {
+        render(context, UnboundedWork::Forbidden)
+    }
+}
+
+/// Whether a render may discover the repository and `stat` the working
+/// directory to answer `$read_only`, or must skip both for an instant render.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum UnboundedWork {
+    Allowed,
+    Forbidden,
+}
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -33,6 +58,10 @@ use crate::formatter::StringFormatter;
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    render(context, UnboundedWork::Allowed)
+}
+
+fn render<'a>(context: &'a Context, discovery: UnboundedWork) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
@@ -52,7 +81,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+    let repo = if discovery == UnboundedWork::Allowed
+        && (config.truncate_to_repo || config.repo_root_style.is_some())
+    {
         context.get_git_repo().ok()
     } else {
         None
@@ -157,8 +188,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "path" => Some(Ok(path_vec[2].as_str())),
                 "before_root_path" => Some(Ok(path_vec[0].as_str())),
                 "repo_root" => Some(Ok(path_vec[1].as_str())),
+                // `is_readonly_dir` stats the filesystem; see `UnboundedWork`.
                 "read_only" => {
-                    if is_readonly_dir(physical_dir) {
+                    if discovery == UnboundedWork::Allowed && is_readonly_dir(physical_dir) {
                         Some(Ok(config.read_only))
                     } else {
                         None
@@ -381,17 +413,46 @@ fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> &'a str {
 mod tests {
     use super::*;
     use crate::config::Either::First;
-    use crate::test::ModuleRenderer;
+    use crate::test::{
+        FixtureProvider, ModuleRenderer, Project, RenderedModule, home_project, project,
+    };
     use crate::utils::create_command;
     use crate::utils::home_dir;
+    use insta::assert_snapshot;
     use nu_ansi_term::Color;
+    use rstest::rstest;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
     use std::os::windows::fs::symlink_dir as symlink;
     use std::path::Path;
-    use std::{fs, io};
-    use tempfile::TempDir;
+
+    /// Outside the home directory, so its path is not contracted to `~`.
+    const KNOWN_ROOT: &str = "/tmp";
+
+    /// Replaces a project's randomly generated directory name in a snapshot.
+    const PROJECT_NAME_PLACEHOLDER: &str = "[PROJECT]";
+
+    fn redact_project_name(project: &Project, rendered: RenderedModule) -> String {
+        rendered
+            .to_string()
+            .replace(&project.directory_name(), PROJECT_NAME_PLACEHOLDER)
+    }
+
+    /// Panics on failure: a test cannot proceed once its fixture doesn't exist.
+    fn init_repo(path: &Path) {
+        let output = create_command("git")
+            .and_then(|mut command| command.args(["init"]).current_dir(path).output())
+            .unwrap_or_else(|error| {
+                panic!("failed to run `git init` in {}: {error}", path.display())
+            });
+        assert!(
+            output.status.success(),
+            "`git init` failed in {}: {}",
+            path.display(),
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
 
     #[test]
     fn contract_home_directory() {
@@ -402,13 +463,12 @@ mod tests {
         assert_eq!(output, "~/schematics/rocket");
     }
 
-    #[test]
-    fn contract_repo_directory() -> io::Result<()> {
-        let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
-        let repo_dir = tmp_dir.path().join("dev").join("rocket-controls");
+    #[rstest]
+    fn contract_repo_directory(home_project: Project) {
+        let repo_dir = home_project.path().join("dev").join("rocket-controls");
         let src_dir = repo_dir.join("src");
-        fs::create_dir_all(&src_dir)?;
-        init_repo(&repo_dir)?;
+        home_project.create_directory("dev/rocket-controls/src");
+        init_repo(&repo_dir);
 
         let src_variations = [src_dir.clone(), dunce::canonicalize(src_dir).unwrap()];
         let repo_variations = [repo_dir.clone(), dunce::canonicalize(repo_dir).unwrap()];
@@ -418,8 +478,6 @@ mod tests {
                 assert_eq!(output, Some("rocket-controls/src".to_string()));
             }
         }
-
-        tmp_dir.close()
     }
 
     #[test]
@@ -490,107 +548,81 @@ mod tests {
         assert_eq!(output, "/foo/baz");
     }
 
-    #[test]
-    fn fish_style_with_user_home_contracted_path() {
-        let path = "~/starship/engines/booster/rocket";
-        let output = to_fish_style(1, path, "engines/booster/rocket");
-        assert_eq!(output, "~/s/");
-    }
-
-    #[test]
-    fn fish_style_with_user_home_contracted_path_and_dot_dir() {
-        let path = "~/.starship/engines/booster/rocket";
-        let output = to_fish_style(1, path, "engines/booster/rocket");
-        assert_eq!(output, "~/.s/");
-    }
-
-    #[test]
-    fn fish_style_with_no_contracted_path() {
-        // `truncation_length = 2`
-        let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(1, path, "repo/but_nested");
-        assert_eq!(output, "/a/P/n/i/");
-    }
-
-    #[test]
-    fn fish_style_with_pwd_dir_len_no_contracted_path() {
-        // `truncation_length = 2`
-        let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(2, path, "repo/but_nested");
-        assert_eq!(output, "/ab/Pa/no/in/");
-    }
-
-    #[test]
-    fn fish_style_with_duplicate_directories() {
-        let path = "~/starship/tmp/C++/C++/C++";
-        let output = to_fish_style(1, path, "C++");
-        assert_eq!(output, "~/s/t/C/C/");
-    }
-
-    #[test]
-    fn fish_style_with_unicode() {
-        let path = "~/starship/tmp/目录/a̐éö̲/目录";
-        let output = to_fish_style(1, path, "目录");
-        assert_eq!(output, "~/s/t/目/a̐/");
-    }
-
-    fn init_repo(path: &Path) -> io::Result<()> {
-        create_command("git")?
-            .args(["init"])
-            .current_dir(path)
-            .output()
-            .map(|_| ())
-    }
-
-    fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
-        fs::create_dir_all(root)?;
-        let dir = TempDir::new_in(root)?;
-        // the .to_string_lossy().to_string() here looks weird but is required
-        // to convert it from a Cow.
-        let path = dir
-            .path()
-            .file_name()
-            .unwrap()
-            .to_string_lossy()
-            .to_string();
-        Ok((dir, path))
+    /// One case per shortening rule, so a broken rule is named by the failing test.
+    #[rstest]
+    #[case::user_home_contracted_path(
+        1,
+        "~/starship/engines/booster/rocket",
+        "engines/booster/rocket",
+        "~/s/"
+    )]
+    #[case::user_home_contracted_path_with_dot_directory(
+        1,
+        "~/.starship/engines/booster/rocket",
+        "engines/booster/rocket",
+        "~/.s/"
+    )]
+    #[case::no_contracted_path(
+        1,
+        "/absolute/Path/not/in_a/repo/but_nested",
+        "repo/but_nested",
+        "/a/P/n/i/"
+    )]
+    #[case::two_character_components(
+        2,
+        "/absolute/Path/not/in_a/repo/but_nested",
+        "repo/but_nested",
+        "/ab/Pa/no/in/"
+    )]
+    #[case::duplicate_directories(1, "~/starship/tmp/C++/C++/C++", "C++", "~/s/t/C/C/")]
+    #[case::unicode(1, "~/starship/tmp/目录/a̐éö̲/目录", "目录", "~/s/t/目/a̐/")]
+    fn fish_style(
+        #[case] pwd_dir_length: usize,
+        #[case] dir_string: &str,
+        #[case] truncated_suffix: &str,
+        #[case] expected: &str,
+    ) {
+        assert_eq!(
+            to_fish_style(pwd_dir_length, dir_string, truncated_suffix),
+            expected
+        );
     }
 
     #[cfg(not(target_os = "windows"))]
     mod linux {
         use super::*;
 
-        #[test]
+        #[rstest]
         #[ignore]
-        fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
-            let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
-            let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        fn symlinked_subdirectory_git_repo_out_of_tree(home_project: Project) {
+            let repo_dir = home_project
+                .path()
+                .join("above-repo")
+                .join("rocket-controls");
             let src_dir = repo_dir.join("src/meters/fuel-gauge");
-            let symlink_dir = tmp_dir.path().join("fuel-gauge");
-            fs::create_dir_all(&src_dir)?;
-            init_repo(&repo_dir)?;
-            symlink(&src_dir, &symlink_dir)?;
+            let symlink_dir = home_project.path().join("fuel-gauge");
+            home_project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+            init_repo(&repo_dir);
+            symlink(&src_dir, &symlink_dir).unwrap();
 
-            let actual = ModuleRenderer::new("directory")
-                .env("HOME", tmp_dir.path().to_str().unwrap())
+            let rendered = home_project
+                .renderer("directory")
+                .env("HOME", home_project.path().to_str().unwrap())
                 .path(symlink_dir)
                 .collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
 
-            assert_eq!(expected, actual);
-
-            tmp_dir.close()
+            assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m~/fuel-gauge\u{1b}[0m ""#);
         }
 
-        #[test]
+        #[rstest]
         #[ignore]
-        fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
-            let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
-            let dir = tmp_dir.path().join("src/fuel-gauge");
-            fs::create_dir_all(&dir)?;
-            init_repo(tmp_dir.path())?;
+        fn git_repo_in_home_directory_truncate_to_repo_true(home_project: Project) {
+            let dir = home_project.path().join("src/fuel-gauge");
+            home_project.create_directory("src/fuel-gauge");
+            init_repo(home_project.path());
 
-            let actual = ModuleRenderer::new("directory")
+            let rendered = home_project
+                .renderer("directory")
                 .config(toml::toml! {
                     [directory]
                     // `truncate_to_repo = true` should attempt to display the truncated path
@@ -598,15 +630,15 @@ mod tests {
                     truncation_length = 5
                 })
                 .path(dir)
-                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .env("HOME", home_project.path().to_str().unwrap())
                 .collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
 
-            assert_eq!(expected, actual);
-
-            tmp_dir.close()
+            assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m~/src/fuel-gauge\u{1b}[0m ""#);
         }
 
+        /// Not snapshotted: whether `/etc` is reported read-only, and whether
+        /// it canonicalizes to itself, both depend on the host, so the
+        /// expectation is composed rather than recorded.
         #[test]
         #[ignore]
         fn directory_in_root() {
@@ -621,55 +653,87 @@ mod tests {
         }
     }
 
+    /// The instant approximation must never `stat` for `$read_only`, unlike the full render.
+    #[cfg(not(target_os = "windows"))]
+    #[test]
+    fn the_instant_approximation_never_shows_read_only() {
+        use std::os::unix::fs::PermissionsExt;
+
+        if nix::unistd::Uid::effective().is_root() {
+            return;
+        }
+
+        let home = tempfile::tempdir().expect("a temporary directory");
+        let working = home.path().join("locked");
+        std::fs::create_dir_all(&working).expect("a working directory");
+        let mut permissions = std::fs::metadata(&working)
+            .expect("the directory was just created")
+            .permissions();
+        permissions.set_mode(0o555);
+        std::fs::set_permissions(&working, permissions).expect("removing the write bit");
+
+        let mut context = crate::test::default_context().set_config(toml::toml! {
+            [directory]
+            format = "[$read_only]($read_only_style)"
+        });
+        context.current_dir = working.clone();
+        context.logical_dir = working;
+        context
+            .env
+            .insert("HOME", home.path().display().to_string());
+
+        let full = Directory.full(&context).expect("a full render");
+        assert!(
+            !full.get_segments().join("").is_empty(),
+            "a genuinely read-only directory must show `$read_only` in the full render"
+        );
+
+        let instant = Directory.instant(&context);
+        assert!(
+            instant.is_none_or(|module| module.get_segments().join("").is_empty()),
+            "the instant approximation must never show `$read_only`, since answering it \
+             would need a `stat` that a first paint may not perform"
+        );
+    }
+
     #[test]
     fn home_directory_default_home_symbol() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m~\u{1b}[0m ""#);
     }
 
     #[test]
     fn home_directory_custom_home_symbol() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .config(toml::toml! {
                 [directory]
                 home_symbol = "🚀"
             })
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("🚀"))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m🚀\u{1b}[0m ""#);
     }
 
     #[test]
     fn home_directory_custom_home_symbol_subdirectories() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path(home_dir().unwrap().join("path/subpath"))
             .config(toml::toml! {
                 [directory]
                 home_symbol = "🚀"
             })
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("🚀/path/subpath"))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m🚀/path/subpath\u{1b}[0m ""#);
     }
 
     #[test]
     fn substituted_truncated_path() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path("/some/long/network/path/workspace/a/b/c/dev")
             .config(toml::toml! {
                 [directory]
@@ -679,19 +743,13 @@ mod tests {
                 "a/b/c" = "d"
             })
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("net/workspace/d/dev"))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mnet/workspace/d/dev\u{1b}[0m ""#);
     }
 
     #[test]
     fn substitution_order() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path("/path/to/sub")
             .config(toml::toml! {
                 [directory.substitutions]
@@ -699,18 +757,14 @@ mod tests {
                 "/to/sub" = "/wrong/order"
             })
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("/correct/order"))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m/correct/order\u{1b}[0m ""#);
     }
 
     #[test]
     fn strange_substitution() {
         let strange_sub = "/\\/;,!";
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .path("/foo/bar/regular/path")
             .config(toml::toml! {
                 [directory]
@@ -720,66 +774,42 @@ mod tests {
                 "regular" = strange_sub
             })
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("/foo/bar/{strange_sub}/path")))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m/foo/bar//\\/;,!/path\u{1b}[0m ""#);
+    }
+
+    /// Split into one test per starting path so a break in one doesn't hide the other.
+    fn render_with_regex_substitutions(path: &str) -> RenderedModule {
+        ModuleRenderer::new("directory")
+            .path(path)
+            .config(toml::toml! {
+                [directory]
+                format = "[$path]($style)"
+                substitutions = [
+                    { from = "~/Documents", to = "docs"},
+                    { from = "^/", to = "<root>/", regex = true},
+                    { from = "/", to = " | "},
+                    { from = "^<root>", to = "/", regex = true},
+                ]
+            })
+            .collect()
+            .into()
     }
 
     #[test]
-    fn regex_substitution() {
-        let actual = ModuleRenderer::new("directory")
-            .path("/var/log")
-            .config(toml::toml! {
-                [directory]
-                format = "[$path]($style)"
-                substitutions = [
-                    { from = "~/Documents", to = "docs"},
-                    { from = "^/", to = "<root>/", regex = true},
-                    { from = "/", to = " | "},
-                    { from = "^<root>", to = "/", regex = true},
-                ]
-            })
-            .collect();
-        let expected = Some(format!(
-            "{}",
-            Color::Cyan.bold().paint(convert_path_sep("/ | var | log"))
-        ));
+    fn regex_substitution_on_absolute_path() {
+        assert_snapshot!(render_with_regex_substitutions("/var/log"), @r#""\u{1b}[1;36m/ | var | log\u{1b}[0m""#);
+    }
 
-        assert_eq!(expected, actual);
-
-        let actual = ModuleRenderer::new("directory")
-            .path("~/Documents/var/log")
-            .config(toml::toml! {
-                [directory]
-                format = "[$path]($style)"
-                substitutions = [
-                    { from = "~/Documents", to = "docs"},
-                    { from = "^/", to = "<root>/", regex = true},
-                    { from = "/", to = " | "},
-                    { from = "^<root>", to = "/", regex = true},
-                ]
-            })
-            .collect();
-        let expected = Some(format!(
-            "{}",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("docs | var | log"))
-        ));
-
-        assert_eq!(expected, actual);
+    #[test]
+    fn regex_substitution_on_home_relative_path() {
+        assert_snapshot!(render_with_regex_substitutions("~/Documents/var/log"), @r#""\u{1b}[1;36mdocs | var | log\u{1b}[0m""#);
     }
 
     #[test]
     fn bad_regex_substitution_leaves_path_untouched() {
-        let path = "/var/log";
-        let actual = ModuleRenderer::new("directory")
-            .path(path)
+        let rendered = ModuleRenderer::new("directory")
+            .path("/var/log")
             .config(toml::toml! {
                 [directory]
                 format = "[$path]($style)"
@@ -789,81 +819,64 @@ mod tests {
                 ]
             })
             .collect();
-        let expected = Some(format!(
-            "{}",
-            Color::Cyan.bold().paint(convert_path_sep(path))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m/var/log\u{1b}[0m""#);
     }
 
-    #[test]
-    fn directory_in_home() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("starship");
-        fs::create_dir_all(&dir)?;
+    #[rstest]
+    fn directory_in_home(home_project: Project) {
+        home_project.create_directory("starship");
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("~/{name}/starship")))
-        ));
+        let rendered = home_project
+            .renderer("directory")
+            .path(home_project.path().join("starship"))
+            .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(redact_project_name(&home_project, rendered.into()), @r#""\u{1b}[1;36m~/[PROJECT]/starship\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn truncated_directory_in_home() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("engine/schematics");
-        fs::create_dir_all(&dir)?;
+    #[rstest]
+    fn truncated_directory_in_home(home_project: Project) {
+        home_project.create_directory("engine/schematics");
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("{name}/engine/schematics")))
-        ));
+        let rendered = home_project
+            .renderer("directory")
+            .path(home_project.path().join("engine/schematics"))
+            .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(redact_project_name(&home_project, rendered.into()), @r#""\u{1b}[1;36m[PROJECT]/engine/schematics\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn fish_directory_in_home() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("starship/schematics");
-        fs::create_dir_all(&dir)?;
+    /// The project's directory name is itself shortened, so redaction can't apply here.
+    #[rstest]
+    fn fish_directory_in_home(home_project: Project) {
+        home_project.create_directory("starship/schematics");
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = home_project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
                 fish_style_pwd_dir_length = 2
             })
-            .path(&dir)
+            .path(home_project.path().join("starship/schematics"))
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "~/{}/st/schematics",
-                name.split_at(3).0
+                home_project.directory_name().split_at(3).0
             )))
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
     fn root_directory() {
         // Note: We have disable the read_only settings here due to false positives when running
         // the tests on Windows as a non-admin.
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
                 read_only = ""
@@ -871,39 +884,32 @@ mod tests {
             })
             .path("/")
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("/"))
-        ));
 
-        assert_eq!(expected, actual);
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m/\u{1b}[0m ""#);
     }
 
     #[test]
-    fn truncated_directory_in_root() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join("thrusters/rocket");
-        fs::create_dir_all(&dir)?;
+    fn truncated_directory_in_root() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        project.create_directory("thrusters/rocket");
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("{name}/thrusters/rocket")))
-        ));
+        let rendered = project
+            .renderer("directory")
+            .path(project.path().join("thrusters/rocket"))
+            .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(redact_project_name(&project, rendered.into()), @r#""\u{1b}[1;36m[PROJECT]/thrusters/rocket\u{1b}[0m ""#);
     }
 
+    /// The project's absolute path isn't knowable ahead of time, so derive the expectation.
     #[test]
-    fn truncated_directory_config_large() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join("thrusters/rocket");
-        fs::create_dir_all(&dir)?;
+    fn truncated_directory_config_large() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        project.create_directory("thrusters/rocket");
+        let dir = project.path().join("thrusters/rocket");
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 100
@@ -919,16 +925,16 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
-    fn fish_style_directory_config_large() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join("thrusters/rocket");
-        fs::create_dir_all(&dir)?;
+    fn fish_style_directory_config_large() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        project.create_directory("thrusters/rocket");
+        let dir = project.path().join("thrusters/rocket");
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
@@ -946,40 +952,33 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
-    fn truncated_directory_config_small() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join("rocket");
-        fs::create_dir_all(&dir)?;
+    fn truncated_directory_config_small() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        project.create_directory("rocket");
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 2
             })
-            .path(dir)
+            .path(project.path().join("rocket"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("{name}/rocket")))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(redact_project_name(&project, rendered.into()), @r#""\u{1b}[1;36m[PROJECT]/rocket\u{1b}[0m ""#);
     }
 
     #[test]
-    fn fish_directory_config_small() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let dir = tmp_dir.path().join("thrusters/rocket");
-        fs::create_dir_all(&dir)?;
+    fn fish_directory_config_small() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        project.create_directory("thrusters/rocket");
+        let dir = project.path().join("thrusters/rocket");
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 2
@@ -996,110 +995,105 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
-    #[test]
-    #[ignore]
-    fn git_repo_root() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        fs::create_dir(&repo_dir)?;
-        init_repo(&repo_dir).unwrap();
+    /// One case per reference backend, so an unrecognized one is named by the failing test.
+    #[rstest]
+    fn directory_in_repository_fixture_contracts_to_repository_root(
+        #[values(FixtureProvider::GIT, FixtureProvider::GIT_REFTABLE)] provider: FixtureProvider,
+    ) {
+        let repository = Project::from_repository_fixture(provider);
+        repository.create_directory("meters/fuel-gauge");
 
-        let actual = ModuleRenderer::new("directory").path(repo_dir).collect();
-        let expected = Some(format!(
+        let rendered = repository
+            .renderer("directory")
+            .path(repository.path().join("meters/fuel-gauge"))
+            .collect();
+
+        let expected = RenderedModule::Styled(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls"))
+            Color::Cyan.bold().paint(convert_path_sep(&format!(
+                "{}/meters/fuel-gauge",
+                repository.directory_name()
+            )))
         ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_eq!(RenderedModule::from(rendered), expected);
     }
 
-    #[test]
+    #[rstest]
     #[ignore]
-    fn directory_in_git_repo() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let dir = repo_dir.join("src");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn git_repo_root(project: Project) {
+        let repo_dir = project.path().join("rocket-controls");
+        project.create_directory("rocket-controls");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls/src"))
-        ));
+        let rendered = project.renderer("directory").path(repo_dir).collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls\u{1b}[0m ""#);
     }
 
-    #[test]
+    #[rstest]
     #[ignore]
-    fn truncated_directory_in_git_repo() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let dir = repo_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn directory_in_git_repo(project: Project) {
+        let repo_dir = project.path().join("rocket-controls");
+        project.create_directory("rocket-controls/src");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
-        ));
+        let rendered = project
+            .renderer("directory")
+            .path(repo_dir.join("src"))
+            .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls/src\u{1b}[0m ""#);
     }
 
-    #[test]
+    #[rstest]
     #[ignore]
-    fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let dir = repo_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn truncated_directory_in_git_repo(project: Project) {
+        let repo_dir = project.path().join("rocket-controls");
+        project.create_directory("rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
+            .path(repo_dir.join("src/meters/fuel-gauge"))
+            .collect();
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36msrc/meters/fuel-gauge\u{1b}[0m ""#);
+    }
+
+    #[rstest]
+    #[ignore]
+    fn directory_in_git_repo_truncate_to_repo_false(project: Project) {
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
             })
-            .path(dir)
+            .path(repo_dir.join("src/meters/fuel-gauge"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
-                "above-repo/rocket-controls/src/meters/fuel-gauge"
-            ))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mabove-repo/rocket-controls/src/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let dir = repo_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn fish_path_directory_in_git_repo_truncate_to_repo_false() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -1107,30 +1101,29 @@ mod tests {
                 truncate_to_repo = false
                 fish_style_pwd_dir_length = 1
             })
-            .path(dir)
+            .path(repo_dir.join("src/meters/fuel-gauge"))
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, &project.path().to_slash_lossy(), "")
             )))
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
     #[ignore]
-    fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let dir = repo_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn fish_path_directory_in_git_repo_truncate_to_repo_true() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1138,174 +1131,134 @@ mod tests {
                 truncate_to_repo = true
                 fish_style_pwd_dir_length = 1
             })
-            .path(dir)
+            .path(repo_dir.join("src/meters/fuel-gauge"))
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(1, &project.path().join("above-repo").to_slash_lossy(), "")
             )))
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
     #[ignore]
-    fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let dir = repo_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn directory_in_git_repo_truncate_to_repo_true() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
                 truncation_length = 5
                 truncate_to_repo = true
             })
-            .path(dir)
+            .path(repo_dir.join("src/meters/fuel-gauge"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls/src/meters/fuel-gauge"))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls/src/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn symlinked_git_repo_root() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
-        fs::create_dir(&repo_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+    fn symlinked_git_repo_root() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("rocket-controls");
+        let symlink_dir = project.path().join("rocket-controls-symlink");
+        project.create_directory("rocket-controls");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls-symlink"))
-        ));
+        let rendered = project.renderer("directory").path(symlink_dir).collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls-symlink\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn directory_in_symlinked_git_repo() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let src_dir = repo_dir.join("src");
-        let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+    fn directory_in_symlinked_git_repo() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("rocket-controls");
+        let symlink_dir = project.path().join("rocket-controls-symlink");
+        project.create_directory("rocket-controls/src");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
-            .path(symlink_src_dir)
+        let rendered = project
+            .renderer("directory")
+            .path(symlink_dir.join("src"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls-symlink/src"))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls-symlink/src\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let src_dir = repo_dir.join("src/meters/fuel-gauge");
-        let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+    fn truncated_directory_in_symlinked_git_repo() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("rocket-controls");
+        let symlink_dir = project.path().join("rocket-controls-symlink");
+        project.create_directory("rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
-            .path(symlink_src_dir)
+        let rendered = project
+            .renderer("directory")
+            .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36msrc/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let src_dir = repo_dir.join("src/meters/fuel-gauge");
-        let symlink_dir = tmp_dir
+    fn directory_in_symlinked_git_repo_truncate_to_repo_false() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        let symlink_dir = project
             .path()
             .join("above-repo")
             .join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
             })
-            .path(symlink_src_dir)
+            .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
-                "above-repo/rocket-controls-symlink/src/meters/fuel-gauge"
-            ))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mabove-repo/rocket-controls-symlink/src/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let src_dir = repo_dir.join("src/meters/fuel-gauge");
-        let symlink_dir = tmp_dir
+    fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        let symlink_dir = project
             .path()
             .join("above-repo")
             .join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -1313,36 +1266,34 @@ mod tests {
                 truncate_to_repo = false
                 fish_style_pwd_dir_length = 1
             })
-            .path(symlink_src_dir)
+            .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, &project.path().to_slash_lossy(), "")
             )))
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
     #[ignore]
-    fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let src_dir = repo_dir.join("src/meters/fuel-gauge");
-        let symlink_dir = tmp_dir
+    fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        let symlink_dir = project
             .path()
             .join("above-repo")
             .join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1350,66 +1301,57 @@ mod tests {
                 truncate_to_repo = true
                 fish_style_pwd_dir_length = 1
             })
-            .path(symlink_src_dir)
+            .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(1, &project.path().join("above-repo").to_slash_lossy(), "")
             )))
         ));
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
     #[ignore]
-    fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
-        let src_dir = repo_dir.join("src/meters/fuel-gauge");
-        let symlink_dir = tmp_dir
+    fn directory_in_symlinked_git_repo_truncate_to_repo_true() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above-repo").join("rocket-controls");
+        let symlink_dir = project
             .path()
             .join("above-repo")
             .join("rocket-controls-symlink");
-        let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(src_dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&repo_dir, &symlink_dir)?;
+        project.create_directory("above-repo/rocket-controls/src/meters/fuel-gauge");
+        init_repo(&repo_dir);
+        symlink(&repo_dir, &symlink_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
                 truncation_length = 5
                 truncate_to_repo = true
             })
-            .path(symlink_src_dir)
+            .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
-                "rocket-controls-symlink/src/meters/fuel-gauge"
-            ))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls-symlink/src/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
     #[ignore]
-    fn symlinked_directory_in_git_repo() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("rocket-controls");
-        let dir = repo_dir.join("src");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
-        symlink(&dir, repo_dir.join("src/loop"))?;
+    fn symlinked_directory_in_git_repo() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("rocket-controls");
+        project.create_directory("rocket-controls/src");
+        init_repo(&repo_dir);
+        symlink(repo_dir.join("src"), repo_dir.join("src/loop")).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1418,20 +1360,13 @@ mod tests {
             })
             .path(repo_dir.join("src/loop/loop"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("rocket-controls/src/loop/loop"))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mrocket-controls/src/loop/loop\u{1b}[0m ""#);
     }
 
     #[test]
     fn truncation_symbol_truncated_root() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
@@ -1439,18 +1374,13 @@ mod tests {
             })
             .path(Path::new("/a/four/element/path"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("…/four/element/path"))
-        ));
-        assert_eq!(expected, actual);
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m…/four/element/path\u{1b}[0m ""#);
     }
 
     #[test]
     fn truncation_symbol_not_truncated_root() {
-        let actual = ModuleRenderer::new("directory")
+        let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 4
@@ -1458,113 +1388,84 @@ mod tests {
             })
             .path(Path::new("/a/four/element/path"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("/a/four/element/path"))
-        ));
-        assert_eq!(expected, actual);
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m/a/four/element/path\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn truncation_symbol_truncated_home() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("a/subpath");
-        fs::create_dir_all(&dir)?;
+    #[rstest]
+    fn truncation_symbol_truncated_home(home_project: Project) {
+        home_project.create_directory("a/subpath");
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = home_project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
-            .path(dir)
+            .path(home_project.path().join("a/subpath"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("…/{name}/a/subpath")))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(redact_project_name(&home_project, rendered.into()), @r#""\u{1b}[1;36m…/[PROJECT]/a/subpath\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn truncation_symbol_not_truncated_home() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("a/subpath");
-        fs::create_dir_all(&dir)?;
+    #[rstest]
+    fn truncation_symbol_not_truncated_home(home_project: Project) {
+        home_project.create_directory("a/subpath");
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = home_project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncate_to_repo = false // Necessary if homedir is a git repo
                 truncation_length = 4
                 truncation_symbol = "…/"
             })
-            .path(dir)
+            .path(home_project.path().join("a/subpath"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("~/{name}/a/subpath")))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(redact_project_name(&home_project, rendered.into()), @r#""\u{1b}[1;36m~/[PROJECT]/a/subpath\u{1b}[0m ""#);
     }
 
     #[test]
-    fn truncation_symbol_truncated_in_repo() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above").join("repo");
-        let dir = repo_dir.join("src/sub/path");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn truncation_symbol_truncated_in_repo() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above").join("repo");
+        project.create_directory("above/repo/src/sub/path");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
-            .path(dir)
+            .path(repo_dir.join("src/sub/path"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/src/sub/path"))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m…/src/sub/path\u{1b}[0m ""#);
     }
 
     #[test]
-    fn truncation_symbol_not_truncated_in_repo() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above").join("repo");
-        let dir = repo_dir.join("src/sub/path");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn truncation_symbol_not_truncated_in_repo() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above").join("repo");
+        project.create_directory("above/repo/src/sub/path");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 5
                 truncation_symbol = "…/"
                 truncate_to_repo = true
             })
-            .path(dir)
+            .path(repo_dir.join("src/sub/path"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("…/repo/src/sub/path"))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m…/repo/src/sub/path\u{1b}[0m ""#);
     }
 
     #[test]
@@ -1624,60 +1525,41 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    #[test]
-    fn use_logical_path_true_should_render_logical_dir_path() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("src/meters/fuel-gauge");
-        fs::create_dir_all(&path)?;
-        let logical_path = "Logical:/fuel-gauge";
+    #[rstest]
+    fn use_logical_path_true_should_render_logical_dir_path(project: Project) {
+        project.create_directory("src/meters/fuel-gauge");
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("Logical:/fuel-gauge"))
-        ));
-
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 use_logical_path = true
                 truncation_length = 3
             })
-            .path(path)
-            .logical_path(logical_path)
+            .path(project.path().join("src/meters/fuel-gauge"))
+            .logical_path("Logical:/fuel-gauge")
             .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36mLogical:/fuel-gauge\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn use_logical_path_false_should_render_current_dir_path() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("src/meters/fuel-gauge");
-        fs::create_dir_all(&path)?;
-        let logical_path = "Logical:/fuel-gauge";
+    #[rstest]
+    fn use_logical_path_false_should_render_current_dir_path(project: Project) {
+        project.create_directory("src/meters/fuel-gauge");
 
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
-        ));
-
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
                 truncation_length = 3
             })
-            .path(path)
-            .logical_path(logical_path) // logical_path should be ignored
+            .path(project.path().join("src/meters/fuel-gauge"))
+            // The logical path should be ignored.
+            .logical_path("Logical:/fuel-gauge")
             .collect();
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36msrc/meters/fuel-gauge\u{1b}[0m ""#);
     }
 
     #[test]
@@ -1739,41 +1621,35 @@ mod tests {
     }
 
     #[test]
-    fn highlight_git_root_dir() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above").join("repo");
-        let dir = repo_dir.join("src/sub/path");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn highlight_git_root_dir() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above").join("repo");
+        project.create_directory("above/repo/src/sub/path");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 5
                 truncate_to_repo = true
                 repo_root_style = "bold red"
             })
-            .path(dir)
+            .path(repo_dir.join("src/sub/path"))
             .collect();
-        let expected = Some(format!(
-            "{}{}repo{} ",
-            Color::Cyan.bold().prefix(),
-            Color::Red.prefix(),
-            Color::Cyan.paint(convert_path_sep("/src/sub/path"))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[1;36m\u{1b}[31mrepo\u{1b}[36m/src/sub/path\u{1b}[0m ""#);
     }
 
     #[test]
-    fn highlight_git_root_dir_config_change() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above").join("repo");
-        let dir = repo_dir.join("src/sub/path");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn highlight_git_root_dir_config_change() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above").join("repo");
+        project.create_directory("above/repo/src/sub/path");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 5
@@ -1782,46 +1658,40 @@ mod tests {
                 repo_root_style = "green"
                 before_repo_root_style = "blue"
             })
-            .path(dir)
+            .path(repo_dir.join("src/sub/path"))
             .collect();
-        let expected = Some(format!(
-            "{}{}{}repo{} ",
-            Color::Blue.prefix(),
-            convert_path_sep("…/above/"),
-            Color::Green.prefix(),
-            Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
-        ));
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""\u{1b}[34m…/above/\u{1b}[32mrepo\u{1b}[1;36m/src/sub/path\u{1b}[0m ""#);
     }
 
+    /// The project's absolute path isn't knowable ahead of time, so it can't be snapshotted.
     #[test]
-    fn highlight_git_root_dir_zero_truncation_length() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let repo_dir = tmp_dir.path().join("above").join("repo");
-        let dir = repo_dir.join("src/sub/path");
-        fs::create_dir_all(&dir)?;
-        init_repo(&repo_dir).unwrap();
+    fn highlight_git_root_dir_zero_truncation_length() {
+        let project = Project::inside(Path::new(KNOWN_ROOT));
+        let repo_dir = project.path().join("above").join("repo");
+        project.create_directory("above/repo/src/sub/path");
+        init_repo(&repo_dir);
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 truncation_length = 0
                 truncate_to_repo = false
                 repo_root_style = "green"
             })
-            .path(dir)
+            .path(repo_dir.join("src/sub/path"))
             .collect();
         let expected = Some(format!(
             "{}{}repo{} ",
             Color::Cyan.bold().paint(convert_path_sep(
-                tmp_dir.path().join("above/").to_str().unwrap()
+                project.path().join("above/").to_str().unwrap()
             )),
             Color::Green.prefix(),
             Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
         ));
+
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
@@ -1867,43 +1737,32 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    #[test]
-    fn use_os_path_sep_false() -> io::Result<()> {
-        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
-        let dir = tmp_dir.path().join("starship");
-        fs::create_dir_all(&dir)?;
+    #[rstest]
+    fn use_os_path_sep_false(home_project: Project) {
+        home_project.create_directory("starship");
 
-        let actual = ModuleRenderer::new("directory")
+        let rendered = home_project
+            .renderer("directory")
             .config(toml::toml! {
                 [directory]
                 use_os_path_sep = false
             })
-            .path(dir)
+            .path(home_project.path().join("starship"))
             .collect();
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(format!("~/{name}/starship"))
-        ));
 
-        assert_eq!(expected, actual);
-        tmp_dir.close()
+        assert_snapshot!(redact_project_name(&home_project, rendered.into()), @r#""\u{1b}[1;36m~/[PROJECT]/starship\u{1b}[0m ""#);
     }
 
-    #[test]
-    fn parent_and_sub_git_repo_are_in_same_name_folder() {
-        assert_eq!(
-            before_root_dir("~/user/gitrepo/gitrepo", "gitrepo"),
-            "~/user/gitrepo/".to_string()
-        );
-
-        assert_eq!(
-            before_root_dir("~/user/gitrepo-diff/gitrepo", "gitrepo"),
-            "~/user/gitrepo-diff/".to_string()
-        );
-
-        assert_eq!(
-            before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
-            "~/user/gitrepo-diff/gitrepo".to_string()
-        );
+    /// A repository nested in a same-named directory must not confuse the search.
+    #[rstest]
+    #[case::same_name_parent("~/user/gitrepo/gitrepo", "gitrepo", "~/user/gitrepo/")]
+    #[case::similar_name_parent("~/user/gitrepo-diff/gitrepo", "gitrepo", "~/user/gitrepo-diff/")]
+    #[case::absent_root_dir("~/user/gitrepo-diff/gitrepo", "aaa", "~/user/gitrepo-diff/gitrepo")]
+    fn parent_and_sub_git_repo_are_in_same_name_folder(
+        #[case] path: &str,
+        #[case] root_dir: &str,
+        #[case] expected: &str,
+    ) {
+        assert_eq!(before_root_dir(path, root_dir), expected.to_string());
     }
 }

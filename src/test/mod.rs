@@ -317,9 +317,34 @@ impl Project {
         }
     }
 
+    /// Creates a project whose directory is a freshly materialized version
+    /// control checkout, as produced by [`fixture_repo`].
+    ///
+    /// Pair this with `#[rstest]`'s `#[values(..)]` over [`FixtureProvider`] to
+    /// get one independently named, independently reported test per backend.
+    pub fn from_repository_fixture(provider: FixtureProvider) -> Self {
+        Self {
+            directory: fixture_repo(provider)
+                .unwrap_or_else(|error| panic!("failed to create a {provider:?} fixture: {error}")),
+        }
+    }
+
     /// The absolute path of this project's directory.
     pub fn path(&self) -> &Path {
         self.directory.path()
+    }
+
+    /// The final component of this project's directory name.
+    ///
+    /// Temporary directories are randomly named, so tests whose expected output
+    /// embeds the project's own name have to read it back rather than hardcode
+    /// it.
+    pub fn directory_name(&self) -> String {
+        self.path()
+            .file_name()
+            .expect("a temporary project directory always has a final component")
+            .to_string_lossy()
+            .into_owned()
     }
 
     /// Creates an empty file at `relative_path`, together with any missing
