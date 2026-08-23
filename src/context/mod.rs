@@ -1,5 +1,6 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
+use crate::escaping::Destination;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
@@ -251,6 +252,14 @@ impl<'a> Context<'a> {
             claude_code_data: None,
             _marker: PhantomData,
         }
+    }
+
+    /// Where the prompt rendered from this context is going.
+    ///
+    /// Defaults to the prompt variable of [`Self::shell`], because that is
+    /// where every prompt starship has ever printed goes.
+    pub fn destination(&self) -> Destination {
+        Destination::shell_prompt_variable(self.shell)
     }
 
     /// Sets the context config, overwriting the existing config
