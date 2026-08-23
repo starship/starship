@@ -179,7 +179,7 @@ elevate_priv() {
 		info "sudo or doas."
 		exit 1
 	fi
-	if ! sudo -v or doas; then
+	if ! sudo -v && ! doas; then
 		error "Superuser not granted, aborting installation"
 		exit 1
 	fi
