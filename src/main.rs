@@ -10,7 +10,11 @@ use clap_complete::generate;
 use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
-use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
+use starship::stream::LatencyEstimates;
+use starship::{
+    FrameEncoding, StreamingTransport, bug_report, configure, init, logger, num_rayon_threads,
+    print, shadow, stream,
+};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -136,6 +140,28 @@ enum Commands {
         #[clap(flatten)]
         properties: Properties,
     },
+    /// Prints the prompt as a stream of frames: an immediate first paint,
+    /// then incremental repaints as slow modules resolve
+    Stream {
+        /// Stream the right prompt (instead of the standard left prompt)
+        #[clap(long)]
+        right: bool,
+        /// What earlier prompts of this shell session measured each module to
+        /// cost, as the payload of the last TIMING frame. Chooses how repaints
+        /// are grouped and nothing else; a shell that keeps none of it, or
+        /// hands back something malformed, gets a prompt that draws to a fixed
+        /// window instead.
+        #[clap(long, default_value = "", value_parser = LatencyEstimates::parse_argument)]
+        timings: LatencyEstimates,
+        /// Shell transport for refinements. `ble` enables the ble.sh hook in bash.
+        #[clap(long, value_enum, default_value_t)]
+        transport: StreamingTransport,
+        /// Event encoding. `json` emits one structured event per line.
+        #[clap(long, value_enum, default_value_t)]
+        frames: FrameEncoding,
+        #[clap(flatten)]
+        properties: Properties,
+    },
     /// Generate random session key
     Session,
     /// Prints the statusline with a specific profile
@@ -237,6 +263,22 @@ fn main() {
                 (_, _, _) => Target::Main,
             };
             print::prompt(properties, target);
+        }
+        Commands::Stream {
+            right,
+            timings,
+            transport,
+            frames,
+            properties,
+        } => {
+            let target = if right { Target::Right } else { Target::Main };
+            // A closed pipe just means the shell stopped wanting this prompt.
+            if let Err(error) = stream::stream(properties, target, &timings, transport, frames)
+                && !error.is_broken_pipe()
+            {
+                eprintln!("Error streaming the prompt: {error}");
+                std::process::exit(1);
+            }
         }
         Commands::Module {
             name,
