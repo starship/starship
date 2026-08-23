@@ -113,6 +113,13 @@ impl Pty {
                 Err(error) if error.kind() == ErrorKind::WouldBlock => {
                     thread::sleep(Duration::from_millis(10))
                 }
+                // Linux, unlike macOS, answers a read on the master with EIO
+                // rather than EOF once the shell has exited and closed its
+                // side of the pty -- the same "nothing more is coming" signal
+                // as `Ok(0)`, not a real failure.
+                Err(error) if error.raw_os_error() == Some(nix::errno::Errno::EIO as i32) => {
+                    return true;
+                }
                 Err(error) => panic!("failed to read shell output: {error}"),
             }
         }

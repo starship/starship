@@ -138,51 +138,6 @@ jobs:
             exit 1
           fi
 
-  streaming_shells:
-    name: Streaming Shells
-    needs: cargo_check
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Setup | Rust
-        run: rustup toolchain install stable --profile minimal --no-self-update
-
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
-
-      - name: Setup | Shells
-        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make zsh
-
-      - name: Setup | ble.sh
-        run: |
-          git clone --depth 1 --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
-          make -C "$RUNNER_TEMP/ble.sh"
-
-      - name: Build | Nushell main
-        run: |
-          git init "$RUNNER_TEMP/nushell"
-          git -C "$RUNNER_TEMP/nushell" remote add origin https://github.com/nushell/nushell.git
-          git -C "$RUNNER_TEMP/nushell" fetch --depth 1 origin 5d80505557115920993296600f57233c30a4248b
-          git -C "$RUNNER_TEMP/nushell" checkout --detach FETCH_HEAD
-          cargo build --locked --manifest-path "$RUNNER_TEMP/nushell/Cargo.toml" --bin nu
-        env:
-          RUSTFLAGS: ""
-
-      - name: Install cargo-nextest
-        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5 # v2.82.0
-        with:
-          tool: cargo-nextest@0.9.140
-
-      - name: Test
-        run: cargo nextest run --all-features --locked --test init_async --run-ignored all --test-threads 1
-        env:
-          BASH: /usr/bin/bash
-          BLE_SH: ${{ runner.temp }}/ble.sh/out/ble.sh
-          NUSHELL_MAIN: ${{ runner.temp }}/nushell/target/debug/nu
-
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
@@ -237,6 +192,31 @@ jobs:
           winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
+      # The pseudo-terminal shell tests (tests/init_async.rs) need real shell
+      # binaries and drive them from an actual terminal, so they only run on
+      # one matrix leg — running them across every OS x Rust channel would be
+      # both wasteful and, on Windows/macOS runners, impossible regardless.
+      - name: Setup | Streaming shells
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make zsh
+
+      - name: Setup | ble.sh
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          git clone --depth 1 --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
+          make -C "$RUNNER_TEMP/ble.sh"
+
+      - name: Build | Nushell main
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          git init "$RUNNER_TEMP/nushell"
+          git -C "$RUNNER_TEMP/nushell" remote add origin https://github.com/nushell/nushell.git
+          git -C "$RUNNER_TEMP/nushell" fetch --depth 1 origin 5d80505557115920993296600f57233c30a4248b
+          git -C "$RUNNER_TEMP/nushell" checkout --detach FETCH_HEAD
+          cargo build --locked --manifest-path "$RUNNER_TEMP/nushell/Cargo.toml" --bin nu
+        env:
+          RUSTFLAGS: ""
+
       # Run the ignored tests that expect the above setup.
       # `--run-ignored all` is nextest's spelling of `--include-ignored`.
       #
@@ -253,7 +233,7 @@ jobs:
           --all-features
           --locked
           --workspace
-          -E 'not binary(init_async)'
+          -E '${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all()' || 'not binary(init_async)' }}'
           --lcov --output-path lcov.info
           --run-ignored all"
         env:
@@ -261,6 +241,9 @@ jobs:
           # Snapshot mismatches must fail the run rather than writing
           # `.snap.new` files nobody will look at on a CI runner.
           INSTA_UPDATE: "no"
+          BASH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/bash' || '' }}
+          BLE_SH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
+          NUSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
 
       - name: Build | Test [Nightly]
         if: matrix.rust == 'nightly'
