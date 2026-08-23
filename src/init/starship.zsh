@@ -51,11 +51,15 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT="${#jobstates[*]}"
+
+    starship_stream_start
 }
 
 # Runs after the user submits the command line, but before it is executed and
 # only if there's an actual command to run
 prompt_starship_preexec() {
+    # Stop the stream now — the line it was rendering into is about to be replaced.
+    starship_stream_stop
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 }
 
@@ -64,8 +68,121 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_starship_precmd
 add-zsh-hook preexec prompt_starship_preexec
 
+add-zsh-hook zshexit starship_stream_stop
+
+STARSHIP_STREAM_DESCRIPTOR=
+STARSHIP_STREAM_PROCESS=
+STARSHIP_STREAM_COMPLETE=
+STARSHIP_TIMINGS=
+
+starship_prompt_arguments() {
+    reply=(
+        --terminal-width="$COLUMNS"
+        --keymap="${KEYMAP:-}"
+        --status="${STARSHIP_CMD_STATUS:-}"
+        --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}"
+        --cmd-duration="${STARSHIP_DURATION:-}"
+        --jobs="${STARSHIP_JOBS_COUNT:-0}"
+    )
+}
+
+starship_read_frame() {
+    local descriptor=$1 kind first second
+    IFS= read -r -d '' -u "$descriptor" kind &&
+        IFS= read -r -d '' -u "$descriptor" first &&
+        IFS= read -r -d '' -u "$descriptor" second || return
+    reply=("$kind" "$first" "$second")
+}
+
+starship_stream_stop() {
+    if [[ -n $STARSHIP_STREAM_DESCRIPTOR ]]; then
+        zle -F "$STARSHIP_STREAM_DESCRIPTOR" 2>/dev/null
+        { exec {STARSHIP_STREAM_DESCRIPTOR}<&- } 2>/dev/null
+        STARSHIP_STREAM_DESCRIPTOR=
+    fi
+    if [[ -n $STARSHIP_STREAM_PROCESS ]]; then
+        kill "$STARSHIP_STREAM_PROCESS" 2>/dev/null
+        STARSHIP_STREAM_PROCESS=
+    fi
+    STARSHIP_STREAM_COMPLETE=
+}
+
+starship_editor_is_busy() {
+    [[ ${WIDGET-} == *complete* || ${WIDGET-} == *search* ||
+       ${LASTWIDGET-} == *complete* || ${LASTWIDGET-} == *search* ]]
+}
+
+starship_editor_is_at_prompt() {
+    [[ -z ${BUFFER-}${PREDISPLAY-}${POSTDISPLAY-} ]]
+}
+
+starship_apply_prompt() {
+    local prompt=$1 repaint=$2
+    STARSHIP_PROMPT=$prompt
+    starship_editor_is_busy && return
+
+    if [[ -n $repaint ]] && starship_editor_is_at_prompt; then
+        zle -I
+        print -rn -- "$repaint"
+    else
+        zle reset-prompt
+    fi
+}
+
+starship_stream_readable() {
+    if [[ -n ${2-} ]] || ! starship_read_frame "$1"; then
+        local complete=$STARSHIP_STREAM_COMPLETE
+        starship_stream_stop
+        if [[ ! $complete ]]; then
+            starship_render_synchronously
+            zle reset-prompt
+        fi
+        return
+    fi
+
+    case $reply[1] in
+        PATCH)
+            starship_apply_prompt "$reply[2]" "$reply[3]"
+            ;;
+        COMPLETE)
+            STARSHIP_TIMINGS=$reply[2]
+            STARSHIP_STREAM_COMPLETE=1
+            ;;
+    esac
+}
+
+starship_render_synchronously() {
+    starship_stream_stop
+    starship_prompt_arguments
+    local -a arguments=("${reply[@]}")
+    STARSHIP_PROMPT="$(::STARSHIP:: prompt "${arguments[@]}")"
+    STARSHIP_RIGHT_PROMPT="$(::STARSHIP:: prompt --right "${arguments[@]}")"
+}
+
+starship_stream_start() {
+    starship_stream_stop
+    starship_prompt_arguments
+    local -a arguments=("${reply[@]}")
+
+    STARSHIP_RIGHT_PROMPT="$(::STARSHIP:: prompt --right "${arguments[@]}")"
+    exec {STARSHIP_STREAM_DESCRIPTOR}< <(::STARSHIP:: stream "${arguments[@]}" --timings="$STARSHIP_TIMINGS" 2>/dev/null)
+
+    if [[ -z $STARSHIP_STREAM_DESCRIPTOR ]] ||
+       ! starship_read_frame "$STARSHIP_STREAM_DESCRIPTOR" ||
+       [[ $reply[1] != READY ]]; then
+        starship_render_synchronously
+        return
+    fi
+
+    STARSHIP_PROMPT=$reply[2]
+    STARSHIP_STREAM_PROCESS=$reply[3]
+    zle -F "$STARSHIP_STREAM_DESCRIPTOR" starship_stream_readable
+}
+
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
+    # Keymap changes require a new render.
+    starship_stream_start
     zle reset-prompt
 }
 
@@ -86,6 +203,22 @@ else
     zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
 fi
 
+if (( ${+functions[TRAPWINCH]} )); then
+    functions[starship_preserved_winch_handler]=$functions[TRAPWINCH]
+elif [[ -n ${traps[WINCH]-} ]]; then
+    eval "starship_preserved_winch_handler() { ${traps[WINCH]} }"
+fi
+
+TRAPWINCH() {
+    if (( ${+functions[starship_preserved_winch_handler]} )); then
+        starship_preserved_winch_handler "$@"
+    fi
+    if zle; then
+        starship_stream_start
+        zle reset-prompt
+    fi
+}
+
 export STARSHIP_SHELL="zsh"
 
 # Set up the session key that will be used to store logs
@@ -97,6 +230,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$('::STARSHIP::' prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$('::STARSHIP::' prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+# A variable, not a command substitution, so a redraw re-expands the stored prompt without rerunning starship (needs promptsubst).
+PROMPT='${STARSHIP_PROMPT}'
+RPROMPT='${STARSHIP_RIGHT_PROMPT}'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
