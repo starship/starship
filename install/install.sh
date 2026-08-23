@@ -172,7 +172,7 @@ usage() {
 }
 
 elevate_priv() {
-	if ! has sudo or doas; then
+	if ! has sudo && ! doas; then
 		error 'Could not find the command "sudo" or "doas", needed to get permissions for install.'
 		info "If you are on Windows, please run your shell as an administrator, then"
 		info "rerun this script. Otherwise, please run this script as root, or install"
