@@ -378,13 +378,13 @@ format = '$all$directory$character'
 Starship can draw available modules first and refine the prompt as slower
 modules resolve. The final prompt is identical to a synchronous render.
 
-| Shell | Refinement |
-| --- | --- |
-| zsh | Changed cells are repainted in place. |
-| fish | The complete prompt is replaced. |
-| Nushell main | The complete prompt is replaced with its unreleased async prompt API. |
-| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced. |
-| Stock Bash and other shells | The prompt remains synchronous. |
+| Shell                                                    | Refinement                                                            |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| zsh                                                      | Changed cells are repainted in place.                                 |
+| fish                                                     | The complete prompt is replaced.                                      |
+| Nushell main                                             | The complete prompt is replaced with its unreleased async prompt API. |
+| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced.                                      |
+| Stock Bash and other shells                              | The prompt remains synchronous.                                       |
 
 `bus` batches width-changing refinements for up to its configured delay;
 `adaptive` places those batches using timings from the current shell session.
@@ -450,20 +450,35 @@ bus = 100
 adaptive = true
 ```
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `enabled` | `true` | Enable streaming refinements. |
-| `bus` | `100` | Maximum grouping delay in milliseconds. |
-| `adaptive` | `true` | Group refinements from session timings. |
+| Option     | Default | Description                                                                 |
+| ---------- | ------- | --------------------------------------------------------------------------- |
+| `enabled`  | `true`  | Enables streaming and dynamic refreshes on supported shells.               |
+| `bus`      | `100`   | Maximum delay, in milliseconds, for a batch of width-changing refinements. |
+| `adaptive` | `true`  | Uses timings from the current shell session to schedule refinement batches. |
 
 ### Refreshing dynamic modules
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `time` | `1000` | Clock refresh interval in milliseconds. |
-| `battery` | `30000` | Battery refresh interval in milliseconds. |
-| `memory_usage` | `5000` | Memory refresh interval in milliseconds. |
-| `localip` | `30000` | Address refresh interval in milliseconds. |
+`time`, `battery`, `memory_usage`, and `localip` can change while a prompt is
+on screen. Configure their refresh intervals under `[async.dynamic]`; a module
+refreshes only when it is enabled and appears in the prompt's format.
+
+```toml
+# ~/.config/starship.toml
+
+[time]
+disabled = false
+
+[async.dynamic]
+time = 1000
+memory_usage = 5000
+```
+
+| Option         | Default | Description                             |
+| -------------- | ------- | --------------------------------------- |
+| `time`         | `1000`  | Clock refresh interval in milliseconds. |
+| `battery`      | `30000` | Battery refresh interval in milliseconds. |
+| `memory_usage` | `5000`  | Memory refresh interval in milliseconds. |
+| `localip`      | `30000` | Address refresh interval in milliseconds. |
 
 Intervals must be whole milliseconds from `1` through `86_400_000` (one day).
 An invalid value is ignored and its default is retained. To stop a dynamic
