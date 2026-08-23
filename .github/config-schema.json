@@ -840,7 +840,7 @@
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
-        "format": "[$symbol$number]($style) ",
+        "format": "($symbol$number )($style)",
         "threshold": 1,
         "symbol_threshold": 1,
         "number_threshold": 2,
@@ -4042,7 +4042,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol$number]($style) "
+          "default": "($symbol$number )($style)"
         },
         "threshold": {
           "type": "integer",
