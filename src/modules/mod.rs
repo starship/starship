@@ -1,4 +1,3 @@
-// While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod azure;
 mod buf;
@@ -119,7 +118,70 @@ pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 use crate::config::ModuleConfig;
 use crate::context::{Context, Detected, Shell};
 use crate::module::Module;
-use std::time::Instant;
+use std::time::{Duration, Instant};
+
+/// How a module behaves over time, and how expensive it is to produce.
+///
+/// The prompt is rendered incrementally: cheap modules are painted immediately
+/// and expensive ones stream in afterwards. Every module therefore has to
+/// declare which of these it is, so the renderer can decide what to wait for.
+/// See [`cadence`] for the classification of each module.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Cadence {
+    /// No unbounded input/output: no subprocess, no repository discovery, no
+    /// directory scan. Cheap system calls such as `gethostname` are
+    /// acceptable, and so is reading a single file whose path is already
+    /// known *and* is guaranteed to resolve fast — a virtual filesystem such
+    /// as `/proc` or `/run`. A path under the user's home directory is not
+    /// guaranteed fast: it may be a slow or network mount (NFS, SMB, a
+    /// stalled FUSE mount), and a single `open` or `stat` against one can
+    /// block for as long as the mount is stuck, unbounded in exactly the way
+    /// this variant promises not to be.
+    ///
+    /// These modules can be rendered on the critical path of the first paint.
+    Instant,
+    /// Performs unbounded input/output: spawns a subprocess, discovers a
+    /// repository, or scans a directory. The cost is set by the machine and the
+    /// working directory rather than by the module, and a subprocess may run
+    /// all the way to `command_timeout`.
+    Deferred,
+    /// Intrinsically time-varying; a rendered value goes stale on its own and
+    /// must be re-polled to stay correct, even when nothing else changed.
+    Dynamic {
+        /// How long a rendered value stays correct.
+        period: Duration,
+    },
+}
+
+/// The clock shown by the `time` module advances every second at its default
+/// (and finest useful) granularity.
+const TIME_PERIOD: Duration = Duration::from_secs(1);
+
+#[cfg(feature = "battery")]
+const BATTERY_PERIOD: Duration = Duration::from_secs(30);
+
+/// Memory pressure is the fastest-moving of these values: it can swing across a
+/// configured threshold within seconds of a build starting.
+const MEMORY_USAGE_PERIOD: Duration = Duration::from_secs(5);
+
+/// The local address changes only when the machine changes network, which is
+/// rare but must not go unnoticed for the length of a shell session.
+const LOCALIP_PERIOD: Duration = Duration::from_secs(30);
+
+/// The [`Cadence`] of a module, or `None` if the module is unknown.
+///
+/// A module missing from the registry table has no declared cadence and the
+/// renderer cannot schedule it; `all_modules_have_a_cadence` fails if a module
+/// is added to `ALL_MODULES` without being classified there.
+///
+/// The names accepted here are exactly the names accepted by [`handle`],
+/// including the `env_var.` and `custom.` prefixed forms. See
+/// [`registry::entry_for`] for the classification of each built-in module and
+/// why it is what it is.
+#[must_use]
+pub fn cadence(module: &str) -> Option<Cadence> {
+    registry::cadence(module)
+}
 
 /// How a module produces its output.
 pub trait Render {
