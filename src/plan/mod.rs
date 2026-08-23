@@ -27,21 +27,17 @@ const FILL_MODULE: &str = "fill";
 /// The module that emits nothing but a line break.
 const LINE_BREAK_MODULE: &str = "line_break";
 
+const ESTIMATED_STYLE_STRING_LENGTH: usize = 16;
+
 /// The name of a module as it may appear in a format string.
-///
-/// Not every name is a module that exists — a format string may name anything —
-/// so this is a name that prompt rendering will *try* to turn into segments,
-/// not a proof that it can.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ModuleName(String);
 
 impl ModuleName {
-    /// Wraps a name taken from a format string or from the default ordering.
     pub fn new(name: impl Into<String>) -> Self {
         Self(name.into())
     }
 
-    /// The name as it is spelled in a format string.
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -54,10 +50,7 @@ impl fmt::Display for ModuleName {
 }
 
 /// The position of one distinct module in a [`Plan`].
-///
-/// This is deliberately not a module name: the plan interns every name once,
-/// so rendering can update a slot in constant time without a second lookup.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct ModuleSlot(usize);
 
 impl ModuleSlot {
@@ -76,18 +69,13 @@ impl Predicate {
     }
 
     fn union(&mut self, other: Self) {
-        for module in other.0 {
-            if !self.0.contains(&module) {
-                self.0.push(module);
-            }
-        }
+        self.0.extend(other.0);
+        self.0.sort_unstable();
+        self.0.dedup();
     }
 }
 
 /// Literal text together with the style that configuration gives it.
-///
-/// The text never contains a line break: line breaks are structural and are
-/// held by [`Node::LineBreak`] instead.
 #[derive(Clone, Debug, PartialEq)]
 pub struct StaticText {
     text: String,
@@ -104,50 +92,21 @@ pub struct FillTemplate {
 /// One piece of a [`Plan`].
 #[derive(Clone, Debug, PartialEq)]
 enum Node {
-    /// Literal text with the style configuration gives it.
     Static(StaticText),
-    /// A module's output, to be supplied per render.
     Slot {
-        /// The module whose segments fill the slot.
         slot: ModuleSlot,
-        /// The style of the enclosing text group, which the module's segments
-        /// take on wherever they carry no style of their own.
         inherited_style: Option<Style>,
     },
-    /// Padding that stretches to whatever width the line has left over.
-    ///
-    /// A fill's characters come from configuration; only how many of them are
-    /// painted is decided per render, and that is decided by the width of
-    /// everything around it rather than by anything a module produces. So a
-    /// fill has no per-render value of its own and contributes nothing to any
-    /// predicate.
     Fill {
-        /// What to repeat, and in which style.
         template: FillTemplate,
     },
-    /// A body that shows only when at least one module in `predicate` renders
-    /// something non-empty.
-    ///
-    /// The predicate is never empty: a body that no module can ever bring into
-    /// view is dropped at build time instead, and one that always shows is
-    /// inlined.
     Conditional {
-        /// The modules whose emptiness decides whether the body shows.
         predicate: Predicate,
-        /// What to render when it does.
         body: Vec<Self>,
     },
-    /// The end of a visual line.
     LineBreak,
 }
 
-/// Everything [`Plan::build`] is allowed to look at.
-///
-/// There is deliberately no way to reach a [`crate::context::Context`] from
-/// here: the fields are the parsed configuration, the destination whose escaping
-/// rules apply, and which of the prompts is being built. That is what makes "a
-/// plan is a function of configuration" a fact about the types rather than a
-/// promise in a comment.
 pub struct PromptConfiguration<'configuration> {
     starship_configuration: &'configuration StarshipConfig,
     root_configuration: &'configuration StarshipRootConfig,
@@ -156,7 +115,6 @@ pub struct PromptConfiguration<'configuration> {
 }
 
 impl<'configuration> PromptConfiguration<'configuration> {
-    /// Bundles the configuration a plan is built from.
     pub fn new(
         starship_configuration: &'configuration StarshipConfig,
         root_configuration: &'configuration StarshipRootConfig,
@@ -172,13 +130,8 @@ impl<'configuration> PromptConfiguration<'configuration> {
     }
 }
 
-/// A distinct module in a plan, in first-paint order.
-///
-/// A module named multiple times is represented once. Its private slot keeps
-/// the rendered value tied to that one plan.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ModuleUse {
-    /// The module to run.
     pub module: ModuleName,
     slot: ModuleSlot,
 }
@@ -189,7 +142,6 @@ impl ModuleUse {
     }
 }
 
-/// The prompt, built from configuration alone.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Plan {
     nodes: Vec<Node>,
@@ -198,26 +150,19 @@ pub struct Plan {
 }
 
 impl Plan {
-    /// Builds the plan for one prompt.
-    ///
-    /// Everything this reads is configuration; nothing it reads can vary between
-    /// two renders of the same prompt.
     pub fn build(configuration: &PromptConfiguration<'_>) -> Self {
-        // Palette resolution: the one configuration-dependent input to style
-        // resolution. Read once, then threaded through every style in the plan.
         let palette = get_palette(
             &configuration.root_configuration.palettes,
             configuration.root_configuration.palette.as_deref(),
         );
 
         let (elements, referenced_modules) = select_format(configuration);
-        let modules_expanded_by_all = modules_expanded_by_all(&referenced_modules);
 
         let mut builder = Builder {
             starship_configuration: configuration.starship_configuration,
             palette,
             destination: configuration.destination,
-            modules_expanded_by_all: &modules_expanded_by_all,
+            referenced_modules: &referenced_modules,
             slots: BTreeMap::new(),
             modules: Vec::new(),
         };
@@ -232,17 +177,10 @@ impl Plan {
         }
     }
 
-    /// The modules the format strings name, including `all` if they name it.
-    ///
-    /// Both the main and the right format contribute, because a module named by
-    /// either one is not one that `$all` should supply again.
     pub fn referenced_modules(&self) -> &BTreeSet<ModuleName> {
         &self.referenced_modules
     }
 
-    /// Every module the plan renders, distinct, in first-paint order.
-    ///
-    /// See [`ModuleUse`] for what that order guarantees.
     pub fn module_uses(&self) -> &[ModuleUse] {
         &self.modules
     }
@@ -252,20 +190,6 @@ impl Plan {
     }
 }
 
-/// What each module of one plan resolved to, for one render.
-///
-/// The state is keyed by *what a value is about* rather than by where it goes,
-/// and it can only be made from the plan it belongs to — [`PromptState::empty`]
-/// is the sole constructor and the sole place the two are ever associated. So
-/// there is no way to hand one plan's values to another plan's structure: no
-/// function takes a plan and a state as two arguments, because a state already
-/// holds its own.
-///
-/// A module with no value renders nothing, which is also what a module that is
-/// disabled or produced nothing renders — the three are indistinguishable by
-/// design. A module that produced an *empty* segment is a different thing
-/// again: the segment is still there, still carries a style, and a following
-/// `prev_fg` or `prev_bg` can still see it.
 #[derive(Clone)]
 pub struct PromptState<'plan> {
     plan: &'plan Plan,
@@ -287,7 +211,6 @@ impl fmt::Display for RecordError {
 impl std::error::Error for RecordError {}
 
 impl<'plan> PromptState<'plan> {
-    /// A render of `plan` in which no module has resolved yet.
     pub fn empty(plan: &'plan Plan) -> Self {
         Self {
             plan,
@@ -318,12 +241,10 @@ impl<'plan> PromptState<'plan> {
         Ok(())
     }
 
-    /// What a module resolved to, or nothing if it has not resolved.
     fn resolved_segments(&self, slot: ModuleSlot) -> &[Segment] {
         &self.resolved[slot.0]
     }
 
-    /// Fills the plan in, producing the segments the prompt is painted from.
     pub fn render(&self) -> Vec<Segment> {
         let mut segments = Vec::new();
         self.render_nodes(self.plan.nodes(), &mut segments);
@@ -340,13 +261,14 @@ impl<'plan> PromptState<'plan> {
                 Node::Slot {
                     slot,
                     inherited_style,
-                    ..
-                } => segments.extend(self.resolved_segments(*slot).iter().cloned().map(
-                    |mut segment| {
-                        segment.set_style_if_empty(*inherited_style);
-                        segment
-                    },
-                )),
+                } => {
+                    segments.extend(self.resolved_segments(*slot).iter().cloned().map(
+                        |mut segment| {
+                            segment.set_style_if_empty(*inherited_style);
+                            segment
+                        },
+                    ));
+                }
                 Node::Fill { template } => {
                     segments.push(Segment::fill(template.style, template.symbol.clone()));
                 }
@@ -359,7 +281,6 @@ impl<'plan> PromptState<'plan> {
         }
     }
 
-    /// Whether a module rendered anything a conditional would count as present.
     fn is_filled(&self, slot: ModuleSlot) -> bool {
         self.resolved_segments(slot)
             .iter()
@@ -367,31 +288,9 @@ impl<'plan> PromptState<'plan> {
     }
 }
 
-/// The modules `$all` stands for: every module in the default ordering that the
-/// format strings do not already name.
-pub fn modules_expanded_by_all(referenced_modules: &BTreeSet<ModuleName>) -> Vec<ModuleName> {
-    PROMPT_ORDER
-        .iter()
-        .map(|module| ModuleName::new(*module))
-        .filter(|module| !referenced_modules.contains(module))
-        .collect()
-}
-
-/// What a part of the plan contributes to the visibility of a conditional that
-/// contains it.
-///
-/// This mirrors, at build time, the question the renderer used to ask at render
-/// time: does any variable inside this conditional have a non-empty value?
-/// Literal text answers "no" — it never brings a conditional into view — and a
-/// module answers "only if it rendered something". A fill and a line break
-/// answer from configuration alone, which is why neither is ever named in a
-/// predicate.
 enum Presence {
-    /// Nothing here can bring a conditional into view.
     Never,
-    /// A conditional shows exactly when one of these modules is filled.
     WhenAnyFilled(Predicate),
-    /// A conditional containing this always shows.
     Always,
 }
 
@@ -408,12 +307,11 @@ impl Presence {
     }
 }
 
-/// Turns format elements into plan nodes.
 struct Builder<'build> {
     starship_configuration: &'build StarshipConfig,
     palette: Option<&'build Palette>,
     destination: Destination,
-    modules_expanded_by_all: &'build [ModuleName],
+    referenced_modules: &'build BTreeSet<ModuleName>,
     slots: BTreeMap<ModuleName, ModuleSlot>,
     modules: Vec<ModuleUse>,
 }
@@ -430,14 +328,12 @@ impl Builder<'_> {
         for element in elements {
             match element {
                 FormatElement::Text(text) => {
-                    let escaped = self.destination.escape(text.clone());
-                    push_literal(&escaped, inherited_style, nodes);
+                    let escaped_text = self.destination.escape(text.clone());
+                    push_literal(&escaped_text, inherited_style, nodes);
                 }
                 FormatElement::TextGroup(group) => {
                     let style = self.resolve_style(&group.style);
                     if group.format.is_empty() {
-                        // An empty text group still produces a segment, so that a
-                        // later `prev_fg` or `prev_bg` can read its style.
                         nodes.push(Node::Static(StaticText {
                             text: String::new(),
                             style,
@@ -469,8 +365,6 @@ impl Builder<'_> {
 
         match presence {
             Presence::Always => {
-                // Configuration proves this always shows, so there is nothing
-                // left to decide per render.
                 nodes.append(&mut body);
                 Presence::Always
             }
@@ -481,12 +375,7 @@ impl Builder<'_> {
                 });
                 Presence::WhenAnyFilled(predicate)
             }
-            Presence::Never => {
-                // No module inside, and nothing statically present: the body
-                // could never have shown, so it goes and takes whatever it
-                // contained with it.
-                Presence::Never
-            }
+            Presence::Never => Presence::Never,
         }
     }
 
@@ -497,16 +386,18 @@ impl Builder<'_> {
         nodes: &mut Vec<Node>,
     ) -> Presence {
         if name == ALL_MODULES_VARIABLE {
-            let expanded = self.modules_expanded_by_all;
-            return expanded.iter().fold(Presence::Never, |presence, module| {
-                presence.merge(self.build_module(module, inherited_style, nodes))
-            });
+            return modules_expanded_by_all(self.referenced_modules)
+                .into_iter()
+                .fold(Presence::Never, |presence, module_name| {
+                    presence.merge(self.build_module(&module_name, inherited_style, nodes))
+                });
         }
 
         let module = ModuleName::new(name);
         if self.is_disabled(module.as_str()) {
             return Presence::Never;
         }
+
         self.build_module(&module, inherited_style, nodes)
     }
 
@@ -517,8 +408,6 @@ impl Builder<'_> {
         nodes: &mut Vec<Node>,
     ) -> Presence {
         match module.as_str() {
-            // A line break has no data behind it: configuration alone says
-            // whether it is there, and it is never empty when it is.
             LINE_BREAK_MODULE => {
                 if self.is_disabled(LINE_BREAK_MODULE) {
                     return Presence::Never;
@@ -526,17 +415,17 @@ impl Builder<'_> {
                 nodes.push(Node::LineBreak);
                 Presence::Always
             }
-            // A fill's characters and style are configuration too; only its
-            // width is decided per render.
             FILL_MODULE => {
                 let Some(template) = self.fill_template(inherited_style) else {
                     return Presence::Never;
                 };
+
                 let presence = if template.symbol.is_empty() {
                     Presence::Never
                 } else {
                     Presence::Always
                 };
+
                 nodes.push(Node::Fill { template });
                 presence
             }
@@ -565,145 +454,133 @@ impl Builder<'_> {
         slot
     }
 
-    /// The fill module's configuration, or `None` if it will not render.
     fn fill_template(&self, inherited_style: Option<Style>) -> Option<FillTemplate> {
         if self.is_disabled(FILL_MODULE) {
             return None;
         }
 
-        let configuration =
-            FillConfig::try_load(self.starship_configuration.get_module_config(FILL_MODULE));
+        let module_configuration = self.starship_configuration.get_module_config(FILL_MODULE);
+        let configuration = FillConfig::try_load(module_configuration);
+
         if configuration.disabled {
             return None;
         }
 
+        let resolved_style =
+            parse_style_string_with_palette(configuration.style, self.palette).or(inherited_style);
+
         Some(FillTemplate {
             symbol: configuration.symbol.to_owned(),
-            // A fill with no style of its own takes on the enclosing text
-            // group's style, exactly as any other module's segments would.
-            style: parse_style_string_with_palette(configuration.style, self.palette)
-                .or(inherited_style),
+            style: resolved_style,
         })
     }
 
-    /// Whether a module is switched off by `disabled = true`.
-    fn is_disabled(&self, module: &str) -> bool {
+    fn is_disabled(&self, module_name: &str) -> bool {
         self.starship_configuration
-            .get_module_config(module)
-            .and_then(|value| value.as_table()?.get("disabled")?.as_bool())
-            == Some(true)
+            .get_module_config(module_name)
+            .and_then(|configuration_value| configuration_value.as_table())
+            .and_then(|module_table| module_table.get("disabled"))
+            .and_then(|disabled_flag| disabled_flag.as_bool())
+            .unwrap_or(false)
     }
 
-    /// Resolves a style specification into a style.
-    ///
-    /// A root format string has no style variables to substitute — only modules
-    /// map those, and a prompt's own format string is not a module — so a style
-    /// variable contributes the empty string, which is what the formatter did
-    /// with an unmapped one too.
     fn resolve_style(&self, elements: &[StyleElement<'_>]) -> Option<Style> {
-        let style_string: String = elements
-            .iter()
-            .map(|element| match element {
-                StyleElement::Text(text) => text.as_ref(),
-                StyleElement::Variable(_) => "",
-            })
-            .collect();
+        let mut style_string = String::with_capacity(ESTIMATED_STYLE_STRING_LENGTH);
+
+        for element in elements {
+            match element {
+                StyleElement::Text(text) => style_string.push_str(text.as_ref()),
+                StyleElement::Variable(_) => {}
+            }
+        }
 
         parse_style_string_with_palette(&style_string, self.palette)
     }
 }
 
-/// Splits literal text on line breaks, which are structural rather than textual.
+/// Every module `$all` stands for, in prompt order, that the format string
+/// did not already name explicitly.
+#[must_use]
+pub fn modules_expanded_by_all(referenced_modules: &BTreeSet<ModuleName>) -> Vec<ModuleName> {
+    PROMPT_ORDER
+        .iter()
+        .map(|module_name| ModuleName::new(*module_name))
+        .filter(|module_name| !referenced_modules.contains(module_name))
+        .collect()
+}
+
 fn push_literal(text: &str, style: Option<Style>, nodes: &mut Vec<Node>) {
-    for (index, piece) in text.split('\n').enumerate() {
-        if index > 0 {
-            nodes.push(Node::LineBreak);
-        }
+    let mut lines = text.split('\n');
+
+    if let Some(first_line) = lines.next() {
         nodes.push(Node::Static(StaticText {
-            text: piece.to_owned(),
+            text: first_line.to_owned(),
+            style,
+        }));
+    }
+
+    for subsequent_line in lines {
+        nodes.push(Node::LineBreak);
+        nodes.push(Node::Static(StaticText {
+            text: subsequent_line.to_owned(),
             style,
         }));
     }
 }
 
-/// Picks the format string this prompt is built from, and collects every module
-/// the configured format strings name.
-///
-/// The module set is deliberately taken from *both* the main and the right
-/// format even when only one of them is being built: a module named by either
-/// is one that `$all` must not supply again.
 fn select_format<'configuration>(
     configuration: &PromptConfiguration<'configuration>,
 ) -> (Vec<FormatElement<'configuration>>, BTreeSet<ModuleName>) {
     let root = configuration.root_configuration;
 
-    if *configuration.target == Target::Continuation {
-        return match parse_format_string(&root.continuation_prompt) {
-            Ok(elements) => {
-                let modules = named_modules(&elements);
-                (elements, modules)
-            }
-            Err(error) => {
-                log::error!("Error parsing continuation prompt: {error}");
-                (fallback_format(), BTreeSet::new())
-            }
-        };
-    }
+    let (left_format, right_format, fallback_name) = match configuration.target {
+        Target::Continuation => (&root.continuation_prompt[..], "", "continuation_prompt"),
+        Target::Main => (&root.format[..], &root.right_format[..], "format"),
+        Target::Right => (&root.format[..], &root.right_format[..], "right_format"),
+        Target::Profile(profile_name) => {
+            let profile = root
+                .user_profiles
+                .get(profile_name)
+                .or_else(|| root.internal_profiles.get(profile_name));
 
-    let (left_format, right_format): (&'configuration str, &'configuration str) =
-        match configuration.target {
-            Target::Main | Target::Right => (&root.format, &root.right_format),
-            Target::Profile(name) => {
-                match root
-                    .user_profiles
-                    .get(name)
-                    .or_else(|| root.internal_profiles.get(name))
-                {
-                    Some(format) => (format, ""),
-                    None => {
-                        log::error!("Profile {name:?} not found");
-                        return (fallback_format(), BTreeSet::new());
-                    }
+            match profile {
+                Some(format_string) => (format_string.as_str(), "", "profile"),
+                None => {
+                    log::error!("Profile {profile_name:?} not found");
+                    return (fallback_format(), BTreeSet::new());
                 }
             }
-            Target::Continuation => {
-                unreachable!("Continuation prompt should have been handled above")
-            }
-        };
-
-    let left_elements = parse_format_string(left_format);
-    let right_elements = parse_format_string(right_format);
-
-    if let Err(ref error) = left_elements {
-        let name = if let Target::Profile(profile_name) = configuration.target {
-            format!("profile.{profile_name}")
-        } else {
-            "format".to_string()
-        };
-        log::error!("Error parsing {name:?}: {error}");
-    }
-
-    if let Err(ref error) = right_elements {
-        log::error!("Error parsing right_format: {error}");
-    }
-
-    let modules: BTreeSet<ModuleName> = [&left_elements, &right_elements]
-        .into_iter()
-        .flatten()
-        .flat_map(|elements| named_modules(elements))
-        .collect();
-
-    let selected = match configuration.target {
-        Target::Main | Target::Profile(_) => left_elements,
-        Target::Right => right_elements,
-        Target::Continuation => {
-            unreachable!("Continuation prompt should have been handled above")
         }
     };
 
-    match selected {
-        Ok(elements) => (elements, modules),
-        Err(_) => (fallback_format(), BTreeSet::new()),
+    let left_elements = parse_and_log(left_format, fallback_name);
+    let right_elements = parse_and_log(right_format, "right_format");
+
+    let mut referenced_modules = named_modules(&left_elements);
+    referenced_modules.extend(named_modules(&right_elements));
+
+    let selected_elements = match configuration.target {
+        Target::Main | Target::Profile(_) | Target::Continuation => left_elements,
+        Target::Right => right_elements,
+    };
+
+    (selected_elements, referenced_modules)
+}
+
+fn parse_and_log<'configuration>(
+    format_string: &'configuration str,
+    name: &str,
+) -> Vec<FormatElement<'configuration>> {
+    if format_string.is_empty() {
+        return Vec::new();
+    }
+
+    match parse_format_string(format_string) {
+        Ok(elements) => elements,
+        Err(error) => {
+            log::error!("Error parsing {name}: {error}");
+            fallback_format()
+        }
     }
 }
 
