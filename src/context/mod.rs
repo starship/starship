@@ -71,6 +71,16 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
+    /// An explicit statement of where the prompt rendered from this context is
+    /// going, or `None` to take the answer from [`Self::shell`].
+    ///
+    /// Kept as an override rather than as a second field of record so that the
+    /// two can never drift apart: a context whose shell is changed and whose
+    /// destination is not still escapes for the shell it now has. Only a
+    /// streaming prompt sets it, and only ever to
+    /// [`Destination::RawTerminal`], which depends on no shell at all.
+    destination_override: Option<Destination>,
+
     /// Which prompt to print (main, right, ...)
     pub target: Target,
 
@@ -239,6 +249,7 @@ impl<'a> Context<'a> {
             git_repo: OnceLock::new(),
             jj_repo: OnceLock::new(),
             shell,
+            destination_override: None,
             target,
             width,
             env,
@@ -259,7 +270,22 @@ impl<'a> Context<'a> {
     /// Defaults to the prompt variable of [`Self::shell`], because that is
     /// where every prompt starship has ever printed goes.
     pub fn destination(&self) -> Destination {
-        Destination::shell_prompt_variable(self.shell)
+        self.destination_override
+            .unwrap_or_else(|| Destination::shell_prompt_variable(self.shell))
+    }
+
+    /// Renders this context's prompt for the terminal rather than for a shell's
+    /// prompt variable.
+    ///
+    /// Only a streaming prompt has any reason to ask for this: it renders once
+    /// for the terminal, so that an incremental repaint is written exactly as
+    /// it stands, and escapes those finished bytes only where it hands a whole
+    /// prompt to the shell. Rendering twice instead would let the repaint and
+    /// the prompt assignment disagree about what is on screen.
+    #[must_use]
+    pub fn rendering_for_the_terminal(mut self) -> Self {
+        self.destination_override = Some(Destination::RawTerminal);
+        self
     }
 
     /// Sets the context config, overwriting the existing config
@@ -960,7 +986,7 @@ pub enum Target {
 }
 
 /// Properties as passed on from the shell as arguments
-#[derive(Parser, Debug)]
+#[derive(Parser, Clone, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]
