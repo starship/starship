@@ -149,7 +149,8 @@ onMounted(() => {
    #### Nushell
    > [!WARNING]
    > This will change in the future.
-   > Only Nushell v0.96+ is supported.
+   > Requires a Nushell main build with `commandline set-prompt`; no release has
+   > this API yet.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
