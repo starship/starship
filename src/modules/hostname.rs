@@ -11,7 +11,7 @@ use whoami::hostname;
 /// Will display the hostname if all of the following criteria are met:
 ///     - `hostname.disabled` is absent or false
 ///     - `hostname.ssh_only` is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`, `$SSH_CLIENT`, or `$SSH_TTY`)
-///     - `hostname.ssh_only` is false AND `hostname.detect_env_vars` is either empty or contains a defined environment variable
+///     - `hostname.detect_env_vars` is either empty or contains a defined environment variable
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
