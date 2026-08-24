@@ -301,19 +301,34 @@ jobs:
           --all-features
           --locked
           --workspace
-          -E '${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all()' || 'not binary(init_async)' }}'
+          -E '${{ matrix.os == 'ubuntu-latest' && 'all()' || 'not binary(init_async)' }}'
           --lcov --output-path lcov.info
-          --run-ignored ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all' || 'default' }}"
+          --run-ignored ${{ matrix.os == 'ubuntu-latest' && 'all' || 'default' }}"
         env:
           CARGO_BUILD_WARNINGS: deny
           # Snapshot mismatches must fail the run rather than writing
           # `.snap.new` files nobody will look at on a CI runner.
           INSTA_UPDATE: "no"
-          BASH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/bash' || '' }}
-          BLE_SH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
-          NUSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
-          POWERSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/pwsh' || '' }}
-          XONSH_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/xonsh' || '' }}
+          BASH: ${{ matrix.os == 'ubuntu-latest' && '/usr/bin/bash' || '' }}
+          BLE_SH: ${{ matrix.os == 'ubuntu-latest' && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
+          NUSHELL_MAIN: ${{ matrix.os == 'ubuntu-latest' && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
+          POWERSHELL_MAIN: ${{ matrix.os == 'ubuntu-latest' && '/usr/bin/pwsh' || '' }}
+          XONSH_MAIN: ${{ matrix.os == 'ubuntu-latest' && '/usr/bin/xonsh' || '' }}
+
+      # Nightly has no shell-streaming setup and no coverage instrumentation
+      # (see the comment on the stable `Build | Test` step above), so it only
+      # ever needs the non-ubuntu, non-init_async slice of the suite.
+      - name: Build | Test [Nightly]
+        if: matrix.rust == 'nightly'
+        run: "cargo nextest run
+          --all-features
+          --locked
+          --workspace
+          -E 'not binary(init_async)'"
+        env:
+          # Nightly's own warnings are not this project's to fix.
+          CARGO_BUILD_WARNINGS: allow
+          INSTA_UPDATE: "no"
 
       # Nightly has no shell-streaming setup (see the comment on the stable
       # `Build | Test` step above), so it only needs the non-init_async slice.
