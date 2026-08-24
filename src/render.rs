@@ -228,19 +228,31 @@ mod tests {
     #[test]
     fn distinct_custom_modules_fill_their_own_slots() {
         let directory = tempfile::tempdir().expect("temporary directory");
+        let shell = if cfg!(windows) {
+            vec![
+                "powershell".to_owned(),
+                "-NoProfile".to_owned(),
+                "-Command".to_owned(),
+                "-".to_owned(),
+            ]
+        } else {
+            vec!["/bin/sh".to_owned()]
+        };
         let mut context = default_context().set_config(toml::toml! {
             add_newline = false
             format = "${custom.fast}${custom.slow}$character"
             [custom.fast]
-            command = "printf fast"
+            command = "echo fast"
             when = true
             format = "$output"
-            shell = ["/bin/sh"]
+            use_stdin = true
+            shell = (shell.clone())
             [custom.slow]
-            command = "printf slow"
+            command = "echo slow"
             when = true
             format = "$output"
-            shell = ["/bin/sh"]
+            use_stdin = true
+            shell = shell
             [character]
             format = ">"
         });
