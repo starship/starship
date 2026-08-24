@@ -246,12 +246,14 @@ mod tests {
             when = true
             format = "$output"
             use_stdin = true
+            ignore_timeout = true
             shell = (shell.clone())
             [custom.slow]
             command = "echo slow"
             when = true
             format = "$output"
             use_stdin = true
+            ignore_timeout = true
             shell = shell
             [character]
             format = ">"
