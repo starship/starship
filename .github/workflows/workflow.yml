@@ -206,6 +206,74 @@ jobs:
           git clone --depth 1 --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
           make -C "$RUNNER_TEMP/ble.sh"
 
+      # ble.sh builds its terminfo/keymap cache into a directory shared by
+      # every invocation of this checkout (it falls back to a path under its
+      # own install dir whenever $HOME has no pre-existing ~/.cache) and does
+      # so with no locking of its own. Left cold, two of the pty tests below
+      # can both attach for the first time at once and race to write it,
+      # corrupting each other's temp files. Building the cache once here,
+      # serially, in a HOME that hits that same fallback path, means every
+      # test that attaches afterwards finds it already warm.
+      - name: Setup | Warm ble.sh's cache
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          python3 - <<'EOF'
+          import os
+          import pty
+          import select
+          import subprocess
+          import time
+
+          home = os.path.join(os.environ["RUNNER_TEMP"], "ble-warmup-home")
+          os.makedirs(home, exist_ok=True)
+          env = dict(os.environ)
+          env["HOME"] = home
+          env["TERM"] = "xterm-256color"
+
+          master, slave = pty.openpty()
+          proc = subprocess.Popen(
+              ["bash", "--noprofile", "--norc", "-i"],
+              stdin=slave,
+              stdout=slave,
+              stderr=slave,
+              env=env,
+              preexec_fn=os.setsid,
+          )
+          os.close(slave)
+          os.write(master, b'source "$BLE_SH"\n')
+
+          # Cache-building issues terminal queries nothing here answers, so it
+          # falls back to its own internal timeouts rather than a fixed pace.
+          # Wait for output to actually go quiet — cache-building finished, or
+          # bash is stuck waiting on a query response — rather than guessing
+          # how long that takes.
+          deadline = time.time() + 60
+          quiet_since = time.time()
+          while time.time() < deadline:
+              ready, _, _ = select.select([master], [], [], 1)
+              if ready:
+                  try:
+                      if not os.read(master, 65536):
+                          break
+                  except OSError:
+                      break
+                  quiet_since = time.time()
+              elif time.time() - quiet_since > 5:
+                  break
+
+          os.write(master, b"exit\n")
+          deadline = time.time() + 10
+          while time.time() < deadline:
+              try:
+                  if not os.read(master, 65536):
+                      break
+              except OSError:
+                  break
+          proc.wait(timeout=5)
+          EOF
+        env:
+          BLE_SH: ${{ format('{0}/ble.sh/out/ble.sh', runner.temp) }}
+
       - name: Build | Nushell main
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
         run: |
