@@ -10,6 +10,8 @@ on:
       - "**.md"
 
 concurrency:
+  # The source repository distinguishes identically named branches in forks;
+  # the branch name lets a newer push cancel its superseded workflow run.
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
