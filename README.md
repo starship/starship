@@ -353,7 +353,7 @@ eval $(starship init ion)
 <details>
 <summary>Lumesh</summary>
 
-Lumesh has builtin support for Starship. Add the following to `~/.config/lumesh/config.lm`:
+Lumesh has built-in support for Starship. Add the following to `~/.config/lumesh/config.lm`:
 
 ```bash
 set LUME_PROMPT_SETTINGS = {
