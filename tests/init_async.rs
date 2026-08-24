@@ -19,7 +19,12 @@ use std::thread;
 use std::time::{Duration, Instant};
 use tempfile::TempDir;
 
-const TIMEOUT: Duration = Duration::from_secs(15);
+// Generous relative to a lone shell's real startup time: these tests share
+// the Test Suite job's CPU with the rest of the coverage-instrumented
+// workspace suite (see workflow.yml and .config/nextest.toml) rather than
+// running in a dedicated job, so wall-clock delays can run long under
+// contention without any real shell or module misbehaving.
+const TIMEOUT: Duration = Duration::from_secs(45);
 const COLUMNS: usize = 160;
 const LINES: usize = 24;
 
@@ -306,48 +311,32 @@ fn bash() -> PathBuf {
     path
 }
 
-fn ble() -> PathBuf {
-    let path = env::var_os("BLE_SH")
+fn named_binary(env_var: &str, description: &str) -> PathBuf {
+    let path = env::var_os(env_var)
         .map(PathBuf::from)
-        .expect("BLE_SH must name ble.sh");
-    assert!(path.is_file(), "BLE_SH is not a file: {}", path.display());
+        .unwrap_or_else(|| panic!("{env_var} must name {description}"));
+    assert!(
+        path.is_file(),
+        "{env_var} is not a file: {}",
+        path.display()
+    );
     path
+}
+
+fn ble() -> PathBuf {
+    named_binary("BLE_SH", "ble.sh")
 }
 
 fn nushell() -> PathBuf {
-    let path = env::var_os("NUSHELL_MAIN")
-        .map(PathBuf::from)
-        .expect("NUSHELL_MAIN must name the Nushell main binary");
-    assert!(
-        path.is_file(),
-        "NUSHELL_MAIN is not a file: {}",
-        path.display()
-    );
-    path
+    named_binary("NUSHELL_MAIN", "the Nushell main binary")
 }
 
 fn powershell() -> PathBuf {
-    let path = env::var_os("POWERSHELL_MAIN")
-        .map(PathBuf::from)
-        .expect("POWERSHELL_MAIN must name the PowerShell binary");
-    assert!(
-        path.is_file(),
-        "POWERSHELL_MAIN is not a file: {}",
-        path.display()
-    );
-    path
+    named_binary("POWERSHELL_MAIN", "the PowerShell binary")
 }
 
 fn xonsh() -> PathBuf {
-    let path = env::var_os("XONSH_MAIN")
-        .map(PathBuf::from)
-        .expect("XONSH_MAIN must name the Xonsh binary");
-    assert!(
-        path.is_file(),
-        "XONSH_MAIN is not a file: {}",
-        path.display()
-    );
-    path
+    named_binary("XONSH_MAIN", "the Xonsh binary")
 }
 
 struct Fixture {
@@ -360,7 +349,7 @@ impl Fixture {
         Self::with_config(
             shell,
             r#"
-format = "${custom.fast}${custom.slow}$character"
+format = "${custom.fast}${custom.slow}$line_break$character"
 add_newline = false
 
 [custom.fast]
@@ -388,11 +377,13 @@ success_symbol = ">"
         let directory = tempfile::tempdir().expect("failed to create scratch directory");
         fs::write(directory.path().join("starship.toml"), config).expect("failed to write config");
 
-        let init = directory.path().join(if matches!(shell, Shell::PowerShell) {
-            "starship-init.ps1"
-        } else {
-            "starship-init"
-        });
+        let init = directory
+            .path()
+            .join(if matches!(shell, Shell::PowerShell) {
+                "starship-init.ps1"
+            } else {
+                "starship-init"
+            });
         let mut command = Command::new(starship());
         command
             .args(["init", shell.name(), "--print-full-init"])
@@ -517,12 +508,20 @@ fn streams(shell: Shell) {
     );
 
     let input = shell.input();
-    let refined = session.pty.wait_for("SLOW");
-    session.pty.send(input);
-    assert!(
-        refined.replace('\n', "").contains(input),
-        "refinement lost input:\n{refined}"
-    );
+    if matches!(shell, Shell::PowerShell) {
+        // PSReadLine's idle pump only repaints while the input buffer is
+        // empty, so the refinement lands before typing begins — and typed
+        // input can never be clobbered by a repaint at all.
+        session.pty.wait_for("SLOW");
+        session.pty.send(input);
+    } else {
+        session.pty.send(input);
+        let refined = session.pty.wait_for("SLOW");
+        assert!(
+            refined.replace('\n', "").contains(input),
+            "refinement lost input:\n{refined}"
+        );
+    }
 
     session.pty.send("\n");
     session.pty.wait_for("RESULT:typing-survived");
@@ -530,12 +529,6 @@ fn streams(shell: Shell) {
         session.pty.wait_for("JOB_COUNT:0");
     }
     session.close();
-}
-
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_streams_a_live_prompt() {
-    streams(Shell::Zsh);
 }
 
 /// Regression test: `right_format` must stream and repaint on its own, the
@@ -586,62 +579,85 @@ time = 30
     session.close();
 }
 
-#[test]
-#[ignore = "requires zsh"]
-fn zsh_right_prompt_ticks_on_its_own() {
-    right_prompt_ticks_on_its_own(Shell::Zsh);
+// Every shell above gets the same pair of `streams`/`right_prompt_ticks_on_its_own`
+// wrappers (only the `#[ignore]` reason and, for PowerShell, the coverage
+// differ), so generate them instead of hand-copying eleven near-identical
+// stanzas — a future shell added to just one list would otherwise be an easy
+// omission to miss in the other.
+macro_rules! shell_test {
+    ($name:ident, $body:ident, $shell:expr, $reason:literal) => {
+        #[test]
+        #[ignore = $reason]
+        fn $name() {
+            $body($shell);
+        }
+    };
 }
 
-#[test]
-#[ignore = "requires fish"]
-fn fish_right_prompt_ticks_on_its_own() {
-    right_prompt_ticks_on_its_own(Shell::Fish);
-}
+shell_test!(
+    zsh_streams_a_live_prompt,
+    streams,
+    Shell::Zsh,
+    "requires zsh"
+);
+shell_test!(
+    fish_streams_a_live_prompt,
+    streams,
+    Shell::Fish,
+    "requires fish"
+);
+shell_test!(
+    bash_ble_streams_a_live_prompt,
+    streams,
+    Shell::Bash,
+    "requires BLE_SH and Bash 4+"
+);
+shell_test!(
+    powershell_streams_a_live_prompt,
+    streams,
+    Shell::PowerShell,
+    "requires POWERSHELL_MAIN"
+);
+shell_test!(
+    nushell_streams_a_live_prompt,
+    streams,
+    Shell::Nushell,
+    "requires NUSHELL_MAIN"
+);
+shell_test!(
+    xonsh_streams_a_live_prompt,
+    streams,
+    Shell::Xonsh,
+    "requires XONSH_MAIN"
+);
 
-#[test]
-#[ignore = "requires BLE_SH and Bash 4+"]
-fn bash_ble_right_prompt_ticks_on_its_own() {
-    right_prompt_ticks_on_its_own(Shell::Bash);
-}
-
-#[test]
-#[ignore = "requires fish"]
-fn fish_streams_a_live_prompt() {
-    streams(Shell::Fish);
-}
-
-#[test]
-#[ignore = "requires BLE_SH and Bash 4+"]
-fn bash_ble_streams_a_live_prompt() {
-    streams(Shell::Bash);
-}
-
-#[test]
-#[ignore = "requires POWERSHELL_MAIN"]
-fn powershell_streams_a_live_prompt() {
-    streams(Shell::PowerShell);
-}
-
-#[test]
-#[ignore = "requires NUSHELL_MAIN"]
-fn nushell_streams_a_live_prompt() {
-    streams(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires XONSH_MAIN"]
-fn xonsh_streams_a_live_prompt() {
-    streams(Shell::Xonsh);
-}
-
-#[test]
-#[ignore = "requires NUSHELL_MAIN"]
-fn nushell_right_prompt_ticks_on_its_own() {
-    right_prompt_ticks_on_its_own(Shell::Nushell);
-}
-
-#[test]
-#[ignore = "requires XONSH_MAIN"]
-fn xonsh_right_prompt_ticks_on_its_own() {
-    right_prompt_ticks_on_its_own(Shell::Xonsh);
-}
+shell_test!(
+    zsh_right_prompt_ticks_on_its_own,
+    right_prompt_ticks_on_its_own,
+    Shell::Zsh,
+    "requires zsh"
+);
+shell_test!(
+    fish_right_prompt_ticks_on_its_own,
+    right_prompt_ticks_on_its_own,
+    Shell::Fish,
+    "requires fish"
+);
+shell_test!(
+    bash_ble_right_prompt_ticks_on_its_own,
+    right_prompt_ticks_on_its_own,
+    Shell::Bash,
+    "requires BLE_SH and Bash 4+"
+);
+shell_test!(
+    nushell_right_prompt_ticks_on_its_own,
+    right_prompt_ticks_on_its_own,
+    Shell::Nushell,
+    "requires NUSHELL_MAIN"
+);
+shell_test!(
+    xonsh_right_prompt_ticks_on_its_own,
+    right_prompt_ticks_on_its_own,
+    Shell::Xonsh,
+    "requires XONSH_MAIN"
+);
