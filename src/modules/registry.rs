@@ -5,6 +5,10 @@ use std::sync::LazyLock;
 use crate::context::Context;
 use crate::module::Module;
 
+#[cfg(feature = "battery")]
+use super::BATTERY_PERIOD;
+use super::{Cadence, LOCALIP_PERIOD, MEMORY_USAGE_PERIOD, TIME_PERIOD};
+
 /// Declares [`BuiltinModule`] and everything that can be generated from
 /// enumerating it alone: its name in each direction, and the array of every
 /// variant. See the module-level doc comment for why this is a macro.
@@ -165,6 +169,7 @@ builtin_modules! {
 /// What the table says about a module, beyond what [`BuiltinModule`] already
 /// carries (its name).
 pub struct ModuleEntry {
+    pub cadence: Cadence,
     pub description: &'static str,
     /// This module's place in [`PROMPT_ORDER`], or `None` for a module that is
     /// not part of the default ordering — a profile-only module such as
@@ -186,88 +191,109 @@ pub const fn entry_for(module: BuiltinModule) -> ModuleEntry {
     match module {
         // Instant — a cheap system call, or reading shell-supplied or environment state. No file system traversal and no subprocess.
         M::Character => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "A character (usually an arrow) beside where the text is entered in your terminal",
             prompt_position: Some(100),
         },
         M::ClaudeContext => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "Context window usage for Claude Code session",
             prompt_position: None,
         },
         M::ClaudeCost => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "Cost info for Claude Code session",
             prompt_position: None,
         },
         M::ClaudeModel => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "AI model name for Claude Code session",
             prompt_position: None,
         },
         M::CmdDuration => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "How long the last command took to execute",
             prompt_position: Some(90),
         },
         M::Conda => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The current conda environment, if $CONDA_DEFAULT_ENV is set",
             prompt_position: Some(75),
         },
         M::Fill => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "Fills the remaining space on the line with a pad string",
             prompt_position: None,
         },
         M::GuixShell => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The guix-shell environment",
             prompt_position: Some(73),
         },
         M::Hostname => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The system hostname",
             prompt_position: Some(1),
         },
         M::Jobs => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The current number of jobs running",
             prompt_position: Some(92),
         },
         M::LineBreak => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "Separates the prompt into two lines",
             prompt_position: Some(91),
         },
         M::Meson => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set",
             prompt_position: Some(77),
         },
         M::NixShell => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The nix-shell environment",
             prompt_position: Some(74),
         },
         M::Shell => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The currently used shell indicator",
             prompt_position: Some(99),
         },
         M::Shlvl => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The current value of SHLVL",
             prompt_position: Some(3),
         },
         M::Singularity => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The currently used Singularity image",
             prompt_position: Some(4),
         },
         M::Spack => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The current spack environment, if $SPACK_ENV is set",
             prompt_position: Some(78),
         },
         M::Status => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The status of the last command",
             prompt_position: Some(95),
         },
         M::Username => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The active user's username",
             prompt_position: Some(0),
         },
         M::Vcsh => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The currently active VCSH repository",
             prompt_position: Some(8),
         },
 
         // Instant — a container marker under `/run`, a virtual filesystem backed by memory rather than a disk or a network mount: the `stat` or `open` against it cannot stall the way one against a real filesystem can.
         M::Container => ModuleEntry {
+            cadence: Cadence::Instant,
             description: "The container indicator, if inside a container.",
             prompt_position: Some(96),
         },
@@ -275,202 +301,257 @@ pub const fn entry_for(module: BuiltinModule) -> ModuleEntry {
         // Dynamic — intrinsically time-varying values, re-polled on their own period.
         #[cfg(feature = "battery")]
         M::Battery => ModuleEntry {
+            cadence: Cadence::Dynamic {
+                period: BATTERY_PERIOD,
+            },
             description: "The current charge of the device's battery and its current charging status",
             prompt_position: Some(93),
         },
         M::Localip => ModuleEntry {
+            cadence: Cadence::Dynamic {
+                period: LOCALIP_PERIOD,
+            },
             description: "The currently assigned ipv4 address",
             prompt_position: Some(2),
         },
         M::MemoryUsage => ModuleEntry {
+            cadence: Cadence::Dynamic {
+                period: MEMORY_USAGE_PERIOD,
+            },
             description: "Current system memory and swap usage",
             prompt_position: Some(79),
         },
         M::Time => ModuleEntry {
+            cadence: Cadence::Dynamic {
+                period: TIME_PERIOD,
+            },
             description: "The current local time",
             prompt_position: Some(94),
         },
 
         // Deferred — read one or more credentials or profile files under the user's home directory: `~/.aws/{config,credentials}`, `~/.azure/azureProfile.json`, `~/.config/gcloud/...`, `~/.config/openstack/clouds.yaml`. Each path is known up front, but "known up front" does not mean bounded — the directory it lives under may be a slow or network mount, and these are full file reads (parsed as INI or JSON), not a single cheap `stat`.
         M::Aws => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current AWS region and profile",
             prompt_position: Some(80),
         },
         M::Azure => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current Azure subscription",
             prompt_position: Some(83),
         },
         M::Gcloud => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current GCP client configuration",
             prompt_position: Some(81),
         },
         M::Openstack => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current OpenStack cloud and project",
             prompt_position: Some(82),
         },
 
         // Deferred — discover a repository, either by opening it through `Context::get_repo` or by walking the ancestors of the working directory looking for a control directory.
         M::Directory => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current working directory",
             prompt_position: Some(7),
         },
         M::GitCommit => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The active commit (and tag if any) of the current Git repo",
             prompt_position: Some(12),
         },
         M::GitState => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current Git operation and its progress",
             prompt_position: Some(13),
         },
         M::HgBranch => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The active branch and topic of the repo in your current directory",
             prompt_position: Some(16),
         },
         M::HgState => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current hg operation",
             prompt_position: Some(17),
         },
         M::Vcs => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently active VCS repository (first one matching)",
             prompt_position: None,
         },
 
         // Deferred — repository discovery followed by a `git` subprocess.
         M::GitBranch => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The active branch of the current Git repo",
             prompt_position: Some(11),
         },
         M::GitMetrics => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently added/deleted lines in your Git repo",
             prompt_position: Some(14),
         },
         M::GitStatus => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "Symbols representing the state of the current Git repo, filtered to your current directory",
             prompt_position: Some(15),
         },
 
         // Deferred — scan the working directory for marker files. No subprocess, but the scan itself is unbounded: its cost is set by the directory it lands in, not by the module.
         M::Daml => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The Daml SDK version of your project",
             prompt_position: Some(26),
         },
         M::DockerContext => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current docker context",
             prompt_position: Some(19),
         },
         M::Gradle => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Gradle",
             prompt_position: Some(37),
         },
         M::Kubernetes => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current Kubernetes context name and, if set, the namespace",
             prompt_position: Some(5),
         },
         M::Maven => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The Maven Wrapper version of the current project",
             prompt_position: Some(45),
         },
 
         // Deferred — `os_info` inspects the running system, which on several platforms means spawning a helper such as `sw_vers` or `lsb_release`.
         M::Os => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current operating system",
             prompt_position: Some(98),
         },
 
         // Deferred — spawn a subprocess to ask a tool for its version or its state. Most of these gate the subprocess behind a directory scan first, which makes them cheap in an unrelated directory but does not make them bounded: the scan is itself unbounded input/output.
         M::Buf => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of the Buf CLI",
             prompt_position: Some(72),
         },
         M::Bun => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of the Bun",
             prompt_position: Some(21),
         },
         M::C => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "Your C compiler type",
             prompt_position: Some(22),
         },
         M::Cmake => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of CMake",
             prompt_position: Some(23),
         },
         M::Cobol => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of COBOL/GNUCOBOL",
             prompt_position: Some(24),
         },
         M::Cpp => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "Your C++ compiler type",
             prompt_position: Some(25),
         },
         M::Crystal => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Crystal",
             prompt_position: Some(87),
         },
         M::Dart => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Dart",
             prompt_position: Some(27),
         },
         M::Deno => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Deno",
             prompt_position: Some(28),
         },
         M::Direnv => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently applied direnv file",
             prompt_position: Some(84),
         },
         M::Dotnet => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The relevant version of the .NET Core SDK for the current directory",
             prompt_position: Some(29),
         },
         M::Elixir => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed versions of Elixir and OTP",
             prompt_position: Some(30),
         },
         M::Elm => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Elm",
             prompt_position: Some(31),
         },
         M::Erlang => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "Current OTP version",
             prompt_position: Some(32),
         },
         M::Fennel => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Fennel",
             prompt_position: Some(33),
         },
         M::Fortran => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently used version of Fortran",
             prompt_position: Some(34),
         },
         M::FossilBranch => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The active branch of the check-out in your current directory",
             prompt_position: Some(9),
         },
         M::FossilMetrics => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently added/deleted lines in your check-out",
             prompt_position: Some(10),
         },
         M::Gleam => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Gleam",
             prompt_position: Some(35),
         },
         M::Golang => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Golang",
             prompt_position: Some(36),
         },
         M::Haskell => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The selected version of the Haskell toolchain",
             prompt_position: Some(38),
         },
         M::Haxe => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Haxe",
             prompt_position: Some(39),
         },
         M::Helm => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Helm",
             prompt_position: Some(40),
         },
         M::Java => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Java",
             prompt_position: Some(41),
         },
@@ -479,146 +560,182 @@ pub const fn entry_for(module: BuiltinModule) -> ModuleEntry {
             prompt_position: None,
         },
         M::Julia => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Julia",
             prompt_position: Some(42),
         },
         M::Kotlin => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Kotlin",
             prompt_position: Some(43),
         },
         M::Lua => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Lua",
             prompt_position: Some(44),
         },
         M::Mise => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current mise status",
             prompt_position: Some(86),
         },
         M::Mojo => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Mojo",
             prompt_position: Some(46),
         },
         M::Nats => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current NATS context",
             prompt_position: Some(6),
         },
         M::Netns => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current network namespace",
             prompt_position: Some(97),
         },
         M::Nim => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Nim",
             prompt_position: Some(47),
         },
         M::Nodejs => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of NodeJS",
             prompt_position: Some(48),
         },
         M::Ocaml => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of OCaml",
             prompt_position: Some(49),
         },
         M::Odin => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Odin",
             prompt_position: Some(50),
         },
         M::Opa => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Open Platform Agent",
             prompt_position: Some(51),
         },
         M::Package => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The package version of the current directory's project",
             prompt_position: Some(20),
         },
         M::Perl => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Perl",
             prompt_position: Some(52),
         },
         M::Php => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of PHP",
             prompt_position: Some(53),
         },
         M::PijulChannel => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current channel of the repo in the current directory",
             prompt_position: Some(18),
         },
         M::Pixi => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Pixi, and the active environment if $PIXI_ENVIRONMENT_NAME is set",
             prompt_position: Some(76),
         },
         M::Pulumi => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current username, stack, and installed version of Pulumi",
             prompt_position: Some(54),
         },
         M::Purescript => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of PureScript",
             prompt_position: Some(55),
         },
         M::Python => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Python",
             prompt_position: Some(56),
         },
         M::Quarto => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Quarto",
             prompt_position: Some(57),
         },
         M::Raku => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Raku",
             prompt_position: Some(58),
         },
         M::Red => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Red",
             prompt_position: Some(60),
         },
         M::Rlang => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of R",
             prompt_position: Some(59),
         },
         M::Ruby => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Ruby",
             prompt_position: Some(61),
         },
         M::Rust => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Rust",
             prompt_position: Some(62),
         },
         M::Scala => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Scala",
             prompt_position: Some(63),
         },
         M::Solidity => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The current installed version of Solidity",
             prompt_position: Some(64),
         },
         M::Sudo => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The sudo credentials are currently cached",
             prompt_position: Some(89),
         },
         M::Swift => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Swift",
             prompt_position: Some(65),
         },
         M::Terraform => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently selected terraform workspace and version",
             prompt_position: Some(66),
         },
         M::Typst => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Typst",
             prompt_position: Some(67),
         },
         M::Vagrant => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Vagrant",
             prompt_position: Some(69),
         },
         M::Vlang => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of V",
             prompt_position: Some(68),
         },
         M::Xmake => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of XMake",
             prompt_position: Some(70),
         },
         M::Zig => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The currently installed version of Zig",
             prompt_position: Some(71),
         },
@@ -783,6 +900,18 @@ impl<'a> ModuleId<'a> {
             return Some(Self::Custom(suffix));
         }
         None
+    }
+}
+
+/// The [`Cadence`] of `module`, or `None` if it is not recognised at all.
+#[must_use]
+pub fn cadence(module: &str) -> Option<Cadence> {
+    match ModuleId::parse(module)? {
+        ModuleId::Builtin(builtin) => Some(entry_for(builtin).cadence),
+        // A single environment variable lookup, whichever variable was named.
+        ModuleId::EnvVar(_) => Some(Cadence::Instant),
+        // A user-supplied command line, run through a shell.
+        ModuleId::Custom(_) => Some(Cadence::Deferred),
     }
 }
 
@@ -1051,9 +1180,10 @@ mod tests {
     }
 
     #[test]
-    fn description_agrees_with_entry_for() {
+    fn cadence_and_description_agree_with_entry_for() {
         for &module in BuiltinModule::ALL {
             let entry = entry_for(module);
+            assert_eq!(Some(entry.cadence), cadence(module.name()));
             assert_eq!(entry.description, description(module.name()));
         }
     }

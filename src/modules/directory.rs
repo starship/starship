@@ -19,11 +19,19 @@ use crate::configs::directory::{DirectoryConfig, SubstitutionConfig};
 use crate::formatter::StringFormatter;
 
 /// The `directory` module's renderer.
+///
+/// Reaches the filesystem in two places — repository discovery and the
+/// `$read_only` `stat` — both unbounded on a slow or network mount, so the
+/// instant approximation skips them; see [`UnboundedWork`].
 pub struct Directory;
 
 impl Render for Directory {
     fn full<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>> {
         render(context, UnboundedWork::Allowed)
+    }
+
+    fn instant<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>> {
+        render(context, UnboundedWork::Forbidden)
     }
 }
 
@@ -32,6 +40,7 @@ impl Render for Directory {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum UnboundedWork {
     Allowed,
+    Forbidden,
 }
 
 /// Creates a module with the current logical or physical directory
@@ -642,6 +651,49 @@ mod tests {
 
             assert_eq!(expected, actual);
         }
+    }
+
+    /// The instant approximation must never `stat` for `$read_only`, unlike the full render.
+    #[cfg(not(target_os = "windows"))]
+    #[test]
+    fn the_instant_approximation_never_shows_read_only() {
+        use std::os::unix::fs::PermissionsExt;
+
+        if nix::unistd::Uid::effective().is_root() {
+            return;
+        }
+
+        let home = tempfile::tempdir().expect("a temporary directory");
+        let working = home.path().join("locked");
+        std::fs::create_dir_all(&working).expect("a working directory");
+        let mut permissions = std::fs::metadata(&working)
+            .expect("the directory was just created")
+            .permissions();
+        permissions.set_mode(0o555);
+        std::fs::set_permissions(&working, permissions).expect("removing the write bit");
+
+        let mut context = crate::test::default_context().set_config(toml::toml! {
+            [directory]
+            format = "[$read_only]($read_only_style)"
+        });
+        context.current_dir = working.clone();
+        context.logical_dir = working;
+        context
+            .env
+            .insert("HOME", home.path().display().to_string());
+
+        let full = Directory.full(&context).expect("a full render");
+        assert!(
+            !full.get_segments().join("").is_empty(),
+            "a genuinely read-only directory must show `$read_only` in the full render"
+        );
+
+        let instant = Directory.instant(&context);
+        assert!(
+            instant.is_none_or(|module| module.get_segments().join("").is_empty()),
+            "the instant approximation must never show `$read_only`, since answering it \
+             would need a `stat` that a first paint may not perform"
+        );
     }
 
     #[test]

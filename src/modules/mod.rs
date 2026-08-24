@@ -184,12 +184,39 @@ pub fn cadence(module: &str) -> Option<Cadence> {
 }
 
 /// How a module produces its output.
+///
+/// Most modules produce one value: the value they exist to show, however long
+/// it takes to work out. A module whose real value needs unbounded work may
+/// additionally offer an *instant* one — a value that is correct as far as it
+/// goes, cheap enough to appear in the very first paint, and replaced by the
+/// real value as soon as that resolves.
+///
+/// The default [`Render::instant`] returns nothing, which is what "this module
+/// contributes nothing until it has really resolved" means. Overriding it is
+/// only worthwhile where a blank would be conspicuous; today that is
+/// [`directory::Directory`] alone, because a first paint with no path in it is
+/// not a prompt anyone would recognise.
 pub trait Render {
     /// The module's real value.
     fn full<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>>;
+
+    /// A value cheap enough to paint before anything slow has resolved, or
+    /// nothing if the module has no such value.
+    ///
+    /// An implementation must not perform unbounded input/output — no
+    /// subprocess, no repository discovery, no directory scan — since this runs
+    /// on the critical path between starting the process and drawing a prompt.
+    fn instant<'context>(&self, context: &'context Context<'_>) -> Option<Module<'context>> {
+        let _ = context;
+        None
+    }
 }
 
-/// The renderer of a module dispatched purely by name.
+/// The renderer of a module that has no instant approximation of its own.
+///
+/// It inherits [`Render::instant`]'s default. There is deliberately no way to
+/// give a module an instant approximation from here: a module that wants one
+/// declares it next to the rest of its own code, the way `directory` does.
 struct DispatchedByName<'name>(&'name str);
 
 impl Render for DispatchedByName<'_> {
@@ -210,6 +237,18 @@ fn with_renderer<T>(module: &str, action: impl FnOnce(&dyn Render) -> T) -> T {
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     timed(module, context, || {
         with_renderer(module, |renderer| renderer.full(context))
+    })
+}
+
+/// Renders `module`'s instant approximation, if it has one, recording how long
+/// it took.
+///
+/// Returns `None` both for a module with no approximation and for one whose
+/// approximation resolved to nothing; the two are the same thing to a caller
+/// painting a prompt, which is why they are not distinguished.
+pub fn instant<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
+    timed(module, context, || {
+        with_renderer(module, |renderer| renderer.instant(context))
     })
 }
 
@@ -272,6 +311,49 @@ mod test {
         for module in ALL_MODULES {
             println!("Checking if {module:?} has a description");
             assert_ne!(description(module), "<no description>");
+        }
+    }
+
+    #[test]
+    fn all_modules_have_a_cadence() {
+        // A module the renderer cannot classify is a module it cannot schedule,
+        // so adding one to `ALL_MODULES` without a cadence must fail here rather
+        // than silently fall back to some default.
+        for module in ALL_MODULES {
+            assert!(
+                cadence(module).is_some(),
+                "module {module:?} has no declared cadence; add it to `cadence`"
+            );
+        }
+    }
+
+    #[test]
+    fn dynamically_named_modules_have_a_cadence() {
+        // These two are dispatched by prefix rather than by name, so they never
+        // appear in `ALL_MODULES` and the check above cannot see them.
+        assert_eq!(cadence("env_var"), Some(Cadence::Instant));
+        assert_eq!(cadence("env_var.SHELL"), Some(Cadence::Instant));
+        assert_eq!(cadence("custom.git_hash"), Some(Cadence::Deferred));
+    }
+
+    #[test]
+    fn an_unknown_module_has_no_cadence() {
+        assert_eq!(cadence("not_a_module"), None);
+        // The prefixed forms only classify the prefixed forms.
+        assert_eq!(cadence("custom"), None);
+    }
+
+    #[test]
+    fn every_dynamic_period_is_usable() {
+        // A zero period would ask the renderer to re-poll without ever making
+        // progress.
+        for module in ALL_MODULES {
+            if let Some(Cadence::Dynamic { period }) = cadence(module) {
+                assert!(
+                    !period.is_zero(),
+                    "module {module:?} declares a zero refresh period"
+                );
+            }
         }
     }
 }
