@@ -210,7 +210,16 @@ jobs:
 
       # Run the ignored tests that expect the above setup.
       # `--run-ignored all` is nextest's spelling of `--include-ignored`.
+      #
+      # Coverage instrumentation is stable-only: cargo-llvm-cov's pinned
+      # release periodically falls out of sync with nightly rust's own
+      # ABI/codegen churn, which surfaces as every test passing and then
+      # object-file collection failing outright — a tool-compatibility
+      # failure, not a real test one. Nightly's purpose in this matrix is
+      # to catch compiler regressions in pass/fail, not to contribute a
+      # coverage number.
       - name: Build | Test
+        if: matrix.rust == 'stable'
         run: "cargo llvm-cov nextest
           --all-features
           --locked
@@ -218,10 +227,21 @@ jobs:
           --lcov --output-path lcov.info
           --run-ignored all"
         env:
-          # Avoid -D warnings on nightly builds
-          CARGO_BUILD_WARNINGS: ${{ matrix.rust == 'stable' && 'deny' || 'allow' }}
+          CARGO_BUILD_WARNINGS: deny
           # Snapshot mismatches must fail the run rather than writing
           # `.snap.new` files nobody will look at on a CI runner.
+          INSTA_UPDATE: "no"
+
+      - name: Build | Test [Nightly]
+        if: matrix.rust == 'nightly'
+        run: "cargo nextest run
+          --all-features
+          --locked
+          --workspace
+          --run-ignored all"
+        env:
+          # Nightly's own warnings are not this project's to fix.
+          CARGO_BUILD_WARNINGS: allow
           INSTA_UPDATE: "no"
 
       - name: Build | Installer [Windows]
@@ -273,7 +293,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        if: github.repository == 'starship/starship'
+        if: github.repository == 'starship/starship' && matrix.rust == 'stable'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
