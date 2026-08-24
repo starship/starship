@@ -72,6 +72,25 @@ add-zsh-hook zshexit starship_stream_stop
 
 typeset -gA STARSHIP_STREAM=(left.prompt '' right.prompt '')
 
+# Mirrors "is the edit buffer empty" into an ordinary variable, because the
+# obvious direct check cannot be done from where it is needed. `zle -F`
+# handlers (see `starship_stream_readable` below) are invoked through the
+# plain shell function-call mechanism, not through zle's widget dispatch, so
+# the zle special parameters `BUFFER`/`PREDISPLAY`/`POSTDISPLAY` are simply
+# unbound inside them — they read as empty unconditionally, whether or not
+# the user has actually typed anything. That made the previous direct check
+# there a no-op that always reported "buffer is empty", so a refinement's
+# fast path (a raw cell-precise repaint, safe only when nothing is on screen
+# but the prompt) could fire while the user was mid-edit and splice its
+# output into the middle of their unsubmitted command line.
+#
+# `zle-line-pre-redraw` is a real widget: zle calls it immediately before
+# every redraw of the line, with the special parameters valid, so this is
+# the one place that can observe them truthfully. Recording the answer here,
+# for a `zle -F` handler to read back later, is the only reliable way to
+# learn it from that side.
+typeset -g STARSHIP_EDITOR_BUFFER_EMPTY=1
+
 starship_prompt_arguments() {
     reply=(
         --terminal-width="$COLUMNS"
@@ -112,7 +131,7 @@ starship_editor_is_busy() {
 }
 
 starship_editor_is_at_prompt() {
-    [[ -z ${BUFFER-}${PREDISPLAY-}${POSTDISPLAY-} ]]
+    (( STARSHIP_EDITOR_BUFFER_EMPTY ))
 }
 
 starship_apply_prompt() {
@@ -217,6 +236,34 @@ else
         starship_zle-keymap-select "$@";
     }
     zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
+fi
+
+# Keeps STARSHIP_EDITOR_BUFFER_EMPTY (see its declaration above) in sync with
+# reality. Unlike `zle-keymap-select`, this widget can fire on every single
+# keystroke, so it does no more than a plain parameter check.
+starship_zle-line-pre-redraw() {
+    if [[ -z ${BUFFER-}${PREDISPLAY-}${POSTDISPLAY-} ]]; then
+        STARSHIP_EDITOR_BUFFER_EMPTY=1
+    else
+        STARSHIP_EDITOR_BUFFER_EMPTY=0
+    fi
+}
+
+## Check for an existing zle-line-pre-redraw widget (zsh-syntax-highlighting
+## and similar plugins commonly define one) so it keeps working unchanged.
+if [[ -v widgets[zle-line-pre-redraw] ]]; then
+    __starship_preserved_zle_line_pre_redraw=${widgets[zle-line-pre-redraw]#user:}
+fi
+
+if [[ -z ${__starship_preserved_zle_line_pre_redraw:-} ]]; then
+    zle -N zle-line-pre-redraw starship_zle-line-pre-redraw;
+else
+    # Define a wrapper fn to call the original widget fn and then Starship's.
+    starship_zle-line-pre-redraw-wrapped() {
+        $__starship_preserved_zle_line_pre_redraw "$@";
+        starship_zle-line-pre-redraw "$@";
+    }
+    zle -N zle-line-pre-redraw starship_zle-line-pre-redraw-wrapped;
 fi
 
 if (( ${+functions[TRAPWINCH]} )); then
