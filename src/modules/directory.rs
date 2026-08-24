@@ -1051,6 +1051,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
@@ -1073,7 +1074,6 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
-                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
@@ -1221,6 +1221,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
@@ -1248,7 +1249,6 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
-                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
