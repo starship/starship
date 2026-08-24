@@ -58,10 +58,15 @@ struct Pty {
     parser: Processor,
     terminal: Term<Listener>,
     events: mpsc::Receiver<Event>,
+    // The byte sequence that submits a typed line, per Shell::enter: every
+    // other shell's line editor accepts a bare `\n`, but PSReadLine's raw-
+    // mode key parser does not treat LF as Enter at all, so `close` and
+    // `abandon` below need the shell-appropriate byte, not a literal `\n`.
+    enter: &'static str,
 }
 
 impl Pty {
-    fn spawn(launch: Launch, cwd: &Path) -> Self {
+    fn spawn(launch: Launch, cwd: &Path, enter: &'static str) -> Self {
         let pty = tty::new(
             &Options {
                 shell: Some(PtyShell::new(
@@ -88,6 +93,7 @@ impl Pty {
             parser: Processor::new(),
             terminal: Term::new(Config::default(), &Size, Listener(sender)),
             events,
+            enter,
         }
     }
 
@@ -107,13 +113,12 @@ impl Pty {
         let mut bytes = [0; 4096];
 
         while Instant::now() < deadline {
+            let mut finished = false;
+
             match self.pty.reader().read(&mut bytes) {
-                Ok(0) => return true,
+                Ok(0) => finished = true,
                 Ok(read) => {
                     self.parser.advance(&mut self.terminal, &bytes[..read]);
-                    while let Ok(Event::PtyWrite(reply)) = self.events.try_recv() {
-                        let _ = self.pty.writer().write_all(reply.as_bytes());
-                    }
                 }
                 Err(error) if error.kind() == ErrorKind::WouldBlock => {
                     thread::sleep(Duration::from_millis(10))
@@ -123,9 +128,30 @@ impl Pty {
                 // side of the pty — the same "nothing more is coming" signal
                 // as `Ok(0)`, not a real failure.
                 Err(error) if error.raw_os_error() == Some(nix::errno::Errno::EIO as i32) => {
-                    return true;
+                    finished = true;
                 }
                 Err(error) => panic!("failed to read shell output: {error}"),
+            }
+
+            // Drain every reply the terminal's own query handling (cursor
+            // position reports, etc.) has queued so far, regardless of
+            // whether this exact iteration's read produced anything. A
+            // reply that is only ever sent "when a read happens to also
+            // land in the same iteration" can be permanently missed: once
+            // the shell blocks waiting for exactly that reply, it stops
+            // sending anything else, so there is never another read to
+            // trigger a later drain either — a self-inflicted deadlock
+            // between this harness and the shell, not a shell bug. This was
+            // observed for real: the final `ESC[6n` a shell issues right
+            // before redrawing its next prompt, with nothing queued to
+            // follow it, went unanswered under the old drain-on-read-only
+            // logic and the shell hung forever waiting for it.
+            while let Ok(Event::PtyWrite(reply)) = self.events.try_recv() {
+                let _ = self.pty.writer().write_all(reply.as_bytes());
+            }
+
+            if finished {
+                return true;
             }
         }
 
@@ -162,7 +188,8 @@ impl Pty {
     }
 
     fn close(&mut self) {
-        self.send("exit\n");
+        self.send("exit");
+        self.send(self.enter);
         let deadline = Instant::now() + TIMEOUT;
         while !self.pump(Duration::from_millis(25)) {
             assert!(
@@ -174,7 +201,8 @@ impl Pty {
     }
 
     fn abandon(&mut self) {
-        let _ = self.pty.writer().write_all(b"exit\n");
+        let _ = self.pty.writer().write_all(b"exit");
+        let _ = self.pty.writer().write_all(self.enter.as_bytes());
     }
 }
 
@@ -210,6 +238,17 @@ impl Shell {
             }
             Self::Xonsh => "print('RESULT:typing-survived')",
             Self::Zsh | Self::Fish | Self::Bash => "printf 'RESULT:%s\\n' typing-survived",
+        }
+    }
+
+    /// The byte that submits the typed line. Every other shell's line editor
+    /// accepts a bare `\n`; PSReadLine's raw-mode key parser does not treat
+    /// LF as Enter at all — confirmed with a bare `pwsh` session that never
+    /// even sources Starship — so PowerShell alone needs a literal `\r`.
+    const fn enter(self) -> &'static str {
+        match self {
+            Self::PowerShell => "\r",
+            Self::Zsh | Self::Fish | Self::Bash | Self::Nushell | Self::Xonsh => "\n",
         }
     }
 
@@ -472,7 +511,7 @@ impl Session {
     fn start_with_fixture(shell: Shell, fixture: Fixture) -> Self {
         let launch = shell.launch(&fixture);
         let startup = launch.startup;
-        let mut pty = Pty::spawn(launch, fixture.directory.path());
+        let mut pty = Pty::spawn(launch, fixture.directory.path(), shell.enter());
         if let Startup::Source(command) = startup {
             pty.send(command);
         }
@@ -509,9 +548,10 @@ fn streams(shell: Shell) {
 
     let input = shell.input();
     if matches!(shell, Shell::PowerShell) {
-        // PSReadLine's idle pump only repaints while the input buffer is
-        // empty, so the refinement lands before typing begins — and typed
-        // input can never be clobbered by a repaint at all.
+        // The PowerShell pump only writes Rust's cursor-neutral repaint while
+        // PSReadLine's input buffer is empty, so the refinement lands before
+        // typing begins — and typed input can never be clobbered by a repaint
+        // at all.
         session.pty.wait_for("SLOW");
         session.pty.send(input);
     } else {
@@ -523,7 +563,7 @@ fn streams(shell: Shell) {
         );
     }
 
-    session.pty.send("\n");
+    session.pty.send(shell.enter());
     session.pty.wait_for("RESULT:typing-survived");
     if matches!(shell, Shell::Nushell | Shell::PowerShell) {
         session.pty.wait_for("JOB_COUNT:0");

@@ -22,12 +22,9 @@ impl Tier {
         match shell {
             Shell::Zsh => Self::CellPrecise,
 
-            Shell::Fish
-            | Shell::Pwsh
-            | Shell::PowerShell
-            | Shell::Nu
-            | Shell::Xonsh
-            | Shell::Cmd => Self::PromptReplace,
+            Shell::Pwsh | Shell::PowerShell => Self::CellPrecise,
+
+            Shell::Fish | Shell::Nu | Shell::Xonsh | Shell::Cmd => Self::PromptReplace,
 
             Shell::Elvish => Self::Static,
 
@@ -173,6 +170,8 @@ mod tests {
             let _ = Tier::of(shell);
         }
         assert_eq!(Tier::CellPrecise, Tier::of(Shell::Zsh));
+        assert_eq!(Tier::CellPrecise, Tier::of(Shell::PowerShell));
+        assert_eq!(Tier::CellPrecise, Tier::of(Shell::Pwsh));
     }
 
     /// The shells whose output this change must not alter at all.

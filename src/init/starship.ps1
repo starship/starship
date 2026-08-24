@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 
 # Replace an earlier initialization cleanly. In particular, this runs the old
-# module's OnRemove hook so no renderer or pump subscription survives a reload.
+# module's OnRemove hook so no renderer process or pump pipeline survives a reload.
 Get-Module -Name starship | Remove-Module -Force
 
 # Keep Starship's implementation out of the global namespace. Only the prompt
@@ -11,14 +11,9 @@ $null = New-Module starship {
     $script:StreamTimings = ''
     $script:TransientPrompt = $false
 
-    # The one shared cell the OnIdle pump reads; it always holds the live
-    # stream (or $null). It must be a global: event actions run in a session
-    # state of their own where module variables, closures, and even the
-    # subscription's MessageData (PSReadLine generates OnIdle events with no
-    # payload) all fail to resolve — a global is the only channel that works.
-    $global:__StarshipStreamBox = @{ Stream = $null }
-    $script:PumpJob = $null
-    $script:PumpSubscriptionId = $null
+    # The box is the only live-stream state. It is touched by the prompt thread
+    # and the pump concurrently, hence synchronized.
+    $script:Stream = $null
 
     # Hosts without PSReadLine (the ISE, constrained hosts) still get a working
     # synchronous prompt; only streaming and transience require PSReadLine.
@@ -28,70 +23,142 @@ $null = New-Module starship {
     $script:DoesUseLists = $script:UsesPSReadLine -and
         (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
 
-    function Get-Cwd {
-        $cwd = Get-Location
-        $providerPrefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
-        @{
-            # ProviderPath is physical only for the FileSystem provider.
-            Path = $cwd.ProviderPath
-            # Microsoft.PowerShell.Core\FileSystem::Dev:\ -> Dev:\
-            LogicalPath = if ($cwd.Path.StartsWith($providerPrefix)) {
-                $cwd.Path.Substring($providerPrefix.Length)
-            } else {
-                $cwd.Path
-            }
+    # Start-StarshipStream copies these module-private functions into the
+    # private runspace and invokes the pump by command name.
+    function Write-StarshipStreamTty {
+        param([Parameter(Mandatory)] [string] $Text)
+
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($Text)
+        $tty = if ($env:OS -eq 'Windows_NT') {
+            [Console]::OpenStandardOutput()
+        } else {
+            [System.IO.File]::Open(
+                '/dev/tty',
+                [System.IO.FileMode]::Open,
+                [System.IO.FileAccess]::Write
+            )
+        }
+        try {
+            $tty.Write($bytes, 0, $bytes.Length)
+            $tty.Flush()
+        } finally {
+            $tty.Dispose()
         }
     }
 
-    function New-NativeProcess {
+    function Stop-StarshipProcess {
+        param([System.Diagnostics.Process] $Process)
+
+        if ($Process) {
+            try { $Process.Kill() } catch { }
+            $Process.Dispose()
+        }
+    }
+
+    function Invoke-StarshipStreamPump {
         param(
-            [Parameter(Mandatory)] [string] $Executable,
-            [Parameter(Mandatory)] [string[]] $Arguments
+            [System.Diagnostics.ProcessStartInfo] $StartInfo,
+            [hashtable] $Box
         )
 
-        $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
-            StandardOutputEncoding = [System.Text.Encoding]::UTF8
-            RedirectStandardOutput = $true
-            RedirectStandardError = $true
-            CreateNoWindow = $true
-            UseShellExecute = $false
+        $process = $null
+        try {
+            $process = [System.Diagnostics.Process]::Start($StartInfo)
+            $Box.Process = $process
+            $null = $process.StandardError.ReadToEndAsync()
+            $process.StandardInput.Close()
+            $reader = $process.StandardOutput
+
+            $frame = ConvertFrom-Json -InputObject $reader.ReadLine() -ErrorAction Stop
+            if ($frame.kind -ne 'READY') {
+                throw "starship stream began with '$($frame.kind)' instead of READY"
+            }
+            $Box.Prompt = $frame.prompt
+            $null = $Box.Ready.Set()
+
+            while (-not $Box.Stop) {
+                $line = $reader.ReadLine()
+                if ($null -eq $line) { break }
+                $frame = ConvertFrom-Json -InputObject $line -ErrorAction Stop
+                switch ($frame.kind) {
+                    'PATCH' {
+                        $Box.Prompt = $frame.prompt
+                        if ($null -eq $frame.repaint) {
+                            $Box.Stop = $true
+                        } else {
+                            $commandLine = $null; $cursor = 0
+                            $null = [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState(
+                                [ref]$commandLine, [ref]$cursor
+                            )
+                            if (-not $commandLine) {
+                                Write-StarshipStreamTty $frame.repaint
+                            }
+                        }
+                    }
+                    'COMPLETE' {
+                        $Box.Timings = ConvertTo-Json $frame.timings -Compress
+                    }
+                }
+            }
+        } catch {
+            if (-not $Box.Stop) {
+                $null = $Box.Ready.Set()
+                [Console]::Error.WriteLine("starship: the stream's pump stopped: $_")
+            }
+        } finally {
+            Stop-StarshipProcess $process
         }
+    }
+
+    # Reuse one initial-state template; each runspace gets its own execution
+    # state while the function definitions are captured only once per module.
+    $script:StreamState = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault()
+    Get-Command Write-StarshipStreamTty, Invoke-StarshipStreamPump, Stop-StarshipProcess -CommandType Function |
+        ForEach-Object {
+            $null = $script:StreamState.Commands.Add(
+                [System.Management.Automation.Runspaces.SessionStateFunctionEntry]::new(
+                    $_.Name, $_.Definition
+                )
+            )
+        }
+
+    function New-StarshipStartInfo {
+        param([Parameter(Mandatory)] [string[]] $Arguments)
+
+        $startInfo = [System.Diagnostics.ProcessStartInfo]::new($script:StarshipExecutable)
+        $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+        $startInfo.RedirectStandardOutput =
+            $startInfo.RedirectStandardError =
+            $startInfo.RedirectStandardInput = $true
+        $startInfo.CreateNoWindow = $startInfo.UseShellExecute = $false
 
         # ArgumentList bypasses Windows command-line re-parsing on modern .NET.
         # Windows PowerShell's .NET Framework lacks it, so retain the exact CRT
         # quoting algorithm as the compatibility path.
         if ($null -ne $startInfo.PSObject.Properties['ArgumentList']) {
             foreach ($argument in $Arguments) {
-                $startInfo.ArgumentList.Add($argument)
+                $null = $startInfo.ArgumentList.Add($argument)
             }
         } else {
-            $escaped = $Arguments | ForEach-Object {
-                $argument = $_ -Replace '(\\+)"', '$1$1"'
-                $argument = $argument -Replace '(\\+)$', '$1$1'
-                $argument = $argument -Replace '"', '\"'
-                "`"$argument`""
-            }
-            $startInfo.Arguments = $escaped -Join ' '
+            $escaped = $Arguments -replace '(\\+)"', '$1$1"' -replace '(\\+)$', '$1$1' -replace '"', '\"'
+            $startInfo.Arguments = ($escaped | ForEach-Object { "`"$_`"" }) -join ' '
         }
-
-        [System.Diagnostics.Process]::Start($startInfo)
+        $startInfo
     }
 
-    function Invoke-Native {
-        param(
-            [Parameter(Mandatory)] [string] $Executable,
-            [Parameter(Mandatory)] [string[]] $Arguments
-        )
+    function Invoke-Starship {
+        param([Parameter(Mandatory)] [string[]] $Arguments)
 
-        $process = New-NativeProcess -Executable $Executable -Arguments $Arguments
+        $process = [System.Diagnostics.Process]::Start((New-StarshipStartInfo $Arguments))
+        # Closed immediately: stdin is redirected only to keep the interactive
+        # terminal off the child's hands, and closing it hands back an EOF.
+        $process.StandardInput.Close()
         try {
-            # Drain both redirected pipes concurrently to rule out pipe-buffer
-            # deadlocks, including on the synchronous fallback path.
+            # Drain both pipes concurrently to rule out buffer-full deadlocks.
             $stdout = $process.StandardOutput.ReadToEndAsync()
             $stderr = $process.StandardError.ReadToEndAsync()
-            [System.Threading.Tasks.Task]::WaitAll(@($stdout, $stderr))
-
-            if ($stderr.Result.Trim() -ne '') {
+            [System.Threading.Tasks.Task]::WaitAll($stdout, $stderr)
+            if ($stderr.Result.Trim()) {
                 $Host.UI.WriteErrorLine($stderr.Result)
             }
             $stdout.Result
@@ -101,71 +168,64 @@ $null = New-Module starship {
     }
 
     function Stop-StarshipStream {
-        $stream = $global:__StarshipStreamBox.Stream
-        if ($null -eq $stream) {
-            return
+        $box = $script:Stream
+        $script:Stream = $null
+        if ($null -eq $box) { return }
+
+        if ($box.Timings) {
+            $script:StreamTimings = $box.Timings
         }
-        $global:__StarshipStreamBox.Stream = $null
-        if ($stream.Timings -ne '') {
-            $script:StreamTimings = $stream.Timings
-        }
+        # Kill the renderer to close its output pipe, which unblocks the pump's
+        # next read. The engine join is bounded because shutdown can race start.
+        $box.Stop = $true
+        try { Stop-StarshipProcess $box.Process } catch { }
         try {
-            if (-not $stream.Process.HasExited) {
-                $stream.Process.Kill()
+            if ($box.Engine) {
+                $null = $box.Engine.BeginStop($null, $null).AsyncWaitHandle.WaitOne(1000)
+                $box.Engine.Runspace.Dispose()
+                $box.Engine.Dispose()
             }
-        } catch {}
-        $stream.Process.Dispose()
+        } catch { }
+        $box.Ready.Dispose()
     }
 
     function Start-StarshipStream {
         param([Parameter(Mandatory)] [string[]] $Arguments)
 
-        $streamArguments = @('stream', '--frames=json') + $Arguments
-        if ($script:StreamTimings -ne '') {
-            $streamArguments += "--timings=$($script:StreamTimings)"
+        $box = [System.Collections.Hashtable]::Synchronized(@{
+            Ready = [System.Threading.ManualResetEventSlim]::new()
+            Stop = $false
+            Timings = ''
+            Process = $null
+            Prompt = $null
+            Engine = $null
+        })
+
+        $arguments = @('stream', '--frames', 'json') + $Arguments
+        if ($script:StreamTimings) {
+            $arguments += "--timings=$($script:StreamTimings)"
         }
 
-        $process = $null
         try {
-            $process = New-NativeProcess -Executable $script:StarshipExecutable -Arguments $streamArguments
-            # Never surface renderer diagnostics into an editable command line,
-            # and never let the renderer block on a full stderr pipe.
-            $null = $process.StandardError.ReadToEndAsync()
+            $script:Stream = $box
+            $box.Engine = [powershell]::Create()
+            $box.Engine.Runspace = [System.Management.Automation.Runspaces.RunspaceFactory]::CreateRunspace($script:StreamState)
+            $box.Engine.Runspace.Open()
+            $null = $box.Engine.AddCommand('Invoke-StarshipStreamPump').
+                AddArgument((New-StarshipStartInfo $arguments)).
+                AddArgument($box)
+            $null = $box.Engine.BeginInvoke()
 
-            # The READY latch is a plain task wait: the reading happens on the
-            # thread pool, so no PowerShell event pumping is involved at all.
-            $reader = $process.StandardOutput
-            $firstLine = $reader.ReadLineAsync()
-            if (-not $firstLine.Wait(2000) -or $null -eq $firstLine.Result) {
-                throw 'starship stream did not paint in time'
+            # The handshake bound: READY within two seconds, or tear the stream
+            # down and let the caller fall back to a synchronous render — the
+            # same contract the old native Attach enforced with its own timeouts.
+            if ($box.Ready.Wait(2000) -and $null -ne $box.Prompt) {
+                return $box.Prompt
             }
-            $frame = $firstLine.Result | ConvertFrom-Json -ErrorAction Stop
-            if ($frame.kind -ne 'READY') {
-                throw "starship stream began with $($frame.kind) instead of READY"
-            }
-
-            $global:__StarshipStreamBox.Stream = @{
-                NextLine = $reader.ReadLineAsync()
-                # What the terminal currently shows; the pump repaints
-                # relative to it.
-                Painted = [string]$frame.prompt
-                Process = $process
-                Prompt = [string]$frame.prompt
-                Reader = $reader
-                Timings = ''
-            }
-            $global:__StarshipStreamBox.Stream.Prompt
         } catch {
-            if ($null -ne $process) {
-                try {
-                    if (-not $process.HasExited) {
-                        $process.Kill()
-                    }
-                } catch {}
-                $process.Dispose()
-            }
-            $null
+            $box.Stop = $true
         }
+        Stop-StarshipStream
     }
 
     function Get-StarshipArguments {
@@ -174,31 +234,34 @@ $null = New-Module starship {
             [Parameter(Mandatory)] [int] $LastExitCode
         )
 
-        $cwd = Get-Cwd
-        # The pump subscription is implementation detail, never a user job.
-        $runningJobs = @(
-            Get-Job | Where-Object {
-                $_.State -eq 'Running' -and
-                ($null -eq $script:PumpJob -or $_.Id -ne $script:PumpJob.Id)
-            }
-        ).Count
+        $location = Get-Location
+        # ProviderPath is physical only for the FileSystem provider, whose
+        # prefix is what turns a logical Path into a physical one.
+        $prefix = "$($location.Provider.ModuleName)\$($location.Provider.Name)::"
+        $logicalPath = if ($location.Path.StartsWith($prefix)) {
+            $location.Path.Substring($prefix.Length)
+        } else {
+            $location.Path
+        }
+
         $arguments = @(
-            "--path=$($cwd.Path)"
-            "--logical-path=$($cwd.LogicalPath)"
+            "--path=$($location.ProviderPath)"
+            "--logical-path=$logicalPath"
             "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)"
-            "--jobs=$runningJobs"
+            "--jobs=$(@(
+                Get-Job |
+                    Where-Object State -EQ Running
+            ).Count)"
         )
 
-        # A fresh console has no history and is considered successful.
+        # A fresh console has no history and is considered successful. When the
+        # last command failed, the failure belongs to this command line only if
+        # the newest error record was raised by it; otherwise a native exit
+        # code is the honest status.
         $status = 0
         if ($lastCommand = Get-History -Count 1) {
             if (-not $DollarQuestion) {
-                $lastCmdletError = try {
-                    $global:error[0] |
-                        Where-Object { $null -ne $_ } |
-                        Select-Object -ExpandProperty InvocationInfo
-                } catch { $null }
-
+                $lastCmdletError = $global:error[0].InvocationInfo
                 $status = if (
                     $null -ne $lastCmdletError -and
                     $lastCommand.CommandLine -eq $lastCmdletError.Line
@@ -217,15 +280,10 @@ $null = New-Module starship {
         $arguments
     }
 
-    function Invoke-StarshipRender {
-        param([Parameter(Mandatory)] [string[]] $Arguments)
-        Invoke-Native -Executable $script:StarshipExecutable -Arguments (@('prompt') + $Arguments)
-    }
-
     function Set-StarshipExtraPromptLineCount {
         param([Parameter(Mandatory)] [string] $PromptText)
         if ($script:UsesPSReadLine) {
-            Set-PSReadLineOption -ExtraPromptLineCount ($PromptText.Split("`n").Length - 1)
+            Set-PSReadLineOption -ExtraPromptLineCount ($PromptText.Split("`n").Count - 1)
         }
     }
 
@@ -279,34 +337,27 @@ $null = New-Module starship {
             if (Test-Path function:Invoke-Starship-PreCommand) {
                 Invoke-Starship-PreCommand
             }
-        } catch {}
+        } catch { }
 
-        $argumentParameters = @{
-            DollarQuestion = $origDollarQuestion
-            LastExitCode = $origLastExitCode
-        }
-        $arguments = Get-StarshipArguments @argumentParameters
+        $arguments = Get-StarshipArguments -DollarQuestion $origDollarQuestion -LastExitCode $origLastExitCode
 
         $promptText = if ($script:TransientPrompt) {
             $script:TransientPrompt = $false
             if (Test-Path function:Invoke-Starship-TransientFunction) {
                 Invoke-Starship-TransientFunction
             } else {
-                "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
+                "$([char]27)[1;32m❯$([char]27)[0m "
             }
+        } elseif (
+            $script:UsesPSReadLine -and
+            $null -ne ($streamed = Start-StarshipStream $arguments)
+        ) {
+            # Set-StarshipExtraPromptLineCount needs PSReadLine to act on it,
+            # so without PSReadLine the prompt renders synchronously rather
+            # than starting a stream nothing would ever redraw.
+            $streamed
         } else {
-            # Streaming repaints ride on PSReadLine's idle pump, so without
-            # PSReadLine the prompt simply renders synchronously.
-            $streamed = if ($script:UsesPSReadLine) {
-                Start-StarshipStream -Arguments $arguments
-            } else {
-                $null
-            }
-            if ($null -ne $streamed) {
-                $streamed
-            } else {
-                Invoke-StarshipRender -Arguments $arguments
-            }
+            Invoke-Starship (@('prompt') + $arguments)
         }
 
         Set-StarshipExtraPromptLineCount -PromptText $promptText
@@ -323,128 +374,13 @@ $null = New-Module starship {
         }
     }
 
-    # The entire live-update mechanism: PSReadLine wakes the engine every 300ms
-    # while it waits for keys, but only when a PowerShell.OnIdle subscriber
-    # exists — so this single permanent subscription both causes the wake-ups
-    # and applies whatever frames have arrived. PSReadLine never fires OnIdle
-    # while a command runs or while typed text sits in the buffer, which is
-    # exactly when a repaint would be unwelcome, so no stop-at-Enter hook and
-    # no per-stream registration or teardown are needed. The action is fully
-    # self-contained (globals, .NET, and built-ins only) because it executes
-    # in a session state where nothing from this module resolves.
-    if ($script:UsesPSReadLine) {
-        $script:PumpJob = Register-EngineEvent -SourceIdentifier PowerShell.OnIdle -Action {
-            $stream = $global:__StarshipStreamBox.Stream
-            if ($null -eq $stream) {
-                return
-            }
-
-            # Apply every frame the renderer has finished writing. Never
-            # blocks: only completed read tasks are consumed.
-            $changed = $false
-            while ($null -ne $stream.NextLine -and $stream.NextLine.IsCompleted) {
-                $line = $null
-                try { $line = $stream.NextLine.Result } catch {}
-                if ($null -eq $line) {
-                    # End of stream. Normal after COMPLETE; after a renderer
-                    # crash the last good paint stays until the next prompt.
-                    $stream.NextLine = $null
-                    break
-                }
-                $stream.NextLine = $stream.Reader.ReadLineAsync()
-
-                try {
-                    $frame = $line | ConvertFrom-Json -ErrorAction Stop
-                } catch {
-                    continue
-                }
-                switch ($frame.kind) {
-                    'PATCH' {
-                        $stream.Prompt = [string]$frame.prompt
-                        $changed = $true
-                    }
-                    'COMPLETE' {
-                        $stream.Timings = $frame.timings | ConvertTo-Json -Compress
-                    }
-                }
-            }
-
-            if (-not $changed) {
-                return
-            }
-
-            # Repaint only the prompt lines above the input line, with purely
-            # relative cursor movement. Two hard-won constraints shape this:
-            #
-            #   * On Unix, any write through the .NET console layer (Console,
-            #     $Host.UI, even the raw stdout stream) while PSReadLine waits
-            #     for keys silently stops its idle pump for the rest of the
-            #     input session — measured, not theoretical. Writing to the
-            #     terminal device directly leaves it running. Windows consoles
-            #     have no such failure mode, so the host writer is fine there.
-            #
-            #   * The final prompt line is PSReadLine's anchor for where typed
-            #     input begins, so it is never redrawn and the line count is
-            #     never changed; PSReadLine's model of the screen stays valid
-            #     without telling it anything. A patch that would change the
-            #     line structure or the final line is skipped — the next
-            #     prompt renders it anyway.
-            $oldLines = $stream.Painted.Split("`n")
-            $newLines = $stream.Prompt.Split("`n")
-            if (
-                $newLines.Length -le 1 -or
-                $newLines.Length -ne $oldLines.Length -or
-                $newLines[-1] -cne $oldLines[-1]
-            ) {
-                return
-            }
-
-            $escape = [char]27
-            $sequence = New-Object System.Text.StringBuilder
-            # Hide the cursor, save its position, and hop to the first line.
-            $null = $sequence.Append("$escape[?25l$escape").Append('7')
-            $null = $sequence.Append("`r$escape[").Append($newLines.Length - 1).Append('A')
-            for ($index = 0; $index -lt $newLines.Length - 1; $index++) {
-                $null = $sequence.Append($newLines[$index]).Append("$escape[K")
-                if ($index -lt $newLines.Length - 2) {
-                    $null = $sequence.Append("`r`n")
-                }
-            }
-            $null = $sequence.Append("$escape").Append('8').Append("$escape[?25h")
-
-            try {
-                if ([System.Environment]::OSVersion.Platform -eq 'Win32NT') {
-                    $Host.UI.Write($sequence.ToString())
-                } else {
-                    $terminal = [IO.File]::OpenWrite('/dev/tty')
-                    try {
-                        $bytes = [Text.Encoding]::UTF8.GetBytes($sequence.ToString())
-                        $terminal.Write($bytes, 0, $bytes.Length)
-                    } finally {
-                        $terminal.Dispose()
-                    }
-                }
-                $stream.Painted = $stream.Prompt
-            } catch {}
-        }
-        $script:PumpSubscriptionId = (
-            Get-EventSubscriber |
-                Where-Object { $_.Action -eq $script:PumpJob } |
-                Select-Object -First 1
-        ).SubscriptionId
-    }
-
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT = 1
-    $ENV:STARSHIP_SHELL = if ($PSVersionTable.PSVersion.Major -gt 5) { 'pwsh' } else { 'powershell' }
-    $ENV:STARSHIP_SESSION_KEY = -join (
-        (48..57) + (65..90) + (97..122) |
-            Get-Random -Count 16 |
-            ForEach-Object { [char]$_ }
-    )
+    $ENV:STARSHIP_SHELL = ('powershell', 'pwsh')[$PSVersionTable.PSVersion.Major -gt 5]
+    $ENV:STARSHIP_SESSION_KEY = [guid]::NewGuid().ToString('N').Substring(0, 16)
 
     if ($script:UsesPSReadLine) {
         Set-PSReadLineOption -ContinuationPrompt (
-            Invoke-Native -Executable $script:StarshipExecutable -Arguments @('prompt', '--continuation')
+            Invoke-Starship @('prompt', '--continuation')
         )
 
         try {
@@ -459,18 +395,11 @@ $null = New-Module starship {
                     [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
                 }
             }
-        } catch {}
+        } catch { }
     }
 
     $ExecutionContext.SessionState.Module.OnRemove = {
         Stop-StarshipStream
-        if ($null -ne $script:PumpSubscriptionId) {
-            Unregister-Event -SubscriptionId $script:PumpSubscriptionId -ErrorAction SilentlyContinue
-        }
-        if ($null -ne $script:PumpJob) {
-            Remove-Job -Job $script:PumpJob -Force -ErrorAction SilentlyContinue
-        }
-        Remove-Variable -Name __StarshipStreamBox -Scope Global -ErrorAction SilentlyContinue
     }
 
     Export-ModuleMember -Function @(
