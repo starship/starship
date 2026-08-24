@@ -1006,11 +1006,21 @@ mod tests {
 
     /// Three slow modules separated by `$fill`, sleeps spaced to land in one group without
     /// depending on scheduler noise; the fill keeps every refinement width-stable.
+    ///
+    /// The gaps between sleeps (300ms) are wide relative to process-spawn and
+    /// scheduling jitter under a loaded CI runner — narrower gaps (previously
+    /// 20ms) let that jitter push the "informed" run's predicted arrivals far
+    /// enough off the "unaided" run's actual ones that they landed in
+    /// different repaint groups, intermittently failing a test whose whole
+    /// point is that they group. `command_timeout` is raised well past the
+    /// longest sleep since the default (500ms) would otherwise kill these
+    /// modules before they resolve.
     fn context_with_three_width_stable_modules() -> (Context<'static>, tempfile::TempDir) {
         let directory = tempfile::tempdir().expect("a temporary directory");
         let mut context = refinable(default_context()).set_config(toml::toml! {
             add_newline = false
             format = "${custom.first}$fill${custom.second} ${custom.third}$line_break$character"
+            command_timeout = 10_000
             [async]
             bus = GENEROUS_WINDOW
             [character]
@@ -1019,15 +1029,15 @@ mod tests {
             symbol = "."
             [custom.first]
             when = true
-            command = "sleep 0.10 && echo one"
+            command = "sleep 0.30 && echo one"
             format = "[$output](cyan)"
             [custom.second]
             when = true
-            command = "sleep 0.12 && echo two"
+            command = "sleep 0.60 && echo two"
             format = "[$output](yellow)"
             [custom.third]
             when = true
-            command = "sleep 0.14 && echo three"
+            command = "sleep 0.90 && echo three"
             format = "[$output](red)"
         });
         context.current_dir = directory.path().to_path_buf();
