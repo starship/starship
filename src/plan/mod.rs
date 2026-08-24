@@ -60,12 +60,6 @@ impl fmt::Display for ModuleName {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) struct ModuleSlot(usize);
 
-impl ModuleSlot {
-    pub(crate) fn index(self) -> usize {
-        self.0
-    }
-}
-
 /// The modules that can make a conditional visible.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 struct Predicate(Vec<ModuleSlot>);
@@ -183,12 +177,6 @@ pub struct ModuleUse {
     slot: ModuleSlot,
 }
 
-impl ModuleUse {
-    pub(crate) fn slot(&self) -> ModuleSlot {
-        self.slot
-    }
-}
-
 /// The prompt, built from configuration alone.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Plan {
@@ -272,6 +260,20 @@ pub struct PromptState<'plan> {
     resolved: Vec<Vec<Segment>>,
 }
 
+/// An attempt to record a module result in a state for another plan.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum RecordError {
+    ForeignModuleUse,
+}
+
+impl fmt::Display for RecordError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("module use does not belong to this prompt plan")
+    }
+}
+
+impl std::error::Error for RecordError {}
+
 impl<'plan> PromptState<'plan> {
     /// A render of `plan` in which no module has resolved yet.
     pub fn empty(plan: &'plan Plan) -> Self {
@@ -286,8 +288,22 @@ impl<'plan> PromptState<'plan> {
     /// The module is named by a borrow of the plan's own copy of the name, so
     /// what is recorded cannot be about a prompt other than the one being
     /// rendered.
-    pub fn record(&mut self, module: &ModuleUse, segments: Vec<Segment>) {
+    pub fn record(
+        &mut self,
+        module: &ModuleUse,
+        segments: Vec<Segment>,
+    ) -> Result<(), RecordError> {
+        if !self
+            .plan
+            .module_uses()
+            .iter()
+            .any(|candidate| std::ptr::eq(candidate, module))
+        {
+            return Err(RecordError::ForeignModuleUse);
+        }
+
         self.resolved[module.slot.0] = segments;
+        Ok(())
     }
 
     /// What a module resolved to, or nothing if it has not resolved.
@@ -744,7 +760,7 @@ mod tests {
         let mut state = PromptState::empty(plan);
         for module_use in plan.module_uses() {
             if let Some(segments) = table.get(module_use.module.as_str()) {
-                state.record(module_use, segments.clone());
+                state.record(module_use, segments.clone()).unwrap();
             }
         }
         state
@@ -920,8 +936,8 @@ mod tests {
         let mut state = PromptState::empty(&plan);
         let alpha = module(&plan, "alpha");
 
-        state.record(alpha, Segment::from_text(None, "first"));
-        state.record(alpha, Segment::from_text(None, "second"));
+        state.record(alpha, Segment::from_text(None, "first")).unwrap();
+        state.record(alpha, Segment::from_text(None, "second")).unwrap();
 
         assert_eq!("second", render_markup(&state));
     }
@@ -932,7 +948,7 @@ mod tests {
     fn a_conditional_keeps_its_literal_with_its_module() {
         let plan = default_plan("($alpha literal)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A"));
+        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
 
         assert_eq!("A literal", render_markup(&state));
     }
@@ -984,7 +1000,7 @@ mod tests {
     fn a_nested_conditional_is_visible_when_its_module_is_filled() {
         let plan = default_plan("(literal ($alpha))");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A"));
+        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
 
         assert_eq!("literal A", render_markup(&state));
     }
@@ -996,7 +1012,7 @@ mod tests {
 
         assert_eq!("", render_markup(&state));
 
-        state.record(module(&plan, "beta"), Segment::from_text(None, "B"));
+        state.record(module(&plan, "beta"), Segment::from_text(None, "B")).unwrap();
         assert_eq!("B", render_markup(&state));
     }
 
@@ -1004,7 +1020,7 @@ mod tests {
     fn an_empty_segment_does_not_fill_a_module() {
         let plan = default_plan("($alpha)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, ""));
+        state.record(module(&plan, "alpha"), Segment::from_text(None, "")).unwrap();
 
         assert_eq!("", render_markup(&state));
     }
@@ -1098,7 +1114,7 @@ mod tests {
     fn a_module_inherits_the_style_of_its_text_group() {
         let plan = default_plan("[$alpha](red bold)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A"));
+        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
 
         assert_eq!("[A](red bold)", render_markup(&state));
     }
