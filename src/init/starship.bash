@@ -66,7 +66,10 @@ starship_ble_stream_end() {
 
 starship_ble_stream_step() {
     local side=$1 descriptor=${STARSHIP_STREAM[$1.fd]-}
-    while read -t 0 -u "$descriptor"; do
+    # One frame per idle tick, not a drain loop: redrawing faster than
+    # ble.sh's own cursor-position queries can round-trip corrupts the
+    # line with stray query-response bytes.
+    if read -t 0 -u "$descriptor"; then
         if ! starship_ble_read_frame "$descriptor"; then
             starship_ble_stream_end "$side"
             return
@@ -81,8 +84,7 @@ starship_ble_stream_step() {
                 STARSHIP_STREAM[$side.done]=1
                 ;;
         esac
-    done
-    if ! kill -0 "${STARSHIP_STREAM[$side.pid]-}" 2>/dev/null; then
+    elif ! kill -0 "${STARSHIP_STREAM[$side.pid]-}" 2>/dev/null; then
         starship_ble_stream_end "$side"
         return
     fi
