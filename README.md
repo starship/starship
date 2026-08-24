@@ -351,6 +351,20 @@ eval $(starship init ion)
 </details>
 
 <details>
+<summary>Lumesh</summary>
+
+Lumesh has builtin support for Starship. Add the following to `~/.config/lumesh/config.lm`:
+
+```bash
+set LUME_PROMPT_SETTINGS = {
+        starship: 1,             # or `true`
+        lazy: 0,                 # 2 is ok if no duration/jobs/status needed
+}
+```
+
+</details>
+
+<details>
 <summary>Nushell</summary>
 
 Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):

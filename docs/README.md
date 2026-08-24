@@ -146,6 +146,19 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
+   #### Lumesh
+
+   Add the following to `~/.config/lumesh/config.lm`:
+
+   ```bash
+   # ~/.config/lumesh/config.lm
+
+   set LUME_PROMPT_SETTINGS = {
+           starship: 1,             # or `true`
+           lazy: 0,                 # 2 is ok if no duration/jobs/status needed
+   }
+   ```
+
    #### Nushell
    > [!WARNING]
    > This will change in the future.
