@@ -303,7 +303,7 @@ jobs:
           --workspace
           -E '${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all()' || 'not binary(init_async)' }}'
           --lcov --output-path lcov.info
-          --run-ignored all"
+          --run-ignored ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all' || 'default' }}"
         env:
           CARGO_BUILD_WARNINGS: deny
           # Snapshot mismatches must fail the run rather than writing
