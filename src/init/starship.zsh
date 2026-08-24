@@ -124,6 +124,14 @@ starship_apply_prompt() {
         zle -I
         print -rn -- "$repaint"
     else
+        # zle -F handlers run outside the ordinary widget context zle expects,
+        # so a `reset-prompt` here without first invalidating the display can
+        # make zle redisplay the wrong prompt in the wrong place (it has been
+        # observed drawing the right prompt's freshly patched text over the
+        # left prompt's position). `zle -I` (see zshzle(1)) is the documented
+        # way to tell zle its cached display is stale before an out-of-band
+        # handler asks it to redraw.
+        zle -I
         zle reset-prompt
     fi
 }
@@ -139,6 +147,8 @@ starship_stream_readable() {
             [[ $side == right ]] && target=(--right)
             starship_prompt_arguments
             STARSHIP_STREAM[$side.prompt]="$(::STARSHIP:: prompt "${target[@]}" "${reply[@]}")"
+            # See the comment beside `zle -I` in starship_apply_prompt above.
+            zle -I
             zle reset-prompt
         fi
         return
@@ -221,6 +231,9 @@ TRAPWINCH() {
     fi
     if zle; then
         starship_stream_start
+        # A trap is, like a `zle -F` handler, outside the ordinary widget
+        # context — see the comment beside `zle -I` in starship_apply_prompt.
+        zle -I
         zle reset-prompt
     fi
 }
