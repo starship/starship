@@ -672,6 +672,7 @@ mod tests {
             .path(home_dir().unwrap().join("path/subpath"))
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 home_symbol = "🚀"
             })
             .collect();
@@ -685,6 +686,7 @@ mod tests {
             .path("/some/long/network/path/workspace/a/b/c/dev")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 4
                 [directory.substitutions]
                 "/some/long/network/path" = "/some/net"
@@ -700,6 +702,8 @@ mod tests {
         let rendered = ModuleRenderer::new("directory")
             .path("/path/to/sub")
             .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
                 [directory.substitutions]
                 "/path/to/sub" = "/correct/order"
                 "/to/sub" = "/wrong/order"
@@ -716,6 +720,7 @@ mod tests {
             .path("/foo/bar/regular/path")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 0
                 fish_style_pwd_dir_length = 2 // Overridden by substitutions
                 [directory.substitutions]
@@ -732,6 +737,7 @@ mod tests {
             .path(path)
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 format = "[$path]($style)"
                 substitutions = [
                     { from = "~/Documents", to = "docs"},
@@ -760,6 +766,7 @@ mod tests {
             .path("/var/log")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 format = "[$path]($style)"
                 substitutions = [
                     { from = "~/Documents", to = "docs"},
@@ -777,6 +784,10 @@ mod tests {
 
         let rendered = home_project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(home_project.path().join("starship"))
             .collect();
 
@@ -789,6 +800,10 @@ mod tests {
 
         let rendered = home_project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(home_project.path().join("engine/schematics"))
             .collect();
 
@@ -827,6 +842,7 @@ mod tests {
         let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 read_only = ""
                 read_only_style = ""
             })
@@ -843,6 +859,10 @@ mod tests {
 
         let rendered = project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(project.path().join("thrusters/rocket"))
             .collect();
 
@@ -911,6 +931,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 2
             })
             .path(project.path().join("rocket"))
@@ -990,6 +1011,10 @@ mod tests {
 
         let rendered = project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(repo_dir.join("src"))
             .collect();
 
@@ -1005,6 +1030,10 @@ mod tests {
 
         let rendered = project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(repo_dir.join("src/meters/fuel-gauge"))
             .collect();
 
@@ -1044,6 +1073,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
@@ -1104,6 +1134,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // `truncate_to_repo = true` should display the truncated path
                 truncation_length = 5
                 truncate_to_repo = true
@@ -1141,6 +1172,10 @@ mod tests {
 
         let rendered = project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(symlink_dir.join("src"))
             .collect();
 
@@ -1159,6 +1194,10 @@ mod tests {
 
         let rendered = project
             .renderer("directory")
+            .config(toml::toml! {
+                [directory]
+                use_os_path_sep = false
+            })
             .path(symlink_dir.join("src/meters/fuel-gauge"))
             .collect();
 
@@ -1209,6 +1248,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // Don't truncate the path at all.
                 truncation_length = 5
                 truncate_to_repo = false
@@ -1279,6 +1319,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // `truncate_to_repo = true` should display the truncated path
                 truncation_length = 5
                 truncate_to_repo = true
@@ -1302,6 +1343,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 // `truncate_to_repo = true` should display the truncated path
                 truncation_length = 5
                 truncate_to_repo = true
@@ -1317,6 +1359,7 @@ mod tests {
         let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
@@ -1331,6 +1374,7 @@ mod tests {
         let rendered = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 4
                 truncation_symbol = "…/"
             })
@@ -1348,6 +1392,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
@@ -1365,6 +1410,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncate_to_repo = false // Necessary if homedir is a git repo
                 truncation_length = 4
                 truncation_symbol = "…/"
@@ -1386,6 +1432,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
@@ -1406,6 +1453,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 5
                 truncation_symbol = "…/"
                 truncate_to_repo = true
@@ -1481,6 +1529,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 use_logical_path = true
                 truncation_length = 3
             })
@@ -1499,6 +1548,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 use_logical_path = false
                 truncation_length = 3
             })
@@ -1579,6 +1629,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 5
                 truncate_to_repo = true
                 repo_root_style = "bold red"
@@ -1600,6 +1651,7 @@ mod tests {
             .renderer("directory")
             .config(toml::toml! {
                 [directory]
+                use_os_path_sep = false
                 truncation_length = 5
                 truncation_symbol = "…/"
                 truncate_to_repo = false
