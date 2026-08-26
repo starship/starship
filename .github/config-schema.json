@@ -1100,6 +1100,7 @@
         "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
         "symbol": "🐏 ",
+        "show_always": false,
         "disabled": true
       }
     },
@@ -4946,9 +4947,19 @@
           "type": "string",
           "default": "white bold dimmed"
         },
+        "threshold_style": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "symbol": {
           "type": "string",
           "default": "🐏 "
+        },
+        "show_always": {
+          "type": "boolean",
+          "default": false
         },
         "disabled": {
           "type": "boolean",

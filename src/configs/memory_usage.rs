@@ -11,7 +11,10 @@ pub struct MemoryConfig<'a> {
     pub threshold: i64,
     pub format: &'a str,
     pub style: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threshold_style: Option<&'a str>,
     pub symbol: &'a str,
+    pub show_always: bool,
     pub disabled: bool,
 }
 
@@ -21,7 +24,9 @@ impl Default for MemoryConfig<'_> {
             threshold: 75,
             format: "via $symbol[$ram( | $swap)]($style) ",
             style: "white bold dimmed",
+            threshold_style: None,
             symbol: "🐏 ",
+            show_always: false,
             disabled: true,
         }
     }
