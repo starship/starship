@@ -245,13 +245,15 @@ jobs:
           BLE_SH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
           NUSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
 
+      # Nightly has no shell-streaming setup (see the comment on the stable
+      # `Build | Test` step above), so it only needs the non-init_async slice.
       - name: Build | Test [Nightly]
         if: matrix.rust == 'nightly'
         run: "cargo nextest run
           --all-features
           --locked
           --workspace
-          --run-ignored all"
+          -E 'not binary(init_async)'"
         env:
           # Nightly's own warnings are not this project's to fix.
           CARGO_BUILD_WARNINGS: allow
