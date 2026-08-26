@@ -375,23 +375,9 @@ format = '$all$directory$character'
 
 ## Async
 
-Starship can draw available modules first and refine the prompt as slower
-modules resolve. The final prompt is identical to a synchronous render.
-
-| Shell                                                    | Refinement                                                            |
-| -------------------------------------------------------- | --------------------------------------------------------------------- |
-| zsh                                                      | Changed cells are repainted in place.                                 |
-| fish                                                     | The complete prompt is replaced.                                      |
-| Nushell main                                             | The complete prompt is replaced with its unreleased async prompt API. |
-| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced.                                      |
-| Stock Bash and other shells                              | The prompt remains synchronous.                                       |
-
-`bus` batches width-changing refinements for up to its configured delay;
-`adaptive` places those batches using timings from the current shell session.
-Width-stable changes apply immediately.
-
-`time`, `battery`, `memory_usage`, and `localip` refresh on these intervals,
-but only while visible and included in the prompt's format.
+Starship is capable of showing prompts before all modules are complete. It streams
+modules in as it receives information. The overall creation time is equivalent,
+but interactivity is not blocked. It's enabled by default, if your shell supports it.
 
 ### How it works
 
