@@ -22,19 +22,16 @@ impl Tier {
         match shell {
             Shell::Zsh => Self::CellPrecise,
 
-            Shell::Fish => Self::PromptReplace,
-
-            Shell::Nu => Self::PromptReplace,
-
-            Shell::Elvish | Shell::Xonsh => Self::Static,
-
-            Shell::Bash
+            Shell::Fish
             | Shell::Pwsh
             | Shell::PowerShell
-            | Shell::Ion
-            | Shell::Tcsh
-            | Shell::Cmd
-            | Shell::Unknown => Self::Static,
+            | Shell::Nu
+            | Shell::Xonsh
+            | Shell::Cmd => Self::PromptReplace,
+
+            Shell::Elvish => Self::Static,
+
+            Shell::Bash | Shell::Ion | Shell::Tcsh | Shell::Unknown => Self::Static,
         }
     }
 
@@ -191,16 +188,12 @@ mod tests {
             vec![
                 Shell::Bash,
                 Shell::Ion,
-                Shell::Pwsh,
-                Shell::PowerShell,
                 Shell::Elvish,
                 Shell::Tcsh,
-                Shell::Xonsh,
-                Shell::Cmd,
                 Shell::Unknown,
             ],
             unrefinable,
-            "every shell but zsh, fish and nu is drawn synchronously today"
+            "every shell but zsh, fish, PowerShell, nu, xonsh and Clink is drawn synchronously today"
         );
     }
 
