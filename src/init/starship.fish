@@ -77,7 +77,11 @@ function __starship_stream_start --argument-names terminal_width keymap command_
         return
     end
 
-    ::STARSHIP:: stream $arguments --timings="$STARSHIP_TIMINGS" | $__fish_bin_dir/fish -c '
+    # `< /dev/null`: this renderer is backgrounded and outlives the prompt
+    # that launched it, but nothing here ever reads stdin. Left inherited,
+    # it would be the shell's own pty, and a renderer still alive when the
+    # shell exits would keep that pty from ever reporting end-of-file.
+    ::STARSHIP:: stream $arguments --timings="$STARSHIP_TIMINGS" < /dev/null | $__fish_bin_dir/fish -c '
         set -l state_name $argv[1]
         set -l ready_fifo $argv[2]
         set -l arguments $argv[3..]
