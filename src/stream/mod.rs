@@ -95,6 +95,10 @@ impl SnapshotSink {
         // writer that never closes leaves anything reading to EOF hanging for
         // the life of the renderer. /dev/null takes the descriptor's place so
         // a later write cannot land on whatever reuses the number.
+        //
+        // Unix-only: `--detach` (the only path that sets announce_first_paint)
+        // is itself gated to unix in main.rs, so this never runs on Windows.
+        #[cfg(unix)]
         if let Ok(sink) = std::fs::OpenOptions::new().write(true).open("/dev/null") {
             let _ = nix::unistd::dup2_stdout(&sink);
         }

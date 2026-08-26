@@ -244,6 +244,14 @@ fn detach_if_requested() {
         // cannot reach a renderer that has outlived the command line it drew.
         Ok(nix::unistd::ForkResult::Child) => {
             let _ = nix::unistd::setsid();
+            // `setsid` only drops the *controlling* terminal; the inherited
+            // stdin fd still points at the shell's pty. A renderer that
+            // outlives the shell keeps that fd open, so the pty's other end
+            // never sees EOF — the shell looks like it never exited. This
+            // process never reads stdin, so /dev/null is a correct stand-in.
+            if let Ok(dev_null) = std::fs::File::open("/dev/null") {
+                let _ = nix::unistd::dup2_stdin(&dev_null);
+            }
         }
         // Nothing has been written yet, so staying in the foreground is a slow
         // prompt rather than a broken one.
