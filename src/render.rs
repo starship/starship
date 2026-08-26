@@ -3,6 +3,7 @@
 use std::collections::BTreeSet;
 use std::fmt;
 use std::sync::mpsc;
+use std::thread;
 use std::time::{Duration, Instant};
 
 use crate::context::Context;
@@ -207,32 +208,110 @@ impl<'plan> Resolutions<'plan> {
     }
 }
 
-pub struct Spawner<'borrow, 'scope, 'context> {
-    scope: &'borrow rayon::Scope<'scope>,
-    sender: mpsc::Sender<Resolution<'scope>>,
-    context: &'scope Context<'context>,
+/// Hands work to the running scope.
+///
+/// The plan and the threads need separate lifetimes here, where the rayon scope
+/// this replaced needed only one. `thread::Scope` is invariant in its own
+/// lifetime, so tying the two together would demand that the plan live exactly
+/// as long as the scope rather than merely outlive it, and no caller can
+/// promise that. `'plan: 'scope` says the true thing instead.
+pub struct Spawner<'scope, 'env, 'plan, 'context> {
+    scope: &'scope thread::Scope<'scope, 'env>,
+    sender: mpsc::Sender<Resolution<'plan>>,
+    context: &'plan Context<'context>,
 }
 
-impl<'scope, 'context> Spawner<'_, 'scope, 'context> {
-    pub fn poll(&self, module: DynamicModule<'scope>) {
+impl<'scope, 'plan: 'scope, 'context> Spawner<'scope, '_, 'plan, 'context> {
+    pub fn poll(&self, module: DynamicModule<'plan>) {
         let sender = self.sender.clone();
         let context = self.context;
+        // Taken before the module moves into the thread; it borrows the plan,
+        // not the module, so it outlives both.
+        let name = module.name().as_str();
 
-        self.scope.spawn(move |_| {
+        spawn_named(self.scope, name, move || {
             let _ = sender.send(module.resolve(context));
         });
     }
 }
 
+/// What runs while the modules do.
+///
+/// A trait rather than a closure parameter because the method has to be generic
+/// over the scope's lifetime. `thread::Scope` is invariant in that lifetime, so
+/// a closure argument would have to name one exact scope, and the only scope a
+/// caller outside [`while_running`] can name is `'static` — which would demand
+/// a `'static` plan. A trait method can be higher-ranked where a closure
+/// argument cannot, and it stays a direct call: nothing boxed, no vtable, and
+/// no allocation per module.
+pub trait WhileRunning<'plan, 'context> {
+    type Output;
+
+    fn run<'scope>(self, spawner: &Spawner<'scope, '_, 'plan, 'context>) -> Self::Output
+    where
+        'plan: 'scope;
+}
+
+/// Work that runs on the calling thread if it is dropped without being taken.
+///
+/// `spawn_scoped` takes the closure by value and drops it when it cannot make a
+/// thread, so there is no way to ask for it back. Expressing the fallback as a
+/// destructor sidesteps that: the successful path takes the work out and the
+/// `None` left behind makes dropping a no-op, while the failing path drops the
+/// closure still holding it and the work runs right here. Nothing is allocated
+/// either way, and no caller can forget to handle the failure.
+struct RunUnlessTaken<F: FnOnce()>(Option<F>);
+
+impl<F: FnOnce()> RunUnlessTaken<F> {
+    fn take_and_run(mut self) {
+        if let Some(body) = self.0.take() {
+            body();
+        }
+    }
+}
+
+impl<F: FnOnce()> Drop for RunUnlessTaken<F> {
+    fn drop(&mut self) {
+        if let Some(body) = self.0.take() {
+            body();
+        }
+    }
+}
+
+/// Puts one module's render on its own thread.
+///
+/// A module spends nearly all of its time blocked — waiting on a subprocess, a
+/// file, or the network — so the threads are there to overlap those waits, not
+/// to use more processors. One thread per module is what that costs: a prompt
+/// pays for the modules it actually defers instead of for a worker pool sized
+/// against the machine, and a thread that is never needed is never made.
+///
+/// Naming them makes a wedged prompt legible in a debugger or a crash report,
+/// which a pool of interchangeable workers cannot be.
+fn spawn_named<'scope, F>(scope: &'scope thread::Scope<'scope, '_>, name: &str, body: F)
+where
+    F: FnOnce() + Send + 'scope,
+{
+    let work = RunUnlessTaken(Some(body));
+    let builder = thread::Builder::new().name(format!("starship:{name}"));
+
+    // Out of threads. Dropping `work` renders the module on this thread, which
+    // costs the overlap it would have had — a slow prompt rather than one
+    // missing a module.
+    if let Err(error) = builder.spawn_scoped(scope, move || work.take_and_run()) {
+        log::debug!("Rendering {name} on the calling thread; no thread to spare: {error}");
+    }
+}
+
 /// Spawns `module_use`'s render on `scope`, sending the result through `sender`.
-fn spawn_resolution<'scope, 'context>(
-    scope: &rayon::Scope<'scope>,
-    sender: mpsc::Sender<Resolution<'scope>>,
-    module_use: &'scope ModuleUse,
-    context: &'scope Context<'context>,
-    referenced_modules: &'scope BTreeSet<ModuleName>,
+fn spawn_resolution<'scope, 'plan: 'scope, 'context>(
+    scope: &'scope thread::Scope<'scope, '_>,
+    sender: mpsc::Sender<Resolution<'plan>>,
+    module_use: &'plan ModuleUse,
+    context: &'plan Context<'context>,
+    referenced_modules: &'plan BTreeSet<ModuleName>,
 ) {
-    scope.spawn(move |_| {
+    spawn_named(scope, module_use.module.as_str(), move || {
         let start_time = Instant::now();
         let segments = render_module(module_use, context, referenced_modules);
         let _ = sender.send(Resolution::initial(
@@ -244,16 +323,19 @@ fn spawn_resolution<'scope, 'context>(
 }
 
 /// Runs the selected modules, delivering each one's output to `arrivals` as it finishes.
-pub fn while_running<'scope, 'context, T>(
-    plan: &'scope Plan,
-    context: &'scope Context<'context>,
+pub fn while_running<'plan, 'context, B>(
+    plan: &'plan Plan,
+    context: &'plan Context<'context>,
     selection: Selection,
-    arrivals: &mpsc::Sender<Resolution<'scope>>,
-    body: impl FnOnce(&Spawner<'_, 'scope, 'context>) -> T,
-) -> T {
+    arrivals: &mpsc::Sender<Resolution<'plan>>,
+    body: B,
+) -> B::Output
+where
+    B: WhileRunning<'plan, 'context>,
+{
     let referenced_modules = plan.referenced_modules();
 
-    rayon::in_place_scope(|scope| {
+    thread::scope(|scope| {
         for module_use in selected_modules(plan, selection) {
             spawn_resolution(
                 scope,
@@ -264,7 +346,7 @@ pub fn while_running<'scope, 'context, T>(
             );
         }
 
-        body(&Spawner {
+        body.run(&Spawner {
             scope,
             sender: arrivals.clone(),
             context,
@@ -282,7 +364,7 @@ pub fn with_resolutions<'plan, T>(
     let referenced_modules = plan.referenced_modules();
     let (sender, receiver) = mpsc::channel::<Resolution<'plan>>();
 
-    rayon::in_place_scope(|scope| {
+    thread::scope(|scope| {
         for module_use in selected_modules(plan, selection) {
             spawn_resolution(
                 scope,
@@ -321,7 +403,7 @@ pub fn stream_instant<'plan>(
     mut receive: impl FnMut(Resolution<'plan>),
 ) {
     // Approximations are Instant by contract, so they run synchronously rather
-    // than paying for a rayon task each.
+    // than paying for a thread each.
     selected_modules(plan, Selection::DeferredOnly)
         .filter_map(|module_use| {
             let start_time = Instant::now();

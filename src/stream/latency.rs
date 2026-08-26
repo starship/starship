@@ -56,10 +56,12 @@ impl LatencyEstimates {
             return Ok(Self::none());
         }
 
-        let parsed_timings = Timings::from_json(argument.as_bytes()).unwrap_or_else(|| {
-            log::warn!("Ignoring a --timings argument that is not a timing payload");
-            Timings::default()
-        });
+        let parsed_timings = Timings::from_wire(argument.as_bytes())
+            .or_else(|| Timings::from_json(argument.as_bytes()))
+            .unwrap_or_else(|| {
+                log::warn!("Ignoring a --timings argument that is not a timing payload");
+                Timings::default()
+            });
 
         Ok(Self(parsed_timings))
     }
@@ -105,22 +107,16 @@ mod tests {
     use super::*;
     use crate::frame::ServerEvent;
 
-    /// The `timings` payload bytes of a `ServerEvent::Complete` frame, as handed back as `--timings=<this>`.
+    /// The `timings` payload bytes of a `Complete` frame, as handed back as `--timings=<this>`.
     fn complete_payload(timings: &Timings) -> Vec<u8> {
         let mut written = Vec::new();
         ServerEvent::Complete(timings.clone())
             .write_to(&mut written)
             .expect("writing to a vector cannot fail");
-        let keyword_length = written
-            .iter()
-            .position(|&byte| byte == 0)
-            .expect("a NUL-terminated keyword field")
-            + 1;
-        let payload_length = written[keyword_length..]
-            .iter()
-            .position(|&byte| byte == 0)
-            .expect("a NUL-terminated timings field");
-        written[keyword_length..keyword_length + payload_length].to_vec()
+        // A frame is NUL-terminated fields; the timings ride the second one.
+        let mut fields = written.split(|&byte| byte == b'\0');
+        assert_eq!(Some(b"COMPLETE".as_slice()), fields.next());
+        fields.next().expect("a timings field").to_vec()
     }
 
     /// Timings holding one measurement per named module.

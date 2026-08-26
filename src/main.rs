@@ -12,8 +12,7 @@ use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::stream::LatencyEstimates;
 use starship::{
-    FrameEncoding, StreamingTransport, bug_report, configure, init, logger, num_rayon_threads,
-    print, shadow, stream,
+    ProcessId, StreamingTransport, bug_report, configure, init, logger, print, shadow, stream,
 };
 
 #[derive(Parser, Debug)]
@@ -144,8 +143,15 @@ enum Commands {
     /// then incremental repaints as slow modules resolve
     Stream {
         /// Stream the right prompt (instead of the standard left prompt)
-        #[clap(long)]
+        #[clap(long, conflicts_with = "both")]
         right: bool,
+        /// Stream both prompts from this one renderer: the right side's paints
+        /// arrive as RIGHT frames, or as the second field of the snapshot record
+        /// under --publish-state. A shell that draws both sides spends one
+        /// process a prompt this way instead of two — which otherwise costs a
+        /// whole process to render nothing whenever no right prompt is set.
+        #[clap(long)]
+        both: bool,
         /// What earlier prompts of this shell session measured each module to
         /// cost, as the payload of the last TIMING frame. Chooses how repaints
         /// are grouped and nothing else; a shell that keeps none of it, or
@@ -156,9 +162,27 @@ enum Commands {
         /// Shell transport for refinements. `ble` enables the ble.sh hook in bash.
         #[clap(long, value_enum, default_value_t)]
         transport: StreamingTransport,
-        /// Event encoding. `json` emits one structured event per line.
-        #[clap(long, value_enum, default_value_t)]
-        frames: FrameEncoding,
+        /// fish integration: instead of streaming frames to stdout, atomically
+        /// rewrite this file as `left\0right\0timings` after each paint. fish
+        /// holds no pipe open across a prompt, so every paint after the first
+        /// reaches it out of this file rather than off a stream.
+        #[clap(long)]
+        publish_state: Option<PathBuf>,
+        /// Companion to --publish-state: write this prompt's completion timings
+        /// here, for the next prompt's `--timings` handoff.
+        #[clap(long, requires = "publish_state")]
+        timings_out: Option<PathBuf>,
+        /// Companion to --publish-state: signal this process `SIGUSR1` after
+        /// each published paint, so fish re-reads the state file.
+        #[clap(long, requires = "publish_state")]
+        signal_pid: Option<u32>,
+        /// Companion to --publish-state: fork into the background before doing
+        /// any work, and announce the first paint on standard output as
+        /// `left\0right\0pid\0`. The shell reads that straight out of the pipeline it
+        /// launched this in, so it waits exactly as long as the first paint
+        /// takes, and gets the renderer's pid to stop it with later.
+        #[clap(long, requires = "publish_state")]
+        detach: bool,
         #[clap(flatten)]
         properties: Properties,
     },
@@ -191,15 +215,53 @@ enum Commands {
     ConfigSchema,
 }
 
+/// Puts a `--detach`ed stream into the background before anything else runs.
+///
+/// fish has no way to wait for a background renderer's first paint: it cannot
+/// hold a pipe open across a prompt, and its `read` has no timeout, so it used
+/// to poll a file and pay a `sleep` fork plus a whole tick of latency. Detaching
+/// inverts that. The renderer is run in the *foreground* of a pipeline, and this
+/// fork hands the work to a child that keeps stdout: the parent exits at once so
+/// the shell's job completes, and the shell's `read` blocks on the pipe until
+/// the child announces its first paint — exactly as long as the paint takes, and
+/// not one syscall longer.
+///
+/// This has to happen before anything spawns a thread — the log cleanup below,
+/// and every module thread after it. `fork` carries only the calling thread into
+/// the child, so any thread made first would be one the child believes in and
+/// does not have. It reads the raw argument list for the same reason: clap has
+/// not run yet.
+#[cfg(unix)]
+fn detach_if_requested() {
+    if !std::env::args_os().any(|argument| argument == "--detach") {
+        return;
+    }
+    // SAFETY: no thread has been spawned yet, so the child inherits a process
+    // whose every lock and thread is accounted for.
+    match unsafe { nix::unistd::fork() } {
+        Ok(nix::unistd::ForkResult::Parent { .. }) => std::process::exit(0),
+        // A session of its own, so a signal aimed at the shell's foreground job
+        // cannot reach a renderer that has outlived the command line it drew.
+        Ok(nix::unistd::ForkResult::Child) => {
+            let _ = nix::unistd::setsid();
+        }
+        // Nothing has been written yet, so staying in the foreground is a slow
+        // prompt rather than a broken one.
+        Err(_) => {}
+    }
+}
+
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
     let _ = nu_ansi_term::enable_ansi_support();
+    #[cfg(unix)]
+    detach_if_requested();
     logger::init();
-    init_global_threadpool();
 
-    // Delete old log files
-    rayon::spawn(|| {
+    // Delete old log files. Detached: nothing later waits on it, and the
+    // process exits when the prompt is written whether or not it has finished.
+    std::thread::spawn(|| {
         let log_dir = logger::get_log_dir();
         logger::cleanup_log_files(log_dir);
     });
@@ -266,14 +328,28 @@ fn main() {
         }
         Commands::Stream {
             right,
+            both,
             timings,
             transport,
-            frames,
+            publish_state,
+            timings_out,
+            signal_pid,
+            detach,
             properties,
         } => {
             let target = if right { Target::Right } else { Target::Main };
+            let delivery = match publish_state {
+                Some(state) => stream::Delivery::Snapshot {
+                    state,
+                    timings_out,
+                    signal_pid: signal_pid.map(ProcessId::from_raw),
+                    announce_first_paint: detach,
+                },
+                None => stream::Delivery::Frames,
+            };
             // A closed pipe just means the shell stopped wanting this prompt.
-            if let Err(error) = stream::stream(properties, target, &timings, transport, frames)
+            if let Err(error) =
+                stream::stream(properties, target, &timings, transport, delivery, both)
                 && !error.is_broken_pipe()
             {
                 eprintln!("Error streaming the prompt: {error}");
@@ -355,12 +431,4 @@ fn main() {
         #[cfg(feature = "config-schema")]
         Commands::ConfigSchema => print::print_schema(),
     }
-}
-
-/// Initialize global `rayon` thread pool
-fn init_global_threadpool() {
-    rayon::ThreadPoolBuilder::new()
-        .num_threads(num_rayon_threads())
-        .build_global()
-        .expect("Failed to initialize worker thread pool");
 }

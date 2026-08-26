@@ -1,5 +1,4 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use rayon::prelude::*;
 use regex::Regex;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
@@ -366,7 +365,7 @@ pub fn handle_module<'a>(
                 .into_iter()
                 .flatten()
                 .collect::<Vec<_>>()
-                .par_iter()
+                .iter()
                 .filter_map(|(child, config)| {
                     // Some env var keys may be part of a top-level module definition
                     if module == "env_var" && !config.is_table() {

@@ -8,15 +8,18 @@ pub use latency::LatencyEstimates;
 
 use std::fmt;
 use std::io::{self, Write};
-use std::sync::mpsc;
+use std::path::{Path, PathBuf};
+use std::sync::{Mutex, mpsc};
+use std::thread;
 use std::time::{Duration, Instant};
+
+#[cfg(unix)]
+use nix::sys::signal::Signal;
 
 use crate::context::{Context, Properties, Target};
 #[cfg(test)]
 use crate::frame::Patch;
-use crate::frame::{
-    FrameEncoding, ProcessId, PromptVariablePayload, RawTerminalPayload, ServerEvent, Timings,
-};
+use crate::frame::{ProcessId, PromptVariablePayload, RawTerminalPayload, ServerEvent, Timings};
 use crate::module::painted::{Painted, TerminalWidth};
 use crate::plan::{Plan, PromptState};
 use crate::print::prompt_configuration;
@@ -30,27 +33,368 @@ use schedule::{ArrivalSchedule, PredictedArrival};
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(1);
 const FAR_FUTURE_DELAY: Duration = Duration::from_secs(24 * 60 * 60);
 
-/// Streams a prompt to the terminal output.
+/// Where a stream's events go.
+///
+/// Almost every shell reads frames from the pipe on standard output. fish is
+/// the exception: it can neither hold a background pipe's read descriptor open
+/// (it has no `exec`) nor safely reopen one, so it takes a latest-prompt
+/// snapshot file plus a `SIGUSR1` poke instead — see [`SnapshotSink`].
+trait EventSink {
+    fn emit(&mut self, event: &ServerEvent) -> io::Result<()>;
+}
+
+/// The default: serialize each event onto the pipe.
+struct FrameSink<'writer> {
+    writer: &'writer mut (dyn Write + Send),
+}
+
+impl EventSink for FrameSink<'_> {
+    fn emit(&mut self, event: &ServerEvent) -> io::Result<()> {
+        event.write_to(&mut self.writer)
+    }
+}
+
+/// A latest-prompt snapshot for fish. Each paint atomically rewrites the state
+/// file as `left\0right\0timings` (write_snapshot adds the trailing NUL), then
+/// signals fish to re-read it. COMPLETE updates the timings half in place so a
+/// later PATCH cannot wipe the next draw's `--timings` handoff; `--timings-out`
+/// still writes a sidecar when a caller asks. There is no repaint file: fish
+/// redraws the whole prompt.
+///
+/// A file is what makes this robust where a pipe cannot be: reading it never
+/// blocks, and re-reading after a coalesced signal simply yields the latest
+/// paint. The one shared cost with the pipe shells — the renderer must stop
+/// once its shell is gone — is met by treating a vanished `signal_pid` as a
+/// broken pipe.
+struct SnapshotSink {
+    state: PathBuf,
+    timings_out: Option<PathBuf>,
+    signal_pid: Option<ProcessId>,
+    last_left: Vec<u8>,
+    last_right: Vec<u8>,
+    last_timings: Vec<u8>,
+    /// Set until the first paint has been announced on standard output.
+    announce_first_paint: bool,
+}
+
+impl SnapshotSink {
+    /// Hands the shell waiting on this renderer's pipeline its first prompt and
+    /// this process's id, then closes standard output so the shell's read ends.
+    /// Everything after this reaches the shell through the state file.
+    fn announce(&mut self) -> io::Result<()> {
+        self.announce_first_paint = false;
+        let mut output = io::stdout().lock();
+        output.write_all(&self.last_left)?;
+        output.write_all(&[0])?;
+        output.write_all(&self.last_right)?;
+        output.write_all(&[0])?;
+        write!(output, "{}", std::process::id())?;
+        output.write_all(&[0])?;
+        output.flush()?;
+        // Hand the pipe back. The shell has what it was waiting for, and a
+        // writer that never closes leaves anything reading to EOF hanging for
+        // the life of the renderer. /dev/null takes the descriptor's place so
+        // a later write cannot land on whatever reuses the number.
+        if let Ok(sink) = std::fs::OpenOptions::new().write(true).open("/dev/null") {
+            let _ = nix::unistd::dup2_stdout(&sink);
+        }
+        Ok(())
+    }
+
+    fn write_record(&self) -> io::Result<()> {
+        let mut record = Vec::with_capacity(
+            self.last_left.len() + self.last_right.len() + self.last_timings.len() + 2,
+        );
+        record.extend_from_slice(&self.last_left);
+        record.push(0);
+        record.extend_from_slice(&self.last_right);
+        record.push(0);
+        record.extend_from_slice(&self.last_timings);
+        write_snapshot(&self.state, &record)
+    }
+
+    fn publish_left(&mut self, prompt: &PromptVariablePayload) -> io::Result<()> {
+        self.last_left.clear();
+        self.last_left.extend_from_slice(prompt.as_bytes());
+        self.write_record()?;
+        if self.announce_first_paint {
+            // Before the signal: the shell is still blocked reading the pipe,
+            // so a SIGUSR1 now would land on a prompt that cannot act on it.
+            return self.announce();
+        }
+        self.signal()
+    }
+
+    /// The right side's paints, which never announce.
+    ///
+    /// The shell is waiting on the left side's first paint, and the right one
+    /// almost always lands before it — an unconfigured right prompt renders at
+    /// once — so it is already in the record the announcement carries. A right
+    /// paint that arrives before that has nothing to signal yet either: the
+    /// shell is still blocked on the pipe.
+    fn publish_right(&mut self, prompt: &PromptVariablePayload) -> io::Result<()> {
+        self.last_right.clear();
+        self.last_right.extend_from_slice(prompt.as_bytes());
+        self.write_record()?;
+        if self.announce_first_paint {
+            return Ok(());
+        }
+        self.signal()
+    }
+
+    fn record_timings(&mut self, timings: &Timings) -> io::Result<()> {
+        self.last_timings.clear();
+        self.last_timings
+            .extend_from_slice(timings.to_wire_string().as_bytes());
+        if let Some(path) = &self.timings_out {
+            write_snapshot(path, &self.last_timings)?;
+        }
+        // No signal: timings are for the next draw, not this one.
+        self.write_record()
+    }
+
+    fn signal(&self) -> io::Result<()> {
+        let Some(pid) = self.signal_pid else {
+            return Ok(());
+        };
+        #[cfg(unix)]
+        match nix::sys::signal::kill(
+            nix::unistd::Pid::from_raw(pid.get() as i32),
+            Signal::SIGUSR1,
+        ) {
+            Ok(()) => Ok(()),
+            // The shell is gone; stop exactly as a closed pipe would.
+            Err(nix::errno::Errno::ESRCH) => Err(io::Error::from(io::ErrorKind::BrokenPipe)),
+            Err(error) => {
+                log::debug!("Failed to signal the shell: {error}");
+                Ok(())
+            }
+        }
+        #[cfg(not(unix))]
+        {
+            let _ = pid;
+            Ok(())
+        }
+    }
+}
+
+/// Atomically publishes `content`, NUL-terminated, to `path`.
+///
+/// The rename is the commit: a reader (fish's `read -z`) sees either the old
+/// file whole or the new file whole, never a torn write. The trailing NUL is
+/// the delimiter fish's NUL-oriented read expects, so it always reads a
+/// complete, unambiguous record.
+fn write_snapshot(path: &Path, content: &[u8]) -> io::Result<()> {
+    let temporary = path.with_extension("tmp");
+    let mut record = Vec::with_capacity(content.len() + 1);
+    record.extend_from_slice(content);
+    record.push(0);
+    std::fs::write(&temporary, record)?;
+    std::fs::rename(&temporary, path)
+}
+
+impl EventSink for SnapshotSink {
+    fn emit(&mut self, event: &ServerEvent) -> io::Result<()> {
+        match event {
+            ServerEvent::Ready { prompt, .. } => self.publish_left(prompt),
+            ServerEvent::Patch(patch) => self.publish_left(patch.prompt()),
+            ServerEvent::RightPrompt(prompt) => self.publish_right(prompt),
+            ServerEvent::Complete(timings) => self.record_timings(timings),
+            ServerEvent::Heartbeat => Ok(()),
+        }
+    }
+}
+
+/// Both sides of one prompt, onto the sink they share.
+///
+/// The two renders are independent — separate plans, separate canvases — so
+/// they run on their own threads and meet only here. A frame is written under
+/// the lock in one call, so the two never interleave inside one.
+struct BothSides<'sink> {
+    sink: &'sink mut (dyn EventSink + Send),
+    /// The timings of whichever side finished first, waiting for the other.
+    finished_first: Option<Timings>,
+}
+
+impl BothSides<'_> {
+    fn emit_from(&mut self, target: &Target, event: &ServerEvent) -> io::Result<()> {
+        match (target, event) {
+            // Every right-side paint is the same statement, so its first is not
+            // distinguished from its later ones and its process id is dropped:
+            // the left side already announced the one process serving both.
+            (Target::Right, ServerEvent::Ready { prompt, .. }) => {
+                self.sink.emit(&ServerEvent::RightPrompt(prompt.clone()))
+            }
+            (Target::Right, ServerEvent::Patch(patch)) => self
+                .sink
+                .emit(&ServerEvent::RightPrompt(patch.prompt().clone())),
+            // One pipe needs one heartbeat, and the left side is always there.
+            (Target::Right, ServerEvent::Heartbeat) => Ok(()),
+            // The shell hands one `--timings` back, so the sides' measurements
+            // have to arrive as one payload. Both started from the same
+            // estimates and each updated its own modules, so the second to
+            // finish carries the union.
+            (_, ServerEvent::Complete(timings)) => match self.finished_first.take() {
+                Some(first) => self
+                    .sink
+                    .emit(&ServerEvent::Complete(first.merged_with(timings))),
+                None => {
+                    self.finished_first = Some(timings.clone());
+                    Ok(())
+                }
+            },
+            (_, event) => self.sink.emit(event),
+        }
+    }
+}
+
+/// One side's view of the shared sink.
+struct SideSink<'both, 'sink> {
+    shared: &'both Mutex<BothSides<'sink>>,
+    target: Target,
+}
+
+impl EventSink for SideSink<'_, '_> {
+    fn emit(&mut self, event: &ServerEvent) -> io::Result<()> {
+        self.shared
+            .lock()
+            .expect("a side that panicked mid-frame cannot be recovered from")
+            .emit_from(&self.target, event)
+    }
+}
+
+/// How a shell wants a streamed prompt delivered.
+pub enum Delivery {
+    /// Frames on standard output (the pipe shells).
+    Frames,
+    /// A snapshot file (`left\0right\0timings`) and the shell to signal (fish).
+    /// `--timings-out` is an optional extra sidecar.
+    Snapshot {
+        state: PathBuf,
+        timings_out: Option<PathBuf>,
+        signal_pid: Option<ProcessId>,
+        /// Write the first paint to standard output as `prompt\0pid\0` and
+        /// close it. A detached renderer is launched in the foreground of a
+        /// pipeline the shell reads, so this is what unblocks that read — and
+        /// it is the only way the shell learns a pid it never forked.
+        announce_first_paint: bool,
+    },
+}
+
+/// Renders both sides of one prompt onto one sink.
+///
+/// A shell used to spawn a renderer per side, which cost a whole process to
+/// produce nothing at all whenever no right prompt was configured — the common
+/// case. The sides still render independently, on a thread each, because they
+/// are separate plans over separate canvases; what they now share is the
+/// process, and so the config parse, the argument handling and the pipe.
+fn run_both_sides(
+    properties: &Properties,
+    latency_estimates: &LatencyEstimates,
+    streaming_transport: StreamingTransport,
+    sink: &mut (dyn EventSink + Send),
+) -> Result<(), StreamError> {
+    let left = Context::new(properties.clone(), Target::Main).rendering_for_the_terminal();
+    let right = Context::new(properties.clone(), Target::Right).rendering_for_the_terminal();
+    let left_tier = streaming_transport.tier(left.shell, &left.target)?;
+    let right_tier = streaming_transport.tier(right.shell, &right.target)?;
+
+    let shared = Mutex::new(BothSides {
+        sink,
+        finished_first: None,
+    });
+
+    let (left_result, right_result) = thread::scope(|scope| {
+        let right_side = thread::Builder::new()
+            .name("starship:right".to_owned())
+            .spawn_scoped(scope, || {
+                let mut side = SideSink {
+                    shared: &shared,
+                    target: Target::Right,
+                };
+                run_at_tier(&right, latency_estimates, right_tier, &mut side)
+            });
+
+        let mut side = SideSink {
+            shared: &shared,
+            target: Target::Main,
+        };
+        let left_result = run_at_tier(&left, latency_estimates, left_tier, &mut side);
+
+        // The left side is what the shell waits on, so a right side that could
+        // not get a thread renders here, after it, rather than delaying it.
+        let right_result = match right_side {
+            Ok(handle) => handle
+                .join()
+                .unwrap_or_else(|_| Err(io::Error::other("the right prompt panicked"))),
+            Err(error) => {
+                log::debug!(
+                    "Rendering the right prompt after the left; no thread to spare: {error}"
+                );
+                let mut side = SideSink {
+                    shared: &shared,
+                    target: Target::Right,
+                };
+                run_at_tier(&right, latency_estimates, right_tier, &mut side)
+            }
+        };
+        (left_result, right_result)
+    });
+
+    left_result
+        .and(right_result)
+        .map_err(StreamError::InputOutput)
+}
+
+/// Streams a prompt, either as frames on standard output or as a snapshot file.
 pub fn stream(
     properties: Properties,
     target: Target,
     latency_estimates: &LatencyEstimates,
     streaming_transport: StreamingTransport,
-    frame_encoding: FrameEncoding,
+    delivery: Delivery,
+    both_sides: bool,
 ) -> Result<(), StreamError> {
-    let context = Context::new(properties, target).rendering_for_the_terminal();
-    let standard_output = io::stdout();
-    let mut output_writer = standard_output.lock();
+    // `Stdout`, not a `StdoutLock`: the lock is not `Send`, and both sides need
+    // a writer they can share. It takes the same lock per write instead, which
+    // costs nothing here because a whole frame is already written under the
+    // sides' own mutex and so can never interleave.
+    let mut standard_output = io::stdout();
+    let mut frame_sink;
+    let mut snapshot_sink;
+    let sink: &mut (dyn EventSink + Send) = match delivery {
+        Delivery::Frames => {
+            frame_sink = FrameSink {
+                writer: &mut standard_output,
+            };
+            &mut frame_sink
+        }
+        Delivery::Snapshot {
+            state,
+            timings_out,
+            signal_pid,
+            announce_first_paint,
+        } => {
+            snapshot_sink = SnapshotSink {
+                state,
+                timings_out,
+                signal_pid,
+                last_left: Vec::new(),
+                last_right: Vec::new(),
+                last_timings: Vec::new(),
+                announce_first_paint,
+            };
+            &mut snapshot_sink
+        }
+    };
 
+    if both_sides {
+        return run_both_sides(&properties, latency_estimates, streaming_transport, sink);
+    }
+
+    let context = Context::new(properties, target).rendering_for_the_terminal();
     let transport_tier = streaming_transport.tier(context.shell, &context.target)?;
-    run_at_tier(
-        &context,
-        latency_estimates,
-        transport_tier,
-        frame_encoding,
-        &mut output_writer,
-    )
-    .map_err(StreamError::InputOutput)
+    run_at_tier(&context, latency_estimates, transport_tier, sink).map_err(StreamError::InputOutput)
 }
 
 #[derive(Debug)]
@@ -93,29 +437,25 @@ impl From<TransportMismatch> for StreamError {
 fn run(
     context: &Context,
     latency_estimates: &LatencyEstimates,
-    output_writer: &mut impl Write,
+    output_writer: &mut (dyn Write + Send),
 ) -> io::Result<()> {
     let transport_tier = StreamingTransport::Auto
         .tier(context.shell, &context.target)
         .expect("The automatic transport accepts every shell environment.");
-    run_at_tier(
-        context,
-        latency_estimates,
-        transport_tier,
-        FrameEncoding::Compact,
-        output_writer,
-    )
+    let mut sink = FrameSink {
+        writer: output_writer,
+    };
+    run_at_tier(context, latency_estimates, transport_tier, &mut sink)
 }
 
 fn run_at_tier(
     context: &Context,
     latency_estimates: &LatencyEstimates,
     transport_tier: Tier,
-    frame_encoding: FrameEncoding,
-    output_writer: &mut impl Write,
+    sink: &mut dyn EventSink,
 ) -> io::Result<()> {
     if crate::print::is_dumb_terminal() {
-        return handle_dumb_terminal(context, frame_encoding, output_writer);
+        return handle_dumb_terminal(context, sink);
     }
 
     let prompt_config = prompt_configuration(context);
@@ -140,21 +480,13 @@ fn run_at_tier(
         );
 
         let final_painted_prompt = paint_prompt(&prompt_state, context);
-        write_server_event(
-            create_ready_event(&final_painted_prompt, context),
-            frame_encoding,
-            output_writer,
-        )?;
+        sink.emit(&create_ready_event(&final_painted_prompt, context))?;
 
         let final_timings = latency_estimates
             .updated_with(&measured_timings)
             .timings()
             .clone();
-        return write_server_event(
-            ServerEvent::Complete(final_timings),
-            frame_encoding,
-            output_writer,
-        );
+        return sink.emit(&ServerEvent::Complete(final_timings));
     }
 
     render::stream_instant(&execution_plan, context, |resolution| {
@@ -163,11 +495,7 @@ fn run_at_tier(
     });
 
     let initial_painted_prompt = paint_prompt(&prompt_state, context);
-    write_server_event(
-        create_ready_event(&initial_painted_prompt, context),
-        frame_encoding,
-        output_writer,
-    )?;
+    sink.emit(&create_ready_event(&initial_painted_prompt, context))?;
 
     let refinement_tier = optional_refinement
         .expect("A static transport tier returns early; async logic requires a refinement tier.");
@@ -198,7 +526,6 @@ fn run_at_tier(
         latency_estimates,
         progress: active_progress,
         scheduler: active_scheduler,
-        frame_encoding,
         last_written_timestamp: Instant::now(),
     };
 
@@ -208,10 +535,33 @@ fn run_at_tier(
         context,
         Selection::DeferredOnly,
         &arrival_sender,
-        |process_spawner| {
-            streaming_session.serve(&arrival_receiver, process_spawner, output_writer)
+        Serving {
+            session: &mut streaming_session,
+            resolutions: &arrival_receiver,
+            sink,
         },
     )
+}
+
+/// Serving the stream, as the body [`render::while_running`] runs beneath the
+/// module threads. A named type rather than a closure only because its one
+/// method has to stay generic over the scope's lifetime; see
+/// [`render::WhileRunning`].
+struct Serving<'borrow, 'plan, 'context> {
+    session: &'borrow mut StreamingSession<'plan, 'context>,
+    resolutions: &'borrow mpsc::Receiver<Resolution<'plan>>,
+    sink: &'borrow mut dyn EventSink,
+}
+
+impl<'plan, 'context> render::WhileRunning<'plan, 'context> for Serving<'_, 'plan, 'context> {
+    type Output = io::Result<()>;
+
+    fn run<'scope>(self, spawner: &Spawner<'scope, '_, 'plan, 'context>) -> Self::Output
+    where
+        'plan: 'scope,
+    {
+        self.session.serve(self.resolutions, spawner, self.sink)
+    }
 }
 
 struct StreamingSession<'plan, 'context> {
@@ -222,26 +572,28 @@ struct StreamingSession<'plan, 'context> {
     latency_estimates: &'plan LatencyEstimates,
     progress: ProgressTracker,
     scheduler: Scheduler<'plan>,
-    frame_encoding: FrameEncoding,
     last_written_timestamp: Instant,
 }
 
 impl<'plan, 'context> StreamingSession<'plan, 'context> {
-    fn serve(
+    fn serve<'scope>(
         &mut self,
         resolutions_receiver: &mpsc::Receiver<Resolution<'plan>>,
-        process_spawner: &Spawner<'_, 'plan, 'context>,
-        output_writer: &mut impl Write,
-    ) -> io::Result<()> {
+        process_spawner: &Spawner<'scope, '_, 'plan, 'context>,
+        sink: &mut dyn EventSink,
+    ) -> io::Result<()>
+    where
+        'plan: 'scope,
+    {
         loop {
             if self.progress.check_and_take_ready() {
-                self.flush_held_bus_events(output_writer)?;
+                self.flush_held_bus_events(sink)?;
                 let final_timings = self
                     .latency_estimates
                     .updated_with(&self.measured_timings)
                     .timings()
                     .clone();
-                self.write_server_event(ServerEvent::Complete(final_timings), output_writer)?;
+                self.emit(ServerEvent::Complete(final_timings), sink)?;
             }
 
             if self.progress.is_completed() && !self.scheduler.has_active_polls() {
@@ -252,14 +604,14 @@ impl<'plan, 'context> StreamingSession<'plan, 'context> {
                 .spawn_due_tasks(Instant::now(), process_spawner);
 
             if self.last_written_timestamp.elapsed() >= HEARTBEAT_INTERVAL {
-                self.write_server_event(ServerEvent::Heartbeat, output_writer)?;
+                self.emit(ServerEvent::Heartbeat, sink)?;
             }
 
             let next_wakeup_time = self.calculate_next_wakeup();
             let timeout_duration = next_wakeup_time.saturating_duration_since(Instant::now());
 
             match resolutions_receiver.recv_timeout(timeout_duration) {
-                Ok(resolution) => self.process_resolution(resolution, output_writer)?,
+                Ok(resolution) => self.process_resolution(resolution, sink)?,
                 Err(mpsc::RecvTimeoutError::Timeout) => {
                     let current_time = Instant::now();
                     if self
@@ -267,7 +619,7 @@ impl<'plan, 'context> StreamingSession<'plan, 'context> {
                         .deadline()
                         .is_some_and(|deadline| deadline <= current_time)
                     {
-                        self.flush_held_bus_events(output_writer)?;
+                        self.flush_held_bus_events(sink)?;
                     }
                 }
                 Err(mpsc::RecvTimeoutError::Disconnected) => {
@@ -282,7 +634,7 @@ impl<'plan, 'context> StreamingSession<'plan, 'context> {
     fn process_resolution(
         &mut self,
         resolution: Resolution<'plan>,
-        output_writer: &mut impl Write,
+        sink: &mut dyn EventSink,
     ) -> io::Result<()> {
         self.measured_timings
             .record(resolution.module().as_str(), resolution.elapsed());
@@ -295,23 +647,23 @@ impl<'plan, 'context> StreamingSession<'plan, 'context> {
         let reflow = Reflow::between(&self.canvas.painted_output, &next_painted_prompt);
 
         if self.bus.admit(reflow, Instant::now()) == Verdict::DrawNow {
-            self.draw_and_transmit(next_painted_prompt, output_writer)?;
+            self.draw_and_transmit(next_painted_prompt, sink)?;
         }
         Ok(())
     }
 
-    fn flush_held_bus_events(&mut self, output_writer: &mut impl Write) -> io::Result<()> {
+    fn flush_held_bus_events(&mut self, sink: &mut dyn EventSink) -> io::Result<()> {
         if !self.bus.release() {
             return Ok(());
         }
         let next_painted_prompt = paint_prompt(&self.canvas.prompt_state, self.context);
-        self.draw_and_transmit(next_painted_prompt, output_writer)
+        self.draw_and_transmit(next_painted_prompt, sink)
     }
 
     fn draw_and_transmit(
         &mut self,
         next_painted_prompt: Painted,
-        output_writer: &mut impl Write,
+        sink: &mut dyn EventSink,
     ) -> io::Result<()> {
         let patch_payload = crate::transport::patch(
             &self.canvas.painted_output,
@@ -324,17 +676,13 @@ impl<'plan, 'context> StreamingSession<'plan, 'context> {
         self.canvas.painted_output = next_painted_prompt;
 
         if let Some(payload) = patch_payload {
-            self.write_server_event(ServerEvent::Patch(payload), output_writer)?;
+            self.emit(ServerEvent::Patch(payload), sink)?;
         }
         Ok(())
     }
 
-    fn write_server_event(
-        &mut self,
-        event: ServerEvent,
-        output_writer: &mut impl Write,
-    ) -> io::Result<()> {
-        event.write(self.frame_encoding, output_writer)?;
+    fn emit(&mut self, event: ServerEvent, sink: &mut dyn EventSink) -> io::Result<()> {
+        sink.emit(&event)?;
         self.last_written_timestamp = Instant::now();
         Ok(())
     }
@@ -442,7 +790,13 @@ impl<'plan> Scheduler<'plan> {
         }
     }
 
-    fn spawn_due_tasks(&mut self, current_time: Instant, process_spawner: &Spawner<'_, 'plan, '_>) {
+    fn spawn_due_tasks<'scope>(
+        &mut self,
+        current_time: Instant,
+        process_spawner: &Spawner<'scope, '_, 'plan, '_>,
+    ) where
+        'plan: 'scope,
+    {
         for poll in self.polls.iter_mut().flatten() {
             if let PollState::Due(due_time) = poll.state
                 && due_time <= current_time
@@ -513,26 +867,14 @@ fn calculate_expected_arrivals(
     ArrivalSchedule::of(predicted_arrivals, window)
 }
 
-fn handle_dumb_terminal(
-    context: &Context,
-    frame_encoding: FrameEncoding,
-    output_writer: &mut impl Write,
-) -> io::Result<()> {
+fn handle_dumb_terminal(context: &Context, sink: &mut dyn EventSink) -> io::Result<()> {
     log::error!("Environment configured as a 'dumb' terminal (TERM=dumb).");
 
     let text_segment = Segment::from_text(None, crate::print::DUMB_TERMINAL_PROMPT);
     let notice_painted = Painted::paint(&text_segment, None);
 
-    write_server_event(
-        create_ready_event(&notice_painted, context),
-        frame_encoding,
-        output_writer,
-    )?;
-    write_server_event(
-        ServerEvent::Complete(Timings::default()),
-        frame_encoding,
-        output_writer,
-    )
+    sink.emit(&create_ready_event(&notice_painted, context))?;
+    sink.emit(&ServerEvent::Complete(Timings::default()))
 }
 
 fn paint_prompt(state: &PromptState<'_>, context: &Context) -> Painted {
@@ -559,14 +901,6 @@ fn create_ready_event(painted_output: &Painted, context: &Context) -> ServerEven
         prompt: escaped_payload,
         process_id: ProcessId::of_this_process(),
     }
-}
-
-fn write_server_event(
-    event: ServerEvent,
-    frame_encoding: FrameEncoding,
-    output_writer: &mut impl Write,
-) -> io::Result<()> {
-    event.write(frame_encoding, output_writer)
 }
 
 fn calculate_next_due_time(period: Duration) -> Instant {
@@ -641,6 +975,7 @@ mod tests {
         Patch,
         Complete,
         Heartbeat,
+        RightPrompt,
     }
 
     fn kind_of(event: &ServerEvent) -> EventKind {
@@ -649,6 +984,7 @@ mod tests {
             ServerEvent::Patch(_) => EventKind::Patch,
             ServerEvent::Complete(_) => EventKind::Complete,
             ServerEvent::Heartbeat => EventKind::Heartbeat,
+            ServerEvent::RightPrompt(_) => EventKind::RightPrompt,
         }
     }
 
@@ -656,14 +992,16 @@ mod tests {
         events.iter().map(kind_of).collect()
     }
 
-    /// The prompt-variable bytes of `event`, as text.
+    /// The prompt-variable bytes of `event`, as they render on screen.
     fn prompt_text(event: &ServerEvent) -> String {
         let bytes = match event {
             ServerEvent::Ready { prompt, .. } => prompt.as_bytes(),
             ServerEvent::Patch(patch) => patch.prompt().as_bytes(),
             other => panic!("{other:?} carries no prompt"),
         };
-        String::from_utf8(bytes.to_vec()).expect("prompt bytes are text")
+        String::from_utf8(bytes.to_vec())
+            .expect("prompt bytes are text")
+            .replace('\u{1f}', "\n")
     }
 
     /// A writer that fails every write once `deadline` passes, standing in for a reader that
@@ -883,7 +1221,8 @@ mod tests {
                         terminal.redraw(patch.prompt().as_terminal_bytes_under(shell).as_bytes());
                     }
                 },
-                ServerEvent::Complete(_) | ServerEvent::Heartbeat => {}
+                ServerEvent::Complete(_) | ServerEvent::Heartbeat | ServerEvent::RightPrompt(_) => {
+                }
             }
         }
         terminal
@@ -1132,7 +1471,7 @@ mod tests {
         completion
             .write_to(&mut written)
             .expect("writing to a vector cannot fail");
-        let mut fields = written.split(|&byte| byte == 0);
+        let mut fields = written.split(|&byte| byte == b'\0');
         assert_eq!(Some(b"COMPLETE".as_slice()), fields.next());
         let payload =
             String::from_utf8_lossy(fields.next().expect("a timing payload")).into_owned();
@@ -1465,7 +1804,8 @@ mod tests {
                 ServerEvent::Patch(patch) => {
                     values.push(String::from_utf8_lossy(patch.prompt().as_bytes()).into_owned());
                 }
-                ServerEvent::Complete(_) | ServerEvent::Heartbeat => {}
+                ServerEvent::Complete(_) | ServerEvent::Heartbeat | ServerEvent::RightPrompt(_) => {
+                }
             }
         }
 
