@@ -115,7 +115,7 @@ impl Pty {
                 }
                 // Linux, unlike macOS, answers a read on the master with EIO
                 // rather than EOF once the shell has exited and closed its
-                // side of the pty -- the same "nothing more is coming" signal
+                // side of the pty — the same "nothing more is coming" signal
                 // as `Ok(0)`, not a real failure.
                 Err(error) if error.raw_os_error() == Some(nix::errno::Errno::EIO as i32) => {
                     return true;
@@ -178,7 +178,9 @@ enum Shell {
     Zsh,
     Fish,
     Bash,
+    PowerShell,
     Nushell,
+    Xonsh,
 }
 
 impl Shell {
@@ -187,13 +189,21 @@ impl Shell {
             Self::Zsh => "zsh",
             Self::Fish => "fish",
             Self::Bash => "bash",
+            Self::PowerShell => "powershell",
             Self::Nushell => "nu",
+            Self::Xonsh => "xonsh",
         }
     }
 
     const fn input(self) -> &'static str {
         match self {
-            Self::Nushell => "print (['RESULT', 'typing-survived'] | str join ':')",
+            Self::Nushell => {
+                "print (['RESULT', 'typing-survived'] | str join ':'); let count = job list | where {|job| $job.description | str starts-with starship-stream } | length; print $\"JOB_COUNT:($count)\""
+            }
+            Self::PowerShell => {
+                "Write-Output 'RESULT:typing-survived'; Write-Output \"JOB_COUNT:$(@(Get-Job | Where-Object Name -Like 'Starship.Stream.*').Count)\""
+            }
+            Self::Xonsh => "print('RESULT:typing-survived')",
             Self::Zsh | Self::Fish | Self::Bash => "printf 'RESULT:%s\\n' typing-survived",
         }
     }
@@ -206,11 +216,14 @@ impl Shell {
                 vec!["-f".into(), "-i".into()],
                 Startup::Source("source \"$STARSHIP_INIT\"\n"),
             ),
-            Self::Fish => (
-                PathBuf::from("fish"),
-                vec!["--interactive".into()],
-                Startup::Source("source \"$STARSHIP_INIT\"\n"),
-            ),
+            Self::Fish => {
+                environment.insert("fish_features".into(), "no-query-term".into());
+                (
+                    PathBuf::from("fish"),
+                    vec!["--interactive".into()],
+                    Startup::Source("source \"$STARSHIP_INIT\"\n"),
+                )
+            }
             Self::Bash => {
                 environment.insert("BLE_SH".into(), ble().display().to_string());
                 (
@@ -224,9 +237,30 @@ impl Shell {
                     Startup::Ready,
                 )
             }
+            Self::PowerShell => (
+                powershell(),
+                vec![
+                    "-NoLogo".into(),
+                    "-NoProfile".into(),
+                    "-NoExit".into(),
+                    "-Command".into(),
+                    ". $env:STARSHIP_INIT".into(),
+                ],
+                Startup::Ready,
+            ),
             Self::Nushell => (
                 nushell(),
                 vec!["--config".into(), fixture.init.display().to_string()],
+                Startup::Ready,
+            ),
+            Self::Xonsh => (
+                xonsh(),
+                vec![
+                    "--interactive".into(),
+                    "--shell-type=prompt_toolkit".into(),
+                    "--rc".into(),
+                    fixture.init.display().to_string(),
+                ],
                 Startup::Ready,
             ),
         };
@@ -292,6 +326,30 @@ fn nushell() -> PathBuf {
     path
 }
 
+fn powershell() -> PathBuf {
+    let path = env::var_os("POWERSHELL_MAIN")
+        .map(PathBuf::from)
+        .expect("POWERSHELL_MAIN must name the PowerShell binary");
+    assert!(
+        path.is_file(),
+        "POWERSHELL_MAIN is not a file: {}",
+        path.display()
+    );
+    path
+}
+
+fn xonsh() -> PathBuf {
+    let path = env::var_os("XONSH_MAIN")
+        .map(PathBuf::from)
+        .expect("XONSH_MAIN must name the Xonsh binary");
+    assert!(
+        path.is_file(),
+        "XONSH_MAIN is not a file: {}",
+        path.display()
+    );
+    path
+}
+
 struct Fixture {
     directory: TempDir,
     init: PathBuf,
@@ -330,7 +388,11 @@ success_symbol = ">"
         let directory = tempfile::tempdir().expect("failed to create scratch directory");
         fs::write(directory.path().join("starship.toml"), config).expect("failed to write config");
 
-        let init = directory.path().join("starship-init");
+        let init = directory.path().join(if matches!(shell, Shell::PowerShell) {
+            "starship-init.ps1"
+        } else {
+            "starship-init"
+        });
         let mut command = Command::new(starship());
         command
             .args(["init", shell.name(), "--print-full-init"])
@@ -378,6 +440,9 @@ success_symbol = ">"
         ]);
         if let Some(path) = env::var_os("PATH") {
             environment.insert("PATH".into(), path.display().to_string());
+        }
+        if let Some(trace) = env::var_os("STARSHIP_STREAM_TRACE") {
+            environment.insert("STARSHIP_STREAM_TRACE".into(), trace.display().to_string());
         }
         environment
     }
@@ -452,16 +517,16 @@ fn streams(shell: Shell) {
     );
 
     let input = shell.input();
-    session.pty.send(input);
     let refined = session.pty.wait_for("SLOW");
-    assert!(refined.contains(input), "refinement lost input:\n{refined}");
+    session.pty.send(input);
+    assert!(
+        refined.replace('\n', "").contains(input),
+        "refinement lost input:\n{refined}"
+    );
 
     session.pty.send("\n");
     session.pty.wait_for("RESULT:typing-survived");
-    if matches!(shell, Shell::Nushell) {
-        session
-            .pty
-            .send("let count = job list | where description == starship-stream | length; print $\"JOB_COUNT:($count)\"\n");
+    if matches!(shell, Shell::Nushell | Shell::PowerShell) {
         session.pty.wait_for("JOB_COUNT:0");
     }
     session.close();
@@ -475,10 +540,9 @@ fn zsh_streams_a_live_prompt() {
 
 /// Regression test: `right_format` must stream and repaint on its own, the
 /// same as `format` does — never recomputed once per prompt draw via a
-/// blocking synchronous `starship prompt --right` call. Each shell that can
-/// refine the right prompt (zsh, fish, and bash through ble.sh) drives its
-/// own independent right-prompt stream. A live clock placed in the right
-/// prompt advances with no input sent, proving the stream is running.
+/// blocking synchronous `starship prompt --right` call. Every refinable shell
+/// drives an independent right-prompt stream. A live clock placed there
+/// advances with no input sent, proving the stream is running.
 fn right_prompt_ticks_on_its_own(shell: Shell) {
     let mut session = Session::start_with_config(
         shell,
@@ -553,7 +617,31 @@ fn bash_ble_streams_a_live_prompt() {
 }
 
 #[test]
+#[ignore = "requires POWERSHELL_MAIN"]
+fn powershell_streams_a_live_prompt() {
+    streams(Shell::PowerShell);
+}
+
+#[test]
 #[ignore = "requires NUSHELL_MAIN"]
 fn nushell_streams_a_live_prompt() {
     streams(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires XONSH_MAIN"]
+fn xonsh_streams_a_live_prompt() {
+    streams(Shell::Xonsh);
+}
+
+#[test]
+#[ignore = "requires NUSHELL_MAIN"]
+fn nushell_right_prompt_ticks_on_its_own() {
+    right_prompt_ticks_on_its_own(Shell::Nushell);
+}
+
+#[test]
+#[ignore = "requires XONSH_MAIN"]
+fn xonsh_right_prompt_ticks_on_its_own() {
+    right_prompt_ticks_on_its_own(Shell::Xonsh);
 }
