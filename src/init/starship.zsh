@@ -70,13 +70,7 @@ add-zsh-hook preexec prompt_starship_preexec
 
 add-zsh-hook zshexit starship_stream_stop
 
-STARSHIP_STREAM_DESCRIPTOR=
-STARSHIP_STREAM_PROCESS=
-STARSHIP_STREAM_COMPLETE=
-STARSHIP_STREAM_RIGHT_DESCRIPTOR=
-STARSHIP_STREAM_RIGHT_PROCESS=
-STARSHIP_STREAM_RIGHT_COMPLETE=
-STARSHIP_TIMINGS=
+typeset -gA STARSHIP_STREAM=(left.prompt '' right.prompt '')
 
 starship_prompt_arguments() {
     reply=(
@@ -97,37 +91,19 @@ starship_read_frame() {
     reply=("$kind" "$first" "$second")
 }
 
-starship_stream_stop_left() {
-    if [[ -n $STARSHIP_STREAM_DESCRIPTOR ]]; then
-        zle -F "$STARSHIP_STREAM_DESCRIPTOR" 2>/dev/null
-        { exec {STARSHIP_STREAM_DESCRIPTOR}<&- } 2>/dev/null
-        STARSHIP_STREAM_DESCRIPTOR=
-    fi
-    if [[ -n $STARSHIP_STREAM_PROCESS ]]; then
-        kill "$STARSHIP_STREAM_PROCESS" 2>/dev/null
-        STARSHIP_STREAM_PROCESS=
-    fi
-    STARSHIP_STREAM_COMPLETE=
-}
-
-starship_stream_stop_right() {
-    if [[ -n $STARSHIP_STREAM_RIGHT_DESCRIPTOR ]]; then
-        zle -F "$STARSHIP_STREAM_RIGHT_DESCRIPTOR" 2>/dev/null
-        { exec {STARSHIP_STREAM_RIGHT_DESCRIPTOR}<&- } 2>/dev/null
-        STARSHIP_STREAM_RIGHT_DESCRIPTOR=
-    fi
-    if [[ -n $STARSHIP_STREAM_RIGHT_PROCESS ]]; then
-        kill "$STARSHIP_STREAM_RIGHT_PROCESS" 2>/dev/null
-        STARSHIP_STREAM_RIGHT_PROCESS=
-    fi
-    STARSHIP_STREAM_RIGHT_COMPLETE=
-}
-
-# Stops both streams; each also stops independently on its own failure so one
-# side dying does not discard the other's in-flight progress.
 starship_stream_stop() {
-    starship_stream_stop_left
-    starship_stream_stop_right
+    local side descriptor process
+    for side in ${@:-left right}; do
+        descriptor=${STARSHIP_STREAM[$side.fd]-}
+        process=${STARSHIP_STREAM[$side.pid]-}
+        if [[ -n $descriptor ]]; then
+            zle -F "$descriptor" 2>/dev/null
+            { exec {descriptor}<&- } 2>/dev/null
+            unset "STARSHIP_STREAM[$descriptor.side]"
+        fi
+        [[ -z $process ]] || kill "$process" 2>/dev/null
+        unset "STARSHIP_STREAM[$side.fd]" "STARSHIP_STREAM[$side.pid]" "STARSHIP_STREAM[$side.done]"
+    done
 }
 
 starship_editor_is_busy() {
@@ -140,11 +116,11 @@ starship_editor_is_at_prompt() {
 }
 
 starship_apply_prompt() {
-    local prompt=$1 repaint=$2
-    STARSHIP_PROMPT=$prompt
+    local side=$1 prompt=$2 repaint=$3
+    STARSHIP_STREAM[$side.prompt]=$prompt
     starship_editor_is_busy && return
 
-    if [[ -n $repaint ]] && starship_editor_is_at_prompt; then
+    if [[ $side == left && -n $repaint ]] && starship_editor_is_at_prompt; then
         zle -I
         print -rn -- "$repaint"
     else
@@ -153,12 +129,16 @@ starship_apply_prompt() {
 }
 
 starship_stream_readable() {
-    if [[ -n ${2-} ]] || ! starship_read_frame "$1"; then
-        local complete=$STARSHIP_STREAM_COMPLETE
-        starship_stream_stop_left
+    local descriptor=$1 side=${STARSHIP_STREAM[$1.side]-} complete target=()
+    [[ -n $side ]] || return
+
+    if [[ -n ${2-} ]] || ! starship_read_frame "$descriptor"; then
+        complete=${STARSHIP_STREAM[$side.done]-}
+        starship_stream_stop "$side"
         if [[ ! $complete ]]; then
+            [[ $side == right ]] && target=(--right)
             starship_prompt_arguments
-            STARSHIP_PROMPT="$(::STARSHIP:: prompt "${reply[@]}")"
+            STARSHIP_STREAM[$side.prompt]="$(::STARSHIP:: prompt "${target[@]}" "${reply[@]}")"
             zle reset-prompt
         fi
         return
@@ -166,71 +146,43 @@ starship_stream_readable() {
 
     case $reply[1] in
         PATCH)
-            starship_apply_prompt "$reply[2]" "$reply[3]"
+            starship_apply_prompt "$side" "$reply[2]" "$reply[3]"
             ;;
         COMPLETE)
-            STARSHIP_TIMINGS=$reply[2]
-            STARSHIP_STREAM_COMPLETE=1
+            STARSHIP_STREAM[$side.timings]=$reply[2]
+            STARSHIP_STREAM[$side.done]=1
             ;;
     esac
 }
 
-# The right prompt's own callback, separate from starship_stream_readable:
-# its cursor sits nowhere near where zle would rest for a cell-precise
-# repaint, so unlike the left prompt it always redraws with a full
-# `zle reset-prompt` rather than ever touching a PATCH's repaint bytes.
-starship_stream_right_readable() {
-    if [[ -n ${2-} ]] || ! starship_read_frame "$1"; then
-        local complete=$STARSHIP_STREAM_RIGHT_COMPLETE
-        starship_stream_stop_right
-        if [[ ! $complete ]]; then
-            starship_prompt_arguments
-            STARSHIP_RIGHT_PROMPT="$(::STARSHIP:: prompt --right "${reply[@]}")"
-            zle reset-prompt
-        fi
+starship_stream_start_one() {
+    local side=$1 descriptor
+    local -a target=()
+    shift
+    [[ $side == right ]] && target=(--right)
+
+    exec {descriptor}< <(
+        ::STARSHIP:: stream "${target[@]}" "$@" --timings="${STARSHIP_STREAM[$side.timings]-}" 2>/dev/null
+    )
+    STARSHIP_STREAM[$side.fd]=$descriptor
+    STARSHIP_STREAM[$descriptor.side]=$side
+    if ! starship_read_frame "$descriptor" || [[ $reply[1] != READY ]]; then
+        starship_stream_stop "$side"
+        STARSHIP_STREAM[$side.prompt]="$(::STARSHIP:: prompt "${target[@]}" "$@")"
         return
     fi
 
-    case $reply[1] in
-        PATCH)
-            STARSHIP_RIGHT_PROMPT=$reply[2]
-            starship_editor_is_busy || zle reset-prompt
-            ;;
-        COMPLETE)
-            STARSHIP_TIMINGS=$reply[2]
-            STARSHIP_STREAM_RIGHT_COMPLETE=1
-            ;;
-    esac
+    STARSHIP_STREAM[$side.prompt]=$reply[2]
+    STARSHIP_STREAM[$side.pid]=$reply[3]
+    zle -F "$descriptor" starship_stream_readable
 }
 
 starship_stream_start() {
     starship_stream_stop
     starship_prompt_arguments
     local -a arguments=("${reply[@]}")
-
-    exec {STARSHIP_STREAM_DESCRIPTOR}< <(::STARSHIP:: stream "${arguments[@]}" --timings="$STARSHIP_TIMINGS" 2>/dev/null)
-    if [[ -z $STARSHIP_STREAM_DESCRIPTOR ]] ||
-       ! starship_read_frame "$STARSHIP_STREAM_DESCRIPTOR" ||
-       [[ $reply[1] != READY ]]; then
-        starship_stream_stop_left
-        STARSHIP_PROMPT="$(::STARSHIP:: prompt "${arguments[@]}")"
-    else
-        STARSHIP_PROMPT=$reply[2]
-        STARSHIP_STREAM_PROCESS=$reply[3]
-        zle -F "$STARSHIP_STREAM_DESCRIPTOR" starship_stream_readable
-    fi
-
-    exec {STARSHIP_STREAM_RIGHT_DESCRIPTOR}< <(::STARSHIP:: stream --right "${arguments[@]}" --timings="$STARSHIP_TIMINGS" 2>/dev/null)
-    if [[ -z $STARSHIP_STREAM_RIGHT_DESCRIPTOR ]] ||
-       ! starship_read_frame "$STARSHIP_STREAM_RIGHT_DESCRIPTOR" ||
-       [[ $reply[1] != READY ]]; then
-        starship_stream_stop_right
-        STARSHIP_RIGHT_PROMPT="$(::STARSHIP:: prompt --right "${arguments[@]}")"
-    else
-        STARSHIP_RIGHT_PROMPT=$reply[2]
-        STARSHIP_STREAM_RIGHT_PROCESS=$reply[3]
-        zle -F "$STARSHIP_STREAM_RIGHT_DESCRIPTOR" starship_stream_right_readable
-    fi
+    starship_stream_start_one right "${arguments[@]}"
+    starship_stream_start_one left "${arguments[@]}"
 }
 
 # Set up a function to redraw the prompt if the user switches vi modes
@@ -285,6 +237,6 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 setopt promptsubst
 
 # A variable, not a command substitution, so a redraw re-expands the stored prompt without rerunning starship (needs promptsubst).
-PROMPT='${STARSHIP_PROMPT}'
-RPROMPT='${STARSHIP_RIGHT_PROMPT}'
+PROMPT='${STARSHIP_STREAM[left.prompt]}'
+RPROMPT='${STARSHIP_STREAM[right.prompt]}'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
