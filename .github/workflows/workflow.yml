@@ -198,7 +198,7 @@ jobs:
       # both wasteful and, on Windows/macOS runners, impossible regardless.
       - name: Setup | Streaming shells
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
-        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make zsh
+        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make xonsh zsh
 
       - name: Setup | ble.sh
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
@@ -244,6 +244,8 @@ jobs:
           BASH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/bash' || '' }}
           BLE_SH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
           NUSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
+          POWERSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/pwsh' || '' }}
+          XONSH_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/xonsh' || '' }}
 
       # Nightly has no shell-streaming setup (see the comment on the stable
       # `Build | Test` step above), so it only needs the non-init_async slice.
