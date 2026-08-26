@@ -3,264 +3,188 @@ if (clink.version_encoded or 0) < 10020030 then
 end
 
 local STARSHIP = [[::STARSHIP::]]
-local STREAMING_CLINK = (clink.version_encoded or 0) >= 10080000
-local POLL_INTERVAL = 0.02
-local TARGETS = {
-  { name = "left", flag = "", prompt = "" },
-  { name = "right", flag = " --right", prompt = "" },
-}
+-- Clink's documented async door, io.popenyield, hands back a handle only once
+-- the child has finished, so it can deliver a prompt but never refine one.
+-- popenyield_internal returns the handle immediately, which is the whole reason
+-- frames can stream — but it is marked "internal use only" in Clink's source,
+-- so it is probed rather than assumed, and its absence costs only streaming.
+local STREAM = (clink.version_encoded or 0) >= 10080000 and io.popenyield_internal ~= nil
 
+-- One renderer draws both sides, so one process feeds two prompt strings. `left`
+-- and `right` hold only what their filters hand back; `renderer` is that one
+-- process — its temp file, its yieldguard, the cursor walking its frames, and
+-- the timings carried forward to prime the next prompt. A single prompt filter
+-- runs a single prompt coroutine (Clink caches one per filter per input line),
+-- so this one coroutine reads this one stream and refills both sides.
+local left = { flag = "", prompt = "" }
+local right = { flag = " --right", prompt = "" }
+local renderer = { timings = "" }
 local starship_prompt = clink.promptfilter(5)
-local current_session
-local generation = 0
-local start_time = os.clock()
-local command_duration = 0
-local is_line_empty = true
+local session, command_start, duration, empty = nil, os.clock(), 0, true
 
-local function shell_arguments()
+local function arguments()
   return " --status=" .. os.geterrorlevel()
-    .. " --cmd-duration=" .. math.floor(command_duration * 1000)
+    .. " --cmd-duration=" .. math.floor(duration * 1000)
     .. " --terminal-width=" .. console.getwidth()
     .. " --keymap=" .. (rl.getvariable("keymap") or "emacs-standard")
 end
 
-local function render(target, arguments)
-  local pipe = io.popen(STARSHIP .. " prompt" .. target.flag .. arguments .. " 2>nul")
+-- `async` says this is running inside the prompt coroutine, where a plain
+-- io.popen would block Clink's whole idle scheduler — and with it the line
+-- editor — for as long as the render takes. io.popenyield yields instead.
+local function render(side, extra, async)
+  local open = (async and io.popenyield) or io.popen
+  local pipe = open(STARSHIP .. " prompt" .. side.flag .. extra .. " 2>nul")
   if not pipe then
     return ""
   end
-  local prompt = pipe:read("*a") or ""
+  local text = pipe:read("*a") or ""
   pipe:close()
-  return prompt
+  return text
 end
 
-local function batch_escape(value)
-  -- Percent expansion is active even inside quotes in a batch file.
-  return value:gsub("%%", "%%%%")
+-- Draws both sides synchronously, the fallback whenever a stream cannot serve
+-- them: no streaming build, a renderer that would not launch, or one whose pipe
+-- closed before it finished.
+local function render_both(extra, async)
+  left.prompt = render(left, extra, async)
+  right.prompt = render(right, extra, async)
 end
 
-local function new_temp_file(prefix, extension)
-  local file, name = os.createtmpfile(prefix, extension)
-  if file then
-    file:close()
+-- Compact frames are KEYWORD\0first\0second\0. Seek-before-read clears CRT EOF
+-- so Clink's copy thread can append; never read a pipe from Lua (it would
+-- freeze the UI). An empty read is not EOF — yieldguard:ready() is.
+--
+-- The one --both renderer sends both sides down this one pipe: READY and PATCH
+-- carry the left prompt (READY's aux field is the renderer's pid, the only side
+-- that announces it), RIGHT carries the right prompt, and a single COMPLETE
+-- carries the merged timings once both sides have finished. HEARTBEAT only keeps
+-- the pipe warm, so it falls through.
+local function consume()
+  if not renderer.file then
+    return false
   end
-  return name
-end
-
-local function unlink(name)
-  if name then
-    os.unlink(name)
+  renderer.file:seek("set", renderer.offset)
+  local chunk = renderer.file:read("*a") or ""
+  if #chunk > 0 then
+    -- Lua strings are immutable, so the buffer is rebuilt once per read, with
+    -- whatever has already been parsed dropped on the way — never once per
+    -- frame. A cursor walks the frames in place; plain `find` scans for the
+    -- terminator without the backtracking a `.-` pattern would spend.
+    renderer.buffer = (renderer.cursor > 1 and renderer.buffer:sub(renderer.cursor) or renderer.buffer) .. chunk
+    renderer.cursor = 1
+    renderer.offset = renderer.offset + #chunk
   end
-end
-
-local function cleanup(target)
-  unlink(target.output)
-  unlink(target.done)
-  unlink(target.batch)
-  target.output = nil
-  target.done = nil
-  target.batch = nil
-  target.offset = 0
-  target.buffer = ""
-end
-
-local function read_new_bytes(target)
-  if not target.output then
-    return ""
-  end
-  local file = io.open(target.output, "rb")
-  if not file then
-    return ""
-  end
-  file:seek("set", target.offset or 0)
-  local bytes = file:read("*a") or ""
-  target.offset = (target.offset or 0) + #bytes
-  file:close()
-  return bytes
-end
-
-local function take_frame(target)
-  local first = target.buffer:find("\0", 1, true)
-  if not first then
-    return
-  end
-  local second = target.buffer:find("\0", first + 1, true)
-  if not second then
-    return
-  end
-  local third = target.buffer:find("\0", second + 1, true)
-  if not third then
-    return
-  end
-
-  local kind = target.buffer:sub(1, first - 1)
-  local payload = target.buffer:sub(first + 1, second - 1)
-  local auxiliary = target.buffer:sub(second + 1, third - 1)
-  target.buffer = target.buffer:sub(third + 1)
-  return kind, payload, auxiliary
-end
-
-local function consume(target)
-  target.buffer = (target.buffer or "") .. read_new_bytes(target)
   local changed = false
   while true do
-    local kind, payload, auxiliary = take_frame(target)
-    if not kind then
+    local first = renderer.buffer:find("\0", renderer.cursor, true)
+    local second = first and renderer.buffer:find("\0", first + 1, true)
+    local third = second and renderer.buffer:find("\0", second + 1, true)
+    if not third then
       break
-    elseif kind == "READY" then
-      target.prompt = payload
-      target.process = tonumber(auxiliary)
-      target.ready = true
-      changed = true
+    end
+    local kind = renderer.buffer:sub(renderer.cursor, first - 1)
+    local payload = renderer.buffer:sub(first + 1, second - 1)
+    local aux = renderer.buffer:sub(second + 1, third - 1)
+    renderer.cursor = third + 1
+    if kind == "READY" then
+      left.prompt, renderer.pid, changed = payload, tonumber(aux), true
     elseif kind == "PATCH" then
-      target.prompt = payload
-      changed = true
+      left.prompt, changed = payload, true
+    elseif kind == "RIGHT" then
+      right.prompt, changed = payload, true
     elseif kind == "COMPLETE" then
-      target.timings = payload
-      target.complete = true
+      renderer.timings, renderer.ok = payload, true
     end
   end
   return changed
 end
 
-local function process_finished(target)
-  if not target.done then
-    return false
-  end
-  local file = io.open(target.done, "rb")
-  if not file then
-    return false
-  end
-  file:close()
-  return true
-end
-
-local function launch(target, arguments)
-  cleanup(target)
-  target.output = new_temp_file("starship_" .. target.name, ".frames")
-  target.done = new_temp_file("starship_" .. target.name, ".done")
-  target.batch = new_temp_file("starship_" .. target.name, ".cmd")
-  if not target.output or not target.done or not target.batch then
-    cleanup(target)
-    return false
-  end
-
-  -- The done file starts absent and is created by the wrapper only after the
-  -- renderer closes stdout. This distinguishes a temporarily empty append-only
-  -- stream from EOF without ever blocking Clink's main coroutine on a pipe.
-  unlink(target.done)
-  local batch = io.open(target.batch, "wb")
-  if not batch then
-    cleanup(target)
-    return false
-  end
-  batch:write("@echo off\r\n")
-  batch:write(
-    batch_escape(STARSHIP),
-    " stream", target.flag, arguments,
-    " >\"", batch_escape(target.output), "\" 2>nul\r\n"
-  )
-  batch:write(">\"", batch_escape(target.done), "\" echo done\r\n")
-  batch:close()
-
-  target.offset = 0
-  target.buffer = ""
-  target.process = nil
-  target.ready = false
-  target.complete = false
-  target.running = true
-
-  local launch_command = 'start "" /b cmd.exe /d /q /c call "' .. target.batch .. '"'
-  os.execute(launch_command)
-  return true
-end
-
-local function stop(target)
-  if not target.running then
-    cleanup(target)
+local function stop()
+  if not renderer.file then
     return
   end
-
-  -- READY is normally already consumed. If Enter wins the race by a few
-  -- milliseconds, give the renderer a tiny bounded window to publish its PID
-  -- so it cannot become an orphaned dynamic stream.
-  if not target.process then
+  -- Clink has no kill of any kind, and closing the handle cannot stand in for
+  -- one: popenyield hands Lua a temp file that a copy thread fills, so the
+  -- renderer's real pipe stays open and its writes keep succeeding. taskkill
+  -- is the only door, and it costs two Windows process spawns.
+  --
+  -- So only knock on it for a renderer that is still alive. A ready yieldguard
+  -- means the child already closed stdout and exited, which is every prompt
+  -- that finished rendering before Enter — the common case pays nothing, and
+  -- only a stream cut off mid-render waits for a PID it can kill.
+  if not renderer.yieldguard:ready() then
+    -- Enter can beat READY, and the PID arrives with it.
     for _ = 1, 10 do
-      consume(target)
-      if target.process or process_finished(target) then
+      if renderer.pid or renderer.yieldguard:ready() then
         break
       end
       os.sleep(0.01)
+      consume()
+    end
+    if renderer.pid and not renderer.yieldguard:ready() then
+      os.execute("taskkill /f /t /pid " .. renderer.pid .. " >nul 2>nul")
     end
   end
-
-  if target.process then
-    os.execute(
-      "taskkill /f /t /pid " .. target.process .. " >nul 2>nul"
-    )
-  end
-  target.running = false
-  target.process = nil
-  cleanup(target)
+  renderer.file:close()
+  renderer.file, renderer.yieldguard, renderer.pid = nil
 end
 
-local function stop_all()
-  for _, target in ipairs(TARGETS) do
-    stop(target)
+-- Public io.popenyield waits until complete output is ready, so it cannot stream
+-- PATCH. The internal API returns a readable handle immediately and a yieldguard
+-- that becomes ready when stdout closes. `--both` draws both sides from this one
+-- process, so where Starship once spawned a renderer per side it now spawns one.
+local function launch(extra)
+  stop()
+  if not io.popenyield_internal then
+    return false
   end
+  local file, yieldguard = io.popenyield_internal(
+    STARSHIP .. " stream --both" .. extra
+      .. ' "--timings=' .. (renderer.timings or ""):gsub('"', '""') .. '" 2>nul',
+    "rb"
+  )
+  if not file then
+    return false
+  end
+  renderer.file, renderer.yieldguard = file, yieldguard
+  renderer.offset, renderer.buffer, renderer.cursor = 0, "", 1
+  renderer.pid, renderer.ok = nil, false
+  return true
 end
 
-local function synchronous_prompts(session)
-  for _, target in ipairs(TARGETS) do
-    target.prompt = render(target, session.arguments)
-  end
-end
-
-local function stream_prompts(session, background)
+local function stream(active_session, background)
   if not background then
-    synchronous_prompts(session)
+    render_both(active_session.arguments)
     return true
   end
 
-  local co = coroutine.running()
-  clink.setcoroutinename(co, "starship prompt stream")
-  clink.setcoroutineinterval(co, POLL_INTERVAL)
+  clink.setcoroutineinterval(coroutine.running(), 0.02)
 
-  local running = 0
-  for _, target in ipairs(TARGETS) do
-    if launch(target, session.arguments) then
-      running = running + 1
-    else
-      target.prompt = render(target, session.arguments)
-    end
-  end
-
-  if running < #TARGETS then
+  if not launch(active_session.arguments) then
+    -- No stream to adopt: draw both sides the slow way and show them at once.
+    render_both(active_session.arguments, true)
     clink.refilterprompt()
+    return true
   end
 
-  while current_session == session and session.active and running > 0 do
-    local changed = false
-    for _, target in ipairs(TARGETS) do
-      if target.running then
-        changed = consume(target) or changed
-        if process_finished(target) then
-          changed = consume(target) or changed
-          if not target.complete then
-            target.prompt = render(target, session.arguments)
-            changed = true
-          end
-          target.running = false
-          target.process = nil
-          cleanup(target)
-          running = running - 1
-        end
+  while session == active_session and active_session.active and renderer.file do
+    local changed = consume()
+    if renderer.yieldguard:ready() then
+      changed = consume() or changed
+      -- The renderer exits only after the merged COMPLETE, so a pipe that closed
+      -- without one was cut off mid-render; redraw both sides synchronously.
+      if not renderer.ok then
+        render_both(active_session.arguments, true)
+        changed = true
       end
+      renderer.file:close()
+      renderer.file, renderer.yieldguard, renderer.pid = nil
     end
-    if changed and current_session == session and session.active then
+    if changed and session == active_session and active_session.active then
       clink.refilterprompt()
     end
-    if running > 0 then
+    if renderer.file then
       coroutine.yield()
     end
   end
@@ -268,86 +192,70 @@ local function stream_prompts(session, background)
 end
 
 clink.onbeginedit(function()
-  local end_time = os.clock()
-  if not is_line_empty then
-    command_duration = end_time - start_time
+  local now = os.clock()
+  if not empty then
+    duration = now - command_start
   end
-
-  generation = generation + 1
-  current_session = {
-    active = true,
-    arguments = shell_arguments(),
-    generation = generation,
-    preprompt_called = false,
-  }
-  for _, target in ipairs(TARGETS) do
-    target.prompt = ""
-  end
+  session = { active = true, arguments = arguments(), preprompt = false }
+  left.prompt, right.prompt = "", ""
 end)
 
-clink.onendedit(function(curr_line)
-  if current_session then
-    current_session.active = false
+clink.onendedit(function(line)
+  if session then
+    session.active = false
   end
-  stop_all()
-
-  if starship_precmd_user_func ~= nil then
-    starship_precmd_user_func(curr_line)
+  stop()
+  if starship_precmd_user_func then
+    starship_precmd_user_func(line)
   end
-  start_time = os.clock()
-  is_line_empty = #curr_line:match("^%s*(.-)%s*$") == 0
+  command_start = os.clock()
+  empty = #line:match("^%s*(.-)%s*$") == 0
 end)
 
 function starship_prompt:filter(prompt)
-  local session = current_session
   if not session then
-    return render(TARGETS[1], shell_arguments())
+    return render(left, arguments())
   end
-
-  if not session.preprompt_called then
-    session.preprompt_called = true
-    if starship_preprompt_user_func ~= nil then
+  if not session.preprompt then
+    session.preprompt = true
+    if starship_preprompt_user_func then
       starship_preprompt_user_func(prompt)
     end
   end
-
-  if STREAMING_CLINK then
+  if STREAM then
     clink.promptcoroutine(function(background)
-      return stream_prompts(session, background)
+      return stream(session, background)
     end)
   else
-    TARGETS[1].prompt = render(TARGETS[1], session.arguments)
+    left.prompt = render(left, session.arguments)
   end
-  return TARGETS[1].prompt
+  return left.prompt
 end
 
-function starship_prompt:rightfilter(prompt)
-  if not STREAMING_CLINK then
-    local arguments = current_session and current_session.arguments or shell_arguments()
-    TARGETS[2].prompt = render(TARGETS[2], arguments)
+function starship_prompt:rightfilter()
+  if not STREAM then
+    right.prompt = render(right, session and session.arguments or arguments())
   end
-  return TARGETS[2].prompt
+  return right.prompt
 end
 
-if starship_transient_prompt_func ~= nil then
+if starship_transient_prompt_func then
   function starship_prompt:transientfilter(prompt)
     return starship_transient_prompt_func(prompt)
   end
 end
-
-if starship_transient_rprompt_func ~= nil then
+if starship_transient_rprompt_func then
   function starship_prompt:transientrightfilter(prompt)
     return starship_transient_rprompt_func(prompt)
   end
 end
 
-local characterset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-local randomkey = ""
+local alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 math.randomseed(os.time())
-for _ = 1, 16 do
-  local index = math.random(#characterset)
-  randomkey = randomkey .. characterset:sub(index, index)
+local key = {}
+for i = 1, 16 do
+  local n = math.random(#alphabet)
+  key[i] = alphabet:sub(n, n)
 end
-
 os.setenv("STARSHIP_SHELL", "cmd")
-os.setenv("STARSHIP_SESSION_KEY", randomkey)
+os.setenv("STARSHIP_SESSION_KEY", table.concat(key))

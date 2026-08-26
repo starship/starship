@@ -1,167 +1,169 @@
-import json
-import shutil
-import subprocess
-import threading
-import time
-import uuid
-
-from xonsh.events import events
-
+import os, subprocess, threading
+from prompt_toolkit import ANSI
 
 STARSHIP = ::STARSHIP::
 
 
-def _starship_arguments():
-    last = __xonsh__.history[-1] if __xonsh__.history else None
-    jobs = sum(
-        job.get("obj") is not None and job["obj"].poll() is None
-        for job in __xonsh__.all_jobs.values()
-    )
-    duration = round((last.ts[1] - last.ts[0]) * 1000) if last else 0
+# Compact frames are KEYWORD\0first\0second\0. Popen.stdout has no readuntil
+# (that is asyncio), so one os.read fills whatever is already in the pipe —
+# a sized read() would block until n bytes or EOF, and this stream stays
+# open for heartbeats. One read usually carries several frames, so the count of
+# terminators still waiting is carried across iterations rather than recovered by
+# rescanning the frames not yet handed out; the buffer is a bytearray so filling
+# it appends in place instead of copying what is left over.
+def _frames(pipe):
+    fd, buf, nuls = pipe.fileno(), bytearray(), 0
+    while True:
+        while nuls < 3:
+            if not (chunk := os.read(fd, 65536)):
+                return
+            nuls += chunk.count(0)
+            buf += chunk
+        keyword, first, second, buf = buf.split(b"\0", 3)
+        nuls -= 3
+        yield keyword.decode(), first.decode(), second.decode()
+
+
+class _Stream:
+    """One renderer, both prompts.
+
+    xonsh asks for $PROMPT and $RIGHT_PROMPT separately and in no order this
+    can rely on, so whichever is asked first starts the stream and the other
+    reads what it left behind. `started` is what makes that once per prompt
+    rather than once per side.
+    """
+
+    __slots__ = "proc", "timings", "prompts", "started"
+
+    def __init__(self):
+        self.proc, self.timings, self.prompts, self.started = None, "", ["", ""], False
+
+    def render(self, args, flag=()):
+        try:
+            return subprocess.check_output(
+                [STARSHIP, "prompt", *flag, *args], stderr=subprocess.DEVNULL, text=True
+            )
+        except (OSError, subprocess.CalledProcessError):
+            return ""
+
+    def render_both(self, args):
+        self.prompts = [self.render(args), self.render(args, ("--right",))]
+
+    def stop(self):
+        proc, self.proc, self.started = self.proc, None, False
+        proc and proc.poll() is None and proc.kill()
+
+    def publish(self, side, text, proc, session):
+        if self.proc is not proc:
+            return
+        self.prompts[side] = text
+        formatted = ANSI(text)
+
+        def apply():
+            if self.proc is proc:
+                setattr(session, "rprompt" if side else "message", formatted)
+                session.app.invalidate()
+
+        try:
+            session.app.loop.call_soon_threadsafe(apply)
+        except (AttributeError, RuntimeError):
+            pass
+
+    def read(self, args, proc, session, frames):
+        done = False
+        try:
+            for kind, first, _ in frames:
+                if kind == "PATCH":
+                    self.publish(0, first, proc, session)
+                elif kind == "RIGHT":
+                    self.publish(1, first, proc, session)
+                elif kind == "COMPLETE":
+                    done = True
+                    if self.proc is proc:
+                        self.timings = first
+        except (OSError, ValueError):
+            pass
+        if not done:
+            self.publish(0, self.render(args), proc, session)
+            self.publish(1, self.render(args, ("--right",)), proc, session)
+
+    def begin(self, session):
+        if self.started:
+            return
+        self.stop()
+        self.started = True
+        args = _args()
+        self.prompts = ["", ""]
+        if not session:
+            self.render_both(args)
+            return
+
+        proc = None
+        try:
+            proc = subprocess.Popen(
+                [STARSHIP, "stream", "--both", *args, f"--timings={self.timings}"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+            )
+            frames = _frames(proc.stdout)
+            # READY is what ends the wait, but the right side's first paint
+            # usually reaches the pipe before it, so anything else is applied on
+            # the way past and the first draw has both sides. Bounded, so a
+            # renderer that never says READY cannot hold the prompt.
+            for _ in range(4):
+                kind, first, _second = next(frames)
+                if kind == "RIGHT":
+                    self.prompts[1] = first
+                elif kind == "READY":
+                    self.prompts[0] = first
+                    break
+            else:
+                raise ValueError
+        except (OSError, ValueError, StopIteration):
+            proc and proc.poll() is None and proc.kill()
+            self.render_both(args)
+            return
+
+        self.proc = proc
+        threading.Thread(
+            target=self.read, args=(args, proc, session, frames), daemon=True
+        ).start()
+
+
+_S = _Stream()
+
+
+def _args():
+    try:
+        last = __xonsh__.history[-1]
+    except Exception:
+        last = None
+    try:
+        width = os.get_terminal_size().columns
+    except OSError:
+        width = 80
     return [
         f"--status={last.rtn if last else 0}",
-        f"--jobs={jobs}",
-        f"--cmd-duration={duration}",
-        f"--terminal-width={shutil.get_terminal_size().columns}",
+        f"--jobs={sum(j.get('obj') is not None and j['obj'].poll() is None for j in __xonsh__.all_jobs.values())}",
+        f"--cmd-duration={round((last.ts[1] - last.ts[0]) * 1000) if last else 0}",
+        f"--terminal-width={width}",
     ]
 
 
-def _starship_run(command):
-    try:
-        return subprocess.check_output(
-            [STARSHIP, *command],
-            stderr=subprocess.DEVNULL,
-            text=True,
-            env=__xonsh__.env.detype(),
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return ""
-
-
-class _StarshipStream:
-    __slots__ = "flag", "prompt", "process", "right", "timings"
-
-    def __init__(self, right):
-        self.right = right
-        self.flag = ["--right"] if right else []
-        self.prompt = self.timings = ""
-        self.process = None
-
-    def render(self, arguments):
-        return _starship_run(["prompt", *self.flag, *arguments])
-
-    def stop(self):
-        process, self.process = self.process, None
-        if process is not None and process.poll() is None:
-            process.kill()
-
-    def publish(self, prompt, process, session):
-        if self.process is not process:
-            return
-        self.prompt = prompt
-        app = session.app
-        while self.process is process and not app.is_running:
-            time.sleep(0.001)
-        if self.process is not process:
-            return
-
-        from prompt_toolkit import ANSI
-
-        formatted = ANSI(prompt)
-
-        def apply():
-            if self.process is process:
-                setattr(session, "rprompt" if self.right else "message", formatted)
-                app.invalidate()
-
-        try:
-            app.loop.call_soon_threadsafe(apply)
-        except RuntimeError:
-            pass
-
-    def read(self, arguments, process, session):
-        complete = False
-        try:
-            for line in process.stdout:
-                frame = json.loads(line)
-                if frame["kind"] == "PATCH":
-                    self.publish(frame["prompt"], process, session)
-                elif frame["kind"] == "COMPLETE":
-                    complete = True
-                    if self.process is process:
-                        self.timings = json.dumps(
-                            frame["timings"], separators=(",", ":")
-                        )
-        except (OSError, ValueError):
-            pass
-
-        if not complete:
-            self.publish(self.render(arguments), process, session)
-
-    def start(self, arguments, session):
-        self.stop()
-        process = None
-        try:
-            process = subprocess.Popen(
-                [
-                    STARSHIP,
-                    "stream",
-                    "--frames=json",
-                    *self.flag,
-                    *arguments,
-                    f"--timings={self.timings}",
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL,
-                text=True,
-                bufsize=1,
-                env=__xonsh__.env.detype(),
-            )
-            ready = json.loads(process.stdout.readline())
-            if ready["kind"] != "READY":
-                raise ValueError("starship stream did not become ready")
-        except (OSError, ValueError):
-            if process is not None and process.poll() is None:
-                process.kill()
-            return self.render(arguments)
-
-        self.process, self.prompt = process, ready["prompt"]
-        threading.Thread(
-            target=self.read,
-            args=(arguments, process, session),
-            name=f"starship-{'right' if self.right else 'left'}",
-            daemon=True,
-        ).start()
-        return self.prompt
-
-
-_STARSHIP_STREAMS = (_StarshipStream(False), _StarshipStream(True))
-_STARSHIP_ARGUMENTS = None
-
-
 def starship_prompt(right=False):
-    global _STARSHIP_ARGUMENTS
-    if not right:
-        _STARSHIP_ARGUMENTS = _starship_arguments()
-    stream = _STARSHIP_STREAMS[right]
-    arguments = _STARSHIP_ARGUMENTS or _starship_arguments()
     session = getattr(getattr(__xonsh__.shell, "shell", None), "prompter", None)
-    return stream.start(arguments, session) if session else stream.render(arguments)
+    _S.begin(session)
+    return _S.prompts[right]
 
 
-def _starship_stop(**_):
-    global _STARSHIP_ARGUMENTS
-    _STARSHIP_ARGUMENTS = None
-    for stream in _STARSHIP_STREAMS:
-        stream.stop()
+@events.on_precommand
+@events.on_exit
+def _stop(**_):
+    _S.stop()
 
 
-events.on_precommand(_starship_stop)
-events.on_exit(_starship_stop)
-__xonsh__.env.update(
-    STARSHIP_SHELL="xonsh",
-    STARSHIP_SESSION_KEY=uuid.uuid4().hex[:16],
-    PROMPT=starship_prompt,
-    RIGHT_PROMPT=lambda: starship_prompt(True),
-    MULTILINE_PROMPT=_starship_run(["prompt", "--continuation"]),
-)
+$STARSHIP_SHELL = os.environ["STARSHIP_SHELL"] = "xonsh"
+$STARSHIP_SESSION_KEY = os.environ["STARSHIP_SESSION_KEY"] = os.urandom(8).hex()
+$PROMPT = starship_prompt
+$RIGHT_PROMPT = lambda: starship_prompt(True)
+$MULTILINE_PROMPT = _S.render(["--continuation"])

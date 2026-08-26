@@ -1,261 +1,233 @@
-# We use PROMPT_COMMAND and the DEBUG trap to generate timing information. We try
-# to avoid clobbering what we can, and try to give the user ways around our
-# clobbers, if it's unavoidable. For example, PROMPT_COMMAND is appended to,
-# and the DEBUG trap is layered with other traps, if it exists.
+# Timing uses PROMPT_COMMAND plus either the DEBUG trap, PS0, or ble.sh hooks.
+# We append rather than clobber wherever the shell allows it. A bash quirk:
+# the DEBUG trap fires for *every* command in a pipeline, which would time
+# only the last stage of `slow | slow | fast`. We therefore set
+# STARSHIP_PREEXEC_READY once the prompt is drawn and start the timer only
+# while it holds, so timing covers the whole line.
 
-# A bash quirk is that the DEBUG trap is fired every time a command runs, even
-# if it's later on in the pipeline. If uncorrected, this could cause bad timing
-# data for commands like `slow | slow | fast`, since the timer starts at the start
-# of the "fast" command.
+_starship_set_return() { return "${1:-0}"; } # bash cannot assign $?
 
-# To solve this, we set a flag `STARSHIP_PREEXEC_READY` when the prompt is
-# drawn, and only start the timer if this flag is present. That way, timing is
-# for the entire command, and not just a portion of it.
+# Milliseconds since epoch. EPOCHREALTIME (bash 5.0+) is seconds.fraction —
+# same split ble.sh uses. PS0/DEBUG on bash 4.x still forks `starship time`.
+if [[ ${EPOCHREALTIME-} ]]; then
+    starship_now() { local LC_ALL= LC_NUMERIC=C t=$EPOCHREALTIME f=${t#*.}000; printf -v "$1" %s "$((${t%%.*}*1000+10#${f:0:3}))"; }
+else
+    starship_now() { printf -v "$1" %s "$(::STARSHIP:: time)"; }
+fi
 
-# A way to set '$?', since bash does not allow assigning to '$?' directly
-function _starship_set_return() { return "${1:-0}"; }
+# STARSHIP_PROMPT is 0=left 1=right; one renderer draws both, so its fd, pid,
+# timings and completion are each one value rather than a pair. A frame is
+# KEYWORD\0first\0second\0; prompts carry their own newlines, so PS1 receives
+# them with nothing to decode. Export the shell name before any hook can spawn
+# `stream --transport ble`.
+STARSHIP_PROMPT=() STARSHIP_FRAME=() STARSHIP_ARGS=()
+STARSHIP_FD= STARSHIP_PID= STARSHIP_DONE= STARSHIP_TIMINGS=
+STARSHIP_RPS1_PAD=
+export STARSHIP_SHELL=bash
 
-STARSHIP_BLE_ENABLED=
-declare -A STARSHIP_STREAM=([0.prompt]='' [1.prompt]='')
-STARSHIP_PROMPT_ARGUMENTS=()
-STARSHIP_FRAME=()
-
+# \q{starship} is the left prompt. Hash the variable (ble's $PWD pattern),
+# not the expanded text: a frozen string never expires the cached unit, so
+# a PATCH of the same line count would leave FAST on screen forever.
+# ble.sh draws rps1 on the left prompt's final row, so a multi-line left
+# pads the right with that many newlines — a static bleopt, not a second
+# \q unit (those issue extra cursor queries).
 function ble/prompt/backslash:starship {
-    ble/prompt/unit/add-hash '${STARSHIP_STREAM[0.prompt]}'
-    ble/prompt/process-prompt-string "${STARSHIP_STREAM[0.prompt]}"
+    ble/prompt/unit/add-hash '${STARSHIP_PROMPT[0]}'
+    ble/prompt/process-prompt-string "${STARSHIP_PROMPT[0]}"
 }
-
-starship_ble_read_frame() {
-    local descriptor=$1 kind first second
-    IFS= read -r -d '' -u "$descriptor" kind &&
-        IFS= read -r -d '' -u "$descriptor" first &&
-        IFS= read -r -d '' -u "$descriptor" second || return
-    STARSHIP_FRAME=("$kind" "$first" "$second")
-}
-
-# ble.sh's `prompt_rps1` carries the right prompt, but it is drawn on the line
-# holding the left prompt's final row, so it is padded with the left prompt's
-# newlines. Either stream recomputes it from the latest left and right values.
-starship_ble_refresh_rps1() {
-    local lines=${STARSHIP_STREAM[0.prompt]//[!$'\n']}
-    bleopt prompt_rps1="$lines${STARSHIP_STREAM[1.prompt]}"
-}
-
+# The pad is the left prompt with everything but its newlines deleted, so it
+# only ever changes when the left side does. Recomputing it on a right-side
+# patch would rescan the whole left prompt, escapes and all, for a string that
+# cannot have changed — and a right-side clock patches far more often than the
+# left is redrawn.
 starship_ble_set_prompt() {
-    STARSHIP_STREAM[$1.prompt]=$2
-    starship_ble_refresh_rps1
+    STARSHIP_PROMPT[$1]=$2
+    ((${1})) || STARSHIP_RPS1_PAD=${2//[!$'\n']}
+    bleopt prompt_rps1="${STARSHIP_RPS1_PAD}${STARSHIP_PROMPT[1]}"
+}
+
+# $2 is a handshake timeout in seconds: a renderer that never paints must
+# not freeze the prompt. Idle reads are already gated by `read -t 0`.
+# mapfile has no timeout, so the handshake waits on the first field
+# (frames are written atomically).
+starship_ble_read_frame() {
+    STARSHIP_FRAME=()
+    if [[ ${2-} ]]; then IFS= read -r -d '' -t "$2" -u "$1" 'STARSHIP_FRAME[0]' && mapfile -d '' -t -n 2 -O 1 -u "$1" STARSHIP_FRAME
+    else mapfile -d '' -t -n 3 -u "$1" STARSHIP_FRAME; fi
+    ((${#STARSHIP_FRAME[@]}==3))
 }
 
 starship_ble_stream_stop() {
-    local side=$1 descriptor=${STARSHIP_STREAM[$1.fd]-} process=${STARSHIP_STREAM[$1.pid]-}
-    ble/util/idle.cancel "starship_ble_stream_step $side" 2>/dev/null || :
-    [[ ! $descriptor ]] || exec {descriptor}<&-
-    [[ ! $process ]] || kill "$process" 2>/dev/null || :
-    unset "STARSHIP_STREAM[$side.fd]" "STARSHIP_STREAM[$side.pid]" "STARSHIP_STREAM[$side.done]"
+    local fd=$STARSHIP_FD pid=$STARSHIP_PID
+    [[ $fd ]] && exec {fd}<&-
+    [[ $pid ]] && kill "$pid" 2>/dev/null || :
+    STARSHIP_FD= STARSHIP_PID= STARSHIP_DONE=
 }
 
+# A dead renderer falls back to a synchronous render of both sides, unless it
+# had already reported COMPLETE and so has nothing left to say.
 starship_ble_stream_end() {
-    local side=$1 complete=${STARSHIP_STREAM[$1.done]-} target=()
-    ((side)) && target=(--right)
-    starship_ble_stream_stop "$side"
+    local complete=$STARSHIP_DONE
+    starship_ble_stream_stop
     if [[ ! $complete ]]; then
-        starship_ble_set_prompt "$side" "$(::STARSHIP:: prompt "${target[@]}" "${STARSHIP_PROMPT_ARGUMENTS[@]}")"
+        starship_ble_set_prompt 0 "$(::STARSHIP:: prompt "${STARSHIP_ARGS[@]}")"
+        starship_ble_set_prompt 1 "$(::STARSHIP:: prompt --right "${STARSHIP_ARGS[@]}")"
         ble/textarea#redraw
     fi
 }
 
+# One idle task, one frame per side per tick, then one redraw. Draining a
+# burst of PATCHes races ble.sh cursor-position queries and corrupts the
+# line (57af33fb). idle.sleep 51 is the documented 20Hz yield — not a
+# substitute for that one-frame cap.
 starship_ble_stream_step() {
-    local side=$1 descriptor=${STARSHIP_STREAM[$1.fd]-}
-    # One frame per idle tick, not a drain loop: redrawing faster than
-    # ble.sh's own cursor-position queries can round-trip corrupts the
-    # line with stray query-response bytes.
-    if read -t 0 -u "$descriptor"; then
-        if ! starship_ble_read_frame "$descriptor"; then
-            starship_ble_stream_end "$side"
-            return
+    local fd=$STARSHIP_FD drew
+    if [[ $fd ]]; then
+        if read -t 0 -u "$fd"; then
+            if starship_ble_read_frame "$fd"; then
+                case ${STARSHIP_FRAME[0]} in
+                    PATCH) starship_ble_set_prompt 0 "${STARSHIP_FRAME[1]}"; drew=1 ;;
+                    RIGHT) starship_ble_set_prompt 1 "${STARSHIP_FRAME[1]}"; drew=1 ;;
+                    COMPLETE) STARSHIP_TIMINGS=${STARSHIP_FRAME[1]}; STARSHIP_DONE=1 ;;
+                esac
+            else starship_ble_stream_end; fi
+        elif ! kill -0 "$STARSHIP_PID" 2>/dev/null; then
+            starship_ble_stream_end
         fi
-        case ${STARSHIP_FRAME[0]} in
-            PATCH)
-                starship_ble_set_prompt "$side" "${STARSHIP_FRAME[1]}"
-                ble/textarea#redraw
-                ;;
-            COMPLETE)
-                STARSHIP_STREAM[$side.timings]=${STARSHIP_FRAME[1]}
-                STARSHIP_STREAM[$side.done]=1
-                ;;
-        esac
-    elif ! kill -0 "${STARSHIP_STREAM[$side.pid]-}" 2>/dev/null; then
-        starship_ble_stream_end "$side"
-        return
     fi
-    ble/util/idle.sleep 51
+    [[ $drew ]] && ble/textarea#redraw
+    # Measured: handing the wait to ble.sh's own backing-off idle interval via
+    # `idle.wait-condition` (its only fd-ish primitive — it has no wait-on-
+    # readable-fd) slowed refinement by more than an order of magnitude in the
+    # pty suite. The flat 20Hz yield stays.
+    [[ $STARSHIP_FD ]] && ble/util/idle.sleep 51
 }
 
 starship_ble_stream_start() {
-    local side=$1 descriptor target=()
-    shift
-    ((side)) && target=(--right)
-    starship_ble_stream_stop "$side"
-
-    exec {descriptor}< <(
-        ::STARSHIP:: stream --transport ble "${target[@]}" "$@" --timings="${STARSHIP_STREAM[$side.timings]-}" 2>/dev/null
-    )
-    STARSHIP_STREAM[$side.fd]=$descriptor
-    if ! starship_ble_read_frame "$descriptor" ||
-       [[ ${STARSHIP_FRAME[0]} != READY ]]; then
-        starship_ble_stream_stop "$side"
-        starship_ble_set_prompt "$side" "$(::STARSHIP:: prompt "${target[@]}" "$@")"
-        return
-    fi
-
-    STARSHIP_STREAM[$side.pid]=${STARSHIP_FRAME[2]}
-    starship_ble_set_prompt "$side" "${STARSHIP_FRAME[1]}"
-    ble/util/idle.push "starship_ble_stream_step $side"
+    local fd attempt
+    starship_ble_stream_stop
+    exec {fd}< <(::STARSHIP:: stream --both --transport ble "$@" --timings="$STARSHIP_TIMINGS" 2>/dev/null)
+    STARSHIP_FD=$fd
+    # READY is what ends the wait, but the right side's first paint usually
+    # reaches the pipe before it, so anything else is applied on the way past
+    # and the first draw has both sides. Bounded, so a renderer that never says
+    # READY cannot hold the prompt.
+    for attempt in 1 2 3 4; do
+        starship_ble_read_frame "$fd" 2 || break
+        case ${STARSHIP_FRAME[0]} in
+            RIGHT) starship_ble_set_prompt 1 "${STARSHIP_FRAME[1]}" ;;
+            READY)
+                STARSHIP_PID=${STARSHIP_FRAME[2]}
+                starship_ble_set_prompt 0 "${STARSHIP_FRAME[1]}"
+                ble/util/idle.cancel starship_ble_stream_step 2>/dev/null || :
+                ble/util/idle.push starship_ble_stream_step
+                return
+                ;;
+        esac
+    done
+    starship_ble_stream_stop
+    starship_ble_set_prompt 0 "$(::STARSHIP:: prompt "$@")"
+    starship_ble_set_prompt 1 "$(::STARSHIP:: prompt --right "$@")"
 }
 
-# Will be run before *every* command (even ones in pipes!)
+# `\j` (bash 4.4 ${var@P}) is the job-count builtin; older bash still splits
+# `jobs -p`. BASH_VERSINFO cannot change mid-session, so the branch — and the
+# `eval` that keeps ${var@P} from being a parse error on the shells that lack
+# it — is spent once here rather than on every prompt.
+if ((BASH_VERSINFO[0]*100+BASH_VERSINFO[1]>=404)); then
+    eval 'starship_count_jobs() { local _j="\j"; NUM_JOBS=${_j@P}; }'
+else
+    starship_count_jobs() { set -- $(jobs -p); NUM_JOBS=$#; }
+fi
+
 starship_preexec() {
-    # Save previous command's last argument, otherwise it will be set to "starship_preexec"
     local PREV_LAST_ARG=$1
-
-    if [[ $STARSHIP_BLE_ENABLED ]]; then
-        starship_ble_stream_stop 0
-        starship_ble_stream_stop 1
+    if [[ $STARSHIP_BLE ]]; then
+        ble/util/idle.cancel starship_ble_stream_step 2>/dev/null || :
+        starship_ble_stream_stop
     fi
-
-    # Avoid restarting the timer for commands in the same pipeline
-    if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
+    # Avoid restarting the timer for commands in the same pipeline.
+    if [[ ${STARSHIP_PREEXEC_READY:-} == true ]]; then
         STARSHIP_PREEXEC_READY=false
-        STARSHIP_START_TIME=$(::STARSHIP:: time)
+        starship_now STARSHIP_START_TIME
     fi
-
     : "$PREV_LAST_ARG"
 }
 
-# Will be run before the prompt is drawn
 starship_precmd() {
-    # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
-    if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
-        STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
-    fi
-    if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt 0 ]]; then
-        STARSHIP_PIPE_STATUS=("${BP_PIPESTATUS[@]}")
-    fi
+    [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]] && STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
+    [[ ${BP_PIPESTATUS+x} && ${#BP_PIPESTATUS[@]} -gt 0 ]] && STARSHIP_PIPE_STATUS=("${BP_PIPESTATUS[@]}")
 
-    # Due to a bug in certain Bash versions, any external process launched
-    # inside $PROMPT_COMMAND will be reported by `jobs` as a background job:
-    #
-    #   [1]  42135 Done                    /bin/echo
-    #
-    # This is a workaround - we run `jobs` once to clear out any completed jobs
-    # first, and then we run it again and count the number of jobs.
-    #
-    # More context: https://github.com/starship/starship/issues/5159
-    # Original bug: https://lists.gnu.org/archive/html/bug-bash/2022-07/msg00117.html
+    # A bash bug reports external processes launched inside PROMPT_COMMAND as
+    # background jobs (starship#5159); run `jobs` once to flush finished ones,
+    # then count. The flush has to stay here, per prompt and ahead of the
+    # preserved user command, or tools like z/autojump show phantom jobs.
     jobs &>/dev/null
+    local NUM_JOBS=0
+    starship_count_jobs
 
-    local job NUM_JOBS=0 IFS=$' \t\n'
-    # Evaluate the number of jobs before running the preserved prompt command, so that tools
-    # like z/autojump, which background certain jobs, do not cause spurious background jobs
-    # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
-    for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
-
-    # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
-
-    # Set $? to the preserved value before running additional parts of the prompt
-    # command pipeline, which may rely on it.
-    _starship_set_return "$STARSHIP_CMD_STATUS"
-
-    if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
-        eval "$STARSHIP_PROMPT_COMMAND"
-    fi
+    _starship_set_return "$STARSHIP_CMD_STATUS" # remaining user prompt pipeline
+    [[ ${STARSHIP_PROMPT_COMMAND-} ]] && eval "$STARSHIP_PROMPT_COMMAND"
 
     local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
-    # Prepare the timer data, if needed.
-    if [[ -n "${STARSHIP_START_TIME-}" ]]; then
-        STARSHIP_END_TIME=$(::STARSHIP:: time)
-        STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
-        STARSHIP_START_TIME=""
+    if [[ ${STARSHIP_START_TIME-} ]]; then
+        starship_now STARSHIP_NOW
+        ARGS+=(--cmd-duration=$((STARSHIP_NOW - STARSHIP_START_TIME)))
+        STARSHIP_START_TIME=
     fi
-    if [[ $STARSHIP_BLE_ENABLED ]]; then
-        STARSHIP_PROMPT_ARGUMENTS=("${ARGS[@]}")
-        starship_ble_stream_start 1 "${ARGS[@]}"
-        starship_ble_stream_start 0 "${ARGS[@]}"
+    if [[ $STARSHIP_BLE ]]; then
+        STARSHIP_ARGS=("${ARGS[@]}")
+        starship_ble_stream_start "${ARGS[@]}"
         PS1='\q{starship}'
     else
         PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     fi
-    STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+    STARSHIP_PREEXEC_READY=true
 }
 
-# If the user appears to be using https://github.com/akinomyoga/ble.sh,
-# then hook our functions into their framework.
-if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
-    STARSHIP_BLE_ENABLED=1
+# Hook into ble.sh when present, else bash-preexec, else raw hooks.
+if [[ ${BLE_VERSION-} && $_ble_version -ge 400 ]]; then
+    STARSHIP_BLE=1
     blehook PREEXEC!='starship_preexec "$_"'
     blehook PRECMD!='starship_precmd'
-# If the user appears to be using https://github.com/rcaloras/bash-preexec,
-# then hook our functions into their framework.
-elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
-    # bash-preexec needs a single function--wrap the args into a closure and pass
-    starship_preexec_all(){ starship_preexec "$_"; }
+elif [[ ${bash_preexec_imported-} || ${__bp_imported-} || ${preexec_functions-} || ${precmd_functions-} ]]; then
+    starship_preexec_all() { starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
     precmd_functions+=(starship_precmd)
 else
-    if [[ -n "${BASH_VERSION-}" ]] && [[ "${BASH_VERSINFO[0]}" -gt 4 || ( "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -ge 4 ) ]]; then
-        starship_preexec_ps0() {
-            ::STARSHIP:: time
-        }
-        # In order to set STARSHIP_START_TIME use an arithmetic expansion that evaluates to 0
-        # To avoid printing anything, use the return value in an ${var:offset:length} substring expansion
-        # with offset and length evaluating to 0.
-        if [[ "${PS0-}" != *"starship_preexec_ps0"* ]]; then
-            PS0='${STARSHIP_START_TIME:$((STARSHIP_START_TIME="$(starship_preexec_ps0)",STARSHIP_PREEXEC_READY=0,0)):0}'"${PS0-}"
+    if ((BASH_VERSINFO[0]*100+BASH_VERSINFO[1]>=404)); then
+        # Capture the start time inside PS0; the arithmetic-expansion
+        # substring trick assigns while printing nothing.
+        if [[ ${PS0-} != *STARSHIP_START_TIME* ]]; then
+            if [[ ${EPOCHREALTIME-} ]]; then
+                PS0='${STARSHIP_START_TIME:$((STARSHIP_START_TIME=${EPOCHREALTIME//./}/1000,STARSHIP_PREEXEC_READY=0,0)):0}'"${PS0-}"
+            else
+                starship_preexec_ps0() { ::STARSHIP:: time; }
+                PS0='${STARSHIP_START_TIME:$((STARSHIP_START_TIME="$(starship_preexec_ps0)",STARSHIP_PREEXEC_READY=0,0)):0}'"${PS0-}"
+            fi
         fi
     else
-        # We want to avoid destroying an existing DEBUG hook. If we detect one, create
-        # a new function that runs both the existing function AND our function, then
-        # re-trap DEBUG to use this new function. This prevents a trap clobber.
+        # Layer onto an existing DEBUG trap instead of clobbering it.
         eval "STARSHIP_DEBUG_TRAP=($(trap -p DEBUG))"
         STARSHIP_DEBUG_TRAP=("${STARSHIP_DEBUG_TRAP[2]}")
-        if [[ -z "$STARSHIP_DEBUG_TRAP" ]]; then
+        if [[ -z $STARSHIP_DEBUG_TRAP ]]; then
             trap 'starship_preexec "$_"' DEBUG
-        elif [[ "$STARSHIP_DEBUG_TRAP" != 'starship_preexec "$_"' && "$STARSHIP_DEBUG_TRAP" != 'starship_preexec_all "$_"' ]]; then
-            starship_preexec_all() {
-                local PREV_LAST_ARG=$1 ; eval -- "$STARSHIP_DEBUG_TRAP"; starship_preexec; : "$PREV_LAST_ARG";
-            }
+        elif [[ $STARSHIP_DEBUG_TRAP != 'starship_preexec "$_"' && $STARSHIP_DEBUG_TRAP != 'starship_preexec_all "$_"' ]]; then
+            starship_preexec_all() { local PREV_LAST_ARG=$1; eval -- "$STARSHIP_DEBUG_TRAP"; starship_preexec; : "$PREV_LAST_ARG"; }
             trap 'starship_preexec_all "$_"' DEBUG
         fi
     fi
-
-    # Finally, prepare the precmd function and set up the start time. We will avoid to
-    # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "${PROMPT_COMMAND-}" ]]; then
-        PROMPT_COMMAND="starship_precmd"
-    elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
-        # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
-        # Prepending to PROMPT_COMMAND breaks "command duration" module.
-        # So, we are preserving the existing PROMPT_COMMAND
-        # which will be executed later in the starship_precmd function
-        STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
-        PROMPT_COMMAND="starship_precmd"
+    # Preserve any existing PROMPT_COMMAND: appending breaks $? propagation,
+    # so we hold it and run it from inside starship_precmd instead.
+    if [[ ${PROMPT_COMMAND-} != *starship_precmd* ]]; then
+        STARSHIP_PROMPT_COMMAND=${PROMPT_COMMAND-}
+        PROMPT_COMMAND=starship_precmd
     fi
 fi
 
-# Ensure that $COLUMNS gets set
 shopt -s checkwinsize
-
-# Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
-STARSHIP_START_TIME=$(::STARSHIP:: time)
-export STARSHIP_SHELL="bash"
-
-# Set up the session key that will be used to store logs
-STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
-STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
-export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
-
-# Set the continuation prompt
+printf -v STARSHIP_SESSION_KEY '%04x%04x%04x%04x' $RANDOM $RANDOM $RANDOM $RANDOM
+export STARSHIP_SESSION_KEY
 PS2="$(::STARSHIP:: prompt --continuation)"
