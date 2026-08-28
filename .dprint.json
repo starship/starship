@@ -7,7 +7,9 @@
   "markdown": {
     "lineWidth": 100
   },
-  "toml": {},
+  "toml": {
+    "quoteStyle": "maintain"
+  },
   "includes": [
     "docs/**/*.{ts,js,cjs,mjs}",
     "**/*.{md,toml,json}"
