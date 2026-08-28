@@ -241,6 +241,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
+                // Ignore version which is just a property reference
                 if !t.as_ref().starts_with('$') {
                     let ver = t.as_ref();
                     return format_version(ver, config.version_format);
