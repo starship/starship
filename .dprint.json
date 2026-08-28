@@ -7,7 +7,9 @@
   "markdown": {
     "lineWidth": 100
   },
-  "toml": {},
+  "toml": {
+    "quoteStyle": "maintain"
+  },
   "includes": [
     "docs/**/*.{ts,js,cjs,mjs}",
     "**/*.{md,toml,json}"
@@ -28,6 +30,6 @@
     "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.96.1/plugin.wasm",
     "https://github.com/dprint/dprint-plugin-json/releases/download/0.23.0/plugin.wasm",
     "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.22.1/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-toml/releases/download/0.7.0/plugin.wasm"
+    "https://github.com/dprint/dprint-plugin-toml/releases/download/0.8.0/plugin.wasm"
   ]
 }
