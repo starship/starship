@@ -1100,6 +1100,7 @@
         "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
         "symbol": "🐏 ",
+        "thresholds": null,
         "show_always": false,
         "disabled": true
       }
@@ -4957,6 +4958,16 @@
           "type": "string",
           "default": "🐏 "
         },
+        "thresholds": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/ThresholdConfig"
+          },
+          "default": null
+        },
         "show_always": {
           "type": "boolean",
           "default": false
@@ -4967,6 +4978,23 @@
         }
       },
       "additionalProperties": false
+    },
+    "ThresholdConfig": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "style": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "style"
+      ]
     },
     "MesonConfig": {
       "type": "object",

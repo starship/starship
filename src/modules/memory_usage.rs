@@ -5,7 +5,7 @@ use systemstat::{
 
 use super::{Context, Module, ModuleConfig};
 
-use crate::configs::memory_usage::MemoryConfig;
+use crate::configs::memory_usage::{MemoryConfig, ThresholdConfig};
 use crate::formatter::StringFormatter;
 
 // Display a `ByteSize` in a human readable format.
@@ -83,6 +83,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let style = config
+        .threshold_style
+        .map(|style| ThresholdConfig {
+            value: config.threshold,
+            style,
+        })
+        .iter()
+        .chain(
+            config
+                .thresholds
+                .filter(|_| config.show_always)
+                .iter()
+                .flat_map(|ts| ts.iter()),
+        )
+        .filter(|t| t.value <= used_rounded)
+        .max_by_key(|t| t.value)
+        .map(|t| t.style)
+        .unwrap_or(config.style);
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -90,11 +109,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(if used_rounded < config.threshold {
-                    config.style
-                } else {
-                    config.threshold_style.unwrap_or(config.style)
-                })),
+                "style" => Some(Ok(style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -198,7 +213,6 @@ mod test {
             .config(toml::toml! {
                 [memory_usage]
                 disabled = false
-                show_always = false
                 threshold = 101
             })
             .collect();
@@ -217,7 +231,7 @@ mod test {
 
     #[test]
     fn threshold_styling() {
-        // RAM usage exceeds the threshold, `threshold_style` is not set
+        // Usage exceeds the threshold, `threshold_style` is not set, so `style` is used instead
         let expected = Some(format!("{}", Color::Green.paint("RAM")));
         let actual = ModuleRenderer::new("memory_usage")
             .config(toml::toml! {
@@ -230,7 +244,7 @@ mod test {
             .collect();
         assert_eq!(expected, actual);
 
-        // RAM usage exceeds the threshold, `threshold_style` is set
+        // Usage exceeds the threshold, `threshold_style` is set
         let expected = Some(format!("{}", Color::Red.paint("RAM")));
         let actual = ModuleRenderer::new("memory_usage")
             .config(toml::toml! {
@@ -244,7 +258,7 @@ mod test {
             .collect();
         assert_eq!(expected, actual);
 
-        // RAM usage is below the threshold, `threshold_style` is set
+        // Usage is below the threshold, `show_always` is true, `threshold_style` is set
         let expected = Some(format!("{}", Color::Green.paint("RAM")));
         let actual = ModuleRenderer::new("memory_usage")
             .config(toml::toml! {
@@ -255,6 +269,186 @@ mod test {
                 threshold = 101
                 threshold_style = "fg:red"
                 format = "[RAM]($style)"
+            })
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn optional_thresholds_missing_fields() {
+        // Both `value` and `style` must be set
+        let output = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+
+                [[memory_usage.thresholds]]
+                value = 0
+            })
+            .collect();
+        assert!(output.is_none());
+
+        let output = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+
+                [[memory_usage.thresholds]]
+                style = "fg:red"
+            })
+            .collect();
+        assert!(output.is_none());
+
+        let output = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+
+                [[memory_usage.thresholds]]
+                value = 0
+                style = "fg:red"
+            })
+            .collect();
+        assert!(output.is_some());
+    }
+
+    #[test]
+    fn optional_thresholds() {
+        // Usage is below the main threshold, optional thresholds are set,
+        // `show_always` is false, so we don't expect any output
+        let output = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                style = "fg:green"
+                threshold = 101
+                threshold_style = "fg:red"
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = -7
+                style = "fg:purple"
+            })
+            .collect();
+        assert!(output.is_none());
+
+        // Usage is below the main threshold, optional thresholds are set, `show_always` is true
+        let expected = Some(format!("{}", Color::Cyan.paint("RAM")));
+        let actual = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+                style = "fg:green"
+                threshold = 101
+                threshold_style = "fg:red"
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = -7
+                style = "fg:purple"
+
+                [[memory_usage.thresholds]]
+                value = -5
+                style = "fg:cyan"
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Usage exceeds some thresholds, optional thresholds are set, `show_always` is true
+        // We expect to see the style from the greatest exceeded threshold
+        let expected = Some(format!("{}", Color::Red.paint("RAM")));
+        let actual = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+                style = "fg:green"
+                threshold = -1
+                threshold_style = "fg:red"
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = 101
+                style = "fg:purple"
+
+                [[memory_usage.thresholds]]
+                value = -5
+                style = "fg:cyan"
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Usage exceeds all threshold, `show_always` is true
+        // We expect to see the style from the greatest exceeded threshold
+        let expected = Some(format!("{}", Color::Purple.paint("RAM")));
+        let actual = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+                style = "fg:green"
+                threshold = -3
+                threshold_style = "fg:red"
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = -1
+                style = "fg:purple"
+
+                [[memory_usage.thresholds]]
+                value = -5
+                style = "fg:cyan"
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Usage exceeds the main and some optional thresholds,
+        // `show_always` is true, `threshold_style` is not set,
+        // we expect an appropriate style from one of the optional thresholds
+        let expected = Some(format!("{}", Color::Cyan.paint("RAM")));
+        let actual = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+                style = "fg:green"
+                threshold = -1
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = 101
+                style = "fg:purple"
+
+                [[memory_usage.thresholds]]
+                value = -5
+                style = "fg:cyan"
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Usage exceeds the main threshold, `show_always` is true
+        // `threshold_style` is not set, we expect the default style
+        let expected = Some(format!("{}", Color::Green.paint("RAM")));
+        let actual = ModuleRenderer::new("memory_usage")
+            .config(toml::toml! {
+                [memory_usage]
+                disabled = false
+                show_always = true
+                style = "fg:green"
+                threshold = -1
+                format = "[RAM]($style)"
+
+                [[memory_usage.thresholds]]
+                value = 101
+                style = "fg:purple"
+
+                [[memory_usage.thresholds]]
+                value = 102
+                style = "fg:cyan"
             })
             .collect();
         assert_eq!(expected, actual);
