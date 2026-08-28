@@ -3037,13 +3037,15 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Options
 
-| Option      | Default                                        | Description                                              |
-| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                          | The style for the module.                                |
-| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
+| Option            | Default                                        | Description                                                                               |
+| ------------------| ---------------------------------------------- | ------------------------------------------------------------------------------------------|
+| `threshold`       | `75`                                           | Hide the memory usage unless it exceeds this percentage.                                  |
+| `format`          | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                                                                |
+| `symbol`          | `'🐏'`                                         | The symbol used before displaying the memory usage.                                       |
+| `style`           | `'bold dimmed white'`                          | The style for the module.                                                                 |
+| `threshold_style` |                                                | The style used when the memory usage exceed the threshold (defaults to `style` if unset). |
+| `show_always`     | `false`                                        | Always shows the `memory_usage` module.                                                   |
+| `disabled`        | `true`                                         | Disables the `memory_usage` module.                                                       |
 
 ### Variables
 
@@ -3054,7 +3056,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
 | symbol       | `🐏`          | Mirrors the value of option `symbol`                               |
-| style\*      |               | Mirrors the value of option `style`                                |
+| style\*      |               | Mirrors the value of option `style` and `threshold_style`          |
 
 *: This variable can only be used as a part of a style string
 *\*: The SWAP file information is only displayed if detected on the current system
@@ -3070,6 +3072,31 @@ threshold = -1
 symbol = ' '
 style = 'bold dimmed green'
 ```
+
+### Additional thresholds
+
+When `show_always` is set to `true`, the `thresholds` configuration can be used to add additional memory usage thresholds and styles.
+
+| Option            | Example                     | Description                                |
+| ----------------- | --------------------------- | ------------------------------------------ |
+| `value`           | `50`                        | **Required** The memory usage percentage.  |
+| `style`           | `'fg:yellow'`               | **Required** The style for the module.     |
+
+#### Example
+
+```toml
+# ~/.config/starship.toml
+
+[[memory_usage.thresholds]]
+value = 50
+style = "fg:yellow"
+
+[[memory_usage.thresholds]]
+value = 25
+style = "fg:blue"
+```
+
+When the memory usage exceeds one of the specified percentages, the value of the option `style` will be mirrored to the `style` variable of the format string.
 
 ## Meson
 
