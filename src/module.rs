@@ -62,6 +62,7 @@ pub const ALL_MODULES: &[&str] = &[
     "julia",
     "kotlin",
     "kubernetes",
+    "lean",
     "line_break",
     "localip",
     "lua",
