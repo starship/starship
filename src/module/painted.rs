@@ -120,7 +120,7 @@ impl Painted {
         let mut next_segment = 0;
         while next_segment < segments.len() {
             if next_segment + 1 == segments.len()
-                && matches!(segments.get(next_segment), Some(Segment::Text(text)) if text.value().is_empty())
+                && matches!(segments.get(next_segment), Some(Segment::Text(text)) if text.is_empty())
                 && matches!(runs.last(), Some(run) if run.kind() == RunKind::LineTerminator)
             {
                 break;

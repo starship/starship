@@ -16,6 +16,10 @@ pub struct TextSegment {
 }
 
 impl TextSegment {
+    pub(crate) fn is_empty(&self) -> bool {
+        self.value.is_empty()
+    }
+
     /// The segment's style before any `prev_fg`/`prev_bg` reference in it has
     /// been resolved.
     pub(crate) fn symbolic_style(&self) -> Option<Style> {

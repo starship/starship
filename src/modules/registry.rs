@@ -104,6 +104,7 @@ builtin_modules! {
     HgState = "hg_state",
     Hostname = "hostname",
     Java = "java",
+    JjBookmark = "jj_bookmark",
     Jobs = "jobs",
     Julia = "julia",
     Kotlin = "kotlin",
@@ -473,6 +474,10 @@ pub const fn entry_for(module: BuiltinModule) -> ModuleEntry {
             description: "The currently installed version of Java",
             prompt_position: Some(41),
         },
+        M::JjBookmark => ModuleEntry {
+            description: "The closest ancestor bookmark in Jujutsu",
+            prompt_position: None,
+        },
         M::Julia => ModuleEntry {
             description: "The currently installed version of Julia",
             prompt_position: Some(42),
@@ -678,6 +683,7 @@ pub fn dispatch_builtin<'a>(module: BuiltinModule, context: &'a Context) -> Opti
         M::HgState => super::hg_state::module(context),
         M::Hostname => super::hostname::module(context),
         M::Java => super::java::module(context),
+        M::JjBookmark => super::jj_bookmark::module(context),
         M::Jobs => super::jobs::module(context),
         M::Julia => super::julia::module(context),
         M::Kotlin => super::kotlin::module(context),

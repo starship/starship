@@ -50,6 +50,7 @@ mod hg_branch;
 mod hg_state;
 mod hostname;
 mod java;
+mod jj_bookmark;
 mod jobs;
 mod julia;
 mod kotlin;

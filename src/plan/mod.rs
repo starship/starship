@@ -936,8 +936,12 @@ mod tests {
         let mut state = PromptState::empty(&plan);
         let alpha = module(&plan, "alpha");
 
-        state.record(alpha, Segment::from_text(None, "first")).unwrap();
-        state.record(alpha, Segment::from_text(None, "second")).unwrap();
+        state
+            .record(alpha, Segment::from_text(None, "first"))
+            .unwrap();
+        state
+            .record(alpha, Segment::from_text(None, "second"))
+            .unwrap();
 
         assert_eq!("second", render_markup(&state));
     }
@@ -948,7 +952,9 @@ mod tests {
     fn a_conditional_keeps_its_literal_with_its_module() {
         let plan = default_plan("($alpha literal)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
+        state
+            .record(module(&plan, "alpha"), Segment::from_text(None, "A"))
+            .unwrap();
 
         assert_eq!("A literal", render_markup(&state));
     }
@@ -1000,7 +1006,9 @@ mod tests {
     fn a_nested_conditional_is_visible_when_its_module_is_filled() {
         let plan = default_plan("(literal ($alpha))");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
+        state
+            .record(module(&plan, "alpha"), Segment::from_text(None, "A"))
+            .unwrap();
 
         assert_eq!("literal A", render_markup(&state));
     }
@@ -1012,7 +1020,9 @@ mod tests {
 
         assert_eq!("", render_markup(&state));
 
-        state.record(module(&plan, "beta"), Segment::from_text(None, "B")).unwrap();
+        state
+            .record(module(&plan, "beta"), Segment::from_text(None, "B"))
+            .unwrap();
         assert_eq!("B", render_markup(&state));
     }
 
@@ -1020,7 +1030,9 @@ mod tests {
     fn an_empty_segment_does_not_fill_a_module() {
         let plan = default_plan("($alpha)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "")).unwrap();
+        state
+            .record(module(&plan, "alpha"), Segment::from_text(None, ""))
+            .unwrap();
 
         assert_eq!("", render_markup(&state));
     }
@@ -1114,7 +1126,9 @@ mod tests {
     fn a_module_inherits_the_style_of_its_text_group() {
         let plan = default_plan("[$alpha](red bold)");
         let mut state = PromptState::empty(&plan);
-        state.record(module(&plan, "alpha"), Segment::from_text(None, "A")).unwrap();
+        state
+            .record(module(&plan, "alpha"), Segment::from_text(None, "A"))
+            .unwrap();
 
         assert_eq!("[A](red bold)", render_markup(&state));
     }
