@@ -53,6 +53,7 @@ mod java;
 mod jj_bookmark;
 mod jobs;
 mod julia;
+mod kerberos;
 mod kotlin;
 mod kubernetes;
 mod line_break;
@@ -178,6 +179,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "jj_bookmark" => jj_bookmark::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
+            "kerberos" => kerberos::module(context),
             "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
@@ -318,6 +320,7 @@ pub fn description(module: &str) -> &'static str {
         "jj_bookmark" => "The closest ancestor bookmark in Jujutsu",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
+        "kerberos" => "A valid kerberos TGT is present in the KRB5CCNAME cache",
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
