@@ -65,12 +65,14 @@ impl FillSegment {
                     return String::new();
                 }
 
-                self.value.graphemes(true).cycle()
-                .scan(0usize, |used, grapheme| {
-                    *used += Grapheme(grapheme).width();
-                    if *used <= width { Some(grapheme) } else { None }
-                })
-                .collect()
+                self.value
+                    .graphemes(true)
+                    .cycle()
+                    .scan(0usize, |used, grapheme| {
+                        *used += Grapheme(grapheme).width();
+                        if *used <= width { Some(grapheme) } else { None }
+                    })
+                    .collect()
             }
             None => String::from(&self.value),
         }

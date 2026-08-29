@@ -33,13 +33,10 @@ pub enum Reflow {
 impl Reflow {
     pub fn between(previous: &Painted, next: &Painted) -> Self {
         if previous.line_count() != next.line_count()
-            || previous
-                .lines()
-                .zip(next.lines())
-                .any(|(previous, next)| {
-                    line_width(previous) != line_width(next)
-                        || fill_layout(previous) != fill_layout(next)
-                })
+            || previous.lines().zip(next.lines()).any(|(previous, next)| {
+                line_width(previous) != line_width(next)
+                    || fill_layout(previous) != fill_layout(next)
+            })
         {
             Self::Shifts
         } else {
