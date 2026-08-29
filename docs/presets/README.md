@@ -83,3 +83,15 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Amin Themes](./amin-themes.md)
+
+This preset includes three clean and colorful prompts: Nordic, Gruvbox, and Minimal.
+
+[![Screenshot of Amin Nordic preset](/presets/img/amin-screenshots.gruvbox.png "Click to view Amin Starship Themes")](./amin-themes.md)
+
+[![Screenshot of Amin Nordic preset](/presets/img/amin-screenshots.tree.png "Click to view Amin Starship Themes")](./amin-themes.md)
+
+[![Screenshot of Amin Nordic preset](/presets/img/amin-screenshots.nordic.png "Click to view Amin Starship Themes")](./amin-themes.md)
+
+[![Screenshot of Amin Nordic preset](/presets/img/amin-screenshots.minimal.png "Click to view Amin Starship Themes")](./amin-themes.md)
