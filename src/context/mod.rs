@@ -140,8 +140,9 @@ impl<'a> Context<'a> {
     /// Create a new instance of Context for the provided directory, loading the
     /// configuration the environment points at.
     ///
-    /// In a test build there is no ambient configuration to load: see
-    /// [`Self::ambient_config`].
+    /// Unit tests in this crate do not load ambient configuration; external
+    /// test harnesses should use [`Self::new_with_config`] to supply an
+    /// explicit, hermetic configuration.
     pub fn new_with_shell_and_path(
         properties: Properties,
         shell: Shell,
@@ -166,13 +167,12 @@ impl<'a> Context<'a> {
     /// help either, because `Env` is a mock in test builds and never forwards
     /// it.
     ///
-    /// So in a test build this is not "a read that is skipped" but a read that
-    /// does not exist: there is no code path from a test to the filesystem
-    /// configuration. Tests that need a configuration hand one to
-    /// [`Self::new_with_config`] or [`Self::set_config`], which is also what
-    /// guarantees everything derived from configuration — `root_config` today,
-    /// whatever is added tomorrow — is derived from *that* configuration and
-    /// not from a half-reset leftover.
+    /// Unit tests in this crate have no code path to filesystem configuration.
+    /// External test harnesses use [`Self::new_with_config`] to make the same
+    /// hermetic guarantee. That constructor also ensures everything derived
+    /// from configuration — `root_config` today, whatever is added tomorrow —
+    /// comes from the supplied configuration rather than a leftover ambient
+    /// setting.
     fn ambient_config(env: &Env<'a>) -> StarshipConfig {
         #[cfg(test)]
         {

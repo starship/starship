@@ -155,6 +155,8 @@ mod tests {
         EcmaScriptModuleFile,
         CommonJsModuleFile,
         TypeScriptFile,
+        TypeScriptModuleFile,
+        CommonJsTypeScriptFile,
         InstalledDependenciesDirectory,
     }
 
@@ -169,6 +171,8 @@ mod tests {
                 Self::EcmaScriptModuleFile => project.create_file("index.mjs"),
                 Self::CommonJsModuleFile => project.create_file("index.cjs"),
                 Self::TypeScriptFile => project.create_file("index.ts"),
+                Self::TypeScriptModuleFile => project.create_file("index.mts"),
+                Self::CommonJsTypeScriptFile => project.create_file("index.cts"),
                 Self::InstalledDependenciesDirectory => project.create_directory("node_modules"),
             };
         }
@@ -195,6 +199,8 @@ mod tests {
             NodeProjectMarker::EcmaScriptModuleFile,
             NodeProjectMarker::CommonJsModuleFile,
             NodeProjectMarker::TypeScriptFile,
+            NodeProjectMarker::TypeScriptModuleFile,
+            NodeProjectMarker::CommonJsTypeScriptFile,
             NodeProjectMarker::InstalledDependenciesDirectory
         )]
         marker: NodeProjectMarker,

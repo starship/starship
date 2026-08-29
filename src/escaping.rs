@@ -29,11 +29,19 @@ where
     T: Into<String>,
 {
     match shell {
-        Shell::Bash => text
-            .into()
-            .replace('\\', r"\\")
-            .replace('$', r"\$")
-            .replace('`', r"\`"),
+        Shell::Bash => {
+            let text = text.into();
+            let mut escaped = String::with_capacity(text.len());
+            for character in text.chars() {
+                match character {
+                    '\\' => escaped.push_str(r"\\"),
+                    '$' => escaped.push_str(r"\$"),
+                    '`' => escaped.push_str(r"\`"),
+                    character => escaped.push(character),
+                }
+            }
+            escaped
+        }
         Shell::Zsh => text.into().replace('%', "%%"),
         _ => text.into(),
     }
