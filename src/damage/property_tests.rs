@@ -41,6 +41,10 @@ proptest! {
 
         for update in &updates[1..] {
             let next = prompt(update);
+            prop_assert!(
+                !matches!(Damage::between(&previous, &next, TerminalWidth(32)), Damage::Full),
+                "single-line ASCII refinements must exercise incremental damage"
+            );
             apply(&mut terminal, &previous, &next);
             prop_assert_eq!(terminal::fully_rendered(&next, TerminalWidth(32)), terminal.screen());
             previous = next;

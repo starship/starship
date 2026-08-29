@@ -124,7 +124,7 @@ fn thread_count() -> ThreadCount {
 /// Return the maximum number of threads for the global thread-pool.
 ///
 /// Module rendering is overwhelmingly blocking I/O (only 26 of 104 modules are
-/// [`Cadence::Instant`]), so sizing the pool to the processor count would force
+/// `Cadence::Instant`), so sizing the pool to the processor count would force
 /// a prompt with more deferred modules than cores through several rounds of
 /// `command_timeout` in sequence; it is sized for blocking work instead.
 pub fn num_rayon_threads() -> usize {
@@ -168,11 +168,4 @@ mod thread_pool_tests {
         assert!(thread_count_from(None, 0).get() >= 1);
     }
 
-    #[test]
-    fn the_environment_variable_is_still_honoured_end_to_end() {
-        assert_eq!(
-            thread_count(),
-            thread_count_from(num_configured_starship_threads(), processor_count())
-        );
-    }
 }

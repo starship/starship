@@ -38,8 +38,7 @@ pub struct RawTerminalPayload(String);
 
 impl RawTerminalPayload {
     pub fn repaint(repaint: &CursorNeutral) -> Self {
-        let repaint_string =
-            String::from_utf8(repaint.as_bytes().to_vec()).expect("repaints are valid UTF-8");
+        let repaint_string = String::from_utf8_lossy(repaint.as_bytes()).into_owned();
         debug_assert!(!repaint_string.contains(char::from(NULL_BYTE)));
         Self(repaint_string)
     }
@@ -340,10 +339,14 @@ impl ServerEvent {
 
                 Ok(Some(Self::Patch(patch)))
             }
-            EVENT_COMPLETE if second.is_empty() => Timings::from_json(&first)
-                .map(Self::Complete)
-                .map(Some)
-                .ok_or("invalid timings"),
+            EVENT_COMPLETE if second.is_empty() => {
+                let timings = if first.is_empty() {
+                    Timings::empty()
+                } else {
+                    Timings::from_json(&first).ok_or("invalid timings")?
+                };
+                Ok(Some(Self::Complete(timings)))
+            }
             EVENT_HEARTBEAT if first.is_empty() && second.is_empty() => Ok(Some(Self::Heartbeat)),
             _ => Err("invalid event"),
         }

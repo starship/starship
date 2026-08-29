@@ -56,15 +56,22 @@ impl FillSegment {
     /// value is used as it stands.
     pub(crate) fn expand(&self, width: Option<usize>) -> String {
         match width {
-            Some(width) => self
-                .value
-                .graphemes(true)
-                .cycle()
+            Some(width) => {
+                if !self
+                    .value
+                    .graphemes(true)
+                    .any(|grapheme| Grapheme(grapheme).width() > 0)
+                {
+                    return String::new();
+                }
+
+                self.value.graphemes(true).cycle()
                 .scan(0usize, |used, grapheme| {
                     *used += Grapheme(grapheme).width();
                     if *used <= width { Some(grapheme) } else { None }
                 })
-                .collect(),
+                .collect()
+            }
             None => String::from(&self.value),
         }
     }

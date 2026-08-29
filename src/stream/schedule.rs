@@ -67,7 +67,9 @@ impl ArrivalSchedule {
             has_later_arrival: batch
                 .arrivals
                 .iter()
-                .any(|arrival| arrival.elapsed() > elapsed),
+                .filter(|arrival| arrival.elapsed() >= elapsed)
+                .nth(1)
+                .is_some(),
         })
     }
 }
