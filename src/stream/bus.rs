@@ -36,13 +36,33 @@ impl Reflow {
             || previous
                 .lines()
                 .zip(next.lines())
-                .any(|(previous, next)| line_width(previous) != line_width(next))
+                .any(|(previous, next)| {
+                    line_width(previous) != line_width(next)
+                        || fill_layout(previous) != fill_layout(next)
+                })
         {
             Self::Shifts
         } else {
             Self::None
         }
     }
+}
+
+fn fill_layout(line: &[Run]) -> Vec<(usize, &str)> {
+    let mut column = 0;
+    let mut fills = Vec::new();
+
+    for run in line {
+        if run.kind() == RunKind::LineTerminator {
+            continue;
+        }
+        if run.kind() == RunKind::Fill {
+            fills.push((column, run.text()));
+        }
+        column += run.text().width_graphemes();
+    }
+
+    fills
 }
 
 fn line_width(line: &[Run]) -> TerminalWidth {
@@ -105,8 +125,12 @@ impl Bus {
 
     /// Admits one refinement. An open batch accepts everything until `release`.
     pub fn admit(&mut self, reflow: Reflow, now: Instant) -> Verdict {
-        if self.holding != Holding::Nothing {
-            return Verdict::Hold;
+        if let Holding::Until(deadline) = self.holding {
+            if deadline > now {
+                return Verdict::Hold;
+            }
+            self.holding = Holding::Nothing;
+            return Verdict::DrawNow;
         }
 
         let Some(deadline) = self.deadline_for(reflow, now) else {
@@ -123,7 +147,10 @@ impl Bus {
                 .then(window_deadline),
             Policy::Predicted { schedule, started } => {
                 let elapsed = now.saturating_duration_since(*started);
-                let batch = schedule.expected_batch_at(elapsed)?;
+                let Some(batch) = schedule.expected_batch_at(elapsed) else {
+                    return (reflow == Reflow::Shifts && !self.window.duration().is_zero())
+                        .then(window_deadline);
+                };
                 batch.has_later_arrival.then(|| {
                     now.checked_add(
                         batch
@@ -132,6 +159,7 @@ impl Bus {
                             .min(self.window.duration()),
                     )
                     .unwrap_or(now)
+                    .max(now)
                 })
             }
         }

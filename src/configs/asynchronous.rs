@@ -43,6 +43,7 @@ macro_rules! dynamic_periods {
             derive(schemars::JsonSchema),
             schemars(deny_unknown_fields)
         )]
+        #[serde(default)]
         pub struct DynamicPeriodsConfig {
             $(
                 $(#[$attribute])*
@@ -81,23 +82,30 @@ macro_rules! dynamic_periods {
                 #[derive(Default, Deserialize)]
                 #[serde(default)]
                 struct Unvalidated {
-                    $($(#[$attribute])* $module: Option<u64>,)+
+                    $($(#[$attribute])* $module: Option<toml::Value>,)+
                 }
 
                 let configured = Unvalidated::deserialize(deserializer)?;
                 let defaults = DynamicPeriodsConfig::default();
 
                 Ok(Self {
-                    $($(#[$attribute])* $module: configured.$module.map_or(defaults.$module, |milliseconds| {
-                        RefreshPeriod::try_from(milliseconds).unwrap_or_else(|reason| {
+                    $($(#[$attribute])* $module: {
+                        let value = configured.$module.as_ref();
+                        value
+                            .and_then(toml::Value::as_integer)
+                            .and_then(|milliseconds| u64::try_from(milliseconds).ok())
+                            .and_then(|milliseconds| RefreshPeriod::try_from(milliseconds).ok())
+                            .unwrap_or_else(|| {
+                                if value.is_some() {
                             log::warn!(
-                                "[async.dynamic] {}: {reason} — keeping the default of {}ms",
+                                "[async.dynamic] {}: invalid interval — keeping the default of {}ms",
                                 stringify!($module),
                                 defaults.$module.get().as_millis(),
                             );
-                            defaults.$module
-                        })
-                    }),)+
+                                }
+                                defaults.$module
+                            })
+                    }),+
                 })
             }
         }

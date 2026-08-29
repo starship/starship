@@ -164,20 +164,8 @@ pub fn dynamic_modules<'plan>(plan: &'plan Plan, context: &Context) -> Vec<Dynam
 
 // A disabled dynamic module must not be polled forever.
 fn is_switched_off(module_name: &ModuleName, context: &Context) -> bool {
-    use crate::config::ModuleConfig;
-
     let string_name = module_name.as_str();
-    let configuration_table = context.config.get_module_config(string_name);
-
-    match string_name {
-        "battery" => crate::configs::battery::BatteryConfig::try_load(configuration_table).disabled,
-        "localip" => crate::configs::localip::LocalipConfig::try_load(configuration_table).disabled,
-        "memory_usage" => {
-            crate::configs::memory_usage::MemoryConfig::try_load(configuration_table).disabled
-        }
-        "time" => crate::configs::time::TimeConfig::try_load(configuration_table).disabled,
-        other_name => context.is_module_disabled_in_config(other_name),
-    }
+    context.is_module_disabled_in_config(string_name)
 }
 
 /// The modules of `plan` that `selection` covers, in first-paint order.

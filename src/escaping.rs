@@ -43,6 +43,7 @@ where
             escaped
         }
         Shell::Zsh => text.into().replace('%', "%%"),
+        Shell::Tcsh => text.into().replace('%', "%%").replace('!', r"\!"),
         _ => text.into(),
     }
 }
@@ -101,7 +102,6 @@ mod tests {
             Shell::Pwsh,
             Shell::PowerShell,
             Shell::Elvish,
-            Shell::Tcsh,
             Shell::Nu,
             Shell::Xonsh,
             Shell::Cmd,
@@ -110,5 +110,10 @@ mod tests {
             let destination = Destination::shell_prompt_variable(shell);
             assert_eq!(text, destination.escape(text), "for {shell:?}");
         }
+    }
+
+    #[test]
+    fn a_tcsh_prompt_variable_escapes_prompt_and_history_tokens() {
+        assert_eq!("100%% \\!", shell_prompt_escape("100% !", Shell::Tcsh));
     }
 }

@@ -389,7 +389,11 @@ impl Builder<'_> {
             return modules_expanded_by_all(self.referenced_modules)
                 .into_iter()
                 .fold(Presence::Never, |presence, module_name| {
-                    presence.merge(self.build_module(&module_name, inherited_style, nodes))
+                    if self.is_disabled(module_name.as_str()) {
+                        presence
+                    } else {
+                        presence.merge(self.build_module(&module_name, inherited_style, nodes))
+                    }
                 });
         }
 
@@ -470,7 +474,7 @@ impl Builder<'_> {
             parse_style_string_with_palette(configuration.style, self.palette).or(inherited_style);
 
         Some(FillTemplate {
-            symbol: configuration.symbol.to_owned(),
+            symbol: self.destination.escape(configuration.symbol),
             style: resolved_style,
         })
     }

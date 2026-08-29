@@ -43,6 +43,8 @@ impl Damage {
 
             if previous_line.exceeds_width(terminal_width)
                 || next_line.exceeds_width(terminal_width)
+                || previous_line.has_zero_width_cell()
+                || next_line.has_zero_width_cell()
             {
                 return Self::Full;
             }
@@ -134,6 +136,10 @@ impl<'a> Line<'a> {
     fn exceeds_width(self, max_width: TerminalWidth) -> bool {
         self.width() > max_width
     }
+
+    fn has_zero_width_cell(self) -> bool {
+        self.cells().any(|cell| Grapheme(cell.text).width() == 0)
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -158,7 +164,7 @@ impl Span {
         let next_count = next.cell_count();
 
         // Suffix matching only makes sense when the lengths match.
-        let suffix_length = if previous_count == next_count {
+        let suffix_length = if previous_count == next_count && previous.width() == next.width() {
             Self::match_suffix_length(previous, next, previous_count.saturating_sub(start_index))
         } else {
             usize::default()
