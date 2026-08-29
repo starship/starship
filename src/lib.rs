@@ -167,5 +167,4 @@ mod thread_pool_tests {
         assert_eq!(thread_count_from(Some(0), 0).get(), 1);
         assert!(thread_count_from(None, 0).get() >= 1);
     }
-
 }
