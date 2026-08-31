@@ -556,6 +556,7 @@ pub const fn entry_for(module: BuiltinModule) -> ModuleEntry {
             prompt_position: Some(41),
         },
         M::JjBookmark => ModuleEntry {
+            cadence: Cadence::Deferred,
             description: "The closest ancestor bookmark in Jujutsu",
             prompt_position: None,
         },
