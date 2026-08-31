@@ -399,9 +399,9 @@ impl ServerEvent {
                 Ok(Some(Self::Complete(timings)))
             }
             EVENT_HEARTBEAT if first.is_empty() && second.is_empty() => Ok(Some(Self::Heartbeat)),
-            EVENT_RIGHT if second.is_empty() => {
-                Ok(Some(Self::RightPrompt(PromptVariablePayload(parse_text(first)))) )
-            }
+            EVENT_RIGHT if second.is_empty() => Ok(Some(Self::RightPrompt(PromptVariablePayload(
+                parse_text(first),
+            )))),
             _ => Err("invalid event"),
         }
     }
