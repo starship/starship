@@ -2007,34 +2007,32 @@
           "type": "integer",
           "format": "uint64",
           "minimum": 1,
-          "maximum": 86400000
+          "maximum": 86400000,
+          "default": 1000
         },
         "battery": {
           "type": "integer",
           "format": "uint64",
           "minimum": 1,
-          "maximum": 86400000
+          "maximum": 86400000,
+          "default": 30000
         },
         "memory_usage": {
           "type": "integer",
           "format": "uint64",
           "minimum": 1,
-          "maximum": 86400000
+          "maximum": 86400000,
+          "default": 5000
         },
         "localip": {
           "type": "integer",
           "format": "uint64",
           "minimum": 1,
-          "maximum": 86400000
+          "maximum": 86400000,
+          "default": 30000
         }
       },
-      "additionalProperties": false,
-      "required": [
-        "time",
-        "battery",
-        "memory_usage",
-        "localip"
-      ]
+      "additionalProperties": false
     },
     "AwsConfig": {
       "title": "AWS",

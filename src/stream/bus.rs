@@ -33,33 +33,16 @@ pub enum Reflow {
 impl Reflow {
     pub fn between(previous: &Painted, next: &Painted) -> Self {
         if previous.line_count() != next.line_count()
-            || previous.lines().zip(next.lines()).any(|(previous, next)| {
-                line_width(previous) != line_width(next)
-                    || fill_layout(previous) != fill_layout(next)
-            })
+            || previous
+                .lines()
+                .zip(next.lines())
+                .any(|(previous, next)| line_width(previous) != line_width(next))
         {
             Self::Shifts
         } else {
             Self::None
         }
     }
-}
-
-fn fill_layout(line: &[Run]) -> Vec<(usize, &str)> {
-    let mut column = 0;
-    let mut fills = Vec::new();
-
-    for run in line {
-        if run.kind() == RunKind::LineTerminator {
-            continue;
-        }
-        if run.kind() == RunKind::Fill {
-            fills.push((column, run.text()));
-        }
-        column += run.text().width_graphemes();
-    }
-
-    fills
 }
 
 fn line_width(line: &[Run]) -> TerminalWidth {
@@ -190,7 +173,7 @@ mod tests {
     }
 
     #[test]
-    fn moving_a_fill_is_a_reflow() {
+    fn fills_make_a_width_change_screen_stable() {
         let before = Painted::paint(
             &[
                 Segment::from_text(None, "a").remove(0),
@@ -205,7 +188,7 @@ mod tests {
             ],
             Some(TerminalWidth(20)),
         );
-        assert_eq!(Reflow::Shifts, Reflow::between(&before, &after));
+        assert_eq!(Reflow::None, Reflow::between(&before, &after));
     }
 
     #[test]
