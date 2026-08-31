@@ -190,7 +190,7 @@ mod tests {
     }
 
     #[test]
-    fn fills_make_a_width_change_screen_stable() {
+    fn moving_a_fill_is_a_reflow() {
         let before = Painted::paint(
             &[
                 Segment::from_text(None, "a").remove(0),
@@ -205,7 +205,7 @@ mod tests {
             ],
             Some(TerminalWidth(20)),
         );
-        assert_eq!(Reflow::None, Reflow::between(&before, &after));
+        assert_eq!(Reflow::Shifts, Reflow::between(&before, &after));
     }
 
     #[test]
