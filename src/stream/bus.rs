@@ -33,10 +33,9 @@ pub enum Reflow {
 impl Reflow {
     pub fn between(previous: &Painted, next: &Painted) -> Self {
         if previous.line_count() != next.line_count()
-            || previous
-                .lines()
-                .zip(next.lines())
-                .any(|(previous, next)| line_width(previous) != line_width(next))
+            || previous.lines().zip(next.lines()).any(|(previous, next)| {
+                line_width(previous) != line_width(next) || unchanged_literals_shift(previous, next)
+            })
         {
             Self::Shifts
         } else {
@@ -52,6 +51,81 @@ fn line_width(line: &[Run]) -> TerminalWidth {
             .map(|run| run.text().width_graphemes())
             .sum(),
     )
+}
+
+/// Whether literal content surviving the update has changed columns.
+///
+/// A fill may move when a preceding module changes without causing a visible
+/// jump: it simply absorbs the change in width. New literal output is not a
+/// moved cell either. The longest common subsequence identifies literal runs
+/// that survived the update; only a changed column of one of those runs is a
+/// reflow.
+fn unchanged_literals_shift(previous: &[Run], next: &[Run]) -> bool {
+    let previous = literal_runs(previous);
+    let next = literal_runs(next);
+    let columns = longest_common_subsequence_lengths(&previous, &next);
+    let width = next.len() + 1;
+    let mut previous_index = 0;
+    let mut next_index = 0;
+
+    while previous_index < previous.len() && next_index < next.len() {
+        if previous[previous_index].0 == next[next_index].0
+            && columns[previous_index * width + next_index]
+                == 1 + columns[(previous_index + 1) * width + next_index + 1]
+        {
+            if previous[previous_index].1 != next[next_index].1 {
+                return true;
+            }
+            previous_index += 1;
+            next_index += 1;
+        } else if columns[(previous_index + 1) * width + next_index]
+            >= columns[previous_index * width + next_index + 1]
+        {
+            previous_index += 1;
+        } else {
+            next_index += 1;
+        }
+    }
+
+    false
+}
+
+fn literal_runs(line: &[Run]) -> Vec<(&str, TerminalWidth)> {
+    let mut column = TerminalWidth(0);
+    let mut literals = Vec::new();
+
+    for run in line {
+        if run.kind() == RunKind::Text {
+            literals.push((run.text(), column));
+        }
+        if run.kind() != RunKind::LineTerminator {
+            column.0 += run.text().width_graphemes();
+        }
+    }
+
+    literals
+}
+
+fn longest_common_subsequence_lengths(
+    previous: &[(&str, TerminalWidth)],
+    next: &[(&str, TerminalWidth)],
+) -> Vec<usize> {
+    let width = next.len() + 1;
+    let mut lengths = vec![0; (previous.len() + 1) * width];
+
+    for previous_index in (0..previous.len()).rev() {
+        for next_index in (0..next.len()).rev() {
+            lengths[previous_index * width + next_index] =
+                if previous[previous_index].0 == next[next_index].0 {
+                    1 + lengths[(previous_index + 1) * width + next_index + 1]
+                } else {
+                    lengths[(previous_index + 1) * width + next_index]
+                        .max(lengths[previous_index * width + next_index + 1])
+                };
+        }
+    }
+
+    lengths
 }
 
 /// What the caller should do with an arriving refinement.
@@ -164,6 +238,7 @@ impl Bus {
 mod tests {
     use super::super::schedule::PredictedArrival;
     use super::*;
+    use crate::module::painted::LineIndex;
     use crate::segment::Segment;
 
     const WINDOW: BusWindow = BusWindow::from_milliseconds(100);
@@ -189,6 +264,34 @@ mod tests {
             Some(TerminalWidth(20)),
         );
         assert_eq!(Reflow::None, Reflow::between(&before, &after));
+    }
+
+    #[test]
+    fn a_fill_cannot_hide_a_shifted_literal_run() {
+        let before = Painted::paint(
+            &[
+                Segment::from_text(None, "a").remove(0),
+                Segment::from_text(None, " middle").remove(0),
+                Segment::fill(None, "."),
+                Segment::from_text(None, "right").remove(0),
+            ],
+            Some(TerminalWidth(20)),
+        );
+        let after = Painted::paint(
+            &[
+                Segment::from_text(None, "long").remove(0),
+                Segment::from_text(None, " middle").remove(0),
+                Segment::fill(None, "."),
+                Segment::from_text(None, "right").remove(0),
+            ],
+            Some(TerminalWidth(20)),
+        );
+
+        assert_eq!(
+            line_width(before.line(LineIndex(0)).unwrap()),
+            line_width(after.line(LineIndex(0)).unwrap())
+        );
+        assert_eq!(Reflow::Shifts, Reflow::between(&before, &after));
     }
 
     #[test]
