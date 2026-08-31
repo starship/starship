@@ -1879,7 +1879,8 @@
         "fossil_modules": "$fossil_branch$fossil_metrics",
         "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
         "hg_modules": "$hg_branch$hg_state",
-        "pijul_modules": "$pijul_channel"
+        "pijul_modules": "$pijul_channel",
+        "fallback_modules": ""
       }
     },
     "vcsh": {
@@ -7053,6 +7054,11 @@
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
           "default": "$pijul_channel"
+        },
+        "fallback_modules": {
+          "description": "Modules to use when no repo is present.",
+          "type": "string",
+          "default": ""
         }
       },
       "additionalProperties": false
