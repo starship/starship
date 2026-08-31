@@ -71,6 +71,11 @@ impl<'plan> Resolution<'plan> {
     }
 
     #[inline]
+    pub(crate) fn is_empty(&self) -> bool {
+        self.segments.is_empty()
+    }
+
+    #[inline]
     pub fn store_in(self, state: &mut PromptState<'plan>) {
         state
             .record(self.module, self.segments)

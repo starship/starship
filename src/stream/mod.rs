@@ -425,6 +425,13 @@ impl<'plan> Scheduler<'plan> {
         let optional_poll = self.polls[slot_index].as_mut();
 
         let poll = match resolution.kind() {
+            ResolutionKind::Initial if resolution.is_empty() => {
+                // A dynamic module that rendered nothing on its first pass is disabled. It
+                // cannot change the prompt until the next invocation, so do not keep this
+                // streaming session alive polling it.
+                self.polls[slot_index] = None;
+                None
+            }
             ResolutionKind::Initial => optional_poll,
             ResolutionKind::Refresh => Some(
                 optional_poll.expect("A refresh resolution was received for a non-dynamic module."),
