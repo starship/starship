@@ -387,7 +387,7 @@ mod tests {
             Type::Ultramarine => "🔷 ",
             Type::Unknown => "❓ ",
             Type::Uos => "🐲 ",
-            Type::Void => " ",
+            Type::Void => "⊚ ",
             Type::Windows => "🪟 ",
             Type::Zorin => "🔹 ",
             _ => "",

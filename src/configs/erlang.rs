@@ -23,7 +23,7 @@ impl Default for ErlangConfig<'_> {
         Self {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: "e ",
             style: "bold red",
             disabled: false,
             detect_extensions: vec![],

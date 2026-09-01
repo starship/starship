@@ -112,17 +112,19 @@ particular do not come with font support out-of-the-box. You need to ensure that
 - You have an emoji font installed. Most systems come with an emoji font by default, but
   some (notably Arch Linux) do not. You can usually install one through your system's
   package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Your font supports the symbols Starship uses. Starship defaults use standard
+  Unicode characters, but the [Nerd Font Symbols preset](https://starship.rs/presets/#nerd-font-symbols)
+  uses Private Use Area glyphs that require a patched font.
 
 To test your system, run the following commands in a terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
-echo -e "\xee\x82\xa0"
+echo -e "\xe2\x8e\x87"
 ```
 
 The first line should produce a [snake emoji](https://emojipedia.org/snake/),
-while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+while the second should produce a [branch symbol (2387)](https://unicode-table.com/en/2387/).
 
 If either symbol fails to display correctly, your system is still misconfigured.
 Unfortunately, getting font configuration correct is sometimes difficult. Users
