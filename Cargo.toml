@@ -50,7 +50,7 @@ gix = { version = "0.87.1", default-features = false, features = [
 ] }
 guess_host_triple = "0.1.5"
 home = "0.5.12"
-indexmap = { version = "2.14.0", features = ["serde"] }
+indexmap = { version = "2.14.1", features = ["serde"] }
 jiff = { version = "0.2.35", features = ["serde"] }
 jsonc-parser = { version = "0.33.1", features = ["serde"] }
 log = { version = "0.4.34", features = ["std"] }
