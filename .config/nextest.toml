@@ -1,0 +1,12 @@
+[test-groups]
+# Each test spawns a real shell in a pseudo-terminal and polls its output;
+# running two at once on a shared CI runner still starves them of CPU often
+# enough to turn the poll timeouts flaky (seen concurrently failing bash
+# and Nushell pty tests on ubuntu-latest's coverage-instrumented leg), so
+# they're fully serialized.
+pty = { max-threads = 1 }
+
+[[profile.default.overrides]]
+filter = 'binary(init_async)'
+test-group = 'pty'
+platform = 'cfg(unix)'

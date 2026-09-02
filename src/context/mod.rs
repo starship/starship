@@ -1,5 +1,6 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
+use crate::escaping::Destination;
 use crate::module::Module;
 use crate::utils::{CommandOutput, PathExt, create_command, exec_timeout, read_file};
 
@@ -70,6 +71,16 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
+    /// An explicit statement of where the prompt rendered from this context is
+    /// going, or `None` to take the answer from [`Self::shell`].
+    ///
+    /// Kept as an override rather than as a second field of record so that the
+    /// two can never drift apart: a context whose shell is changed and whose
+    /// destination is not still escapes for the shell it now has. Only a
+    /// streaming prompt sets it, and only ever to
+    /// [`Destination::RawTerminal`], which depends on no shell at all.
+    destination_override: Option<Destination>,
+
     /// Which prompt to print (main, right, ...)
     pub target: Target,
 
@@ -136,17 +147,67 @@ impl<'a> Context<'a> {
         )
     }
 
-    /// Create a new instance of Context for the provided directory
+    /// Create a new instance of Context for the provided directory, loading the
+    /// configuration the environment points at.
+    ///
+    /// Unit tests in this crate do not load ambient configuration; external
+    /// test harnesses should use [`Self::new_with_config`] to supply an
+    /// explicit, hermetic configuration.
     pub fn new_with_shell_and_path(
-        mut properties: Properties,
+        properties: Properties,
         shell: Shell,
         target: Target,
         path: PathBuf,
         logical_path: PathBuf,
         env: Env<'a>,
     ) -> Self {
-        let config = StarshipConfig::initialize(get_config_path_os(&env).as_deref());
+        let config = Self::ambient_config(&env);
+        Self::new_with_config(properties, shell, target, path, logical_path, env, config)
+    }
 
+    /// The configuration the ambient environment points at.
+    ///
+    /// The filesystem read only exists in a non-test build. A test build that
+    /// could reach the developer's own `~/.config/starship.toml` would report
+    /// results that depend on their personal dotfiles: a `palette` alone
+    /// redefines every named color a module renders, so a test asserting on
+    /// ANSI yellow sees the palette's truecolor yellow instead. Worse, a
+    /// personal configuration can coincidentally make a genuinely broken module
+    /// render the expected output. Pointing `STARSHIP_CONFIG` elsewhere does not
+    /// help either, because `Env` is a mock in test builds and never forwards
+    /// it.
+    ///
+    /// Unit tests in this crate have no code path to filesystem configuration.
+    /// External test harnesses use [`Self::new_with_config`] to make the same
+    /// hermetic guarantee. That constructor also ensures everything derived
+    /// from configuration — `root_config` today, whatever is added tomorrow —
+    /// comes from the supplied configuration rather than a leftover ambient
+    /// setting.
+    fn ambient_config(env: &Env<'a>) -> StarshipConfig {
+        #[cfg(test)]
+        {
+            let _ = env;
+            StarshipConfig { config: None }
+        }
+        #[cfg(not(test))]
+        StarshipConfig::initialize(get_config_path_os(env).as_deref())
+    }
+
+    /// Create a new instance of Context for the provided directory from an
+    /// explicitly supplied, fully owned configuration.
+    ///
+    /// Everything the context derives from configuration is derived here, so a
+    /// caller that supplies a configuration gets a context consistent with it —
+    /// there is no second step to forget.
+    pub fn new_with_config(
+        mut properties: Properties,
+        shell: Shell,
+        target: Target,
+        path: PathBuf,
+        logical_path: PathBuf,
+        env: Env<'a>,
+        config: StarshipConfig,
+    ) -> Self {
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
         if properties
@@ -188,6 +249,7 @@ impl<'a> Context<'a> {
             git_repo: OnceLock::new(),
             jj_repo: OnceLock::new(),
             shell,
+            destination_override: None,
             target,
             width,
             env,
@@ -201,6 +263,29 @@ impl<'a> Context<'a> {
             claude_code_data: None,
             _marker: PhantomData,
         }
+    }
+
+    /// Where the prompt rendered from this context is going.
+    ///
+    /// Defaults to the prompt variable of [`Self::shell`], because that is
+    /// where every prompt starship has ever printed goes.
+    pub fn destination(&self) -> Destination {
+        self.destination_override
+            .unwrap_or_else(|| Destination::shell_prompt_variable(self.shell))
+    }
+
+    /// Renders this context's prompt for the terminal rather than for a shell's
+    /// prompt variable.
+    ///
+    /// Only a streaming prompt has any reason to ask for this: it renders once
+    /// for the terminal, so that an incremental repaint is written exactly as
+    /// it stands, and escapes those finished bytes only where it hands a whole
+    /// prompt to the shell. Rendering twice instead would let the repaint and
+    /// the prompt assignment disagree about what is on screen.
+    #[must_use]
+    pub fn rendering_for_the_terminal(mut self) -> Self {
+        self.destination_override = Some(Destination::RawTerminal);
+        self
     }
 
     /// Sets the context config, overwriting the existing config
@@ -901,7 +986,7 @@ pub enum Target {
 }
 
 /// Properties as passed on from the shell as arguments
-#[derive(Parser, Debug)]
+#[derive(Parser, Clone, Debug)]
 pub struct Properties {
     /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]

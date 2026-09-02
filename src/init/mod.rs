@@ -227,7 +227,9 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_elv()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
+        "nu" => print_script(NU_INIT, &starship_path.sprint()?),
         "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "cmd" => print_script(CMDEXE_INIT, &starship_path.sprint_cmdexe()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\

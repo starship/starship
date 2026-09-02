@@ -1,119 +1,15 @@
+pub mod painted;
+
 use crate::segment;
-use crate::segment::{FillSegment, Segment};
-use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
+use crate::segment::Segment;
+use nu_ansi_term::AnsiString;
+use painted::{Painted, TerminalWidth};
 use std::fmt;
 use std::time::Duration;
 
 // List of all modules
 // Default ordering is handled in configs/starship_root.rs
-pub const ALL_MODULES: &[&str] = &[
-    "aws",
-    "azure",
-    #[cfg(feature = "battery")]
-    "battery",
-    "buf",
-    "bun",
-    "c",
-    "character",
-    "claude_context",
-    "claude_cost",
-    "claude_model",
-    "cmake",
-    "cmd_duration",
-    "cobol",
-    "conda",
-    "container",
-    "cpp",
-    "crystal",
-    "daml",
-    "dart",
-    "deno",
-    "directory",
-    "direnv",
-    "docker_context",
-    "dotnet",
-    "elixir",
-    "elm",
-    "erlang",
-    "fennel",
-    "fill",
-    "fortran",
-    "fossil_branch",
-    "fossil_metrics",
-    "gcloud",
-    "git_branch",
-    "git_commit",
-    "git_metrics",
-    "git_state",
-    "git_status",
-    "gleam",
-    "golang",
-    "gradle",
-    "guix_shell",
-    "haskell",
-    "haxe",
-    "helm",
-    "hg_branch",
-    "hg_state",
-    "hostname",
-    "java",
-    "jj_bookmark",
-    "jobs",
-    "julia",
-    "kotlin",
-    "kubernetes",
-    "line_break",
-    "localip",
-    "lua",
-    "maven",
-    "memory_usage",
-    "meson",
-    "mise",
-    "mojo",
-    "nats",
-    "netns",
-    "nim",
-    "nix_shell",
-    "nodejs",
-    "ocaml",
-    "odin",
-    "opa",
-    "openstack",
-    "os",
-    "package",
-    "perl",
-    "php",
-    "pijul_channel",
-    "pixi",
-    "pulumi",
-    "purescript",
-    "python",
-    "quarto",
-    "raku",
-    "red",
-    "rlang",
-    "ruby",
-    "rust",
-    "scala",
-    "shell",
-    "shlvl",
-    "singularity",
-    "solidity",
-    "spack",
-    "status",
-    "sudo",
-    "swift",
-    "terraform",
-    "time",
-    "typst",
-    "username",
-    "vagrant",
-    "vcs",
-    "vcsh",
-    "vlang",
-    "xmake",
-    "zig",
-];
+pub const ALL_MODULES: &[&str] = crate::modules::registry::ALL_MODULES;
 
 /// A module is a collection of segments showing data for a single integration
 /// (e.g. The git module shows the current git branch and status)
@@ -178,73 +74,30 @@ impl<'a> Module<'a> {
         self.segments.iter().map(segment::Segment::value).collect()
     }
 
-    /// Returns a vector of colored `AnsiString` elements to be later used with
-    /// `AnsiStrings()` to optimize ANSI codes
-    pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None)
+    /// Resolves this module's segments into their final painted form, with
+    /// fills left at their natural width.
+    pub fn paint(&self) -> Painted {
+        self.paint_for_width(None)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
-        let mut iter = self.segments.iter().peekable();
-        let mut ansi_strings: Vec<AnsiString> = Vec::new();
-        while iter.peek().is_some() {
-            ansi_strings.extend(ansi_line(&mut iter, width));
-        }
-        ansi_strings
+    /// Resolves this module's segments into their final painted form, stretching
+    /// fills to take up the width left over on each line.
+    pub fn paint_for_width(&self, available_width: Option<TerminalWidth>) -> Painted {
+        Painted::paint(&self.segments, available_width)
+    }
+
+    pub fn ansi_strings(&self) -> Vec<AnsiString<'static>> {
+        self.paint()
+            .runs()
+            .iter()
+            .map(|run| run.style().as_ansi_style().paint(run.text().to_owned()))
+            .collect()
     }
 }
 
 impl fmt::Display for Module<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let ansi_strings = self.ansi_strings();
-        write!(f, "{}", AnsiStrings(&ansi_strings))
-    }
-}
-
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
-where
-    I: Iterator<Item = &'a Segment>,
-{
-    let mut used = 0usize;
-    let mut current: Vec<AnsiString> = Vec::new();
-    let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
-    let mut prev_style: Option<AnsiStyle> = None;
-
-    for segment in segments {
-        if let Segment::Fill(fs) = segment {
-            chunks.push((current, fs));
-            current = Vec::new();
-            prev_style = None;
-        } else {
-            used += segment.width_graphemes();
-            let current_segment_string = segment.ansi_string(prev_style.as_ref());
-
-            prev_style = Some(*current_segment_string.style_ref());
-            current.push(current_segment_string);
-        }
-
-        if matches!(segment, Segment::LineTerm) {
-            break;
-        }
-    }
-
-    if chunks.is_empty() {
-        current
-    } else {
-        let fill_size = term_width
-            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
-            .map(|remaining| remaining / chunks.len());
-        chunks
-            .into_iter()
-            .flat_map(|(strs, fill)| {
-                let fill_string = fill.ansi_string(
-                    fill_size,
-                    strs.last().map(nu_ansi_term::AnsiGenericString::style_ref),
-                );
-                strs.into_iter().chain(std::iter::once(fill_string))
-            })
-            .chain(current)
-            .collect::<Vec<AnsiString>>()
+        write!(f, "{}", self.paint())
     }
 }
 

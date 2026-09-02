@@ -15,10 +15,206 @@
 # A way to set '$?', since bash does not allow assigning to '$?' directly
 function _starship_set_return() { return "${1:-0}"; }
 
+STARSHIP_STREAM_DESCRIPTOR=
+STARSHIP_STREAM_PROCESS=
+STARSHIP_STREAM_COMPLETE=
+STARSHIP_STREAM_RIGHT_DESCRIPTOR=
+STARSHIP_STREAM_RIGHT_PROCESS=
+STARSHIP_STREAM_RIGHT_COMPLETE=
+STARSHIP_BLE_ENABLED=
+STARSHIP_TIMINGS=
+STARSHIP_RIGHT_TIMINGS=
+STARSHIP_PROMPT=
+STARSHIP_RIGHT_PROMPT=
+STARSHIP_PROMPT_ARGUMENTS=()
+STARSHIP_RIGHT_PROMPT_ARGUMENTS=()
+STARSHIP_FRAME=()
+STARSHIP_RIGHT_FRAME=()
+
+function ble/prompt/backslash:starship {
+    ble/prompt/unit/add-hash '$STARSHIP_PROMPT'
+    ble/prompt/process-prompt-string "$STARSHIP_PROMPT"
+}
+
+starship_ble_read_frame() {
+    local descriptor=$1 kind first second
+    IFS= read -r -d '' -u "$descriptor" kind &&
+        IFS= read -r -d '' -u "$descriptor" first &&
+        IFS= read -r -d '' -u "$descriptor" second || return
+    STARSHIP_FRAME=("$kind" "$first" "$second")
+}
+
+starship_ble_read_right_frame() {
+    local descriptor=$1 kind first second
+    IFS= read -r -d '' -u "$descriptor" kind &&
+        IFS= read -r -d '' -u "$descriptor" first &&
+        IFS= read -r -d '' -u "$descriptor" second || return
+    STARSHIP_RIGHT_FRAME=("$kind" "$first" "$second")
+}
+
+# ble.sh's `prompt_rps1` carries the right prompt, but it is drawn on the line
+# holding the left prompt's final row, so it is padded with the left prompt's
+# newlines. Either stream recomputes it from the latest left and right values.
+starship_ble_refresh_rps1() {
+    local lines=${STARSHIP_PROMPT//[!$'\n']}
+    bleopt prompt_rps1="$lines$STARSHIP_RIGHT_PROMPT"
+}
+
+starship_ble_set_prompt() {
+    STARSHIP_PROMPT=$1
+    starship_ble_refresh_rps1
+}
+
+starship_ble_set_right_prompt() {
+    STARSHIP_RIGHT_PROMPT=$1
+    starship_ble_refresh_rps1
+}
+
+starship_ble_stream_stop() {
+    ble/util/idle.cancel starship_ble_stream_step 2>/dev/null || :
+    if [[ $STARSHIP_STREAM_DESCRIPTOR ]]; then
+        exec {STARSHIP_STREAM_DESCRIPTOR}<&-
+        STARSHIP_STREAM_DESCRIPTOR=
+    fi
+    if [[ $STARSHIP_STREAM_PROCESS ]]; then
+        kill "$STARSHIP_STREAM_PROCESS" 2>/dev/null || :
+        STARSHIP_STREAM_PROCESS=
+    fi
+    STARSHIP_STREAM_COMPLETE=
+}
+
+# The right prompt streams independently, so it stops and fails on its own
+# without discarding the left prompt's in-flight progress.
+starship_ble_stream_right_stop() {
+    ble/util/idle.cancel starship_ble_stream_right_step 2>/dev/null || :
+    if [[ $STARSHIP_STREAM_RIGHT_DESCRIPTOR ]]; then
+        exec {STARSHIP_STREAM_RIGHT_DESCRIPTOR}<&-
+        STARSHIP_STREAM_RIGHT_DESCRIPTOR=
+    fi
+    if [[ $STARSHIP_STREAM_RIGHT_PROCESS ]]; then
+        kill "$STARSHIP_STREAM_RIGHT_PROCESS" 2>/dev/null || :
+        STARSHIP_STREAM_RIGHT_PROCESS=
+    fi
+    STARSHIP_STREAM_RIGHT_COMPLETE=
+}
+
+starship_ble_stream_end() {
+    local complete=$STARSHIP_STREAM_COMPLETE
+    starship_ble_stream_stop
+    if [[ ! $complete ]]; then
+        starship_ble_set_prompt "$(::STARSHIP:: prompt "${STARSHIP_PROMPT_ARGUMENTS[@]}")"
+        ble/textarea#redraw
+    fi
+}
+
+starship_ble_stream_right_end() {
+    local complete=$STARSHIP_STREAM_RIGHT_COMPLETE
+    starship_ble_stream_right_stop
+    if [[ ! $complete ]]; then
+        starship_ble_set_right_prompt "$(::STARSHIP:: prompt --right "${STARSHIP_RIGHT_PROMPT_ARGUMENTS[@]}")"
+        ble/textarea#redraw
+    fi
+}
+
+starship_ble_stream_step() {
+    if read -t 0 -u "$STARSHIP_STREAM_DESCRIPTOR"; then
+        if ! starship_ble_read_frame "$STARSHIP_STREAM_DESCRIPTOR"; then
+            starship_ble_stream_end
+            return
+        else
+            case ${STARSHIP_FRAME[0]} in
+                PATCH)
+                    starship_ble_set_prompt "${STARSHIP_FRAME[1]}"
+                    ble/textarea#redraw
+                    ;;
+                COMPLETE)
+                    STARSHIP_TIMINGS=${STARSHIP_FRAME[1]}
+                    STARSHIP_STREAM_COMPLETE=1
+                    ;;
+            esac
+        fi
+    elif ! kill -0 "$STARSHIP_STREAM_PROCESS" 2>/dev/null; then
+        starship_ble_stream_end
+        return
+    fi
+
+    ble/util/idle.sleep 51
+}
+
+starship_ble_stream_right_step() {
+    if read -t 0 -u "$STARSHIP_STREAM_RIGHT_DESCRIPTOR"; then
+        if ! starship_ble_read_right_frame "$STARSHIP_STREAM_RIGHT_DESCRIPTOR"; then
+            starship_ble_stream_right_end
+            return
+        else
+            case ${STARSHIP_RIGHT_FRAME[0]} in
+                PATCH)
+                    starship_ble_set_right_prompt "${STARSHIP_RIGHT_FRAME[1]}"
+                    ble/textarea#redraw
+                    ;;
+                COMPLETE)
+                    STARSHIP_RIGHT_TIMINGS=${STARSHIP_RIGHT_FRAME[1]}
+                    STARSHIP_STREAM_RIGHT_COMPLETE=1
+                    ;;
+            esac
+        fi
+    elif ! kill -0 "$STARSHIP_STREAM_RIGHT_PROCESS" 2>/dev/null; then
+        starship_ble_stream_right_end
+        return
+    fi
+
+    ble/util/idle.sleep 51
+}
+
+starship_ble_stream_start() {
+    starship_ble_stream_stop
+    STARSHIP_PROMPT_ARGUMENTS=("$@")
+
+    exec {STARSHIP_STREAM_DESCRIPTOR}< <(
+        ::STARSHIP:: stream --transport ble "$@" --timings="$STARSHIP_TIMINGS" 2>/dev/null
+    )
+    if [[ -z $STARSHIP_STREAM_DESCRIPTOR ]] ||
+       ! starship_ble_read_frame "$STARSHIP_STREAM_DESCRIPTOR" ||
+       [[ ${STARSHIP_FRAME[0]} != READY ]]; then
+        starship_ble_stream_stop
+        starship_ble_set_prompt "$(::STARSHIP:: prompt "$@")"
+        return
+    fi
+
+    STARSHIP_STREAM_PROCESS=${STARSHIP_FRAME[2]}
+    starship_ble_set_prompt "${STARSHIP_FRAME[1]}"
+    ble/util/idle.push starship_ble_stream_step
+}
+
+starship_ble_stream_right_start() {
+    starship_ble_stream_right_stop
+    STARSHIP_RIGHT_PROMPT_ARGUMENTS=("$@")
+
+    exec {STARSHIP_STREAM_RIGHT_DESCRIPTOR}< <(
+        ::STARSHIP:: stream --right --transport ble "$@" --timings="$STARSHIP_RIGHT_TIMINGS" 2>/dev/null
+    )
+    if [[ -z $STARSHIP_STREAM_RIGHT_DESCRIPTOR ]] ||
+       ! starship_ble_read_right_frame "$STARSHIP_STREAM_RIGHT_DESCRIPTOR" ||
+       [[ ${STARSHIP_RIGHT_FRAME[0]} != READY ]]; then
+        starship_ble_stream_right_stop
+        starship_ble_set_right_prompt "$(::STARSHIP:: prompt --right "$@")"
+        return
+    fi
+
+    STARSHIP_STREAM_RIGHT_PROCESS=${STARSHIP_RIGHT_FRAME[2]}
+    starship_ble_set_right_prompt "${STARSHIP_RIGHT_FRAME[1]}"
+    ble/util/idle.push starship_ble_stream_right_step
+}
+
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
     local PREV_LAST_ARG=$1
+
+    if [[ $STARSHIP_BLE_ENABLED ]]; then
+        starship_ble_stream_stop
+        starship_ble_stream_right_stop
+    fi
 
     # Avoid restarting the timer for commands in the same pipeline
     if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
@@ -77,10 +273,12 @@ starship_precmd() {
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         STARSHIP_START_TIME=""
     fi
-    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
-    if [[ ${BLE_ATTACHED-} ]]; then
-        local nlns=${PS1//[!$'\n']}
-        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
+    if [[ $STARSHIP_BLE_ENABLED ]]; then
+        starship_ble_stream_right_start "${ARGS[@]}"
+        starship_ble_stream_start "${ARGS[@]}"
+        PS1='\q{starship}'
+    else
+        PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
@@ -88,6 +286,7 @@ starship_precmd() {
 # If the user appears to be using https://github.com/akinomyoga/ble.sh,
 # then hook our functions into their framework.
 if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
+    STARSHIP_BLE_ENABLED=1
     blehook PREEXEC!='starship_preexec "$_"'
     blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
@@ -152,4 +351,3 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
-

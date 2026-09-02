@@ -9,6 +9,12 @@ on:
       - "docs/**"
       - "**.md"
 
+concurrency:
+  # The source repository distinguishes identically named branches in forks;
+  # the branch name lets a newer push cancel its superseded workflow run.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -132,12 +138,11 @@ jobs:
             exit 1
           fi
 
-  # Run tests on Linux, macOS, and Windows
-  # On both Rust stable and Rust nightly
   test:
     name: Test Suite
     runs-on: ${{ matrix.os }}
     needs: cargo_check # First check then run expansive tests
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -161,10 +166,10 @@ jobs:
       - name: Setup | Cache
         uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
 
-      - name: Install cargo-llvm-cov
+      - name: Install cargo-llvm-cov and cargo-nextest
         uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
         with:
-          tool: cargo-llvm-cov
+          tool: cargo-llvm-cov,cargo-nextest@0.9.140
 
       # For windows installer test
       # On stable rust & main repo pushes only
@@ -187,17 +192,72 @@ jobs:
           winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements
           Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8
 
-      # Run the ignored tests that expect the above setup
+      # The pseudo-terminal shell tests (tests/init_async.rs) need real shell
+      # binaries and drive them from an actual terminal, so they only run on
+      # one matrix leg — running them across every OS x Rust channel would be
+      # both wasteful and, on Windows/macOS runners, impossible regardless.
+      - name: Setup | Streaming shells
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: sudo apt-get update && sudo apt-get install --yes bash fish gawk make zsh
+
+      - name: Setup | ble.sh
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          git clone --depth 1 --branch v0.4.0-devel3 https://github.com/akinomyoga/ble.sh.git "$RUNNER_TEMP/ble.sh"
+          make -C "$RUNNER_TEMP/ble.sh"
+
+      - name: Build | Nushell main
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        run: |
+          git init "$RUNNER_TEMP/nushell"
+          git -C "$RUNNER_TEMP/nushell" remote add origin https://github.com/nushell/nushell.git
+          git -C "$RUNNER_TEMP/nushell" fetch --depth 1 origin 5d80505557115920993296600f57233c30a4248b
+          git -C "$RUNNER_TEMP/nushell" checkout --detach FETCH_HEAD
+          cargo build --locked --manifest-path "$RUNNER_TEMP/nushell/Cargo.toml" --bin nu
+        env:
+          RUSTFLAGS: ""
+
+      # Run the ignored tests that expect the above setup.
+      # `--run-ignored all` is nextest's spelling of `--include-ignored`.
+      #
+      # Coverage instrumentation is stable-only: cargo-llvm-cov's pinned
+      # release periodically falls out of sync with nightly rust's own
+      # ABI/codegen churn, which surfaces as every test passing and then
+      # object-file collection failing outright — a tool-compatibility
+      # failure, not a real test one. Nightly's purpose in this matrix is
+      # to catch compiler regressions in pass/fail, not to contribute a
+      # coverage number.
       - name: Build | Test
-        run: "cargo llvm-cov
+        if: matrix.rust == 'stable'
+        run: "cargo llvm-cov nextest
           --all-features
           --locked
           --workspace
+          -E '${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && 'all()' || 'not binary(init_async)' }}'
           --lcov --output-path lcov.info
-          -- --include-ignored"
+          --run-ignored all"
         env:
-          # Avoid -D warnings on nightly builds
-          CARGO_BUILD_WARNINGS: ${{ matrix.rust == 'stable' && 'deny' || 'allow' }}
+          CARGO_BUILD_WARNINGS: deny
+          # Snapshot mismatches must fail the run rather than writing
+          # `.snap.new` files nobody will look at on a CI runner.
+          INSTA_UPDATE: "no"
+          BASH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && '/usr/bin/bash' || '' }}
+          BLE_SH: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/ble.sh/out/ble.sh', runner.temp) || '' }}
+          NUSHELL_MAIN: ${{ (matrix.os == 'ubuntu-latest' && matrix.rust == 'stable') && format('{0}/nushell/target/debug/nu', runner.temp) || '' }}
+
+      # Nightly has no shell-streaming setup (see the comment on the stable
+      # `Build | Test` step above), so it only needs the non-init_async slice.
+      - name: Build | Test [Nightly]
+        if: matrix.rust == 'nightly'
+        run: "cargo nextest run
+          --all-features
+          --locked
+          --workspace
+          -E 'not binary(init_async)'"
+        env:
+          # Nightly's own warnings are not this project's to fix.
+          CARGO_BUILD_WARNINGS: allow
+          INSTA_UPDATE: "no"
 
       - name: Build | Installer [Windows]
         continue-on-error: true
@@ -248,7 +308,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        if: github.repository == 'starship/starship'
+        if: github.repository == 'starship/starship' && matrix.rust == 'stable'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
