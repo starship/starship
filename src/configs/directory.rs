@@ -39,6 +39,7 @@ pub struct DirectoryConfig<'a> {
     pub truncation_symbol: &'a str,
     pub home_symbol: &'a str,
     pub use_os_path_sep: bool,
+    pub use_osc8_url: bool,
 }
 
 impl DirectoryConfig<'_> {
@@ -69,6 +70,7 @@ impl Default for DirectoryConfig<'_> {
             truncation_symbol: "",
             home_symbol: "~",
             use_os_path_sep: true,
+            use_osc8_url: false,
         }
     }
 }
