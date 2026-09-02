@@ -31,6 +31,21 @@
       "minimum": 0,
       "default": 500
     },
+    "async": {
+      "description": "How a streaming prompt paces itself: whether it streams at all, how\nlong it collects reflowing refinements before redrawing, and how often\neach module whose value goes stale on its own is renewed. See\n[`AsynchronousConfig`].",
+      "$ref": "#/$defs/AsynchronousConfig",
+      "default": {
+        "enabled": true,
+        "bus": 100,
+        "adaptive": true,
+        "dynamic": {
+          "time": 1000,
+          "battery": 30000,
+          "memory_usage": 5000,
+          "localip": 30000
+        }
+      }
+    },
     "add_newline": {
       "type": "boolean",
       "default": true
@@ -1950,6 +1965,75 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "AsynchronousConfig": {
+      "description": "Streaming prompt timing settings.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enables refinements after the first paint.",
+          "type": "boolean",
+          "default": true
+        },
+        "bus": {
+          "description": "Maximum refinement batching delay in milliseconds.",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "default": 100
+        },
+        "adaptive": {
+          "description": "Batches refinements using session timing estimates.",
+          "type": "boolean",
+          "default": true
+        },
+        "dynamic": {
+          "description": "Refresh periods for dynamic modules.",
+          "$ref": "#/$defs/DynamicPeriodsConfig",
+          "default": {
+            "time": 1000,
+            "battery": 30000,
+            "memory_usage": 5000,
+            "localip": 30000
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DynamicPeriodsConfig": {
+      "description": "Dynamic module refresh periods.",
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1,
+          "maximum": 86400000,
+          "default": 1000
+        },
+        "battery": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1,
+          "maximum": 86400000,
+          "default": 30000
+        },
+        "memory_usage": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1,
+          "maximum": 86400000,
+          "default": 5000
+        },
+        "localip": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1,
+          "maximum": 86400000,
+          "default": 30000
+        }
+      },
+      "additionalProperties": false
+    },
     "AwsConfig": {
       "title": "AWS",
       "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.\nThe output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.\nIf the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile\nis read from the `AWS_VAULT` env var and the credentials expiration date\nis read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`\nvar.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile\nis read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile\nis read from the `AWSUME_PROFILE` env var and the credentials expiration\ndate is read from the `AWSUME_EXPIRATION` env var.\n\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile\nis read from the `AWS_SSO_PROFILE` env var.",

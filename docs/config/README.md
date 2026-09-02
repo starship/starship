@@ -373,6 +373,46 @@ modules you explicitly add to the format will not be duplicated. Eg.
 format = '$all$directory$character'
 ```
 
+## Async
+
+Starship can draw available modules first and refine the prompt as slower
+modules resolve. The final prompt is identical to a synchronous render.
+
+| Shell                                                    | Refinement                                                            |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| zsh                                                      | Changed cells are repainted in place.                                 |
+| fish                                                     | The complete prompt is replaced.                                      |
+| Nushell main                                             | The complete prompt is replaced with its unreleased async prompt API. |
+| bash with [ble.sh](https://github.com/akinomyoga/ble.sh) | The complete prompt is replaced.                                      |
+| Stock Bash and other shells                              | The prompt remains synchronous.                                       |
+
+`bus` batches width-changing refinements for up to its configured delay;
+`adaptive` places those batches using timings from the current shell session.
+Width-stable changes apply immediately.
+
+`time`, `battery`, `memory_usage`, and `localip` refresh on these intervals,
+but only while visible and included in the prompt's format.
+
+### Options
+
+| Option     | Default | Description                             |
+| ---------- | ------- | --------------------------------------- |
+| `enabled`  | `true`  | Enable streaming refinements.           |
+| `bus`      | `100`   | Maximum grouping delay in milliseconds. |
+| `adaptive` | `true`  | Group refinements from session timings. |
+
+### `[async.dynamic]`
+
+| Option         | Default | Description                               |
+| -------------- | ------- | ----------------------------------------- |
+| `time`         | `1000`  | Clock refresh interval in milliseconds.   |
+| `battery`      | `30000` | Battery refresh interval in milliseconds. |
+| `memory_usage` | `5000`  | Memory refresh interval in milliseconds.  |
+| `localip`      | `30000` | Address refresh interval in milliseconds. |
+
+Intervals must be between 1 and 86,400,000 milliseconds. Invalid values retain
+their defaults. Disable a dynamic module with its own `disabled = true`.
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.

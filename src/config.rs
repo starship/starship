@@ -355,6 +355,26 @@ impl From<nu_ansi_term::Color> for Style {
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<Style> {
+    parse_style_string_with_palette(
+        style_string,
+        context.and_then(|context| {
+            get_palette(
+                &context.root_config.palettes,
+                context.root_config.palette.as_deref(),
+            )
+        }),
+    )
+}
+
+/// Parse a style string against an explicit palette rather than a [`Context`].
+///
+/// The palette is the only thing a style string depends on beyond itself, so
+/// this is style resolution without a running prompt; [`parse_style_string`]
+/// is this function with the palette read out of a context.
+pub fn parse_style_string_with_palette(
+    style_string: &str,
+    palette: Option<&Palette>,
+) -> Option<Style> {
     style_string
         .split_whitespace()
         .try_fold(Style::default(), |style, token| {
@@ -393,15 +413,7 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
                         None // fg:none yields no style.
                     } else {
                         // Either bg or valid color or both.
-                        let parsed = parse_color_string(
-                            color_string,
-                            context.and_then(|x| {
-                                get_palette(
-                                    &x.root_config.palettes,
-                                    x.root_config.palette.as_deref(),
-                                )
-                            }),
-                        );
+                        let parsed = parse_color_string(color_string, palette);
                         // bg + invalid color = reset the background to default.
                         if !col_fg && parsed.is_none() {
                             let mut new_style = style;
@@ -490,7 +502,8 @@ fn parse_color_string(
     predefined_color
 }
 
-fn get_palette<'a>(
+/// Look up the palette a configuration selects, if it selects one that exists.
+pub fn get_palette<'a>(
     palettes: &'a HashMap<String, Palette>,
     palette_name: Option<&str>,
 ) -> Option<&'a Palette> {
