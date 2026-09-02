@@ -132,244 +132,171 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<&
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
-    use nu_ansi_term::Color;
-    use std::fs::{self, File};
-    use std::io;
-    use std::io::Write;
+    use crate::test::{Project, RenderedModule, project};
+    use insta::assert_snapshot;
+    use rstest::rstest;
 
-    #[test]
-    fn folder_without_node_files() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-        dir.close()
+    /// The `format` that also surfaces the `engines` requirement, used by the
+    /// checks that care about how a mismatch is reported.
+    const FORMAT_WITH_ENGINES_VERSION: &str = "via [$symbol($version )($engines_version )]($style)";
+
+    /// A filesystem artifact that on its own must make the `nodejs` module
+    /// treat a directory as a Node.js project.
+    ///
+    /// Each variant becomes its own independently named, independently reported
+    /// test case, so a detection rule that regresses is identified by name
+    /// rather than hidden behind whichever rule happens to fail first.
+    #[derive(Clone, Copy, Debug)]
+    enum NodeProjectMarker {
+        PackageManifest,
+        NodeVersionFile,
+        NodeVersionManagerFile,
+        JavaScriptFile,
+        EcmaScriptModuleFile,
+        CommonJsModuleFile,
+        TypeScriptFile,
+        TypeScriptModuleFile,
+        CommonJsTypeScriptFile,
+        InstalledDependenciesDirectory,
     }
 
-    #[test]
-    fn folder_with_package_json() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("package.json"))?.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+    impl NodeProjectMarker {
+        /// Materializes this marker inside `project`.
+        fn create_in(self, project: &Project) {
+            match self {
+                Self::PackageManifest => project.create_file("package.json"),
+                Self::NodeVersionFile => project.create_file(".node-version"),
+                Self::NodeVersionManagerFile => project.create_file(".nvmrc"),
+                Self::JavaScriptFile => project.create_file("index.js"),
+                Self::EcmaScriptModuleFile => project.create_file("index.mjs"),
+                Self::CommonJsModuleFile => project.create_file("index.cjs"),
+                Self::TypeScriptFile => project.create_file("index.ts"),
+                Self::TypeScriptModuleFile => project.create_file("index.mts"),
+                Self::CommonJsTypeScriptFile => project.create_file("index.cts"),
+                Self::InstalledDependenciesDirectory => project.create_directory("node_modules"),
+            };
+        }
     }
 
-    #[test]
-    fn folder_with_package_json_and_esy_lock() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("package.json"))?.sync_all()?;
-        let esy_lock = dir.path().join("esy.lock");
-        fs::create_dir_all(esy_lock)?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-        dir.close()
+    /// A `package.json` declaring `engines.node` as `requirement`.
+    fn package_manifest_requiring_node(requirement: &str) -> String {
+        format!("{{\n  \"engines\": {{\n    \"node\": \"{requirement}\"\n  }}\n}}")
     }
 
-    #[test]
-    fn folder_with_node_version() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join(".node-version"))?.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+    #[rstest]
+    fn folder_without_node_files(project: Project) {
+        assert_eq!(project.render("nodejs"), RenderedModule::Empty);
     }
 
-    #[test]
-    fn folder_with_nvmrc() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join(".nvmrc"))?.sync_all()?;
+    #[rstest]
+    fn folder_with_node_project_marker(
+        project: Project,
+        #[values(
+            NodeProjectMarker::PackageManifest,
+            NodeProjectMarker::NodeVersionFile,
+            NodeProjectMarker::NodeVersionManagerFile,
+            NodeProjectMarker::JavaScriptFile,
+            NodeProjectMarker::EcmaScriptModuleFile,
+            NodeProjectMarker::CommonJsModuleFile,
+            NodeProjectMarker::TypeScriptFile,
+            NodeProjectMarker::TypeScriptModuleFile,
+            NodeProjectMarker::CommonJsTypeScriptFile,
+            NodeProjectMarker::InstalledDependenciesDirectory
+        )]
+        marker: NodeProjectMarker,
+    ) {
+        marker.create_in(&project);
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+        // Every marker must produce the very same rendering, so all cases share
+        // one inline snapshot. `allow_duplicates!` tells insta that repeated
+        // assertions against this location are intentional: under `cargo test`
+        // all cases run in one process, and insta otherwise rejects the second
+        // assertion at a given inline location as an accidental loop.
+        insta::allow_duplicates! {
+            assert_snapshot!(project.render("nodejs"), @r#""via \u{1b}[1;32m\u{e718} v12.0.0 \u{1b}[0m""#);
+        }
     }
 
-    #[test]
-    fn folder_with_js_file() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("index.js"))?.sync_all()?;
+    /// An `esy` project happens to carry a `package.json`, but belongs to the
+    /// `ocaml` module rather than to this one.
+    #[rstest]
+    fn folder_with_package_json_and_esy_lock(project: Project) {
+        project.create_file("package.json");
+        project.create_directory("esy.lock");
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+        assert_eq!(project.render("nodejs"), RenderedModule::Empty);
     }
 
-    #[test]
-    fn folder_with_mjs_file() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("index.mjs"))?.sync_all()?;
+    #[rstest]
+    fn engines_node_version_match(project: Project) {
+        project.write_file("package.json", &package_manifest_requiring_node(">=12.0.0"));
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+        assert_snapshot!(project.render("nodejs"), @r#""via \u{1b}[1;32m\u{e718} v12.0.0 \u{1b}[0m""#);
     }
 
-    #[test]
-    fn folder_with_cjs_file() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("index.cjs"))?.sync_all()?;
+    /// A version outside the declared `engines` range must switch the module
+    /// over to `not_capable_style`.
+    #[rstest]
+    fn engines_node_version_not_match(project: Project) {
+        project.write_file("package.json", &package_manifest_requiring_node("<12.0.0"));
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
+        assert_snapshot!(project.render("nodejs"), @r#""via \u{1b}[1;31m\u{e718} v12.0.0 \u{1b}[0m""#);
     }
 
-    #[test]
-    fn folder_with_ts_file() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("index.ts"))?.sync_all()?;
+    #[rstest]
+    fn show_expected_version_when_engines_does_not_match(project: Project) {
+        project.write_file("package.json", &package_manifest_requiring_node("<=11.0.0"));
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn folder_with_node_modules() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let node_modules = dir.path().join("node_modules");
-        fs::create_dir_all(node_modules)?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn engines_node_version_match() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let mut file = File::create(dir.path().join("package.json"))?;
-        file.write_all(
-            b"{
-            \"engines\":{
-                \"node\":\">=12.0.0\"
-            }
-        }",
-        )?;
-        file.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn engines_node_version_not_match() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let mut file = File::create(dir.path().join("package.json"))?;
-        file.write_all(
-            b"{
-            \"engines\":{
-                \"node\":\"<12.0.0\"
-            }
-        }",
-        )?;
-        file.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" v12.0.0 ")));
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn show_expected_version_when_engines_does_not_match() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let mut file = File::create(dir.path().join("package.json"))?;
-        file.write_all(
-            b"{
-            \"engines\":{
-                \"node\":\"<=11.0.0\"
-            }
-        }",
-        )?;
-        file.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs")
-            .path(dir.path())
+        let rendered = project
+            .renderer("nodejs")
             .config(toml::toml! {
                 [nodejs]
-                format = "via [$symbol($version )($engines_version )]($style)"
+                format = FORMAT_WITH_ENGINES_VERSION
             })
             .collect();
-        let expected = Some(format!(
-            "via {}",
-            Color::Red.bold().paint(" v12.0.0 <=11.0.0 ")
-        ));
 
-        assert_eq!(expected, actual);
-        dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""via \u{1b}[1;31m\u{e718} v12.0.0 <=11.0.0 \u{1b}[0m""#);
     }
 
-    #[test]
-    fn do_not_show_expected_version_if_engines_match() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let mut file = File::create(dir.path().join("package.json"))?;
-        file.write_all(
-            b"{
-            \"engines\":{
-                \"node\":\">=12.0.0\"
-            }
-        }",
-        )?;
-        file.sync_all()?;
+    #[rstest]
+    fn do_not_show_expected_version_if_engines_match(project: Project) {
+        project.write_file("package.json", &package_manifest_requiring_node(">=12.0.0"));
 
-        let actual = ModuleRenderer::new("nodejs")
-            .path(dir.path())
-            .config(toml::toml! [
-                [nodejs]
-                format = "via [$symbol($version )($engines_version )]($style)"
-            ])
-            .collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
-
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn do_not_show_expected_version_if_no_set_engines_version() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("package.json"))?.sync_all()?;
-
-        let actual = ModuleRenderer::new("nodejs")
-            .path(dir.path())
+        let rendered = project
+            .renderer("nodejs")
             .config(toml::toml! {
                 [nodejs]
-                format = "via [$symbol($version )($engines_version )]($style)"
+                format = FORMAT_WITH_ENGINES_VERSION
             })
             .collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
 
-        assert_eq!(expected, actual);
-        dir.close()
+        assert_snapshot!(RenderedModule::from(rendered), @r#""via \u{1b}[1;32m\u{e718} v12.0.0 \u{1b}[0m""#);
     }
 
-    #[test]
-    fn no_node_installed() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("index.js"))?.sync_all()?;
-        let actual = ModuleRenderer::new("nodejs")
-            .path(dir.path())
+    #[rstest]
+    fn do_not_show_expected_version_if_no_set_engines_version(project: Project) {
+        project.create_file("package.json");
+
+        let rendered = project
+            .renderer("nodejs")
+            .config(toml::toml! {
+                [nodejs]
+                format = FORMAT_WITH_ENGINES_VERSION
+            })
+            .collect();
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""via \u{1b}[1;32m\u{e718} v12.0.0 \u{1b}[0m""#);
+    }
+
+    #[rstest]
+    fn no_node_installed(project: Project) {
+        project.create_file("index.js");
+
+        let rendered = project
+            .renderer("nodejs")
             .cmd("node --version", None)
             .collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" ")));
-        assert_eq!(expected, actual);
-        dir.close()
+
+        assert_snapshot!(RenderedModule::from(rendered), @r#""via \u{1b}[1;32m\u{e718} \u{1b}[0m""#);
     }
 }

@@ -1,6 +1,7 @@
 use indexmap::IndexMap;
 use serde::{self, Deserialize, Serialize};
 
+pub mod asynchronous;
 pub mod aws;
 pub mod azure;
 pub mod battery;

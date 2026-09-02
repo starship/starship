@@ -1,5 +1,4 @@
 use clap::{ValueEnum, builder::PossibleValue};
-use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use regex::Regex;
 use std::collections::BTreeSet;
@@ -12,13 +11,12 @@ use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
-use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
-use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::ALL_MODULES;
 use crate::module::Module;
+use crate::module::painted::TerminalWidth;
 use crate::modules;
-use crate::segment::Segment;
+use crate::plan::{ModuleName, Plan, PromptConfiguration, modules_expanded_by_all};
 use crate::shadow;
 use crate::utils::wrap_colorseq_for_shell;
 
@@ -90,17 +88,26 @@ pub fn prompt_with_claude_code(args: Properties, target: Target) {
     write!(handle, "{}", get_prompt(&context)).unwrap();
 }
 
+/// What starship shows instead of a prompt under a terminal that cannot render
+/// one.
+pub const DUMB_TERMINAL_PROMPT: &str = "Starship disabled due to TERM=dumb > ";
+
+/// Whether the terminal starship is running under can render a prompt at all.
+///
+/// A `dumb` terminal has no cursor addressing or rendition, so neither a
+/// styled prompt nor an incremental repaint means anything there.
+pub fn is_dumb_terminal() -> bool {
+    std::env::var_os("TERM").is_some_and(|term| term == "dumb")
+}
+
 pub fn get_prompt(context: &Context) -> String {
     let config = &context.root_config;
     let mut buf = String::new();
 
-    match std::env::var_os("TERM") {
-        Some(term) if term == "dumb" => {
-            log::error!("Under a 'dumb' terminal (TERM=dumb).");
-            buf.push_str("Starship disabled due to TERM=dumb > ");
-            return buf;
-        }
-        _ => {}
+    if is_dumb_terminal() {
+        log::error!("Under a 'dumb' terminal (TERM=dumb).");
+        buf.push_str(DUMB_TERMINAL_PROMPT);
+        return buf;
     }
 
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
@@ -109,48 +116,23 @@ pub fn get_prompt(context: &Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let (formatter, modules) = load_formatter_and_modules(context);
-
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
+    // The prompt is built in two steps: a plan, which follows from
+    // configuration alone, and then the module output that fills its slots.
+    let plan = Plan::build(&prompt_configuration(context));
+    let state = crate::render::fill_slots(&plan, context);
 
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
+    root_module.set_segments(state.render());
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    let painted = root_module.paint_for_width(Some(TerminalWidth(context.width)));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
+    // Painting strips redundant ANSI color sequences, so apply it before modifying the ANSI
     // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    let shell_wrapped_output = wrap_colorseq_for_shell(painted.to_string(), context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -195,9 +177,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
-                .to_string()
-                .replace('\n', "\\n"),
+            value: module.paint().to_string().replace('\n', "\\n"),
             duration: module.duration,
             duration_len: format_duration(&module.duration).width_graphemes(),
         })
@@ -244,7 +224,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
+                value: module.paint().to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
@@ -319,20 +299,36 @@ pub fn explain(args: Properties) {
     }
 }
 
+/// The configuration a prompt's [`Plan`] is built from.
+///
+/// This is the only place a [`Context`] is taken apart into the configuration a
+/// plan is allowed to see; [`Plan::build`] itself has no way back to one.
+pub fn prompt_configuration<'context>(
+    context: &'context Context<'_>,
+) -> PromptConfiguration<'context> {
+    PromptConfiguration::new(
+        &context.config,
+        &context.root_config,
+        context.destination(),
+        &context.target,
+    )
+}
+
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
-    let (_formatter, modules) = load_formatter_and_modules(context);
+    let plan = Plan::build(&prompt_configuration(context));
+    let modules = plan.referenced_modules();
 
-    for module in &modules {
+    for module in modules {
         // Manually add all modules if `$all` is encountered
-        if module == "all" {
-            for module in all_modules_uniq(&modules) {
-                let modules = handle_module(&module, context, &modules);
+        if module.as_str() == "all" {
+            for module in modules_expanded_by_all(modules) {
+                let modules = handle_module(module.as_str(), context, modules);
                 prompt_order.extend(modules);
             }
         } else {
-            let modules = handle_module(module, context, &modules);
+            let modules = handle_module(module.as_str(), context, modules);
             prompt_order.extend(modules);
         }
     }
@@ -340,10 +336,10 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     prompt_order
 }
 
-fn handle_module<'a>(
+pub fn handle_module<'a>(
     module: &str,
     context: &'a Context,
-    module_list: &BTreeSet<String>,
+    module_list: &BTreeSet<ModuleName>,
 ) -> Vec<Module<'a>> {
     let mut modules: Vec<Module> = Vec::new();
 
@@ -397,9 +393,9 @@ fn should_add_implicit_module(
     parent_module: &str,
     child_module: &str,
     config: &toml::Value,
-    module_list: &BTreeSet<String>,
+    module_list: &BTreeSet<ModuleName>,
 ) -> bool {
-    let explicit_module_name = format!("{parent_module}.{child_module}");
+    let explicit_module_name = ModuleName::new(format!("{parent_module}.{child_module}"));
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
@@ -422,89 +418,6 @@ pub fn format_duration(duration: &Duration) -> String {
         "<1ms".to_string()
     } else {
         format!("{milis:?}ms")
-    }
-}
-
-/// Return the modules from $all that are not already in the list
-fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
-    let mut prompt_order: Vec<String> = Vec::new();
-    for module in PROMPT_ORDER {
-        if !module_list.contains(*module) {
-            prompt_order.push(String::from(*module));
-        }
-    }
-
-    prompt_order
-}
-
-/// Load the correct formatter for the context (ie left prompt or right prompt)
-/// and the list of all modules used in a format string
-fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
-    let config = &context.root_config;
-
-    if context.target == Target::Continuation {
-        let cf = &config.continuation_prompt;
-        let formatter = StringFormatter::new(cf);
-        return match formatter {
-            Ok(f) => {
-                let modules = f.get_variables().into_iter().collect();
-                (f, modules)
-            }
-            Err(e) => {
-                log::error!("Error parsing continuation prompt: {e}");
-                (StringFormatter::raw(">"), BTreeSet::new())
-            }
-        };
-    }
-
-    let (left_format_str, right_format_str): (&str, &str) = match context.target {
-        Target::Main | Target::Right => (&config.format, &config.right_format),
-        Target::Profile(ref name) => {
-            if let Some(lf) = config
-                .user_profiles
-                .get(name)
-                .or_else(|| config.internal_profiles.get(name))
-            {
-                (lf, "")
-            } else {
-                log::error!("Profile {name:?} not found");
-                return (StringFormatter::raw(">"), BTreeSet::new());
-            }
-        }
-        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
-    };
-
-    let lf = StringFormatter::new(left_format_str);
-    let rf = StringFormatter::new(right_format_str);
-
-    if let Err(ref e) = lf {
-        let name = if let Target::Profile(ref profile_name) = context.target {
-            format!("profile.{profile_name}")
-        } else {
-            "format".to_string()
-        };
-        log::error!("Error parsing {name:?}: {e}");
-    }
-
-    if let Err(ref e) = rf {
-        log::error!("Error parsing right_format: {e}");
-    }
-
-    let modules = [&lf, &rf]
-        .into_iter()
-        .flatten()
-        .flat_map(VariableHolder::get_variables)
-        .collect();
-
-    let main_formatter = match context.target {
-        Target::Main | Target::Profile(_) => lf,
-        Target::Right => rf,
-        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
-    };
-
-    match main_formatter {
-        Ok(f) => (f, modules),
-        _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
 }
 
@@ -599,6 +512,10 @@ mod test {
                 format="$all"
                 [character]
                 format=">"
+                // `battery` reads real hardware; disable it so this doesn't
+                // depend on the developer's laptop charge level.
+                [battery]
+                disabled = true
         });
         context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();
@@ -617,6 +534,9 @@ mod test {
             right_format="$all"
             [character]
             format=">"
+            // See `prompt_with_all`: `battery` reads real hardware.
+            [battery]
+            disabled = true
         });
         context.env.insert("HOME", NULL_DEVICE.to_string());
         let dir = tempfile::tempdir().unwrap();

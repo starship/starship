@@ -10,5 +10,6 @@ typ = "typ"
 extentions = "extentions" # TODO: should be extensions
 worl = "worl" # typo on purpose
 rela = "rela"
+awsome = "awsome" # typo on purpose: an aws-lookalike module name that must not parse
 [files]
 extend-exclude = ["CHANGELOG.md", "docs/*"]
