@@ -3037,13 +3037,14 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ### Options
 
-| Option      | Default                                        | Description                                              |
-| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                          | The style for the module.                                |
-| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
+| Option          | Default                                        | Description                                              |
+| --------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `threshold`     | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
+| `show_decimals` | false                                          | Show decimal values in memory usage.                     |
+| `format`        | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
+| `symbol`        | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
+| `style`         | `'bold dimmed white'`                          | The style for the module.                                |
+| `disabled`      | `true`                                         | Disables the `memory_usage` module.                      |
 
 ### Variables
 

@@ -1097,6 +1097,7 @@
       "$ref": "#/$defs/MemoryConfig",
       "default": {
         "threshold": 75,
+        "show_decimals": false,
         "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
         "symbol": "🐏 ",
@@ -4937,6 +4938,10 @@
           "type": "integer",
           "format": "int64",
           "default": 75
+        },
+        "show_decimals": {
+          "type": "boolean",
+          "default": false
         },
         "format": {
           "type": "string",
