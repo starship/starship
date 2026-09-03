@@ -210,20 +210,26 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                                                                                                        |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| Option            | Default                        | Description                                                                                                                                                                                                      |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                                              |
+| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                                               |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                                                            |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                                                     |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                                                        |
+| `osc_133`         | `false`                        | Emit [OSC 133](https://gitlab.freedesktop.org/Per_Bothner/specifications/-/blob/master/proposals/semantic-prompts.md) semantic-prompt escape sequences (A/B/D from the prompt). |
+| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions.                               |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                   |
 
 > [!TIP]
 > If you have symlinks to networked filesystems, consider setting
 > `follow_symlinks` to `false`.
+
+> [!NOTE]
+> `osc_133` is read at `starship init <shell>` time, so re-source your
+> shell after toggling it. The `C` (start of command output) marker is
+> not supported.
 
 ### Example
 
