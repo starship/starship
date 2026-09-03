@@ -24,6 +24,7 @@ pub struct SubstitutionConfig<'a> {
 #[serde(default)]
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
+    pub truncation_width: i64,
     pub truncate_to_repo: bool,
     pub substitutions: Either<Vec<SubstitutionConfig<'a>>, IndexMap<String, &'a str>>,
     pub fish_style_pwd_dir_length: i64,
@@ -54,6 +55,7 @@ impl Default for DirectoryConfig<'_> {
     fn default() -> Self {
         Self {
             truncation_length: 3,
+            truncation_width: 0,
             truncate_to_repo: true,
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
