@@ -1,146 +1,166 @@
-function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish job groups (or legacy PIDs if toggled)'
-    # To force legacy behavior (process PIDs), set this variable to "false":
-    #   set -g __starship_fish_use_job_groups "false"
-    if test "$__starship_fish_use_job_groups" = "false"
-        # Legacy behavior: counts PIDs (may overcount pipelines with terminated producers)
-        set -g STARSHIP_JOBS (jobs -p 2>/dev/null | count)
-    else
-        # Default behavior: count job groups
-        set -g STARSHIP_JOBS (jobs -g 2>/dev/null | count)
-    end    
+## Re-sourcing wipes any earlier session's streams and temp files.
+functions -q __starship_stream_cleanup; and __starship_stream_cleanup
+
+set -g __starship_stream_prompt '' ''
+set -g __starship_stream_worker ''
+set -g __starship_transient 0 0
+set -g __starship_prompt_arguments
+
+# Pid-keyed dir holding one file, because one renderer draws both sides. Not a
+# fifo: fish `exec` replaces the shell (no held pipe fd) and `read` has no
+# timeout, so a fifo cannot be drained after coalesced SIGUSR1. Atomic rename +
+# `left\0right\0timings\0` never blocks or tears; COMPLETE timings ride as the
+# last field of the same record so a later paint cannot wipe them.
+set -g __starship_d /tmp/starship-$fish_pid
+set -q TMPDIR; and set -g __starship_d $TMPDIR/starship-$fish_pid
+test -d $__starship_d; or command mkdir -p -- $__starship_d
+set -g __starship_state $__starship_d/prompt
+
+function __starship_stream_update --on-signal USR1
+    test -n "$__starship_stream_worker"; and test -f $__starship_state; or return
+    # Both sides come out of the one record. Their statuses are not checked: an
+    # empty side is an ordinary reading, and the rename that published this made
+    # all three fields current together.
+    begin
+        read -z left
+        read -z right
+    end <$__starship_state
+    set -g __starship_stream_prompt[1] "$left"
+    set -g __starship_stream_prompt[2] "$right"
+    test -n "$__starship_in_prompt"; or contains -- 1 $__starship_transient; or commandline -f repaint
 end
 
-function fish_prompt
-    switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings
-            set STARSHIP_KEYMAP "$fish_bind_mode"
-        case '*'
-            set STARSHIP_KEYMAP insert
+# One renderer, so one pid to stop — and `kill` not being a fish builtin, one
+# fork to stop it instead of the two this used to cost.
+function __starship_stream_stop
+    set -l worker $__starship_stream_worker
+    set -g __starship_stream_worker ''
+    test -n "$worker"; and test "$worker" != sync; and command kill $worker 2>/dev/null
+end
+
+function __starship_stream_cleanup --on-event fish_exit
+    __starship_stream_stop
+    command rm -r -- $__starship_d
+end
+
+function __starship_stream_start
+    __starship_stream_stop
+    # The record is `left\0right\0timings\0`; only the timings are wanted here,
+    # but `read` takes one NUL field per call, so the two leading fields go to a
+    # throwaway to reach the third. Not `read -z _`: `$_` is read-only in fish,
+    # so that errored every prompt the file survived — which, before the snapshot
+    # outlived a draw, was never.
+    set -l timings discarded
+    test -f $__starship_state; and begin
+        read -z discarded
+        read -z discarded
+        read -z timings
+    end <$__starship_state
+    # `--detach` forks the renderer into the background before it does any work
+    # and hands its first paint and its pid back up this pipeline, so this read
+    # *is* the handshake: it blocks for exactly as long as that paint takes.
+    #
+    # fish cannot do better than poll otherwise — it holds no pipe across a
+    # prompt and its `read` has no timeout — and polling cost a `sleep` fork
+    # plus a whole tick of latency for a paint that lands in single-digit
+    # milliseconds. Nothing here clears the snapshot first either: the first
+    # paint arrives on the pipe, not out of the file, so a stale one cannot be
+    # mistaken for it.
+    ::STARSHIP:: stream --both --detach --publish-state=$__starship_state \
+        --signal-pid=$fish_pid --timings="$timings" $argv 2>/dev/null | begin
+        read -z left
+        read -z right
+        read -z worker
     end
+    if test -n "$worker"
+        set -g __starship_stream_prompt[1] "$left"
+        set -g __starship_stream_prompt[2] "$right"
+        set -g __starship_stream_worker $worker
+        return
+    end
+    # No first paint: render both sides synchronously and mark the stream served
+    # so this draw does not retry.
+    ::STARSHIP:: prompt $argv | read -z left
+    ::STARSHIP:: prompt --right $argv | read -z right
+    set -g __starship_stream_prompt[1] "$left"
+    set -g __starship_stream_prompt[2] "$right"
+    set -g __starship_stream_worker sync
+end
 
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
-    set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
+function __starship_stream_preexec --on-event fish_preexec
+    __starship_stream_stop
+    set -g __starship_stream_prompt '' ''
+    set -g __starship_prompt_arguments
+end
 
-    __starship_set_job_count
-
-    if contains -- --final-rendering $argv; or test "$TRANSIENT" = "1"
-        if test "$TRANSIENT" = "1"
-            set -g TRANSIENT 0
-            # Clear from cursor to end of screen as `commandline -f repaint` does not do this
-            # See https://github.com/fish-shell/fish-shell/issues/8418
-            printf \e\[0J
+function __starship_prompt --a side
+    set -g __starship_in_prompt 1
+    set -l command_pipestatus $pipestatus
+    set -l command_status $status
+    if not set -q __starship_prompt_arguments[1]
+        set -l keymap insert
+        contains -- "$fish_key_bindings" fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_key_bindings; and set keymap "$fish_bind_mode"
+        # Job groups by default; force legacy PIDs:
+        #   set -g __starship_fish_use_job_groups "false"
+        set -l mode -g
+        test "$__starship_fish_use_job_groups" = false; and set mode -p
+        set -g __starship_prompt_arguments --terminal-width="$COLUMNS" --status="$command_status" \
+            --pipestatus="$command_pipestatus" --keymap="$keymap" --cmd-duration="$CMD_DURATION$cmd_duration" \
+            --jobs=(count (jobs $mode 2>/dev/null))
+    end
+    set -l arguments $__starship_prompt_arguments
+    if contains -- --final-rendering $argv; or test "$__starship_transient[$side]" = 1
+        if test "$__starship_transient[$side]" = 1
+            set -g __starship_transient[$side] 0
+            test $side -eq 1; and printf \e\[0J
         end
-        if type -q starship_transient_prompt_func
-            starship_transient_prompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
-        else
+        set -l transients starship_transient_prompt_func starship_transient_rprompt_func
+        if functions -q $transients[$side]
+            $transients[$side] $arguments
+        else if test $side -eq 1
             printf "\e[1;32m❯\e[0m "
         end
-    else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        set -e __starship_in_prompt
+        return
     end
+    test -n "$__starship_stream_worker"; or __starship_stream_start $arguments
+    printf %s "$__starship_stream_prompt[$side]"
+    set -e __starship_in_prompt
 end
 
-function fish_right_prompt
-    switch "$fish_key_bindings"
-        case fish_hybrid_key_bindings fish_vi_key_bindings fish_helix_keybindings
-            set STARSHIP_KEYMAP "$fish_bind_mode"
-        case '*'
-            set STARSHIP_KEYMAP insert
-    end
+function fish_prompt; __starship_prompt 1 $argv; end
+function fish_right_prompt; __starship_prompt 2 $argv; end
 
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
-    # Account for changes in variable name between v2.7 and v3.0
-    set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-
-    # Now it's safe to call job count function (after status capture)
-    __starship_set_job_count
-
-    if contains -- --final-rendering $argv; or test "$RIGHT_TRANSIENT" = "1"
-        set -g RIGHT_TRANSIENT 0
-        if type -q starship_transient_rprompt_func
-            starship_transient_rprompt_func --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
-        else
-            printf ""
-        end
-    else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
-    end
-end
-
-# Disable virtualenv prompt, it breaks starship
 set -g VIRTUAL_ENV_DISABLE_PROMPT 1
-
-# Remove default mode prompt
 builtin functions -e fish_mode_prompt
+set -gx STARSHIP_SHELL fish
 
-set -gx STARSHIP_SHELL "fish"
-
-# Transience related functions
 function __starship_reset_transient --on-event fish_postexec
-    set -g TRANSIENT 0
-    set -g RIGHT_TRANSIENT 0
+    set -g __starship_transient 0 0
 end
 
+# fish >= 4.1 uses the `fish_transient_prompt` builtin; older fish binds Enter.
 function __starship_transient_execute
-    if commandline --is-valid || test -z (commandline | string collect) && not commandline --paging-mode
-        set -g TRANSIENT 1
-        set -g RIGHT_TRANSIENT 1
+    if commandline --is-valid; and not commandline --paging-mode
+        set -g __starship_transient 1 1
         commandline -f repaint
     end
     commandline -f execute
 end
 
-function __starship_fish_version_at_least --description 'Check if fish version is at least the given version'
-    set -l parts (string split '.' $FISH_VERSION)
-    set -l major $parts[1]
-    set -l minor 0
-    if set -q parts[2]
-        set minor $parts[2]
-    end
+set -l v (string split . $FISH_VERSION)
+set -g __starship_transient_builtin (test $v[1] -gt 4; or test $v[1] -eq 4 -a $v[2] -ge 1; and echo 1)
 
-    set req_parts (string split '.' $argv[1])
-    set req_major $req_parts[1]
-    set req_minor 0
-    if set -q req_parts[2]
-        set req_minor $req_parts[2]
-    end
-
-    if test $major -gt $req_major
-        return 0
-    else if test $major -eq $req_major -a $minor -ge $req_minor
-        return 0
-    else
-        return 1
-    end
-end
-
-# --user is the default, but listed anyway to make it explicit.
 function enable_transience --description 'enable transient prompt keybindings'
-    # fish >= 4.1 has transient prompt support built
-    if __starship_fish_version_at_least 4.1
-        set -g fish_transient_prompt 1
-        return
-    end
+    test -n "$__starship_transient_builtin"; and set -g fish_transient_prompt 1; and return
     bind --user \r __starship_transient_execute
     bind --user -M insert \r __starship_transient_execute
 end
 
-# Erase the transient prompt related key bindings.
-# --user is the default, but listed anyway to make it explicit.
-# Erasing a user binding will revert to the preset.
 function disable_transience --description 'remove transient prompt keybindings'
-    # fish >= 4.1 has transient prompt support built
-    if __starship_fish_version_at_least 4.1
-        set -g fish_transient_prompt 0
-        return
-    end
+    test -n "$__starship_transient_builtin"; and set -g fish_transient_prompt 0; and return
     bind --user -e \r
     bind --user -M insert -e \r
 end
 
-# Set up the session key that will be used to store logs
-# We don't use `random [min] [max]` because it is unavailable in older versions of fish shell
-set -gx STARSHIP_SESSION_KEY (string sub -s1 -l16 (random)(random)(random)(random)(random)0000000000000000)
+set -gx STARSHIP_SESSION_KEY (random 1000000000000000 9999999999999999)

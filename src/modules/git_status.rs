@@ -2,7 +2,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use crate::{context, num_configured_starship_threads, num_rayon_threads};
+use crate::{context, max_worktree_walk_threads, num_configured_starship_threads};
 use gix::bstr::ByteVec;
 use gix::status::Submodule;
 use regex::Regex;
@@ -414,7 +414,7 @@ fn get_repo_status(
                         3,
                     ))
                 } else {
-                    Some(num_rayon_threads())
+                    Some(max_worktree_walk_threads())
                 };
                 if config.untracked.is_empty() {
                     opts.dirwalk_options.take();

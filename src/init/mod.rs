@@ -51,6 +51,12 @@ impl StarshipPath {
             .map(|s| format!("'{s}'"))
     }
 
+    /// Python string literal for Xonsh's subprocess API.
+    fn sprint_xonsh(&self) -> io::Result<String> {
+        self.str_path()
+            .and_then(|path| serde_json::to_string(path).map_err(io::Error::other))
+    }
+
     /// `Elvish` specific path escaping
     fn sprint_elv(&self) -> io::Result<String> {
         // Prefix with `e:` to force elvish to interpret it as an executable path
@@ -227,7 +233,9 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_elv()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
-        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "nu" => print_script(NU_INIT, &starship_path.sprint()?),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_xonsh()?),
+        "cmd" => print_script(CMDEXE_INIT, &starship_path.sprint_cmdexe()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -297,6 +305,18 @@ mod tests {
             native_path: PathBuf::from(r"C:\'starship.exe"),
         };
         assert_eq!(starship_path.sprint_pwsh()?, r"'C:\''starship.exe'");
+        Ok(())
+    }
+
+    #[test]
+    fn escape_xonsh() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from("C:\\Cool Tools\\starship\".exe"),
+        };
+        assert_eq!(
+            starship_path.sprint_xonsh()?,
+            r#""C:\\Cool Tools\\starship\".exe""#
+        );
         Ok(())
     }
 
