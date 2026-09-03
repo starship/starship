@@ -503,19 +503,20 @@ style = "bold red"
 
 #### Variables
 
-| Variable                   | Example | Description                                           |
-| -------------------------- | ------- | ----------------------------------------------------- |
-| gauge                      | `██▒░░` | Visual representation of context usage                |
-| percentage                 | `65%`   | Context usage as a percentage                         |
-| input_tokens               | `45.2k` | Total input tokens in conversation                    |
-| output_tokens              | `12.3k` | Total output tokens in conversation                   |
-| curr_input_tokens          | `5.1k`  | Input tokens from most recent API call                |
-| curr_output_tokens         | `1.2k`  | Output tokens from most recent API call               |
-| curr_cache_creation_tokens | `1.5k`  | Cache creation tokens from most recent API call       |
-| curr_cache_read_tokens     | `23.4k` | Cache read tokens from most recent API call           |
-| total_tokens               | `200k`  | Total context window size                             |
-| symbol                     |         | Mirrors the value of option `symbol`                  |
-| style\*                    |         | Mirrors the style from the matching display threshold |
+| Variable                   | Example                                | Description                                           |
+| -------------------------- | -------------------------------------- | ----------------------------------------------------- |
+| gauge                      | `██▒░░`                                | Visual representation of context usage                |
+| percentage                 | `65%`                                  | Context usage as a percentage                         |
+| input_tokens               | `45.2k`                                | Total input tokens in conversation                    |
+| output_tokens              | `12.3k`                                | Total output tokens in conversation                   |
+| curr_input_tokens          | `5.1k`                                 | Input tokens from most recent API call                |
+| curr_output_tokens         | `1.2k`                                 | Output tokens from most recent API call               |
+| curr_cache_creation_tokens | `1.5k`                                 | Cache creation tokens from most recent API call       |
+| curr_cache_read_tokens     | `23.4k`                                | Cache read tokens from most recent API call           |
+| total_tokens               | `200k`                                 | Total context window size                             |
+| session_id                 | `9218cba7-871e-4bd8-9687-e9b902346cb3` | The ID of the current Claude Code session             |
+| symbol                     |                                        | Mirrors the value of option `symbol`                  |
+| style\*                    |                                        | Mirrors the style from the matching display threshold |
 
 \*: This variable can only be used as a part of a style string
 
