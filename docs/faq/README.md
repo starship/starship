@@ -129,6 +129,30 @@ Unfortunately, getting font configuration correct is sometimes difficult. Users
 on the Discord may be able to help. If both symbols display correctly, but
 you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
+## Why does my background color bleed on wrapped lines?
+
+A lot of terminal emulators (such as xterm, konsole, foot, wezterm, ghostty, rio) have a rendering bug where, if a prompt line with background colors soft-wraps, the background color at the wrap point [bleeds across the rest of the wrapped line](https://stackoverflow.com/questions/53740460/ansi-escape-code-weird-behavior-at-end-of-line), ignoring subsequent color changes and resets.
+
+This is most visible with powerline-style presets that use colored segments. The workaround is to add a custom module that emits an ANSI escape sequence to reset the background color and erase to end of line:
+
+```toml
+# Add $erase_line to the format string where you want the background to reset,
+# typically right before $line_break:
+format = """
+...\
+${custom.erase_line}\
+$line_break$character"""
+
+[custom.erase_line]
+description = "Resets background color and erases to end of line"
+command = "printf '\\e[49m\\e[K'"
+when = true
+format = "$output"
+shell = ["sh"]
+```
+
+`\e[49m` resets the background color to the terminal default, and `\e[K` erases from the cursor to the end of the line using that default background. Together they prevent the color bleed.
+
 ## How do I uninstall Starship?
 
 Starship is just as easy to uninstall as it is to install in the first place.
