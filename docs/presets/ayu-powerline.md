@@ -4,7 +4,7 @@
 
 This preset is a minimally modified version of [Catppuccin Powerline](./catppuccin-powerline.md) using the [Ayu](https://github.com/ayu-theme/ayu-colors) color palette.
 
-![Screenshot of Ayu Powerline preset](/presets/img/ayu-powerline.png)
+![Screenshot of Ayu Powerline preset](/presets/img/ayu-powerline-all-flavors.png)
 
 ### Prerequisites
 
