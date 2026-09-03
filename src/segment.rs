@@ -16,12 +16,21 @@ pub struct TextSegment {
 }
 
 impl TextSegment {
-    // Returns the AnsiString of the segment value
-    fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
-        match self.style {
-            Some(style) => style.to_ansi_style(prev).paint(&self.value),
-            None => AnsiString::from(&self.value),
-        }
+    pub(crate) fn is_empty(&self) -> bool {
+        self.value.is_empty()
+    }
+
+    /// The segment's style before any `prev_fg`/`prev_bg` reference in it has
+    /// been resolved.
+    pub(crate) fn symbolic_style(&self) -> Option<Style> {
+        self.style
+    }
+
+    fn ansi_string(&self, previous: Option<&AnsiStyle>) -> AnsiString<'_> {
+        self.style.map_or_else(
+            || AnsiString::from(&self.value),
+            |style| style.to_ansi_style(previous).paint(&self.value),
+        )
     }
 }
 
@@ -36,23 +45,39 @@ pub struct FillSegment {
 }
 
 impl FillSegment {
-    // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
-        let s = match width {
-            Some(w) => self
+    /// The segment's style before any `prev_fg`/`prev_bg` reference in it has
+    /// been resolved.
+    pub(crate) fn symbolic_style(&self) -> Option<Style> {
+        self.style
+    }
+
+    /// Repeats the fill's value until it occupies `width` terminal cells,
+    /// stopping before any grapheme that would overshoot. Without a width the
+    /// value is used as it stands.
+    pub(crate) fn expand(&self, width: Option<usize>) -> String {
+        match width {
+            Some(width) => self
                 .value
                 .graphemes(true)
                 .cycle()
-                .scan(0usize, |len, g| {
-                    *len += Grapheme(g).width();
-                    if *len <= w { Some(g) } else { None }
+                .scan(0usize, |used, grapheme| {
+                    *used += Grapheme(grapheme).width();
+                    if *used <= width { Some(grapheme) } else { None }
                 })
-                .collect::<String>(),
+                .collect(),
             None => String::from(&self.value),
-        };
+        }
+    }
+
+    pub fn ansi_string(
+        &self,
+        width: Option<usize>,
+        previous: Option<&AnsiStyle>,
+    ) -> AnsiString<'_> {
+        let text = self.expand(width);
         match self.style {
-            Some(style) => style.to_ansi_style(prev).paint(s),
-            None => AnsiString::from(s),
+            Some(style) => style.to_ansi_style(previous).paint(text),
+            None => AnsiString::from(text),
         }
     }
 }
@@ -60,12 +85,9 @@ impl FillSegment {
 #[cfg(test)]
 mod fill_seg_tests {
     use super::FillSegment;
-    use nu_ansi_term::Color;
-
     #[test]
-    fn ansi_string_width() {
+    fn expansion_respects_terminal_width() {
         let width: usize = 10;
-        let style = Color::Blue.bold();
 
         let inputs = vec![
             (".", ".........."),
@@ -78,10 +100,9 @@ mod fill_seg_tests {
         for (text, expected) in &inputs {
             let f = FillSegment {
                 value: String::from(*text),
-                style: Some(style.into()),
+                style: None,
             };
-            let actual = f.ansi_string(Some(width), None);
-            assert_eq!(style.paint(*expected), actual);
+            assert_eq!(*expected, f.expand(Some(width)));
         }
     }
 }
@@ -95,6 +116,13 @@ pub enum Segment {
 }
 
 impl Segment {
+    pub(crate) fn text(style: Option<Style>, value: impl Into<String>) -> Self {
+        Self::Text(TextSegment {
+            style,
+            value: value.into(),
+        })
+    }
+
     /// Creates new segments from a text with a style; breaking out `LineTerminators`.
     pub fn from_text<T>(style: Option<Style>, value: T) -> Vec<Self>
     where
@@ -105,10 +133,7 @@ impl Segment {
             if !segs.is_empty() {
                 segs.push(Self::LineTerm);
             }
-            segs.push(Self::Text(TextSegment {
-                value: String::from(s),
-                style,
-            }));
+            segs.push(Self::text(style, s));
         });
         segs
     }
@@ -126,13 +151,13 @@ impl Segment {
 
     pub fn style(&self) -> Option<AnsiStyle> {
         match self {
-            Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
-            Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
+            Self::Text(text) => text.style.map(|style| style.to_ansi_style(None)),
+            Self::Fill(fill) => fill.style.map(|style| style.to_ansi_style(None)),
             Self::LineTerm => None,
         }
     }
 
-    pub fn set_style_if_empty(&mut self, style: Option<Style>) {
+    pub(crate) fn set_style_if_empty(&mut self, style: Option<Style>) {
         match self {
             Self::Fill(fs) => {
                 if fs.style.is_none() {
@@ -148,7 +173,7 @@ impl Segment {
         }
     }
 
-    pub fn value(&self) -> &str {
+    pub(crate) fn value(&self) -> &str {
         match self {
             Self::Fill(fs) => &fs.value,
             Self::Text(ts) => &ts.value,
@@ -156,16 +181,15 @@ impl Segment {
         }
     }
 
-    // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&AnsiStyle>) -> AnsiString<'_> {
+    pub fn ansi_string(&self, previous: Option<&AnsiStyle>) -> AnsiString<'_> {
         match self {
-            Self::Fill(fs) => fs.ansi_string(None, prev),
-            Self::Text(ts) => ts.ansi_string(prev),
+            Self::Text(text) => text.ansi_string(previous),
+            Self::Fill(fill) => fill.ansi_string(None, previous),
             Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
         }
     }
 
-    pub fn width_graphemes(&self) -> usize {
+    pub(crate) fn width_graphemes(&self) -> usize {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
             Self::Text(ts) => ts.value.width_graphemes(),

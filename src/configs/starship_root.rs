@@ -38,116 +38,15 @@ pub struct StarshipRootConfig {
 
 pub type Palette = HashMap<String, String>;
 
-// List of default prompt order
-// NOTE: If this const value is changed then Default prompt order subheading inside
-// prompt heading of config docs needs to be updated according to changes made here.
-pub const PROMPT_ORDER: &[&str] = &[
-    "username",
-    "hostname",
-    "localip",
-    "shlvl",
-    "singularity",
-    "kubernetes",
-    "nats",
-    "directory",
-    "vcsh",
-    "fossil_branch",
-    "fossil_metrics",
-    "git_branch",
-    "git_commit",
-    "git_state",
-    "git_metrics",
-    "git_status",
-    "hg_branch",
-    "hg_state",
-    "pijul_channel",
-    "docker_context",
-    "package",
-    // ↓ Toolchain version modules ↓
-    // (Let's keep these sorted alphabetically)
-    "bun",
-    "c",
-    "cmake",
-    "cobol",
-    "cpp",
-    "daml",
-    "dart",
-    "deno",
-    "dotnet",
-    "elixir",
-    "elm",
-    "erlang",
-    "fennel",
-    "fortran",
-    "gleam",
-    "golang",
-    "gradle",
-    "haskell",
-    "haxe",
-    "helm",
-    "java",
-    "julia",
-    "kotlin",
-    "lua",
-    "maven",
-    "mojo",
-    "nim",
-    "nodejs",
-    "ocaml",
-    "odin",
-    "opa",
-    "perl",
-    "php",
-    "pulumi",
-    "purescript",
-    "python",
-    "quarto",
-    "raku",
-    "rlang",
-    "red",
-    "ruby",
-    "rust",
-    "scala",
-    "solidity",
-    "swift",
-    "terraform",
-    "typst",
-    "vlang",
-    "vagrant",
-    "xmake",
-    "zig",
-    // ↑ Toolchain version modules ↑
-    "buf",
-    "guix_shell",
-    "nix_shell",
-    "conda",
-    "pixi",
-    "meson",
-    "spack",
-    "memory_usage",
-    "aws",
-    "gcloud",
-    "openstack",
-    "azure",
-    "direnv",
-    "env_var",
-    "mise",
-    "crystal",
-    "custom",
-    "sudo",
-    "cmd_duration",
-    "line_break",
-    "jobs",
-    #[cfg(feature = "battery")]
-    "battery",
-    "time",
-    "status",
-    "container",
-    "netns",
-    "os",
-    "shell",
-    "character",
-];
+/// The default order modules are drawn in, and what `$all` expands to.
+///
+/// Generated from the module registry — see [`crate::modules::registry`] —
+/// rather than hand-maintained here; each module's place in this ordering is
+/// declared next to the rest of what the registry says about it.
+///
+/// NOTE: If this ordering changes, the default prompt order subheading inside
+/// the prompt heading of the config docs needs to be updated to match.
+pub use crate::modules::registry::PROMPT_ORDER;
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
 impl Default for StarshipRootConfig {
