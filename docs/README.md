@@ -19,7 +19,7 @@ footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 
 # Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Lumesh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
 <script setup>
@@ -144,6 +144,19 @@ onMounted(() => {
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+   #### Lumesh
+
+   Add the following to `~/.config/lumesh/config.lm`:
+
+   ```bash
+   # ~/.config/lumesh/config.lm
+
+   set LUME_PROMPT_SETTINGS = {
+           starship: 1,             # or `true`
+           lazy: 0,                 # 2 is ok if no duration/jobs/status needed
+   }
    ```
 
    #### Nushell
