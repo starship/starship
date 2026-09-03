@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Ayu Powerline](./ayu-powerline.md)
+
+This preset is a minimally modified version of [Catppuccin Powerline](./catppuccin-powerline.md) using the [Ayu](https://github.com/ayu-theme/ayu-colors) color palette.
+
+[![Screenshot of Ayu Powerline preset](/presets/img/ayu-powerline.png "Click to view Ayu Powerline preset")](./ayu-powerline)
