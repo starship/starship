@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+* **maven:** fall back to the local `mvn` binary version when no Maven wrapper is present, and cache it between prompts (configurable via `cache` and `cache_ttl`)
+
 ## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-28)
 
 

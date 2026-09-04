@@ -59,6 +59,7 @@ mod line_break;
 mod localip;
 mod lua;
 mod maven;
+mod maven_cache;
 mod memory_usage;
 mod meson;
 mod mise;
@@ -323,7 +324,7 @@ pub fn description(module: &str) -> &'static str {
         "line_break" => "Separates the prompt into two lines",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
-        "maven" => "The Maven Wrapper version of the current project",
+        "maven" => "The Maven Wrapper version, or the version of the local `mvn` binary, of the current project",
         "memory_usage" => "Current system memory and swap usage",
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"

@@ -2992,7 +2992,7 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Maven
 
-The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown. Otherwise the version of the local `mvn` binary (resolved from `PATH`, following symlinks) is shown, using a short-lived persistent cache to avoid spawning the process on every prompt.
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -3014,6 +3014,8 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 | `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `maven` module.                                              |
 | `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+| `cache`             | `true`                               | Caches the discovered `mvn` version between prompts.                      |
+| `cache_ttl`         | `3600`                               | Time-to-live in seconds of a cached `mvn` version entry.                  |
 
 ### Variables
 
