@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let maven_version = match wrapper_properties.as_deref() {
                         // Prefer the Maven version pinned by the project's wrapper, if any,
-                        // but fall back to the local `mvn` binary if the wrapper is unparseable.
+                        // but fall back to the local `mvn` binary if the wrapper is unparsable.
                         Some(properties) => parse_maven_version_from_properties(properties)
                             .or_else(|| get_mvn_version(context, config.cache, config.cache_ttl)),
                         // Otherwise fall back to the resolved `mvn` binary version, using a
