@@ -187,6 +187,7 @@ mod tests {
 
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::{CommandOutput, display_command};
     use std::fs::{self, File};
     use std::io::{self, Write};
 
@@ -255,6 +256,13 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
                 cache = false
             })
             .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
             .collect();
 
         let expected = Some(format!(
@@ -291,6 +299,13 @@ distributionType=only-script
                 cache = false
             })
             .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
             .collect();
 
         let expected = Some(format!(

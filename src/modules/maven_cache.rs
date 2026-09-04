@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 use std::thread;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
@@ -10,9 +10,12 @@ use crate::logger::get_log_dir;
 
 const CACHE_FILE: &str = "maven-cache.json";
 const LOCK_FILE: &str = "maven-cache.json.lock";
-// How long we keep retrying to acquire the cross-process lock before giving up. Past this point
-// the lock is also considered stale (left behind by a crashed process) and is reclaimed. The
-// generous value makes it very unlikely we evict a live-but-slow owner.
+// How old a lock marker must be before it is assumed abandoned (left behind by a crashed
+// process) and reclaimed. Writers only hold the lock for milliseconds, so this short grace makes
+// recovery prompt without evicting an active holder.
+const LOCK_GRACE: Duration = Duration::from_secs(2);
+// Hard cap on how long we keep polling a genuinely-contended lock before giving up and skipping
+// the write. Live contention is released in milliseconds, so this rarely binds.
 const LOCK_TIMEOUT: Duration = Duration::from_secs(10);
 
 // Allows tests to redirect the cache location without sharing state across concurrently
@@ -86,7 +89,7 @@ impl Drop for CacheLock {
 
 fn acquire_lock(dir: &Path) -> Option<CacheLock> {
     let lock_path = dir.join(LOCK_FILE);
-    let started = std::time::Instant::now();
+    let started = Instant::now();
 
     loop {
         match std::fs::OpenOptions::new()
@@ -95,33 +98,48 @@ fn acquire_lock(dir: &Path) -> Option<CacheLock> {
             .open(&lock_path)
         {
             Ok(file) => {
+                // Record the owner PID so a peer can reason about ownership and (combined with the
+                // age guard) recover promptly if this process crashes.
+                let _ = std::fs::write(&lock_path, std::process::id().to_string());
                 return Some(CacheLock {
                     path: lock_path,
                     _file: file,
                 });
             }
             Err(error) if error.kind() == ErrorKind::AlreadyExists => {
-                // A live owner is never evicted while we are still within the bounded wait: we keep
-                // polling for the whole timeout, only reclaiming the lock once it appears genuinely
-                // abandoned (held past the generous stale threshold). This avoids evicting a peer
-                // that is merely slow, at the cost of a possible lost update if a suspended owner
-                // resumes much later (benign: the entry is recomputed on the next `mvn --version`).
-                if started.elapsed() >= LOCK_TIMEOUT {
-                    let old = std::fs::metadata(&lock_path)
-                        .and_then(|meta| meta.modified())
-                        .map(|modified| modified.elapsed().unwrap_or_default() >= LOCK_TIMEOUT)
-                        .unwrap_or(true);
-                    if old {
-                        let _ = std::fs::remove_file(&lock_path);
-                        continue;
+                // Ownership-aware recovery: a lock owned by the current process is never reclaimed
+                // (it is an active re-entrant holder), and a recently-created marker is assumed to
+                // belong to a live peer. Older markers are treated as abandoned and reclaimed
+                // immediately, so a crashed process does not block the synchronous module for long.
+                if lock_may_be_live(&lock_path) {
+                    if started.elapsed() >= LOCK_TIMEOUT {
+                        return None;
                     }
-                    return None;
+                    thread::sleep(Duration::from_millis(20));
+                } else {
+                    let _ = std::fs::remove_file(&lock_path);
+                    continue;
                 }
-                thread::sleep(Duration::from_millis(20));
             }
             Err(_) => return None,
         }
     }
+}
+
+/// True while the current lock holder may still be active: either it is owned by this process, or
+/// the marker is younger than the grace period. Otherwise the marker is assumed abandoned.
+fn lock_may_be_live(lock_path: &Path) -> bool {
+    let owns_lock = std::fs::read_to_string(lock_path)
+        .ok()
+        .and_then(|content| content.trim().parse::<u32>().ok())
+        .is_some_and(|pid| pid == std::process::id());
+    if owns_lock {
+        return true;
+    }
+    std::fs::metadata(lock_path)
+        .and_then(|meta| meta.modified())
+        .map(|modified| modified.elapsed().unwrap_or_default() < LOCK_GRACE)
+        .unwrap_or(true)
 }
 
 /// Caches the version associated with the resolved binary path using a cross-process lock and an
