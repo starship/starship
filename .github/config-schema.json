@@ -248,6 +248,7 @@
       "default": {
         "format": "[$symbol$model]($style) ",
         "symbol": "🤖 ",
+        "thinking_symbol": "💭 ",
         "style": "bold blue",
         "model_aliases": {},
         "disabled": false
@@ -2458,6 +2459,10 @@
         "symbol": {
           "type": "string",
           "default": "🤖 "
+        },
+        "thinking_symbol": {
+          "type": "string",
+          "default": "💭 "
         },
         "style": {
           "type": "string",

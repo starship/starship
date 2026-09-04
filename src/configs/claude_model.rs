@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 pub struct ClaudeModelConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
+    pub thinking_symbol: &'a str,
     pub style: &'a str,
     pub model_aliases: IndexMap<String, &'a str>,
     pub disabled: bool,
@@ -21,6 +22,7 @@ impl Default for ClaudeModelConfig<'_> {
         Self {
             format: "[$symbol$model]($style) ",
             symbol: "🤖 ",
+            thinking_symbol: "💭 ",
             style: "bold blue",
             model_aliases: IndexMap::new(),
             disabled: false,
