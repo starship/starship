@@ -266,6 +266,42 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
     }
 
     #[test]
+    fn folder_with_unparsable_wrapper_falls_back_to_mvn() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
+        let properties = dir
+            .path()
+            .join(".mvn")
+            .join("wrapper")
+            .join("maven-wrapper.properties");
+        fs::create_dir_all(properties.parent().unwrap())?;
+        let mut file = File::create(properties)?;
+        // A wrapper file present but lacking a usable `distributionUrl` line.
+        file.write_all(
+            b"\
+wrapperVersion=3.3.4
+distributionType=only-script
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn maven_wrapper_recursive() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let properties = dir

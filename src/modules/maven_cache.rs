@@ -10,9 +10,10 @@ use crate::logger::get_log_dir;
 
 const CACHE_FILE: &str = "maven-cache.json";
 const LOCK_FILE: &str = "maven-cache.json.lock";
-// How long (seconds) we keep retrying to acquire the cross-process lock before giving up and
-// proceeding without it (best effort). Also the threshold past which a lock is considered stale.
-const LOCK_TIMEOUT: Duration = Duration::from_secs(3);
+// How long we keep retrying to acquire the cross-process lock before giving up. Past this point
+// the lock is also considered stale (left behind by a crashed process) and is reclaimed. The
+// generous value makes it very unlikely we evict a live-but-slow owner.
+const LOCK_TIMEOUT: Duration = Duration::from_secs(10);
 
 // Allows tests to redirect the cache location without sharing state across concurrently
 // running test threads (each test thread has its own override).
@@ -100,18 +101,20 @@ fn acquire_lock(dir: &Path) -> Option<CacheLock> {
                 });
             }
             Err(error) if error.kind() == ErrorKind::AlreadyExists => {
-                // Remove a stale lock left behind by a crashed process. Staleness is based on the
-                // lock file's modification time (set atomically at creation), which avoids racing
-                // with a peer that just created the file but has not written its payload yet.
-                let stale = std::fs::metadata(&lock_path)
-                    .and_then(|meta| meta.modified())
-                    .map(|modified| modified.elapsed().unwrap_or_default() >= LOCK_TIMEOUT)
-                    .unwrap_or(true);
-                if stale {
-                    let _ = std::fs::remove_file(&lock_path);
-                    continue;
-                }
+                // A live owner is never evicted while we are still within the bounded wait: we keep
+                // polling for the whole timeout, only reclaiming the lock once it appears genuinely
+                // abandoned (held past the generous stale threshold). This avoids evicting a peer
+                // that is merely slow, at the cost of a possible lost update if a suspended owner
+                // resumes much later (benign: the entry is recomputed on the next `mvn --version`).
                 if started.elapsed() >= LOCK_TIMEOUT {
+                    let old = std::fs::metadata(&lock_path)
+                        .and_then(|meta| meta.modified())
+                        .map(|modified| modified.elapsed().unwrap_or_default() >= LOCK_TIMEOUT)
+                        .unwrap_or(true);
+                    if old {
+                        let _ = std::fs::remove_file(&lock_path);
+                        continue;
+                    }
                     return None;
                 }
                 thread::sleep(Duration::from_millis(20));
@@ -133,9 +136,11 @@ pub fn set(binary: &Path, version: String) {
         return;
     }
 
-    // Serialize the read/merge/write only when we can actually take the lock; otherwise fall back
-    // to the best-effort unlocked path (a fresh `mvn --version` will be re-cached next time).
-    let _lock = acquire_lock(dir);
+    // Serialize the read/merge/write under the cross-process lock. If the lock cannot be acquired
+    // we skip the write entirely: writing unlocked could overwrite another process's entry.
+    let Some(_lock) = acquire_lock(dir) else {
+        return;
+    };
 
     let mut cache = load();
     cache.entries.insert(
