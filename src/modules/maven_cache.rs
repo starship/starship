@@ -1,12 +1,18 @@
 use std::collections::HashMap;
-use std::path::PathBuf;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::io::ErrorKind;
+use std::path::{Path, PathBuf};
+use std::thread;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
 use crate::logger::get_log_dir;
 
 const CACHE_FILE: &str = "maven-cache.json";
+const LOCK_FILE: &str = "maven-cache.json.lock";
+// How long (seconds) we keep retrying to acquire the cross-process lock before giving up and
+// proceeding without it (best effort). Also the threshold past which a lock is considered stale.
+const LOCK_TIMEOUT: Duration = Duration::from_secs(3);
 
 // Allows tests to redirect the cache location without sharing state across concurrently
 // running test threads (each test thread has its own override).
@@ -39,7 +45,7 @@ fn now() -> u64 {
 fn cache_path() -> PathBuf {
     #[cfg(test)]
     {
-        if let Some(path) = TEST_PATH.with(|p| *p.borrow()) {
+        if let Some(path) = TEST_PATH.with(|p| p.borrow().clone()) {
             return path;
         }
     }
@@ -55,7 +61,7 @@ fn load() -> Cache {
 }
 
 /// Returns the cached version for the given resolved binary path if it is still fresh.
-pub fn get(binary: &PathBuf, ttl: u64) -> Option<String> {
+pub fn get(binary: &Path, ttl: u64) -> Option<String> {
     let cache = load();
     let entry = cache.entries.get(&binary.to_string_lossy().into_owned())?;
     if now().saturating_sub(entry.written_at) > ttl {
@@ -64,9 +70,61 @@ pub fn get(binary: &PathBuf, ttl: u64) -> Option<String> {
     Some(entry.version.clone())
 }
 
-/// Caches the version associated with the resolved binary path using an atomic replace so that
-/// concurrent readers never observe a partially written file.
-pub fn set(binary: &PathBuf, version: String) {
+/// A best-effort cross-process lock backed by an atomic `create_new` lock file. Serializes
+/// concurrent `set` calls so the read/merge/write sequence does not lose entries.
+struct CacheLock {
+    path: PathBuf,
+    _file: std::fs::File,
+}
+
+impl Drop for CacheLock {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_file(&self.path);
+    }
+}
+
+fn acquire_lock(dir: &Path) -> Option<CacheLock> {
+    let lock_path = dir.join(LOCK_FILE);
+    let started = std::time::Instant::now();
+
+    loop {
+        match std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&lock_path)
+        {
+            Ok(file) => {
+                return Some(CacheLock {
+                    path: lock_path,
+                    _file: file,
+                });
+            }
+            Err(error) if error.kind() == ErrorKind::AlreadyExists => {
+                // Remove a stale lock left behind by a crashed process. Staleness is based on the
+                // lock file's modification time (set atomically at creation), which avoids racing
+                // with a peer that just created the file but has not written its payload yet.
+                let stale = std::fs::metadata(&lock_path)
+                    .and_then(|meta| meta.modified())
+                    .map(|modified| modified.elapsed().unwrap_or_default() >= LOCK_TIMEOUT)
+                    .unwrap_or(true);
+                if stale {
+                    let _ = std::fs::remove_file(&lock_path);
+                    continue;
+                }
+                if started.elapsed() >= LOCK_TIMEOUT {
+                    return None;
+                }
+                thread::sleep(Duration::from_millis(20));
+            }
+            Err(_) => return None,
+        }
+    }
+}
+
+/// Caches the version associated with the resolved binary path using a cross-process lock and an
+/// atomic replace so that concurrent readers never observe a partially written file and concurrent
+/// writers do not overwrite each other's entries.
+pub fn set(binary: &Path, version: String) {
     let path = cache_path();
     let Some(dir) = path.parent() else {
         return;
@@ -75,16 +133,21 @@ pub fn set(binary: &PathBuf, version: String) {
         return;
     }
 
+    // Serialize the read/merge/write only when we can actually take the lock; otherwise fall back
+    // to the best-effort unlocked path (a fresh `mvn --version` will be re-cached next time).
+    let _lock = acquire_lock(dir);
+
     let mut cache = load();
-    cache
-        .entries
-        .insert(binary.to_string_lossy().into_owned(), CacheEntry { version, written_at: now() });
+    cache.entries.insert(
+        binary.to_string_lossy().into_owned(),
+        CacheEntry {
+            version,
+            written_at: now(),
+        },
+    );
 
     // Serialize to a unique temp file in the same directory, then atomically move it into place.
-    let tmp = dir.join(format!(
-        "{CACHE_FILE}.tmp.{}",
-        std::process::id()
-    ));
+    let tmp = dir.join(format!("{CACHE_FILE}.tmp.{}", std::process::id()));
     if std::fs::write(&tmp, serde_json::to_vec(&cache).unwrap_or_default()).is_err() {
         return;
     }
@@ -104,7 +167,8 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join(CACHE_FILE);
         // Set the override for this thread while the closure runs, then restore it.
-        let previous = TEST_PATH.with(|p| p.borrow_mut().replace(Some(path.clone())));
+        let previous = TEST_PATH.with(|p| p.borrow().clone());
+        TEST_PATH.with(|p| *p.borrow_mut() = Some(path.clone()));
         f(&path);
         TEST_PATH.with(|p| *p.borrow_mut() = previous);
         let _ = dir.close();
@@ -113,7 +177,10 @@ mod tests {
     #[test]
     fn set_then_get_within_ttl() {
         with_temp_path(|_| {
-            set(&PathBuf::from("/opt/mvn/4.0.0-rc-6"), "4.0.0-rc-6".to_string());
+            set(
+                &PathBuf::from("/opt/mvn/4.0.0-rc-6"),
+                "4.0.0-rc-6".to_string(),
+            );
             assert_eq!(
                 get(&PathBuf::from("/opt/mvn/4.0.0-rc-6"), 3600),
                 Some("4.0.0-rc-6".to_string())
@@ -157,6 +224,49 @@ mod tests {
     fn missing_entry_is_a_miss() {
         with_temp_path(|_| {
             assert_eq!(get(&PathBuf::from("/nope"), 3600), None);
+        });
+    }
+
+    #[test]
+    fn concurrent_sets_do_not_lose_entries() {
+        with_temp_path(|path| {
+            let shared = path.clone();
+            // Each spawned thread has its own thread-local cache path, so point every thread at
+            // the same shared temp file to exercise the cross-process lock serialization.
+            let handles: Vec<_> = (0..8)
+                .map(|i| {
+                    let target = shared.clone();
+                    std::thread::spawn(move || {
+                        TEST_PATH.with(|p| *p.borrow_mut() = Some(target));
+                        set(&PathBuf::from(format!("/bin/{i}")), i.to_string());
+                    })
+                })
+                .collect();
+            for handle in handles {
+                handle.join().unwrap();
+            }
+
+            for i in 0..8 {
+                assert_eq!(
+                    get(&PathBuf::from(format!("/bin/{i}")), 3600),
+                    Some(i.to_string())
+                );
+            }
+        });
+    }
+
+    #[test]
+    fn lock_is_acquired_and_released() {
+        with_temp_path(|_| {
+            let dir = cache_path().parent().unwrap().to_path_buf();
+            let lock = dir.join(LOCK_FILE);
+
+            let guard = acquire_lock(&dir).unwrap();
+            // Ownership of the lock file is exclusive as long as the guard is alive.
+            assert!(lock.exists());
+            drop(guard);
+            // Dropping the guard releases the lock by removing the file.
+            assert!(!lock.exists());
         });
     }
 }

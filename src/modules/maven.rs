@@ -40,8 +40,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let maven_version = match wrapper_properties.as_deref() {
-                        // Prefer the Maven version pinned by the project's wrapper, if any.
-                        Some(properties) => parse_maven_version_from_properties(properties),
+                        // Prefer the Maven version pinned by the project's wrapper, if any,
+                        // but fall back to the local `mvn` binary if the wrapper is unparseable.
+                        Some(properties) => parse_maven_version_from_properties(properties)
+                            .or_else(|| get_mvn_version(context, config.cache, config.cache_ttl)),
                         // Otherwise fall back to the resolved `mvn` binary version, using a
                         // short-lived persistent cache to avoid spawning the binary on each prompt.
                         None => get_mvn_version(context, config.cache, config.cache_ttl),
@@ -49,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let maven_version = maven_version.as_deref()?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &maven_version,
+                        maven_version,
                         config.version_format,
                     )
                     .map(Ok)
@@ -90,11 +92,7 @@ fn parse_maven_version_from_properties(wrapper_properties: &str) -> Option<Strin
 
 /// The version of the `mvn` binary installed on the machine, resolved if available and not
 /// served by the persistent cache.
-fn get_mvn_version(
-    context: &Context,
-    cache_enabled: bool,
-    cache_ttl: u64,
-) -> Option<String> {
+fn get_mvn_version(context: &Context, cache_enabled: bool, cache_ttl: u64) -> Option<String> {
     // Resolve the concrete `mvn` binary so the cache can be keyed to a specific
     // installation (e.g. an SDKMAN-managed version). This also follows symlinks.
     let binary = resolve_mvn_binary();
@@ -110,9 +108,7 @@ fn get_mvn_version(
 
     let version = parse_mvn_version(&context.exec_cmd(binary_name, &["--version"])?.stdout)?;
 
-    if cache_enabled
-        && let Some(binary) = binary.as_ref()
-    {
+    if cache_enabled && let Some(binary) = binary.as_ref() {
         maven_cache::set(binary, version.clone());
     }
 
@@ -145,7 +141,7 @@ fn resolve_symlinks_bounded(path: &Path) -> PathBuf {
         }
     }
 
-    std::fs::canonicalize(&current).unwrap_or(current)
+    dunce::canonicalize(&current).unwrap_or(current)
 }
 
 /// Parses the Maven version from the first line of `mvn --version`, e.g.
@@ -351,7 +347,9 @@ wrapperVersion=3.3.4
     #[test]
     fn test_format_mvn_version_rc() {
         assert_eq!(
-            parse_mvn_version("Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n"),
+            parse_mvn_version(
+                "Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n"
+            ),
             Some("4.0.0-rc-6".to_string())
         );
     }
@@ -359,7 +357,9 @@ wrapperVersion=3.3.4
     #[test]
     fn test_format_mvn_version_snapshot() {
         assert_eq!(
-            parse_mvn_version("Apache Maven 3.9.0-SNAPSHOT (1234567890123456789012345678901234567890)\n"),
+            parse_mvn_version(
+                "Apache Maven 3.9.0-SNAPSHOT (1234567890123456789012345678901234567890)\n"
+            ),
             Some("3.9.0-SNAPSHOT".to_string())
         );
     }

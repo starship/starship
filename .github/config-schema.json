@@ -4912,6 +4912,8 @@
         },
         "cache_ttl": {
           "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
           "default": 3600
         },
         "detect_extensions": {
