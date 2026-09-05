@@ -11,6 +11,7 @@ pub const ALL_MODULES: &[&str] = &[
     "azure",
     #[cfg(feature = "battery")]
     "battery",
+    "blank_fill",
     "buf",
     "bun",
     "c",
