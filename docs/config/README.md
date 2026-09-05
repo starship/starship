@@ -1916,6 +1916,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
+| `ignore_remotes`     | `[]`                                              | A list of remotes to avoid displaying. Useful for 'origin' or fetch-only remotes.        |
 | `ignore_bare_repo`   | `false`                                           | Do not show when in a bare repo.                                                         |
 | `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
@@ -1941,6 +1942,7 @@ symbol = '🌱 '
 truncation_length = 4
 truncation_symbol = ''
 ignore_branches = ['master', 'main']
+ignore_remotes = ['origin', 'upstream']
 ```
 
 ## Git Commit
