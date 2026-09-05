@@ -318,6 +318,10 @@ impl JJRepo {
     pub const CHANGE_DIVERGENT: &str = "/jj/change/divergent";
     pub const CHANGE_NOT_ASCII: &str = "/jj/change/not-ascii";
 
+    pub const METRIC_ADDED: &str = "/jj/metrics-added";
+    pub const METRIC_DELETED: &str = "/jj/metrics-deleted";
+    pub const METRIC_ZERO: &str = "/jj/metrics-zero";
+
     pub const NONE: &str = "/jj/no-repo";
 }
 
@@ -438,6 +442,26 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             JJRepo::CHANGE_NOT_ASCII,
             || output([
                 (CHANGE, "Étxwmvtttmrkkoqkutlystlnozssmnk"),
+            ]),
+        ),
+        // Repos testing jj_metrics rendering
+        (
+            JJRepo::METRIC_ADDED,
+            || output([
+                (LINES_D, "0"),
+            ]),
+        ),
+        (
+            JJRepo::METRIC_DELETED,
+            || output([
+                (LINES_A, "0")
+            ]),
+        ),
+        (
+            JJRepo::METRIC_ZERO,
+            || output([
+                (LINES_A, "0"),
+                (LINES_D, "0"),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout
