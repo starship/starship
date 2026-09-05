@@ -1880,4 +1880,46 @@ users: []
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    fn test_config_context_user_alias_without_user() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                format = "$symbol($user )($context )($cluster )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                user_alias = "abc"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ test_context test_namespace".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }
