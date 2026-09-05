@@ -21,6 +21,25 @@ pub struct ClaudeCodeData {
     pub cost: Option<CostInfo>,
     pub workspace: Option<Workspace>,
     pub effort: Option<EffortInfo>,
+    pub rate_limits: Option<RateLimits>,
+}
+
+/// Subscription rate limit usage. Each window is reported independently.
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct RateLimits {
+    pub five_hour: Option<RateLimitWindow>,
+    pub seven_day: Option<RateLimitWindow>,
+}
+
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct RateLimitWindow {
+    #[serde(deserialize_with = "deserialize_null_default")]
+    pub used_percentage: f32,
+    /// Unix epoch seconds at which the window resets.
+    #[serde(deserialize_with = "deserialize_null_default")]
+    pub resets_at: i64,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -134,6 +153,74 @@ mod tests {
             data.context_window.current_usage.cache_read_input_tokens,
             20
         );
+    }
+
+    #[test]
+    fn test_deserializes_rate_limits_with_one_window() {
+        let payload = r#"{
+            "rate_limits": {
+                "five_hour": {
+                    "used_percentage": 23.5,
+                    "resets_at": 1738425600
+                }
+            }
+        }"#;
+
+        let data: ClaudeCodeData =
+            serde_json::from_str(payload).expect("rate limit payload must deserialize");
+
+        let rate_limits = data.rate_limits.expect("rate_limits must be present");
+        let five_hour = rate_limits.five_hour.expect("five_hour must be present");
+        assert!((five_hour.used_percentage - 23.5).abs() < f32::EPSILON);
+        assert_eq!(five_hour.resets_at, 1_738_425_600);
+        assert!(
+            rate_limits.seven_day.is_none(),
+            "windows are reported independently"
+        );
+    }
+
+    #[test]
+    fn test_deserializes_rate_limits_with_null_window_fields() {
+        let payload = r#"{
+            "model": {
+                "id": "claude-opus-4-7[1m]",
+                "display_name": "Opus 4.7 (1M context)"
+            },
+            "rate_limits": {
+                "five_hour": {
+                    "used_percentage": null,
+                    "resets_at": null
+                },
+                "seven_day": null
+            }
+        }"#;
+
+        let data: ClaudeCodeData =
+            serde_json::from_str(payload).expect("session-start payload must deserialize");
+
+        // A null anywhere in `rate_limits` must not discard the whole payload
+        assert_eq!(data.model.display_name, "Opus 4.7 (1M context)");
+        let rate_limits = data.rate_limits.expect("rate_limits must be present");
+        let five_hour = rate_limits.five_hour.expect("five_hour must be present");
+        assert_eq!(five_hour.used_percentage, 0.0);
+        assert_eq!(five_hour.resets_at, 0);
+        assert!(rate_limits.seven_day.is_none());
+    }
+
+    #[test]
+    fn test_missing_rate_limit_window_fields_default() {
+        let payload = r#"{ "rate_limits": { "five_hour": {} } }"#;
+
+        let data: ClaudeCodeData =
+            serde_json::from_str(payload).expect("rate limit payload must deserialize");
+
+        let five_hour = data
+            .rate_limits
+            .expect("rate_limits must be present")
+            .five_hour
+            .expect("five_hour must be present");
+        assert_eq!(five_hour.used_percentage, 0.0);
+        assert_eq!(five_hour.resets_at, 0);
     }
 
     #[test]
