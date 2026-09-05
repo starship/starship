@@ -58,12 +58,12 @@ fn get_aliased_name<'a>(
     alias: Option<&'a str>,
 ) -> Option<String> {
     let replacement = alias.or(current_value)?.to_string();
+    // If there is no current value, there is nothing to alias, regardless of pattern
+    let value = current_value?;
     let Some(pattern) = pattern else {
-        // If user pattern not set, treat it as a match-all pattern
+        // If pattern not set, treat it as a match-all pattern
         return Some(replacement);
     };
-    // If a pattern is set, but we have no value, there is no match
-    let value = current_value?;
     if value == pattern {
         return Some(replacement);
     }
@@ -1835,6 +1835,48 @@ users: []
             .collect();
 
         let expected = Some("§ test_user test_context prod-123".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_namespace_alias_without_namespace() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                style = "bold red"
+                format = "$symbol($user )($context )($cluster )($namespace)"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                namespace_alias = "dev"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ test_user test_context ".to_string());
         assert_eq!(expected, actual);
         dir.close()
     }
