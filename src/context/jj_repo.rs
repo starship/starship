@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use super::Context;
@@ -66,6 +66,11 @@ impl JJRepo {
             root,
             current_change: OnceLock::new(),
         }
+    }
+
+    /// Root directory of the Jujutsu repository
+    pub fn root(&self) -> &Path {
+        &self.root
     }
 
     /// Information about the current change's state.
@@ -318,6 +323,22 @@ impl JJRepo {
     pub const CHANGE_DIVERGENT: &str = "/jj/change/divergent";
     pub const CHANGE_NOT_ASCII: &str = "/jj/change/not-ascii";
 
+    pub const METRIC_ADDED: &str = "/jj/metrics-added";
+    pub const METRIC_DELETED: &str = "/jj/metrics-deleted";
+    pub const METRIC_ZERO: &str = "/jj/metrics-zero";
+
+    pub const STATUS_IMMEDIATE_CONFLICT: &str = "/jj/status/immediate-conflict";
+    pub const STATUS_NO_CONFLICT: &str = "/jj/status/no-conflict";
+    pub const STATUS_DESCRIPTION: &str = "/jj/status/description";
+    pub const STATUS_HIDDEN: &str = "/jj/status/hidden";
+    pub const STATUS_IMMUTABLE: &str = "/jj/status/immutable";
+
+    pub const STATUS_ADDED: &str = "/jj/status/added";
+    pub const STATUS_COPIED: &str = "/jj/status/copied";
+    pub const STATUS_DELETED: &str = "/jj/status/deleted";
+    pub const STATUS_MODIFIED: &str = "/jj/status/modified";
+    pub const STATUS_RENAMED: &str = "/jj/status/renamed";
+
     pub const NONE: &str = "/jj/no-repo";
 }
 
@@ -438,6 +459,87 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             JJRepo::CHANGE_NOT_ASCII,
             || output([
                 (CHANGE, "Étxwmvtttmrkkoqkutlystlnozssmnk"),
+            ]),
+        ),
+        // Repos testing jj_metrics rendering
+        (
+            JJRepo::METRIC_ADDED,
+            || output([
+                (LINES_D, "0"),
+            ]),
+        ),
+        (
+            JJRepo::METRIC_DELETED,
+            || output([
+                (LINES_A, "0")
+            ]),
+        ),
+        (
+            JJRepo::METRIC_ZERO,
+            || output([
+                (LINES_A, "0"),
+                (LINES_D, "0"),
+            ]),
+        ),
+        // Repos testing jj_status rendering
+        (
+            JJRepo::STATUS_IMMEDIATE_CONFLICT,
+            || output([
+                (CONFLICT, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_NO_CONFLICT,
+            || output([
+                (CONFLICT, "false"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DESCRIPTION,
+            || output([
+                (DESC, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_HIDDEN,
+            || output([
+                (HIDDEN, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_IMMUTABLE,
+            || output([
+                (IMMUTABLE, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_ADDED,
+            || output([
+                (FILES, "AAA"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_COPIED,
+            || output([
+                (FILES, "CCC"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DELETED,
+            || output([
+                (FILES, "DDD"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_MODIFIED,
+            || output([
+                (FILES, "MMM"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_RENAMED,
+            || output([
+                (FILES, "RRR"),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout

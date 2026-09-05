@@ -59,6 +59,8 @@ pub const ALL_MODULES: &[&str] = &[
     "java",
     "jj_bookmark",
     "jj_change",
+    "jj_metrics",
+    "jj_status",
     "jobs",
     "julia",
     "kotlin",

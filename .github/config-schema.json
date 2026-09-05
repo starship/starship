@@ -992,6 +992,34 @@
         "disabled": false
       }
     },
+    "jj_metrics": {
+      "$ref": "#/$defs/JJMetricsConfig",
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "only_nonzero_diffs": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "disabled": false
+      }
+    },
+    "jj_status": {
+      "$ref": "#/$defs/JJStatusConfig",
+      "default": {
+        "format": "([\\[$all\\]]($style) )",
+        "style": "bold red",
+        "conflicted": "!",
+        "description_empty": "◌",
+        "description_present": "",
+        "hidden": "",
+        "immutable": "◆",
+        "added": "+",
+        "copied": "=",
+        "deleted": "✘",
+        "modified": "~",
+        "renamed": "»",
+        "disabled": false
+      }
+    },
     "jobs": {
       "$ref": "#/$defs/JobsConfig",
       "default": {
@@ -1884,6 +1912,7 @@
       "default": {
         "order": [
           "git",
+          "jj",
           "hg",
           "pijul",
           "fossil"
@@ -1892,6 +1921,7 @@
         "fossil_modules": "$fossil_branch$fossil_metrics",
         "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
         "hg_modules": "$hg_branch$hg_state",
+        "jj_modules": "$jj_bookmark$jj_change$jj_metrics$jj_status",
         "pijul_modules": "$pijul_channel"
       }
     },
@@ -4596,6 +4626,108 @@
       },
       "additionalProperties": false
     },
+    "JJMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "added_style": {
+          "description": "Value of the `$added_style` variable in the format string",
+          "type": "string",
+          "default": "bold green"
+        },
+        "deleted_style": {
+          "description": "Value of the `$deleted_style` variable in the format string",
+          "type": "string",
+          "default": "bold red"
+        },
+        "only_nonzero_diffs": {
+          "description": "Render only for changed items",
+          "type": "boolean",
+          "default": true
+        },
+        "format": {
+          "description": "Format string for the module",
+          "type": "string",
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )"
+        },
+        "disabled": {
+          "description": "Disable the module",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "JJStatusConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "The default format for `jj_status`.",
+          "type": "string",
+          "default": "([\\[$all\\]]($style) )"
+        },
+        "style": {
+          "description": "The style for the module.",
+          "type": "string",
+          "default": "bold red"
+        },
+        "conflicted": {
+          "description": "The format shown when the current change or a parent has merge conflicts.",
+          "type": "string",
+          "default": "!"
+        },
+        "description_empty": {
+          "description": "The format shown when the current change has no description.",
+          "type": "string",
+          "default": "◌"
+        },
+        "description_present": {
+          "description": "The format shown when the current change has a description.",
+          "type": "string",
+          "default": ""
+        },
+        "hidden": {
+          "description": "The format shown when the current change is hidden.",
+          "type": "string",
+          "default": ""
+        },
+        "immutable": {
+          "description": "The format shown when the current change is immutable.",
+          "type": "string",
+          "default": "◆"
+        },
+        "added": {
+          "description": "The format shown when a new file has been added in the working directory.",
+          "type": "string",
+          "default": "+"
+        },
+        "copied": {
+          "description": "The format shown when a new file has been copied in the working directory.",
+          "type": "string",
+          "default": "="
+        },
+        "deleted": {
+          "description": "The format shown when a file has been deleted in the working directory.",
+          "type": "string",
+          "default": "✘"
+        },
+        "modified": {
+          "description": "The format shown when a file has been modified in the working directory.",
+          "type": "string",
+          "default": "~"
+        },
+        "renamed": {
+          "description": "The format shown when a file has been renamed in the working directory.",
+          "type": "string",
+          "default": "»"
+        },
+        "disabled": {
+          "description": "Disables the `jj_status` module.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
     "JobsConfig": {
       "type": "object",
       "properties": {
@@ -7091,6 +7223,7 @@
           },
           "default": [
             "git",
+            "jj",
             "hg",
             "pijul",
             "fossil"
@@ -7115,6 +7248,11 @@
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
           "default": "$hg_branch$hg_state"
+        },
+        "jj_modules": {
+          "description": "Modules to use when Jujutsu is matched.\n\nThey are configured separately at the top level.",
+          "type": "string",
+          "default": "$jj_bookmark$jj_change$jj_metrics$jj_status"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",
