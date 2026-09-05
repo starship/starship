@@ -1,26 +1,23 @@
 ---
-layout: home
+layout: Home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Der minimalistische, super schnelle und unendlich anpassbare Prompt für jede Shell!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Loslegen →
       link: ./de-DE/guide/
 features:
-  - 
-    title: Kompatibel
+  - title: Kompatibel
     details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
-  - 
-    title: Rust-Powered
+  - title: Rust-Powered
     details: Bringt die Schnelligkeit und Sicherheit von Rust in deine Shell-Prompt.
-  - 
-    title: Individualisierbar
+  - title: Individualisierbar
     details: Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Schnell-Installation verfügbar für Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, und PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Installiere die Binärversion von **starship**:
 
-
    #### Neueste Version installieren
 
    Mit Shell:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Führe das Skript oben erneut aus, um Starship selbst zu aktualisieren. Die vorhandene Version wird ersetzt, ohne dass deine Starship-Konfiguration verloren geht.
-
 
    #### Installation mithilfe eines Paket-Managers
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
-
+2. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Trage folgendes am Ende der `~/.config/fish/config.fish` ein:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
-
-   #### Powershell
+   #### PowerShell
 
    Füge das Folgende ans Ende von `Microsoft.PowerShell_profile.ps1` an. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -133,10 +123,9 @@ onMounted(() => {
    eval $(starship init ion)
    ```
 
-
    #### Elvish
 
-   > [!WARNING] Only elvish v0.18 or higher is supported.
+   > [!WARNUNG] Nur elvish v0.18 oder höher wird unterstützt.
 
    Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Nur Nushell v0.96+ wird unterstützt.
+   > [!WARNUNG] Dies wird sich in Zukunft ändern.
+   > Nur Nushell v0.96+ wird unterstützt.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +168,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### ⌘ Cmd
 

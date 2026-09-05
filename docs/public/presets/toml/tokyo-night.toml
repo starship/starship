@@ -2,7 +2,7 @@
 
 format = """
 [░▒▓](#a3aed2)\
-[  ](bg:#a3aed2 fg:#090c0c)\
+$os\
 [](bg:#769ff0 fg:#a3aed2)\
 $directory\
 [](fg:#769ff0 bg:#394260)\
@@ -10,6 +10,7 @@ $git_branch\
 $git_status\
 [](fg:#394260 bg:#212736)\
 $nodejs\
+$bun\
 $rust\
 $golang\
 $php\
@@ -39,8 +40,18 @@ format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
 style = "bg:#394260"
 format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
 
+[jj_bookmark]
+symbol = ""
+style = "bg:#394260"
+format = '[[ $symbol $bookmark(@$remote)$diverged( \\(+$overflow_count others\\)) ](fg:#769ff0 bg:#394260)]($style)'
+
 [nodejs]
 symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[bun]
+symbol = ""
 style = "bg:#212736"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 
@@ -64,3 +75,32 @@ disabled = false
 time_format = "%R" # Hour:Minute Format
 style = "bg:#1d2230"
 format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+
+[os]
+style = "bg:#a3aed2 fg:#090c0c"
+format = "[ $symbol ]($style)"
+disabled = false
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+AOSC = ""
+Arch = "󰣇"
+Artix = "󰣇"
+EndeavourOS = ""
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+Pop = ""

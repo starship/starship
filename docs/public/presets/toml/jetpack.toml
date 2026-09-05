@@ -55,6 +55,7 @@ $lua\
 $maven\
 $nim\
 $nodejs\
+$bun\
 $ocaml\
 $opa\
 $perl\
@@ -220,6 +221,10 @@ detect_files = ["package-lock.json", "yarn.lock"]
 detect_folders = ["node_modules"]
 detect_extensions = []
 
+[bun]
+format = " [bun](italic) [◫ ($version)](bold bright-green)"
+version_format = "${raw}"
+
 [python]
 format = " [py](italic) [${symbol}${version}]($style)"
 symbol = "[⌉](bold bright-blue)⌊ "
@@ -303,6 +308,14 @@ format = " hs [$symbol($version )]($style)"
 [java]
 symbol = "∪ "
 format = " java [${symbol}(${version} )]($style)"
+
+[jj_bookmark]
+format = " [$symbol$bookmark(@$remote)$diverged( \\(+$overflow_count others\\))]($style)"
+symbol = "[△](bold italic bright-blue)"
+style = "italic bright-blue"
+truncation_symbol = "⋯"
+truncation_length = 11
+ignore_names = ["main", "master"]
 
 [julia]
 symbol = "◎ "

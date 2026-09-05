@@ -1,10 +1,10 @@
 [Zurück zu den Voreinstellungen](./#bracketed-segments)
 
-# Bracketed Segments Preset
+# Preset - Bracketed Segments
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Dieses Preset ändert das Format aller integrierten Module, um deren Segment in Klammern zu zeigen, anstatt der Verwendung der Standardformulierung ("via", "on", etc.) von Starship.
 
-![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png)
+![Screenshot für Preset Bracketed Segments](/presets/img/bracketed-segments.png)
 
 ### Konfiguration
 
@@ -12,6 +12,6 @@ This preset changes the format of all the built-in modules to show their segment
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml){download}
+[Klicken, um TOML herunterzuladen](/presets/toml/bracketed-segments.toml){download}
 
 <<< @/public/presets/toml/bracketed-segments.toml

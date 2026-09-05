@@ -53,7 +53,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
-                        let repo_root = context.get_repo().ok().and_then(|r| r.workdir.as_deref());
+                        let repo_root = context
+                            .get_git_repo()
+                            .ok()
+                            .and_then(|r| r.workdir.as_deref());
                         estimate_dotnet_version(
                             context,
                             &dotnet_files,
@@ -111,16 +114,14 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
                 // for namespaced:
                 // Ok((ref namespace_value, Event::Start(ref e)))
                 match e.name().as_ref() {
-                    b"TargetFrameworks" => in_tfm = true,
-                    b"TargetFramework" => in_tfm = true,
+                    "TargetFrameworks" => in_tfm = true,
+                    "TargetFramework" => in_tfm = true,
                     _ => in_tfm = false,
                 }
             }
             // unescape and decode the text event using the reader encoding
-            Ok(Event::Text(e)) => {
-                if in_tfm {
-                    return e.decode().ok().map(std::borrow::Cow::into_owned);
-                }
+            Ok(Event::Text(e)) if in_tfm => {
+                return Some(e.as_ref().to_string());
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
             Err(e) => {
@@ -210,7 +211,7 @@ fn check_directory_for_global_json(path: &Path) -> Option<String> {
     let global_json_path = path.join(GLOBAL_JSON_FILE);
     log::debug!(
         "Checking if global.json exists at: {}",
-        &global_json_path.display()
+        global_json_path.display()
     );
     if global_json_path.exists() {
         get_pinned_sdk_version_from_file(&global_json_path)
@@ -273,7 +274,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
         Some(GLOBAL_JSON_FILE) => return Some(FileType::GlobalJson),
         Some(PROJECT_JSON_FILE) => return Some(FileType::ProjectJson),
         _ => (),
-    };
+    }
 
     let extension_lower = map_str_to_lower(path.extension());
 

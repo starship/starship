@@ -146,7 +146,10 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
 }
 
 fn get_venv_from_path(venv_path: &Path) -> Option<String> {
-    venv_path.file_name()?.to_str().map(|s| s.to_string())
+    venv_path
+        .file_name()?
+        .to_str()
+        .map(std::string::ToString::to_string)
 }
 
 #[cfg(test)]

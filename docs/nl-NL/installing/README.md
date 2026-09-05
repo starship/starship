@@ -3,9 +3,9 @@
 Om Starship te installeren moet je twee dingen doen:
 
 1. Sla het **Starship** programma op je computer op
-1. Stel je shell in om het Starship programma te gebruiken bij de invoer door de opstartscripts aan te passen
+2. Stel je shell in om het Starship programma te gebruiken bij de invoer door de opstartscripts aan te passen
 
-Voor de meeste gebruikers werken de instructies op de [hoofdpagina](../guide/#🚀-installation) prima, maar voor specifieke platformen zijn er andere instructies.
+Voor de meeste gebruikers werken de instructies op de [hoofdpagina](../guide/#🚀-installation) prima, maar voor specifieke platformen zijn er andere instructies. maar voor specifieke platformen zijn er andere instructies.
 
 Er bestaan dermate veel platformen dat ze niet meer in het hoofdbestand voor de README, dus zijn andere instructies door de gemeenschap hier samengebracht. Staat jouw platform er niet tussen? Voeg het hier toe als je het werkend krijgt!
 
@@ -57,7 +57,7 @@ Activeer de `programs.starship` module in het `home.nix` bestand en voeg je inst
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuratie geschreven naar ~/.config/starship.toml
     settings = {
       # add_newline = false;
 

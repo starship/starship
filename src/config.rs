@@ -1,8 +1,8 @@
 use crate::configs::Palette;
 use crate::context::Context;
 
-use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
+use crate::utils::serde::{ValueDeserializer, ValueRef};
 use nu_ansi_term::Color;
 use serde::{
     Deserialize, Deserializer, Serialize, de::Error as SerdeError, de::value::Error as ValueError,
@@ -103,12 +103,12 @@ where
     T: schemars::JsonSchema + Sized,
 {
     fn schema_name() -> Cow<'static, str> {
-        Either::<T, Vec<T>>::schema_name()
+        // `Either::<T, Vec<T>>::schema_name()` is not unique per `T`; nested `VecOr`s must not share a `$defs` entry.
+        Cow::Owned(format!("VecOr_{}", T::schema_name()))
     }
 
     fn schema_id() -> Cow<'static, str> {
-        let mod_path = module_path!();
-        Cow::Owned(format!("{mod_path}::{}", Self::schema_name()))
+        Cow::Owned(format!("{}::VecOr<{}>", module_path!(), T::schema_id()))
     }
 
     fn json_schema(generator: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
@@ -138,7 +138,7 @@ impl StarshipConfig {
 
         match toml::from_str(&toml_content) {
             Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
+                log::debug!("Config parsed: {parsed:?}");
                 Some(parsed)
             }
             Err(error) => {
@@ -158,7 +158,7 @@ impl StarshipConfig {
         let config_file_path = config_file_path.as_ref().unwrap();
         match utils::read_file(config_file_path) {
             Ok(content) => {
-                log::trace!("Config file content: \"\n{}\"", &content);
+                log::trace!("Config file content: \"\n{content}\"");
                 Some(content)
             }
             Err(e) => {
@@ -168,7 +168,7 @@ impl StarshipConfig {
                     log::Level::Error
                 };
 
-                log::log!(level, "Unable to read config file content: {}", &e);
+                log::log!(level, "Unable to read config file content: {e}");
                 None
             }
         }
@@ -178,11 +178,7 @@ impl StarshipConfig {
     pub fn get_module_config(&self, module_name: &str) -> Option<&Value> {
         let module_config = self.get_config(&[module_name]);
         if module_config.is_some() {
-            log::debug!(
-                "Config found for \"{}\": {:?}",
-                &module_name,
-                &module_config
-            );
+            log::debug!("Config found for \"{module_name}\": {module_config:?}");
         }
         module_config
     }
@@ -208,7 +204,7 @@ impl StarshipConfig {
                     log::trace!(
                         "No config found for \"{}\": \"{}\" is not a table",
                         path.join("."),
-                        &option
+                        option
                     );
                     return None;
                 }
@@ -216,7 +212,7 @@ impl StarshipConfig {
                 log::trace!(
                     "No config found for \"{}\": \"{}\" is not a table",
                     path.join("."),
-                    &option
+                    option
                 );
                 return None;
             }
@@ -228,7 +224,7 @@ impl StarshipConfig {
             log::trace!(
                 "No config found for \"{}\": Option \"{}\" not found",
                 path.join("."),
-                &last_option
+                last_option
             );
         }
         value
@@ -238,11 +234,7 @@ impl StarshipConfig {
     pub fn get_custom_module_config(&self, module_name: &str) -> Option<&Value> {
         let module_config = self.get_config(&["custom", module_name]);
         if module_config.is_some() {
-            log::debug!(
-                "Custom config found for \"{}\": {:?}",
-                &module_name,
-                &module_config
-            );
+            log::debug!("Custom config found for \"{module_name}\": {module_config:?}");
         }
         module_config
     }
@@ -1057,6 +1049,22 @@ mod tests {
             None,
             StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
+        );
+    }
+
+    /// Guard against schemars `$defs` collisions by requiring distinct IDs for nested `VecOr` types.
+    #[cfg(feature = "config-schema")]
+    #[test]
+    fn vec_or_schema_ids_distinguish_nesting() {
+        use schemars::JsonSchema;
+
+        assert_ne!(
+            VecOr::<VecOr<&str>>::schema_id(),
+            VecOr::<&str>::schema_id(),
+        );
+        assert_ne!(
+            VecOr::<VecOr<&str>>::schema_name(),
+            VecOr::<&str>::schema_name(),
         );
     }
 }

@@ -36,6 +36,9 @@ impl Default for NodejsConfig<'_> {
                 "!bunfig.toml",
                 "!bun.lock",
                 "!bun.lockb",
+                "!deno.json",
+                "!deno.jsonc",
+                "!deno.lock",
             ],
             detect_folders: vec!["node_modules"],
         }

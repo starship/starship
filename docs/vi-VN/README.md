@@ -2,25 +2,22 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Bắt đầu →
       link: ./guide/
 features:
-  - 
-    title: Khả năng tương thích
+  - title: Khả năng tương thích
     details: Những công việc trên đa số các shell phổ biến trên đa số các hệ điều hành phổ biến. Sử dụng nó ở mọi nơi!
-  - 
-    title: Sức mạnh của Rust
+  - title: Sức mạnh của Rust
     details: Mang lại tốc độ và độ an toàn tốt nhất của Rust, giúp prompt của bạn thực thi nhanh chóng và đáng tin cậy nhất có thể.
-  - 
-    title: Khả năng tuỳ biến
+  - title: Khả năng tuỳ biến
     details: Mọi chi tiết nhỏ được tuỳ biến theo ý thích của bạn, giúp prompt này nhỏ nhất có thể hoặc phong phú về tính năng như bạn muốn.
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Hỗ trợ cài đặt nhanh cho Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, và PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Cài đặt **starship** nhị phân:
 
-
    #### Cài đặt phiên bản cuối cùng
 
    Với Shell:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Để cập nhật chính Starship, hãy chạy lại đoạn script bên trên. Nó sẽ thay thế phiên bản hiện tại mà không hề thay đổi gì những cài đặt của Starship trước đó.
-
 
    #### Cài đặt thông qua Trình quản lí gói
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
-
+2. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Thêm đoạn sau vào cuối tệp tin `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
+   #### PowerShell
 
-   #### Powershell
-
-   Thêm đoạn sau vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -133,20 +123,19 @@ onMounted(() => {
    eval $(starship init ion)
    ```
 
-
    #### Elvish
 
-   > [!WARNING] Only elvish v0.18 or higher is supported.
+   > [!CẢNH BÁO] Chỉ elvish v0.18 hoặc cao hơn được hỗ trợ.
 
-   Add the following to the end of `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` on Windows):
+   Thêm các dòng sau vào cuối tệp `~/.config/elvish/rc.elv` (`%AppData%\elvish\rc.elv` trên Windows):
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   Đối với các phiên bản elvish trước v0.21.0 tệp cấu hình có thể là `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,18 +147,17 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Chỉ hỗ trợ nushell từ phiên bản 0.96 trở lên.
+   > [!WARNING]> This will change in the future.
+   > > Chỉ hỗ trợ nushell từ phiên bản 0.96 trở lên.
 
-   Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
+   Thêm những dòng sau vào cuối tệp cấu hình Nushell (tìm bằng cách chạy `$nu.config-path` trong Nushell):
 
    ```sh
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -181,10 +169,9 @@ onMounted(() => {
    execx($(starship init xonsh))
    ```
 
-
    #### Cmd
 
-   Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Thêm đoạn mã sau vào tệp tin `starship.lua` và đặt tệp tin này vào địa chỉ Clink scripts:
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

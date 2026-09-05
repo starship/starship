@@ -80,7 +80,7 @@ format = "tomó [$duration]($style) "
 
 | Propiedad eliminada     | Reemplazo        |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `simbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |

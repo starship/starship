@@ -41,7 +41,7 @@ pub struct DirectoryConfig<'a> {
     pub use_os_path_sep: bool,
 }
 
-impl<'a> DirectoryConfig<'a> {
+impl DirectoryConfig<'_> {
     pub fn substitutions_empty(&self) -> bool {
         match &self.substitutions {
             Either::First(vec) => vec.is_empty(),

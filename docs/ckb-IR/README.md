@@ -2,27 +2,24 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: promptـێکی سوکەڵە، خێرا، و بێسنور دڵخوازکراو بۆ هەر شێڵێک!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: دەستپێبکە ←
       link: ./guide/
 features:
-  - 
-    title: سەرەتا گونجان
+  - title: سەرەتا گونجان
     details: کاردەکات لەسەر زۆربەی شێڵە باوەکان لەسەر زۆربەی سیستەمە باوەکان. لە هەموو شوێنێک بەکاری بهێنە!
-  - 
-    title: Rust لە پشتە
+  - title: Rust لە پشتە
     details: باشترینی هاوتاکانی لە خێرایی و سەلامەتی Rust بەکارئەهێنێ بۆ ئەوەی promptـەکەت خێراترین و پشت پێبەستراوین بێ.
-  - 
-    title: دڵخوازکراو
+  - title: دڵخوازکراو
     details: هەموو وردەکارییەکی دڵخواز ئەکرێ بەوجۆرەی حەزت لێیە، بۆ ئەوەی promptـەکە سوکەڵە بێ و پڕ تایبەتمەندی بێت بەوجۆرەی حەزت لێیە ببێ.
 footer: لەژێر مۆڵەتی ISCـە | مافی پارێزراوە © 2019-ئێستا بەژداریکەرانی Starship
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: یەکێ لە Promptـە شێڵ نەناسەکان"
-description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.'
+description: "Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell."
 ---
 
 <script setup>
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. باینەری **starship** دابمەزرێنە:
 
-
    #### کۆتا وەشان دابمەزرێنە
 
    لەگەڵ شێڵ:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
-
 
    #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
-
+2. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
+   #### PowerShell
 
-   #### Powershell
-
-   ئەمەی خوارەوە زیادبکە لە کۆتایی `Microsoft.PowerShell_profile.ps1`. ئەتوانی شوێنی ئەم فایلە ببینیتەوە بە سەیرکردنی گۆڕاوی `$PROFILE` لە PowerShell. ئاسایی ڕێڕەوەکە بریتیە لە `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` یان `/.config/powershell/Microsoft.PowerShell_profile.ps1` لەسەر -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
+   For elvish versions prior to v0.21.0 the config file might instead be `~/.elvish/rc.elv`
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] This will change in the future. Only Nushell v0.96+ is supported.
+   > [!WARNING]> This will change in the future.
+   > > Only Nushell v0.96+ is supported.
 
    Add the following to the end of your Nushell configuration (find it by running `$nu.config-path` in Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -180,7 +168,6 @@ onMounted(() => {
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 

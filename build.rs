@@ -11,7 +11,7 @@ fn main() -> SdResult<()> {
 
     #[cfg(windows)]
     {
-        let mut res = winres::WindowsResource::new();
+        let mut res = winresource::WindowsResource::new();
         res.set_manifest_file("starship.exe.manifest")
             .set_icon("media/icon.ico");
         res.compile()?;
@@ -37,7 +37,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             .and_then(|v| v.strip_suffix(".toml"))
             .expect("Failed to process filename");
         presets.push_str(format!("print::Preset(\"{name}\"),\n").as_str());
-        match_arms.push_str(format!(r#""{name}" => include_bytes!(r"{full_path}"),"#).as_str());
+        match_arms.push_str(format!(r#""{name}" => include_str!(r"{full_path}"),"#).as_str());
     }
 
     writeln!(
@@ -51,7 +51,7 @@ pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
     ]
 }}
 
-pub fn get_preset_content(name: &str) -> &[u8] {{
+pub fn get_preset_content(name: &str) -> &str {{
     match name {{
     {match_arms}
     _ => unreachable!(),

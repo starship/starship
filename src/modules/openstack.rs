@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use yaml_rust2::YamlLoader;
 
 use super::{Context, Module, ModuleConfig};
@@ -11,15 +13,13 @@ type Project = String;
 
 fn get_osp_project_from_config(context: &Context, osp_cloud: &str) -> Option<Project> {
     // Attempt to follow OpenStack standards for clouds.yaml location:
-    // 1st = $PWD/clouds.yaml, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
+    // 1st = current directory, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
     let config = [
-        context.get_env("PWD").map(|pwd| pwd + "/clouds.yaml"),
-        context.get_home().map(|home| {
-            home.join(".config/openstack/clouds.yaml")
-                .display()
-                .to_string()
-        }),
-        Some(String::from("/etc/openstack/clouds.yaml")),
+        Some(context.current_dir.join("clouds.yaml")),
+        context
+            .get_home()
+            .map(|home| home.join(".config/openstack/clouds.yaml")),
+        Some(PathBuf::from("/etc/openstack/clouds.yaml")),
     ];
 
     config
@@ -107,7 +107,7 @@ clouds:
 ",
         )?;
         let actual = ModuleRenderer::new("openstack")
-            .env("PWD", dir.path().to_str().unwrap())
+            .path(dir.path())
             .env("OS_CLOUD", "corp")
             .config(toml::toml! {
                 [openstack]
@@ -133,7 +133,7 @@ dummy_yaml
 ",
         )?;
         let actual = ModuleRenderer::new("openstack")
-            .env("PWD", dir.path().to_str().unwrap())
+            .path(dir.path())
             .env("OS_CLOUD", "test")
             .config(toml::toml! {
                 [openstack]
@@ -153,7 +153,7 @@ dummy_yaml
         file.write_all(b"")?;
         drop(file);
         let actual = ModuleRenderer::new("openstack")
-            .env("PWD", dir.path().to_str().unwrap())
+            .path(dir.path())
             .env("OS_CLOUD", "test")
             .config(toml::toml! {
                 [openstack]

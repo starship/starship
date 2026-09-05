@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "otp_version" => versions
                     .deref()
                     .as_ref()
-                    .map(|(otp_version, _)| otp_version.to_string())
+                    .map(|(otp_version, _)| otp_version.clone())
                     .map(Ok),
                 _ => None,
             })

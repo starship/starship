@@ -56,7 +56,7 @@ format = """\
 
 Từ trước tới v0.45.0, một vài mô đun sẽ chấp nhận `prefix` và/hoặc `suffix` theo thứ tự để stylize các mà các mô đun được render.
 
-Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó. Thay vì định nghĩa một tiền tố và hậu tố cho các giá trị context-based, các giá trị bây giờ có thể được thay thế với một format string, cái đại diện cho đầu ra của module.
+Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Thay vì định nghĩa một tiền tố và hậu tố cho các giá trị context-based, các giá trị bây giờ có thể được thay thế với một format string, cái đại diện cho đầu ra của module.
 
 **Ví dụcủa cấu hình pre-v0.45.0**
 

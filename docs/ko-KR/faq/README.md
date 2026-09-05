@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-Starship에 내장된 [Bash 구현](https://github.com/starship/starship/blob/master/src/init/starship.bash)은 [명령 지속 시간 모듈](https://starship.rs/config/#command-duration)과 같은 고급 기능을 허용하고 Starship이 사전 설치된 Bash 구성과 호환되도록 하기 위해 약간 더 복잡합니다.
+Starship에 내장된 [Bash 구현](https://github.com/starship/starship/blob/main/src/init/starship.bash)은 [명령 지속 시간 모듈](https://starship.rs/config/#command-duration)과 같은 고급 기능을 허용하고 Starship이 사전 설치된 Bash 구성과 호환되도록 하기 위해 약간 더 복잡합니다.
 
 `starship 프롬프트`에서 지원하는 모든 플래그 값을 보려면 아래 명령어를 사용하세요:
 
@@ -103,14 +103,15 @@ echo -e "\xee\x82\xa0"
 
 첫 번째 줄은 [뱀 이모지](https://emojipedia.org/snake/)를 생성해야 하고, 두 번째 줄은 [파워라인 브랜치 기호(e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)를 생성해야 합니다.
 
-두 기호 중 하나라도 올바르게 표시되지 않으면 시스템이 여전히 잘못 구성된 것입니다. 안타깝게도 글꼴 구성을 올바르게 설정하는 것은 때때로 어렵습니다. Discord의 사용자들이 도움을 줄 수 있습니다. 두 기호 모두 올바르게 표시되지만 starship에서 여전히 보이지 않는다면 [버그 보고서를 제출하세요!](https://github.com/starship/starship/issues/new/choose)
+두 기호 중 하나라도 올바르게 표시되지 않으면 시스템이 여전히 잘못 구성된 것입니다.
+안타깝게도 글꼴 구성을 올바르게 설정하는 것은 때때로 어렵습니다. Discord의 사용자들이 도움을 줄 수 있습니다. 두 기호 모두 올바르게 표시되지만 starship에서 여전히 보이지 않는다면 [버그 보고서를 제출하세요!](https://github.com/starship/starship/issues/new/choose)
 
 ## Starship을 어떻게 삭제하나요?
 
 Starship은 처음 설치하는 것만큼이나 쉽게 제거할 수 있습니다.
 
 1. 셸 설정 파일 (예시: `~/.bashrc`) 에서 Starship 초기화에 사용되는 모든 줄을 제거하세요.
-1. Starship 바이너리 파일을 제거하세요.
+2. Starship 바이너리 파일을 제거하세요.
 
 Starship을 패키지 매니저로 설치하였다면 해당 패키지 매니저의 제거 지침 문서를 참조해 주세요.
 

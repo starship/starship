@@ -20,6 +20,7 @@ $java\
 $julia\
 $maven\
 $nodejs\
+$bun\
 $nim\
 $rust\
 $scala\
@@ -120,6 +121,11 @@ symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
+[jj_bookmark]
+symbol = ""
+style = "bg:#FCA17D"
+format = '[ $symbol $bookmark(@$remote)$diverged( \\(+$overflow_count others\\)) ]($style)'
+
 [julia]
 symbol = " "
 style = "bg:#86BBD8"
@@ -131,6 +137,11 @@ format = '[ $symbol ($version) ]($style)'
 
 [nodejs]
 symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[bun]
+symbol = ""
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 

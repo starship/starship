@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Docs | Format
-        uses: dprint/check@v2.3
+        uses: dprint/check@9cb3a2b17a8e606d37aae341e49df3654933fc23 # v2.3
 
   # Validate preset files
   taplo:
@@ -22,9 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install | Taplo
-        run: cargo install --debug --locked --version 0.10.0 taplo-cli
+        uses: taiki-e/install-action@b20dedce73af6905cdc30d6611090c9b67557c8d # v2.85.12
+        with:
+          tool: taplo-cli
       - name: Presets | Validate with schema
         run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/public/presets/toml/*.toml
 
@@ -35,11 +37,11 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref != 'i18n_master' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - name: Prevent File Change
-        uses: actions/github-script@v8
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const { execSync } = require('child_process');
@@ -62,12 +64,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup | Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24.14.0
+          node-version: 24.20.0
           cache: 'npm'
           cache-dependency-path: docs/package-lock.json
 

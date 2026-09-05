@@ -9,6 +9,9 @@ pub mod bun;
 pub mod c;
 pub mod cc;
 pub mod character;
+pub mod claude_context;
+pub mod claude_cost;
+pub mod claude_model;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -50,6 +53,8 @@ pub mod hg_branch;
 pub mod hg_state;
 pub mod hostname;
 pub mod java;
+pub mod jj_bookmark;
+pub mod jj_change;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
@@ -139,6 +144,12 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     character: character::CharacterConfig<'a>,
     #[serde(borrow)]
+    claude_context: claude_context::ClaudeContextConfig<'a>,
+    #[serde(borrow)]
+    claude_cost: claude_cost::ClaudeCostConfig<'a>,
+    #[serde(borrow)]
+    claude_model: claude_model::ClaudeModelConfig<'a>,
+    #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
     #[serde(borrow)]
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
@@ -218,6 +229,10 @@ pub struct FullConfig<'a> {
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
+    #[serde(borrow)]
+    jj_bookmark: jj_bookmark::JJBookmarkConfig<'a>,
+    #[serde(borrow)]
+    jj_change: jj_change::JJChangeConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]

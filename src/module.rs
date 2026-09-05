@@ -15,6 +15,9 @@ pub const ALL_MODULES: &[&str] = &[
     "bun",
     "c",
     "character",
+    "claude_context",
+    "claude_cost",
+    "claude_model",
     "cmake",
     "cmd_duration",
     "cobol",
@@ -54,6 +57,8 @@ pub const ALL_MODULES: &[&str] = &[
     "hg_state",
     "hostname",
     "java",
+    "jj_bookmark",
+    "jj_change",
     "jobs",
     "julia",
     "kotlin",
@@ -207,19 +212,16 @@ where
     let mut prev_style: Option<AnsiStyle> = None;
 
     for segment in segments {
-        match segment {
-            Segment::Fill(fs) => {
-                chunks.push((current, fs));
-                current = Vec::new();
-                prev_style = None;
-            }
-            _ => {
-                used += segment.width_graphemes();
-                let current_segment_string = segment.ansi_string(prev_style.as_ref());
+        if let Segment::Fill(fs) = segment {
+            chunks.push((current, fs));
+            current = Vec::new();
+            prev_style = None;
+        } else {
+            used += segment.width_graphemes();
+            let current_segment_string = segment.ansi_string(prev_style.as_ref());
 
-                prev_style = Some(*current_segment_string.style_ref());
-                current.push(current_segment_string);
-            }
+            prev_style = Some(*current_segment_string.style_ref());
+            current.push(current_segment_string);
         }
 
         if matches!(segment, Segment::LineTerm) {
