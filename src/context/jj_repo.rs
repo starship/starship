@@ -13,10 +13,14 @@ pub struct JJRepo {
 #[derive(Debug)]
 pub struct CurrentChange {
     /// JJ change ID
+    ///
+    /// Checked to be ASCII at construction
     pub change: Box<str>,
     /// Size of the shortest unique prefix for the change ID
     pub change_shortest: u8,
     /// Underlying VCS commit ID (most often Git)
+    ///
+    /// Checked to be ASCII at construction
     pub commit: Box<str>,
     /// Size of the shortest unique prefix for the commit ID
     pub commit_shortest: u8,
@@ -147,14 +151,14 @@ impl JJRepo {
                 // A full JJ change ID is always `[k-z]{32}`,
                 // so we do a quick sanity check on it just to confirm it looks ok
                 let change = lines.next()?;
-                if change.len() != 32 {
+                if change.len() != 32 || !change.is_ascii() {
                     return None;
                 }
 
                 Some(CurrentChange {
                     change: Box::from(change),
                     change_shortest: lines.next()?.parse().ok()?,
-                    commit: Box::from(lines.next()?),
+                    commit: Box::from(lines.next().filter(|s| s.is_ascii())?),
                     commit_shortest: lines.next()?.parse().ok()?,
                     change_offset,
                     bookmarks: parse_bookmark_lines(lines.next()?, lines.next()?),
@@ -311,6 +315,9 @@ impl JJRepo {
 
     pub const BOOKMARK_NO_CURRENT: &str = "/jj/bookmarks/no-current";
 
+    pub const CHANGE_DIVERGENT: &str = "/jj/change/divergent";
+    pub const CHANGE_NOT_ASCII: &str = "/jj/change/not-ascii";
+
     pub const NONE: &str = "/jj/no-repo";
 }
 
@@ -417,6 +424,20 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             JJRepo::BOOKMARK_NO_CURRENT,
             || output([
                 (BOOKMARKS_CUR, ""),
+            ]),
+        ),
+        // Repos testing jj_change rendering
+        (
+            JJRepo::CHANGE_DIVERGENT,
+            || output([
+                (DIVERGENT, "true"),
+                (CHANGE_OFFSET, "2"),
+            ]),
+        ),
+        (
+            JJRepo::CHANGE_NOT_ASCII,
+            || output([
+                (CHANGE, "Étxwmvtttmrkkoqkutlystlnozssmnk"),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout

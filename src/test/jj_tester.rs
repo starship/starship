@@ -75,6 +75,8 @@ impl JJTester {
         Self::new(module).repo(JJRepo::EMPTY_OUTPUT).render();
         // JJ repo and invalid output -> parsing fails
         Self::new(module).repo(JJRepo::INVALID_OUTPUT).render();
+        // JJ repo with invalid change hash format -> no output
+        Self::new(module).repo(JJRepo::CHANGE_NOT_ASCII).render();
         // Invalid format
         Self::new(module)
             .repo(JJRepo::BASE)
