@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.27.0](https://github.com/starship/starship/compare/v1.26.0...v1.27.0) (2026-09-05)
+
+
+### Features
+
+* Add `jj_bookmark` module ([#7643](https://github.com/starship/starship/issues/7643)) ([6f33dce](https://github.com/starship/starship/commit/6f33dcec91b758ccbae4ed850eaa6feabff798f9))
+* add `jj_change` module ([#7691](https://github.com/starship/starship/issues/7691)) ([70c705e](https://github.com/starship/starship/commit/70c705ed20c0cadfaf1ae14824ebc85f0d5cdda7))
+* **claude_model:** add effort variable ([#7614](https://github.com/starship/starship/issues/7614)) ([ea4098c](https://github.com/starship/starship/commit/ea4098cbc2ce0cdb2bd44e259aa8125496ab7839))
+* **git_branch:** add `ignore_remotes` option ([#7671](https://github.com/starship/starship/issues/7671)) ([0f9da35](https://github.com/starship/starship/commit/0f9da35ea379c4bb0e66c5a1b3d1ab3e8c297a9c))
+
+
+### Bug Fixes
+
+* **bash:** avoid duplicating PS0 preexec hook ([#7587](https://github.com/starship/starship/issues/7587)) ([8f28dfc](https://github.com/starship/starship/commit/8f28dfcb1ca3242fba00a3cf98c10ee24605c3ed))
+* **openstack:** resolve clouds.yaml from context current directory ([#7655](https://github.com/starship/starship/issues/7655)) ([6d88346](https://github.com/starship/starship/commit/6d883464cd06c9c5b2bafd6a47f09f738f5745d0))
+* **package:** support build.gradle.kts in gradle version detection ([#7627](https://github.com/starship/starship/issues/7627)) ([0461483](https://github.com/starship/starship/commit/04614837ddab699783211627a7d7929bffaed82c))
+* **sudo:** Avoid creating system error logs on every unsuccessful invocation ([#7530](https://github.com/starship/starship/issues/7530)) ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+* **sudo:** sudo module pollutes journalctl with error logs ([564a471](https://github.com/starship/starship/commit/564a471b5af63da3fec5f914b6d0e325f8787fad))
+
 ## [1.26.0](https://github.com/starship/starship/compare/v1.25.1...v1.26.0) (2026-06-28)
 
 
