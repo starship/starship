@@ -1086,6 +1086,8 @@
         "style": "bold bright-cyan",
         "disabled": false,
         "recursive": false,
+        "cache": true,
+        "cache_ttl": 3600,
         "detect_extensions": [],
         "detect_files": [
           "pom.xml"
@@ -4903,6 +4905,16 @@
         "recursive": {
           "type": "boolean",
           "default": false
+        },
+        "cache": {
+          "type": "boolean",
+          "default": true
+        },
+        "cache_ttl": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0,
+          "default": 3600
         },
         "detect_extensions": {
           "type": "array",

@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use crate::{
     config::ModuleConfig,
@@ -8,6 +8,8 @@ use crate::{
     module::Module,
     utils,
 };
+
+use super::maven_cache;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("maven");
@@ -37,11 +39,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let properties = wrapper_properties.as_deref()?;
-                    let maven_version = parse_maven_version_from_properties(properties)?;
+                    let maven_version = match wrapper_properties.as_deref() {
+                        // Prefer the Maven version pinned by the project's wrapper, if any,
+                        // but fall back to the local `mvn` binary if the wrapper is unparsable.
+                        Some(properties) => parse_maven_version_from_properties(properties)
+                            .or_else(|| get_mvn_version(context, config.cache, config.cache_ttl)),
+                        // Otherwise fall back to the resolved `mvn` binary version, using a
+                        // short-lived persistent cache to avoid spawning the binary on each prompt.
+                        None => get_mvn_version(context, config.cache, config.cache_ttl),
+                    };
+                    let maven_version = maven_version.as_deref()?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &maven_version,
+                        maven_version,
                         config.version_format,
                     )
                     .map(Ok)
@@ -80,6 +90,73 @@ fn parse_maven_version_from_properties(wrapper_properties: &str) -> Option<Strin
     Some(version.to_string())
 }
 
+/// The version of the `mvn` binary installed on the machine, resolved if available and not
+/// served by the persistent cache.
+fn get_mvn_version(context: &Context, cache_enabled: bool, cache_ttl: u64) -> Option<String> {
+    // Resolve the concrete `mvn` binary so the cache can be keyed to a specific
+    // installation (e.g. an SDKMAN-managed version). This also follows symlinks.
+    let binary = resolve_mvn_binary();
+    let binary_name = if cfg!(windows) { "mvn.cmd" } else { "mvn" };
+
+    // Serve from the cache first when it is enabled and the entry is fresh enough.
+    if cache_enabled
+        && let Some(binary) = binary.as_ref()
+        && let Some(version) = maven_cache::get(binary, cache_ttl)
+    {
+        return Some(version);
+    }
+
+    let version = parse_mvn_version(&context.exec_cmd(binary_name, &["--version"])?.stdout)?;
+
+    if cache_enabled && let Some(binary) = binary.as_ref() {
+        maven_cache::set(binary, version.clone());
+    }
+
+    Some(version)
+}
+
+/// The canonical location of the `mvn` binary, following symlinks (bounded to avoid cycles).
+fn resolve_mvn_binary() -> Option<PathBuf> {
+    let exe = if cfg!(windows) { "mvn.cmd" } else { "mvn" };
+    let found = which::which(exe).ok()?;
+    Some(resolve_symlinks_bounded(&found))
+}
+
+/// Resolves `path` to its canonical real location, following up to 10 symlink hops.
+fn resolve_symlinks_bounded(path: &Path) -> PathBuf {
+    let mut current = path.to_path_buf();
+    for _ in 0..10 {
+        match std::fs::read_link(&current) {
+            Ok(target) => {
+                current = if target.is_absolute() {
+                    target
+                } else {
+                    match current.parent() {
+                        Some(dir) => dir.join(target),
+                        None => target,
+                    }
+                };
+            }
+            Err(_) => break,
+        }
+    }
+
+    dunce::canonicalize(&current).unwrap_or(current)
+}
+
+/// Parses the Maven version from the first line of `mvn --version`, e.g.
+/// `Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)`.
+fn parse_mvn_version(mvn_stdout: &str) -> Option<String> {
+    mvn_stdout
+        .lines()
+        .next()?
+        .split_once("Apache Maven")?
+        .1
+        .split_whitespace()
+        .next()
+        .map(str::to_string)
+}
+
 /// Tries to find the maven-wrapper.properties file.
 fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<String> {
     let read_wrapper_properties = |base_dir: &Path| {
@@ -110,6 +187,7 @@ mod tests {
 
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::{CommandOutput, display_command};
     use std::fs::{self, File};
     use std::io::{self, Write};
 
@@ -162,6 +240,77 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
         let expected = Some(format!(
             "via {}",
             Color::LightCyan.bold().paint("🅼 v3.9.12 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_maven_and_no_wrapper_falls_back_to_mvn() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_unparsable_wrapper_falls_back_to_mvn() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("pom.xml"))?.sync_all()?;
+        let properties = dir
+            .path()
+            .join(".mvn")
+            .join("wrapper")
+            .join("maven-wrapper.properties");
+        fs::create_dir_all(properties.parent().unwrap())?;
+        let mut file = File::create(properties)?;
+        // A wrapper file present but lacking a usable `distributionUrl` line.
+        file.write_all(
+            b"\
+wrapperVersion=3.3.4
+distributionType=only-script
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("maven")
+            .config(toml::toml! {
+                [maven]
+                cache = false
+            })
+            .path(dir.path())
+            .cmd(
+                &display_command("mvn", &["--version"]),
+                Some(CommandOutput {
+                    stdout: String::from("Apache Maven 4.0.0-rc-6 (test-runner)"),
+                    stderr: String::new(),
+                }),
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅼 v4.0.0-rc-6 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -236,5 +385,60 @@ wrapperVersion=3.3.4
             parse_maven_version_from_properties(&input("3.9.0-SNAPSHOT")),
             Some("3.9.0-SNAPSHOT".to_string())
         );
+    }
+
+    #[test]
+    fn test_format_mvn_version_stable() {
+        assert_eq!(
+            parse_mvn_version("Apache Maven 3.9.12 (b89855c551a02db07e8f7b36c5e6a2e60f9e3a2b)\n"),
+            Some("3.9.12".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_rc() {
+        assert_eq!(
+            parse_mvn_version(
+                "Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n"
+            ),
+            Some("4.0.0-rc-6".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_snapshot() {
+        assert_eq!(
+            parse_mvn_version(
+                "Apache Maven 3.9.0-SNAPSHOT (1234567890123456789012345678901234567890)\n"
+            ),
+            Some("3.9.0-SNAPSHOT".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_mvn_version_garbage() {
+        assert_eq!(parse_mvn_version("not a maven output\n"), None);
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn resolve_mvn_binary_is_bounded() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let root = dir.path();
+        let real = root.join("real-mvn");
+        File::create(&real)?.sync_all()?;
+
+        // Build a chain of symlinks longer than the 10-hop bound.
+        let mut current = real;
+        for i in 0..15 {
+            let link = root.join(format!("link-{i}"));
+            std::os::unix::fs::symlink(&current, &link)?;
+            current = link;
+        }
+
+        let resolved = resolve_symlinks_bounded(&current);
+        // Bounded resolution must terminate; the final canonical path still exists.
+        assert!(resolved.is_absolute());
+        dir.close()
     }
 }

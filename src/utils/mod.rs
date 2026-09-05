@@ -252,6 +252,12 @@ InstalledDir: /usr/bin",
             ),
             stderr: String::default(),
         }),
+        "mvn --version" | "mvn.cmd --version" => Some(CommandOutput {
+            stdout: String::from(
+                "Apache Maven 4.0.0-rc-6 (6a8189b24518daa120539fa41ce12f2b48ec09a8)\n",
+            ),
+            stderr: String::default(),
+        }),
         "gcc --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
