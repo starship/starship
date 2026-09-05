@@ -4824,6 +4824,13 @@
           ],
           "default": null
         },
+        "namespace_pattern": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
         "symbol": {
           "type": [
             "string",
@@ -4846,6 +4853,13 @@
           "default": null
         },
         "user_alias": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "namespace_alias": {
           "type": [
             "string",
             "null"
