@@ -10,6 +10,7 @@ use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
+use url::Url;
 
 use super::{Context, Module};
 
@@ -110,6 +111,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
+    let (prefix, osc8_suffix) = if config.use_osc8_url {
+        match Url::from_directory_path(physical_dir) {
+            Ok(url) => (
+                format!("\u{001B}]8;;{url}\u{001B}\\{prefix}"),
+                "\u{001B}]8;;\u{001B}\\",
+            ),
+            Err(_) => (prefix, ""), // Completely skip OSC 8 if path conversion fails
+        }
+    } else {
+        (prefix, "")
+    };
+
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
@@ -122,12 +135,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
+                [
+                    prefix + before,
+                    root.to_string(),
+                    after_repo_root + osc8_suffix,
+                ]
             } else {
-                [String::new(), String::new(), prefix + dir_string.as_str()]
+                [
+                    String::new(),
+                    String::new(),
+                    prefix + dir_string.as_str() + osc8_suffix,
+                ]
             }
         }
-        _ => [String::new(), String::new(), prefix + dir_string.as_str()],
+        _ => [
+            String::new(),
+            String::new(),
+            prefix + dir_string.as_str() + osc8_suffix,
+        ],
     };
 
     let path_vec = if config.use_os_path_sep {
