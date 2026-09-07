@@ -110,35 +110,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::new()
     };
 
-    // the whole path in one segment, with no repo root to highlight
-    let unsplit = |prefix: String| [String::new(), String::new(), prefix + dir_string.as_str()];
+    // The path is only split around the repo root when there is a root to
+    // highlight and the logical path actually lies under it. A symlink pointing
+    // sideways into a subdirectory of the repo resolves into it without sharing
+    // a prefix with it, so it has no contracted form and is not split.
+    let split_at_repo_root = repo
+        .and_then(|r| r.workdir.as_ref())
+        .filter(|_| config.repo_root_style.is_some())
+        .and_then(|repo_root| contract_repo_path(display_dir, repo_root))
+        .and_then(|contracted_path| {
+            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+            let num_segments_after_root = after_repo_root.split('/').count();
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) if config.repo_root_style.is_some() => {
-            // The logical path need not lie under the repo root even though the
-            // repo was found: a symlink pointing sideways into a subdirectory of
-            // the repo resolves into it without sharing a prefix with it, and so
-            // has no contracted form, which is the None case here.
-            match contract_repo_path(display_dir, repo_root) {
-                Some(contracted_path) => {
-                    let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-                    let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-                    let num_segments_after_root = after_repo_root.split('/').count();
+            (config.truncation_length == 0
+                || ((num_segments_after_root - 1) as i64) < config.truncation_length)
+                .then(|| {
+                    [
+                        before_root_dir(&dir_string, &contracted_path).to_string(),
+                        repo_path_vec[0].to_string(),
+                        after_repo_root,
+                    ]
+                })
+        });
 
-                    if config.truncation_length == 0
-                        || ((num_segments_after_root - 1) as i64) < config.truncation_length
-                    {
-                        let root = repo_path_vec[0];
-                        let before = before_root_dir(&dir_string, &contracted_path);
-                        [prefix + before, root.to_string(), after_repo_root]
-                    } else {
-                        unsplit(prefix)
-                    }
-                }
-                None => unsplit(prefix),
-            }
-        }
-        _ => unsplit(prefix),
+    let path_vec = match split_at_repo_root {
+        Some([before_root, root, after_root]) => [prefix + &before_root, root, after_root],
+        // the whole path in one segment, with no repo root to highlight
+        None => [String::new(), String::new(), prefix + dir_string.as_str()],
     };
 
     let path_vec = if config.use_os_path_sep {
