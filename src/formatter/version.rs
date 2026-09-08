@@ -38,16 +38,19 @@ impl<'a> VersionFormatter<'a> {
                 "major" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.major.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(0)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(0)?.to_string())),
                     _ => None,
                 },
                 "minor" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.minor.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(1)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(1)?.to_string())),
                     _ => None,
                 },
                 "patch" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.patch.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(2)?.to_string())),
+                    Some(Versioning::Complex(v)) => Some(Ok(v.nth(2)?.to_string())),
                     _ => None,
                 },
                 _ => None,
@@ -104,6 +107,16 @@ mod tests {
         assert_eq!(
             VersionFormatter::format_version("1.2-a.3", VERSION_FORMAT),
             Ok("major:1 minor:2 patch: raw:1.2-a.3".to_string())
+        );
+    }
+
+    #[test]
+    fn test_complex() {
+        // A Go toolchain built with an experiment reports a version that is
+        // neither semver nor a general version, e.g. `go1.26.5-X:nodwarf5`.
+        assert_eq!(
+            VersionFormatter::format_version("1.26.5-X:nodwarf5", VERSION_FORMAT),
+            Ok("major:1 minor:26 patch:5 raw:1.26.5-X:nodwarf5".to_string())
         );
     }
 
