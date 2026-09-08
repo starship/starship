@@ -130,17 +130,17 @@ download() {
 unpack() {
 	archive=$1
 	bin_dir=$2
-	=${3-}
+	sudo=${3-}
 
 	case "$archive" in
 	*.tar.gz)
 		flags=$(test -n "${VERBOSE-}" && echo "-xzvof" || echo "-xzof")
-		${} tar "${flags}" "${archive}" -C "${bin_dir}"
+		${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
 		return 0
 		;;
 	*.zip)
 		flags=$(test -z "${VERBOSE-}" && echo "-qqo" || echo "-o")
-		UNZIP="${flags}" ${} unzip "${archive}" -d "${bin_dir}"
+		UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
 		return 0
 		;;
 	esac
@@ -184,7 +184,6 @@ elevate_priv() {
 		exit 1
 	fi
 }
-
 
 install() {
 	ext="$1"
