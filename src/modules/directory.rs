@@ -112,17 +112,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
-            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-            let num_segments_after_root = after_repo_root.split('/').count();
+            if let Some(contracted_path) = contract_repo_path(display_dir, repo_root) {
+                let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+                let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+                let num_segments_after_root = after_repo_root.split('/').count();
 
-            if config.truncation_length == 0
-                || ((num_segments_after_root - 1) as i64) < config.truncation_length
-            {
-                let root = repo_path_vec[0];
-                let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
+                if config.truncation_length == 0
+                    || ((num_segments_after_root - 1) as i64) < config.truncation_length
+                {
+                    let root = repo_path_vec[0];
+                    let before = before_root_dir(&dir_string, &contracted_path);
+                    [prefix + before, root.to_string(), after_repo_root]
+                } else {
+                    [String::new(), String::new(), prefix + dir_string.as_str()]
+                }
             } else {
                 [String::new(), String::new(), prefix + dir_string.as_str()]
             }
@@ -1252,6 +1255,37 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[cfg(not(target_os = "windows"))]
+    #[ignore]
+    fn symlinked_subdirectory_git_repo_with_repo_root_style() -> io::Result<()> {
+        let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
+        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        let src_dir = repo_dir.join("src/meters/fuel-gauge");
+        let symlink_dir = tmp_dir.path().join("fuel-gauge");
+        fs::create_dir_all(&src_dir)?;
+        init_repo(&repo_dir)?;
+        symlink(&src_dir, &symlink_dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                repo_root_style = "bold red"
+            })
+            .env("HOME", tmp_dir.path().to_str().unwrap())
+            .path(src_dir)
+            .logical_path(symlink_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("~/fuel-gauge"))
+        ));
+
+        assert_eq!(expected, actual);
+
         tmp_dir.close()
     }
 
