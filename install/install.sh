@@ -130,17 +130,17 @@ download() {
 unpack() {
 	archive=$1
 	bin_dir=$2
-	sudo=${3-}
+	=${3-}
 
 	case "$archive" in
 	*.tar.gz)
 		flags=$(test -n "${VERBOSE-}" && echo "-xzvof" || echo "-xzof")
-		${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
+		${} tar "${flags}" "${archive}" -C "${bin_dir}"
 		return 0
 		;;
 	*.zip)
 		flags=$(test -z "${VERBOSE-}" && echo "-qqo" || echo "-o")
-		UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
+		UNZIP="${flags}" ${} unzip "${archive}" -d "${bin_dir}"
 		return 0
 		;;
 	esac
@@ -172,18 +172,19 @@ usage() {
 }
 
 elevate_priv() {
-	if ! has sudo && ! doas; then
+	if ! [[ has sudo || has doas ]]; then
 		error 'Could not find the command "sudo" or "doas", needed to get permissions for install.'
 		info "If you are on Windows, please run your shell as an administrator, then"
 		info "rerun this script. Otherwise, please run this script as root, or install"
-		info "sudo or doas."
+		info "sudo."
 		exit 1
 	fi
-	if ! sudo -v && ! doas; then
+	if ! [[ has sudo || has doas ]; then
 		error "Superuser not granted, aborting installation"
 		exit 1
 	fi
 }
+
 
 install() {
 	ext="$1"
