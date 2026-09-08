@@ -9,16 +9,16 @@ use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
 
 // Display a `ByteSize` in a human readable format.
-fn display_bs(bs: ByteSize) -> String {
+fn display_bs(bs: ByteSize, show_decimals: bool) -> String {
     let mut display_bytes = bs.to_string_as(true);
     let mut keep = true;
-    // Skip decimals and the space before the byte unit.
+    // Skip decimals (unless `show_decimals` is set) and the space before the byte unit.
     display_bytes.retain(|c| match c {
         ' ' => {
             keep = true;
             false
         }
-        '.' => {
+        '.' if !show_decimals => {
             keep = false;
             false
         }
@@ -33,11 +33,11 @@ fn pct(total: ByteSize, free: ByteSize) -> f64 {
 }
 
 // Print usage string used/total
-fn format_usage_total(total: ByteSize, free: ByteSize) -> String {
+fn format_usage_total(total: ByteSize, free: ByteSize, show_decimals: bool) -> String {
     format!(
         "{}/{}",
-        display_bs(saturating_sub_bytes(total, free)),
-        display_bs(total)
+        display_bs(saturating_sub_bytes(total, free), show_decimals),
+        display_bs(total, show_decimals)
     )
 }
 
@@ -93,11 +93,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "ram" => Some(Ok(format_usage_total(memory.total, memory.free))),
+                "ram" => Some(Ok(format_usage_total(
+                    memory.total,
+                    memory.free,
+                    config.show_decimals,
+                ))),
                 "ram_pct" => Some(Ok(format!("{used_pct:.0}%"))),
                 "swap" => Some(Ok(format_usage_total(
                     swap.as_ref()?.total,
                     swap.as_ref()?.free,
+                    config.show_decimals,
                 ))),
                 "swap_pct" => Some(Ok(format!(
                     "{:.0}%",
@@ -128,19 +133,56 @@ mod test {
     #[test]
     fn test_format_usage_total() {
         assert_eq!(
-            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(1024 * 1024 * 1024)),
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024),
+                false
+            ),
             "0B/1GiB"
         );
         assert_eq!(
             format_usage_total(
                 ByteSize(1024 * 1024 * 1024),
-                ByteSize(1024 * 1024 * 1024 / 2)
+                ByteSize(1024 * 1024 * 1024),
+                true
+            ),
+            "0B/1.0GiB"
+        );
+        assert_eq!(
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024 / 2),
+                false
             ),
             "512MiB/1GiB"
         );
         assert_eq!(
-            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(0)),
+            format_usage_total(
+                ByteSize(1024 * 1024 * 1024),
+                ByteSize(1024 * 1024 * 1024 / 2),
+                true
+            ),
+            "512.0MiB/1.0GiB"
+        );
+        assert_eq!(
+            format_usage_total(ByteSize(1024 * 1024 * 1024), ByteSize(0), false),
             "1GiB/1GiB"
+        );
+        assert_eq!(
+            format_usage_total(
+                ByteSize((1024 * 1024 * 1024) + (1024 * 1024 * 512)),
+                ByteSize(0),
+                false
+            ),
+            "1GiB/1GiB"
+        );
+        assert_eq!(
+            format_usage_total(
+                ByteSize((1024 * 1024 * 1024) + (1024 * 1024 * 512)),
+                ByteSize(0),
+                true
+            ),
+            "1.5GiB/1.5GiB"
         );
     }
 
