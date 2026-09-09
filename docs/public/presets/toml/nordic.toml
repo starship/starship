@@ -1,0 +1,76 @@
+format = """
+[](#329da8)\
+$username\
+[](bg:#5E81AC fg:#2E3440)\
+$directory\
+[](fg:#5E81AC bg:#88C0D0)\
+$python$conda\
+[](fg:#88C0D0 bg:#8FBCBB)\
+$git_branch$git_status\
+[](fg:#8FBCBB bg:#81A1C1)\
+$time\
+[](fg:#81A1C1)\
+$line_break$character
+"""
+
+[username]
+show_always = true
+style_user = "bg:#2E3440 fg:#FFFFFF"
+format = '[  $user ]($style)'
+
+[directory]
+style = "bg:#5E81AC fg:#ECEFF4"
+format = "[$path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+fish_style_pwd_dir_length = 3
+
+[directory.substitutions]
+"~" = " "
+"Documents" = "󰈙 Docs"
+"Downloads" = " DL"
+"Projects" = " Proj"
+"Music" = "󰝚 Music"
+"Pictures" = " Pics"
+"Desktop" = " Desk"
+
+[python]
+symbol = ""
+style = "bg:#88C0D0 fg:#2E3440"
+format = '[ $symbol ($virtualenv) ]($style)'
+pyenv_version_name = false
+
+[conda]
+symbol = "󱔎"
+style = "bg:#88C0D0 fg:#2E3440"
+format = '[ $symbol $environment ]($style)'
+ignore_base = false
+
+[git_branch]
+symbol = ""
+style = "bg:#8FBCBB fg:#2E3440"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#8FBCBB fg:#2E3440"
+format = '[$all_status ]($style)'
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+renamed = "🔀"
+deleted = "✘"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bg:#81A1C1 fg:#2E3440"
+format = '[🕒 $time ]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+success_symbol = "[❯❯](bold green)"
+error_symbol = "[❯!](bold red)"
+vimcmd_symbol = "[❮](green)"
+
