@@ -84,13 +84,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // Truncate the dir string to the maximum number of path components
-    let dir_string =
-        if let Some(truncated) = truncate(&dir_string, config.truncation_length as usize) {
-            is_truncated = true;
-            truncated
-        } else {
-            dir_string
-        };
+    let dir_string = if let Some(truncated) = truncate(
+        &dir_string,
+        config.truncation_length as usize,
+        config.truncation_width as usize,
+    ) {
+        is_truncated = true;
+        truncated
+    } else {
+        dir_string
+    };
 
     let prefix = if is_truncated {
         // Substitutions could have changed the prefix, so don't allow them and
@@ -907,6 +910,7 @@ mod tests {
             .config(toml::toml! {
                 [directory]
                 truncation_length = 100
+                truncation_width = 300
             })
             .path(&dir)
             .collect();
@@ -914,7 +918,7 @@ mod tests {
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(
-                &truncate(&dir_str, 100).unwrap_or(dir_str)
+                &truncate(&dir_str, 100, 300).unwrap_or(dir_str)
             ))
         ));
 
@@ -1905,5 +1909,29 @@ mod tests {
             before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
             "~/user/gitrepo-diff/gitrepo".to_string()
         );
+    }
+
+    #[test]
+    fn truncated_directory_config_width() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let dir = tmp_dir.path().join("a_long_directory_name/rocket");
+        fs::create_dir_all(&dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 0
+                truncation_width = 10
+            })
+            .path(&dir)
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep("rocket"))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 }
