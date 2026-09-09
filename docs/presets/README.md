@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [ANSI Powerline](./ansi-powerline.md)
+
+A powerline-style preset that uses only standard ANSI color names instead of hard-coded hex values, so it adapts to any terminal color scheme.
+
+[![Screenshot of ANSI Powerline preset](/presets/img/ansi-powerline.png "Click to view ANSI Powerline preset")](./ansi-powerline)
