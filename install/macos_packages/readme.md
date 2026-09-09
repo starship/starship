@@ -1,4 +1,4 @@
-# MacOS Codesigning Scripts
+# macOS Codesigning Scripts
 
 Well, here we are. The Apple notarization procedure is complex enough that I
 need an actual pile of scripts and writeup to be able to remember how to do it.
