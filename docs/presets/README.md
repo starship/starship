@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Purple Rainbow](./purple-rainbow.md)
+
+This preset is inspired by [Gruvbox Rainbow](./gruvbox-rainbow.md) and [Tokyo Night](./tokyo-night.md), and features a purple-to-blue gradient color scheme.
+
+[![Screenshot of Purple Rainbow preset](/presets/img/purple-rainbow.png "Click to view Purple Heart preset")](./purple-rainbow)
