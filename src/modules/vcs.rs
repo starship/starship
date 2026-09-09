@@ -3,9 +3,11 @@ use std::path::Path;
 
 use super::{Context, Module, ModuleConfig};
 
+use crate::configs::git_status::GitStatusConfig;
 use crate::configs::vcs::VcsConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::string_formatter::StringFormatterError;
+use crate::modules::git_status::get_static_repo_status;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("vcs");
@@ -34,6 +36,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(modules).and_then(|formatter| {
         formatter
+            .map_style(|variable: &str| match variable {
+                "style" => {
+                    if is_repo_clean(context, vcs).unwrap_or(true) {
+                        Some(Ok(config.style_clean))
+                    } else {
+                        Some(Ok(config.style_dirty))
+                    }
+                }
+                _ => None,
+            })
             .map_variables_to_segments(|variable| match variable {
                 "vcs" => Some(Err(StringFormatterError::Custom(
                     "cannot recursively include the `vcs` module in itself".into(),
@@ -69,6 +81,26 @@ pub fn discover_repo_root<'a>(context: &'a Context, vcs: Vcs) -> Option<Cow<'a, 
     };
 
     scan.scan().map(Into::into)
+}
+
+fn is_repo_clean(context: &Context, vcs: Vcs) -> Option<bool> {
+    let is_clean = match vcs {
+        Vcs::Fossil => context.exec_cmd("fossil", &["changes"])?.stdout.is_empty(),
+        Vcs::Git => {
+            let status_module = context.new_module("git_status");
+            let status_config = GitStatusConfig::try_load(status_module.config);
+            let repo = context.get_repo().ok()?;
+            let status = get_static_repo_status(context, repo, &status_config)?;
+            !status.is_dirty()
+        }
+        Vcs::Hg => context
+            .exec_cmd("hg", &["status", "-mard"])?
+            .stdout
+            .is_empty(),
+        Vcs::Pijul => context.exec_cmd("pijul", &["status"])?.stdout.is_empty(),
+    };
+
+    Some(is_clean)
 }
 
 #[derive(Debug, Copy, Clone)]
