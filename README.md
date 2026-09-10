@@ -355,7 +355,7 @@ eval $(starship init ion)
 
 Add the following to `~/.config/lumesh/config.lm`:
 
-```bash
+```sh
 set LUME_PROMPT_SETTINGS = {
     starship: 1,
     lazy: 0,
