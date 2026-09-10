@@ -329,6 +329,9 @@ symbol = "swift "
 [typst]
 symbol = "typst "
 
+[upterm]
+symbol = "upterm "
+
 [vagrant]
 symbol = "vagrant "
 
