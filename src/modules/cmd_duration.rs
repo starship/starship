@@ -105,6 +105,14 @@ fn undistract_me<'a>(
             .icon("utilities-terminal")
             .timeout(timeout);
 
+        #[cfg(target_os = "linux")]
+        {
+            use notify_rust::Hint;
+            if config.notifications_transient {
+                notification.hint(Hint::Transient(true));
+            }
+        }
+
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {err}");
         }
