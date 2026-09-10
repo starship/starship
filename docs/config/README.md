@@ -381,6 +381,8 @@ The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_P
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
+If the option `sso.require_active` is set to `true`, the module hides for SSO-based profiles unless a cached token is present and unexpired. See [SSO Options](#sso-options).
+
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
 is read from the `AWS_SESSION_EXPIRATION` env var.
@@ -410,6 +412,14 @@ is read from the `AWS_SSO_PROFILE` env var.
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+
+### SSO Options
+
+Configured under `[aws.sso]`.
+
+| Option           | Default | Description                                                                                                 |
+| ---------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
+| `require_active` | `false` | If `true`, hides the module for SSO-based profiles when no unexpired token is cached in `~/.aws/sso/cache`. |
 
 ### Variables
 
@@ -466,6 +476,15 @@ style = 'bold blue'
 symbol = '🅰 '
 [aws.profile_aliases]
 Enterprise_Naming_Scheme-voidstars = 'void**'
+```
+
+#### Require an active SSO session
+
+```toml
+# ~/.config/starship.toml
+
+[aws.sso]
+require_active = true
 ```
 
 ## Azure
