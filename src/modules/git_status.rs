@@ -761,14 +761,15 @@ fn format_text<F>(
 where
     F: Fn(&str) -> Option<String> + Send + Sync,
 {
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
+    match StringFormatter::new(format_str) {
+        Ok(formatter) => formatter
             .map(|variable| mapper(variable).map(Ok))
             .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{config_path}`");
-        None
+            .ok(),
+        Err(error) => {
+            log::warn!("Error parsing format string `{config_path}`:\n{error}");
+            None
+        }
     }
 }
 
@@ -1627,6 +1628,32 @@ pub mod tests {
             ));
 
             assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn parse_error_in_count_format_is_skipped() -> io::Result<()> {
+        // A count format that fails to parse must not abort the module:
+        // the offending segment is dropped (and the parse error is logged
+        // by `format_text`) rather than propagated. Guards the error arm
+        // this change added around `StringFormatter::new`.
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
+
+            create_staged(repo_dir.path())?;
+
+            let actual = ModuleRenderer::new("git_status")
+                .config(toml::toml! {
+                    [git_status]
+                    format = "$staged"
+                    staged = "${"
+                })
+                .path(repo_dir.path())
+                .collect();
+
+            assert_eq!(None, actual);
             repo_dir.close()?;
         }
         Ok(())
