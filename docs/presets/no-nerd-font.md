@@ -2,12 +2,13 @@
 
 # No Nerd Fonts Preset
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+::: warning DEPRECATED
 
-This means that even without a Nerd Font installed, you should be able to view
-all module symbols.
+Starship's default symbols no longer require Nerd Fonts as of this release.
+This preset is kept for backwards compatibility, but does not change anything
+from the default configuration.
 
-This preset will become the default preset in a future release of starship.
+:::
 
 ### Configuration
 

@@ -21,7 +21,7 @@ impl Default for PulumiConfig<'_> {
         Self {
             format: "via [$symbol($username@)$stack]($style) ",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: "⠿ ",
             style: "bold 5",
             disabled: false,
             search_upwards: true,
