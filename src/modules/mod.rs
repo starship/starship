@@ -52,6 +52,7 @@ mod hostname;
 mod java;
 mod jj_bookmark;
 mod jj_change;
+mod jj_metrics;
 mod jobs;
 mod julia;
 mod kotlin;
@@ -178,6 +179,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "java" => java::module(context),
             "jj_bookmark" => jj_bookmark::module(context),
             "jj_change" => jj_change::module(context),
+            "jj_metrics" => jj_metrics::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -319,6 +321,7 @@ pub fn description(module: &str) -> &'static str {
         "java" => "The currently installed version of Java",
         "jj_bookmark" => "The closest ancestor bookmark in Jujutsu",
         "jj_change" => "The current change in Jujutsu",
+        "jj_metrics" => "The number of added and deleted lines in Jujutsu",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",

@@ -55,6 +55,7 @@ pub mod hostname;
 pub mod java;
 pub mod jj_bookmark;
 pub mod jj_change;
+pub mod jj_metrics;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
@@ -233,6 +234,8 @@ pub struct FullConfig<'a> {
     jj_bookmark: jj_bookmark::JJBookmarkConfig<'a>,
     #[serde(borrow)]
     jj_change: jj_change::JJChangeConfig<'a>,
+    #[serde(borrow)]
+    jj_metrics: jj_metrics::JJMetricsConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]
