@@ -332,6 +332,9 @@ symbol = "typst "
 [vagrant]
 symbol = "vagrant "
 
+[vault]
+symbol = "vault "
+
 [terraform]
 symbol = "terraform "
 
