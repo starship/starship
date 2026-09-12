@@ -1,21 +1,16 @@
 # Розширені налаштування
 
-While Starship is a versatile shell, sometimes you need to do more than edit
-`starship.toml` to get it to do certain things. Ця сторінка містить деякі з найбільш
+Хоча Starship — це універсальна оболонка, іноді для того, щоб змусити її виконувати певні дії, потрібно зробити щось більше, ніж просто відредагувати
+`starship.toml`. Ця сторінка містить деякі з найбільш
 докладних методів налаштувань, які використовуються у starship.
 
 > [!WARNING] Конфігурації в цьому розділі можуть бути змінені в майбутніх випусках Starship.
 
 ## TransientPrompt у PowerShell
 
-Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. To enable
-this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put
-this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
-`Disable-TransientPrompt`.
+Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. Щоб увімкнути цю функцію, виконайте команду `Enable-TransientPrompt` у командному рядку. Щоб зробити цю поведінку постійною, додайте цю команду у ваш $PROFILE`. Функцію «Transience» можна вимкнути на льоту за допомогою команди `Disable-TransientPrompt\`.
 
-Типово, ліва частина вводу буде замінена на `>`. To customize this,
-define a new function called `Invoke-Starship-TransientFunction`. For example, to
-display Starship's `character` module here, you would do
+Типово, ліва частина вводу буде замінена на `>`. Щоб налаштувати це, визначте нову функцію з назвою `Invoke-Starship-TransientFunction`. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -29,20 +24,15 @@ Enable-TransientPrompt
 
 ## TransientPrompt та TransientRightPrompt в Cmd
 
-Clink дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. To enable
-this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. Щоб увімкнути це, виконайте `clink set prompt.transient <value>`, де \<value\> може бути одним з:
 
 - `always`: завжди замінює попередній командний рядок
 - `same_dir`: замінює попередній командний рядок тільки якщо робоча тека не змінювалась
 - `off`: не змінює командний рядок (тобто функцію вимкнено)
 
-Це треба зробити лише один раз. Make the following changes to your `starship.lua`
-to customize what gets displayed on the left and on the right:
+Це треба зробити лише один раз. Зробіть наступні зміни у `starship.lua`, щоб налаштувати, що показується ліворуч і праворуч:
 
-- Типово, ліва частина вводу буде замінена на `>`. To customize this,
-  define a new function called `starship_transient_prompt_func`. This function
-  receives the current prompt as a string that you can utilize. For example, to
-  display Starship's `character` module here, you would do
+- Типово, ліва частина вводу буде замінена на `>`. Щоб кастомізувати її, створіть нову функцію з назвою `starship_transient_prompt_func`. Ця функція отримує поточний текст командного рядка, з яким ви зможете працювати. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -53,10 +43,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- Типово, права частина вводу є порожньою. To customize this, define a new
-  function called `starship_transient_rprompt_func`. This function receives the
-  current prompt as a string that you can utilize. For example, to display
-  the time at which the last command was started here, you would do
+- Типово, права частина вводу є порожньою. Щоб кастомізувати її, створіть нову функцію з назвою `starship_transient_rprompt_func`. Ця функція отримує поточний текст командного рядка, з яким ви зможете працювати. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -67,16 +54,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt та TransientRightPrompt у Fish
 
-Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. To enable
-this, run `enable_transience` in the shell session. To make it permanent, put
-this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with
-`disable_transience`.
+Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. Щоб увімкнути це, запустіть `enable_transience` в оболонці. Щоб зробити цю змінну постійною, додайте цей вираз до ваших налаштувань `~/.config/fish/config.fish`. Функцію «Transience» можна вимкнути на льоту за допомогою команди `disable_transience`.
 
 Зверніть увагу, що у випадку Fish, перехідний командний рядок буде надруковано лише тоді, коли командний рядок не порожній та синтаксично правильний.
 
-- Типово, ліва частина вводу буде замінена на зелений символ `❯`. To customize this,
-  define a new function called `starship_transient_prompt_func`. For example, to
-  display Starship's `character` module here, you would do
+- Типово, ліва частина вводу буде замінена на зелений символ `❯`. Щоб кастомізувати її, створіть нову функцію з назвою `starship_transient_prompt_func`. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```fish
 function starship_transient_prompt_func
@@ -86,9 +68,7 @@ starship init fish | source
 enable_transience
 ```
 
-- Типово, права частина вводу є порожньою. To customize this, define a new
-  function called `starship_transient_rprompt_func`. For example, to display
-  the time at which the last command was started here, you would do
+- Типово, права частина вводу є порожньою. Щоб кастомізувати її, створіть нову функцію з назвою `starship_transient_rprompt_func`. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```fish
 function starship_transient_rprompt_func
@@ -100,32 +80,21 @@ enable_transience
 
 ## TransientPrompt та TransientRightPrompt в Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework at v0.4 or higher allows you to replace
-the previous-printed prompt with custom strings. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. To enable this, put this in `~/.bashrc`
-`bleopt prompt_ps1_transient=<value>`:
+[Ble.sh](https://github.com/akinomyoga/ble.sh) v0.4 або вище дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`.
-When `prompt_ps1_final` is empty and the option `prompt_ps1_transient` has a non-empty \<value\>,
-the prompt specified by `PS1` is erased on leaving the current command line.
-If \<value\> contains a field `trim`, only the last line of multiline `PS1` is
-preserved and the other lines are erased. Otherwise, the command line will be
-redrawn as if `PS1=` is specified. When a field `same-dir` is contained in
-\<value\> and the current working directory is different from the final directory of
-the previous command line, this option `prompt_ps1_transient` is ignored.
+\<value\> тут — це розділений двокрапкою список `always`, `same-dir` та `trim`.
+Якщо `prompt_ps1_final` порожній, а параметр `prompt_ps1_transient` містить непусте значення \<value\>, то командний рядок, задана параметром `PS1`, стирається при виході з поточного командного рядка.
+Якщо \<value\> містить поле `trim`, зберігається лише останній рядок багаторядкового `PS1`, а решта рядків видаляються. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у \<value\> та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
 
 Зробіть наступні зміни у `~/.blerc` (або у `~/.config/blesh/init.sh`), щоб налаштувати, що показується ліворуч і праворуч:
 
-- To customize what the left side of input gets replaced with, configure the
-  `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character`
-  module here, you would do
+- Для налаштування того, чим замінюється ліва частина вводу, налаштуйте параметр `prompt_ps1_final` для Ble.sh. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```bash
 bleopt prompt_ps1_final='$(starship module character)'
 ```
 
-- To customize what the right side of input gets replaced with, configure the
-  `prompt_rps1_final` Ble.sh option. For example, to display
-  the time at which the last command was started here, you would do
+- Для налаштування того, чим замінюється права частина вводу, налаштуйте параметр `prompt_rps1_final`. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```bash
 bleopt prompt_rps1_final='$(starship module time)'
@@ -133,13 +102,9 @@ bleopt prompt_rps1_final='$(starship module time)'
 
 ## Власні команди pre-prompt та pre-execution в Cmd
 
-Clink забезпечує надзвичайно гнучкий API для виконання команд pre-prompt і pre-exec в Cmd. Його досить просто використовувати в Starship. Make the following changes
-to your `starship.lua` file as per your requirements:
+Clink забезпечує надзвичайно гнучкий API для виконання команд pre-prompt і pre-exec в Cmd. Його досить просто використовувати в Starship. Зробіть наступні зміни у вашому `starship.lua` відповідно до ваших вимог:
 
-- To run a custom function right before the prompt is drawn, define a new
-  function called `starship_preprompt_user_func`. This function receives
-  the current prompt as a string that you can utilize. For example, to
-  draw a rocket before the prompt, you would do
+- Для запуску власних функцій прямо перед виводом командного рядка, визначте нову функцію з назвою `starship_preprompt_user_func`. Ця функція отримує поточний текст командного рядка, з яким ви зможете працювати. Наприклад, щоб показати ракету перед командним рядком, ви можете зробити наступне
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -149,10 +114,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- To run a custom function right before a command is executed, define a new
-  function called `starship_precmd_user_func`. This function receives
-  the current commandline as a string that you can utilize. For example, to
-  print the command that's about to be executed, you would do
+- Для запуску власних функцій прямо перед виконанням команди, визначте нову функцію з назвою `starship_precmd_user_func`. Ця функція отримує поточний текст команди, з яким ви зможете працювати. Наприклад, для виводу команди, яка буде виконана, вам треба зробити
 
 ```lua
 function starship_precmd_user_func(line)
@@ -165,12 +127,10 @@ load(io.popen('starship init cmd'):read("*a"))()
 ## Власні команди pre-prompt та pre-execution в Bash
 
 Bash не має офіційної системи preexec/precmd, як більшість інших оболонок.
-Because of this, it is difficult to provide fully customizable hooks in `bash`.
+Через це важко забезпечити повністю настроювані гачки для цього в `bash`.
 Однак, Starship дає можливість вставити свої власні функції в процедуру виводу командного рядка:
 
-- To run a custom function right before the prompt is drawn, define a new
-  function and then assign its name to `starship_precmd_user_func`. For example,
-  to draw a rocket before the prompt, you would do
+- Для запуску власних функцій прямо перед виводом командного рядка, визначте нову функцію з назвою `starship_precmd_user_func`. Наприклад, щоб показати ракету перед командним рядком, ви можете зробити наступне
 
 ```bash
 function blastoff(){
@@ -179,11 +139,9 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the
-  [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
-  However, you **must** trap the DEBUG signal _before_ initializing Starship!
-  Starship can preserve the value of the DEBUG trap, but if the trap is overwritten
-  after starship starts up, some functionality will break.
+- Щоб запустити власну функцію безпосередньо перед виконанням команди, можна скористатися [механізмом перехоплення [`DEBUG`]](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
+  Однак, ви **повинні** перехопити сигнал DEBUG _перед_ ініціалізацією Starship!
+  Starship може зберегти значення перехоплення DEBUG, але якщо перехоплення буде перезаписане після початку запуску, деякі функції не працюватимуть.
 
 ```bash
 function blastoff(){
@@ -198,7 +156,7 @@ set +o functrace
 ## Власні команди pre-prompt та pre-execution в PowerShell
 
 PowerShell не має офіційної системи preexec/precmd, як більшість інших оболонок.
-Because of this, it is difficult to provide fully customizable hooks in `powershell`.
+Через це важко забезпечити повністю настроювані гачки для цього в `powershell`.
 Однак, Starship дає можливість вставити свої власні функції в процедуру виводу командного рядка:
 
 Створіть функцію з назвою `Invoke-Starship-PreCommand`
@@ -212,8 +170,7 @@ function Invoke-Starship-PreCommand {
 ## Зміна заголовка вікна
 
 В деяких оболонках командний рядок автоматично змінює заголовок вікна (наприклад, на назву поточної теки). У Fish це стандартна поведінка.
-Starship does not do this, but it's fairly straightforward to add this
-functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Starship цього не робить, але це досить просто зробити у `bash`, `zsh`, `cmd` або `powershell`.
 
 Спочатку визначте функцію зміни заголовка вікна (в bash і zsh – однаково):
 
@@ -261,7 +218,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 Ви також можете встановити подібний вивід у PowerShell, створивши функцію з назвою `Invoke-Starship-PreCommand`.
 
 ```powershell
-# edit $PROFILE
+# редагування $PROFILE
 function Invoke-Starship-PreCommand {
   $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
@@ -271,13 +228,9 @@ Invoke-Expression (&starship init powershell)
 
 ## Командний рядок праворуч {#enable-right-prompt}
 
-Деякі оболонки підтримують вивід командного рядка праворуч. Starship can
-set the content of the right prompt using the `right_format` option. Any module that can be used
-in `format` is also supported in `right_format`. The `$all` variable will only contain modules
-not explicitly used in either `format` or `right_format`.
+Деякі оболонки підтримують вивід командного рядка праворуч. Starship може встановити вміст правої частини командного рядка за допомогою параметра `right_format`. Будь-який модуль, який можна використовувати у `format`, також підтримується у `right_format`. Змінна `$all` міститиме лише модулі, які явно не використовується, а ні в `format`, а ні в `right_format`.
 
-Примітка: командний рядок праворуч – це один рядок, що знаходиться праворуч у рядку вводу. To right align modules above
-the input line in a multi-line prompt, see the [`fill` module](../config/#fill).
+Примітка: командний рядок праворуч – це один рядок, що знаходиться праворуч у рядку вводу. Щоб вирівняти модулі праворуч над рядком введення в багаторядковому запиті, перегляньте [модуль `fill`](./config/#fill).
 
 `right_format` наразі підтримується для таких оболонок: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
@@ -301,7 +254,7 @@ right_format = """$all"""
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-When using `zsh` (v5.0.5+), the shell adds a default trailing space to the right prompt. This can cause alignment issues specifically when using the Starship `$fill` module. To remove this gap, add the following to your `.zshrc`:
+При використанні `zsh` (версія 5.0.5 і вище) оболонка стандартно додає пробіл у кінці правого боку командного рядка. Це може спричинити проблеми з вирівнюванням, зокрема під час використання модуля Starship `$fill`. Щоб видалити цей проміжок, додайте наступне до вашого `.zshrc`:
 
 ```zsh
 ZLE_RPROMPT_INDENT=0
@@ -311,9 +264,9 @@ ZLE_RPROMPT_INDENT=0
 
 Деякі оболонки підтримують подовження вводу так само як і  звичайний ввід в командний рядок. Такий ввід буде показаний замість звичайного, колі користувач ввів символ продовження вводу (наприклад одну ліву дужку чи лапку).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
+У Starship можна встановити показ продовженого вводу за допомогою параметра `continuation_prompt`. Стандартний командний рядок — `'[∙](bright-black) '`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Примітка: `continuation_prompt` слід встановити на літеральний рядок без жодних змінних.
 
 Примітка: Подовжений ввід доступний лише для наступних оболонок:
 
@@ -351,17 +304,17 @@ Starship підтримує показ власного рядка стану п
 }
 ```
 
-2. Customize the statusline appearance in your `~/.config/starship.toml` (see [Configuration](#configuration) below)
+2. Налаштуйте вигляд рядка стану у файлі `~/.config/starship.toml` (див. розділ [Налаштування](#configuration) нижче)
 
 ### Огляд
 
-When invoked with `starship statusline claude-code`, Starship receives Claude Code session data via stdin and renders a statusline using a dedicated profile named `claude-code`.
+При запуску з параметром `starship statusline claude-code` Starship отримує дані сеансу Claude Code через стандартний ввід (stdin) і показує рядок стану, використовуючи спеціальний профіль з назвою `claude-code`.
 
 Типовий формат профілю:
 
-- `claude_model`: Displays the current Claude model being used
-- `claude_context`: Shows context window usage with a visual gauge
-- `claude_cost`: Displays session cost and statistics
+- `claude_model`: Показує поточну модель, яка використовується в Claude
+- `claude_context`: Показує використання контекстного вікна за допомогою візуального індикатора
+- `claude_cost`: Показує вартість сеансу та статистичні дані
 
 Типовий формат профілю:
 
@@ -372,7 +325,7 @@ claude-code = "$claude_model$git_branch$claude_context$claude_cost"
 
 ### Налаштування
 
-You can customize the Claude Code statusline by modifying the `claude-code` profile and individual module configurations in your `~/.config/starship.toml`:
+Ви можете налаштувати рядок стану коду Claude Code змінивши профіль `claude-code` і окремі конфігурації модулів в `~/.config/starship.toml`:
 
 ```toml
 # ~/.config/starship.toml
@@ -398,7 +351,7 @@ symbol = "💰 "
 
 ### Claude Model
 
-The `claude_model` module displays the current Claude model being used in the session.
+Модуль `claude_model` показує поточну модель Claude, яка використовується в сесії.
 
 #### Змінні
 
@@ -408,7 +361,7 @@ The `claude_model` module displays the current Claude model being used in the se
 | `символ`        | `'🤖 '`                      | ID моделі                                                                                                                                                  |
 | `style`         | `'bold blue'`                | Віддзеркалює значення параметра `symbol`                                                                                                                   |
 | `model_aliases` | `{}`                         | Звʼязує ідентифікатори моделей або їхні назви з коротшими псевдонімами. Спочатку перевіряється ідентифікатор, потім назва. |
-| `disabled`      | `false`                      | Disables the `claude_model` module.                                                                                                        |
+| `disabled`      | `false`                      | Вимикає модуль `claude_model`.                                                                                                             |
 
 #### Змінні
 
@@ -443,7 +396,7 @@ style = "bold cyan"
 
 ### Claude Context
 
-The `claude_context` module displays context window usage as a percentage and visual gauge. Стиль автоматично змінюється на основі налаштованих порогів.
+Модуль `claude_context` показує використання контекстного вікна у вигляді відсотка і візуального індикатора. Стиль автоматично змінюється на основі налаштованих порогів.
 
 #### Параметри
 
@@ -455,17 +408,17 @@ The `claude_context` module displays context window usage as a percentage and vi
 | `gauge_full_symbol`    | `'█'`                             | Символ, який використовується для заповнених сегментів індикатора.          |
 | `gauge_partial_symbol` | `'▒'`                             | Символ, який використовується для частково заповнених сегментів індикатора. |
 | `gauge_empty_symbol`   | `'░'`                             | Символ, який використовується для не заповнених сегментів індикатора.       |
-| `display`              | [see below](#display)             | Налаштування порогів та стилів.                                             |
-| `disabled`             | `false`                           | Disables the `claude_context` module.                                       |
+| `display`              | [див нижче](#display)             | Налаштування порогів та стилів.                                             |
+| `disabled`             | `false`                           | Вимикає модуль `claude_context`.                                            |
 
 ##### Display
 
-The `display` option is an array of objects that define thresholds and styles for different usage levels. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+Параметр `display` — це масив об’єктів, які визначають порогові значення та стилі для різних рівнів використання. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
 
 | Параметр    | Стандартно   | Опис                                                                                |
 | ----------- | ------------ | ----------------------------------------------------------------------------------- |
 | `threshold` | `0.0`        | Мінімальний відсоток використання контекстних вікон, що відповідає цій конфігурації |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched                       |
+| `style`     | `bold green` | Значення `style`, якщо ця конфігурація візуалізації має збіг                        |
 | `hidden`    | `false`      | Приховати цей модуль, якщо він збігається з конфігурацією.          |
 
 ```toml
@@ -562,7 +515,7 @@ style = "bold red"
 
 ### Claude Cost
 
-The `claude_cost` module displays the total cost of the current Claude Code session in USD. Like `claude_context`, it supports threshold-based styling.
+Модуль `claude_cost` показує загальну вартість поточної сесії Claude Code в доларах США. Як і `claude_context`, він підтримує стилізацію на основі порогових значень.
 
 #### Параметри
 
@@ -570,17 +523,17 @@ The `claude_cost` module displays the total cost of the current Claude Code sess
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `'[$symbol(\\$$cost)]($style) '` | Формат модуля.                               |
 | `символ`   | `'💰 '`                            | Символ, який показується перед сумою витрат. |
-| `display`  | [see below](#display-1)            | Налаштування порогів та стилів.              |
-| `disabled` | `false`                            | Disables the `claude_cost` module.           |
+| `display`  | [див нижче](#display-1)            | Налаштування порогів та стилів.              |
+| `disabled` | `false`                            | Вимикає модуль `claude_cost`.                |
 
 ##### Display
 
-The `display` option is an array of objects that define cost thresholds and styles. The module uses the style from the highest matching threshold or hides the module if `hidden` is `true`.
+Параметр `display` — це масив об\єктів, які визначають порогові значення та стилі для порогових значень витрат. Модуль використовує стиль із найвищим порогом відповідності або приховує модуль, якщо `hidden` має значення `true`.
 
 | Параметр    | Стандартно   | Опис                                                                       |
 | ----------- | ------------ | -------------------------------------------------------------------------- |
 | `threshold` | `0.0`        | Мінімальна вартість у доларах США для такої конфігурації                   |
-| `style`     | `bold green` | The value of `style` if this display configuration is matched              |
+| `style`     | `bold green` | Значення `style`, якщо ця конфігурація візуалізації має збіг               |
 | `hidden`    | `false`      | Приховати цей модуль, якщо він збігається з конфігурацією. |
 
 **Стандартні налаштування:**
@@ -642,7 +595,7 @@ format = "[$symbol$cost ($duration)]($style) "
 
 ## Рядки стилів
 
-Рядки стилю — список слів, розділених пробілами. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Кожне слово може бути одним з наступних:
+Рядки стилю — список слів, розділених пробілами. Слова не чутливі до регістру (наприклад `bold` і `BoLd` вважаються однаковими). Кожне слово може бути одним з наступних:
 
 - `bold`
 - `italic`
@@ -657,25 +610,22 @@ format = "[$symbol$cost ($duration)]($style) "
 - `<color>`
 - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future.
-`<color>` can also be set to `prev_fg` or `prev_bg` which evaluates to the previous item's foreground or background color respectively if available or `none` otherwise.
-`inverted` swaps the background and foreground colors. Порядок слів у рядку не має значення.
+де `<color>` є специфікацією кольору (обговорюється нижче). `fg:<color>` та  `<color>` на цей час роблять те саме, хоча це може змінитися в майбутньому.
+`<color>` може також мати значення `prev_fg` або `prev_bg`, які обчислюють колір тексту або фону попереднього елемента відповідно, якщо він доступний, або `none` у протилежному випадку.
+`inverted` замінює кольори тла і тексту. Порядок слів у рядку не має значення.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+Токен `none` перевизначає всі інші токени у рядку, якщо він не є частиною `bg:`, так `fg:red none fg:blue` все одно створить рядок без стилізування. `bg:none` встановлює типовий колір фону, таким чином, `fg:red bg:none` еквівалентно `red` або `fg:red`, а `bg:green fg:red fg:none` також еквівалентно `fg:red` або `red`. Використання `none` у поєднанні з іншими токенами в майбутньому може стати помилкою.
 
 Якщо для тексту та фону задано кілька кольорів, останній в рядку буде мати вищий пріоритет.
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`,
-  `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these
-  with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an
-  [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- Число від 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- Один із стандартних кольорів терміналу: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Ви можете опціонально додавати префікс `bright-`, щоб отримати яскраву версію (наприклад, `bright-white`).
+- Символ `#` за яким йде шестизначний шістнадцятковий код кольору. Тут вказується [шестнадцятковий код кольору RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+- Число від 0-255. Це визначає [8-бітний код кольору ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Якщо для тексту та фону задано кілька кольорів, останній в рядку буде мати вищий пріоритет.
 
 Не кожен рядок стилю буде правильно показуватись у кожному терміналі. Зокрема, існують такі відомі примхи:
 
-- Many terminals disable support for `blink` by default.
-- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app.
+- Багато терміналів стандартно вмикають підтримку `blink`.
+- `hidden` [не підтримується в iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` не підтримується стандартно в macOS Terminal.app.
