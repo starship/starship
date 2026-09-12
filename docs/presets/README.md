@@ -60,6 +60,12 @@ It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
+## [Tour Classique Blue](./tour-classique-blue.md)
+
+This preset is inspired by vintage French cycling and one bike in particular in the Tour de France. Built upon [Pastel Powerline](./pastel-powerline.md) but a bit more minimal, it features an elegant blue gradient powerline design and requires a Nerd Font.
+
+[![Screenshot of Tour Classique Blue preset](/presets/img/tour-classique-blue.png "Click to view Tour Classique Blue preset")](./tour-classique-blue)
+
 ## [Tokyo Night](./tokyo-night.md)
 
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
