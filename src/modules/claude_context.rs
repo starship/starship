@@ -1,7 +1,7 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::claude_context::ClaudeContextConfig;
 use crate::formatter::StringFormatter;
-use crate::utils::humanize_int;
+use crate::utils::{humanize_int, render_gauge};
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("claude_context");
@@ -45,34 +45,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 })
                 .map(|variable| match variable {
-                    "gauge" => {
-                        let filled_float =
-                            (f64::from(percentage) / 100.0) * f64::from(config.gauge_width);
-                        let (filled_count, partial) = if config.gauge_partial_symbol.is_empty() {
-                            (filled_float.round() as usize, false)
-                        } else {
-                            let full = filled_float.floor() as usize;
-                            let rem = filled_float - full as f64;
-                            // Show partial block if remainder is significant enough (> 0.25)
-                            // but if it's very close to 1 (> 0.75), just round up to full (handled by empty_count check)
-                            if rem >= 0.25 {
-                                (full, true)
-                            } else {
-                                (full, false)
-                            }
-                        };
-
-                        let filled_count = filled_count.min(config.gauge_width as usize);
-                        let partial_count =
-                            usize::from(partial && filled_count < config.gauge_width as usize);
-                        let empty_count = (config.gauge_width as usize)
-                            .saturating_sub(filled_count + partial_count);
-
-                        let gauge = config.gauge_full_symbol.repeat(filled_count)
-                            + &config.gauge_partial_symbol.repeat(partial_count)
-                            + &config.gauge_empty_symbol.repeat(empty_count);
-                        Some(Ok(gauge))
-                    }
+                    "gauge" => Some(Ok(render_gauge(
+                        f64::from(percentage),
+                        config.gauge_width,
+                        config.gauge_full_symbol,
+                        config.gauge_partial_symbol,
+                        config.gauge_empty_symbol,
+                    ))),
                     "percentage" => Some(Ok(format!("{percentage}%"))),
                     "input_tokens" => Some(Ok(humanize_int(
                         claude_data.context_window.total_input_tokens,
@@ -210,6 +189,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            rate_limits: None,
         }
     }
 
