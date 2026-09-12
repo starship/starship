@@ -767,6 +767,331 @@ mod test {
     }
 
     #[test]
+    fn responsive_absent_and_empty_config_preserve_output() {
+        let mut absent = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        absent.env.insert("value", "long".to_string());
+        absent.width = 1;
+
+        let mut empty = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = []
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        empty.env.insert("value", "long".to_string());
+        empty.width = 1;
+
+        assert_eq!(get_prompt(&absent), "long");
+        assert_eq!(get_prompt(&empty), "long");
+    }
+
+    #[test]
+    fn responsive_exact_width_keeps_all_modules() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "fits".to_string());
+        context.width = 4;
+
+        assert_eq!(get_prompt(&context), "fits");
+    }
+
+    #[test]
+    fn responsive_exhaustion_keeps_remaining_content() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "literal${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "drop".to_string());
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "literal");
+    }
+
+    #[test]
+    fn responsive_hides_conditional_separators_but_not_literals() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "L( | ${env_var.value})R"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "long".to_string());
+        context.width = 2;
+
+        assert_eq!(get_prompt(&context), "LR");
+    }
+
+    #[test]
+    fn responsive_skips_missing_empty_disabled_and_repeated_entries() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.disabled}${env_var.empty}${env_var.first}${env_var.second}"
+            [responsive]
+            drop_order = [
+                "missing",
+                "env_var.disabled",
+                "env_var.empty",
+                "env_var.first",
+                "env_var.first",
+                "env_var.second",
+            ]
+            [env_var.disabled]
+            disabled = true
+            variable = "disabled"
+            format = "$env_value"
+            [env_var.empty]
+            variable = "empty"
+            format = "$env_value"
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+        });
+        context.env.insert("disabled", "ignored".to_string());
+        context.env.insert("first", "123".to_string());
+        context.env.insert("second", "45".to_string());
+        context.width = 2;
+
+        assert_eq!(get_prompt(&context), "45");
+    }
+
+    #[test]
+    fn responsive_measures_every_main_prompt_line() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.short}\n${env_var.long}"
+            [responsive]
+            drop_order = ["env_var.long"]
+            [env_var.short]
+            variable = "short"
+            format = "$env_value"
+            [env_var.long]
+            variable = "long"
+            format = "$env_value"
+        });
+        context.env.insert("short", "ok".to_string());
+        context.env.insert("long", "overflow".to_string());
+        context.width = 2;
+
+        assert_eq!(get_prompt(&context), "ok\n");
+    }
+
+    #[test]
+    fn responsive_all_preserves_concrete_module_identity() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$all"
+            right_format = "$directory"
+            [responsive]
+            drop_order = ["custom.extra"]
+            [custom.extra]
+            when = true
+            format = "xx"
+            [line_break]
+            disabled = true
+            [character]
+            format = ">"
+        });
+        context.env.insert("HOME", NULL_DEVICE.to_string());
+        context.current_dir = dir.path().to_path_buf();
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ">");
+        dir.close()
+    }
+
+    #[test]
+    fn responsive_implicit_groups_preserve_child_identity() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$custom$env_var$character"
+            [responsive]
+            drop_order = ["custom.extra", "env_var.extra"]
+            [custom.extra]
+            when = true
+            format = "aa"
+            [env_var.extra]
+            variable = "extra"
+            format = "$env_value"
+            [character]
+            format = ">"
+        });
+        context.env.insert("extra", "bb".to_string());
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "bb>");
+    }
+
+    #[test]
+    fn responsive_right_prompt_measures_joined_lines() {
+        let mut context = default_context().set_config(toml::toml! {
+            right_format = "${env_var.first}\n${env_var.second}"
+            [responsive]
+            drop_order = ["env_var.first"]
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+        });
+        context.env.insert("first", "ab".to_string());
+        context.env.insert("second", "cd".to_string());
+        context.target = Target::Right;
+        context.width = 3;
+
+        assert_eq!(get_prompt(&context), "cd");
+    }
+
+    #[test]
+    fn responsive_profile_prompt_drops_modules() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [responsive]
+            drop_order = ["env_var.extra"]
+            [profiles]
+            test = "${env_var.extra}$character"
+            [env_var.extra]
+            variable = "extra"
+            format = "$env_value"
+            [character]
+            format = ">"
+        });
+        context.env.insert("extra", "long".to_string());
+        context.target = Target::Profile("test".to_string());
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ">");
+    }
+
+    #[test]
+    fn responsive_bypasses_continuation_and_unknown_width() {
+        let mut continuation = default_context().set_config(toml::toml! {
+            continuation_prompt = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        continuation.env.insert("value", "long".to_string());
+        continuation.target = Target::Continuation;
+        continuation.width = 1;
+
+        let mut unknown_width = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        unknown_width.env.insert("value", "long".to_string());
+        unknown_width.width = 0;
+
+        assert_eq!(get_prompt(&continuation), "long");
+        assert_eq!(get_prompt(&unknown_width), "long");
+    }
+
+    #[test]
+    fn responsive_protects_structural_modules_and_reflows_fill() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$fill$line_break$character${env_var.value}"
+            [responsive]
+            drop_order = ["fill", "line_break", "character", "env_var.value"]
+            [fill]
+            symbol = "."
+            style = ""
+            [character]
+            format = ">"
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "long".to_string());
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), ".\n>");
+    }
+
+    #[test]
+    fn responsive_treats_vcs_as_an_atomic_module() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::create_dir(dir.path().join(".hg"))?;
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "$vcs$character"
+            [responsive]
+            drop_order = ["custom.inner"]
+            [vcs]
+            order = ["hg"]
+            hg_modules = "${custom.inner}"
+            [custom.inner]
+            when = true
+            format = "inner"
+            [character]
+            format = ">"
+        });
+        context.current_dir = dir.path().to_path_buf();
+        context.width = 1;
+
+        assert_eq!(get_prompt(&context), "inner>");
+
+        context.root_config.responsive.drop_order = vec!["vcs".to_string()];
+        assert_eq!(get_prompt(&context), ">");
+        dir.close()
+    }
+
+    #[test]
+    fn responsive_zsh_escape_can_overmeasure_module_output() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.value}"
+            [responsive]
+            drop_order = ["env_var.value"]
+            [env_var.value]
+            variable = "value"
+            format = "$env_value"
+        });
+        context.env.insert("value", "%".to_string());
+        context.shell = Shell::Zsh;
+        context.width = 1;
+
+        // Zsh consumes the doubled percent as one visible character, but responsive measurement
+        // sees the already escaped value and may conservatively drop it.
+        assert_eq!(get_prompt(&context), "");
+    }
+
+    #[test]
     fn prompt_with_all() -> io::Result<()> {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
