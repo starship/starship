@@ -2,25 +2,22 @@
 layout: home
 hero:
   image: /logo.svg
-  text:
+  text: null
   tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
   actions:
-    - 
-      theme: brand
+    - theme: brand
       text: Початок роботи →
       link: ./guide/
 features:
-  - 
-    title: Сумісність на першому місці
+  - title: Сумісність на першому місці
     details: Працює з більшістю оболонок у всіх популярних операційних системах. Можна використовувати будь-де!
-  - 
-    title: Rust під капотом
+  - title: Rust під капотом
     details: Використовує найкращу в класі швидкість та безпеку застосунків створених за допомогою Rust, що робить ваш командний рядок швидким та надійним.
-  - 
-    title: Персоналізація
+  - title: Персоналізація
     details: Кожна дрібничка налаштовується відповідно до ваших потреб, щоб зробити командний рядок аскетичним чи багатофункціональним, таким, яким ви б хотіли б його бачити.
 footer: Ліцензія ISC | Авторське право © 2019-по сьогодні Учасники Starship
-#Used for the description meta tag, for SEO
+
+# Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
 description: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки! Показує потрібну інформацію залишаючись блискучим та мінімальним. Швидке встановлення доступне для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd і PowerShell.
 ---
@@ -52,7 +49,6 @@ onMounted(() => {
 
 1. Встановіть **starship**:
 
-
    #### Встановлення останньої версії
 
    З оболонки:
@@ -62,7 +58,6 @@ onMounted(() => {
    ```
 
    Для оновлення Starship перезапустіть команду вказану вище. Це допоможе замінити поточну версію не чіпаючи налаштувань Starship.
-
 
    #### Встановлення за допомогою пакетних менеджерів
 
@@ -78,8 +73,7 @@ onMounted(() => {
    winget install starship
    ```
 
-1. Додайте init скрипт до конфігураційного файлу оболонки:
-
+2. Додайте init скрипт до конфігураційного файлу оболонки:
 
    #### Bash
 
@@ -91,7 +85,6 @@ onMounted(() => {
    eval "$(starship init bash)"
    ```
 
-
    #### Fish
 
    Додайте наступний рядок наприкінці `~/.config/fish/config.fish`:
@@ -101,7 +94,6 @@ onMounted(() => {
 
    starship init fish | source
    ```
-
 
    #### Zsh
 
@@ -113,15 +105,13 @@ onMounted(() => {
    eval "$(starship init zsh)"
    ```
 
+   #### PowerShell
 
-   #### Powershell
-
-   Додайте наступний рядок в кінець `Microsoft.PowerShell_profile.ps1`. Ви можете перевірити розташування цього файлу, звернувшись до змінної `$PROFILE` у PowerShell. Зазвичай це `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` або `~/.config/powershell/Microsoft.PowerShell_profile.ps1` у -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -132,7 +122,6 @@ onMounted(() => {
 
    eval $(starship init ion)
    ```
-
 
    #### Elvish
 
@@ -145,8 +134,8 @@ onMounted(() => {
 
    eval (starship init elvish)
    ```
-   Для версії elvish до v0.21.0 файл конфігурації може бути `~/.elvish/rc.elv` натомість
 
+   Для версії elvish до v0.21.0 файл конфігурації може бути `~/.elvish/rc.elv` натомість
 
    #### Tcsh
 
@@ -158,10 +147,10 @@ onMounted(() => {
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   > [!WARNING] У майбутньому це може змінитись. Підтримується лише Nushell v0.96+.
+   > [!WARNING]> This will change in the future.
+   > > Only Nushell v0.96+ is supported.
 
    Додайте наступний рядок наприкінці налаштувань Nushell (знайдіть її за допомоги `$nu.config-path` в Nushell):
 
@@ -169,7 +158,6 @@ onMounted(() => {
    mkdir ($nu.data-dir | path join "vendor/autoload")
    starship init nu | save -f ($nu.data-dir | path join "vendor/autoload/starship.nu")
    ```
-
 
    #### Xonsh
 
@@ -181,10 +169,9 @@ onMounted(() => {
    execx($(starship init xonsh))
    ```
 
-
    #### Cmd
 
-   Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Додайте наступне у файл `starship.lua` і розмістіть цей файл у теці скриптів Cline:
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

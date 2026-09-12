@@ -13,7 +13,6 @@ pub mod config;
 pub mod configs;
 pub mod configure;
 pub mod context;
-pub mod context_env;
 pub mod formatter;
 pub mod init;
 pub mod logger;
@@ -21,7 +20,6 @@ pub mod module;
 mod modules;
 pub mod print;
 mod segment;
-mod serde_utils;
 mod utils;
 
 #[cfg(test)]
@@ -39,5 +37,5 @@ pub fn num_rayon_threads() -> usize {
     num_configured_starship_threads()
         // Default to the number of logical cores,
         // but restrict the number of threads to 8
-        .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8))
+        .unwrap_or_else(|| available_parallelism().map_or(1, usize::from).min(8))
 }

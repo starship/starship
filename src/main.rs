@@ -7,7 +7,7 @@ use std::time::SystemTime;
 
 use clap::{CommandFactory, Parser, Subcommand, ValueEnum};
 use clap_complete::generate;
-use rand::Rng;
+use rand::RngExt;
 use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::{bug_report, configure, init, logger, num_rayon_threads, print, shadow};
@@ -57,6 +57,12 @@ fn generate_completions(shell: CompletionShell) {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum Statuslines {
+    #[clap(alias = "claude")]
+    ClaudeCode,
+}
+
 #[derive(Subcommand, Debug)]
 enum Commands {
     /// Create a pre-populated GitHub issue with information about your configuration
@@ -101,6 +107,9 @@ enum Commands {
         /// Output the preset to a file instead of stdout
         #[clap(short, long, conflicts_with = "list")]
         output: Option<PathBuf>,
+        /// Forcibly overwrite the output file if it already exists
+        #[clap(short, long, requires = "output")]
+        force: bool,
         /// List out all preset names
         #[clap(short, long)]
         list: bool,
@@ -129,6 +138,15 @@ enum Commands {
     },
     /// Generate random session key
     Session,
+    /// Prints the statusline with a specific profile
+    Statusline {
+        /// The statusline provider to use
+        provider: Statuslines,
+        #[clap(long)]
+        profile: Option<String>,
+        #[clap(flatten)]
+        properties: Properties,
+    },
     /// Prints time in milliseconds
     #[clap(hide = true)]
     Time,
@@ -236,7 +254,12 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
-        Commands::Preset { name, list, output } => print::preset_command(name, output, list),
+        Commands::Preset {
+            name,
+            list,
+            output,
+            force,
+        } => print::preset_command(name, output, force, list),
         Commands::Config { name, value } => {
             let context = Context::default();
             if let Some(name) = name {
@@ -275,6 +298,18 @@ fn main() {
                 .map(char::from)
                 .collect::<String>()
         ),
+        Commands::Statusline {
+            provider,
+            profile,
+            properties,
+        } => {
+            let profile = profile.unwrap_or_else(|| match provider {
+                Statuslines::ClaudeCode => "claude-code".to_string(),
+            });
+
+            let target = Target::Profile(profile);
+            print::prompt_with_claude_code(properties, target);
+        }
         #[cfg(feature = "config-schema")]
         Commands::ConfigSchema => print::print_schema(),
     }

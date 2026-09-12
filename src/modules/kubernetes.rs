@@ -70,11 +70,8 @@ fn get_aliased_name<'a>(
     let re = match regex::Regex::new(&format!("^{pattern}$")) {
         Ok(re) => re,
         Err(error) => {
-            log::warn!(
-                "Could not compile regular expression `{}`:\n{}",
-                &format!("^{pattern}$"),
-                error
-            );
+            let str_pattern = format!("^{pattern}$");
+            log::warn!("Could not compile regular expression `{str_pattern}`:\n{error}");
             return None;
         }
     };
@@ -195,9 +192,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }).unwrap_or_else(|| {
             // TODO: figure out if returning is more sensible. But currently we have tests depending on this
             log::warn!(
-                "Invalid KUBECONFIG: identified current-context `{}`, but couldn't find the context in any config file(s): `{}`.\n",
-                &current_kube_ctx_name,
-                &kube_cfg
+                "Invalid KUBECONFIG: identified current-context `{current_kube_ctx_name}`, but couldn't find the context in any config file(s): `{kube_cfg}`.\n"
                 );
             KubeCtxComponents::default()
         });
@@ -334,11 +329,7 @@ mod deprecated {
         match alias {
             Some(alias) => {
                 log::warn!(
-                    "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{}_alias' instead. (`{}` -> `{}`)",
-                    &name,
-                    &name,
-                    &current_value,
-                    &alias
+                    "Usage of '{name}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{name}_alias' instead. (`{current_value}` -> `{alias}`)"
                 );
                 Some(alias)
             }

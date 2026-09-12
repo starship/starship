@@ -35,7 +35,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if config.require_repo && context.get_repo().is_err() {
+    if config.require_repo && context.get_git_repo().is_err() {
         return None;
     }
 
@@ -99,7 +99,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         Err(error) => {
             log::warn!("Error in module `custom.{name}`:\n{error}");
         }
-    };
+    }
     Some(module)
 }
 
@@ -126,7 +126,7 @@ fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a tom
         log::debug!(
             "top level format contains custom module {module_name:?}, but no configuration was provided.",
         );
-    };
+    }
     None
 }
 
@@ -280,7 +280,7 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
 
 /// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
 /// given command.
-/// Returns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
+/// Returns `false` if the shell expects scripts as arguments, `true` if as `stdin`.
 fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
     let shell_exe = Path::new(shell).file_stem();
     let no_args = shell_args.is_empty();
@@ -313,7 +313,7 @@ mod tests {
     use super::*;
 
     use crate::context::Shell;
-    use crate::test::{FixtureProvider, ModuleRenderer, fixture_repo};
+    use crate::test::{COMMON_GIT_PROVIDERS, ModuleRenderer, fixture_repo};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -761,20 +761,23 @@ mod tests {
 
     #[test]
     fn test_render_require_repo_in() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = fixture_repo(mode)?;
 
-        let actual = ModuleRenderer::new("custom.test")
-            .path(repo_dir.path())
-            .config(toml::toml! {
-                [custom.test]
-                when = true
-                require_repo = true
-                format = "test"
-            })
-            .collect();
-        let expected = Some("test".to_string());
-        assert_eq!(expected, actual);
-        repo_dir.close()
+            let actual = ModuleRenderer::new("custom.test")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [custom.test]
+                    when = true
+                    require_repo = true
+                    format = "test"
+                })
+                .collect();
+            let expected = Some("test".to_string());
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     #[test]

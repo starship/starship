@@ -11,7 +11,7 @@ jobs:
     # Prevent this workflow from running (and failing) on forks
     if: github.repository == 'starship/starship'
     steps:
-      - uses: starship/crowdin-pretranslate-action@v0.1.1
+      - uses: starship/crowdin-pretranslate-action@05f21625b1486f1b77d53002fed82c4609247712 # v0.1.1
         with:
           project_id: 372655
           api_key: ${{ secrets.CROWDIN_API_TOKEN }}

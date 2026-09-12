@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use chrono::DateTime;
 use ini::Ini;
+use jiff::{Timestamp, Zoned};
 use serde_json as json;
 use sha1::{Digest, Sha1};
 
@@ -124,6 +124,19 @@ fn get_aws_profile_and_region(
     }
 }
 
+// Get the SSO cache key input from a profile section, handling both direct sso_start_url
+// and sso_session (which references a separate [sso-session <name>] section).
+fn get_sso_cache_key_input(profile_section: &ini::Properties) -> Option<String> {
+    profile_section
+        .get("sso_session")
+        .map(std::string::ToString::to_string)
+        .or_else(|| {
+            profile_section
+                .get("sso_start_url")
+                .map(std::string::ToString::to_string)
+        })
+}
+
 fn get_credentials_duration(
     context: &Context,
     aws_profile: Option<&Profile>,
@@ -140,7 +153,7 @@ fn get_credentials_duration(
         .find_map(|env_var| context.get_env(env_var))
     {
         // get expiration from environment variables
-        chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
+        expiration_date.parse::<Timestamp>().ok()
     } else if let Some(section) =
         get_creds(context, aws_creds).and_then(|creds| get_profile_creds(creds, aws_profile))
     {
@@ -149,24 +162,24 @@ fn get_credentials_duration(
         expiration_keys
             .iter()
             .find_map(|expiration_key| section.get(expiration_key))
-            .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
+            .and_then(|expiration| expiration.parse::<Timestamp>().ok())
     } else {
         // get expiration from cached SSO credentials
         let config = get_config(context, aws_config)?;
         let section = get_profile_config(config, aws_profile)?;
-        let start_url = section.get("sso_start_url")?;
+        let cache_key_input = get_sso_cache_key_input(section)?;
         // https://github.com/boto/botocore/blob/d7ff05fac5bf597246f9e9e3fac8f22d35b02e64/botocore/utils.py#L3350
-        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(start_url.as_bytes()));
+        let cache_key = crate::utils::encode_to_hex(&Sha1::digest(cache_key_input.as_bytes()));
         // https://github.com/aws/aws-cli/blob/b3421dcdd443db95999364e94266c0337b45cc43/awscli/customizations/sso/utils.py#L89
         let mut sso_cred_path = context.get_home()?;
         sso_cred_path.push(format!(".aws/sso/cache/{cache_key}.json"));
         let sso_cred_json: json::Value =
             json::from_str(&crate::utils::read_file(&sso_cred_path).ok()?).ok()?;
         let expires_at = sso_cred_json.get("expiresAt")?.as_str();
-        DateTime::parse_from_rfc3339(expires_at?).ok()
+        expires_at?.parse::<Timestamp>().ok()
     }?;
 
-    Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
+    Some(expiration_date.as_second() - Zoned::now().timestamp().as_second())
 }
 
 fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
@@ -323,6 +336,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
     use std::fs::{File, create_dir};
@@ -727,21 +741,16 @@ credential_process = /opt/bin/awscreds-retriever
 
     #[test]
     fn expiration_date_set() {
-        use chrono::{DateTime, SecondsFormat, Utc};
-
         let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
         for env_var in expiration_env_vars {
-            let now_plus_half_hour: DateTime<Utc> =
-                DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
+            let now_plus_half_hour =
+                Timestamp::from_second(Zoned::now().timestamp().as_second() + 1800).unwrap();
 
             let actual = ModuleRenderer::new("aws")
                 .env("AWS_PROFILE", "astronauts")
                 .env("AWS_REGION", "ap-northeast-2")
                 .env("AWS_ACCESS_KEY_ID", "dummy")
-                .env(
-                    env_var,
-                    now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
-                )
+                .env(env_var, now_plus_half_hour.to_string())
                 .collect();
 
             let possible_values = [
@@ -763,16 +772,14 @@ credential_process = /opt/bin/awscreds-retriever
 
     #[test]
     fn expiration_date_set_from_file() -> io::Result<()> {
-        use chrono::{DateTime, Utc};
-
         let dir = tempfile::tempdir()?;
         let credentials_path = dir.path().join("credentials");
         let mut file = File::create(&credentials_path)?;
 
-        let now_plus_half_hour: DateTime<Utc> =
-            DateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0).unwrap();
+        let now_plus_half_hour =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() + 1800).unwrap();
 
-        let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
+        let expiration_date = now_plus_half_hour.to_string();
 
         let expiration_keys = ["expiration", "x_security_token_expires"];
         for key in expiration_keys {
@@ -838,10 +845,7 @@ aws_secret_access_key=dummy
 
     #[test]
     fn expiration_date_set_expired() {
-        use chrono::{DateTime, SecondsFormat, Utc};
-
-        let now: DateTime<Utc> =
-            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1800, 0).unwrap();
+        let now = Timestamp::from_second(Zoned::now().timestamp().as_second() - 1800).unwrap();
 
         let symbol = "!!!";
 
@@ -853,10 +857,7 @@ aws_secret_access_key=dummy
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
-            .env(
-                "AWS_SESSION_EXPIRATION",
-                now.to_rfc3339_opts(SecondsFormat::Secs, true),
-            )
+            .env("AWS_SESSION_EXPIRATION", now.to_string())
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -1047,8 +1048,6 @@ credential_process = /opt/bin/awscreds-for-tests
 
     #[test]
     fn sso_legacy_set() -> io::Result<()> {
-        use chrono::{DateTime, SecondsFormat, Utc};
-
         let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
         std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
 
@@ -1071,16 +1070,10 @@ sso_role_name = <AWS-ROLE-NAME>
                 .join(".aws/sso/cache/a47a4e57aecc96b31b4f083543924bd6f828e65a.json"),
         )?;
 
-        let one_second_ago: DateTime<Utc> =
-            DateTime::from_timestamp(chrono::Local::now().timestamp() - 1, 0).unwrap();
+        let one_second_ago =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
 
-        file.write_all(
-            format!(
-                r#"{{"expiresAt": "{}"}}"#,
-                one_second_ago.to_rfc3339_opts(SecondsFormat::Secs, true)
-            )
-            .as_bytes(),
-        )?;
+        file.write_all(format!(r#"{{"expiresAt": "{one_second_ago}"}}"#).as_bytes())?;
         file.sync_all()?;
 
         let actual = module_renderer.collect();
@@ -1095,32 +1088,51 @@ sso_role_name = <AWS-ROLE-NAME>
 
     #[test]
     fn sso_set() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("config");
+        let (module_renderer, dir) = ModuleRenderer::new_with_home("aws")?;
+        std::fs::create_dir_all(dir.path().join(".aws/sso/cache"))?;
+
+        let config_path = dir.path().join(".aws/config");
         let mut config = File::create(&config_path)?;
         config.write_all(
             "[profile astronauts]
-sso_session = my-sso
+sso_session = default
 sso_account_id = 123456789011
 sso_role_name = readOnly
 region = us-west-2
 output = json
 
-[sso-session my-sso]
+[sso-session default]
 sso_region = us-east-1
 sso_start_url = https://starship.rs/sso
 sso_registration_scopes = sso:account:access
 "
             .as_bytes(),
         )?;
+        config.sync_all()?;
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+        // SHA-1 of "default" = 7505d64a54e061b7acd54ccd58b49dc43500b635
+        let mut cache_file = File::create(
+            dir.path()
+                .join(".aws/sso/cache/7505d64a54e061b7acd54ccd58b49dc43500b635.json"),
+        )?;
+
+        let one_second_ago =
+            Timestamp::from_second(Zoned::now().timestamp().as_second() - 1).unwrap();
+
+        cache_file.write_all(format!(r#"{{"expiresAt": "{one_second_ago}"}}"#).as_bytes())?;
+        cache_file.sync_all()?;
+
+        let actual = module_renderer
             .env("AWS_PROFILE", "astronauts")
+            .config(toml::toml! {
+                [aws]
+            })
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts (us-west-2) ")
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (us-west-2) [X] ")
         ));
 
         assert_eq!(expected, actual);

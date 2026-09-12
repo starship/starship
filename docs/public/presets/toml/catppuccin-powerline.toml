@@ -14,6 +14,7 @@ $c\
 $rust\
 $golang\
 $nodejs\
+$bun\
 $php\
 $java\
 $kotlin\
@@ -89,6 +90,11 @@ symbol = ""
 style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 
+[bun]
+symbol = ""
+style = "bg:green"
+format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+
 [c]
 symbol = " "
 style = "bg:green"
@@ -113,6 +119,11 @@ format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
 symbol = " "
 style = "bg:green"
 format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+
+[jj_bookmark]
+symbol = ""
+style = "bg:yellow"
+format = '[[ $symbol $bookmark(@$remote)$diverged( \\(+$overflow_count others\\)) ](fg:crust bg:yellow)]($style)'
 
 [kotlin]
 symbol = ""

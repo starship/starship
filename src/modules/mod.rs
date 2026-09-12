@@ -6,6 +6,9 @@ mod bun;
 mod c;
 mod cc;
 mod character;
+mod claude_context;
+mod claude_cost;
+mod claude_model;
 mod cmake;
 mod cmd_duration;
 mod cobol;
@@ -35,7 +38,7 @@ mod git_branch;
 mod git_commit;
 mod git_metrics;
 mod git_state;
-pub(crate) mod git_status;
+pub mod git_status;
 mod gleam;
 mod golang;
 mod gradle;
@@ -47,6 +50,9 @@ mod hg_branch;
 mod hg_state;
 mod hostname;
 mod java;
+mod jj_bookmark;
+mod jj_change;
+mod jj_metrics;
 mod jobs;
 mod julia;
 mod kotlin;
@@ -54,6 +60,7 @@ mod kubernetes;
 mod line_break;
 mod localip;
 mod lua;
+mod maven;
 mod memory_usage;
 mod meson;
 mod mise;
@@ -128,6 +135,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "bun" => bun::module(context),
             "c" => c::module(context),
             "character" => character::module(context),
+            "claude_context" => claude_context::module(context),
+            "claude_cost" => claude_cost::module(context),
+            "claude_model" => claude_model::module(context),
             "cmake" => cmake::module(context),
             "cmd_duration" => cmd_duration::module(context),
             "cobol" => cobol::module(context),
@@ -167,6 +177,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hg_state" => hg_state::module(context),
             "hostname" => hostname::module(context),
             "java" => java::module(context),
+            "jj_bookmark" => jj_bookmark::module(context),
+            "jj_change" => jj_change::module(context),
+            "jj_metrics" => jj_metrics::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -174,6 +187,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "line_break" => line_break::module(context),
             "localip" => localip::module(context),
             "lua" => lua::module(context),
+            "maven" => maven::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
             "mise" => mise::module(context),
@@ -261,6 +275,9 @@ pub fn description(module: &str) -> &'static str {
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
+        "claude_context" => "Context window usage for Claude Code session",
+        "claude_cost" => "Cost info for Claude Code session",
+        "claude_model" => "AI model name for Claude Code session",
         "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
@@ -284,11 +301,13 @@ pub fn description(module: &str) -> &'static str {
         "fossil_branch" => "The active branch of the check-out in your current directory",
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
-        "git_branch" => "The active branch of the repo in your current directory",
-        "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
-        "git_metrics" => "The currently added/deleted lines in your repo",
-        "git_state" => "The current git operation, and it's progress",
-        "git_status" => "Symbol representing the state of the repo",
+        "git_branch" => "The active branch of the current Git repo",
+        "git_commit" => "The active commit (and tag if any) of the current Git repo",
+        "git_metrics" => "The currently added/deleted lines in your Git repo",
+        "git_state" => "The current Git operation, and it's progress",
+        "git_status" => {
+            "Symbols representing the state of the current Git repo, filtered to your current directory"
+        }
         "gleam" => "The currently installed version of Gleam",
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",
@@ -300,6 +319,9 @@ pub fn description(module: &str) -> &'static str {
         "hg_state" => "The current hg operation",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
+        "jj_bookmark" => "The closest ancestor bookmark in Jujutsu",
+        "jj_change" => "The current change in Jujutsu",
+        "jj_metrics" => "The number of added and deleted lines in Jujutsu",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
@@ -307,6 +329,7 @@ pub fn description(module: &str) -> &'static str {
         "line_break" => "Separates the prompt into two lines",
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
+        "maven" => "The Maven Wrapper version of the current project",
         "memory_usage" => "Current system memory and swap usage",
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"

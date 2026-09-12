@@ -1,4 +1,12 @@
+use crate::config::Either;
 use serde::{Deserialize, Serialize};
+
+// Wrapper struct to enable serde serialization/deserialization for jiff::tz::TimeZone
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(transparent)]
+pub struct TimezoneWrapper(
+    #[serde(with = "jiff::fmt::serde::tz::required")] pub jiff::tz::TimeZone,
+);
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -14,7 +22,8 @@ pub struct TimeConfig<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_format: Option<&'a str>,
     pub disabled: bool,
-    pub utc_time_offset: &'a str,
+    #[cfg_attr(feature = "config-schema", schemars(with = "String"))]
+    pub utc_time_offset: Either<TimezoneWrapper, &'a str>,
     pub time_range: &'a str,
 }
 
@@ -26,7 +35,7 @@ impl Default for TimeConfig<'_> {
             use_12hr: false,
             time_format: None,
             disabled: true,
-            utc_time_offset: "local",
+            utc_time_offset: Either::Second("local"),
             time_range: "-",
         }
     }
