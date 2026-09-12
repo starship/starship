@@ -2,7 +2,7 @@ use clap::{ValueEnum, builder::PossibleValue};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use regex::Regex;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -110,29 +110,9 @@ pub fn get_prompt(context: &Context) -> String {
     }
 
     let (formatter, modules) = load_formatter_and_modules(context);
-
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
+    let module_plan = create_module_plan(&formatter, context, &modules);
+    let module_cache = compute_module_cache(&module_plan, context);
+    let formatter = map_cached_modules(formatter, &module_plan, &module_cache);
 
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
@@ -322,32 +302,128 @@ pub fn explain(args: Properties) {
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
-    let (_formatter, modules) = load_formatter_and_modules(context);
+    let (formatter, modules) = load_formatter_and_modules(context);
+    let module_plan = create_module_plan(&formatter, context, &modules);
 
-    for module in &modules {
-        // Manually add all modules if `$all` is encountered
-        if module == "all" {
-            for module in all_modules_uniq(&modules) {
-                let modules = handle_module(&module, context, &modules);
-                prompt_order.extend(modules);
-            }
-        } else {
-            let modules = handle_module(module, context, &modules);
-            prompt_order.extend(modules);
-        }
+    for module in concrete_module_names(&module_plan) {
+        prompt_order.extend(handle_module(&module, context));
     }
 
     prompt_order
 }
 
-fn handle_module<'a>(
-    module: &str,
-    context: &'a Context,
+type ModulePlan = BTreeMap<String, Vec<String>>;
+type ModuleCache = HashMap<String, Vec<Segment>>;
+
+fn create_module_plan(
+    formatter: &StringFormatter<'_>,
+    context: &Context,
     module_list: &BTreeSet<String>,
-) -> Vec<Module<'a>> {
+) -> ModulePlan {
+    formatter
+        .get_variables()
+        .into_iter()
+        .map(|variable| {
+            let modules = expand_module_variable(&variable, context, module_list);
+            (variable, modules)
+        })
+        .collect()
+}
+
+fn expand_module_variable(
+    module: &str,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<String> {
+    if module == "all" {
+        all_modules_uniq(module_list)
+            .into_iter()
+            .flat_map(|module| expand_module_variable(&module, context, module_list))
+            .collect()
+    } else if matches!(module, "custom" | "env_var") {
+        grouped_module_names(module, context, module_list)
+    } else {
+        vec![module.to_string()]
+    }
+}
+
+fn grouped_module_names(
+    module: &str,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> Vec<String> {
+    let mut modules = Vec::new();
+
+    if module == "env_var" {
+        modules.push(module.to_string());
+    }
+
+    modules.extend(
+        context
+            .config
+            .get_config(&[module])
+            .and_then(|config| config.as_table().map(toml::map::Map::iter))
+            .into_iter()
+            .flatten()
+            .filter_map(|(child, config)| {
+                if module == "env_var" && !config.is_table() {
+                    None
+                } else if should_add_implicit_module(module, child, config, module_list) {
+                    Some(format!("{module}.{child}"))
+                } else {
+                    None
+                }
+            }),
+    );
+
+    modules
+}
+
+fn concrete_module_names(module_plan: &ModulePlan) -> Vec<String> {
+    let mut seen = BTreeSet::new();
+
+    module_plan
+        .values()
+        .flatten()
+        .filter(|module| seen.insert((*module).clone()))
+        .cloned()
+        .collect()
+}
+
+fn compute_module_cache(module_plan: &ModulePlan, context: &Context) -> ModuleCache {
+    concrete_module_names(module_plan)
+        .par_iter()
+        .map(|module| {
+            let segments = handle_module(module, context)
+                .into_iter()
+                .flat_map(|module| module.segments)
+                .collect();
+            (module.clone(), segments)
+        })
+        .collect()
+}
+
+fn map_cached_modules<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+) -> StringFormatter<'a> {
+    formatter.map_variables_to_segments(|variable| {
+        module_plan.get(variable).map(|modules| {
+            Ok(modules
+                .iter()
+                .filter_map(|module| module_cache.get(module))
+                .flatten()
+                .cloned()
+                .collect())
+        })
+    })
+}
+
+fn handle_module<'a>(module: &str, context: &'a Context) -> Vec<Module<'a>> {
     let mut modules: Vec<Module> = Vec::new();
 
-    if ALL_MODULES.contains(&module) {
+    if ALL_MODULES.contains(&module) || module == "env_var" {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
             modules.extend(modules::handle(module, context));
@@ -355,35 +431,6 @@ fn handle_module<'a>(
     } else if module.starts_with("custom.") || module.starts_with("env_var.") {
         // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
         modules.extend(modules::handle(module, context));
-    } else if matches!(module, "custom" | "env_var") {
-        // env var is a spacial case and may contain a top-level module definition
-        if module == "env_var" {
-            modules.extend(modules::handle(module, context));
-        }
-
-        // Write out all custom modules, except for those that are explicitly set
-        modules.extend(
-            context
-                .config
-                .get_config(&[module])
-                .and_then(|config| config.as_table().map(toml::map::Map::iter))
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .par_iter()
-                .filter_map(|(child, config)| {
-                    // Some env var keys may be part of a top-level module definition
-                    if module == "env_var" && !config.is_table() {
-                        None
-                    } else if should_add_implicit_module(module, child, config, module_list) {
-                        Some(modules::handle(&format!("{module}.{child}"), context))
-                    } else {
-                        None
-                    }
-                })
-                .flatten()
-                .collect::<Vec<Module>>(),
-        );
     } else {
         log::debug!(
             "Expected top level format to contain value from {ALL_MODULES:?}. Instead received {module}",
@@ -794,6 +841,25 @@ mod test {
     }
 
     #[test]
+    fn all_plan_preserves_implicit_custom_identity() {
+        let context = default_context().set_config(toml::toml! {
+                format="$all${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+        });
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+
+        assert!(module_plan["all"].contains(&"custom.a".to_string()));
+        assert!(!module_plan["all"].contains(&"custom.b".to_string()));
+        assert_eq!(module_plan["custom.b"], ["custom.b"]);
+    }
+
+    #[test]
     fn env_mixed() {
         let mut context = default_context().set_config(toml::toml! {
                 format="${env_var.c}$env_var${env_var.b}"
@@ -815,6 +881,28 @@ mod test {
         let expected = String::from("\ncdab");
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn env_plan_preserves_top_level_and_implicit_identity() {
+        let context = default_context().set_config(toml::toml! {
+                format="${env_var.c}$env_var${env_var.b}"
+                [env_var]
+                format="$env_value"
+                variable = "d"
+                [env_var.a]
+                format="$env_value"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+        });
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+
+        assert_eq!(module_plan["env_var"], ["env_var", "env_var.a"]);
+        assert_eq!(module_plan["env_var.b"], ["env_var.b"]);
+        assert_eq!(module_plan["env_var.c"], ["env_var.c"]);
     }
 
     #[test]
