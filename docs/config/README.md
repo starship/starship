@@ -210,16 +210,17 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                                                                                                        |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| Option              | Default                        | Description                                                                                                                                                                        |
+| ------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
+| `right_format`      | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`      | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
+| `command_timeout`   | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
+| `command_cache_ttl` | `0`                            | Time-to-live in seconds for the shared cache of command output, skipping the cache entirely when `0`.                                                                              |
+| `add_newline`       | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
+| `palette`           | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
+| `palettes`          | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks`   | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
 
 > [!TIP]
 > If you have symlinks to networked filesystems, consider setting
@@ -3074,7 +3075,7 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Maven
 
-The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown.
+The `maven` module indicates the presence of a Maven project in the current directory. If the [Maven Wrapper](https://maven.apache.org/wrapper/) is enabled, the Maven version will be parsed from `.mvn/wrapper/maven-wrapper.properties` and shown. Otherwise the version of the local `mvn` binary (resolved from `PATH`, following symlinks) is shown, using a short-lived entry in the shared command cache to avoid spawning the process on every prompt.
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -3085,17 +3086,19 @@ If you use an alternate POM syntax (for example `pom.hocon`), add its filename t
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                         |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['.mvn']`                           | Which folders should trigger this module.                                 |
-| `style`             | `'bold bright-cyan'`                 | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `maven` module.                                              |
-| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                       |
+| Option              | Default                              | Description                                                                         |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                          |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`           |
+| `symbol`            | `'🅼 '`                               | A format string representing the symbol of Maven.                                   |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                                        |
+| `detect_files`      | `['pom.xml']`                        | Which filenames should trigger this module.                                         |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                           |
+| `style`             | `'bold bright-cyan'`                 | The style for the module.                                                           |
+| `disabled`          | `false`                              | Disables the `maven` module.                                                        |
+| `recursive`         | `false`                              | Enables recursive finding for the `.mvn` directory.                                 |
+| `cache`             | `true`                               | Caches the discovered `mvn` version between prompts using the shared command cache. |
+| `cache_ttl`         | `3600`                               | Time-to-live in seconds of a cached `mvn` version entry.                            |
 
 ### Variables
 
