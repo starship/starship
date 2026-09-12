@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [robbyrussell](./robbyrussell.md)
+
+This preset emulates the look and behavior of [Oh My Zsh's robbyrussell](https://github.com/ohmyzsh/ohmyzsh/wiki/themes#robbyrussell).
+
+[![Screenshot of the robbyrussell preset](/presets/img/robbyrussell.jpg "Click to view the robbyrussell preset")](./robbyrussell)
