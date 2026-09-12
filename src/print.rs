@@ -112,25 +112,15 @@ pub fn get_prompt(context: &Context) -> String {
     let (formatter, modules) = load_formatter_and_modules(context);
     let module_plan = create_module_plan(&formatter, context, &modules);
     let module_cache = compute_module_cache(&module_plan, context);
-    let formatter = map_cached_modules(formatter, &module_plan, &module_cache);
+    let rendered_prompt = render_responsive_prompt(formatter, &module_plan, &module_cache, context);
 
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None, Some(context))
-            .expect("Unexpected error returned in root format variables"),
-    );
-
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    // AnsiStrings strips redundant ANSI color sequences, so apply it before modifying the ANSI
-    // color sequences for this specific shell
-    let shell_wrapped_output =
-        wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
+    // The rendered prompt has already passed through AnsiStrings, so shell wrapping happens after
+    // redundant ANSI color sequences are stripped.
+    let shell_wrapped_output = wrap_colorseq_for_shell(rendered_prompt, context.shell);
     write!(buf, "{shell_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
@@ -407,17 +397,121 @@ fn map_cached_modules<'a>(
     formatter: StringFormatter<'a>,
     module_plan: &ModulePlan,
     module_cache: &ModuleCache,
+    hidden_modules: &BTreeSet<String>,
 ) -> StringFormatter<'a> {
     formatter.map_variables_to_segments(|variable| {
-        module_plan.get(variable).map(|modules| {
-            Ok(modules
-                .iter()
-                .filter_map(|module| module_cache.get(module))
-                .flatten()
-                .cloned()
-                .collect())
-        })
+        let modules = module_plan.get(variable)?;
+
+        if modules.iter().all(|module| hidden_modules.contains(module)) {
+            return None;
+        }
+
+        Some(Ok(modules
+            .iter()
+            .filter(|module| !hidden_modules.contains(*module))
+            .filter_map(|module| module_cache.get(module))
+            .flatten()
+            .cloned()
+            .collect()))
     })
+}
+
+fn render_responsive_prompt<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+    context: &'a Context,
+) -> String {
+    let mut hidden_modules = BTreeSet::new();
+    let mut rendered = render_prompt(
+        formatter,
+        module_plan,
+        module_cache,
+        &hidden_modules,
+        context,
+    );
+
+    if context.width == 0
+        || context.target == Target::Continuation
+        || context.root_config.responsive.drop_order.is_empty()
+        || prompt_fits(&rendered, context)
+    {
+        return rendered;
+    }
+
+    let Some(format) = selected_format(context) else {
+        return rendered;
+    };
+
+    for module in &context.root_config.responsive.drop_order {
+        if matches!(module.as_str(), "character" | "line_break" | "fill")
+            || !module_cache.contains_key(module)
+            || !hidden_modules.insert(module.clone())
+        {
+            continue;
+        }
+
+        let formatter = StringFormatter::new(format)
+            .expect("responsive format was successfully parsed before rendering");
+        rendered = render_prompt(
+            formatter,
+            module_plan,
+            module_cache,
+            &hidden_modules,
+            context,
+        );
+
+        if prompt_fits(&rendered, context) {
+            break;
+        }
+    }
+
+    rendered
+}
+
+fn render_prompt<'a>(
+    formatter: StringFormatter<'a>,
+    module_plan: &ModulePlan,
+    module_cache: &ModuleCache,
+    hidden_modules: &BTreeSet<String>,
+    context: &'a Context,
+) -> String {
+    let formatter = map_cached_modules(formatter, module_plan, module_cache, hidden_modules);
+    let mut root_module = Module::new("Starship Root", "The root module", None);
+    root_module.set_segments(
+        formatter
+            .parse(None, Some(context))
+            .expect("Unexpected error returned in root format variables"),
+    );
+
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    AnsiStrings(&module_strings).to_string()
+}
+
+fn prompt_fits(rendered: &str, context: &Context) -> bool {
+    // Measure before shell wrappers are added. Module values have already passed through
+    // shell_prompt_escape, so escaped Zsh percent signs and Bash metacharacters may over-measure.
+    if context.target == Target::Right {
+        rendered.replace('\n', "").width_graphemes() <= context.width
+    } else {
+        rendered
+            .lines()
+            .all(|line| line.width_graphemes() <= context.width)
+    }
+}
+
+fn selected_format<'a>(context: &'a Context<'_>) -> Option<&'a str> {
+    match &context.target {
+        Target::Main => Some(&context.root_config.format),
+        Target::Right => Some(&context.root_config.right_format),
+        Target::Profile(name) => context
+            .root_config
+            .user_profiles
+            .get(name)
+            .or_else(|| context.root_config.internal_profiles.get(name))
+            .map(String::as_str),
+        Target::Continuation => Some(&context.root_config.continuation_prompt),
+    }
 }
 
 fn handle_module<'a>(module: &str, context: &'a Context) -> Vec<Module<'a>> {
@@ -636,6 +730,40 @@ mod test {
         let expected = String::from(">>"); // should strip new lines
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn responsive_prompt_drops_modules_in_configured_order() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "${env_var.first}${env_var.second}${env_var.essential}"
+            [responsive]
+            drop_order = ["env_var.first", "env_var.second"]
+            [env_var.first]
+            variable = "first"
+            format = "$env_value"
+            [env_var.second]
+            variable = "second"
+            format = "$env_value"
+            [env_var.essential]
+            variable = "essential"
+            format = "$env_value"
+        });
+        context.env.insert("first", "123".to_string());
+        context.env.insert("second", "45".to_string());
+        context.env.insert("essential", "ok".to_string());
+        context.width = 4;
+
+        assert_eq!(get_prompt(&context), "45ok");
+    }
+
+    #[test]
+    fn responsive_measurement_uses_visible_line_width() {
+        let mut context = default_context();
+        context.width = 2;
+
+        assert!(prompt_fits("\x1b[31mab\x1b[0m\n👩‍👩‍👦‍👦", &context));
+        assert!(!prompt_fits("abc", &context));
     }
 
     #[test]
