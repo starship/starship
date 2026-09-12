@@ -25,6 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Vcs::Fossil => config.fossil_modules,
         Vcs::Git => config.git_modules,
         Vcs::Hg => config.hg_modules,
+        Vcs::Jujutsu => config.jj_modules,
         Vcs::Pijul => config.pijul_modules,
     };
 
@@ -66,6 +67,7 @@ pub fn discover_repo_root<'a>(context: &'a Context, vcs: Vcs) -> Option<Cow<'a, 
         Vcs::Hg => scan.set_folders(&[".hg"]),
         Vcs::Pijul => scan.set_folders(&[".pijul"]),
         Vcs::Git => return context.get_git_repo().ok().map(|r| r.repo.path().into()),
+        Vcs::Jujutsu => return context.get_jj_repo().map(|r| r.root().into()),
     };
 
     scan.scan().map(Into::into)
@@ -77,6 +79,7 @@ pub enum Vcs {
     Git,
     // NOTE: uses `hg` to correspond to existing `hg_branch` module
     Hg,
+    Jujutsu,
     Pijul,
 }
 
@@ -88,6 +91,7 @@ impl<'a> TryFrom<&'a str> for Vcs {
             "fossil" => Ok(Self::Fossil),
             "git" => Ok(Self::Git),
             "hg" | "mercurial" => Ok(Self::Hg),
+            "jj" | "jujutsu" => Ok(Self::Jujutsu),
             "pijul" => Ok(Self::Pijul),
             _ => Err(value),
         }
@@ -187,6 +191,24 @@ mod tests {
     }
 
     #[test]
+    fn detect_jj() -> io::Result<()> {
+        with_marker(
+            "jj",
+            FixtureProvider::Jujutsu,
+            Some(format!("{}", Color::Green.bold().paint("test "))),
+        )
+    }
+
+    #[test]
+    fn detect_jj_alias_jujutsu() -> io::Result<()> {
+        with_marker(
+            "jujutsu",
+            FixtureProvider::Jujutsu,
+            Some(format!("{}", Color::Green.bold().paint("test "))),
+        )
+    }
+
+    #[test]
     fn detect_pijul() -> io::Result<()> {
         with_marker(
             "pijul",
@@ -223,6 +245,7 @@ mod tests {
             fossil_modules = "${custom.test}"
             git_modules = "${custom.test}"
             hg_modules = "${custom.test}"
+            jj_modules = "${custom.test}"
             pijul_modules = "${custom.test}"
 
             // Inserting the `custom.test` module to have something printed that we control

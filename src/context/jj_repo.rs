@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use super::Context;
@@ -38,8 +38,24 @@ pub struct CurrentChange {
     /// Total lines removed in this change
     pub lines_removed: u32,
 
+    pub status: Status,
+}
+
+#[derive(Debug, Default)]
+pub struct Status {
     /// See `impl CurrentChange` below
-    flags: u32,
+    flags: u8,
+
+    /// Count of added files
+    pub added: usize,
+    /// Count of copied files
+    pub copied: usize,
+    /// Count of deleted files
+    pub deleted: usize,
+    /// Count of modified files
+    pub modified: usize,
+    /// Count of renamed files
+    pub renamed: usize,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -66,6 +82,11 @@ impl JJRepo {
             root,
             current_change: OnceLock::new(),
         }
+    }
+
+    /// Root directory of the Jujutsu repository
+    pub fn root(&self) -> &Path {
+        &self.root
     }
 
     /// Information about the current change's state.
@@ -164,42 +185,34 @@ impl JJRepo {
                     bookmarks: parse_bookmark_lines(lines.next()?, lines.next()?),
                     lines_added: lines.next()?.parse().ok()?,
                     lines_removed: lines.next()?.parse().ok()?,
-                    flags: {
-                        let mut flags = 0;
+                    status: {
+                        let mut status = Status::default();
 
                         if has_conflict {
-                            flags |= CurrentChange::CONFLICTED;
+                            status.flags |= CurrentChange::CONFLICTED;
                         }
                         if description {
-                            flags |= CurrentChange::DESCRIPTION;
+                            status.flags |= CurrentChange::DESCRIPTION;
                         }
                         if hidden {
-                            flags |= CurrentChange::HIDDEN;
+                            status.flags |= CurrentChange::HIDDEN;
                         }
                         if immutable {
-                            flags |= CurrentChange::IMMUTABLE;
+                            status.flags |= CurrentChange::IMMUTABLE;
                         }
 
-                        if let Some(statuses) = lines.next() {
-                            if statuses.contains('A') {
-                                flags |= CurrentChange::STATUS_ADDED;
-                            }
-                            if statuses.contains('C') {
-                                flags |= CurrentChange::STATUS_COPIED;
-                            }
-                            if statuses.contains('D') {
-                                flags |= CurrentChange::STATUS_DELETED;
-                            }
-                            if statuses.contains('M') {
-                                flags |= CurrentChange::STATUS_MODIFIED;
-                            }
-                            if statuses.contains('R') {
-                                flags |= CurrentChange::STATUS_RENAMED;
-                            }
+                        // JJ documents the characters it will return, those that interest us are
+                        // all single bytes so we don't need to do the u8 -> char conversion
+                        for byte in lines.next().unwrap_or("").bytes() {
+                            status.added += usize::from(byte == b'A');
+                            status.copied += usize::from(byte == b'C');
+                            status.deleted += usize::from(byte == b'D');
+                            status.modified += usize::from(byte == b'M');
+                            status.renamed += usize::from(byte == b'R');
                         }
 
-                        flags
-                    },
+                        status
+                    }
                 })
             })
             .as_ref()
@@ -207,60 +220,29 @@ impl JJRepo {
 }
 
 impl CurrentChange {
-    const CONFLICTED: u32 = 1 << 0;
-    const DESCRIPTION: u32 = 1 << 1;
-    const HIDDEN: u32 = 1 << 2;
-    const IMMUTABLE: u32 = 1 << 3;
-
-    const STATUS_ADDED: u32 = 1 << 4;
-    const STATUS_COPIED: u32 = 1 << 5;
-    const STATUS_DELETED: u32 = 1 << 6;
-    const STATUS_MODIFIED: u32 = 1 << 7;
-    const STATUS_RENAMED: u32 = 1 << 8;
+    const CONFLICTED: u8 = 1 << 0;
+    const DESCRIPTION: u8 = 1 << 1;
+    const HIDDEN: u8 = 1 << 2;
+    const IMMUTABLE: u8 = 1 << 3;
 
     /// True if any mutable change up to the current one is conflicted
     pub fn conflicted(&self) -> bool {
-        self.flags & Self::CONFLICTED == Self::CONFLICTED
+        self.status.flags & Self::CONFLICTED == Self::CONFLICTED
     }
 
     /// True if the current change has a non-empty description
     pub fn description(&self) -> bool {
-        self.flags & Self::DESCRIPTION == Self::DESCRIPTION
+        self.status.flags & Self::DESCRIPTION == Self::DESCRIPTION
     }
 
     /// True if the current change is hidden
     pub fn hidden(&self) -> bool {
-        self.flags & Self::HIDDEN == Self::HIDDEN
+        self.status.flags & Self::HIDDEN == Self::HIDDEN
     }
 
     /// True if the current change is immutable
     pub fn immutable(&self) -> bool {
-        self.flags & Self::IMMUTABLE == Self::IMMUTABLE
-    }
-
-    /// True if the current change includes at least one added file
-    pub fn status_added(&self) -> bool {
-        self.flags & Self::STATUS_ADDED == Self::STATUS_ADDED
-    }
-
-    /// True if the current change includes at least one copied file
-    pub fn status_copied(&self) -> bool {
-        self.flags & Self::STATUS_COPIED == Self::STATUS_COPIED
-    }
-
-    /// True if the current change includes at least one deleted file
-    pub fn status_deleted(&self) -> bool {
-        self.flags & Self::STATUS_DELETED == Self::STATUS_DELETED
-    }
-
-    /// True if the current change includes at least one modified file
-    pub fn status_modified(&self) -> bool {
-        self.flags & Self::STATUS_MODIFIED == Self::STATUS_MODIFIED
-    }
-
-    /// True if the current change includes at least one renamed file
-    pub fn status_renamed(&self) -> bool {
-        self.flags & Self::STATUS_RENAMED == Self::STATUS_RENAMED
+        self.status.flags & Self::IMMUTABLE == Self::IMMUTABLE
     }
 }
 
@@ -321,6 +303,19 @@ impl JJRepo {
     pub const METRIC_ADDED: &str = "/jj/metrics-added";
     pub const METRIC_DELETED: &str = "/jj/metrics-deleted";
     pub const METRIC_ZERO: &str = "/jj/metrics-zero";
+
+    pub const STATUS_IMMEDIATE_CONFLICT: &str = "/jj/status/immediate-conflict";
+    pub const STATUS_NO_CONFLICT: &str = "/jj/status/no-conflict";
+    pub const STATUS_DESCRIPTION: &str = "/jj/status/description";
+    pub const STATUS_HIDDEN: &str = "/jj/status/hidden";
+    pub const STATUS_IMMUTABLE: &str = "/jj/status/immutable";
+
+    pub const STATUS_ADDED: &str = "/jj/status/added";
+    pub const STATUS_COPIED: &str = "/jj/status/copied";
+    pub const STATUS_DELETED: &str = "/jj/status/deleted";
+    pub const STATUS_MODIFIED: &str = "/jj/status/modified";
+    pub const STATUS_RENAMED: &str = "/jj/status/renamed";
+    pub const STATUS_NO_CHANGES: &str = "/jj/status/no-changes";
 
     pub const NONE: &str = "/jj/no-repo";
 }
@@ -462,6 +457,73 @@ pub fn mock_jj_cmd(s: &str) -> Option<crate::utils::CommandOutput> {
             || output([
                 (LINES_A, "0"),
                 (LINES_D, "0"),
+            ]),
+        ),
+        // Repos testing jj_status rendering
+        (
+            JJRepo::STATUS_IMMEDIATE_CONFLICT,
+            || output([
+                (CONFLICT, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_NO_CONFLICT,
+            || output([
+                (CONFLICT, "false"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DESCRIPTION,
+            || output([
+                (DESC, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_HIDDEN,
+            || output([
+                (HIDDEN, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_IMMUTABLE,
+            || output([
+                (IMMUTABLE, "true"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_ADDED,
+            || output([
+                (FILES, "AA"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_COPIED,
+            || output([
+                (FILES, "CCC"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_DELETED,
+            || output([
+                (FILES, "DDDD"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_MODIFIED,
+            || output([
+                (FILES, "MMMMM"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_RENAMED,
+            || output([
+                (FILES, "RRRRRR"),
+            ]),
+        ),
+        (
+            JJRepo::STATUS_NO_CHANGES,
+            || output([
+                (FILES, ""),
             ]),
         ),
         // Used to test the parsing will correctly fail on empty stdout

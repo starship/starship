@@ -1,3 +1,4 @@
+use super::utils::format;
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
@@ -63,12 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map_variables_to_segments(|variable: &str| {
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed, "git_status.stashed", context, count)
+                        format::count(config.stashed, "git_status.stashed", context, count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
-                            format_text(
+                            format::text(
                                 config.diverged,
                                 "git_status.diverged",
                                 context,
@@ -79,36 +80,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                                 },
                             )
                         } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", context, ahead)
+                            format::count(config.ahead, "git_status.ahead", context, ahead)
                         } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", context, behind)
+                            format::count(config.behind, "git_status.behind", context, behind)
                         } else {
-                            format_symbol(config.up_to_date, "git_status.up_to_date", context)
+                            format::symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(config.conflicted, "git_status.conflicted", context, count)
+                        format::count(config.conflicted, "git_status.conflicted", context, count)
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", context, count)
+                        format::count(config.deleted, "git_status.deleted", context, count)
                     }),
                     "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", context, count)
+                        format::count(config.renamed, "git_status.renamed", context, count)
                     }),
                     "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", context, count)
+                        format::count(config.modified, "git_status.modified", context, count)
                     }),
                     "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged, "git_status.staged", context, count)
+                        format::count(config.staged, "git_status.staged", context, count)
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(config.untracked, "git_status.untracked", context, count)
+                        format::count(config.untracked, "git_status.untracked", context, count)
                     }),
                     "typechanged" => info.get_typechanged().and_then(|count| {
-                        format_count(config.typechanged, "git_status.typechanged", context, count)
+                        format::count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     "worktree_added" => info.get_worktree_added().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_added,
                             "git_status.worktree_added",
                             context,
@@ -116,7 +117,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_deleted" => info.get_worktree_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_deleted,
                             "git_status.worktree_deleted",
                             context,
@@ -124,7 +125,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_modified" => info.get_worktree_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_modified,
                             "git_status.worktree_modified",
                             context,
@@ -132,7 +133,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "worktree_typechanged" => info.get_worktree_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.worktree_typechanged,
                             "git_status.worktree_typechanged",
                             context,
@@ -140,10 +141,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_added" => info.get_index_added().and_then(|count| {
-                        format_count(config.index_added, "git_status.index_added", context, count)
+                        format::count(config.index_added, "git_status.index_added", context, count)
                     }),
                     "index_deleted" => info.get_index_deleted().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_deleted,
                             "git_status.index_deleted",
                             context,
@@ -151,7 +152,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_modified" => info.get_index_modified().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_modified,
                             "git_status.index_modified",
                             context,
@@ -159,7 +160,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         )
                     }),
                     "index_typechanged" => info.get_index_typechanged().and_then(|count| {
-                        format_count(
+                        format::count(
                             config.index_typechanged,
                             "git_status.index_typechanged",
                             context,
@@ -750,51 +751,6 @@ impl RepoStatus {
             }
         }
     }
-}
-
-fn format_text<F>(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    mapper: F,
-) -> Option<Vec<Segment>>
-where
-    F: Fn(&str) -> Option<String> + Send + Sync,
-{
-    if let Ok(formatter) = StringFormatter::new(format_str) {
-        formatter
-            .map(|variable| mapper(variable).map(Ok))
-            .parse(None, Some(context))
-            .ok()
-    } else {
-        log::warn!("Error parsing format string `{config_path}`");
-        None
-    }
-}
-
-fn format_count(
-    format_str: &str,
-    config_path: &str,
-    context: &Context,
-    count: usize,
-) -> Option<Vec<Segment>> {
-    if count == 0 {
-        return None;
-    }
-
-    format_text(
-        format_str,
-        config_path,
-        context,
-        |variable| match variable {
-            "count" => Some(count.to_string()),
-            _ => None,
-        },
-    )
-}
-
-fn format_symbol(format_str: &str, config_path: &str, context: &Context) -> Option<Vec<Segment>> {
-    format_text(format_str, config_path, context, |_variable| None)
 }
 
 #[cfg(target_os = "linux")]
