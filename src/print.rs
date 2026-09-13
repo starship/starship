@@ -452,7 +452,7 @@ fn render_responsive_prompt<'a>(
 
     for module in &context.root_config.responsive.drop_order {
         if matches!(module.as_str(), "character" | "line_break" | "fill")
-            || !module_cache.contains_key(module)
+            || !cached_module_has_output(module_cache, module)
             || !hidden_modules.insert(module.clone())
         {
             continue;
@@ -474,6 +474,12 @@ fn render_responsive_prompt<'a>(
     }
 
     rendered
+}
+
+fn cached_module_has_output(module_cache: &ModuleCache, module: &str) -> bool {
+    module_cache
+        .get(module)
+        .is_some_and(|segments| !segments.is_empty())
 }
 
 fn render_prompt<'a>(
@@ -904,6 +910,15 @@ mod test {
         context.env.insert("first", "123".to_string());
         context.env.insert("second", "45".to_string());
         context.width = 2;
+
+        let (formatter, modules) = load_formatter_and_modules(&context);
+        let module_plan = create_module_plan(&formatter, &context, &modules);
+        let module_cache = compute_module_cache(&module_plan, &context);
+
+        assert!(!cached_module_has_output(&module_cache, "missing"));
+        assert!(!cached_module_has_output(&module_cache, "env_var.disabled"));
+        assert!(!cached_module_has_output(&module_cache, "env_var.empty"));
+        assert!(cached_module_has_output(&module_cache, "env_var.first"));
 
         assert_eq!(get_prompt(&context), "45");
     }
