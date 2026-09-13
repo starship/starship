@@ -292,8 +292,8 @@ pub fn explain(args: Properties) {
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
-    let (formatter, modules) = load_formatter_and_modules(context);
-    let module_plan = create_module_plan(&formatter, context, &modules);
+    let (_formatter, modules) = load_formatter_and_modules(context);
+    let module_plan = create_module_plan_from_variables(modules.iter().cloned(), context, &modules);
 
     for module in concrete_module_names(&module_plan) {
         prompt_order.extend(handle_module(&module, context));
@@ -310,8 +310,15 @@ fn create_module_plan(
     context: &Context,
     module_list: &BTreeSet<String>,
 ) -> ModulePlan {
-    formatter
-        .get_variables()
+    create_module_plan_from_variables(formatter.get_variables(), context, module_list)
+}
+
+fn create_module_plan_from_variables(
+    variables: impl IntoIterator<Item = String>,
+    context: &Context,
+    module_list: &BTreeSet<String>,
+) -> ModulePlan {
+    variables
         .into_iter()
         .map(|variable| {
             let modules = expand_module_variable(&variable, context, module_list);
@@ -730,6 +737,26 @@ mod test {
         let expected = String::from(">>"); // should strip new lines
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn diagnostics_include_modules_only_in_right_format() {
+        let mut context = default_context().set_config(toml::toml! {
+            format = "$character"
+            right_format = "${env_var.right}"
+            [env_var.right]
+            variable = "right"
+            format = "$env_value"
+        });
+        context.env.insert("right", "value".to_string());
+
+        let modules = compute_modules(&context);
+
+        assert!(
+            modules
+                .iter()
+                .any(|module| module.get_name() == "env_var.right")
+        );
     }
 
     #[test]
