@@ -563,6 +563,27 @@ mod test {
     const NULL_DEVICE: &str = if cfg!(windows) { "NUL" } else { "/dev/null" };
 
     #[test]
+    fn fill_with_zero_width_symbol_terminates() {
+        // A $fill symbol made entirely of zero-width unicode (here, a ZWJ) can
+        // never reach the target width by itself; rendering it used to hang
+        // forever instead of just producing an empty fill.
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                format = "left$fill right"
+                [fill]
+                symbol = "\u{200d}"
+        });
+        context.target = Target::Main;
+        context.width = 20;
+
+        let actual = get_prompt(&context);
+        assert_eq!(
+            format!("left{} right", nu_ansi_term::Color::Black.bold().paint("")),
+            actual
+        );
+    }
+
+    #[test]
     fn main_prompt() {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
