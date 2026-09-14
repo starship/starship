@@ -112,17 +112,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
-            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
-            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
-            let num_segments_after_root = after_repo_root.split('/').count();
+            if let Some(contracted_path) = contract_repo_path(display_dir, repo_root) {
+                let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+                let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+                let num_segments_after_root = after_repo_root.split('/').count();
 
-            if config.truncation_length == 0
-                || ((num_segments_after_root - 1) as i64) < config.truncation_length
-            {
-                let root = repo_path_vec[0];
-                let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before, root.to_string(), after_repo_root]
+                if config.truncation_length == 0
+                    || ((num_segments_after_root - 1) as i64) < config.truncation_length
+                {
+                    let root = repo_path_vec[0];
+                    let before = before_root_dir(&dir_string, &contracted_path);
+                    [prefix + before, root.to_string(), after_repo_root]
+                } else {
+                    [String::new(), String::new(), prefix + dir_string.as_str()]
+                }
             } else {
                 [String::new(), String::new(), prefix + dir_string.as_str()]
             }
@@ -1819,6 +1822,66 @@ mod tests {
             )),
             Color::Green.prefix(),
             Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_symlink_into_repo_subdir() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let symlink_dir = tmp_dir.path().join("symlink_dir");
+        symlink(&dir, &symlink_dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 0
+                truncate_to_repo = false
+                repo_root_style = "bold red"
+            })
+            .path(&symlink_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep(symlink_dir.to_str().unwrap()))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_symlink_into_repo_subdir_truncate_to_repo() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let symlink_dir = tmp_dir.path().join("symlink_dir");
+        symlink(&dir, &symlink_dir)?;
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 0
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+            })
+            .path(&symlink_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(convert_path_sep(symlink_dir.to_str().unwrap()))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
