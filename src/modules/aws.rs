@@ -1,5 +1,5 @@
+use std::borrow::Cow;
 use std::cell::OnceCell;
-use std::collections::HashMap;
 use std::path::PathBuf;
 use std::str::FromStr;
 
@@ -182,13 +182,74 @@ fn get_credentials_duration(
     Some(expiration_date.as_second() - Zoned::now().timestamp().as_second())
 }
 
-fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
-    name.as_ref()
-        .and_then(|n| aliases.get(n))
-        .map(|&a| a.to_string())
-        .or(name)
+fn get_aliased_name<'a>(
+    pattern: Option<&'a str>,
+    current_value: Option<&str>,
+    alias: Option<&'a str>,
+) -> Option<String> {
+    let replacement = alias.or(current_value)?.to_string();
+    let Some(pattern) = pattern else {
+        return Some(replacement);
+    };
+    let value = current_value?;
+    if value == pattern {
+        return Some(replacement);
+    }
+    let re = match regex::Regex::new(&format!("^{pattern}$")) {
+        Ok(re) => re,
+        Err(error) => {
+            log::warn!(
+                "Could not compile regular expression `{}`:\n{}",
+                &format!("^{pattern}$"),
+                error
+            );
+            return None;
+        }
+    };
+    let replaced = re.replace(value, replacement.as_str());
+    match replaced {
+        Cow::Owned(replaced) => Some(replaced),
+        Cow::Borrowed(_) => None,
+    }
 }
 
+mod deprecated {
+    use std::borrow::Cow;
+    use std::collections::HashMap;
+
+    pub fn get_alias<'a>(
+        current_value: String,
+        aliases: &'a HashMap<String, &'a str>,
+        name: &'a str,
+    ) -> Option<String> {
+        let alias = if let Some(val) = aliases.get(current_value.as_str()) {
+            Some((*val).to_string())
+        } else {
+            aliases.iter().find_map(|(k, v)| {
+                let re = regex::Regex::new(&format!("^{k}$")).ok()?;
+                let replaced = re.replace(current_value.as_str(), *v);
+                match replaced {
+                    Cow::Owned(replaced) => Some(replaced),
+                    Cow::Borrowed(_) => None,
+                }
+            })
+        };
+
+        match alias {
+            Some(alias) => {
+                log::warn!(
+                    "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'profiles' with '{}_alias' instead. (`{}` -> `{}`)",
+                    name,
+                    name,
+                    current_value,
+                    alias
+                );
+                Some(alias)
+            }
+            None => Some(current_value),
+        }
+    }
+}
 fn has_credential_process_or_sso(
     context: &Context,
     aws_profile: Option<&Profile>,
@@ -300,23 +361,59 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         )
     };
 
-    let mapped_region = alias_name(aws_region, &config.region_aliases);
+    let (matched_profile_config, display_profile, display_region) = config
+        .profiles
+        .iter()
+        .find_map(|profile_config| {
+            let profile_alias = get_aliased_name(
+                Some(profile_config.profile_pattern),
+                aws_profile.as_deref(),
+                profile_config.profile_alias,
+            )?;
 
-    let mapped_profile = alias_name(aws_profile, &config.profile_aliases);
+            let region_alias = get_aliased_name(
+                profile_config.region_pattern,
+                aws_region.as_deref(),
+                profile_config.region_alias,
+            );
+            if matches!(
+                (profile_config.region_pattern, &region_alias),
+                (Some(_), None)
+            ) {
+                return None;
+            }
+
+            Some((Some(profile_config), Some(profile_alias), region_alias))
+        })
+        .unwrap_or((None, aws_profile, aws_region));
+
+    let display_profile = display_profile
+        .map(|p| deprecated::get_alias(p, &config.profile_aliases, "profile"))
+        .unwrap_or(None);
+    let display_region = display_region
+        .map(|r| deprecated::get_alias(r, &config.region_aliases, "region"))
+        .unwrap_or(None);
+
+    let display_style = matched_profile_config
+        .and_then(|cfg| cfg.style)
+        .unwrap_or(config.style);
+    let display_symbol = matched_profile_config
+        .and_then(|cfg| cfg.symbol)
+        .unwrap_or(config.symbol);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => Some(config.symbol),
+                "symbol" => Some(display_symbol),
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(display_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "profile" => mapped_profile.as_ref().map(Ok),
-                "region" => mapped_region.as_ref().map(Ok),
+                "profile" => display_profile.as_ref().map(Ok),
+                "region" => display_region.as_ref().map(Ok),
                 "duration" => duration.as_ref().map(Ok),
                 _ => None,
             })
@@ -341,6 +438,190 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::{File, create_dir};
     use std::io::{self, Write};
+
+    #[test]
+    fn profiles_simple_pattern_match() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "astro"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_regex_pattern_match() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "company-prod-astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "company-.*-astronauts"
+                profile_alias = "astro"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_capture_group_replacement() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "company-prod-astronauts")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "company-(?P<env>[\\w-]+)-astronauts"
+                profile_alias = "astro-$env"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro-prod ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_region_pattern_match() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-southeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "astro"
+                region_pattern = "ap-southeast-.*"
+                region_alias = "au"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (au) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_region_pattern_no_match_skips_entry() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "us-east-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "astro-au"
+                region_pattern = "ap-southeast-.*"
+                region_alias = "au"
+
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "astro-us"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro-us (us-east-1) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_custom_style_and_symbol() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "production")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "production"
+                style = "bold red"
+                symbol = "🔴 "
+            })
+            .collect();
+        let expected = Some(format!("on {}", Color::Red.bold().paint("🔴 production ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_no_match_falls_through() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "production"
+                profile_alias = "prod"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_first_match_wins() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "first"
+
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                profile_alias = "second"
+            })
+            .collect();
+        let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  first ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profiles_region_capture_group() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-southeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [[aws.profiles]]
+                profile_pattern = "astronauts"
+                region_pattern = "(?P<area>[a-z]+)-(?P<dir>[a-z]+)-(?P<num>\\d+)"
+                region_alias = "$area-$num"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (ap-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
 
     #[test]
     #[ignore]

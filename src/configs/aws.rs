@@ -39,14 +39,16 @@ pub struct AwsConfig<'a> {
     pub style: &'a str,
     /// Disables the AWS module.
     pub disabled: bool,
-    /// Table of region aliases to display in addition to the AWS name.
+    /// Deprecated: Table of region aliases to display in addition to the AWS name.
     pub region_aliases: HashMap<String, &'a str>,
-    /// Table of profile aliases to display in addition to the AWS name.
+    /// Deprecated: Table of profile aliases to display in addition to the AWS name.
     pub profile_aliases: HashMap<String, &'a str>,
     /// The symbol displayed when the temporary credentials have expired.
     pub expiration_symbol: &'a str,
     /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
+    /// Customised styles and symbols for specific profiles.
+    pub profiles: Vec<AwsProfileConfig<'a>>,
 }
 
 impl Default for AwsConfig<'_> {
@@ -60,6 +62,29 @@ impl Default for AwsConfig<'_> {
             profile_aliases: HashMap::new(),
             expiration_symbol: "X",
             force_display: false,
+            profiles: vec![],
         }
     }
+}
+
+#[derive(Clone, Deserialize, Serialize, Default)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+pub struct AwsProfileConfig<'a> {
+    /// Regular expression to match the current AWS profile name.
+    pub profile_pattern: &'a str,
+    /// Regular expression to match the current AWS region name.
+    pub region_pattern: Option<&'a str>,
+    /// Profile alias to display instead of the full profile name.
+    pub profile_alias: Option<&'a str>,
+    /// Region alias to display instead of the full region name.
+    pub region_alias: Option<&'a str>,
+    /// The style for the module when this profile matches.
+    pub style: Option<&'a str>,
+    /// The symbol for the module when this profile matches.
+    pub symbol: Option<&'a str>,
 }
