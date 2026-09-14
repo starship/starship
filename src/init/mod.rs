@@ -282,6 +282,9 @@ const CMDEXE_INIT: &str = include_str!("starship.lua");
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Write;
+    use std::process::Stdio;
+
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {
@@ -317,6 +320,73 @@ mod tests {
         assert_eq!(
             starship_path.sprint_cmdexe()?,
             r#""C:\Cool Tools\starship.exe""#
+        );
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn bash_empty_command_clears_status_args() -> io::Result<()> {
+        let args_log = tempfile::NamedTempFile::new()?;
+        let init_script = BASH_INIT.replace("::STARSHIP::", "__starship_mock");
+        let harness = r#"
+__starship_mock() {
+  case "$1" in
+    time) printf '1000\n' ;;
+    prompt)
+      shift
+      printf '<prompt>'
+      printf '%s\n' "$*" >> "$STARSHIP_ARGS_LOG"
+      ;;
+  esac
+}
+COLUMNS=80
+SHLVL=1
+source /dev/stdin <<< "$STARSHIP_INIT_SCRIPT"
+false
+
+exit
+"#;
+
+        let mut command = create_command("bash")?;
+        let mut child = command
+            .arg("--noprofile")
+            .arg("--norc")
+            .arg("-i")
+            .env("STARSHIP_INIT_SCRIPT", init_script)
+            .env("STARSHIP_ARGS_LOG", args_log.path())
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()?;
+
+        child
+            .stdin
+            .as_mut()
+            .expect("bash stdin should be piped")
+            .write_all(harness.as_bytes())?;
+
+        let output = child.wait_with_output()?;
+
+        let calls = std::fs::read_to_string(args_log.path())?;
+        let prompt_calls = calls
+            .lines()
+            .filter(|line| line.contains("--terminal-width"))
+            .collect::<Vec<_>>();
+
+        assert!(
+            prompt_calls.len() >= 3,
+            "expected prompts after init, false, and empty enter:\n{calls}\nstdout:\n{}\nstderr:\n{}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(
+            prompt_calls[1].contains("--status=1"),
+            "failed command should pass its status:\n{calls}"
+        );
+        assert!(
+            prompt_calls[2].contains("--status= --pipestatus= "),
+            "empty command should clear the previous status:\n{calls}"
         );
         Ok(())
     }
