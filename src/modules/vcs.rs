@@ -19,13 +19,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .order
         .into_iter()
         .filter_map(|vcs| Vcs::try_from(vcs).ok())
-        .find(|vcs| discover_repo_root(context, *vcs).is_some())?;
+        .find(|vcs| discover_repo_root(context, *vcs).is_some());
 
     let modules = match vcs {
-        Vcs::Fossil => config.fossil_modules,
-        Vcs::Git => config.git_modules,
-        Vcs::Hg => config.hg_modules,
-        Vcs::Pijul => config.pijul_modules,
+        Some(vcs) => match vcs {
+            Vcs::Fossil => config.fossil_modules,
+            Vcs::Git => config.git_modules,
+            Vcs::Hg => config.hg_modules,
+            Vcs::Pijul => config.pijul_modules,
+        },
+        None => config.fallback_modules,
     };
 
     if modules.is_empty() {
@@ -197,7 +200,33 @@ mod tests {
 
     #[test]
     fn invalid_vcs_is_none() -> io::Result<()> {
-        with_marker("does_not_exists", FixtureProvider::Fossil, None)
+        with_marker("does_not_exist", FixtureProvider::Fossil, None)
+    }
+
+    #[test]
+    fn no_vcs_is_fallback() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let config = toml::toml! {
+            [vcs]
+            fallback_modules = "${custom.fallback_test}"
+
+            [custom.fallback_test]
+            command = "echo fallback"
+            when = true
+        };
+
+        let actual = ModuleRenderer::new("vcs")
+            .config(config)
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(
+            actual,
+            Some(format!("{}", Color::Green.bold().paint("fallback ")))
+        );
+
+        repo_dir.close()
     }
 
     #[track_caller]
