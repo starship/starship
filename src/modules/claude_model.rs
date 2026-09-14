@@ -69,6 +69,7 @@ mod tests {
     #[test]
     fn test_disabled() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-3-5-sonnet".to_string(),
@@ -92,6 +93,7 @@ mod tests {
     #[test]
     fn test_with_model_alias() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "global.anthropic.claude-sonnet-4-5-20250929-v1:0".to_string(),
@@ -120,6 +122,7 @@ mod tests {
     #[test]
     fn test_without_alias_uses_display_name() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-3-5-sonnet".to_string(),
@@ -149,6 +152,7 @@ mod tests {
     #[test]
     fn test_effort_level() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-opus-4-8".to_string(),
@@ -178,6 +182,7 @@ mod tests {
     #[test]
     fn test_effort_absent_omits_variable() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "claude-opus-4-8".to_string(),
@@ -205,6 +210,7 @@ mod tests {
     #[test]
     fn test_alias_by_display_name() {
         let data = crate::context::ClaudeCodeData {
+            session_id: None,
             cwd: None,
             model: crate::context::ModelInfo {
                 id: "some-long-vendor-specific-id".to_string(),
