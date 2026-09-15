@@ -235,6 +235,16 @@ impl<'a> Context<'a> {
         self.env.get_env_os(key)
     }
 
+    /// Returns whether the current session is an SSH session, detected by the
+    /// presence of any of the `SSH_CONNECTION`, `SSH_CLIENT`, or `SSH_TTY`
+    /// environment variables.
+    pub fn is_ssh_session(&self) -> bool {
+        const SSH_ENV_VARS: [&str; 3] = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
+        SSH_ENV_VARS
+            .iter()
+            .any(|env| self.get_env_os(env).is_some())
+    }
+
     /// Convert a `~` in a path to the home directory
     pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {

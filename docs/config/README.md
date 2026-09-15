@@ -2483,6 +2483,11 @@ The `hostname` module shows the system hostname.
 | `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
 | `aliases`         | `{}`                                   | Translate system hostnames to something else. If `trim_at` is specified, only the first part will be matched and replaced.            |
 
+> [!TIP]
+> SSH connection is detected by checking environment variables
+> `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
+> these variables, one workaround is to set one of them with a dummy value.
+
 ### Variables
 
 | Variable   | Example    | Description                                           |
