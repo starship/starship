@@ -16,7 +16,7 @@ pub struct JJMetricsConfig<'a> {
     pub only_nonzero_diffs: bool,
     /// Format string for the module
     pub format: &'a str,
-    /// Disable the `jj_metrics`
+    /// Disable the module
     pub disabled: bool,
 }
 
