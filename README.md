@@ -441,6 +441,10 @@ Please check out these previous works that helped inspire the creation of starsh
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
 
+**Supporter Tier**
+
+- [Alex Holmes](https://github.com/alexhholmes)
+
 ## 🔒 Code Signing Policy
 
 Free code signing provided by [SignPath.io], certificate by [SignPath Foundation].

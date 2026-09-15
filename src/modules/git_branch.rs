@@ -4,7 +4,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
-use crate::context::Repo;
+use crate::context::GitRepo;
 use crate::formatter::StringFormatter;
 use crate::modules::git_status::uses_reftables;
 
@@ -27,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo = context.get_repo().ok()?;
+    let repo = context.get_git_repo().ok()?;
 
     let gix_repo = repo.open();
     if config.ignore_bare_repo && gix_repo.workdir().is_none() {
@@ -96,6 +96,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let is_ignored_remote = config
+        .ignore_remotes
+        .iter()
+        .any(|ignored| remote_name.as_deref() == Some(ignored));
+
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
 
     let remote_branch_string = remote_branch.unwrap_or_default();
@@ -142,7 +147,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }
                 }
                 "remote_name" => {
-                    if show_remote && !remote_name_graphemes.is_empty() {
+                    if show_remote && !is_ignored_remote && !remote_name_graphemes.is_empty() {
                         Some(Ok(remote_name_graphemes.concat()))
                     } else {
                         None
@@ -167,7 +172,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// Given `remote_names`, find the longest matching remote name in `remote_ref_name` and return it.
 fn find_longest_matching_remote_name(
     remote_ref_name: &gix::refs::FullNameRef,
-    remote_names: &gix::remote::Names<'_>,
+    remote_names: &gix::remote::Names,
 ) -> Option<String> {
     let (category, shorthand_name) = remote_ref_name.category_and_short_name()?;
     if !matches!(category, gix::refs::Category::RemoteBranch) {
@@ -184,7 +189,7 @@ fn find_longest_matching_remote_name(
 /// Returns `None` if not on a branch (detached HEAD) or if the git command fails.
 fn get_branch_info_from_git(
     context: &Context,
-    repo: &Repo,
+    repo: &GitRepo,
 ) -> Option<(gix::refs::FullName, Option<gix::refs::FullName>)> {
     // Get current branch name using git symbolic-ref
     let branch_output = repo.exec_git(context, ["symbolic-ref", "HEAD"])?;
@@ -514,6 +519,48 @@ mod tests {
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_ignore_remotes() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            // Both repos must use the same hash format; SHA1/SHA256 repos can't fetch from each other.
+            let sha256 = rand::random();
+            let remote_dir = fixture_repo_with_hash(mode, sha256)?;
+            let repo_dir = fixture_repo_with_hash(mode, sha256)?;
+
+            create_command("git")?
+                .args(["checkout", "-b", "test_branch"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["remote", "add", "--fetch", "remote_repo"])
+                .arg(remote_dir.path())
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            create_command("git")?
+                .args(["branch", "--set-upstream-to", "remote_repo/master"])
+                .current_dir(repo_dir.path())
+                .output()?;
+
+            let actual = ModuleRenderer::new("git_branch")
+                .path(repo_dir.path())
+                .config(toml::toml! {
+                    [git_branch]
+                        ignore_remotes = ["remote_repo"]
+                        format = "($remote_name/)$branch"
+                })
+                .collect();
+
+            let expected = Some("test_branch");
+
+            assert_eq!(expected, actual.as_deref());
+            repo_dir.close()?;
+            remote_dir.close()?;
         }
         Ok(())
     }

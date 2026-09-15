@@ -180,7 +180,9 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
             let caps = re.captures(&contents)?;
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
-            let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+            let build_file_contents = context
+                .read_file_from_pwd("build.gradle")
+                .or_else(|| context.read_file_from_pwd("build.gradle.kts"))?;
             let re = Regex::new(r#"(?m)^version( |\s*=\s*)['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
             let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
@@ -231,7 +233,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
     loop {
         match reader.read_event_into(&mut buf) {
             Ok(QXEvent::Start(ref e)) => {
-                in_ver = depth == 1 && e.name().as_ref() == b"version";
+                in_ver = depth == 1 && e.name().as_ref() == "version";
                 depth += 1;
             }
             Ok(QXEvent::End(_)) => {
@@ -239,12 +241,13 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.decode().ok().map(std::borrow::Cow::into_owned);
-                return match ver {
-                    // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
-                    _ => None,
-                };
+                // Ignore version which is just a property reference
+                if !t.as_ref().starts_with('$') {
+                    let ver = t.as_ref();
+                    return format_version(ver, config.version_format);
+                }
+
+                return None;
             }
             Ok(QXEvent::Eof) => break,
             Ok(_) => (),
@@ -1204,6 +1207,26 @@ java {
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
+
+    #[test]
+    fn test_extract_gradle_version_kotlin_dsl() -> io::Result<()> {
+        let config_name = "build.gradle.kts";
+        let config_content = "plugins {
+    id(\"java\")
+    id(\"test.plugin\") version \"0.2.0\"
+}
+version = \"0.1.0\"
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
     #[test]
     fn test_extract_grade_version_from_properties() -> io::Result<()> {
         let config_name = "gradle.properties";

@@ -121,6 +121,11 @@ symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
+[jj_bookmark]
+symbol = ""
+style = "bg:#FCA17D"
+format = '[ $symbol $bookmark(@$remote)$diverged( \\(+$overflow_count others\\)) ]($style)'
+
 [julia]
 symbol = " "
 style = "bg:#86BBD8"

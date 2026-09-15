@@ -209,6 +209,7 @@ mod tests {
             },
             cost: None,
             workspace: None,
+            effort: None,
         }
     }
 
