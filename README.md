@@ -191,7 +191,8 @@
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A font with decent Unicode support (most modern system fonts are sufficient).
+- Optionally, a [Nerd Font](https://www.nerdfonts.com/) for additional icons. (See the [Nerd Font Symbols preset](https://starship.rs/presets/#nerd-font-symbols).)
 
 ### Step 1. Install Starship
 
