@@ -11,6 +11,13 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
+## [Deep Context](./deep-context.md)
+
+This preset combines Nerd Font symbols with complete project paths and a compact `user@host`
+identity for SSH sessions.
+
+[![Screenshot of Deep Context preset](/presets/img/deep-context.png "Click to view Deep Context preset")](./deep-context)
+
 ## [No Nerd Fonts](./no-nerd-font.md)
 
 This preset changes the symbols for several modules so that no Nerd Font symbols
