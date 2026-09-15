@@ -403,7 +403,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 | Option              | Default                                                           | Description                                                                                                 |
 | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
-| `symbol`            | `'☁️ '`                                                            | The symbol used before displaying the current AWS profile.                                                  |
+| `symbol`            | `'☁️ '`                                                           | The symbol used before displaying the current AWS profile.                                                  |
 | `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
@@ -876,7 +876,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 | Option              | Default                              | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `'⚙️ '`                               | The symbol used before displaying the version of COBOL.                   |
+| `symbol`            | `'⚙️ '`                              | The symbol used before displaying the version of COBOL.                   |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `'bold blue'`                        | The style for the module.                                                 |
@@ -1835,7 +1835,7 @@ environment variables has been set.
 | Option            | Default                                                  | Description                                                      |
 | ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
-| `symbol`          | `'☁️  '`                                                  | The symbol used before displaying the current GCP profile.       |
+| `symbol`          | `'☁️  '`                                                 | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                     | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                     | Table of project aliases to display in addition to the GCP name. |
 | `detect_env_vars` | `[]`                                                     | Which environmental variables should trigger this module         |
@@ -3354,7 +3354,7 @@ The `nats` module shows the name of the current [NATS](https://nats.io) context.
 
 | Option     | Default                    | Description                                                  |
 | ---------- | -------------------------- | ------------------------------------------------------------ |
-| `symbol`   | `'✉️ '`                     | The symbol used before the NATS context (defaults to empty). |
+| `symbol`   | `'✉️ '`                    | The symbol used before the NATS context (defaults to empty). |
 | `style`    | `'bold purple'`            | The style for the module.                                    |
 | `format`   | `'[$symbol$name]($style)'` | The format for the module.                                   |
 | `disabled` | `false`                    | Disables the `nats` module.                                  |
@@ -3460,7 +3460,7 @@ The module will be shown when inside a nix-shell environment.
 | Option        | Default                                      | Description                                                           |
 | ------------- | -------------------------------------------- | --------------------------------------------------------------------- |
 | `format`      | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                                            |
-| `symbol`      | `'❄️ '`                                       | A format string representing the symbol of nix-shell.                 |
+| `symbol`      | `'❄️ '`                                      | A format string representing the symbol of nix-shell.                 |
 | `style`       | `'bold blue'`                                | The style for the module.                                             |
 | `impure_msg`  | `'impure'`                                   | A format string shown when the shell is impure.                       |
 | `pure_msg`    | `'pure'`                                     | A format string shown when the shell is pure.                         |
@@ -3675,7 +3675,7 @@ to fetch the current project in use.
 | Option     | Default                                       | Description                                                    |
 | ---------- | --------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | The format for the module.                                     |
-| `symbol`   | `'☁️ '`                                        | The symbol used before displaying the current OpenStack cloud. |
+| `symbol`   | `'☁️ '`                                       | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                               | The style for the module.                                      |
 | `disabled` | `false`                                       | Disables the `openstack` module.                               |
 
@@ -3797,7 +3797,7 @@ Zorin = "🔹 "
 
 | Variable | Example      | Description                                                        |
 | -------- | ------------ | ------------------------------------------------------------------ |
-| symbol   | `🎗️`          | The current operating system symbol from advanced option `symbols` |
+| symbol   | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name     | `Arch Linux` | The current operating system name                                  |
 | type     | `Arch`       | The current operating system type                                  |
 | codename |              | The current operating system codename, if applicable               |
@@ -4583,7 +4583,7 @@ set to a number and meets or exceeds the specified threshold.
 | --------------- | ---------------------------- | ------------------------------------------------------------------- |
 | `threshold`     | `2`                          | Display threshold.                                                  |
 | `format`        | `'[$symbol$shlvl]($style) '` | The format for the module.                                          |
-| `symbol`        | `'↕️  '`                      | The symbol used to represent the `SHLVL`.                           |
+| `symbol`        | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                           |
 | `repeat`        | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount.       |
 | `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
 | `style`         | `'bold yellow'`              | The style for the module.                                           |
