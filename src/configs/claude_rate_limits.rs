@@ -24,7 +24,7 @@ pub struct ClaudeRateLimitsConfig<'a> {
 impl Default for ClaudeRateLimitsConfig<'_> {
     fn default() -> Self {
         Self {
-            format: "[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) ",
+            format: "[$symbol]($style)([ 5h $five_hour_percentage]($five_hour_style))([ 7d $seven_day_percentage]($seven_day_style)) ",
             symbol: "⏳",
             gauge_width: 5,
             gauge_full_symbol: "█",

@@ -256,7 +256,7 @@
     "claude_rate_limits": {
       "$ref": "#/$defs/ClaudeRateLimitsConfig",
       "default": {
-        "format": "[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) ",
+        "format": "[$symbol]($style)([ 5h $five_hour_percentage]($five_hour_style))([ 7d $seven_day_percentage]($seven_day_style)) ",
         "symbol": "⏳",
         "gauge_width": 5,
         "gauge_full_symbol": "█",
@@ -2502,7 +2502,7 @@
       "properties": {
         "format": {
           "type": "string",
-          "default": "[$symbol( 5h $five_hour_percentage)( 7d $seven_day_percentage)]($style) "
+          "default": "[$symbol]($style)([ 5h $five_hour_percentage]($five_hour_style))([ 7d $seven_day_percentage]($seven_day_style)) "
         },
         "symbol": {
           "type": "string",
