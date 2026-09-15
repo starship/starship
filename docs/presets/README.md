@@ -83,3 +83,10 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+
+## [Clean Text](./clean-text.md)
+
+This preset provides a clean, two-line developer prompt with runtime version tracking that requires no Nerd Fonts or unicode symbols. Great for stock terminal environments, remote SSH sessions, and containers.
+
+[Click to view Clean Text preset](./clean-text.md)
