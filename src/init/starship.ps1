@@ -92,7 +92,14 @@ $null = New-Module starship {
                     # goes deeply negative as soon as the buffer scrolls past one window
                     # height (i.e. almost immediately in normal use), clearing nothing.
                     # ESC[0J (erase from cursor to end of screen) needs no buffer/window
-                    # coordinate reconciliation and reliably wipes any leftover rows.
+                    # coordinate reconciliation and reliably wipes any leftover rows - but
+                    # it erases from wherever the cursor currently sits, and the edit
+                    # cursor may be mid-line (e.g. the user moved left to fix a typo before
+                    # hitting Enter). Move to the true end of the buffer first so the erase
+                    # only touches what's actually below the input, never visible command text.
+                    # (ESC[0J needs VT processing, same as every ANSI color code this whole
+                    # prompt already relies on - not a new terminal requirement.)
+                    [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
                     [Console]::Out.Write("$([char]0x1B)[0J")
                 }
                 [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
