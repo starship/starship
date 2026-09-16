@@ -83,11 +83,17 @@ $null = New-Module starship {
                 }
             } finally {
                 if ($script:DoesUseLists) {
-                    # If PSReadline is set to display suggestion list, this workaround is needed to clear the buffer below
-                    # before accepting the current commandline. The max amount of items in the list is 10, so 12 lines
-                    # are cleared (10 + 1 more for the prompt + 1 more for current commandline).
-                    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("`n" * [math]::Min($Host.UI.RawUI.WindowSize.Height - $Host.UI.RawUI.CursorPosition.Y - 1, 12))
-                    [Microsoft.PowerShell.PSConsoleReadLine]::Undo()
+                    # If PSReadLine is set to display the suggestion list, the rows it drew
+                    # below the input are not otherwise erased before the transient prompt
+                    # replaces the input line, leaving them stuck on screen. This used to
+                    # insert newlines and undo them, sized off WindowSize.Height minus
+                    # CursorPosition.Y - but CursorPosition is relative to the whole scroll
+                    # buffer while WindowSize is just the visible window, so that difference
+                    # goes deeply negative as soon as the buffer scrolls past one window
+                    # height (i.e. almost immediately in normal use), clearing nothing.
+                    # ESC[0J (erase from cursor to end of screen) needs no buffer/window
+                    # coordinate reconciliation and reliably wipes any leftover rows.
+                    [Console]::Out.Write("$([char]0x1B)[0J")
                 }
                 [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
                 [Console]::OutputEncoding = $previousOutputEncoding
