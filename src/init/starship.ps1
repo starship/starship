@@ -83,24 +83,23 @@ $null = New-Module starship {
                 }
             } finally {
                 if ($script:DoesUseLists) {
-                    # If PSReadLine is set to display the suggestion list, the rows it drew
-                    # below the input are not otherwise erased before the transient prompt
-                    # replaces the input line, leaving them stuck on screen. This used to
-                    # insert newlines and undo them, sized off WindowSize.Height minus
-                    # CursorPosition.Y - but CursorPosition is relative to the whole scroll
-                    # buffer while WindowSize is just the visible window, so that difference
-                    # goes deeply negative as soon as the buffer scrolls past one window
-                    # height (i.e. almost immediately in normal use), clearing nothing.
-                    # ESC[0J (erase from cursor to end of screen) needs no buffer/window
-                    # coordinate reconciliation and reliably wipes any leftover rows - but
-                    # it erases from wherever the cursor currently sits, and the edit
-                    # cursor may be mid-line (e.g. the user moved left to fix a typo before
-                    # hitting Enter). Move to the true end of the buffer first so the erase
-                    # only touches what's actually below the input, never visible command text.
-                    # (ESC[0J needs VT processing, same as every ANSI color code this whole
-                    # prompt already relies on - not a new terminal requirement.)
-                    [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
-                    [Console]::Out.Write("$([char]0x1B)[0J")
+                    # If PSReadLine is set to display the suggestion list, this workaround is needed to clear the buffer below
+                    # before accepting the current commandline. The max amount of items in the list is 10, so 12 lines
+                    # are cleared (10 + 1 more for the prompt + 1 more for current commandline).
+                    #
+                    # This used to size the newline count off WindowSize.Height minus CursorPosition.Y - but CursorPosition
+                    # is relative to the whole scroll buffer while WindowSize is just the visible window, so that difference
+                    # goes deeply negative as soon as the buffer scrolls past one window height (i.e. almost immediately in
+                    # normal use), clearing nothing. Dropped the math entirely - 12 is already the documented safe max, no
+                    # cursor-position calculation needed.
+                    #
+                    # This must go through PSReadLine's own Insert()/Undo() and not a raw ANSI erase (e.g. ESC[0J written
+                    # directly to the console): PSReadLine tracks how many lines its own output occupies internally (see
+                    # Set-PSReadLineOption -ExtraPromptLineCount below) to compute cursor position on the *next* render.
+                    # Erasing the screen directly bypasses that bookkeeping, so PSReadLine's internal row count goes stale
+                    # and the next prompt render draws at the wrong position, corrupting it instead of fixing anything.
+                    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("`n" * 12)
+                    [Microsoft.PowerShell.PSConsoleReadLine]::Undo()
                 }
                 [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
                 [Console]::OutputEncoding = $previousOutputEncoding
