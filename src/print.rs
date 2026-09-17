@@ -142,7 +142,7 @@ pub fn get_prompt(context: &Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width), context.shell);
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
@@ -852,6 +852,42 @@ mod test {
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn fill_ignores_bash_escapes_in_width() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                format = r"a$fill\$\\`"
+                [fill]
+                symbol = "-"
+                style = ""
+        });
+        context.shell = Shell::Bash;
+        context.width = 10;
+
+        // `$`, `\` and `` ` `` are escaped for bash but each only take up one column
+        let expected = String::from("a------\\$\\\\\\`");
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn fill_ignores_zsh_escapes_in_width() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                format = "a$fill 100%"
+                [fill]
+                symbol = "-"
+                style = ""
+        });
+        context.shell = Shell::Zsh;
+        context.width = 10;
+
+        // `%` is escaped as `%%` for zsh but only takes up one column
+        let expected = String::from("a---- 100%%");
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
     }
 
     #[test]
