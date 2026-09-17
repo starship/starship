@@ -111,8 +111,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
-        Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+        Some(repo_root)
+            if config.repo_root_style.is_some()
+                && (!home_dir.starts_with(repo_root) || **repo_root == home_dir) =>
+        {
+            // Handle the home directory by doing symbol substitution in both
+            // the display directory and the repo root.
+            let full_path = contract_path(display_dir, &home_dir, config.home_symbol);
+            let top_level_path = contract_path(repo_root, &home_dir, config.home_symbol);
+            let contracted_path = contract_repo_path(
+                Path::new(full_path.as_ref()),
+                Path::new(top_level_path.as_ref()),
+            )?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
@@ -601,6 +611,84 @@ mod tests {
                 .env("HOME", tmp_dir.path().to_str().unwrap())
                 .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_in_home_directory_repo_root_style() -> io::Result<()> {
+            // This test verifies that repo_root_style works correctly when the git repo
+            // root IS the home directory itself (the exception case in the fix).
+            //
+            // Setup: HOME and repo_root are the same directory
+            // Expected: repo_root_style IS applied
+            //
+            // By using a standalone temp directory (not nested in the actual home), this test
+            // works reliably regardless of whether the tester's actual home directory is
+            // itself a git repository.
+
+            let tmp_dir = TempDir::new()?;
+            let dir = tmp_dir.path().join("src/fuel-gauge");
+            fs::create_dir_all(&dir)?;
+            init_repo(tmp_dir.path())?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    truncation_length = 5
+                    repo_root_style = "bold red"
+                })
+                .path(dir)
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .collect();
+            let expected = Some(format!(
+                "{}{}~{} ",
+                Color::Cyan.bold().prefix(),
+                Color::Red.prefix(),
+                Color::Cyan.paint("/src/fuel-gauge")
+            ));
+
+            assert_eq!(expected, actual);
+
+            tmp_dir.close()
+        }
+
+        #[test]
+        fn git_repo_as_ancestor_of_home_no_repo_root_style() -> io::Result<()> {
+            // This test verifies the safeguard: repo_root_style should NOT be applied
+            // when home is inside an ancestor git repository.
+            //
+            // Setup: Git repo at ancestor level, HOME is a subdirectory inside that repo
+            // Expected: repo_root_style is NOT applied (just shows the path normally)
+            //
+            // This prevents confusing output when your home directory happens to be
+            // inside a git repository (e.g., if /Users or /home is a git repo).
+
+            let tmp_dir = TempDir::new()?;
+            // Create a git repo at the ancestor level
+            init_repo(tmp_dir.path())?;
+
+            // Create "home" as a subdirectory within the git repo
+            let fake_home = tmp_dir.path().join("home_dir");
+            let dir = fake_home.join("projects/stuff");
+            fs::create_dir_all(&dir)?;
+
+            let actual = ModuleRenderer::new("directory")
+                .config(toml::toml! {
+                    [directory]
+                    truncation_length = 1
+                    repo_root_style = "bold red"
+                })
+                .path(&dir)
+                .env("HOME", fake_home.to_str().unwrap())
+                .collect();
+
+            // repo_root_style should NOT be applied due to the safeguard.
+            // With truncation_length = 1 and home inside an ancestor git repo,
+            // we should just see the deepest directory with no red styling.
+            let expected = Some(format!("{} ", Color::Cyan.bold().paint("stuff")));
 
             assert_eq!(expected, actual);
 
