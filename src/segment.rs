@@ -1,5 +1,7 @@
 use crate::{
     config::Style,
+    context::Shell,
+    formatter::string_formatter::shell_prompt_unescape,
     print::{Grapheme, UnicodeWidthGraphemes},
 };
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
@@ -165,10 +167,11 @@ impl Segment {
         }
     }
 
-    pub fn width_graphemes(&self) -> usize {
+    /// Returns the display width of the segment value, ignoring the escapes added for `shell`
+    pub fn width_graphemes(&self, shell: Shell) -> usize {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
-            Self::Text(ts) => ts.value.width_graphemes(),
+            Self::Text(ts) => shell_prompt_unescape(&ts.value, shell).width_graphemes(),
             Self::LineTerm => 0,
         }
     }
