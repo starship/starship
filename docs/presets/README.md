@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Gruvbox Sentence](./gruvbox-sentence.md)
+
+This preset keeps the palette of [Gruvbox Rainbow](./gruvbox-rainbow.md) but drops the powerline segments in favor of a flat, sentence-style prompt — segments are joined with prepositions (`in`, `on`, `via`, `at`) instead of colored pills.
+
+[![Screenshot of Gruvbox Sentence preset](/presets/img/gruvbox-sentence.png "Click to view Gruvbox Sentence preset")](./gruvbox-sentence)
