@@ -20,7 +20,7 @@ impl Default for FossilBranchConfig<'_> {
     fn default() -> Self {
         Self {
             format: "on [$symbol$branch]($style) ",
-            symbol: " ",
+            symbol: "⎇ ",
             style: "bold purple",
             truncation_length: i64::MAX,
             truncation_symbol: "…",
