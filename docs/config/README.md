@@ -1215,6 +1215,7 @@ it would have been `nixpkgs/pkgs`.
 | `substitutions`             |         | An Array or table of substitutions to be made to the path.                                                                                                             |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| `use_osc8_url`              | `false` | If `true` the `directory` component of the prompt will become a hyperlink to `file://$path` via [OSC 8](https://github.com/Alhadis/OSC8-Adoption) escape sequence.     |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
 prefixes or development directories of Java. Note that this will disable the fish style PWD. It takes an array of the following

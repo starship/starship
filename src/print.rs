@@ -38,10 +38,18 @@ pub trait UnicodeWidthGraphemes {
     fn width_graphemes(&self) -> usize;
 }
 
-static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
+static ESCAPE_REGEX: OnceLock<Regex> = OnceLock::new();
 
-fn ansi_strip() -> &'static Regex {
-    ANSI_REGEX.get_or_init(|| Regex::new(r"\x1B\[[0-9;]*m").unwrap())
+fn strip_escapes() -> &'static Regex {
+    ESCAPE_REGEX.get_or_init(|| {
+        // Define each pattern group individually for readability
+        let patterns = [
+            r"\x1B\[[0-9;]*m",                // SGR sequences
+            r"\x1B\].*?(?:\x1B\\|\x9C|\x07)", // OSC sequences
+        ];
+
+        Regex::new(&patterns.join("|")).unwrap()
+    })
 }
 
 impl<T> UnicodeWidthGraphemes for T
@@ -49,7 +57,7 @@ where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        ansi_strip()
+        strip_escapes()
             .replace_all(self.as_ref(), "")
             .into_owned()
             .graphemes(true)
@@ -67,6 +75,26 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    let (osc8_start, osc8_end) = ("\x1B]8;;", "\x1B\\");
+    // OSC 8 hyperlink test
+    assert_eq!(
+        9,
+        format!("{0}file:///{1}Link text{0}{1}", osc8_start, osc8_end).width_graphemes()
+    );
+    // Link with newline
+    assert_eq!(
+        11,
+        format!("{0}file:///{1}With\nnewline{0}{1}", osc8_start, osc8_end).width_graphemes()
+    );
+    // Colorized link
+    assert_eq!(
+        10,
+        format!(
+            "{0}file:///{1}\x1B[35;6mPink blink{0}{1}",
+            osc8_start, osc8_end
+        )
+        .width_graphemes()
+    );
 }
 
 pub fn prompt(args: Properties, target: Target) {
