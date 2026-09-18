@@ -408,6 +408,7 @@ is read from the `AWS_SSO_PROFILE` env var.
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
 | `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
+| `refresh_symbol`    | `↻`                                                               | The symbol displayed when an expired SSO access token can be refreshed silently                             |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
