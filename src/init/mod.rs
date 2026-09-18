@@ -279,6 +279,35 @@ const XONSH_INIT: &str = include_str!("starship.xsh");
 
 const CMDEXE_INIT: &str = include_str!("starship.lua");
 
+/// Pad a PowerShell transient prompt so it occupies the same number of rows as
+/// the live prompt. `buffer == None` means the edit buffer could not be read.
+///
+/// Keep in sync with `Get-StarshipTransientPromptText` in `starship.ps1`.
+#[cfg(test)]
+fn align_pwsh_transient_prompt(
+    transient: &str,
+    live_line_count: usize,
+    buffer: Option<&str>,
+) -> String {
+    let align_height = match buffer {
+        Some(buf) if !buf.contains('\n') => false,
+        _ => true,
+    };
+    if !align_height {
+        return transient.to_string();
+    }
+
+    let transient_line_count = transient.split('\n').count();
+    if live_line_count <= transient_line_count {
+        return transient.to_string();
+    }
+
+    format!(
+        "{}{transient}",
+        "\n".repeat(live_line_count - transient_line_count)
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -319,5 +348,67 @@ mod tests {
             r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
+    }
+
+    #[test]
+    fn pwsh_init_wires_transient_height_alignment() {
+        assert!(
+            PWSH_INIT.contains("function Get-StarshipTransientPromptText"),
+            "starship.ps1 must define Get-StarshipTransientPromptText"
+        );
+        assert!(
+            PWSH_INIT.contains(
+                "Get-StarshipTransientPromptText -TransientText $transient -LiveLineCount $liveLineCount -Buffer $buffer"
+            ),
+            "transient prompt path must align height using ExtraPromptLineCount and the edit buffer"
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_multiline_two_row_live_pads_one_newline() {
+        let buffer =
+            "Write-Host \"test line 1\"\nWrite-Host \"test line 2\"\nWrite-Host \"test line 3\"";
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, Some(buffer)), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_single_line_stays_compact() {
+        assert_eq!(
+            align_pwsh_transient_prompt("❯ ", 2, Some(r#"1..3 | % { Write-Host "test $_" }"#)),
+            "❯ "
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_three_row_live_pads_two_newlines() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 3, Some("a\nb")), "\n\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_already_matching_height_unchanged() {
+        assert_eq!(align_pwsh_transient_prompt("\n❯ ", 2, Some("a\nb")), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_unknown_buffer_pads_to_be_safe() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, None), "\n❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_empty_buffer_stays_compact() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 2, Some("")), "❯ ");
+    }
+
+    #[test]
+    fn pwsh_transient_taller_than_live_unchanged() {
+        assert_eq!(
+            align_pwsh_transient_prompt("\n\n❯ ", 2, Some("a\nb")),
+            "\n\n❯ "
+        );
+    }
+
+    #[test]
+    fn pwsh_transient_one_row_live_multiline_no_pad() {
+        assert_eq!(align_pwsh_transient_prompt("❯ ", 1, Some("a\nb")), "❯ ");
     }
 }
