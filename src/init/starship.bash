@@ -29,10 +29,9 @@ starship_preexec() {
     : "$PREV_LAST_ARG"
 }
 
-# Will be run before the prompt is drawn
-starship_precmd() {
+starship_precmd_pre() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
+    export STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=("${PIPESTATUS[@]}")
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
     fi
@@ -52,24 +51,23 @@ starship_precmd() {
     # Original bug: https://lists.gnu.org/archive/html/bug-bash/2022-07/msg00117.html
     jobs &>/dev/null
 
-    local job NUM_JOBS=0 IFS=$' \t\n'
+    export STARSHIP_NUM_JOBS=0
+    local job IFS=$' \t\n'
     # Evaluate the number of jobs before running the preserved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
-    for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
+    for job in $(jobs -p); do [[ $job ]] && ((STARSHIP_NUM_JOBS++)); done
 
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
-
     # Set $? to the preserved value before running additional parts of the prompt
     # command pipeline, which may rely on it.
     _starship_set_return "$STARSHIP_CMD_STATUS"
+}
 
-    if [[ -n "${STARSHIP_PROMPT_COMMAND-}" ]]; then
-        eval "$STARSHIP_PROMPT_COMMAND"
-    fi
 
-    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --shlvl="${SHLVL}")
+starship_precmd_post() {
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${STARSHIP_NUM_JOBS}" --shlvl="${SHLVL}")
     # Prepare the timer data, if needed.
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
@@ -83,6 +81,17 @@ starship_precmd() {
         bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+
+    # Set $? to the preserved value before running additional parts of the prompt
+    # command pipeline, which may rely on it.
+    _starship_set_return "$STARSHIP_CMD_STATUS"
+}
+
+# Will be run before the prompt is drawn
+# Combines the pre and post functions into one, so that it can be used with bash frameworks
+starship_precmd() {
+    starship_precmd_pre "$@"
+    starship_precmd_post "$@"
 }
 
 # If the user appears to be using https://github.com/akinomyoga/ble.sh,
@@ -131,10 +140,12 @@ else
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
         # Prepending to PROMPT_COMMAND breaks "command duration" module.
-        # So, we are preserving the existing PROMPT_COMMAND
-        # which will be executed later in the starship_precmd function
-        STARSHIP_PROMPT_COMMAND="$PROMPT_COMMAND"
-        PROMPT_COMMAND="starship_precmd"
+        # So, we are splitting the precmd into two parts, one that runs before starship_precmd and one that runs after.
+
+        # Join with newlines, not semicolons, to avoid breaking existing prompt command entries
+        # that start or end with semicolons.
+        # Double newlines guard against trailing backslashes in PROMPT_COMMAND
+        PROMPT_COMMAND=starship_precmd_pre$'\n'"${PROMPT_COMMAND}"$'\n\n'starship_precmd_post
     fi
 fi
 
