@@ -2,7 +2,7 @@
 
 # Pastel Powerline
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+Цей шаблон створено під впливом [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
 Він також показує як працює шлях підстановки в starship.
 
 ![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png)
