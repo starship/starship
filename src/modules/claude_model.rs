@@ -29,6 +29,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
+                "thinking_symbol" => claude_data
+                    .thinking
+                    .as_ref()
+                    .filter(|t| t.enabled)
+                    .map(|_| config.thinking_symbol),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -78,6 +83,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            thinking: None,
         };
         let actual = ModuleRenderer::new("claude_model")
             .config(toml::toml! {
@@ -101,6 +107,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            thinking: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -129,6 +136,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            thinking: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -160,6 +168,7 @@ mod tests {
             effort: Some(crate::utils::statusline::EffortInfo {
                 level: "high".to_string(),
             }),
+            thinking: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -187,6 +196,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            thinking: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")
@@ -194,6 +204,90 @@ mod tests {
                 [claude_model]
                 symbol = ""
                 format = "[$model( \\($effort\\))]($style)"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Blue.bold().paint("Opus 4.8")));
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_thinking_symbol_enabled() {
+        let data = crate::context::ClaudeCodeData {
+            cwd: None,
+            model: crate::context::ModelInfo {
+                id: "claude-opus-4-8".to_string(),
+                display_name: "Opus 4.8".to_string(),
+            },
+            context_window: crate::context::ContextWindow::default(),
+            cost: None,
+            workspace: None,
+            effort: None,
+            thinking: Some(crate::utils::statusline::ThinkingInfo { enabled: true }),
+        };
+
+        let actual = ModuleRenderer::new("claude_model")
+            .config(toml::toml! {
+                [claude_model]
+                thinking_symbol = "🧠 "
+                format = "[$thinking_symbol$model]($style)"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Blue.bold().paint("🧠 Opus 4.8")));
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_thinking_symbol_disabled_omits_variable() {
+        let data = crate::context::ClaudeCodeData {
+            cwd: None,
+            model: crate::context::ModelInfo {
+                id: "claude-opus-4-8".to_string(),
+                display_name: "Opus 4.8".to_string(),
+            },
+            context_window: crate::context::ContextWindow::default(),
+            cost: None,
+            workspace: None,
+            effort: None,
+            thinking: Some(crate::utils::statusline::ThinkingInfo { enabled: false }),
+        };
+
+        let actual = ModuleRenderer::new("claude_model")
+            .config(toml::toml! {
+                [claude_model]
+                thinking_symbol = "🧠 "
+                format = "[$thinking_symbol$model]($style)"
+            })
+            .claude_code_data(data)
+            .collect();
+
+        let expected = Some(format!("{}", Color::Blue.bold().paint("Opus 4.8")));
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn test_thinking_symbol_absent_omits_variable() {
+        let data = crate::context::ClaudeCodeData {
+            cwd: None,
+            model: crate::context::ModelInfo {
+                id: "claude-opus-4-8".to_string(),
+                display_name: "Opus 4.8".to_string(),
+            },
+            context_window: crate::context::ContextWindow::default(),
+            cost: None,
+            workspace: None,
+            effort: None,
+            thinking: None,
+        };
+
+        let actual = ModuleRenderer::new("claude_model")
+            .config(toml::toml! {
+                [claude_model]
+                thinking_symbol = "🧠 "
+                format = "[$thinking_symbol$model]($style)"
             })
             .claude_code_data(data)
             .collect();
@@ -214,6 +308,7 @@ mod tests {
             cost: None,
             workspace: None,
             effort: None,
+            thinking: None,
         };
 
         let actual = ModuleRenderer::new("claude_model")

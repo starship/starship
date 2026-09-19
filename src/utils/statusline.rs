@@ -21,12 +21,19 @@ pub struct ClaudeCodeData {
     pub cost: Option<CostInfo>,
     pub workspace: Option<Workspace>,
     pub effort: Option<EffortInfo>,
+    pub thinking: Option<ThinkingInfo>,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
 #[serde(default)]
 pub struct EffortInfo {
     pub level: String,
+}
+
+#[derive(Deserialize, Debug, Clone, Default)]
+#[serde(default)]
+pub struct ThinkingInfo {
+    pub enabled: bool,
 }
 
 #[derive(Deserialize, Debug, Clone, Default)]
@@ -122,6 +129,12 @@ mod tests {
                     "cache_creation_input_tokens": 10,
                     "cache_read_input_tokens": 20
                 }
+            },
+            "effort": {
+                "level": "high"
+            },
+            "thinking": {
+                "enabled": true
             }
         }"#;
 
@@ -134,6 +147,8 @@ mod tests {
             data.context_window.current_usage.cache_read_input_tokens,
             20
         );
+        assert_eq!(data.effort.expect("effort present").level, "high");
+        assert!(data.thinking.expect("thinking present").enabled);
     }
 
     #[test]
