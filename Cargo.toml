@@ -35,8 +35,8 @@ config-schema = ["schemars"]
 notify = ["notify-rust"]
 
 [dependencies]
-clap = { version = "4.6.6", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.6.9"
+clap = { version = "4.6.7", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.6.11"
 clap_complete_nushell = "4.6.2"
 dirs = "7.0.0"
 dunce = "1.0.5"
