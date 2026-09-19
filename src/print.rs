@@ -10,7 +10,7 @@ use std::sync::OnceLock;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthChar;
+use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
@@ -20,17 +20,21 @@ use crate::module::Module;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
-use crate::utils::wrap_colorseq_for_shell;
+use crate::utils::{wrap_colorseq_for_shell, wrap_widechar_for_zsh};
 
 pub struct Grapheme<'a>(pub &'a str);
 
 impl Grapheme<'_> {
     pub fn width(&self) -> usize {
-        self.0
-            .chars()
-            .filter_map(UnicodeWidthChar::width)
-            .max()
-            .unwrap_or(0)
+        // The string width accounts for the whole cluster: variation selector 16 gives
+        // emoji presentation (❄️ is two cells), regional indicator pairs form one flag,
+        // and ZWJ sequences render as a single glyph. Control characters occupy no cells,
+        // but `UnicodeWidthStr` counts them as one, so they are handled separately.
+        if self.0.chars().all(|c| UnicodeWidthChar::width(c).is_none()) {
+            return 0;
+        }
+
+        UnicodeWidthStr::width(self.0)
     }
 }
 
@@ -61,12 +65,58 @@ where
 
 #[test]
 fn test_grapheme_aware_width() {
-    // UnicodeWidthStr::width would return 8
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
     // Magenta string test
     assert_eq!(11, "\x1B[35;6mnormal text".width_graphemes());
+    // ❄️ is a snowflake (U+2744) with variation selector 16 (U+FE0F): two cells wide even
+    // though the base character is narrow. 🇬🇧 is two regional indicator symbols forming one
+    // two-cell flag.
+    assert_eq!(2, "❄️".width_graphemes());
+    assert_eq!(2, "🇬🇧".width_graphemes());
+    // Control characters occupy no cells.
+    assert_eq!(2, "a\nb".width_graphemes());
+}
+
+#[test]
+fn test_zsh_wide_char_glitch_sequences() -> std::io::Result<()> {
+    use crate::context::{Shell, Target};
+    use crate::test::default_context;
+
+    let dir = tempfile::tempdir()?;
+    let mut context = default_context().set_config(toml::toml! {
+        add_newline = false
+        format = "$custom"
+        [custom.emoji_test]
+        when = true
+        format = "🥟 test 🐚 ❄️"
+    });
+    context.current_dir = dir.path().to_path_buf();
+    context.shell = Shell::Zsh;
+    context.target = Target::Main;
+
+    let result = get_prompt(&context);
+
+    // The two-cell emoji get glitch sequences; the snowflake (U+2744) followed by variation
+    // selector 16 (U+FE0F) is included because its base character is only one cell wide.
+    assert_eq!(result, "%{🥟%2G%} test %{🐚%2G%} %{❄️%2G%}");
+
+    dir.close()
+}
+
+#[test]
+fn test_term_dumb_disables_prompt() {
+    use crate::context::Target;
+    use crate::test::default_context;
+
+    let mut context = default_context();
+    context.target = Target::Main;
+    context.env.insert("TERM", "dumb".to_string());
+
+    let result = get_prompt(&context);
+
+    assert_eq!(result, "Starship disabled due to TERM=dumb > ");
 }
 
 pub fn prompt(args: Properties, target: Target) {
@@ -94,7 +144,7 @@ pub fn get_prompt(context: &Context) -> String {
     let config = &context.root_config;
     let mut buf = String::new();
 
-    match std::env::var_os("TERM") {
+    match context.get_env_os("TERM") {
         Some(term) if term == "dumb" => {
             log::error!("Under a 'dumb' terminal (TERM=dumb).");
             buf.push_str("Starship disabled due to TERM=dumb > ");
@@ -151,7 +201,10 @@ pub fn get_prompt(context: &Context) -> String {
     // color sequences for this specific shell
     let shell_wrapped_output =
         wrap_colorseq_for_shell(AnsiStrings(&module_strings).to_string(), context.shell);
-    write!(buf, "{shell_wrapped_output}").unwrap();
+
+    // Explicitly tell zsh how many cells wide characters should take up
+    let wide_char_wrapped_output = wrap_widechar_for_zsh(shell_wrapped_output, context.shell);
+    write!(buf, "{wide_char_wrapped_output}").unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
