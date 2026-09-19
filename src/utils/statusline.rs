@@ -15,6 +15,7 @@ where
 #[derive(Deserialize, Debug, Clone, Default)]
 #[serde(default)]
 pub struct ClaudeCodeData {
+    pub session_id: Option<String>,
     pub cwd: Option<String>,
     pub model: ModelInfo,
     pub context_window: ContextWindow,
@@ -98,6 +99,7 @@ mod tests {
         let data: ClaudeCodeData =
             serde_json::from_str(payload).expect("session-start payload must deserialize");
 
+        assert_eq!(data.session_id, None);
         assert_eq!(data.model.display_name, "Opus 4.7 (1M context)");
         assert_eq!(data.context_window.context_window_size, 1_000_000);
         assert_eq!(data.context_window.used_percentage, 0.0);
@@ -107,6 +109,7 @@ mod tests {
     #[test]
     fn test_deserializes_fully_populated_payload() {
         let payload = r#"{
+            "session_id": "9218cba7-871e-4bd8-9687-e9b902346cb3",
             "model": {
                 "id": "claude-opus-4-7[1m]",
                 "display_name": "Opus 4.7 (1M context)"
@@ -128,6 +131,10 @@ mod tests {
         let data: ClaudeCodeData =
             serde_json::from_str(payload).expect("populated payload must deserialize");
 
+        assert_eq!(
+            data.session_id.as_deref(),
+            Some("9218cba7-871e-4bd8-9687-e9b902346cb3")
+        );
         assert_eq!(data.context_window.total_input_tokens, 1234);
         assert!((data.context_window.used_percentage - 12.5).abs() < f32::EPSILON);
         assert_eq!(
