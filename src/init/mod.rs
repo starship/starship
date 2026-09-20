@@ -311,6 +311,8 @@ fn align_pwsh_transient_prompt(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Write;
+    use std::process::{Command, Stdio};
     #[test]
     fn escape_pwsh() -> io::Result<()> {
         let starship_path = StarshipPath {
@@ -362,6 +364,51 @@ mod tests {
             ),
             "transient prompt path must align height using ExtraPromptLineCount and the edit buffer"
         );
+    }
+
+    #[test]
+    fn pwsh_transient_actual_function_pads_multiline_prompt() {
+        let Ok(pwsh) = which("pwsh").or_else(|_| which("powershell")) else {
+            return;
+        };
+        let function_start = PWSH_INIT
+            .find("function Get-StarshipTransientPromptText")
+            .expect("starship.ps1 must define Get-StarshipTransientPromptText");
+        let function_end = PWSH_INIT[function_start..]
+            .find("\n    function global:prompt")
+            .map(|offset| function_start + offset)
+            .expect("transient prompt helper must end before the prompt function");
+        let function = &PWSH_INIT[function_start..function_end];
+        let script = format!(
+            r#"{function}
+$result = Get-StarshipTransientPromptText -TransientText "❯ " -LiveLineCount 2 -Buffer "a`nb"
+[Console]::Write((($result.ToCharArray() | ForEach-Object {{ [int]$_ }}) -join ','))
+"#
+        );
+
+        let mut child = Command::new(pwsh)
+            .args(["-NoLogo", "-NoProfile", "-NonInteractive", "-Command", "-"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .expect("failed to start PowerShell");
+        child
+            .stdin
+            .take()
+            .expect("PowerShell stdin must be piped")
+            .write_all(script.as_bytes())
+            .expect("failed to write PowerShell test script");
+        let output = child
+            .wait_with_output()
+            .expect("failed to wait for PowerShell");
+
+        assert!(
+            output.status.success(),
+            "PowerShell helper failed: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "10,10095,32");
     }
 
     #[test]
