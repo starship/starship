@@ -381,7 +381,7 @@ mod tests {
         let function = &PWSH_INIT[function_start..function_end];
         let script = format!(
             r#"{function}
-$result = Get-StarshipTransientPromptText -TransientText "❯ " -LiveLineCount 2 -Buffer "a`nb"
+$result = Get-StarshipTransientPromptText -TransientText ([string][char]0x276F + ' ') -LiveLineCount 2 -Buffer "a`nb"
 [Console]::Write((($result.ToCharArray() | ForEach-Object {{ [int]$_ }}) -join ','))
 "#
         );
@@ -408,11 +408,54 @@ $result = Get-StarshipTransientPromptText -TransientText "❯ " -LiveLineCount 2
             "PowerShell helper failed: {}",
             String::from_utf8_lossy(&output.stderr)
         );
-        assert!(
-            String::from_utf8_lossy(&output.stdout).contains("10,10095,32"),
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        assert_eq!(
+            strip_terminal_control_sequences(&stdout).trim(),
+            "10,10095,32",
             "PowerShell helper returned unexpected output: {}",
-            String::from_utf8_lossy(&output.stdout)
+            stdout
         );
+    }
+
+    fn strip_terminal_control_sequences(input: &str) -> String {
+        let mut output = String::new();
+        let mut chars = input.chars().peekable();
+
+        while let Some(ch) = chars.next() {
+            if ch != '\u{1b}' {
+                output.push(ch);
+                continue;
+            }
+
+            match chars.peek().copied() {
+                Some('[') => {
+                    chars.next();
+                    for ch in chars.by_ref() {
+                        if ('@'..='~').contains(&ch) {
+                            break;
+                        }
+                    }
+                }
+                Some(']') => {
+                    chars.next();
+                    while let Some(ch) = chars.next() {
+                        if ch == '\u{7}' {
+                            break;
+                        }
+                        if ch == '\u{1b}' && chars.peek() == Some(&'\\') {
+                            chars.next();
+                            break;
+                        }
+                    }
+                }
+                Some('=') | Some('>') => {
+                    chars.next();
+                }
+                _ => {}
+            }
+        }
+
+        output
     }
 
     #[test]
