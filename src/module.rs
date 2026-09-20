@@ -1,3 +1,4 @@
+use crate::context::Shell;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
@@ -184,14 +185,18 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None)
+        self.ansi_strings_for_width(None, Shell::Unknown)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
+    pub fn ansi_strings_for_width(
+        &self,
+        width: Option<usize>,
+        shell: Shell,
+    ) -> Vec<AnsiString<'_>> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
-            ansi_strings.extend(ansi_line(&mut iter, width));
+            ansi_strings.extend(ansi_line(&mut iter, width, shell));
         }
         ansi_strings
     }
@@ -204,7 +209,11 @@ impl fmt::Display for Module<'_> {
     }
 }
 
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
+fn ansi_line<'a, I>(
+    segments: &mut I,
+    term_width: Option<usize>,
+    shell: Shell,
+) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
 {
@@ -219,7 +228,7 @@ where
             current = Vec::new();
             prev_style = None;
         } else {
-            used += segment.width_graphemes();
+            used += segment.width_graphemes_shell(shell);
             let current_segment_string = segment.ansi_string(prev_style.as_ref());
 
             prev_style = Some(*current_segment_string.style_ref());
@@ -320,5 +329,51 @@ mod tests {
         };
 
         assert!(!module.is_empty());
+    }
+
+    #[test]
+    fn test_fill_discounts_bash_escapes() {
+        // `$` is stored escaped as `\$` for bash; the fill width must count
+        // what the terminal renders (1), not the stored 2 graphemes.
+        // Regression test for https://github.com/starship/starship/issues/7728.
+        let mut segments = Segment::from_text(None, "\\$");
+        segments.push(Segment::fill(None, "."));
+        segments.extend(Segment::from_text(None, "ab"));
+        let module = Module {
+            config: None,
+            name: "unit_test".to_string(),
+            description: "This is a unit test".to_string(),
+            segments,
+            duration: Duration::default(),
+        };
+
+        let rendered = nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(
+            Some(10),
+            Shell::Bash,
+        ))
+        .to_string();
+        assert_eq!(rendered, "\\$.......ab");
+    }
+
+    #[test]
+    fn test_fill_discounts_zsh_escapes() {
+        // `%` is stored escaped as `%%` for zsh; fill must count 1.
+        let mut segments = Segment::from_text(None, "%%");
+        segments.push(Segment::fill(None, "."));
+        segments.extend(Segment::from_text(None, "ab"));
+        let module = Module {
+            config: None,
+            name: "unit_test".to_string(),
+            description: "This is a unit test".to_string(),
+            segments,
+            duration: Duration::default(),
+        };
+
+        let rendered = nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(
+            Some(10),
+            Shell::Zsh,
+        ))
+        .to_string();
+        assert_eq!(rendered, "%%.......ab");
     }
 }
