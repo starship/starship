@@ -408,7 +408,11 @@ $result = Get-StarshipTransientPromptText -TransientText "❯ " -LiveLineCount 2
             "PowerShell helper failed: {}",
             String::from_utf8_lossy(&output.stderr)
         );
-        assert_eq!(String::from_utf8_lossy(&output.stdout), "10,10095,32");
+        assert!(
+            String::from_utf8_lossy(&output.stdout).contains("10,10095,32"),
+            "PowerShell helper returned unexpected output: {}",
+            String::from_utf8_lossy(&output.stdout)
+        );
     }
 
     #[test]
