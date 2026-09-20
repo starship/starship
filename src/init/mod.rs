@@ -459,6 +459,24 @@ $result = Get-StarshipTransientPromptText -TransientText ([string][char]0x276F +
     }
 
     #[test]
+    fn terminal_control_sequence_stripper_preserves_prompt_char_codes() {
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}[?1h\u{1b}=10,10095,32\u{1b}[?25h"),
+            "10,10095,32"
+        );
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}]0;title\u{7}10,10095,32"),
+            "10,10095,32"
+        );
+        assert_eq!(
+            strip_terminal_control_sequences("\u{1b}]0;title\u{1b}\\10,10095,32"),
+            "10,10095,32"
+        );
+        assert_eq!(strip_terminal_control_sequences("\u{1b}>10"), "10");
+        assert_eq!(strip_terminal_control_sequences("\u{1b}X10"), "X10");
+    }
+
+    #[test]
     fn pwsh_transient_multiline_two_row_live_pads_one_newline() {
         let buffer =
             "Write-Host \"test line 1\"\nWrite-Host \"test line 2\"\nWrite-Host \"test line 3\"";
