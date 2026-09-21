@@ -607,6 +607,7 @@ mod test {
             format = "!${fill}ab"
             [fill]
             symbol = "."
+            style = ""
         });
         context.shell = Shell::Tcsh;
         context.width = 10;
@@ -615,6 +616,25 @@ mod test {
 
         assert!(actual.starts_with(r"\!"));
         assert_eq!(actual.matches('.').count(), 6);
+        assert_eq!(actual.chars().count(), context.width);
+    }
+
+    #[test]
+    fn tcsh_fill_symbol_accounts_for_exclamation_escape() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 10;
+
+        let actual = get_prompt(&context);
+
+        assert_eq!(actual, r"a\!\!\!\!b");
+        assert_eq!(actual.chars().count(), context.width);
     }
 
     #[test]
