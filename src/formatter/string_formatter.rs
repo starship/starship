@@ -910,6 +910,16 @@ mod tests {
         let seg = Segment::from_text(None, stored).remove(0);
         assert_eq!(seg.width_graphemes_shell(ShellCtx::Bash), 1);
 
+        let stored = shell_prompt_escape("`", Shell::Bash);
+        assert_eq!(stored, "\\`");
+        let seg = Segment::from_text(None, stored).remove(0);
+        assert_eq!(seg.width_graphemes_shell(ShellCtx::Bash), 1);
+
+        let stored = shell_prompt_escape("\\", Shell::Bash);
+        assert_eq!(stored, "\\\\");
+        let seg = Segment::from_text(None, stored).remove(0);
+        assert_eq!(seg.width_graphemes_shell(ShellCtx::Bash), 1);
+
         let stored = shell_prompt_escape("10%", Shell::Zsh);
         assert_eq!(stored, "10%%");
         let seg = Segment::from_text(None, stored).remove(0);

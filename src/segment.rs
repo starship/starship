@@ -192,6 +192,9 @@ impl Segment {
 /// Width of `value` as rendered by `shell`, discounting escape sequences
 /// added by `shell_prompt_escape`.
 fn unescaped_width(value: &str, shell: Shell) -> usize {
+    if !value.contains(['$', '`', '\\', '%']) {
+        return value.width_graphemes();
+    }
     match shell {
         // Inverse of shell_prompt_escape for bash: backtick and dollar
         // first, backslash last.
