@@ -34,8 +34,17 @@ impl Grapheme<'_> {
     }
 }
 
-pub trait UnicodeWidthGraphemes {
+pub trait UnicodeWidthGraphemes: AsRef<str> {
     fn width_graphemes(&self) -> usize;
+
+    fn width_graphemes_for_shell(&self, shell: Shell) -> usize {
+        let width = self.width_graphemes();
+        if shell == Shell::Tcsh {
+            width + self.as_ref().matches('!').count()
+        } else {
+            width
+        }
+    }
 }
 
 static ANSI_REGEX: OnceLock<Regex> = OnceLock::new();
@@ -142,7 +151,7 @@ pub fn get_prompt(context: &Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width));
+    let module_strings = root_module.ansi_strings_for_width(Some(context.width), context.shell);
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
@@ -589,6 +598,23 @@ mod test {
         let expected = String::from(">>"); // should strip new lines
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn tcsh_fill_accounts_for_exclamation_escape() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "!${fill}ab"
+            [fill]
+            symbol = "."
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 10;
+
+        let actual = get_prompt(&context);
+
+        assert!(actual.starts_with(r"\!"));
+        assert_eq!(actual.matches('.').count(), 6);
     }
 
     #[test]

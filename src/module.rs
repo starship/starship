@@ -1,3 +1,4 @@
+use crate::context::Shell;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
@@ -184,14 +185,18 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None)
+        self.ansi_strings_for_width(None, Shell::Unknown)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
+    pub fn ansi_strings_for_width(
+        &self,
+        width: Option<usize>,
+        shell: Shell,
+    ) -> Vec<AnsiString<'_>> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
-            ansi_strings.extend(ansi_line(&mut iter, width));
+            ansi_strings.extend(ansi_line(&mut iter, width, shell));
         }
         ansi_strings
     }
@@ -204,7 +209,11 @@ impl fmt::Display for Module<'_> {
     }
 }
 
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
+fn ansi_line<'a, I>(
+    segments: &mut I,
+    term_width: Option<usize>,
+    shell: Shell,
+) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
 {
@@ -219,7 +228,7 @@ where
             current = Vec::new();
             prev_style = None;
         } else {
-            used += segment.width_graphemes();
+            used += segment.width_graphemes_for_shell(shell);
             let current_segment_string = segment.ansi_string(prev_style.as_ref());
 
             prev_style = Some(*current_segment_string.style_ref());
