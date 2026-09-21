@@ -40,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let show_username = config.show_always
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
-        || is_ssh_session(context) // [3]
+        || context.is_ssh_session() // [3]
         || has_detected_env_var == Detected::Yes; // [4]
 
     if !show_username || has_detected_env_var == Detected::Negated {
@@ -117,11 +117,6 @@ fn is_root_user() -> bool {
 #[cfg(all(not(target_os = "windows"), not(test)))]
 fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
-}
-
-fn is_ssh_session(context: &Context) -> bool {
-    let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
-    ssh_env.iter().any(|env| context.get_env_os(env).is_some())
 }
 
 #[cfg(test)]
