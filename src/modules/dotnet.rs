@@ -455,27 +455,35 @@ mod tests {
     }
 
     #[test]
-    fn shows_latest_in_directory_with_project_json() -> io::Result<()> {
+    fn shows_nothing_in_directory_with_only_project_json() -> io::Result<()> {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.json", None)?;
-        expect_output(
-            workspace.path(),
-            Some(format!(
-                "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
-            )),
-        );
+        expect_output(workspace.path(), None);
         workspace.close()
     }
 
     #[test]
-    fn shows_pinned_in_directory_with_global_json() -> io::Result<()> {
+    fn shows_nothing_in_directory_with_only_global_json() -> io::Result<()> {
         let workspace = create_workspace(false)?;
         let global_json = make_pinned_sdk_json("1.2.3");
         touch_path(&workspace, "global.json", Some(&global_json))?;
+        expect_output(workspace.path(), None);
+        workspace.close()
+    }
+
+    #[test]
+    fn shows_pinned_when_global_json_and_csproj_are_present() -> io::Result<()> {
+        let workspace = create_workspace(false)?;
+        let global_json = make_pinned_sdk_json("1.2.3");
+        let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
+        touch_path(&workspace, "global.json", Some(&global_json))?;
+        touch_path(&workspace, "project.csproj", Some(&csproj))?;
         expect_output(
             workspace.path(),
-            Some(format!("via {}", Color::Blue.bold().paint(".NET v1.2.3 "))),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
+            )),
         );
         workspace.close()
     }

@@ -1385,8 +1385,6 @@ shows the latest installed version of the SDK.
 By default this module will only be shown in your prompt when one or more of
 the following files are present in the current directory:
 
-- `global.json`
-- `project.json`
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
@@ -1414,7 +1412,7 @@ when there is a `.csproj` file in the current directory.
 | `symbol`            | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Which filenames should trigger this module.                               |
+| `detect_files`      | `['Directory.Build.props', 'Directory.Build.targets', 'Packages.props']`                                | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this module.                                 |
 | `style`             | `'bold blue'`                                                                                           | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
