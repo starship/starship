@@ -250,8 +250,10 @@ where
             }
 
             let remaining = tw - used;
-            let mut size = remaining / chunks.len();
-            while size > 0 {
+            let mut min_size = 0;
+            let mut max_size = remaining / chunks.len();
+            while min_size < max_size {
+                let size = min_size + (max_size - min_size).div_ceil(2);
                 let fill_width = chunks
                     .iter()
                     .map(|(_, fill)| {
@@ -262,11 +264,12 @@ where
                     .sum::<usize>();
 
                 if fill_width <= remaining {
-                    return Some(size);
+                    min_size = size;
+                } else {
+                    max_size = size - 1;
                 }
-                size -= 1;
             }
-            None
+            Some(min_size)
         });
         chunks
             .into_iter()

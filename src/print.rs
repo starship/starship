@@ -638,6 +638,41 @@ mod test {
     }
 
     #[test]
+    fn tcsh_fill_distributes_width_across_segments() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b${fill}c"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 11;
+
+        let actual = get_prompt(&context);
+
+        assert_eq!(actual, r"a\!\!b\!\!c");
+        assert_eq!(actual.chars().count(), context.width);
+    }
+
+    #[test]
+    fn tcsh_fill_suppresses_segments_when_width_is_too_small() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            format = "a${fill}b${fill}c"
+            [fill]
+            symbol = "!"
+            style = ""
+        });
+        context.shell = Shell::Tcsh;
+        context.width = 4;
+
+        let actual = get_prompt(&context);
+
+        assert_eq!(actual, "abc");
+    }
+
+    #[test]
     fn prompt_with_all() -> io::Result<()> {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
