@@ -347,11 +347,9 @@ mod tests {
             duration: Duration::default(),
         };
 
-        let rendered = nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(
-            Some(10),
-            Shell::Bash,
-        ))
-        .to_string();
+        let rendered =
+            nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(Some(10), Shell::Bash))
+                .to_string();
         assert_eq!(rendered, "\\$.......ab");
     }
 
@@ -369,11 +367,9 @@ mod tests {
             duration: Duration::default(),
         };
 
-        let rendered = nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(
-            Some(10),
-            Shell::Zsh,
-        ))
-        .to_string();
+        let rendered =
+            nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(Some(10), Shell::Zsh))
+                .to_string();
         assert_eq!(rendered, "%%.......ab");
     }
 }
