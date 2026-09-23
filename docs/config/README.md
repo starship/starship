@@ -2044,8 +2044,12 @@ the current git repository.
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 | `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| `show_repo_size`     | `false`                                                      | Enable the `repo_size` variable with the size of `.git`. |
 
 ### Variables
+
+Set `show_repo_size = true` to expose `repo_size`, the human-readable size of
+the repository's `.git` directory. The size is not calculated by default.
 
 | Variable        | Example | Description                                 |
 | --------------- | ------- | ------------------------------------------- |
