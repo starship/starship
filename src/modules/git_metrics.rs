@@ -697,9 +697,11 @@ mod tests {
         let nested = directory.path().join("nested");
         std::fs::create_dir(&nested)?;
         std::fs::write(nested.join("index"), [0_u8; 2048])?;
+        let link = directory.path().join("link");
+        std::fs::File::create(&link)?;
         let expected_size =
             repo_dir_size(directory.path()).expect("directory size should be available");
-        let link = directory.path().join("link");
+        std::fs::remove_file(&link)?;
 
         #[cfg(unix)]
         std::os::unix::fs::symlink(&nested, &link)?;
@@ -740,8 +742,20 @@ mod tests {
         let linked_repository = gix::open(&linked_worktree).expect("linked worktree should open");
         assert_ne!(linked_repository.git_dir(), linked_repository.common_dir());
         assert_eq!(
-            repo_dir_size(linked_repository.common_dir()),
-            repo_dir_size(&repository.path().join(".git"))
+            linked_repository
+                .common_dir()
+                .canonicalize()
+                .expect("common directory should exist"),
+            repository
+                .path()
+                .join(".git")
+                .canonicalize()
+                .expect("repository git directory should exist")
+        );
+        assert!(
+            repo_dir_size(linked_repository.git_dir())
+                < repo_dir_size(linked_repository.common_dir()),
+            "linked worktree metadata must be smaller than shared repository data"
         );
         Ok(())
     }
