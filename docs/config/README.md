@@ -1805,8 +1805,8 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 | --------------- | ------- | ------------------------------------------- |
 | added           | `1`     | The current number of added lines           |
 | deleted         | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`                  |
-| deleted_style\* |         | Mirrors the value of option `deleted_style`                |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
 *: This variable can only be used as a part of a style string
 
@@ -2054,13 +2054,13 @@ so the shared object store is measured instead of the worktree metadata director
 The size is not calculated by default. On platforms without an allocated-size
 filesystem API, logical file sizes are used.
 
-| Variable        | Example | Description                                               |
-| --------------- | ------- | --------------------------------------------------------- |
-| added           | `1`     | The current number of added lines                         |
-| deleted         | `2`     | The current number of deleted lines                       |
-| repo_size       | `512B`  | The repository size when `show_repo_size` is enabled      |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable        | Example | Description                                          |
+| --------------- | ------- | ---------------------------------------------------- |
+| added           | `1`     | The current number of added lines                    |
+| deleted         | `2`     | The current number of deleted lines                  |
+| repo_size       | `512B`  | The repository size when `show_repo_size` is enabled |
+| added_style\*   |         | Mirrors the value of option `added_style`            |
+| deleted_style\* |         | Mirrors the value of option `deleted_style`          |
 
 *: This variable can only be used as a part of a style string
 
