@@ -2036,20 +2036,23 @@ the current git repository.
 
 ### Options
 
-| Option               | Default                                                      | Description                           |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `'bold green'`                                               | The style for the added count.        |
-| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
-| `show_repo_size`     | `false`                                                      | Enable the `repo_size` variable with the size of `.git`. |
+| Option               | Default                                                      | Description                                                      |
+| -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------- |
+| `added_style`        | `'bold green'`                                               | The style for the added count.                                   |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.                                 |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items.                            |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.                                       |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.                               |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules                                     |
+| `show_repo_size`     | `false`                                                      | Enable the `repo_size` variable with the on-disk size of `.git`. |
 
 ### Variables
 
 Set `show_repo_size = true` to expose `repo_size`, the human-readable size of
-the repository's `.git` directory. The size is not calculated by default.
+the repository's `.git` directory. Linked worktrees use the common Git directory,
+so the shared object store is measured instead of the worktree metadata directory.
+The size is not calculated by default. On platforms without an allocated-size
+filesystem API, logical file sizes are used.
 
 | Variable        | Example | Description                                 |
 | --------------- | ------- | ------------------------------------------- |

@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     gix_repo.workdir()?;
     let repo_size = config
         .show_repo_size
-        .then(|| repo_dir_size(&repo.path))
+        .then(|| repo_dir_size(gix_repo.common_dir()))
         .flatten()
         .map(format_repo_size);
     let status_module = context.new_module("git_status");
@@ -292,12 +292,27 @@ fn repo_dir_size(path: &std::path::Path) -> Option<u64> {
     for entry in entries.flatten() {
         let metadata = std::fs::symlink_metadata(entry.path()).ok()?;
         if metadata.is_dir() {
+            size = size.checked_add(metadata_size(&metadata)?)?;
             size = size.checked_add(repo_dir_size(&entry.path())?)?;
         } else if metadata.is_file() {
-            size = size.checked_add(metadata.len())?;
+            size = size.checked_add(metadata_size(&metadata)?)?;
         }
     }
     Some(size)
+}
+
+fn metadata_size(metadata: &std::fs::Metadata) -> Option<u64> {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+
+        metadata.blocks().checked_mul(512)
+    }
+
+    #[cfg(not(unix))]
+    {
+        Some(metadata.len())
+    }
 }
 
 fn format_repo_size(size: u64) -> String {
@@ -682,8 +697,52 @@ mod tests {
         let nested = directory.path().join("nested");
         std::fs::create_dir(&nested)?;
         std::fs::write(nested.join("index"), [0_u8; 2048])?;
+        let expected_size =
+            repo_dir_size(directory.path()).expect("directory size should be available");
+        let link = directory.path().join("link");
 
-        assert_eq!(repo_dir_size(directory.path()), Some(3072));
+        #[cfg(unix)]
+        std::os::unix::fs::symlink(&nested, &link)?;
+        #[cfg(windows)]
+        if let Err(error) = std::os::windows::fs::symlink_dir(&nested, &link) {
+            if error.kind() == io::ErrorKind::PermissionDenied {
+                return Ok(());
+            }
+            return Err(error);
+        }
+
+        let size = repo_dir_size(directory.path()).expect("directory size should be available");
+        assert_eq!(size, expected_size, "symlinks must not be followed");
+        assert!(size >= 3072, "directory size should include both files");
+        assert_ne!(format_repo_size(size), "0B");
+        Ok(())
+    }
+
+    #[test]
+    fn uses_the_common_directory_for_linked_worktrees() -> io::Result<()> {
+        let repository = create_repo_with_commit(FixtureProvider::Git {
+            bare: false,
+            reftable: false,
+        })?;
+        let linked_worktree = repository.path().join("linked");
+
+        run_git_cmd(
+            [
+                "worktree",
+                "add",
+                "--detach",
+                linked_worktree.to_str().expect("path should be UTF-8"),
+            ],
+            Some(repository.path()),
+            true,
+        )?;
+
+        let linked_repository = gix::open(&linked_worktree).expect("linked worktree should open");
+        assert_ne!(linked_repository.git_dir(), linked_repository.common_dir());
+        assert_eq!(
+            repo_dir_size(linked_repository.common_dir()),
+            repo_dir_size(&repository.path().join(".git"))
+        );
         Ok(())
     }
 
@@ -705,7 +764,7 @@ mod tests {
             .path(path)
             .collect();
 
-        assert!(actual.is_some_and(|size| size.ends_with('B')));
+        assert!(actual.is_some_and(|size| size.ends_with('B') && size != "0B"));
         repo_dir.close()?;
         Ok(())
     }
