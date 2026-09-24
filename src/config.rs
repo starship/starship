@@ -357,18 +357,18 @@ impl From<nu_ansi_term::Color> for Style {
 pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<Style> {
     style_string
         .split_whitespace()
-        .try_fold(Style::default(), |style, token| {
-            let token = token.to_lowercase();
-
+        .try_fold(Style::default(), |style, raw_token| {
             // Check for FG/BG identifiers and strip them off if appropriate
             // If col_fg is true, color the foreground. If it's false, color the background.
-            let (token, col_fg) = if token.as_str().starts_with("fg:") {
-                (token.trim_start_matches("fg:").to_owned(), true)
-            } else if token.as_str().starts_with("bg:") {
-                (token.trim_start_matches("bg:").to_owned(), false)
-            } else {
-                (token, true) // Bare colors are assumed to color the foreground
+            let prefix = raw_token.get(..3).map(str::to_ascii_lowercase);
+            let (raw_token, col_fg) = match prefix.as_deref() {
+                Some("fg:") => (&raw_token[3..], true),
+                Some("bg:") => (&raw_token[3..], false),
+                _ => (raw_token, true), // Bare colors are assumed to color the foreground
             };
+            // Keywords are case-insensitive. The original case is kept for color
+            // lookups so that palette entries such as `base0D` can be matched exactly.
+            let token = raw_token.to_lowercase();
 
             match token.as_str() {
                 "underline" => Some(style.map_style(nu_ansi_term::Style::underline)),
@@ -394,7 +394,7 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
                     } else {
                         // Either bg or valid color or both.
                         let parsed = parse_color_string(
-                            color_string,
+                            raw_token,
                             context.and_then(|x| {
                                 get_palette(
                                     &x.root_config.palettes,
@@ -454,8 +454,20 @@ fn parse_color_string(
         return Some(Color::Fixed(ansi_color_num));
     }
 
-    // Check palette for a matching user-defined color
-    if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
+    // Check palette for a matching user-defined color.
+    // An exact match is preferred. Otherwise fall back to the lowercase name (the
+    // previous behaviour) and finally to any case-insensitive match, because style
+    // strings are documented as not being case sensitive.
+    if let Some(palette_color) = palette.and_then(|x| {
+        x.get(color_string)
+            .or_else(|| x.get(&color_string.to_lowercase()))
+            .or_else(|| {
+                x.iter()
+                    .filter(|(name, _)| name.eq_ignore_ascii_case(color_string))
+                    .min_by(|(a, _), (b, _)| a.cmp(b))
+                    .map(|(_, color)| color)
+            })
+    }) {
         log::trace!("Read user-defined color string: {color_string} defined as {palette_color}");
         return parse_color_string(palette_color, None);
     }
@@ -1004,6 +1016,65 @@ mod tests {
         assert_eq!(
             parse_color_string("green", Some(&palette)),
             Some(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_colors_palette_case_insensitive() {
+        let mut palette = Palette::new();
+        palette.insert("base0D".to_string(), "#89b4fa".to_string());
+        palette.insert("Mustard".to_string(), "#af8700".to_string());
+
+        // Exact match on a mixed-case name
+        assert_eq!(
+            parse_color_string("base0D", Some(&palette)),
+            Some(Color::Rgb(137, 180, 250))
+        );
+        // Case-insensitive fallback
+        assert_eq!(
+            parse_color_string("base0d", Some(&palette)),
+            Some(Color::Rgb(137, 180, 250))
+        );
+        assert_eq!(
+            parse_color_string("MUSTARD", Some(&palette)),
+            Some(Color::Rgb(175, 135, 0))
+        );
+
+        // An exact match wins over a case-insensitive one
+        palette.insert("base0d".to_string(), "17".to_string());
+        assert_eq!(
+            parse_color_string("base0D", Some(&palette)),
+            Some(Color::Rgb(137, 180, 250))
+        );
+        assert_eq!(
+            parse_color_string("base0d", Some(&palette)),
+            Some(Color::Fixed(17))
+        );
+    }
+
+    #[test]
+    fn table_get_styles_palette_mixed_case_names() {
+        let config = toml::toml! {
+            palette = "base16"
+            [palettes.base16]
+            base0B = "#a6e3a1"
+            base0D = "#89b4fa"
+        };
+        let context = Context::default().set_config(config);
+
+        let expected = Style::from(
+            Color::Rgb(166, 227, 161)
+                .bold()
+                .on(Color::Rgb(137, 180, 250)),
+        );
+        assert_eq!(
+            parse_style_string("bold fg:base0B bg:base0D", Some(&context)),
+            Some(expected)
+        );
+        // Keywords, prefixes and palette names are all case-insensitive
+        assert_eq!(
+            parse_style_string("BOLD FG:BASE0B BG:base0d", Some(&context)),
+            Some(expected)
         );
     }
 
