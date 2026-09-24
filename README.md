@@ -77,7 +77,6 @@
 
 <h1></h1>
 
-
 <img
   src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
   alt="Starship with iTerm2 and the Snazzy theme"
