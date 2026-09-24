@@ -77,16 +77,6 @@
 
 <h1></h1>
 
-> [!WARNING]
-> **The default branch has been renamed from `master` to `main`.**
-> If you have a local clone, update it by running:
->
-> ```sh
-> git branch -m master main
-> git fetch origin
-> git branch -u origin/main main
-> git remote set-head origin -a
-> ```
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/main/media/demo.gif"
@@ -363,10 +353,6 @@ Please check out these previous works that helped inspire the creation of starsh
 ## ❤️ Sponsors
 
 Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
-
-**Supporter Tier**
-
-- [Alex Holmes](https://github.com/alexhholmes)
 
 ## 🔒 Code Signing Policy
 
