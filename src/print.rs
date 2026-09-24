@@ -142,7 +142,8 @@ pub fn get_prompt(context: &Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_width(Some(context.width), context.shell);
+    let module_strings =
+        root_module.ansi_strings_for_width_and_shell(Some(context.width), context.shell);
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();

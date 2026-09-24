@@ -185,10 +185,14 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None, Shell::Unknown)
+        self.ansi_strings_for_width(None)
     }
 
-    pub fn ansi_strings_for_width(
+    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
+        self.ansi_strings_for_width_and_shell(width, Shell::Unknown)
+    }
+
+    pub fn ansi_strings_for_width_and_shell(
         &self,
         width: Option<usize>,
         shell: Shell,
@@ -347,9 +351,10 @@ mod tests {
             duration: Duration::default(),
         };
 
-        let rendered =
-            nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(Some(10), Shell::Bash))
-                .to_string();
+        let rendered = nu_ansi_term::AnsiStrings(
+            &module.ansi_strings_for_width_and_shell(Some(10), Shell::Bash),
+        )
+        .to_string();
         assert_eq!(rendered, "\\$.......ab");
     }
 
@@ -367,9 +372,10 @@ mod tests {
             duration: Duration::default(),
         };
 
-        let rendered =
-            nu_ansi_term::AnsiStrings(&module.ansi_strings_for_width(Some(10), Shell::Zsh))
-                .to_string();
+        let rendered = nu_ansi_term::AnsiStrings(
+            &module.ansi_strings_for_width_and_shell(Some(10), Shell::Zsh),
+        )
+        .to_string();
         assert_eq!(rendered, "%%.......ab");
     }
 }
