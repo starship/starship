@@ -109,6 +109,21 @@ pub fn get_prompt(context: &Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
+    // OSC 133 semantic prompt: emit a D (command-finished, with exit status when
+    // available) followed by A (prompt start). The matching B (prompt end / input
+    // start) is appended later, after the prompt body. Right prompts are skipped
+    // since they don't represent the input cursor location.
+    if config.osc_133 && context.target != Target::Right {
+        if let Some(status) = context.properties.status_code.as_deref() {
+            buf.push_str(&osc_133_seq(&format!("D;{status}"), context.shell));
+        }
+        let a_args = match context.target {
+            Target::Continuation => "A;k=s",
+            _ => "A",
+        };
+        buf.push_str(&osc_133_seq(a_args, context.shell));
+    }
+
     let (formatter, modules) = load_formatter_and_modules(context);
 
     let formatter = formatter.map_variables_to_segments(|module| {
@@ -165,7 +180,24 @@ pub fn get_prompt(context: &Context) -> String {
         buf = buf.replace('\n', " \\n");
     }
 
+    // OSC 133;B marks the end of the prompt / start of user input.
+    if config.osc_133 && context.target != Target::Right {
+        buf.push_str(&osc_133_seq("B", context.shell));
+    }
+
     buf
+}
+
+/// Build an OSC 133 escape sequence with shell-appropriate wrappers so that the
+/// non-printing bytes don't confuse the shell's prompt width calculation. See
+/// https://gitlab.freedesktop.org/Per_Bothner/specifications/-/blob/master/proposals/semantic-prompts.md
+fn osc_133_seq(args: &str, shell: Shell) -> String {
+    let (beg, end) = match shell {
+        Shell::Bash => ("\\[", "\\]"),
+        Shell::Zsh | Shell::Tcsh => ("%{", "%}"),
+        _ => ("", ""),
+    };
+    format!("{beg}\x1b]133;{args}\x07{end}")
 }
 
 pub fn module(module_name: &str, args: Properties) {
@@ -670,6 +702,119 @@ mod test {
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_main_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                osc_133 = true
+                format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Main;
+
+        let expected = "\x1b]133;A\x07>\x1b]133;B\x07";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_main_prompt_with_status() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                osc_133 = true
+                format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Main;
+        context.properties.status_code = Some("0".to_string());
+
+        let expected = "\x1b]133;D;0\x07\x1b]133;A\x07>\x1b]133;B\x07";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_continuation_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+                osc_133 = true
+                continuation_prompt = "><>"
+        });
+        context.target = Target::Continuation;
+
+        let expected = "\x1b]133;A;k=s\x07><>\x1b]133;B\x07";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_right_prompt_is_skipped() {
+        let mut context = default_context().set_config(toml::toml! {
+                osc_133 = true
+                right_format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Right;
+        context.properties.status_code = Some("0".to_string());
+
+        let expected = ">";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_disabled_emits_no_sequences() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Main;
+        context.properties.status_code = Some("0".to_string());
+
+        let expected = ">";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_bash_wraps_sequence() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                osc_133 = true
+                format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Main;
+        context.shell = Shell::Bash;
+        context.properties.status_code = Some("0".to_string());
+
+        let expected = "\\[\x1b]133;D;0\x07\\]\\[\x1b]133;A\x07\\]>\\[\x1b]133;B\x07\\]";
+        let actual = get_prompt(&context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn osc_133_zsh_wraps_sequence() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                osc_133 = true
+                format = "$character"
+                [character]
+                format = ">"
+        });
+        context.target = Target::Main;
+        context.shell = Shell::Zsh;
+
+        let expected = "%{\x1b]133;A\x07%}>%{\x1b]133;B\x07%}";
         let actual = get_prompt(&context);
         assert_eq!(expected, actual);
     }
