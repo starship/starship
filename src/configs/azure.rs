@@ -20,7 +20,7 @@ impl Default for AzureConfig<'_> {
     fn default() -> Self {
         Self {
             format: "on [$symbol($subscription)]($style) ",
-            symbol: "󰠅 ",
+            symbol: "🅰 ",
             style: "blue bold",
             disabled: true,
             subscription_aliases: HashMap::new(),
