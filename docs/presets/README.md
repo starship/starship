@@ -83,3 +83,9 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
 [![Screenshot of Catppuccin Powerline preset](/presets/img/catppuccin-powerline.png "Click to view Catppuccin Powerline preset")](./catppuccin-powerline)
+
+## [Catppuccin Split Pill](./pill.md)
+
+This preset features a professional "split-pill" design with perfectly rounded corners and a dual-tone white/accent color scheme.
+
+[![Screenshot of Catppuccin Split Pill preset](/presets/img/pill.png "Click to view Catppuccin Split Pill preset")](./pill)
