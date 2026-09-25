@@ -42,6 +42,12 @@ impl FillSegment {
             Some(w) => self
                 .value
                 .graphemes(true)
+                // Zero-width graphemes (e.g. a bare combining mark or ZWJ used as the fill
+                // symbol) never advance `len` below, so cycling over them would spin
+                // forever without ever reaching `w`. Drop them before cycling: they can't
+                // contribute visible width anyway, and this guarantees termination even
+                // if every grapheme in the symbol turns out to be zero-width.
+                .filter(|g| Grapheme(g).width() > 0)
                 .cycle()
                 .scan(0usize, |len, g| {
                     *len += Grapheme(g).width();
@@ -60,7 +66,7 @@ impl FillSegment {
 #[cfg(test)]
 mod fill_seg_tests {
     use super::FillSegment;
-    use nu_ansi_term::Color;
+    use nu_ansi_term::{AnsiString, Color};
 
     #[test]
     fn ansi_string_width() {
@@ -83,6 +89,33 @@ mod fill_seg_tests {
             let actual = f.ansi_string(Some(width), None);
             assert_eq!(style.paint(*expected), actual);
         }
+    }
+
+    #[test]
+    fn ansi_string_all_zero_width_symbol_does_not_hang() {
+        // A fill symbol made up entirely of zero-width graphemes (e.g. a bare
+        // combining mark or a ZWJ) can never reach the target width, so cycling
+        // over it must terminate instead of looping forever. It can't render
+        // anything visible, so the result should just be empty.
+        let f = FillSegment {
+            value: String::from("\u{0301}"), // combining acute accent, width 0
+            style: None,
+        };
+        let actual = f.ansi_string(Some(10), None);
+        assert_eq!(AnsiString::from(""), actual);
+    }
+
+    #[test]
+    fn ansi_string_mixed_zero_width_symbol() {
+        // Zero-width graphemes mixed into an otherwise-visible symbol should be
+        // skipped, filling with just the visible graphemes instead of hanging.
+        let width: usize = 4;
+        let f = FillSegment {
+            value: String::from("\u{200d}."), // ZWJ + '.'
+            style: None,
+        };
+        let actual = f.ansi_string(Some(width), None);
+        assert_eq!(AnsiString::from("...."), actual);
     }
 }
 
