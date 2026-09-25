@@ -1,5 +1,6 @@
 use crate::{
     config::Style,
+    context::Shell,
     print::{Grapheme, UnicodeWidthGraphemes},
 };
 use nu_ansi_term::{AnsiString, Style as AnsiStyle};
@@ -171,6 +172,79 @@ impl Segment {
             Self::Text(ts) => ts.value.width_graphemes(),
             Self::LineTerm => 0,
         }
+    }
+
+    /// Visible width of the segment as rendered by `shell`.
+    ///
+    /// `shell_prompt_escape` escapes `$`, `` ` ``, `\` (bash) and `%` (zsh)
+    /// before the value reaches the segment, so measuring the stored value
+    /// overcounts by one per escaped char and starves `$fill`. Unescape for
+    /// measurement only; the stored value is still what gets printed.
+    pub fn width_graphemes_shell(&self, shell: Shell) -> usize {
+        match self {
+            Self::Fill(fs) => fs.value.width_graphemes(),
+            Self::Text(ts) => unescaped_width(&ts.value, shell),
+            Self::LineTerm => 0,
+        }
+    }
+}
+
+/// Width of `value` as rendered by `shell`, discounting escape sequences
+/// added by `shell_prompt_escape`.
+fn unescaped_width(value: &str, shell: Shell) -> usize {
+    if !value.contains(['$', '`', '\\', '%']) {
+        return value.width_graphemes();
+    }
+    match shell {
+        // Inverse of shell_prompt_escape for bash: backtick and dollar
+        // first, backslash last.
+        Shell::Bash => value
+            .replace("\\`", "`")
+            .replace("\\$", "$")
+            .replace("\\\\", "\\")
+            .width_graphemes(),
+        Shell::Zsh => value.replace("%%", "%").width_graphemes(),
+        _ => value.width_graphemes(),
+    }
+}
+
+#[cfg(test)]
+mod unescaped_width_tests {
+    use super::*;
+    use crate::context::Shell;
+
+    #[test]
+    fn bash_escaped_chars_count_as_one() {
+        // `$` is stored escaped as `\$` (2 graphemes) but renders as 1.
+        let seg = Segment::from_text(None, "\\$".to_string()).remove(0);
+        assert_eq!(seg.width_graphemes(), 2);
+        assert_eq!(seg.width_graphemes_shell(Shell::Bash), 1);
+    }
+
+    #[test]
+    fn bash_other_escapes_count_as_one() {
+        for stored in ["\\\\", "\\`"] {
+            let seg = Segment::from_text(None, stored.to_string()).remove(0);
+            assert_eq!(seg.width_graphemes_shell(Shell::Bash), 1);
+        }
+    }
+
+    #[test]
+    fn zsh_percent_counts_as_one() {
+        let seg = Segment::from_text(None, "%%".to_string()).remove(0);
+        assert_eq!(seg.width_graphemes_shell(Shell::Zsh), 1);
+    }
+
+    #[test]
+    fn unknown_shell_keeps_stored_width() {
+        let seg = Segment::from_text(None, "\\$".to_string()).remove(0);
+        assert_eq!(seg.width_graphemes_shell(Shell::Unknown), 2);
+    }
+
+    #[test]
+    fn plain_text_unaffected() {
+        let seg = Segment::from_text(None, "user@machine".to_string()).remove(0);
+        assert_eq!(seg.width_graphemes_shell(Shell::Bash), 12);
     }
 }
 
