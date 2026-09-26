@@ -30,8 +30,6 @@ impl Default for DotnetConfig<'_> {
             disabled: false,
             detect_extensions: vec!["csproj", "fsproj", "xproj"],
             detect_files: vec![
-                "global.json",
-                "project.json",
                 "Directory.Build.props",
                 "Directory.Build.targets",
                 "Packages.props",

@@ -510,8 +510,6 @@
           "xproj"
         ],
         "detect_files": [
-          "global.json",
-          "project.json",
           "Directory.Build.props",
           "Directory.Build.targets",
           "Packages.props"
@@ -3222,8 +3220,6 @@
             "type": "string"
           },
           "default": [
-            "global.json",
-            "project.json",
             "Directory.Build.props",
             "Directory.Build.targets",
             "Packages.props"
