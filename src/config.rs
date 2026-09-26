@@ -13,6 +13,7 @@ use std::clone::Clone;
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::io::ErrorKind;
+use std::path::Path;
 
 use toml::Value;
 
@@ -132,20 +133,31 @@ impl StarshipConfig {
             .unwrap_or_default()
     }
 
-    /// Create a config from a starship configuration file
+    /// Create a config from one or more starship configuration files, later files take precedence
     fn config_from_file(config_file_path: Option<&OsStr>) -> Option<toml::Table> {
-        let toml_content = Self::read_config_content_as_str(config_file_path)?;
+        let mut config: Option<toml::Table> = None;
 
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {parsed:?}");
-                Some(parsed)
-            }
-            Err(error) => {
-                log::error!("Unable to parse the config file: {error}");
-                None
+        for path in std::env::split_paths(config_file_path?) {
+            let Some(toml_content) = Self::read_config_content_as_str(Some(path.as_os_str()))
+            else {
+                continue;
+            };
+
+            match toml::from_str(&toml_content) {
+                Ok(parsed) => {
+                    log::debug!("Config parsed: {parsed:?}");
+                    match config.as_mut() {
+                        Some(config) => merge_tables(config, parsed),
+                        None => config = Some(parsed),
+                    }
+                }
+                Err(error) => {
+                    log::error!("Unable to parse the config file: {error}");
+                }
             }
         }
+
+        config
     }
 
     pub fn read_config_content_as_str(config_file_path: Option<&OsStr>) -> Option<String> {
@@ -168,7 +180,11 @@ impl StarshipConfig {
                     log::Level::Error
                 };
 
-                log::log!(level, "Unable to read config file content: {e}");
+                log::log!(
+                    level,
+                    "Unable to read config file content from {}: {e}",
+                    Path::new(config_file_path).display()
+                );
                 None
             }
         }
@@ -246,6 +262,20 @@ impl StarshipConfig {
     /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
+    }
+}
+
+/// Merge `overlay` into `base`, recursing into tables
+fn merge_tables(base: &mut toml::Table, overlay: toml::Table) {
+    for (key, value) in overlay {
+        match (base.get_mut(&key), value) {
+            (Some(Value::Table(base_table)), Value::Table(overlay_table)) => {
+                merge_tables(base_table, overlay_table);
+            }
+            (_, value) => {
+                base.insert(key, value);
+            }
+        }
     }
 }
 
@@ -1050,6 +1080,112 @@ mod tests {
             StarshipConfig::read_config_content_as_str(None),
             "if the platform doesn't have utils::home_dir(), it should return None"
         );
+    }
+
+    fn write_config_files(
+        dir: &std::path::Path,
+        files: &[(&str, &str)],
+    ) -> std::io::Result<std::ffi::OsString> {
+        let mut paths = Vec::new();
+        for (name, content) in files {
+            let path = dir.join(name);
+            std::fs::write(&path, content)?;
+            paths.push(path);
+        }
+        Ok(std::env::join_paths(paths).unwrap())
+    }
+
+    #[test]
+    fn config_from_multiple_files_later_files_take_precedence() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = write_config_files(
+            dir.path(),
+            &[
+                (
+                    "base.toml",
+                    "add_newline = false\n[character]\nsuccess_symbol = \"a\"\nerror_symbol = \"b\"\n",
+                ),
+                ("override.toml", "[character]\nsuccess_symbol = \"c\"\n"),
+            ],
+        )?;
+
+        let config = StarshipConfig::initialize(Some(&config_path));
+
+        assert_eq!(
+            config.get_config(&["add_newline"]),
+            Some(&Value::Boolean(false))
+        );
+        assert_eq!(
+            config.get_config(&["character", "success_symbol"]),
+            Some(&Value::String("c".to_string()))
+        );
+        assert_eq!(
+            config.get_config(&["character", "error_symbol"]),
+            Some(&Value::String("b".to_string()))
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn config_from_multiple_files_replaces_arrays() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = write_config_files(
+            dir.path(),
+            &[
+                (
+                    "base.toml",
+                    "[[battery.display]]\nthreshold = 10\n[[battery.display]]\nthreshold = 30\n",
+                ),
+                ("override.toml", "[[battery.display]]\nthreshold = 25\n"),
+            ],
+        )?;
+
+        let config = StarshipConfig::initialize(Some(&config_path));
+        let display = config
+            .get_config(&["battery", "display"])
+            .and_then(Value::as_array)
+            .unwrap();
+
+        assert_eq!(display.len(), 1);
+        assert_eq!(display[0].get("threshold"), Some(&Value::Integer(25)));
+        dir.close()
+    }
+
+    #[test]
+    fn config_from_multiple_files_skips_missing_and_invalid_files() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut paths = vec![dir.path().join("missing.toml")];
+        paths.extend(std::env::split_paths(&write_config_files(
+            dir.path(),
+            &[
+                ("invalid.toml", "this is not toml"),
+                ("valid.toml", "add_newline = false\n"),
+            ],
+        )?));
+        let config_path = std::env::join_paths(paths).unwrap();
+
+        let config = StarshipConfig::initialize(Some(&config_path));
+
+        assert_eq!(
+            config.get_config(&["add_newline"]),
+            Some(&Value::Boolean(false))
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn config_from_multiple_files_none_exist() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = std::env::join_paths([
+            dir.path().join("missing1.toml"),
+            dir.path().join("missing2.toml"),
+        ])
+        .unwrap();
+
+        let config = StarshipConfig::initialize(Some(&config_path));
+
+        assert!(config.config.is_none());
+        dir.close()
     }
 
     /// Guard against schemars `$defs` collisions by requiring distinct IDs for nested `VecOr` types.
