@@ -10,9 +10,17 @@ use super::Context;
 use crate::configs::git_status::GitStatusConfig;
 use crate::modules::git_status::uses_reftables;
 use crate::{
-    config::ModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
-    formatter::string_formatter::StringFormatterError, module::Module,
+    config::ModuleConfig,
+    configs::git_metrics::{GitMetricsConfig, GitMetricsMode},
+    formatter::StringFormatter,
+    formatter::string_formatter::StringFormatterError,
+    module::Module,
 };
+
+/// Well-known empty tree object id for SHA1 repos.
+/// SHA256 cannot be discovered via gix, so cannot be handled yet.
+const EMPTY_TREE_SHA1: &str = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+const EMPTY_TREE_SHA256: &str = "6ef19b41225c5369f1c104d45d8d85efa9b057b53b14b4b9b939dd74decc5321";
 
 /// Creates a module with the current added/deleted lines in the git repository at the
 /// current directory
@@ -40,6 +48,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let mut git_args = vec!["diff", "--shortstat"];
         if config.ignore_submodules {
             git_args.push("--ignore-submodules");
+        }
+        // `git diff --shortstat HEAD` fails on an unborn HEAD
+        // Fall back to a well-known empty tree SHA1 if HEAD is unborn.
+        if matches!(config.mode, GitMetricsMode::All) {
+            if gix_repo.head().is_ok_and(|h| h.is_unborn()) {
+                let object_hash = gix_repo.object_hash();
+                match object_hash {
+                    gix::hash::Kind::Sha1 => git_args.push(EMPTY_TREE_SHA1),
+                    gix::hash::Kind::Sha256 => git_args.push(EMPTY_TREE_SHA256),
+                    _ => {
+                        log::warn!("Unsupported object hash kind: {:?}", object_hash);
+                        return None;
+                    }
+                }
+            } else {
+                git_args.push("HEAD");
+            }
         }
 
         let diff = repo.exec_git(context, &git_args)?.stdout;
@@ -95,6 +120,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     use gix::status;
                     let mut diff = Diff::default();
                     match change {
+                        status::Item::TreeIndex(_) if config.mode == GitMetricsMode::Unstaged => {}
                         status::Item::TreeIndex(change) => {
                             use gix::diff::index::Change;
                             match change {
@@ -443,13 +469,7 @@ mod tests {
             run_git_cmd(["add", "new-file"], Some(path), true)?;
 
             let actual = render_metrics(path);
-
-            let expected = if matches!(mode, FixtureProvider::Git { reftable: true, .. }) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Green.bold().paint("+1")))
-            };
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -472,12 +492,7 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::Git { reftable: true, .. }) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Green.bold().paint("+1")))
-            };
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -515,16 +530,11 @@ mod tests {
 
             let actual = render_metrics(path);
 
-            let expected = if matches!(mode, FixtureProvider::Git { reftable: true, .. }) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!(
-                    "{} {} ",
-                    Color::Green.bold().paint("+1"),
-                    Color::Red.bold().paint("-3")
-                ))
-            };
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+1"),
+                Color::Red.bold().paint("-3")
+            ));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -578,13 +588,7 @@ mod tests {
             run_git_cmd(["rm", "the_file"], Some(path), true)?;
 
             let actual = render_metrics(path);
-
-            let expected = if matches!(mode, FixtureProvider::Git { reftable: true, .. }) {
-                // TODO: detect staged changes as well - `git diff` using another `git diff --cached` call.
-                None
-            } else {
-                Some(format!("{} ", Color::Red.bold().paint("-3")))
-            };
+            let expected = Some(format!("{} ", Color::Red.bold().paint("-3")));
 
             assert_eq!(expected, actual);
             repo_dir.close()?;
@@ -602,6 +606,60 @@ mod tests {
             write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
             let actual = render_metrics(path);
+
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+4"),
+                Color::Red.bold().paint("-2")
+            ));
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_all_changes_by_default_mode() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
+
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+            let file_staged = path.join("the_file_staged");
+            write_file(&file_staged, "Alpha\nBeta\nGamma\nDelta\n")?;
+            run_git_cmd(["add", "the_file_staged"], Some(path), true)?;
+
+            let actual = render_metrics(path);
+
+            let expected = Some(format!(
+                "{} {} ",
+                Color::Green.bold().paint("+8"),
+                Color::Red.bold().paint("-2")
+            ));
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_unstaged_changes_only_in_unstaged_mode() -> io::Result<()> {
+        for &mode in COMMON_GIT_PROVIDERS {
+            let repo_dir = create_repo_with_commit(mode)?;
+            let path = repo_dir.path();
+
+            let file_path = path.join("the_file");
+            write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+            let file_staged = path.join("the_file_staged");
+            write_file(&file_staged, "Alpha\nBeta\nGamma\nDelta\n")?;
+            run_git_cmd(["add", "the_file_staged"], Some(path), true)?;
+
+            let actual = render_metrics_unstaged(path);
 
             let expected = Some(format!(
                 "{} {} ",
@@ -802,6 +860,17 @@ mod tests {
             .collect()
     }
 
+    fn render_metrics_unstaged(path: &Path) -> Option<String> {
+        ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                mode = "unstaged"
+            })
+            .path(path)
+            .collect()
+    }
+
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
     where
         A: IntoIterator<Item = S>,
@@ -825,6 +894,71 @@ mod tests {
         } else {
             Ok(())
         }
+    }
+
+    fn create_unborn_repo(sha256: bool) -> io::Result<tempfile::TempDir> {
+        let repo_dir = tempfile::tempdir()?;
+        let path = repo_dir.path();
+        let mut git_args = vec![
+            "init",
+            "--quiet",
+            path.to_str().expect("Path was not UTF-8"),
+        ];
+        if sha256 {
+            git_args.push("--object-format=sha256");
+        } else {
+            git_args.push("--object-format=sha1");
+        }
+
+        run_git_cmd(git_args, None, true)?;
+        config_git_repo_for_tests(path)?;
+        run_git_cmd(["checkout", "-b", "master"], Some(path), false)?;
+        Ok(repo_dir)
+    }
+
+    #[test]
+    fn shows_staged_addition_on_unborn_head() -> io::Result<()> {
+        for sha256 in [false, true] {
+            let repo_dir = create_unborn_repo(sha256)?;
+            let path = repo_dir.path();
+
+            std::fs::write(path.join("new-file"), "new line\n")?;
+            run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+            let actual = render_metrics(path);
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn shows_staged_addition_on_unborn_head_with_git_executable() -> io::Result<()> {
+        for sha256 in [false, true] {
+            let repo_dir = create_unborn_repo(sha256)?;
+            let path = repo_dir.path();
+
+            std::fs::write(path.join("new-file"), "new line\n")?;
+            run_git_cmd(["add", "new-file"], Some(path), true)?;
+
+            let actual = ModuleRenderer::new("git_metrics")
+                .config(toml::toml! {
+                    [git_status]
+                    use_git_executable = true
+                    [git_metrics]
+                    disabled = false
+                    mode = "all"
+                })
+                .path(path)
+                .collect();
+            let expected = Some(format!("{} ", Color::Green.bold().paint("+1")));
+
+            assert_eq!(expected, actual);
+            repo_dir.close()?;
+        }
+        Ok(())
     }
 
     fn create_repo_with_commit(provider: FixtureProvider) -> io::Result<tempfile::TempDir> {
