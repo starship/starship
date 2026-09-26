@@ -217,6 +217,7 @@ This is the list of prompt-wide configuration options.
 | `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
 | `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
 | `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
+| `responsive`      | `{ drop_order = [] }`          | Configure modules to hide when the prompt exceeds the terminal width. See [Responsive Prompt](#responsive-prompt).                                                                 |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
@@ -252,6 +253,23 @@ blue = '21'
 # Define new color
 mustard = '#af8700'
 ```
+
+### Responsive Prompt
+
+The prompt can hide less important modules when it is wider than the terminal. This is opt-in: an absent or empty `drop_order` does not change the prompt.
+
+```toml
+[responsive]
+drop_order = ['time', 'package', 'nodejs', 'cmd_duration']
+```
+
+Starship removes whole modules in the configured order until every prompt line fits the full terminal width or the list is exhausted. Modules not in the list remain visible, so the remaining prompt may still wrap. Literal characters in `format` are never removed; include separators in a [conditional format group](../advanced-config/#conditional-format-strings) when they should disappear with a module.
+
+`character`, `line_break`, and `fill` are always kept. Custom and environment variable modules use their full names, such as `custom.weather` and `env_var.region`. The `vcs` module is treated as one module: list `vcs` to hide it, since modules rendered inside it cannot be hidden independently.
+
+Responsive behavior applies independently to the main and right prompts, and also applies to profiles. Each main or profile prompt line is measured separately; right-prompt newlines are joined before measurement. Continuation prompts are unchanged. If terminal width cannot be detected, responsive behavior is skipped. Terminal resizing takes effect the next time the prompt is rendered.
+
+Width is measured from rendered output before shell prompt wrappers are added. Shell-escaped characters such as `%` in Zsh may be conservatively overcounted, which can hide one additional module.
 
 ### Default Prompt Format
 
