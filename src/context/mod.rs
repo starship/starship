@@ -467,6 +467,26 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
+        self.exec_cmd_with_cache(cmd, args, true)
+    }
+
+    /// Execute a command, bypassing the shared command-output cache entirely.
+    #[inline]
+    pub fn exec_cmd_no_cache<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+    ) -> Option<CommandOutput> {
+        self.exec_cmd_with_cache(cmd, args, false)
+    }
+
+    #[inline]
+    fn exec_cmd_with_cache<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+        use_cache: bool,
+    ) -> Option<CommandOutput> {
         log::trace!("Executing command {cmd:?} with args {args:?} from context");
         #[cfg(test)]
         {
@@ -480,12 +500,35 @@ impl<'a> Context<'a> {
                 return output;
             }
         }
-        let mut cmd = create_command(cmd).ok()?;
-        cmd.args(args).current_dir(&self.current_dir);
-        exec_timeout(
-            &mut cmd,
+
+        // A global, shared, cross-process cache for command output. It is only active when the
+        // user configures a positive TTL; a TTL of 0 (the default) keeps the historical behavior
+        // of always executing the command. The key includes the resolved binary (so a switch of
+        // the underlying installation, e.g. via SDKMAN, invalidates the entry) and the execution
+        // directory (so directory-dependent commands such as `git branch` do not collide across
+        // projects). Callers that must bypass the cache, e.g. to honour a module-specific
+        // `cache = false`, use `exec_cmd_no_cache`.
+        let cache_ttl = self.root_config.command_cache_ttl;
+        let cache_key = (use_cache && cache_ttl > 0)
+            .then(|| crate::utils::command_cache::key(Some(&self.current_dir), &cmd, args));
+        if let Some(key) = cache_key.as_deref()
+            && let Some(output) = crate::utils::command_cache::get(key, cache_ttl)
+        {
+            return Some(output);
+        }
+
+        let mut command = create_command(cmd).ok()?;
+        command.args(args).current_dir(&self.current_dir);
+        let output = exec_timeout(
+            &mut command,
             Duration::from_millis(self.root_config.command_timeout),
-        )
+        );
+
+        if let (Some(key), Some(output)) = (cache_key.as_deref(), output.as_ref()) {
+            crate::utils::command_cache::set(key, output.clone(), cache_ttl);
+        }
+
+        output
     }
 
     /// Attempt to execute several commands with `exec_cmd`, return the results of the first that works
