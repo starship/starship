@@ -45,6 +45,8 @@ pub struct AwsConfig<'a> {
     pub profile_aliases: HashMap<String, &'a str>,
     /// The symbol displayed when the temporary credentials have expired.
     pub expiration_symbol: &'a str,
+    /// The symbol displayed when an expired SSO access token can be refreshed silently.
+    pub refresh_symbol: &'a str,
     /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
 }
@@ -59,6 +61,7 @@ impl Default for AwsConfig<'_> {
             region_aliases: HashMap::new(),
             profile_aliases: HashMap::new(),
             expiration_symbol: "X",
+            refresh_symbol: "↻",
             force_display: false,
         }
     }
