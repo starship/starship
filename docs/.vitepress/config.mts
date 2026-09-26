@@ -24,7 +24,8 @@ const sidebar = (lang: string | undefined, override = {}) =>
         return { link: path, text: override?.[item.page] ?? item.text };
     });
 
-const editLinkPattern = 'https://github.com/starship/starship/edit/main/docs/:path';
+const githubEditLinkPattern = "https://github.com/starship/starship/edit/main/docs/:path";
+const crowdinEditLinkPattern = "https://translate.starship.rs/";
 
 export default defineConfig({
     locales: {
@@ -44,7 +45,7 @@ export default defineConfig({
                 // Enable edit links
                 editLink: {
                     text: "Edit this page on GitHub",
-                    pattern: editLinkPattern,
+                    pattern: githubEditLinkPattern,
                 },
             }
         },
@@ -69,8 +70,8 @@ export default defineConfig({
                     presets: "Konfigurations-Beispiele",
                 }),
                 editLink: {
-                    text: "Bearbeite diese Seite auf GitHub",
-                    pattern: editLinkPattern,
+                    text: "Bearbeite diese Seite auf Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             }
         },
@@ -95,8 +96,8 @@ export default defineConfig({
                     presets: "Ajustes predeterminados",
                 }),
                 editLink: {
-                    text: "Edita esta página en GitHub",
-                    pattern: editLinkPattern,
+                    text: "Edita esta página en Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -117,8 +118,8 @@ export default defineConfig({
                     installing: "Installation avancée",
                 }),
                 editLink: {
-                    text: "Éditez cette page sur GitHub",
-                    pattern: editLinkPattern,
+                    text: "Éditez cette page sur Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -141,8 +142,8 @@ export default defineConfig({
                     presets: "Prasetel",
                 }),
                 editLink: {
-                    text: "Sunting halaman ini di Github",
-                    pattern: editLinkPattern,
+                    text: "Sunting halaman ini di Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -163,8 +164,8 @@ export default defineConfig({
                     installing: "Installazione Avanzata",
                 }),
                 editLink: {
-                    text: "Modifica questa pagina in Github",
-                    pattern: editLinkPattern,
+                    text: "Modifica questa pagina in Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -186,8 +187,8 @@ export default defineConfig({
                     installing: "高度なインストール",
                 }),
                 editLink: {
-                    text: "GitHub で編集する",
-                    pattern: editLinkPattern,
+                    text: "Crowdin で編集する",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -211,8 +212,8 @@ export default defineConfig({
                     presets: "Predefinições",
                 }),
                 editLink: {
-                    text: "Edite esta página no Github",
-                    pattern: editLinkPattern,
+                    text: "Edite esta página no Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -237,8 +238,8 @@ export default defineConfig({
                     faq: "Часто Задаваемые Вопросы",
                 }),
                 editLink: {
-                    text: "Редактировать эту страницу на GitHub",
-                    pattern: editLinkPattern,
+                    text: "Редактировать эту страницу на Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -264,8 +265,8 @@ export default defineConfig({
                     presets: "Шаблони",
                 }),
                 editLink: {
-                    text: "Редагувати цю сторінку на GitHub",
-                    pattern: editLinkPattern,
+                    text: "Редагувати цю сторінку на Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -287,8 +288,8 @@ export default defineConfig({
                     faq: "Các hỏi thường gặp",
                 }),
                 editLink: {
-                    text: "Chỉnh sửa trang này trên GitHub",
-                    pattern: editLinkPattern,
+                    text: "Chỉnh sửa trang này trên Crowdin",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -314,8 +315,8 @@ export default defineConfig({
                     presets: "社区配置分享",
                 }),
                 editLink: {
-                    text: "在 GitHub 上修改此页",
-                    pattern: editLinkPattern,
+                    text: "在 Crowdin 上修改此页",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
@@ -337,8 +338,8 @@ export default defineConfig({
                     installing: "進階安裝",
                 }),
                 editLink: {
-                    text: "在 GitHub 上修改此頁面",
-                    pattern: editLinkPattern,
+                    text: "在 Crowdin 上修改此頁面",
+                    pattern: crowdinEditLinkPattern,
                 },
             },
         },
