@@ -1,3 +1,5 @@
+use crate::context::Shell;
+use crate::print::UnicodeWidthGraphemes;
 use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use nu_ansi_term::{AnsiString, AnsiStrings, Style as AnsiStyle};
@@ -184,14 +186,18 @@ impl<'a> Module<'a> {
     /// Returns a vector of colored `AnsiString` elements to be later used with
     /// `AnsiStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<AnsiString<'_>> {
-        self.ansi_strings_for_width(None)
+        self.ansi_strings_for_width(None, Shell::Unknown)
     }
 
-    pub fn ansi_strings_for_width(&self, width: Option<usize>) -> Vec<AnsiString<'_>> {
+    pub fn ansi_strings_for_width(
+        &self,
+        width: Option<usize>,
+        shell: Shell,
+    ) -> Vec<AnsiString<'_>> {
         let mut iter = self.segments.iter().peekable();
         let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
-            ansi_strings.extend(ansi_line(&mut iter, width));
+            ansi_strings.extend(ansi_line(&mut iter, width, shell));
         }
         ansi_strings
     }
@@ -204,7 +210,11 @@ impl fmt::Display for Module<'_> {
     }
 }
 
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
+fn ansi_line<'a, I>(
+    segments: &mut I,
+    term_width: Option<usize>,
+    shell: Shell,
+) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
 {
@@ -219,7 +229,7 @@ where
             current = Vec::new();
             prev_style = None;
         } else {
-            used += segment.width_graphemes();
+            used += segment.width_graphemes_for_shell(shell);
             let current_segment_string = segment.ansi_string(prev_style.as_ref());
 
             prev_style = Some(*current_segment_string.style_ref());
@@ -234,9 +244,33 @@ where
     if chunks.is_empty() {
         current
     } else {
-        let fill_size = term_width
-            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
-            .map(|remaining| remaining / chunks.len());
+        let fill_size = term_width.and_then(|tw| {
+            if tw <= used {
+                return None;
+            }
+
+            let remaining = tw - used;
+            let mut min_size = 0;
+            let mut max_size = remaining / chunks.len();
+            while min_size < max_size {
+                let size = min_size + (max_size - min_size).div_ceil(2);
+                let fill_width = chunks
+                    .iter()
+                    .map(|(_, fill)| {
+                        fill.ansi_string(Some(size), None)
+                            .to_string()
+                            .width_graphemes_for_shell(shell)
+                    })
+                    .sum::<usize>();
+
+                if fill_width <= remaining {
+                    min_size = size;
+                } else {
+                    max_size = size - 1;
+                }
+            }
+            Some(min_size)
+        });
         chunks
             .into_iter()
             .flat_map(|(strs, fill)| {
