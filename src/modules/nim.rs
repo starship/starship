@@ -12,7 +12,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .try_begin_scan()?
         .set_files(&config.detect_files)
         .set_extensions(&config.detect_extensions)
-        .set_folders(&config.detect_files)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_nim_project {
@@ -145,6 +145,38 @@ mod tests {
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("👑 v1.2.0 ")));
         assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_matching_detect_folders() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::create_dir(dir.path().join("nimble.pack"))?;
+        let actual = ModuleRenderer::new("nim")
+            .config(toml::toml! {
+                [nim]
+                format = "detected"
+                detect_folders = ["nimble.pack"]
+            })
+            .path(dir.path())
+            .collect();
+        assert_eq!(Some("detected".to_string()), actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_does_not_match_detect_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        std::fs::create_dir(dir.path().join("nim.cfg"))?;
+        let actual = ModuleRenderer::new("nim")
+            .config(toml::toml! {
+                [nim]
+                format = "detected"
+                detect_files = ["nim.cfg"]
+            })
+            .path(dir.path())
+            .collect();
+        assert_eq!(None, actual);
         dir.close()
     }
 }
