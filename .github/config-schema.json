@@ -1912,6 +1912,7 @@
       "default": {
         "order": [
           "git",
+          "jj",
           "hg",
           "pijul",
           "fossil"
@@ -1920,6 +1921,7 @@
         "fossil_modules": "$fossil_branch$fossil_metrics",
         "git_modules": "$git_branch$git_commit$git_state$git_metrics$git_status",
         "hg_modules": "$hg_branch$hg_state",
+        "jj_modules": "$jj_bookmark$jj_change$jj_metrics$jj_status",
         "pijul_modules": "$pijul_channel"
       }
     },
@@ -7221,6 +7223,7 @@
           },
           "default": [
             "git",
+            "jj",
             "hg",
             "pijul",
             "fossil"
@@ -7245,6 +7248,11 @@
           "description": "Modules to use when Mercurial is matched.\n\nThey are configured separately at the top level.",
           "type": "string",
           "default": "$hg_branch$hg_state"
+        },
+        "jj_modules": {
+          "description": "Modules to use when Jujutsu is matched.\n\nThey are configured separately at the top level.",
+          "type": "string",
+          "default": "$jj_bookmark$jj_change$jj_metrics$jj_status"
         },
         "pijul_modules": {
           "description": "Modules to use when Pijul is matched.\n\nThey are configured separately at the top level.",

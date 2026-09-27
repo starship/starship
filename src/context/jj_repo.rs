@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use super::Context;
@@ -65,7 +65,7 @@ impl JJRepo {
     /// Discover if we're in a JJ repo by looking for a `.jj` directory in the current directory
     /// and its parents.
     ///
-    /// While this is technically more error prone than `jj workspace root`, it also much faster
+    /// While this is technically more error prone than `jj workspace root`, it is also much faster
     /// and subsequent JJ commands will fail fast if it's not actually a JJ repo.
     pub fn discover(context: &Context) -> Option<Self> {
         context
@@ -84,6 +84,11 @@ impl JJRepo {
         }
     }
 
+    /// Root directory of the Jujutsu repository
+    pub fn root(&self) -> &Path {
+        &self.root
+    }
+
     /// Information about the current change's state.
     pub fn current_change(&self, context: &Context) -> Option<&CurrentChange> {
         self.current_change
@@ -98,9 +103,9 @@ impl JJRepo {
                     "--repository".as_ref(),
                     self.root.as_os_str(),
                     "show".as_ref(),
-                    // Find conflicts in parents and select only one of them: we want to print
-                    // `conflict_before|` once if there is a conflict and it's not in '@'
-                    "@ | latest(heads(conflicts()::@ & conflicts()), 1)".as_ref(),
+                    // Find conflicts in mutable parents and select only one of them: we want to
+                    // print `conflict_before|` once if there is a conflict and it's not in '@'
+                    "@ | latest(heads(mutable() & ::@ & conflicts()), 1)".as_ref(),
                     "--no-patch".as_ref(),
                     // Important to ensure `conflict_before|` is always printed first if a conflict
                     // is present before '@' (and not in '@')
