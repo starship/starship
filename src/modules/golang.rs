@@ -257,6 +257,17 @@ mod tests {
     }
 
     #[test]
+    fn test_format_go_version_with_build_tags() {
+        // Some toolchains report build tags after the version number. The
+        // suffix is kept so `${raw}` still shows the full version.
+        let input = "go version go1.26.5-X:nodwarf5 linux/amd64";
+        assert_eq!(
+            parse_go_version(input),
+            Some("1.26.5-X:nodwarf5".to_string())
+        );
+    }
+
+    #[test]
     fn show_mod_version_if_not_matching_go_version() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let mut file = File::create(dir.path().join("go.mod"))?;
