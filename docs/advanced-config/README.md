@@ -283,7 +283,7 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## Enable Right Prompt {#enable-right-prompt}
 
 Some shells support a right prompt which renders on the same line as the input. Starship can
 set the content of the right prompt using the `right_format` option. Any module that can be used
