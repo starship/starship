@@ -6,9 +6,9 @@ use crate::formatter::StringFormatter;
 ///
 /// The character segment prints an arrow character in a color dependent on the
 /// exit-code of the last executed command:
-/// - If the exit-code was "0", it will be formatted with `success_symbol`
-///   (green arrow by default)
-/// - If the exit-code was anything else, it will be formatted with
+/// - If the exit-code is listed in `success_exit_codes`, it will be formatted
+///   with `success_symbol` (green arrow by default)
+/// - If the exit-code is anything else, it will be formatted with
 ///   `error_symbol` (red arrow by default)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
@@ -27,7 +27,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let props = &context.properties;
     let exit_code = props.status_code.as_deref().unwrap_or("0");
     let keymap = props.keymap.as_str();
-    let exit_success = exit_code == "0";
+    let exit_success = exit_code
+        .parse::<i32>()
+        .map(|code| config.success_exit_codes.contains(&code))
+        .unwrap_or(false);
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -139,6 +142,53 @@ mod test {
             .status(0)
             .collect();
         assert_eq!(expected_success, actual);
+    }
+
+    #[test]
+    fn custom_success_exit_codes() {
+        let expected_success = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_failure = Some(format!("{} ", Color::Red.bold().paint("❯")));
+
+        // 130 is SIGINT, 148 is SIGTSTP
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_exit_codes = [0, 130, 148]
+            })
+            .status(130)
+            .collect();
+        assert_eq!(expected_success, actual);
+
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_exit_codes = [0, 130, 148]
+            })
+            .status(148)
+            .collect();
+        assert_eq!(expected_success, actual);
+
+        // An unlisted exit code is still a failure
+        for status in [1, 143, 54321] {
+            let actual = ModuleRenderer::new("character")
+                .config(toml::toml! {
+                    [character]
+                    success_exit_codes = [0, 130, 148]
+                })
+                .status(status)
+                .collect();
+            assert_eq!(expected_failure, actual);
+        }
+
+        // Setting the list replaces the default, so 0 alone no longer means success
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_exit_codes = [130]
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected_failure, actual);
     }
 
     #[test]

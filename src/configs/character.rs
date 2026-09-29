@@ -16,6 +16,7 @@ pub struct CharacterConfig<'a> {
     pub vimcmd_visual_symbol: &'a str,
     pub vimcmd_replace_symbol: &'a str,
     pub vimcmd_replace_one_symbol: &'a str,
+    pub success_exit_codes: Vec<i32>,
     pub disabled: bool,
 }
 
@@ -29,6 +30,7 @@ impl Default for CharacterConfig<'_> {
             vimcmd_visual_symbol: "[❮](bold yellow)",
             vimcmd_replace_symbol: "[❮](bold purple)",
             vimcmd_replace_one_symbol: "[❮](bold purple)",
+            success_exit_codes: vec![0],
             disabled: false,
         }
     }
