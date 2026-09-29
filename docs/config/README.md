@@ -794,7 +794,7 @@ look at [this example](#with-custom-error-shape).
 | `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
 | `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
 | `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
-| `success_exit_codes`        | `[0]`                | The exit codes treated as success. Any other exit code uses `error_symbol`.             |
+| `success_exit_codes`        | `[0]`                | The exit codes treated as success, replacing the default. Others use `error_symbol`.   |
 | `disabled`                  | `false`              | Disables the `character` module.                                                        |
 
 ### Variables

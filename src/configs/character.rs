@@ -16,7 +16,7 @@ pub struct CharacterConfig<'a> {
     pub vimcmd_visual_symbol: &'a str,
     pub vimcmd_replace_symbol: &'a str,
     pub vimcmd_replace_one_symbol: &'a str,
-    pub success_exit_codes: Vec<i32>,
+    pub success_exit_codes: Vec<i64>,
     pub disabled: bool,
 }
 
