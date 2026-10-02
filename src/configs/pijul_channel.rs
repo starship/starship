@@ -19,7 +19,7 @@ pub struct PijulConfig<'a> {
 impl Default for PijulConfig<'_> {
     fn default() -> Self {
         Self {
-            symbol: " ",
+            symbol: "⎇ ",
             style: "bold purple",
             format: "on [$symbol$channel]($style) ",
             truncation_length: i64::MAX,
