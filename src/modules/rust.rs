@@ -11,9 +11,6 @@ use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils::{create_command, read_file};
 
-type VersionString = String;
-type ToolchainString = String;
-
 /// Lazily shares toolchain selection and version detection within one module render.
 struct RustToolchainInfo {
     /// Rustup settings parsed from $HOME/.rustup/settings.toml
@@ -22,8 +19,6 @@ struct RustToolchainInfo {
     selected_toolchain: OnceLock<Option<String>>,
     /// Version detection from toolchain metadata or compiler execution
     toolchain_version: OnceLock<VersionDetection>,
-    /// Parsed `rustc -Vv` output for an unmanaged compiler or unknown toolchain.
-    rustc_verbose_version: OnceLock<Option<(VersionString, ToolchainString)>>,
 }
 
 impl RustToolchainInfo {
@@ -32,7 +27,6 @@ impl RustToolchainInfo {
             rustup_settings: OnceLock::new(),
             selected_toolchain: OnceLock::new(),
             toolchain_version: OnceLock::new(),
-            rustc_verbose_version: OnceLock::new(),
         }
     }
 
@@ -96,7 +90,7 @@ impl RustToolchainInfo {
             // rustup (system-managed rustc).
             if !rustc_is_rustup_managed(context) {
                 log::debug!("rustc is not rustup-managed; skipping rustup version detection");
-                return VersionDetection::UnmanagedCompiler;
+                return execute_rustc_verbose_version(context);
             }
 
             let out = if let Some(toolchain) = self.selected_toolchain(context) {
@@ -109,7 +103,7 @@ impl RustToolchainInfo {
                 directory
                     .as_deref()
                     .and_then(get_version_from_toolchain_dir)
-                    .map(VersionDetection::RustcVersion)
+                    .map(VersionDetection::StandardVersion)
                     .unwrap_or_else(|| {
                         run_rustc_from_toolchain(
                             toolchain,
@@ -125,28 +119,13 @@ impl RustToolchainInfo {
                         )
                     })
             } else {
-                VersionDetection::UnknownToolchain
+                // No selected toolchain: the fallback compiler can be queried safely.
+                execute_rustc_verbose_version(context)
             };
 
             log::debug!("Rustup rustc version is {out:?}");
             out
         })
-    }
-
-    /// Gets the (version, toolchain) string as returned by `rustc -vV`
-    fn rustc_verbose_version(&self, context: &Context) -> Option<(&str, &str)> {
-        let toolchain = self.rustup_settings(context).default_toolchain();
-
-        self.rustc_verbose_version
-            .get_or_init(|| {
-                let output = context.exec_cmd("rustc", &["-Vv"])?;
-                let out = format_rustc_version_verbose(&output.stdout, toolchain);
-
-                log::debug!("Rustc verbose version is {out:?}");
-                out
-            })
-            .as_ref()
-            .map(|(x, y)| (&x[..], &y[..]))
     }
 }
 
@@ -206,17 +185,14 @@ fn get_module_version(
     type Outcome = VersionDetection;
 
     match toolchain_info.toolchain_version(context) {
-        Outcome::RustcVersion(rustc_version) => {
+        Outcome::StandardVersion(rustc_version) => {
             format_rustc_version(rustc_version, config.version_format)
         }
-        Outcome::UnmanagedCompiler | Outcome::UnknownToolchain => {
-            // If `rustc` is not managed by rustup or no toolchain is selected,
-            // we can execute `rustc --version` without
-            // triggering a toolchain download
-            format_rustc_version(&execute_rustc_version(context)?, config.version_format)
+        Outcome::VerboseVersion { release, .. } => {
+            Some(format_rust_release(release, config.version_format))
         }
         Outcome::ToolchainNotInstalled(name) => Some(name.clone()),
-        Outcome::Unavailable => None,
+        Outcome::Unavailable | Outcome::FallbackUnavailable => None,
     }
 }
 
@@ -227,15 +203,14 @@ fn get_module_numeric_version(
     type Outcome = VersionDetection;
 
     match toolchain_info.toolchain_version(context) {
-        Outcome::RustcVersion(version) => {
+        Outcome::StandardVersion(version) => {
             let release = version.split_whitespace().nth(1).unwrap_or(version);
             Some(format_semver(release))
         }
-        Outcome::UnmanagedCompiler | Outcome::UnknownToolchain => {
-            let (numver, _toolchain) = toolchain_info.rustc_verbose_version(context)?;
-            Some(numver.to_string())
+        Outcome::VerboseVersion { release, .. } => Some(format_semver(release)),
+        Outcome::ToolchainNotInstalled(_) | Outcome::Unavailable | Outcome::FallbackUnavailable => {
+            None
         }
-        Outcome::ToolchainNotInstalled(_) | VersionDetection::Unavailable => None,
     }
 }
 
@@ -245,14 +220,12 @@ fn get_toolchain_name(context: &Context, toolchain_info: &RustToolchainInfo) -> 
     let default_host_triple = toolchain_info.default_host_triple(context);
 
     match toolchain_info.toolchain_version(context) {
-        Outcome::RustcVersion(_) | Outcome::ToolchainNotInstalled(_) | Outcome::Unavailable => {
+        Outcome::StandardVersion(_) | Outcome::ToolchainNotInstalled(_) | Outcome::Unavailable => {
             let toolchain = toolchain_info.selected_toolchain(context)?;
             Some(format_toolchain(toolchain, default_host_triple))
         }
-        Outcome::UnmanagedCompiler | Outcome::UnknownToolchain => {
-            let (_numver, toolchain) = toolchain_info.rustc_verbose_version(context)?;
-            Some(format_toolchain(toolchain, default_host_triple))
-        }
+        Outcome::VerboseVersion { host, .. } => Some(format_toolchain(host, default_host_triple)),
+        Outcome::FallbackUnavailable => None,
     }
 }
 
@@ -353,7 +326,7 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
 fn parse_toolchain_version_output(output: Output) -> VersionDetection {
     if output.status.success() {
         if let Ok(output) = String::from_utf8(output.stdout) {
-            return VersionDetection::RustcVersion(output);
+            return VersionDetection::StandardVersion(output);
         }
     } else if let Ok(stderr) = String::from_utf8(output.stderr)
         && stderr.starts_with("error: toolchain '")
@@ -367,11 +340,11 @@ fn parse_toolchain_version_output(output: Output) -> VersionDetection {
     VersionDetection::Unavailable
 }
 
-fn execute_rustc_version(context: &Context) -> Option<String> {
+fn execute_rustc_verbose_version(context: &Context) -> VersionDetection {
     context
-        .exec_cmd("rustc", &["--version"])
-        .map(|o| o.stdout)
-        .filter(|s| !s.is_empty())
+        .exec_cmd("rustc", &["-Vv"])
+        .and_then(|output| parse_rustc_verbose_version(&output.stdout))
+        .unwrap_or(VersionDetection::FallbackUnavailable)
 }
 
 /// Returns `true` when the `rustc` binary in PATH is managed by rustup —
@@ -516,11 +489,15 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         // get down to "1.34.0"
         .nth(1)?;
 
+    Some(format_rust_release(version, version_format))
+}
+
+fn format_rust_release(version: &str, version_format: &str) -> String {
     match VersionFormatter::format_version(version, version_format) {
-        Ok(formatted) => Some(formatted),
+        Ok(formatted) => formatted,
         Err(error) => {
             log::warn!("Error formatting `rust` version:\n{error}");
-            Some(format!("v{version}"))
+            format!("v{version}")
         }
     }
 }
@@ -533,7 +510,7 @@ fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> Strin
         .to_owned()
 }
 
-fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option<(String, String)> {
+fn parse_rustc_verbose_version(stdout: &str) -> Option<VersionDetection> {
     let (mut release, mut host) = (None, None);
     for line in stdout.lines() {
         if line.starts_with("release: ") {
@@ -544,9 +521,10 @@ fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option
         }
     }
     let (release, host) = (release?, host?);
-    let version = format_semver(release);
-    let toolchain = toolchain.map_or_else(|| host.to_string(), ToOwned::to_owned);
-    Some((version, toolchain))
+    Some(VersionDetection::VerboseVersion {
+        release: release.to_owned(),
+        host: host.to_owned(),
+    })
 }
 
 fn format_semver(semver: &str) -> String {
@@ -555,11 +533,18 @@ fn format_semver(semver: &str) -> String {
 
 #[derive(Debug, PartialEq)]
 enum VersionDetection {
-    RustcVersion(String),
+    /// Standard output from a selected rustup toolchain or its metadata.
+    StandardVersion(String),
+    /// Verbose output from the fallback compiler; the host belongs to this compiler.
+    VerboseVersion {
+        release: String,
+        host: String,
+    },
     ToolchainNotInstalled(String),
-    UnknownToolchain,
-    UnmanagedCompiler,
+    /// A selected rustup toolchain's version could not be read.
     Unavailable,
+    /// The fallback compiler could not provide verbose version information.
+    FallbackUnavailable,
 }
 
 #[derive(Default, Debug, PartialEq, Deserialize)]
@@ -726,7 +711,7 @@ mod tests {
     }
 
     #[test]
-    fn test_unmanaged_compiler_uses_context_command_mocks() -> io::Result<()> {
+    fn test_unmanaged_compiler_uses_only_verbose_output() -> io::Result<()> {
         use crate::test::ModuleRenderer;
         use crate::utils::CommandOutput;
         let dir = tempfile::tempdir()?;
@@ -734,6 +719,106 @@ mod tests {
         let output = ModuleRenderer::new("rust")
             .path(dir.path())
             .env("PATH", dir.path().to_string_lossy())
+            .env("RUSTUP_HOME", dir.path().to_string_lossy())
+            .cmd("rustc --version", None)
+            .cmd(
+                "rustc -Vv",
+                Some(CommandOutput {
+                    stdout: "rustc 1.42.0-nightly\nrelease: 1.42.0-nightly\nhost: x86_64-unknown-linux-gnu\n"
+                        .into(),
+                    stderr: String::new(),
+                }),
+            )
+            .config(toml::toml! { [rust]
+                format = "$version|$numver|$toolchain"
+            })
+            .collect();
+        assert_eq!(
+            output,
+            Some("v1.42.0-nightly|v1.42.0|x86_64-unknown-linux-gnu".into())
+        );
+        dir.close()
+    }
+
+    #[test]
+    fn test_fallback_version_is_cached_for_all_variables() -> io::Result<()> {
+        use crate::utils::CommandOutput;
+        for succeeds in [true, false] {
+            let dir = tempfile::tempdir()?;
+            let mut env = Env::default();
+            env.insert("PATH", dir.path().to_string_lossy().into_owned());
+            let mut context = Context::new_with_shell_and_path(
+                Default::default(),
+                Shell::Unknown,
+                Target::Main,
+                dir.path().into(),
+                dir.path().into(),
+                env,
+            );
+            context.cmd.insert("rustc --version", None);
+            let output = CommandOutput {
+                stdout: "release: 1.42.0-nightly\nhost: x86_64-unknown-linux-gnu\n".into(),
+                stderr: String::new(),
+            };
+            context
+                .cmd
+                .insert("rustc -Vv", succeeds.then(|| output.clone()));
+            let info = RustToolchainInfo::new();
+            info.rustup_settings
+                .set(RustupSettings {
+                    default_toolchain: Some("stable".into()),
+                    default_host_triple: Some("aarch64-apple-darwin".into()),
+                    ..Default::default()
+                })
+                .unwrap();
+            let config = RustConfig {
+                version_format: "${raw}",
+                ..Default::default()
+            };
+            assert_eq!(
+                get_module_numeric_version(&context, &info),
+                succeeds.then(|| "v1.42.0".into()),
+            );
+            // Later variables must use the original result, caching failures as well as success.
+            context
+                .cmd
+                .insert("rustc -Vv", (!succeeds).then_some(output));
+            assert_eq!(
+                get_module_version(&context, &config, &info),
+                succeeds.then(|| "1.42.0-nightly".into()),
+            );
+            assert_eq!(
+                get_toolchain_name(&context, &info),
+                succeeds.then(|| "x86_64-unknown-linux-gnu".into()),
+            );
+            dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_unmanaged_compiler_ignores_rustup_default_toolchain() -> io::Result<()> {
+        use crate::test::ModuleRenderer;
+        use crate::utils::CommandOutput;
+        let dir = tempfile::tempdir()?;
+        fs::File::create(dir.path().join("Cargo.toml"))?.sync_all()?;
+        fs::write(
+            dir.path().join("settings.toml"),
+            "version = \"12\"\ndefault_toolchain = \"stable\"\n[overrides]\n",
+        )?;
+        let rustc = dir
+            .path()
+            .join(format!("rustc{}", std::env::consts::EXE_SUFFIX));
+        fs::File::create(&rustc)?.sync_all()?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            fs::set_permissions(&rustc, fs::Permissions::from_mode(0o755))?;
+        }
+        let output = ModuleRenderer::new("rust")
+            .path(dir.path())
+            .env("PATH", dir.path().to_string_lossy())
+            .env("CARGO_HOME", dir.path().join("cargo").to_string_lossy())
             .env("RUSTUP_HOME", dir.path().to_string_lossy())
             .cmd(
                 "rustc --version",
@@ -1018,7 +1103,7 @@ version = "12"
         });
         assert_eq!(
             parse_toolchain_version_output(RUSTC_VERSION.clone()),
-            VersionDetection::RustcVersion("rustc 1.34.0\n".to_owned()),
+            VersionDetection::StandardVersion("rustc 1.34.0\n".to_owned()),
         );
 
         static TOOLCHAIN_NAME: LazyLock<Output> = LazyLock::new(|| Output {
@@ -1263,20 +1348,7 @@ version = "12"
     }
 
     #[test]
-    fn test_format_rustc_version_verbose() {
-        macro_rules! test {
-            () => {};
-            (($input:expr, $toolchain:expr) => $expected:expr $(,$($rest:tt)*)?) => {
-                assert_eq!(
-                    format_rustc_version_verbose($input, $toolchain)
-                        .as_ref()
-                        .map(|(s1, s2)| (&**s1, &**s2)),
-                    $expected,
-                );
-                test!($($($rest)*)?);
-            };
-        }
-
+    fn test_parse_rustc_verbose_version() {
         static STABLE: &str = r"rustc 1.40.0 (73528e339 2019-12-16)
 binary: rustc
 commit-hash: 73528e339aae0f17a15ffa49a8ac608f50c6cf14
@@ -1304,16 +1376,22 @@ release: 1.42.0-nightly
 LLVM version: 9.0
 ";
 
-        test!(
-            (STABLE, None) => Some(("v1.40.0", "x86_64-unknown-linux-gnu")),
-            (STABLE, Some("stable")) => Some(("v1.40.0", "stable")),
-            (BETA, None) => Some(("v1.41.0", "x86_64-unknown-linux-gnu")),
-            (BETA, Some("beta")) => Some(("v1.41.0", "beta")),
-            (NIGHTLY, None) => Some(("v1.42.0", "x86_64-unknown-linux-gnu")),
-            (NIGHTLY, Some("nightly")) => Some(("v1.42.0", "nightly")),
-            ("", None) => None,
-            ("", Some("stable")) => None,
-        );
+        for (output, release) in [
+            (STABLE, "1.40.0"),
+            (BETA, "1.41.0-beta.1"),
+            (NIGHTLY, "1.42.0-nightly"),
+        ] {
+            assert_eq!(
+                parse_rustc_verbose_version(output),
+                Some(VersionDetection::VerboseVersion {
+                    release: release.into(),
+                    host: "x86_64-unknown-linux-gnu".into(),
+                }),
+            );
+        }
+        for output in ["", "release: 1.40.0\n", "host: x86_64-unknown-linux-gnu\n"] {
+            assert_eq!(parse_rustc_verbose_version(output), None);
+        }
     }
 
     #[test]
