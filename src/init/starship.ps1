@@ -100,6 +100,45 @@ $null = New-Module starship {
         $script:TransientPrompt = $false
     }
 
+    # PSReadLine lays out a still-live buffer from the prompt height it is
+    # handed. A shorter transient prompt therefore leaves continuation rows
+    # behind. Pad to the live height for multiline (or unknown) buffers.
+    # Keep in sync with align_pwsh_transient_prompt in src/init/mod.rs.
+    function Get-StarshipTransientPromptText {
+        param(
+            [AllowEmptyString()]
+            [AllowNull()]
+            $TransientText,
+            [int]$LiveLineCount,
+            $Buffer
+        )
+
+        if ($null -eq $TransientText) {
+            $TransientText = ''
+        } elseif ($TransientText -is [array]) {
+            $TransientText = $TransientText -join "`n"
+        } else {
+            $TransientText = [string]$TransientText
+        }
+
+        $alignHeight = $true
+        if ($null -ne $Buffer -and -not ([string]$Buffer).Contains("`n")) {
+            $alignHeight = $false
+        }
+
+        if (-not $alignHeight) {
+            return $TransientText
+        }
+
+        $transientLineCount = $TransientText.Split("`n").Length
+        $pad = $LiveLineCount - $transientLineCount
+        if ($pad -le 0) {
+            return $TransientText
+        }
+
+        return ("`n" * $pad) + $TransientText
+    }
+
     function global:prompt {
         $origDollarQuestion = $global:?
         $origLastExitCode = $global:LASTEXITCODE
@@ -148,11 +187,27 @@ $null = New-Module starship {
         # Invoke Starship
         $promptText = if ($script:TransientPrompt) {
             $script:TransientPrompt = $false
-            if (Test-Path function:Invoke-Starship-TransientFunction) {
+            $transient = if (Test-Path function:Invoke-Starship-TransientFunction) {
                 Invoke-Starship-TransientFunction
             } else {
                 "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
             }
+
+            # ExtraPromptLineCount still reflects the live prompt at this point.
+            $liveLineCount = 1
+            try {
+                $liveLineCount = [math]::Max(1, (Get-PSReadLineOption).ExtraPromptLineCount + 1)
+            } catch {}
+
+            $line = $null
+            $cursor = $null
+            $buffer = $null
+            try {
+                [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+                $buffer = $line
+            } catch {}
+
+            Get-StarshipTransientPromptText -TransientText $transient -LiveLineCount $liveLineCount -Buffer $buffer
         } else {
             Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
         }
