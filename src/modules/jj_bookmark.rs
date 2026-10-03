@@ -14,11 +14,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let current_change = context.get_jj_repo()?.current_change(context)?;
-    let bookmarks = current_change.bookmarks.as_deref()?;
 
     // The overflow count filters out ignored bookmarks
     let ((name, remote, diverged), overflow_count) = {
-        let mut iter = bookmarks.iter().filter_map(|b| {
+        let mut iter = current_change.bookmarks.iter().filter_map(|b| {
             let name = b.name();
             let remote = b.remote();
             let ignored = config.ignore_names.contains(&name)
@@ -99,8 +98,13 @@ pub mod tests {
     }
 
     #[test]
-    fn test_render_no_current() {
-        tester(JJRepo::BOOKMARK_NO_CURRENT)
+    fn test_render_no_bookmarks() {
+        tester(JJRepo::BOOKMARKS_NONE).render();
+    }
+
+    #[test]
+    fn test_render_parents_bookmarks() {
+        tester(JJRepo::BOOKMARKS_IN_PARENT)
             .expected(format!(
                 "on {} ",
                 Color::Purple.bold().paint("\u{e0a0} par_local (+3 others)")
