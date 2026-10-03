@@ -44,6 +44,21 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
+`STARSHIP_CONFIG` can also contain multiple configuration files, separated by `:` (or `;` on Windows).
+The files are merged in order, so settings in later files override settings in earlier ones.
+This makes it possible to use a preset as a base and keep your own changes in a separate file:
+
+```sh
+export STARSHIP_CONFIG=~/.config/starship/preset.toml:~/.config/starship/custom.toml
+```
+
+```powershell
+$ENV:STARSHIP_CONFIG = "$HOME\.config\starship\preset.toml;$HOME\.config\starship\custom.toml"
+```
+
+Tables are merged key by key, while any other value, including arrays, is replaced as a whole.
+When multiple files are set, `starship config` can't modify the configuration, so edit the files directly instead.
+
 ### Logging
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal.
