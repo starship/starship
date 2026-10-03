@@ -940,6 +940,7 @@ mod tests {
         assert_eq!(humanize_int(999_500), "1M");
         assert_eq!(humanize_int(999_999), "1M");
         assert_eq!(humanize_int(999_500_000), "1G");
+        assert_eq!(humanize_int(999_499_999), "999M");
         assert_eq!(humanize_int(999_999_999), "1G");
     }
 
