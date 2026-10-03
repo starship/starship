@@ -29,7 +29,7 @@ use terminal_size::terminal_size;
 
 pub use crate::utils::env::Env;
 pub use crate::utils::statusline::{
-    ClaudeCodeData, ContextWindow, CostInfo, CurrentUsage, ModelInfo, Workspace,
+    ClaudeCodeData, ContextWindow, CostInfo, CurrentUsage, ModelInfo, ThinkingInfo, Workspace,
 };
 
 mod git_repo;
