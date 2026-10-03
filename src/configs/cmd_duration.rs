@@ -1,4 +1,35 @@
+use crate::config::Either;
 use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+pub enum NotificationMode {
+    #[serde(rename = "none")]
+    None,
+    #[serde(rename = "desktop")]
+    Desktop,
+    #[serde(rename = "ansi")]
+    Ansi,
+}
+
+impl From<Either<bool, NotificationMode>> for NotificationMode {
+    fn from(value: Either<bool, Self>) -> Self {
+        match value {
+            Either::First(b) => {
+                if b {
+                    Self::Desktop
+                } else {
+                    Self::None
+                }
+            }
+            Either::Second(mode) => mode,
+        }
+    }
+}
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -13,7 +44,7 @@ pub struct CmdDurationConfig<'a> {
     pub style: &'a str,
     pub show_milliseconds: bool,
     pub disabled: bool,
-    pub show_notifications: bool,
+    pub show_notifications: Either<bool, NotificationMode>,
     pub min_time_to_notify: i64,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -28,7 +59,7 @@ impl Default for CmdDurationConfig<'_> {
             show_milliseconds: false,
             style: "yellow bold",
             disabled: false,
-            show_notifications: false,
+            show_notifications: Either::Second(NotificationMode::None),
             min_time_to_notify: 45_000,
             notification_timeout: None,
         }

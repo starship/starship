@@ -1,6 +1,6 @@
 use super::{Context, Module, ModuleConfig};
 
-use crate::configs::cmd_duration::CmdDurationConfig;
+use crate::configs::cmd_duration::{CmdDurationConfig, NotificationMode};
 use crate::formatter::StringFormatter;
 use crate::utils::render_time;
 
@@ -51,66 +51,91 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(undistract_me(module, &config, context, elapsed))
 }
 
-#[cfg(not(feature = "notify"))]
 fn undistract_me<'a>(
-    module: Module<'a>,
-    _config: &CmdDurationConfig,
-    _context: &'a Context,
-    _elapsed: u128,
-) -> Module<'a> {
-    module
-}
-
-#[cfg(feature = "notify")]
-fn undistract_me<'a>(
-    module: Module<'a>,
+    mut module: Module<'a>,
     config: &CmdDurationConfig,
     context: &'a Context,
     elapsed: u128,
 ) -> Module<'a> {
-    use notify_rust::{Notification, Timeout};
     use nu_ansi_term::{AnsiStrings, unstyle};
 
-    if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
-        if cfg!(target_os = "linux") {
-            let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
-                .iter()
-                .find_map(|&var| context.get_env(var).filter(|val| !val.is_empty()))
-                .is_some();
+    if config.min_time_to_notify as u128 > elapsed {
+        return module;
+    }
 
-            if !in_graphical_session {
+    match NotificationMode::from(config.show_notifications.clone()) {
+        NotificationMode::Desktop => {
+            if !(cfg!(feature = "notify")) {
+                log::warn!(
+                    "Notifications are enabled in [cmd_duration], but the notify feature is not enabled"
+                );
                 return module;
             }
+
+            #[cfg(feature = "notify")]
+            send_native_notification(config, &module, context);
         }
+        NotificationMode::Ansi => {
+            let body = format!(
+                "Command execution {}",
+                unstyle(&AnsiStrings(&module.ansi_strings())).trim()
+            );
 
-        // On macOS 26+ notify-rust will get stuck finding the current application identifier
-        // so we set it manually to the default terminal app.
-        #[cfg(target_os = "macos")]
-        let _ = notify_rust::set_application("com.apple.Terminal");
-
-        let body = format!(
-            "Command execution {}",
-            unstyle(&AnsiStrings(&module.ansi_strings()))
-        );
-
-        let timeout = match config.notification_timeout {
-            Some(v) => Timeout::Milliseconds(v),
-            None => Timeout::Default,
-        };
-
-        let mut notification = Notification::new();
-        notification
-            .summary("Command finished")
-            .body(&body)
-            .icon("utilities-terminal")
-            .timeout(timeout);
-
-        if let Err(err) = notification.show() {
-            log::trace!("Cannot show notification: {err}");
+            module.segments.extend(crate::segment::Segment::from_text(
+                None,
+                // TODO: use approach of @davidkna of introducing Segment::Control, see
+                // https://github.com/starship/starship/compare/main...davidkna:starship:native-notify
+                // TODO: detect shell and decide what ANSI var should be used.
+                format!("\x1b]777;notify;Command finished;{body}\x1b\\"),
+            ));
         }
+        _ => {}
     }
 
     module
+}
+
+#[cfg(feature = "notify")]
+fn send_native_notification(config: &CmdDurationConfig, module: &Module, context: &Context) {
+    use notify_rust::{Notification, Timeout};
+    use nu_ansi_term::{AnsiStrings, unstyle};
+
+    if cfg!(target_os = "linux") {
+        let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
+            .iter()
+            .find_map(|&var| context.get_env(var).filter(|val| !val.is_empty()))
+            .is_some();
+
+        if !in_graphical_session {
+            return;
+        }
+    }
+
+    // On macOS 26+ notify-rust will get stuck finding the current application identifier
+    // so we set it manually to the default terminal app.
+    #[cfg(target_os = "macos")]
+    let _ = notify_rust::set_application("com.apple.Terminal");
+
+    let timeout = match config.notification_timeout {
+        Some(v) => Timeout::Milliseconds(v),
+        None => Timeout::Default,
+    };
+
+    let body = format!(
+        "Command execution {}",
+        unstyle(&AnsiStrings(&module.ansi_strings())).trim()
+    );
+
+    let mut notification = Notification::new();
+    notification
+        .summary("Command finished")
+        .body(&body)
+        .icon("utilities-terminal")
+        .timeout(timeout);
+
+    if let Err(err) = notification.show() {
+        log::trace!("Cannot show notification: {err}");
+    }
 }
 
 #[cfg(test)]
@@ -191,6 +216,26 @@ mod tests {
             .collect();
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_5s_duration_osc9_notification() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                show_notifications = "ansi"
+                min_time_to_notify = 1000
+            })
+            .cmd_duration(5000)
+            .collect();
+
+        let expected = Some(format!(
+            "took {} \x1b]777;notify;{};{}\x1b\\",
+            Color::Yellow.bold().paint("5s"),
+            "Command finished",
+            "Command execution took 5s"
+        ));
         assert_eq!(expected, actual);
     }
 }
