@@ -130,7 +130,7 @@ line2
 """
 ```
 
-### Format Strings
+### Format Strings {#format-strings}
 
 Format strings are the format that a module prints all its variables with.
 Most modules have an entry called `format` that configures the display format of the module.
@@ -162,7 +162,7 @@ For example:
 - `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
 
-#### Style Strings
+#### Style Strings {#style-strings}
 
 Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](../advanced-config/).
 
@@ -253,7 +253,7 @@ blue = '21'
 mustard = '#af8700'
 ```
 
-### Default Prompt Format
+### Default Prompt Format {#default-prompt-format}
 
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
@@ -550,7 +550,7 @@ charging_symbol = '⚡️ '
 discharging_symbol = '💀 '
 ```
 
-### Battery Display
+### Battery Display {#battery-display}
 
 The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style).
 If no `display` is provided. The default is as shown:
@@ -804,7 +804,7 @@ look at [this example](#with-custom-error-shape).
 
 ### Examples
 
-#### With custom error shape
+#### With custom error shape {#with-custom-error-shape}
 
 ```toml
 # ~/.config/starship.toml
@@ -1175,7 +1175,7 @@ By default the module will be shown if any of the following conditions are met:
 format = 'via [🦕 $version](green bold) '
 ```
 
-## Directory
+## Directory {#directory}
 
 The `directory` module shows the path to your current directory, truncated to
 three parent folders. Your directory will also be truncated to the root of the
@@ -4168,7 +4168,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Example
 
-#### With Pulumi Version
+#### With Pulumi Version {#with-pulumi-version}
 
 ```toml
 # ~/.config/starship.toml
@@ -5026,7 +5026,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Example
 
-#### With Terraform Version
+#### With Terraform Version {#with-terraform-version}
 
 ```toml
 # ~/.config/starship.toml
@@ -5475,7 +5475,7 @@ These modules will be shown if any of the following conditions are met:
 
 *: This variable can only be used as a part of a style string
 
-#### Custom command shell
+#### Custom command shell {#custom-command-shell}
 
 `shell` accepts a non-empty list of strings, where:
 
