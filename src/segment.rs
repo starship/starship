@@ -91,7 +91,7 @@ mod fill_seg_tests {
 pub enum Segment {
     Text(TextSegment),
     Fill(FillSegment),
-    LineTerm,
+    LineTerm { max_width: usize },
 }
 
 impl Segment {
@@ -103,7 +103,7 @@ impl Segment {
         let mut segs: Vec<Self> = Vec::new();
         value.into().split(LINE_TERMINATOR).for_each(|s| {
             if !segs.is_empty() {
-                segs.push(Self::LineTerm);
+                segs.push(Self::LineTerm { max_width: 0 });
             }
             segs.push(Self::Text(TextSegment {
                 value: String::from(s),
@@ -128,7 +128,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.style.map(|cs| cs.to_ansi_style(None)),
             Self::Text(ts) => ts.style.map(|cs| cs.to_ansi_style(None)),
-            Self::LineTerm => None,
+            Self::LineTerm { .. } => None,
         }
     }
 
@@ -144,7 +144,7 @@ impl Segment {
                     ts.style = style;
                 }
             }
-            Self::LineTerm => {}
+            Self::LineTerm { .. } => {}
         }
     }
 
@@ -152,7 +152,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => &fs.value,
             Self::Text(ts) => &ts.value,
-            Self::LineTerm => LINE_TERMINATOR_STRING,
+            Self::LineTerm { .. } => LINE_TERMINATOR_STRING,
         }
     }
 
@@ -161,7 +161,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.ansi_string(None, prev),
             Self::Text(ts) => ts.ansi_string(prev),
-            Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
+            Self::LineTerm { .. } => AnsiString::from(LINE_TERMINATOR_STRING),
         }
     }
 
@@ -169,7 +169,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
             Self::Text(ts) => ts.value.width_graphemes(),
-            Self::LineTerm => 0,
+            Self::LineTerm { .. } => 0,
         }
     }
 }
