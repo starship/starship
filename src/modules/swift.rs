@@ -3,6 +3,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::swift::SwiftConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
+use crate::utils::CommandOutput;
 
 /// Creates a module with the current Swift version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -33,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let swift_version =
-                        parse_swift_version(&context.exec_cmd("swift", &["--version"])?.stdout)?;
+                        parse_swift_version(&swift_version_output(context)?.stdout)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &swift_version,
@@ -57,6 +58,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+/// Returns the output of the fastest available `swift` version query.
+///
+/// `swift --version` goes through the Swift driver, which locates the
+/// toolchain on every invocation. On macOS that alone can take seconds,
+/// tripping the global command timeout so the module disappears (see #7639).
+/// `swift-frontend --version` prints a compatible first line but starts much
+/// faster, so prefer it and fall back to the driver.
+fn swift_version_output(context: &Context) -> Option<CommandOutput> {
+    let output = context.exec_cmd("swift-frontend", &["--version"]);
+    if output
+        .as_ref()
+        .is_some_and(|o| parse_swift_version(&o.stdout).is_some())
+    {
+        return output;
+    }
+    #[cfg(target_os = "macos")]
+    {
+        // `swift-frontend` usually isn't on PATH on macOS; locate it inside
+        // the active toolchain instead. `xcrun --find` itself is fast.
+        if let Some(found) = context.exec_cmd("xcrun", &["--find", "swift-frontend"]) {
+            let output = context.exec_cmd(found.stdout.trim(), &["--version"]);
+            if output
+                .as_ref()
+                .is_some_and(|o| parse_swift_version(&o.stdout).is_some())
+            {
+                return output;
+            }
+        }
+    }
+    context.exec_cmd("swift", &["--version"])
+}
+
 fn parse_swift_version(swift_version: &str) -> Option<String> {
     // split into ["Apple", "Swift", "version", "5.2.2", ...] or
     //            ["Swift", "version", "5.3-dev", ...]
@@ -72,6 +105,7 @@ fn parse_swift_version(swift_version: &str) -> Option<String> {
 mod tests {
     use super::parse_swift_version;
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -116,6 +150,46 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_swift_file_prefers_swift_frontend() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.swift"))?.sync_all()?;
+        let actual = ModuleRenderer::new("swift")
+            .cmd(
+                "swift-frontend --version",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        "Apple Swift version 6.3.1 (swiftlang-6.3.1.1.2 clang-2100.0.123.102)\nTarget: arm64-apple-macosx26.0\n",
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v6.3.1 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_swift_file_falls_back_to_swift_driver() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.swift"))?.sync_all()?;
+        let actual = ModuleRenderer::new("swift")
+            .cmd("swift-frontend --version", None)
+            .path(dir.path())
+            .collect();
         let expected = Some(format!(
             "via {}",
             Color::Fixed(202).bold().paint("🐦 v5.2.2 ")

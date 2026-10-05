@@ -588,6 +588,10 @@ Target: x86_64-apple-darwin19.4.0\n",
             ),
             stderr: String::default(),
         }),
+        // `swift-frontend` is tried before the driver (see swift module);
+        // mock it as missing so tests exercise the `swift` fallback by default.
+        "swift-frontend --version" => None,
+        "xcrun --find swift-frontend" => None,
         "vagrant --version" => Some(CommandOutput {
             stdout: String::from("Vagrant 2.2.10\n"),
             stderr: String::default(),
