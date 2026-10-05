@@ -9,6 +9,17 @@ pub fn default_profiles() -> IndexMap<String, String> {
     )])
 }
 
+#[derive(Clone, Default, Serialize, Deserialize, Debug)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+pub struct ResponsiveConfig {
+    pub drop_order: Vec<String>,
+}
+
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[cfg_attr(
     feature = "config-schema",
@@ -26,6 +37,7 @@ pub struct StarshipRootConfig {
     pub command_timeout: u64,
     pub add_newline: bool,
     pub follow_symlinks: bool,
+    pub responsive: ResponsiveConfig,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
@@ -163,8 +175,52 @@ impl Default for StarshipRootConfig {
             command_timeout: 500,
             add_newline: true,
             follow_symlinks: true,
+            responsive: ResponsiveConfig::default(),
             palette: None,
             palettes: HashMap::default(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config::ModuleConfig;
+
+    #[test]
+    fn responsive_defaults_to_an_empty_drop_order() {
+        assert!(
+            StarshipRootConfig::default()
+                .responsive
+                .drop_order
+                .is_empty()
+        );
+    }
+
+    #[test]
+    fn responsive_preserves_configured_drop_order() {
+        let table = toml::toml! {
+            [responsive]
+            drop_order = ["time", "package", "custom.weather"]
+        };
+        let config = StarshipRootConfig::load(&table);
+
+        assert_eq!(
+            config.responsive.drop_order,
+            ["time", "package", "custom.weather"]
+        );
+    }
+
+    #[test]
+    fn malformed_responsive_config_falls_back_to_root_defaults() {
+        let table = toml::toml! {
+            format = "$directory"
+            [responsive]
+            drop_order = "time"
+        };
+        let config = StarshipRootConfig::load(&table);
+
+        assert_eq!(config.format, "$all");
+        assert!(config.responsive.drop_order.is_empty());
     }
 }
