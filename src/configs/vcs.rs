@@ -44,6 +44,8 @@ pub struct VcsConfig<'a> {
     ///
     /// They are configured separately at the top level.
     pub pijul_modules: &'a str,
+    /// Modules to use when no repo is present.
+    pub fallback_modules: &'a str,
 }
 
 impl Default for VcsConfig<'_> {
@@ -56,6 +58,7 @@ impl Default for VcsConfig<'_> {
             hg_modules: "$hg_branch$hg_state",
             jj_modules: "$jj_bookmark$jj_change$jj_metrics$jj_status",
             pijul_modules: "$pijul_channel",
+            fallback_modules: "",
         }
     }
 }
